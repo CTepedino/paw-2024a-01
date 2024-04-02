@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public class WriterJdbcDao implements WriterDao {
 
-    private final static RowMapper<Writer> ROW_MAPPER = (rs, rowNum) -> new Writer(rs.getLong("writer_id"), rs.getString("name"), rs.getString("last_Name"), rs.getString("email"));
+    private final static RowMapper<Writer> ROW_MAPPER = (rs, rowNum) -> new Writer(rs.getLong("writer_id"), rs.getString("first_name"), rs.getString("last_Name"), rs.getString("email"));
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -25,7 +25,6 @@ public class WriterJdbcDao implements WriterDao {
     @Autowired
     public WriterJdbcDao(final DataSource ds){
         jdbcTemplate = new JdbcTemplate(ds);
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS writers("+ "writer_id SERIAL PRIMARY KEY, " + "name VARCHAR(255) NOT NULL," + "last_name VARCHAR(255) NOT NULL," + "email VARCHAR(255) NOT NULL UNIQUE," + ")");
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .usingGeneratedKeyColumns("writer_ Id")
                 .withTableName("writers");
@@ -41,7 +40,7 @@ public class WriterJdbcDao implements WriterDao {
     public Writer create(String name, String lastName, String email){
         Map<String, Object> writerData = new HashMap<>();
         writerData.put("email", email);
-        writerData.put("name", name);
+        writerData.put("first_name", name);
         writerData.put("last_name", lastName);
         Number generatedId = simpleJdbcInsert.executeAndReturnKey(writerData);
         return new Writer(generatedId.longValue(), name, lastName, email);
