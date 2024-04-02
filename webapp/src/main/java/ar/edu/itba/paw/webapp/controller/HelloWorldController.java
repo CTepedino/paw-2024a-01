@@ -76,4 +76,14 @@ public class HelloWorldController {
         mav.addObject("user", testUser);
         return mav;
     }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/buyForm")
+    public ModelAndView buyForm(){
+        return new ModelAndView("buyForm");
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
+    public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("email") String email){
+        return new ModelAndView("redirect:/");
+    }
 }
