@@ -83,7 +83,7 @@ public class HelloWorldController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
-    public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("email") String email){
+    public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("lastName") String lastName, @RequestParam("email") String email){
         return new ModelAndView("redirect:/");
     }
 }

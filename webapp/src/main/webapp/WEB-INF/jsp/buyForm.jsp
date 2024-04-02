@@ -10,8 +10,14 @@
 <form action="${registerUrl}" method="post">
     <div>
         <label>
-            Name:
-            <input name="username" placeholder="username"/>
+            First Name:
+            <input name="name" placeholder="First Name"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Last Name:
+            <input name="lastName" placeholder="Last Name"/>
         </label>
     </div>
     <div>
