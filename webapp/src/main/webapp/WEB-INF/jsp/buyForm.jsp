@@ -11,19 +11,19 @@
     <div>
         <label>
             First Name:
-            <input name="name" placeholder="First Name"/>
+            <input name="name" placeholder="First Name" required/>
         </label>
     </div>
     <div>
         <label>
             Last Name:
-            <input name="lastName" placeholder="Last Name"/>
+            <input name="lastName" placeholder="Last Name" required/>
         </label>
     </div>
     <div>
         <label>
             Email:
-            <input name="email" placeholder="email@example.com"/>
+            <input name="email" placeholder="email@example.com" required/>
         </label>
     </div>
     <div>
