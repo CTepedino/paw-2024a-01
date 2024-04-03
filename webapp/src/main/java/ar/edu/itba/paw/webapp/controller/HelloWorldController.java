@@ -81,7 +81,7 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/buyForm")
+    @RequestMapping(method = RequestMethod.GET, path = "/buy")
     public ModelAndView buyForm(){
         return new ModelAndView("buyForm");
     }
