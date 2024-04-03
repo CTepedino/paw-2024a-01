@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,9 +26,8 @@ public class BookController {
         return mav;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/addbook")
-    public ModelAndView addBook(@RequestParam("title") String title)
-                               /* @RequestParam("description") String description,
+    @RequestMapping(method=RequestMethod.POST, path ="/addbook")
+    public ModelAndView addBook(@RequestParam("title") String  title,@RequestParam("description") String description,
                                 @RequestParam("genra") String genra,
                                 @RequestParam("price") double price,
                                 @RequestParam("page_numbers") int pageNumbers,
@@ -35,10 +35,9 @@ public class BookController {
                                 @RequestParam("image") String image,
                                 @RequestParam("suggested_age") int suggestedAge,
                                 @RequestParam("published_date") String publishedDate,
-                                @RequestParam("writer_email") String writerEmail)*/
+                                @RequestParam("writer_email") String writerEmail)
     {
-        final Book book = bs.create(title/*,description,genra,price,pageNumbers,prev,image,suggestedAge,publishedDate,writerEmail*/);
+        final Book book = bs.create(title,description,genra,price,pageNumbers,prev,image,suggestedAge,publishedDate,writerEmail);
         return new ModelAndView("redirect:/");
     }
-
 }

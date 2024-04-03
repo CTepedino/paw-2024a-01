@@ -1,13 +1,14 @@
 package ar.edu.itba.paw.models;
 
+import java.io.File;
 import java.util.Date;
 
 public class Book {
         private final int libroId;
         private final String title;
-        /*private final String description;
+        private final String description;
         private final String genra;
-        private final double price;
+        private final Double price;
         private final int pageNumbers;
         private final String prev;
         private final String image;
@@ -15,12 +16,13 @@ public class Book {
 
         private final String publishedDate;
 
-        private final String writerEmail;*/
+        private final String writerEmail;
 
-        public Book(int libroId, String title /*, String description, String genra, double price, int pageNumbers, String prev, String image, int suggestedAge, String publishedDate, String writerEmail*/){
+
+        public Book(int libroId, String title, String description, String genra, Double price, int pageNumbers, String prev, String image, int suggestedAge, String publishedDate, String writerEmail){
             this.libroId=libroId;
             this.title = title;
-           /* this.description = description;
+            this.description = description;
             this.genra=genra;
             this.price=price;
             this.pageNumbers=pageNumbers;
@@ -28,7 +30,7 @@ public class Book {
             this.image=image;
             this.suggestedAge=suggestedAge;
             this.publishedDate=publishedDate;
-            this.writerEmail=writerEmail;*/
+            this.writerEmail=writerEmail;
         }
 
 
@@ -38,7 +40,7 @@ public class Book {
     public String getTitle() {
         return title;
     }
-/*
+
     public double getPrice() {
         return price;
     }
@@ -75,5 +77,5 @@ public class Book {
 
     public String getPrev() {
         return prev;
-    }*/
+    }
 }

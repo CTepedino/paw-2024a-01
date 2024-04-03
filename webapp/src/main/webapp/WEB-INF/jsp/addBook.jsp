@@ -12,14 +12,14 @@
     <label for="title">Titulo:</label><br>
     <input type="text" id="title" name="title"><br>
 
-  <%--  <label for="description">Descripcion:</label><br>
+    <label for="description">Descripcion:</label><br>
     <input type="text"  id="description" name="description"><br>
 
     <label for="genra">Genero:</label><br>
     <input type="text" id="genra" name="genra"><br>
 
     <label for="price">Precio:</label><br>
-    <input type="number" id="price" name="price"><br>
+    <input type="number" id="price" name="price" step="0.01"><br>
 
     <label for="page_numbers">Numero de Paginas:</label><br>
     <input type="number" id="page_numbers" name="page_numbers"><br>
@@ -28,16 +28,16 @@
     <input type="text" id="prev" name="prev"><br>
 
     <label for="image">Imagen:</label><br>
-    <input type="text" id="image" name="image"><br>
+    <input type="file" id="image" name="image"><br>
 
     <label for="suggested_age">Edad Sugerida:</label><br>
     <input type="number" id="suggested_age" name="suggested_age"><br>
 
     <label for="published_date">Fecha de Publicación:</label><br>
-    <input type="text" id="published_date" name="published_date"><br>
+    <input type="Date" id="published_date" name="published_date"><br>
 
     <label for="writer_email">Ingrese su correo electrónico:</label><br>
-    <input type="text" id="writer_email" name="writer_email"><br>--%>
+    <input type="email" id="writer_email" name="writer_email"><br>
     <input type="submit" value="Publicar">
 </form>
 </body>
