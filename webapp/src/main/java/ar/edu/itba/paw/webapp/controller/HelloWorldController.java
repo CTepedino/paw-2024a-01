@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.MailService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
@@ -16,9 +17,12 @@ public class HelloWorldController {
 
     private final UserService us;
 
+    private final MailService ms;
+
     @Autowired
-    public HelloWorldController(final UserService us){
+    public HelloWorldController(final UserService us, final MailService ms){
         this.us = us;
+        this.ms = ms;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
@@ -84,6 +88,7 @@ public class HelloWorldController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
     public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("lastName") String lastName, @RequestParam("email") String email){
+        ms.sendEmail("mivaw93421@evimzo.com", name, lastName, email);
         return new ModelAndView("redirect:/");
     }
 }
