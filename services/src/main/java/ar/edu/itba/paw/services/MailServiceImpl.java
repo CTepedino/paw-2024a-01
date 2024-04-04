@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -23,7 +24,8 @@ public class MailServiceImpl implements MailService {
         this.templateEngine = templateEngine;
     }
 
-    public String sendEmail(String to, String name, String lastName, String readerEmail){
+    @Async
+    public void sendEmail(String to, String name, String lastName, String readerEmail){
         try {
             Context context = new Context();
             context.setVariable("name", name);
@@ -43,9 +45,8 @@ public class MailServiceImpl implements MailService {
 
             javaMailSender.send(mimeMessage);
 
-            return "Email sent successfully!";
         } catch (MessagingException e) {
-            return "Failed to send email: " + e.getMessage();
+            System.err.println("Failed to send email: " + e.getMessage());
         }
     }
 }

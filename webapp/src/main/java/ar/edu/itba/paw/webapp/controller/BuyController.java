@@ -25,10 +25,8 @@ public class BuyController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
     public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("lastName") String lastName, @RequestParam("email") String email){
-        String alert = ms.sendEmail("mivaw93421@evimzo.com", name, lastName, email);
-        final ModelAndView mav = new ModelAndView("emailConfirmation");
-        mav.addObject("alert", alert);
-        return mav;
+        ms.sendEmail("mivaw93421@evimzo.com", name, lastName, email);
+        return new ModelAndView("emailConfirmation");
     }
 
 }
