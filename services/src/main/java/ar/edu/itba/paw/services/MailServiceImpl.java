@@ -2,31 +2,49 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Service
 public class MailServiceImpl implements MailService {
 
     private final JavaMailSender javaMailSender;
+    private final TemplateEngine templateEngine;
 
     @Autowired
-    public MailServiceImpl(JavaMailSender javaMailSender) {
+    public MailServiceImpl(JavaMailSender javaMailSender, TemplateEngine templateEngine) {
         this.javaMailSender = javaMailSender;
+        this.templateEngine = templateEngine;
     }
 
     public String sendEmail(String to, String name, String lastName, String readerEmail){
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject("A reader wants to buy your book");
-        message.setText(String.format("The reader %s %s is interested in buying your book. Please contact them at %s", name, lastName, readerEmail));
-
         try {
-            javaMailSender.send(message);
+            Context context = new Context();
+            context.setVariable("name", name);
+            context.setVariable("lastName", lastName);
+            context.setVariable("readerEmail", readerEmail);
+
+
+            String emailContent = templateEngine.process("contactEmailTemplate", context);
+
+
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            messageHelper.setTo(to);
+            messageHelper.setSubject("A reader wants to buy your book");
+            messageHelper.setText(emailContent, true);
+
+
+            javaMailSender.send(mimeMessage);
+
             return "Email sent successfully!";
-        } catch (MailException e) {
+        } catch (MessagingException e) {
             return "Failed to send email: " + e.getMessage();
         }
     }

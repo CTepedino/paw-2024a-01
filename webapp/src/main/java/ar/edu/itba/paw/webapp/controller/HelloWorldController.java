@@ -17,12 +17,9 @@ public class HelloWorldController {
 
     private final UserService us;
 
-    private final MailService ms;
-
     @Autowired
-    public HelloWorldController(final UserService us, final MailService ms){
+    public HelloWorldController(final UserService us){
         this.us = us;
-        this.ms = ms;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
@@ -78,19 +75,6 @@ public class HelloWorldController {
         mav.addObject("title", "Dynamic Page");
         User testUser = new User(2, "test user");
         mav.addObject("user", testUser);
-        return mav;
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/buy")
-    public ModelAndView buyForm(){
-        return new ModelAndView("buyForm");
-    }
-
-    @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
-    public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("lastName") String lastName, @RequestParam("email") String email){
-        String alert = ms.sendEmail("writer@email.com", name, lastName, email);
-        final ModelAndView mav = new ModelAndView("emailConfirmation");
-        mav.addObject("alert", alert);
         return mav;
     }
 }

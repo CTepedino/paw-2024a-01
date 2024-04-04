@@ -17,6 +17,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -42,7 +45,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl("jdbc:postgresql://localhost/postgres");
@@ -52,7 +55,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public DataSourceInitializer dataSourceInitializer(DataSource ds){
+    public DataSourceInitializer dataSourceInitializer(DataSource ds) {
         final DataSourceInitializer dsi = new DataSourceInitializer();
 
         dsi.setDataSource(ds);
@@ -61,7 +64,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return dsi;
     }
 
-    private DatabasePopulator databasePopulator(){
+    private DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
 
         dbp.addScript(schemaSql);
@@ -78,10 +81,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("sandbox.smtp.mailtrap.io");
+        mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(25);
-        mailSender.setUsername("8749961ad74e08");
-        mailSender.setPassword("9d586f3ae6ae9c");
+        mailSender.setUsername("lucabloise4@gmail.com");
+        mailSender.setPassword("bdiu dvxy vkrv qwbc");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -89,5 +92,22 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         props.put("mail.smtp.starttls.enable", "true");
 
         return mailSender;
+    }
+
+    @Bean
+    public SpringResourceTemplateResolver templateResolver() {
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding("UTF-8");
+        return templateResolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(templateResolver());
+        return engine;
     }
 }
