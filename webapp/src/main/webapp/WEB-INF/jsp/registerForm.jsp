@@ -6,6 +6,7 @@
     <link href="/css/style.css" rel="stylesheet"/>
 </head>
 <body>
+<%@ include file="components/topBar.jsp" %>
 <%@ include file="components/header.jsp" %>
 <c:url value="/create" var="registerUrl"/>
 <form action="${registerUrl}" method="post">

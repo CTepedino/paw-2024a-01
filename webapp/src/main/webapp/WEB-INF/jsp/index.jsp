@@ -3,6 +3,7 @@
 
 <html>
 <body>
+<%@ include file="components/topBar.jsp" %>
 <%@ include file="components/header.jsp" %>
 <h2>Hello World!</h2>
 </body>
