@@ -8,6 +8,7 @@
 <body>
 <c:url value="/sendBuyInfo" var="registerUrl"/>
 <form action="${registerUrl}" method="post">
+    <input name="writerId" value="${writerId}" hidden="hidden">
     <div>
         <label>
             First Name:
