@@ -46,3 +46,4 @@ public class WriterJdbcDao implements WriterDao {
         return new Writer(generatedId.longValue(), name, lastName, email);
     }
 }
+

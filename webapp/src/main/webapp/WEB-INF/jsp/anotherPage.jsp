@@ -4,7 +4,7 @@
     <title>This is another page</title>
 </head>
 <body>
-<%@ include file="components/header.jsp" %>
+<%@ include file="components/topBar.jsp" %>
 <h1>This is another page</h1>
 </body>
 </html>
