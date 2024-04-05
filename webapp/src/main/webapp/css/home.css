@@ -1,0 +1,43 @@
+.explore_back{
+    background-color: #437C90;
+    padding: 10px;
+}
+
+.container{
+    width: 100%;
+    margin-top: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.explore_books {
+    color: white;
+}
+
+.steps {
+    color: white;
+}
+
+.books .container {
+    width: 95%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Alinea las tarjetas en filas con espacios entre ellas */
+}
+
+.card {
+    flex-basis: calc(50% - 10px); /* El ancho de cada tarjeta es el 50% del contenedor menos el margen */
+    display: flex;
+}
+
+.card-image {
+    width: 100%; /* La imagen ocupará todo el ancho de su contenedor */
+    max-width: 200px; /* Ancho máximo para la imagen */
+}
+
+
+.card-content,
+.card-reveal {
+    flex: 1;
+}
