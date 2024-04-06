@@ -9,6 +9,8 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -24,6 +26,8 @@ import javax.sql.DataSource;
         "ar.edu.itba.paw.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    private static final long MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -70,5 +74,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+    }
+
+    @Bean
+    public MultipartResolver multipartResolver(){
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(MAX_UPLOAD_SIZE);
+        return multipartResolver;
     }
 }

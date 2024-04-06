@@ -9,3 +9,14 @@ CREATE TABLE IF NOT EXISTS writers(
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE
 );
+
+
+CREATE TABLE IF NOT EXISTS pdfs(
+    pdf_id SERIAL PRIMARY KEY,
+    pdf BYTEA
+);
+
+CREATE TABLE IF NOT EXISTS images(
+    image_id SERIAL PRIMARY KEY,
+    image BYTEA
+)
