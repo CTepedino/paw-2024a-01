@@ -3,18 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Email Template</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .logo {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .email-content {
+            margin-top: 20px;
+        }
+        .email-content p {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-<p>
-    Dear Seller,
-</p>
-<p>
-    The reader <span th:text="${name}"></span> <span th:text="${lastName}"></span> is interested in buying your book.
-    Please contact them at <span th:text="${readerEmail}"></span>.
-</p>
-<p>
-    Best regards,
-    Cybrary
-</p>
+<div class="container">
+    <div class="logo">
+        <a href="http://localhost:8080" style="text-decoration: none; color: #333;">Cybrary</a>
+    </div>
+    <div class="title">
+        <h2 style="text-align: center;">A reader wants to buy your book!</h2>
+    </div>
+    <div class="email-content">
+        <p>The reader <span th:text="${name}"></span> <span th:text="${lastName}"></span> is interested in buying one of your books.</p>
+        <p>Please contact them at <span th:text="${readerEmail}"></span>.</p>
+    </div>
+</div>
 </body>
 </html>

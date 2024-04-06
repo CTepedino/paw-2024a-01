@@ -8,7 +8,7 @@
 
 <body>
     <script>
-        alert("An email has been sent to the seller!\nAwait for instructions in your inbox.");
+        alert("Your information has been sent to the seller!\nAwait for further instructions in your inbox.");
         window.location.href = "/";
     </script>
 </body>

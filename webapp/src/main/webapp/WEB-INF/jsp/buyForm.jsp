@@ -20,17 +20,17 @@
                                 <input name="writerId" value="${writerId}" hidden="hidden">
                                 <div class="row">
                                     <div class="input-field col s6">
-                                        <input name="name" id="name" type="text" class="validate" required>
+                                        <input name="name" id="name" type="text" class="validate" required maxlength="15">
                                         <label for="name">First Name</label>
                                     </div>
                                     <div class="input-field col s6">
-                                        <input name="lastName" id="lastName" type="text" class="validate" required>
+                                        <input name="lastName" id="lastName" type="text" class="validate" required maxlength="15">
                                         <label for="lastName">Last Name</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <input name="email" id="email" type="email" class="validate" required>
+                                        <input name="email" id="email" type="email" class="validate" required maxlength="50">
                                         <label for="email">Email</label>
                                     </div>
                                 </div>
