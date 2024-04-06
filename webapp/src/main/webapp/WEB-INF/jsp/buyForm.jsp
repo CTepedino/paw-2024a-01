@@ -3,33 +3,47 @@
 <html>
 <head>
     <title>Contact Information</title>
-    <link href="/css/style.css" rel="stylesheet"/>
 </head>
 <body>
-<c:url value="/sendBuyInfo" var="registerUrl"/>
-<form action="${registerUrl}" method="post">
-    <input name="writerId" value="${writerId}" hidden="hidden">
-    <div>
-        <label>
-            First Name:
-            <input name="name" placeholder="First Name" required/>
-        </label>
-    </div>
-    <div>
-        <label>
-            Last Name:
-            <input name="lastName" placeholder="Last Name" required/>
-        </label>
-    </div>
-    <div>
-        <label>
-            Email:
-            <input name="email" placeholder="email@example.com" required/>
-        </label>
-    </div>
-    <div>
-        <input type="submit" value="Send Contact Information"/>
-    </div>
-</form>
+    <%@ include file="components/topBar.jsp" %>
+    <c:url value="/sendBuyInfo" var="registerUrl"/>
+        <div class="row">
+            <div class="col s4 push-s4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Enter Your Contact Information</span>
+                        <div class="row">
+                            <span class="card-subtitle col s12">The information will be sent to the seller.</span>
+                        </div>
+                        <div class="row">
+                            <form action="${registerUrl}" method="post" class="col s12">
+                                <input name="writerId" value="${writerId}" hidden="hidden">
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <input name="name" id="name" type="text" class="validate" required>
+                                        <label for="name">First Name</label>
+                                    </div>
+                                    <div class="input-field col s6">
+                                        <input name="lastName" id="lastName" type="text" class="validate" required>
+                                        <label for="lastName">Last Name</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input name="email" id="email" type="email" class="validate" required>
+                                        <label for="email">Email</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 </body>
 </html>

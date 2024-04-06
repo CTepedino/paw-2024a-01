@@ -22,17 +22,16 @@ public class BuyController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/buy")
-    public ModelAndView buyForm(@RequestParam("writerId") Long writerId){
+    public ModelAndView buyForm(){
         ModelAndView mav = new ModelAndView("buyForm");
-        mav.addObject("writerId", writerId);
+        mav.addObject("writerId", 1);
         return mav;
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
     public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("lastName") String lastName, @RequestParam("email") String email, @RequestParam("writerId") Long writerId){
-        //System.out.println(writerId);
         //ms.sendEmail(ws.findById(writerId).get().getEmail(), name, lastName, email);
-        ms.sendEmail("mivaw93421@evimzo.com", name, lastName, email);
+        ms.sendEmail("lbloise@itba.edu.ar", name, lastName, email);
         return new ModelAndView("emailConfirmation");
     }
 
