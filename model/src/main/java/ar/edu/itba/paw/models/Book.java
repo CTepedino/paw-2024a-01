@@ -4,37 +4,37 @@ import java.io.File;
 import java.util.Date;
 
 public class Book {
-        private final int libroId;
+        private final long libroId;
         private final String title;
         private final String description;
-        private final String genra;
+        private final String genre;
         private final Double price;
         private final int pageNumbers;
         private final String prev;
-        private final String image;
+        private final Long image_id;
         private final int suggestedAge;
 
-        private final String publishedDate;
+        private final String published_date;
 
-        private final String writerEmail;
+        private final Long writer_id;
 
 
-        public Book(int libroId, String title, String description, String genra, Double price, int pageNumbers, String prev, String image, int suggestedAge, String publishedDate, String writerEmail){
+        public Book(long libroId, String title, String description, String genre, Double price, int pageNumbers, String prev, Long image_id, int suggestedAge, String published_date, Long writer_id){
             this.libroId=libroId;
             this.title = title;
             this.description = description;
-            this.genra=genra;
+            this.genre=genre;
             this.price=price;
             this.pageNumbers=pageNumbers;
             this.prev=prev;
-            this.image=image;
+            this.image_id=image_id;
             this.suggestedAge=suggestedAge;
-            this.publishedDate=publishedDate;
-            this.writerEmail=writerEmail;
+            this.published_date=published_date;
+            this.writer_id=writer_id;
         }
 
 
-    public int getLibroId() {
+    public long getLibroId() {
         return libroId;
     }
     public String getTitle() {
@@ -45,18 +45,20 @@ public class Book {
         return price;
     }
 
-    public String getWriterEmail() {
-        return writerEmail;
+    public long getImage_id() {
+        return image_id;
     }
 
-
+    public long getWriter_id() {
+        return writer_id;
+    }
 
     public int getPageNumbers() {
         return pageNumbers;
     }
 
-    public String getPublishedDate() {
-        return publishedDate;
+    public String getpublished_date() {
+        return published_date;
     }
 
     public String getDescription() {
@@ -64,15 +66,15 @@ public class Book {
     }
 
     public String getGenra() {
-        return genra;
+        return genre;
     }
 
     public int getSuggestedAge() {
         return suggestedAge;
     }
 
-    public String getImage() {
-        return image;
+    public Long findbyid() {
+        return image_id;
     }
 
     public String getPrev() {

@@ -8,7 +8,6 @@
 
 <body>
 <%@ include file="components/topBar.jsp" %>
-<%@ include file="components/header.jsp" %>
     <h1>Page Using TagLib</h1>
     <p>Username: <c:out value="${user.username}"/></p>
     <c:if test="${user.userId > 1}">

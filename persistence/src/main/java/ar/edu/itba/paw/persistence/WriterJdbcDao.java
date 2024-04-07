@@ -26,7 +26,7 @@ public class WriterJdbcDao implements WriterDao {
     public WriterJdbcDao(final DataSource ds){
         jdbcTemplate = new JdbcTemplate(ds);
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .usingGeneratedKeyColumns("writer_ Id")
+                .usingGeneratedKeyColumns("writer_id")
                 .withTableName("writers");
     }
 

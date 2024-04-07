@@ -7,7 +7,6 @@
 </head>
 <body>
 <%@ include file="components/topBar.jsp" %>
-<%@ include file="components/header.jsp" %>
 <h1>Hello ${user.username}</h1>
 </body>
 </html>
