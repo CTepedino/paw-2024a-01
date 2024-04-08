@@ -1,6 +1,7 @@
 .nav-wrapper {
     background-color: #437c90;
 }
-.brand-logo {
-    margin-left: 10px;
+
+.material-icons {
+    padding-left: 10px;
 }

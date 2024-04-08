@@ -9,8 +9,8 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -24,9 +24,10 @@ import javax.sql.DataSource;
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller",
         "ar.edu.itba.paw.services",
         "ar.edu.itba.paw.persistence"})
-
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    private static final long MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -46,16 +47,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl("jdbc:postgresql://localhost/paw");
-        ds.setUsername("postgres");
-        ds.setPassword("Efmt.123");
+        ds.setUsername("cnt");
+        ds.setPassword("pawDBtest");
         return ds;
     }
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(DataSource ds){
         final DataSourceInitializer dsi = new DataSourceInitializer();
+
         dsi.setDataSource(ds);
         dsi.setDatabasePopulator(databasePopulator());
+
         return dsi;
     }
 
@@ -74,11 +77,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public StandardServletMultipartResolver multipartResolver() {
-        return new StandardServletMultipartResolver();
+    public MultipartResolver multipartResolver(){
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(MAX_UPLOAD_SIZE);
+        return multipartResolver;
     }
-
 }
-
-
-

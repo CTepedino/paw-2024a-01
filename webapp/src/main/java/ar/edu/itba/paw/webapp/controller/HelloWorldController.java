@@ -22,9 +22,8 @@ public class HelloWorldController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
-    public ModelAndView registerForm(){
-        final ModelAndView mav = new ModelAndView("registerForm");
-
+    public ModelAndView home(){
+        final ModelAndView mav = new ModelAndView("home");
         return mav;
     }
 
