@@ -28,6 +28,8 @@ public class HelloWorldController {
         return new ModelAndView("redirect:/" + user.getUserId());
     }
 
+
+
 //    @RequestMapping(method = RequestMethod.GET, path="/{userId:\\d+}")
 //    public ModelAndView userProfile(@PathVariable("userId") final long userId){
 //        final ModelAndView mav = new ModelAndView("profile");

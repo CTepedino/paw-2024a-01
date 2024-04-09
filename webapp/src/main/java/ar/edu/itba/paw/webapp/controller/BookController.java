@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.interfaces.PublishService;
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
@@ -15,10 +16,19 @@ import org.springframework.web.servlet.ModelAndView;
 public class BookController {
 
     private final PublishService ps;
+    private final BookService bs;
 
     @Autowired
-    public BookController(PublishService ps){
+    public BookController(PublishService ps, BookService bs){
         this.ps = ps;
+        this.bs = bs;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/")
+    public ModelAndView home(){
+        final ModelAndView mav = new ModelAndView("home");
+        mav.addObject("books", bs.getAll());
+        return mav;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
