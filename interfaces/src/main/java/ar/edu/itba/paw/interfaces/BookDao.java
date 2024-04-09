@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.models.Book;
+import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.Writer;
 
 import java.sql.Date;
@@ -12,8 +13,8 @@ public interface BookDao {
     Book create(
             String title,
             String description,
-            String genre,
-            Double price,
+            BookGenre genre,
+            double price,
             int pageCount,
             long pdfId,
             long imageId,

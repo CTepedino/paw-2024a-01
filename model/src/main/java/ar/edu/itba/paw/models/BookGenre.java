@@ -14,14 +14,13 @@ public enum BookGenre {
     SELF_HELP("Self help"),
     YOUNG_ADULT("Young adult");
 
-    private final String genre;
+    private final String displayName;
 
-    BookGenre(String genre){
-        this.genre = genre;
+    BookGenre(String displayName){
+        this.displayName = displayName;
     }
 
-    @Override
-    public String toString(){
-        return genre;
+    public String getDisplayName() {
+        return displayName;
     }
 }

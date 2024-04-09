@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
         return bookDao.create(
                 title,
                 description,
-                genre.toString(),
+                genre,
                 price,
                 pageCount,
                 pdfId,

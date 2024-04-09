@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Book;
+import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.Writer;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,7 +29,7 @@ public class BookJdbcDaoTest {
 
     private static final String TITLE = "myBook";
     private static final String DESCRIPTION = "a book";
-    private static final String GENRE = "fiction";
+    private static final BookGenre GENRE = BookGenre.FICTION;
     private static final double PRICE = 120.25;
     private static final int PAGE_COUNT = 120;
     private static final int SUGGESTED_AGE = 3;
