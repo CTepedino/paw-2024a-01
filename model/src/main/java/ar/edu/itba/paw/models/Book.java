@@ -16,10 +16,16 @@ public class Book {
 
         private final String published_date;
 
-        private final Long writer_id;
+        //private final Long writer_id;
+
+        private final String writerName;
+
+        private final String writerSurname;
+
+        private final String writerEmail;
 
 
-        public Book(long libroId, String title, String description, String genre, Double price, int pageNumbers, String prev, Long image_id, int suggestedAge, String published_date, Long writer_id){
+        public Book(long libroId, String title, String description, String genre, Double price, int pageNumbers, String prev, Long image_id, int suggestedAge, String published_date, String writerName, String writerSurname, String writerEmail){
             this.libroId=libroId;
             this.title = title;
             this.description = description;
@@ -30,7 +36,10 @@ public class Book {
             this.image_id=image_id;
             this.suggestedAge=suggestedAge;
             this.published_date=published_date;
-            this.writer_id=writer_id;
+            //this.writer_id=writer_id;
+            this.writerName = writerName;
+            this.writerSurname = writerSurname;
+            this.writerEmail = writerEmail;
         }
 
 
@@ -49,9 +58,9 @@ public class Book {
         return image_id;
     }
 
-    public long getWriter_id() {
-        return writer_id;
-    }
+//    public long getWriter_id() {
+//        return writer_id;
+//    }
 
     public int getPageNumbers() {
         return pageNumbers;
@@ -79,5 +88,17 @@ public class Book {
 
     public String getPrev() {
         return prev;
+    }
+
+    public String getWriterEmail() {
+        return writerEmail;
+    }
+
+    public String getWriterName() {
+        return writerName;
+    }
+
+    public String getWriterSurname() {
+        return writerSurname;
     }
 }

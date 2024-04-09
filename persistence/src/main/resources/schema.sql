@@ -27,6 +27,9 @@ CREATE TABLE IF NOT EXISTS books (
     suggested_age INT,
     published_date DATE,
     writer_id INT,
+    writer_name TEXT,
+    writer_email TEXT,
+    writer_surname TEXT,
     FOREIGN KEY (writer_id) REFERENCES writers (writer_id)
     );
 

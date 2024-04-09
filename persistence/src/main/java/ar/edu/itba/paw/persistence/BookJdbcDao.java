@@ -18,7 +18,7 @@ import java.util.Optional;
 @Repository
 public class BookJdbcDao implements BookDao {
 
-    private final static RowMapper<Book> ROW_MAPPER = (rs, rowNum) -> new Book(rs.getLong("book_id"), rs.getString("title"), rs.getString("description"), rs.getString("genre"),rs.getDouble("price"),rs.getInt("page_numbers"),rs.getString("preview"),rs.getLong("image_id"),rs.getInt("suggested_age"),rs.getString("published_date"),rs.getLong("writer_id"));
+    private final static RowMapper<Book> ROW_MAPPER = (rs, rowNum) -> new Book(rs.getLong("book_id"), rs.getString("title"), rs.getString("description"), rs.getString("genre"),rs.getDouble("price"),rs.getInt("page_numbers"),rs.getString("preview"),rs.getLong("image_id"),rs.getInt("suggested_age"),rs.getString("published_date"),rs.getString("writer_name"), rs.getString("writer_surname"), rs.getString("writer_email") );
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -43,7 +43,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public Book create(String title, String description, String genre, Double price, int pageNumbers, String prev, long image_id, int suggestedAge, String published_date, long writer_id) {
+    public Book create(String title, String description, String genre, Double price, int pageNumbers, String prev, long image_id, int suggestedAge, String published_date, String writerName, String writerSurname, String writerEmail) {
         Map<String, Object> bookdata = new HashMap<>();
         bookdata.put("title",title);
         bookdata.put("description",description);
@@ -54,9 +54,11 @@ public class BookJdbcDao implements BookDao {
         bookdata.put("image_id", image_id);
         bookdata.put("suggested_age",suggestedAge);
         bookdata.put("published_date",published_date);
-        bookdata.put("writer_id",writer_id);
+        bookdata.put("writer_name", writerName);
+        bookdata.put("writer_surname", writerSurname);
+        bookdata.put("writer_email", writerEmail);
         Number generatedId = simpleJdbcInsert.executeAndReturnKey(bookdata);
-        return new Book(generatedId.intValue(),title,description,genre,price,pageNumbers,prev,image_id,suggestedAge,published_date,writer_id);
+        return new Book(generatedId.intValue(),title,description,genre,price,pageNumbers,prev,image_id,suggestedAge,published_date, writerName, writerSurname, writerEmail);
     }
 
 

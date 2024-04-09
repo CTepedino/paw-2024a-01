@@ -27,8 +27,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book create(String title, String description, String genre, Double price, int page_numbers, String prev, long image_id, int suggestedAge, String published_date, long writer_id) {
-        return bookDao.create(title,description,genre,price,page_numbers,prev,image_id,suggestedAge,published_date,writer_id);
+    public Book create(String title, String description, String genre, Double price, int page_numbers, String prev, long image_id, int suggestedAge, String published_date, String writerName, String writerSurname, String writerEmail) {
+        return bookDao.create(title,description,genre,price,page_numbers,prev,image_id,suggestedAge,published_date,writerName, writerSurname, writerEmail);
     }
 
 

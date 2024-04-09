@@ -27,6 +27,7 @@
                 </div>
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4">${book.title}<i class="material-icons right">more_vert</i></span>
+                    <p>${book.writerName} ${book.writerSurname}</p>
                     <p>${book.genra}</p>
                     <p>+ ${book.suggestedAge}</p>
                     <p>$ ${book.price}</p>

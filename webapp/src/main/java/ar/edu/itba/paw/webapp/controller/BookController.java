@@ -56,8 +56,8 @@ public class BookController {
         System.out.println("Last Name: " + formDataWithFile.getWriter_lastname()); */
 
         final Image image = is.uploadImage(formDataWithFile.getFile().getInputStream().readAllBytes());
-        final Writer writer = ws.create(formDataWithFile.getWriter_name(), formDataWithFile.getWriter_lastname(),formDataWithFile.getWriter_email());
-        final Book book = bs.create(formDataWithFile.getTitle(), formDataWithFile.getDescription(), formDataWithFile.getGenre(),formDataWithFile.getPrice(),formDataWithFile.getPage_numbers(), formDataWithFile.getPrev(), image.getImageId(), formDataWithFile.getSuggested_age(), formDataWithFile.getPublished_date(), writer.getWriterId());
+        //final Writer writer = ws.create(formDataWithFile.getWriter_name(), formDataWithFile.getWriter_lastname(),formDataWithFile.getWriter_email());
+        final Book book = bs.create(formDataWithFile.getTitle(), formDataWithFile.getDescription(), formDataWithFile.getGenre(),formDataWithFile.getPrice(),formDataWithFile.getPage_numbers(), formDataWithFile.getPrev(), image.getImageId(), formDataWithFile.getSuggested_age(), formDataWithFile.getPublished_date(), formDataWithFile.getWriter_name(), formDataWithFile.getWriter_lastname(),formDataWithFile.getWriter_email());
         return new ModelAndView("redirect:/");
     }
 }
