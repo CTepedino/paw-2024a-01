@@ -43,20 +43,20 @@ public class HelloWorldController {
 
 
 
-    @RequestMapping(method = RequestMethod.GET, path="/{nonnumeric:[a-z]+}")
+   /* @RequestMapping(method = RequestMethod.GET, path="/{nonnumeric:[a-z]+}")
     public ModelAndView invalidView(){
         final ModelAndView mav = new ModelAndView("index");
         mav.addObject("user", us.findById(-1).orElseThrow(UserNotFoundException::new));
 
         return mav;
-    }
+    }*/
 
-    @RequestMapping(method = RequestMethod.GET, path = "/other")
+  /*  @RequestMapping(method = RequestMethod.GET, path = "/other")
     public ModelAndView otherView(){
         final ModelAndView mav = new ModelAndView("anotherPage");
 
         return mav;
-    }
+    }*/
 
     @RequestMapping(method = RequestMethod.GET, path = "/dynamic")
     public ModelAndView dynamicView(){
