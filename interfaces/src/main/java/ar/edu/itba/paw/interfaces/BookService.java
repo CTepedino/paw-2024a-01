@@ -18,7 +18,11 @@ public interface BookService {
             long pdfId,
             long imageId,
             int suggestedAge,
-            long writerId
+            long writerId,
+
+            String writerName,
+            String writerLastName,
+            String writerEmail
     );
 
     Optional<Book> findById(long id);

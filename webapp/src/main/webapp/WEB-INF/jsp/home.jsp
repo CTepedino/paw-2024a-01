@@ -22,16 +22,16 @@
         <div class="container">
         <c:forEach var="book" items="${books}">
             <div class="card" >
-                <a href="${pageContext.request.contextPath}/${book.libroId}">
+                <a href="${pageContext.request.contextPath}/${book.bookId}">
                 <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="/css/book-cover.jpg">
                 </div>
                 </a>
-                <a href="${pageContext.request.contextPath}/${book.libroId}">
+                <a href="${pageContext.request.contextPath}/${book.bookId}">
                 <div class="card-content" >
                     <span class="card-title grey-text text-darken-4">${book.title}</span>
-                    <p>${book.writerName} ${book.writerSurname}</p>
-                    <p>${book.genra}</p>
+                    <p>${book.writerName} ${book.writerLastName}</p>
+                    <p>${book.genre}</p>
                     <p>+ ${book.suggestedAge}</p>
                     <p>$ ${book.price}</p>
 

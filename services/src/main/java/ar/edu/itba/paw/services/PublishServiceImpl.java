@@ -59,7 +59,11 @@ public class PublishServiceImpl implements PublishService {
                 bookPreviewPdf.getPdfId(),
                 bookImage.getImageId(),
                 suggestedAge,
-                writer.getWriterId()
+                writer.getWriterId(),
+
+                writerFirstName,
+                writerLastName,
+                writerEmail
         );
 
     }

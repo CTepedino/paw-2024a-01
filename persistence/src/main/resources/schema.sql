@@ -32,6 +32,11 @@ CREATE TABLE IF NOT EXISTS books (
     pdf_id INT NOT NULL,
     image_id INT NOT NULL,
     writer_id INT NOT NULL,
+
+    writer_name TEXT,
+    writer_last_name TEXT,
+    writer_email TEXT,
+
     FOREIGN KEY (writer_id) REFERENCES writers (writer_id) ON DELETE CASCADE,
     FOREIGN KEY (image_id) REFERENCES images (image_id) ON DELETE CASCADE,
     FOREIGN KEY (pdf_id) REFERENCES pdfs (pdf_id) ON DELETE CASCADE

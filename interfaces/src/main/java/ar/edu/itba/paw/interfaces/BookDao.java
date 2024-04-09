@@ -20,7 +20,12 @@ public interface BookDao {
             long imageId,
             int suggestedAge,
             Date publishDate,
-            long writerId
+            long writerId,
+
+            String writerName,
+            String writerLastName,
+            String writerEmail
+
     );
 
     List<Book> getAll();
