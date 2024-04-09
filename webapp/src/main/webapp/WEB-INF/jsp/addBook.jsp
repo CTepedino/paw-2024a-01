@@ -1,3 +1,5 @@
+<%--suppress JSUnresolvedLibraryURL --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -5,40 +7,141 @@
 <head>
     <meta charset="UTF-8">
     <title>Publicar Libro</title>
+    <link href="/css/style.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
 </head>
 <body>
-<h2>Publicar Nuevo Libro</h2>
-<form action="${pageContext.request.contextPath}/addbook" method="post">
-    <label for="title">Titulo:</label><br>
-    <input type="text" id="title" name="title"><br>
+<%@ include file="components/topBar.jsp" %>
+<h5>¡Subí tu libro!</h5>
+<div class="row form" >
+    <form class="col s6 z-depth-2 center" action="${pageContext.request.contextPath}/addbook" method="post" enctype="multipart/form-data" >
+        <h4>Ingresá tus datos</h4>
 
-  <%--  <label for="description">Descripcion:</label><br>
-    <input type="text"  id="description" name="description"><br>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="writer_name">Nombre del autor<span class="red-text">*</span></label><br>
+                <input type="text" id="writer_name" name="writer_name" class="validate" placeholder="Ejemplo: Gabriel García Márquez">
+                <span class="helper-text" data-error="Por favor ingrese el nombre del autor"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="writer_lastname">Apellido del autor<span class="red-text">*</span></label><br>
+                <input type="text" id="writer_lastname" name="writer_lastname" class="validate" placeholder="Ejemplo: García Márquez">
+                <span class="helper-text" data-error="Por favor ingrese el apellido del autor"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="writer_email">Correo electrónico del autor<span class="red-text">*</span></label><br>
+                <input type="text" id="writer_email" name="writer_email" class="validate" placeholder="Ejemplo: autor@example.com">
+                <span class="helper-text" data-error="Por favor ingrese un correo electrónico válido"></span>
+            </div>
+        </div>
 
-    <label for="genra">Genero:</label><br>
-    <input type="text" id="genra" name="genra"><br>
+        <h4>Ingresá los datos del libro</h4>
 
-    <label for="price">Precio:</label><br>
-    <input type="number" id="price" name="price"><br>
-
-    <label for="page_numbers">Numero de Paginas:</label><br>
-    <input type="number" id="page_numbers" name="page_numbers"><br>
-
-    <label for="prev">Previsualizacion:</label><br>
-    <input type="text" id="prev" name="prev"><br>
-
-    <label for="image">Imagen:</label><br>
-    <input type="text" id="image" name="image"><br>
-
-    <label for="suggested_age">Edad Sugerida:</label><br>
-    <input type="number" id="suggested_age" name="suggested_age"><br>
-
-    <label for="published_date">Fecha de Publicación:</label><br>
-    <input type="text" id="published_date" name="published_date"><br>
-
-    <label for="writer_email">Ingrese su correo electrónico:</label><br>
-    <input type="text" id="writer_email" name="writer_email"><br>--%>
-    <input type="submit" value="Publicar">
-</form>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="title">Título del libro<span class="red-text">*</span></label><br>
+                <input type="text" id="title" name="title" class="validate" placeholder="Ejemplo: Cien años de soledad">
+                <span class="helper-text" data-error="Por favor ingrese el título del libro"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="description">Descripción del libro<span class="red-text">*</span></label><br>
+                <input type="text" id="description" name="description" class="materialize-textarea" placeholder="Breve descripción del contenido del libro"></input>
+                <span class="helper-text" data-error="Por favor ingrese una descripción del libro"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="genre" class="active">Género literario<span class="red-text">*</span></label>
+                <select name="genre" id="genre"  >
+                    <option value="" disabled> Seleccione género </option>
+                    <option value="Novela">Novela</option>
+                    <option value="Poesía">Poesía</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Ensayo">Ensayo</option>
+                    <option value="Cuento">Cuento</option>
+                    <option value="Fábula">Fábula</option>
+                    <option value="Ciencia ficción">Ciencia ficción</option>
+                    <option value="Fantasía">Fantasía</option>
+                    <option value="Historia">Historia</option>
+                    <option value="Biografía">Biografía</option>
+                    <option value="Crónica">Crónica</option>
+                    <option value="Epopeya">Epopeya</option>
+                    <option value="Leyenda">Leyenda</option>
+                    <option value="Mitología">Mitología</option>
+                    <option value="Tragedia">Tragedia</option>
+                    <option value="Comedia">Comedia</option>
+                    <option value="Sátira">Sátira</option>
+                    <option value="Diario">Diario</option>
+                    <option value="Memorias">Memorias</option>
+                </select>
+                <span class="helper-text" data-error="Por favor seleccione el género literario del libro"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="page_numbers">Número de páginas<span class="red-text">*</span></label><br>
+                <input type="number" id="page_numbers" name="page_numbers" class="validate" placeholder="Ejemplo: 300">
+                <span class="helper-text" data-error="Por favor ingrese el número de páginas"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="prev">Previsualización del libro<span class="red-text">*</span></label><br>
+                <input type="text" id="prev" name="prev" class="validate" placeholder="Breve previsualización del contenido">
+                <span class="helper-text" data-error="Por favor ingrese una previsualización del libro"></span>
+            </div>
+        </div>
+        <div class="row">
+                <div class="input-field col s12">
+                    <label for="suggested_age">Edad sugerida<span class="red-text">*</span></label><br>
+                    <input type="number" id="suggested_age" name="suggested_age" class="validate" placeholder="Ejemplo: 18">
+                    <span class="helper-text" data-error="Por favor ingrese una edad sugerida"></span>
+                </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="price">Precio<span class="red-text">*</span></label><br>
+                <input type="number" id="price" name="price" placeholder="Ejemplo: 20.99">
+                <span class="helper-text" data-error="Por favor ingrese el precio del libro"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="file" class="active">Imagen de portada<span class="red-text">*</span></label><br>
+                <input type="file" id="file" name="file" placeholder="Ejemplo: 123456">
+                <span class="helper-text" data-error="Por favor ingrese el ID de la imagen"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="published_date">Fecha de publicación<span class="red-text">*</span></label><br>
+                <input type="date" id="published_date" name="published_date" class="validate" placeholder="Ejemplo: 2024-04-05">
+                <span class="helper-text" data-error="Por favor ingrese la fecha de publicación"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <button class="btn waves-effect waves-light" type="submit" name="action">
+                    <i class="material-icons center">PUBLICAR</i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
 </body>
 </html>

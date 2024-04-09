@@ -9,6 +9,8 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -22,6 +24,7 @@ import javax.sql.DataSource;
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller",
         "ar.edu.itba.paw.services",
         "ar.edu.itba.paw.persistence"})
+
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
@@ -51,10 +54,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public DataSourceInitializer dataSourceInitializer(DataSource ds){
         final DataSourceInitializer dsi = new DataSourceInitializer();
-
         dsi.setDataSource(ds);
         dsi.setDatabasePopulator(databasePopulator());
-
         return dsi;
     }
 
@@ -71,4 +72,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         super.addResourceHandlers(registry);
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
     }
+
+    @Bean
+    public StandardServletMultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver();
+    }
+
 }
+
+
+

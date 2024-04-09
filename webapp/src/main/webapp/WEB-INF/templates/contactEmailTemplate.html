@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Template</title>
+</head>
+<body>
+<p>
+    Dear Seller,
+</p>
+<p>
+    The reader <span th:text="${name}"></span> <span th:text="${lastName}"></span> is interested in buying your book.
+    Please contact them at <span th:text="${readerEmail}"></span>.
+</p>
+<p>
+    Best regards,
+    Cybrary
+</p>
+</body>
+</html>

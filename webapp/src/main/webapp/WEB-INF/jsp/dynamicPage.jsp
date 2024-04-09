@@ -6,7 +6,6 @@
 
 <body>
 <%@ include file="components/topBar.jsp" %>
-<%@ include file="components/header.jsp" %>
     <h1>${title}</h1>
     <p>Username: ${user.username}</p>
 </body>
