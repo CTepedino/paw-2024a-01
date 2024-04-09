@@ -19,6 +19,6 @@
         </div>
     </div>
     <p>${book.description}</p>
-    <a class="waves-effect waves-light btn">Contact Writer</a>
+    <a class="waves-effect waves-light btn" href="/buy?writerEmail=${book.writerEmail}&bookTitle=${book.title}">Contact Writer</a>
 </body>
 </html>

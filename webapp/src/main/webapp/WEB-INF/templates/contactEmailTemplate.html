@@ -40,7 +40,7 @@
         <h2 style="text-align: center;">A reader wants to buy your book!</h2>
     </div>
     <div class="email-content">
-        <p>The reader <span th:text="${name}"></span> <span th:text="${lastName}"></span> is interested in buying one of your books.</p>
+        <p>The reader <span th:text="${name}"></span> <span th:text="${lastName}"></span> is interested in buying "<span th:text="${bookTitle}"></span>"</p>
         <p>Please contact them at <span th:text="${readerEmail}"></span>.</p>
     </div>
 </div>

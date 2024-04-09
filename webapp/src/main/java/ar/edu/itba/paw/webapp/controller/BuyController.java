@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.MailService;
-import ar.edu.itba.paw.interfaces.WriterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,24 +12,23 @@ import org.springframework.web.servlet.ModelAndView;
 public class BuyController {
 
     private final MailService ms;
-    private final WriterService ws;
 
     @Autowired
-    public BuyController(final MailService ms, final WriterService ws){
+    public BuyController(final MailService ms){
         this.ms = ms;
-        this.ws = ws;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/buy")
-    public ModelAndView buyForm(@RequestParam("writerId") Long writerId){
+    public ModelAndView buyForm(@RequestParam("writerEmail") String writerEmail, @RequestParam("bookTitle") String bookTitle){
         ModelAndView mav = new ModelAndView("buyForm");
-        mav.addObject("writerId", writerId);
+        mav.addObject("writerEmail", writerEmail);
+        mav.addObject("bookTitle", bookTitle);
         return mav;
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
-    public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("lastName") String lastName, @RequestParam("email") String email, @RequestParam("writerId") Long writerId){
-        ms.sendEmail(ws.findById(writerId).get().getEmail(), name, lastName, email);
+    public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("lastName") String lastName, @RequestParam("email") String email, @RequestParam("writerEmail") String writerEmail, @RequestParam("bookTitle") String bookTitle){
+        ms.sendEmail(writerEmail, name, lastName, email, bookTitle);
         return new ModelAndView("emailConfirmation");
     }
 

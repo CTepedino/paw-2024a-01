@@ -25,12 +25,13 @@ public class MailServiceImpl implements MailService{
     }
 
     @Async
-    public void sendEmail(String to, String name, String lastName, String readerEmail){
+    public void sendEmail(String to, String name, String lastName, String readerEmail, String bookTitle){
         try {
             Context context = new Context();
             context.setVariable("name", name);
             context.setVariable("lastName", lastName);
             context.setVariable("readerEmail", readerEmail);
+            context.setVariable("bookTitle", bookTitle);
 
 
             String emailContent = templateEngine.process("contactEmailTemplate", context);

@@ -17,7 +17,8 @@
                         </div>
                         <div class="row">
                             <form action="${registerUrl}" method="post" class="col s12">
-                                <input name="writerId" value="${writerId}" hidden="hidden">
+                                <input name="writerEmail" value="${writerEmail}" hidden="hidden">
+                                <input name="bookTitle" value="${bookTitle}" hidden="hidden">
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <input name="name" id="name" type="text" class="validate" required maxlength="15">
@@ -35,8 +36,8 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-                                        <i class="material-icons right">send</i>
+                                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                                        <i class="material-icons right">Submit</i>
                                     </button>
                                 </div>
                             </form>
