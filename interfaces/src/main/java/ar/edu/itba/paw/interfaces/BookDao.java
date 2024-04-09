@@ -15,7 +15,7 @@ public interface BookDao {
             String genre,
             Double price,
             int pageCount,
-            long pdfPreviewId,
+            long pdfId,
             long imageId,
             int suggestedAge,
             Date publishDate,

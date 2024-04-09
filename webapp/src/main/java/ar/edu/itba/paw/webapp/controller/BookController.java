@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.PublishService;
+import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,9 @@ public class BookController {
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
     public ModelAndView addBookForm(){
-        return new ModelAndView("addBook");
+        ModelAndView mav = new ModelAndView("addBook");
+        mav.addObject("genres", BookGenre.values());
+        return mav;
     }
 
     @RequestMapping(method = RequestMethod.POST, path="/addBook")

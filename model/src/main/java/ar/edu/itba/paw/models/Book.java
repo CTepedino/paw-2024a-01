@@ -7,7 +7,7 @@ public class Book {
     private final String title;
     private final String description;
     private final String genre;
-    private final Double price;
+    private final double price;
     private final int pageCount;
     private final long previewPdfId;
     private final long imageId;
@@ -15,7 +15,7 @@ public class Book {
     private final Date publishDate;
     private final long writerId;
 
-    public Book(long bookId, String title, String description, String genre, Double price, int pageCount, long previewPdfId, long imageId, int suggestedAge, Date publishDate, long writerId) {
+    public Book(long bookId, String title, String description, String genre, double price, int pageCount, long previewPdfId, long imageId, int suggestedAge, Date publishDate, long writerId) {
         this.bookId = bookId;
         this.title = title;
         this.description = description;
@@ -45,7 +45,7 @@ public class Book {
         return genre;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 

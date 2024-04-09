@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.BookDao;
 import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.Writer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,7 +25,7 @@ public class BookJdbcDao implements BookDao {
             rs.getString("genre"),
             rs.getDouble("price"),
             rs.getInt("page_count"),
-            rs.getLong("pdf_preview_id"),
+            rs.getLong("pdf_id"),
             rs.getLong("image_id"),
             rs.getInt("suggested_age"),
             rs.getDate("publish_date"),
@@ -60,7 +59,7 @@ public class BookJdbcDao implements BookDao {
             String genre, 
             Double price, 
             int pageCount, 
-            long pdfPreviewId, 
+            long pdfId,
             long imageId, 
             int suggestedAge, 
             Date publishDate, 
@@ -71,7 +70,7 @@ public class BookJdbcDao implements BookDao {
         bookData.put("title",title);
         bookData.put("description",description);
         bookData.put("genre", genre);
-        bookData.put("pdf_preview_id",pdfPreviewId);
+        bookData.put("pdf_id",pdfId);
         bookData.put("page_count",pageCount);
         bookData.put("price",price);
         bookData.put("image_id", imageId);
@@ -87,7 +86,7 @@ public class BookJdbcDao implements BookDao {
                 genre,
                 price,
                 pageCount,
-                pdfPreviewId,
+                pdfId,
                 imageId,
                 suggestedAge,
                 publishDate,

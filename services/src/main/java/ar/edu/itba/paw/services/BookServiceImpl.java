@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.BookDao;
 import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.interfaces.ImageService;
 import ar.edu.itba.paw.models.Book;
+import ar.edu.itba.paw.models.BookGenre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,26 +27,25 @@ public class BookServiceImpl implements BookService {
     public Book create(
             String title,
             String description,
-            String genre,
-            Double price,
+            BookGenre genre,
+            double price,
             int pageCount,
-            long pdfPreviewId,
+            long pdfId,
             long imageId,
             int suggestedAge,
-            Date publishDate,
             long writerId
     ){
 
         return bookDao.create(
                 title,
                 description,
-                genre,
+                genre.toString(),
                 price,
                 pageCount,
-                pdfPreviewId,
+                pdfId,
                 imageId,
                 suggestedAge,
-                publishDate,
+                new Date(System.currentTimeMillis()),
                 writerId
         );
     }

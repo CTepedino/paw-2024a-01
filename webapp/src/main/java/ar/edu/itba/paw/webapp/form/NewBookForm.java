@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.models.BookGenre;
 import org.springframework.web.multipart.MultipartFile;
 
 public class NewBookForm {
@@ -9,9 +10,9 @@ public class NewBookForm {
 
     private String title;
     private String description;
-    private String genre;
+    private BookGenre genre;
     private int suggestedAge;
-    private Double price;
+    private double price;
     private int pageCount;
 
     private MultipartFile image;
@@ -57,11 +58,11 @@ public class NewBookForm {
         this.description = description;
     }
 
-    public String getGenre() {
+    public BookGenre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(BookGenre genre) {
         this.genre = genre;
     }
 
@@ -73,11 +74,11 @@ public class NewBookForm {
         this.suggestedAge = suggestedAge;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

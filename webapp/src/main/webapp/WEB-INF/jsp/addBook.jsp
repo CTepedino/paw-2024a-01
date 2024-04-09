@@ -64,7 +64,7 @@
                 <label for="genre" class="active">Género literario<span class="red-text">*</span></label>
                 <select name="genre" id="genre"  >
                     <option value="" disabled> Seleccione género </option>
-                    <option value="Novela">Novela</option>
+<%--                    <option value="Novela">Novela</option>
                     <option value="Poesía">Poesía</option>
                     <option value="Drama">Drama</option>
                     <option value="Ensayo">Ensayo</option>
@@ -82,7 +82,10 @@
                     <option value="Comedia">Comedia</option>
                     <option value="Sátira">Sátira</option>
                     <option value="Diario">Diario</option>
-                    <option value="Memorias">Memorias</option>
+                    <option value="Memorias">Memorias</option>--%>
+                    <c:forEach items="${genres}" var="genre">
+                        <option value="${genre}"><c:out value="${genre}"/></option>
+                    </c:forEach>
                 </select>
                 <span class="helper-text" data-error="Por favor seleccione el género literario del libro"></span>
             </div>
