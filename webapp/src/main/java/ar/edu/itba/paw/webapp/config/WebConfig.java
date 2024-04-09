@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    private static final long MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
+    private static final long MAX_UPLOAD_SIZE = 10L * 1024 * 1024;
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;

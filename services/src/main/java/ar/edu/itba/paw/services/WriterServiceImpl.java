@@ -24,8 +24,15 @@ public class WriterServiceImpl implements WriterService {
         return writerDao.findById(id);
     }
 
+
     @Override
     public Writer create(String name, String lastName, String email) {
         return writerDao.create(name, lastName, email);
+    }
+
+    @Override
+    public Writer createOrGet(String name, String lastName, String email) {
+        Optional<Writer> maybeWriter = writerDao.findByEmail(email);
+        return maybeWriter.orElseGet(() -> writerDao.create(name, lastName, email));
     }
 }

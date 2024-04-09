@@ -45,5 +45,15 @@ public class WriterJdbcDao implements WriterDao {
         Number generatedId = simpleJdbcInsert.executeAndReturnKey(writerData);
         return new Writer(generatedId.longValue(), name, lastName, email);
     }
+
+    @Override
+    public Optional<Writer> findByEmail(String email){
+        final List<Writer> list = jdbcTemplate.query(
+                "SELECT * FROM writers WHERE email = ?",
+                new Object[] {email},
+                ROW_MAPPER
+        );
+        return list.stream().findFirst();
+    }
 }
 

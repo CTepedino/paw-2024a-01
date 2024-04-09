@@ -16,28 +16,29 @@
 <body>
 <%@ include file="components/topBar.jsp" %>
 <h5>¡Subí tu libro!</h5>
-<div class="row form" >
-    <form class="col s6 z-depth-2 center" action="${pageContext.request.contextPath}/addbook" method="post" enctype="multipart/form-data" >
+<c:url value="/addBook" var="postUrl"/>
+<div class="row form">
+    <form class="col s6 z-depth-2 center" action="${postUrl}" method="post" enctype="multipart/form-data" >
         <h4>Ingresá tus datos</h4>
 
         <div class="row">
             <div class="input-field col s12">
-                <label for="writer_name">Nombre del autor<span class="red-text">*</span></label><br>
-                <input type="text" id="writer_name" name="writer_name" class="validate" placeholder="Ejemplo: Gabriel García Márquez">
+                <label for="writerFirstName">Nombre del autor<span class="red-text">*</span></label><br>
+                <input type="text" id="writerFirstName" name="writerFirstName" class="validate" placeholder="Ejemplo: Gabriel García Márquez">
                 <span class="helper-text" data-error="Por favor ingrese el nombre del autor"></span>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <label for="writer_lastname">Apellido del autor<span class="red-text">*</span></label><br>
-                <input type="text" id="writer_lastname" name="writer_lastname" class="validate" placeholder="Ejemplo: García Márquez">
+                <label for="writerLastName">Apellido del autor<span class="red-text">*</span></label><br>
+                <input type="text" id="writerLastName" name="writerLastName" class="validate" placeholder="Ejemplo: García Márquez">
                 <span class="helper-text" data-error="Por favor ingrese el apellido del autor"></span>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <label for="writer_email">Correo electrónico del autor<span class="red-text">*</span></label><br>
-                <input type="text" id="writer_email" name="writer_email" class="validate" placeholder="Ejemplo: autor@example.com">
+                <label for="writerEmail">Correo electrónico del autor<span class="red-text">*</span></label><br>
+                <input type="text" id="writerEmail" name="writerEmail" class="validate" placeholder="Ejemplo: autor@example.com">
                 <span class="helper-text" data-error="Por favor ingrese un correo electrónico válido"></span>
             </div>
         </div>
@@ -88,22 +89,15 @@
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <label for="page_numbers">Número de páginas<span class="red-text">*</span></label><br>
-                <input type="number" id="page_numbers" name="page_numbers" class="validate" placeholder="Ejemplo: 300">
+                <label for="pageCount">Número de páginas<span class="red-text">*</span></label><br>
+                <input id="pageCount" name="pageCount" class="validate" placeholder="Ejemplo: 300">
                 <span class="helper-text" data-error="Por favor ingrese el número de páginas"></span>
             </div>
         </div>
         <div class="row">
-            <div class="input-field col s12">
-                <label for="prev">Previsualización del libro<span class="red-text">*</span></label><br>
-                <input type="text" id="prev" name="prev" class="validate" placeholder="Breve previsualización del contenido">
-                <span class="helper-text" data-error="Por favor ingrese una previsualización del libro"></span>
-            </div>
-        </div>
-        <div class="row">
                 <div class="input-field col s12">
-                    <label for="suggested_age">Edad sugerida<span class="red-text">*</span></label><br>
-                    <input type="number" id="suggested_age" name="suggested_age" class="validate" placeholder="Ejemplo: 18">
+                    <label for="suggestedAge">Edad sugerida<span class="red-text">*</span></label><br>
+                    <input type="number" id="suggestedAge" name="suggestedAge" class="validate" placeholder="Ejemplo: 18">
                     <span class="helper-text" data-error="Por favor ingrese una edad sugerida"></span>
                 </div>
         </div>
@@ -116,16 +110,16 @@
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <label for="file" class="active">Imagen de portada<span class="red-text">*</span></label><br>
-                <input type="file" id="file" name="file" placeholder="Ejemplo: 123456">
+                <label for="image" class="active">Imagen de portada<span class="red-text">*</span></label><br>
+                <input type="file" id="image" name="image" placeholder="Ejemplo: 123456" accept=".png, .jpeg">
                 <span class="helper-text" data-error="Por favor ingrese el ID de la imagen"></span>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <label for="published_date">Fecha de publicación<span class="red-text">*</span></label><br>
-                <input type="date" id="published_date" name="published_date" class="validate" placeholder="Ejemplo: 2024-04-05">
-                <span class="helper-text" data-error="Por favor ingrese la fecha de publicación"></span>
+                <label for="pdf">Previsualización del libro<span class="red-text">*</span></label><br>
+                <input type="file" id="pdf" name="pdf" class="validate" placeholder="Breve previsualización del contenido" accept=".pdf">
+                <span class="helper-text" data-error="Por favor ingrese una previsualización del libro"></span>
             </div>
         </div>
         <div class="row">

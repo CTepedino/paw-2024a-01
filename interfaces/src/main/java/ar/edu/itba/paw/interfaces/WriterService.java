@@ -10,4 +10,6 @@ public interface WriterService {
     Optional<Writer> findById(long id);
 
     Writer create(String name, String lastName, String email);
+
+    Writer createOrGet(String name, String lastName, String email);
 }
