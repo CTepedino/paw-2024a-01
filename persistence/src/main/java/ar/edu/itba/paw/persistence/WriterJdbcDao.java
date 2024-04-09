@@ -26,7 +26,7 @@ public class WriterJdbcDao implements WriterDao {
     public WriterJdbcDao(final DataSource ds){
         jdbcTemplate = new JdbcTemplate(ds);
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .usingGeneratedKeyColumns("writer_ Id")
+                .usingGeneratedKeyColumns("writer_id")
                 .withTableName("writers");
     }
 
@@ -44,6 +44,16 @@ public class WriterJdbcDao implements WriterDao {
         writerData.put("last_name", lastName);
         Number generatedId = simpleJdbcInsert.executeAndReturnKey(writerData);
         return new Writer(generatedId.longValue(), name, lastName, email);
+    }
+
+    @Override
+    public Optional<Writer> findByEmail(String email){
+        final List<Writer> list = jdbcTemplate.query(
+                "SELECT * FROM writers WHERE email = ?",
+                new Object[] {email},
+                ROW_MAPPER
+        );
+        return list.stream().findFirst();
     }
 }
 

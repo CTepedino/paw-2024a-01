@@ -21,6 +21,8 @@ import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -32,6 +34,8 @@ import java.util.Properties;
         "ar.edu.itba.paw.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    private static final long MAX_UPLOAD_SIZE = 10L * 1024 * 1024;
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -47,7 +51,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl("jdbc:postgresql://localhost/postgres");
@@ -57,7 +61,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public DataSourceInitializer dataSourceInitializer(DataSource ds) {
+    public DataSourceInitializer dataSourceInitializer(DataSource ds){
         final DataSourceInitializer dsi = new DataSourceInitializer();
 
         dsi.setDataSource(ds);
@@ -66,7 +70,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return dsi;
     }
 
-    private DatabasePopulator databasePopulator() {
+    private DatabasePopulator databasePopulator(){
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
 
         dbp.addScript(schemaSql);
@@ -111,5 +115,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(templateResolver());
         return engine;
+    }
+
+    @Bean
+    public MultipartResolver multipartResolver(){
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(MAX_UPLOAD_SIZE);
+        return multipartResolver;
     }
 }

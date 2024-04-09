@@ -1,0 +1,12 @@
+.container{
+    width: 100%;
+    margin-top: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.book_cover {
+    margin: 20px;
+    width: 100%; /* La imagen ocupará todo el ancho de su contenedor */
+    max-width: 200px; /* Ancho máximo para la imagen */
+}

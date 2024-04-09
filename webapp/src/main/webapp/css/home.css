@@ -1,5 +1,5 @@
 .explore_back{
-    background-color: #437C90;
+    background-color: #255957;
     padding: 10px;
 }
 
@@ -10,6 +10,11 @@
     justify-content: space-around;
 }
 
+a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
 
 .explore_books {
     color: white;

@@ -9,3 +9,38 @@ CREATE TABLE IF NOT EXISTS writers(
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE
 );
+
+CREATE TABLE IF NOT EXISTS pdfs(
+    pdf_id SERIAL PRIMARY KEY,
+    pdf BYTEA NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS images(
+    image_id SERIAL PRIMARY KEY,
+    image BYTEA NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS books (
+    book_id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    genre TEXT NOT NULL,
+    page_count INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    suggested_age INT NOT NULL,
+    published_date DATE DEFAULT now(),
+    pdf_id INT NOT NULL,
+    image_id INT NOT NULL,
+    writer_id INT NOT NULL,
+
+    writer_name TEXT,
+    writer_last_name TEXT,
+    writer_email TEXT,
+
+    FOREIGN KEY (writer_id) REFERENCES writers (writer_id) ON DELETE CASCADE,
+    FOREIGN KEY (image_id) REFERENCES images (image_id) ON DELETE CASCADE,
+    FOREIGN KEY (pdf_id) REFERENCES pdfs (pdf_id) ON DELETE CASCADE
+);
+
+
+

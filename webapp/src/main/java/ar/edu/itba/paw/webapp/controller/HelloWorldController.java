@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.MailService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
@@ -22,11 +21,6 @@ public class HelloWorldController {
         this.us = us;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/")
-    public ModelAndView home(){
-        final ModelAndView mav = new ModelAndView("home");
-        return mav;
-    }
 
     @RequestMapping(method = RequestMethod.POST, path = "/create")
     public ModelAndView register(@RequestParam("username") String username){
@@ -34,30 +28,32 @@ public class HelloWorldController {
         return new ModelAndView("redirect:/" + user.getUserId());
     }
 
-    @RequestMapping(method = RequestMethod.GET, path="/{userId:\\d+}")
-    public ModelAndView userProfile(@PathVariable("userId") final long userId){
-        final ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("user", us.findById(userId).orElseThrow(UserNotFoundException::new));
-
-        return mav;
-    }
 
 
+//    @RequestMapping(method = RequestMethod.GET, path="/{userId:\\d+}")
+//    public ModelAndView userProfile(@PathVariable("userId") final long userId){
+//        final ModelAndView mav = new ModelAndView("profile");
+//        mav.addObject("user", us.findById(userId).orElseThrow(UserNotFoundException::new));
+//
+//        return mav;
+//    }
 
-    @RequestMapping(method = RequestMethod.GET, path="/{nonnumeric:[a-z]+}")
+
+
+   /* @RequestMapping(method = RequestMethod.GET, path="/{nonnumeric:[a-z]+}")
     public ModelAndView invalidView(){
         final ModelAndView mav = new ModelAndView("index");
         mav.addObject("user", us.findById(-1).orElseThrow(UserNotFoundException::new));
 
         return mav;
-    }
+    }*/
 
-    @RequestMapping(method = RequestMethod.GET, path = "/other")
+  /*  @RequestMapping(method = RequestMethod.GET, path = "/other")
     public ModelAndView otherView(){
         final ModelAndView mav = new ModelAndView("anotherPage");
 
         return mav;
-    }
+    }*/
 
     @RequestMapping(method = RequestMethod.GET, path = "/dynamic")
     public ModelAndView dynamicView(){
