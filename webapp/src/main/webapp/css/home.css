@@ -10,6 +10,11 @@
     justify-content: space-around;
 }
 
+a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
 
 .explore_books {
     color: white;

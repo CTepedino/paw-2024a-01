@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.BookDao;
 import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.Writer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBooks(){
         return bookDao.getBooks();
+    }
+
+    @Override
+    public Optional<Book> findById(long id) {
+        return bookDao.findById(id);
     }
 
     @Override

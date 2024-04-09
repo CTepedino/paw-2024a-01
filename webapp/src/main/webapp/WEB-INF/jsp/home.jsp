@@ -21,23 +21,24 @@
     <div class="books">
         <div class="container">
         <c:forEach var="book" items="${books}">
-            <div class="card">
+            <div class="card" >
+                <a href="${pageContext.request.contextPath}/${book.libroId}">
                 <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="/css/book-cover.jpg">
                 </div>
-                <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4">${book.title}<i class="material-icons right">more_vert</i></span>
+                </a>
+                <a href="${pageContext.request.contextPath}/${book.libroId}">
+                <div class="card-content" >
+                    <span class="card-title grey-text text-darken-4">${book.title}</span>
                     <p>${book.writerName} ${book.writerSurname}</p>
                     <p>${book.genra}</p>
                     <p>+ ${book.suggestedAge}</p>
                     <p>$ ${book.price}</p>
 
                 </div>
-                <div class="card-reveal">
-                    <span class="card-title grey-text text-darken-4">Description <i class="material-icons right">close</i></span>
-                    <p>${book.description}</p>
-                </div>
+                </a>
             </div>
+            </a>
         </c:forEach>
         </div>
     </div>
