@@ -6,114 +6,112 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Publicar Libro</title>
-    <link href="/css/style.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+    <title>Publish Book</title>
+    <link href="/css/addBook.css" rel="stylesheet"/>
 </head>
 <body>
 <%@ include file="components/topBar.jsp" %>
-<h5>¡Subí tu libro!</h5>
 <c:url value="/addBook" var="postUrl"/>
-<div class="row form">
-    <form class="col s6 z-depth-2 center" action="${postUrl}" method="post" enctype="multipart/form-data" >
-        <h4>Ingresá tus datos</h4>
+<div class="container">
+<div class="form">
+    <h5>Publish your Book!</h5>
+    <form class="z-depth-2" action="${postUrl}" method="post" enctype="multipart/form-data" >
+        <h6>Fill in your details</h6>
 
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="writerFirstName">Nombre del autor<span class="red-text">*</span></label><br>
-                <input type="text" id="writerFirstName" name="writerFirstName" class="validate" placeholder="Ejemplo: Gabriel García Márquez">
-                <span class="helper-text" data-error="Por favor ingrese el nombre del autor"></span>
+        <div>
+            <div class="input-field">
+                <label for="writerFirstName">Author's name<span class="red-text">*</span></label><br>
+                <input type="text" id="writerFirstName" name="writerFirstName" class="validate">
+                <span class="helper-text" data-error="Please enter the author's name"></span>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="writerLastName">Apellido del autor<span class="red-text">*</span></label><br>
-                <input type="text" id="writerLastName" name="writerLastName" class="validate" placeholder="Ejemplo: García Márquez">
-                <span class="helper-text" data-error="Por favor ingrese el apellido del autor"></span>
+        <div>
+            <div class="input-field">
+                <label for="writerLastName">Author's surname<span class="red-text">*</span></label><br>
+                <input type="text" id="writerLastName" name="writerLastName" class="validate">
+                <span class="helper-text" data-error="Please enter the author's surname"></span>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="writerEmail">Correo electrónico del autor<span class="red-text">*</span></label><br>
-                <input type="text" id="writerEmail" name="writerEmail" class="validate" placeholder="Ejemplo: autor@example.com">
-                <span class="helper-text" data-error="Por favor ingrese un correo electrónico válido"></span>
+        <div>
+            <div class="input-field">
+                <label for="writerEmail">Contact email<span class="red-text">*</span></label><br>
+                <input type="text" id="writerEmail" name="writerEmail" class="validate">
+                <span class="helper-text" data-error="Please enter a valid email"></span>
             </div>
         </div>
 
-        <h4>Ingresá los datos del libro</h4>
+        <h6>Fill in the book's details</h6>
 
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="title">Título del libro<span class="red-text">*</span></label><br>
-                <input type="text" id="title" name="title" class="validate" placeholder="Ejemplo: Cien años de soledad">
-                <span class="helper-text" data-error="Por favor ingrese el título del libro"></span>
+        <div>
+            <div class="input-field">
+                <label for="title">Title<span class="red-text">*</span></label><br>
+                <input type="text" id="title" name="title" class="validate">
+                <span class="helper-text" data-error="Please complete the book's title"></span>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="description">Descripción del libro<span class="red-text">*</span></label><br>
-                <input type="text" id="description" name="description" class="materialize-textarea" placeholder="Breve descripción del contenido del libro"></input>
-                <span class="helper-text" data-error="Por favor ingrese una descripción del libro"></span>
+        <div>
+            <div class="input-field">
+                <label for="description">Description<span class="red-text">*</span></label><br>
+                <input type="text" id="description" name="description" class="materialize-textarea" placeholder="Short description of your book"></input>
+                <span class="helper-text" data-error="Please enter a description"></span>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="genre" class="active">Género literario<span class="red-text">*</span></label>
+        <div>
+            <div class="input-field">
+                <label for="genre" class="active">Genre<span class="red-text">*</span></label>
                 <select name="genre" id="genre"  >
-                    <option value="" disabled> Seleccione género </option>
+                    <option value="" disabled> Select a genre </option>
                     <c:forEach items="${genres}" var="genre">
                         <option value="${genre}"><c:out value="${genre.displayName}"/></option>
                     </c:forEach>
                 </select>
-                <span class="helper-text" data-error="Por favor seleccione el género literario del libro"></span>
+                <span class="helper-text" data-error="Please select your book's genre"></span>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="pageCount">Número de páginas<span class="red-text">*</span></label><br>
-                <input id="pageCount" name="pageCount" class="validate" placeholder="Ejemplo: 300">
-                <span class="helper-text" data-error="Por favor ingrese el número de páginas"></span>
+        <div>
+            <div class="input-field">
+                <label for="pageCount">Page count<span class="red-text">*</span></label><br>
+                <input id="pageCount" name="pageCount" class="validate">
+                <span class="helper-text" data-error="Please enter the number of pages"></span>
             </div>
         </div>
-        <div class="row">
-                <div class="input-field col s12">
-                    <label for="suggestedAge">Edad sugerida<span class="red-text">*</span></label><br>
-                    <input type="number" id="suggestedAge" name="suggestedAge" class="validate" placeholder="Ejemplo: 18">
-                    <span class="helper-text" data-error="Por favor ingrese una edad sugerida"></span>
+        <div>
+                <div class="input-field">
+                    <label for="suggestedAge">Recommended age<span class="red-text">*</span></label><br>
+                    <input type="number" id="suggestedAge" name="suggestedAge" class="validate" >
+                    <span class="helper-text" data-error="Please enter recommended age"></span>
                 </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="price">Precio<span class="red-text">*</span></label><br>
-                <input type="number" id="price" name="price" placeholder="Ejemplo: 20.99">
-                <span class="helper-text" data-error="Por favor ingrese el precio del libro"></span>
+        <div>
+            <div class="input-field">
+                <label for="price">Price<span class="red-text">*</span></label><br>
+                <input type="number" id="price" name="price">
+                <span class="helper-text" data-error="Please enter the price of the book"></span>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="image" class="active">Imagen de portada<span class="red-text">*</span></label><br>
-                <input type="file" id="image" name="image" placeholder="Ejemplo: 123456" accept=".png, .jpeg">
-                <span class="helper-text" data-error="Por favor ingrese el ID de la imagen"></span>
+        <div>
+            <div class="input-field">
+                <label for="image" class="active">Cover image<span class="red-text">*</span></label><br>
+                <input type="file" id="image" name="image" accept=".png, .jpeg">
+                <span class="helper-text" ></span>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <label for="pdf">Previsualización del libro<span class="red-text">*</span></label><br>
-                <input type="file" id="pdf" name="pdf" class="validate" placeholder="Breve previsualización del contenido" accept=".pdf">
-                <span class="helper-text" data-error="Por favor ingrese una previsualización del libro"></span>
+        <div>
+            <div class="input-field">
+                <label for="pdf" class="active">Book's preview<span class="red-text">*</span></label><br>
+                <input type="file" id="pdf" name="pdf"  accept=".pdf">
+                <span class="helper-text" ></span>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
+        <div>
+            <div class="input-field">
                 <button class="btn waves-effect waves-light" type="submit" name="action">
-                    <i class="material-icons center">PUBLICAR</i>
+                    Publish
                 </button>
             </div>
         </div>
     </form>
+</div>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

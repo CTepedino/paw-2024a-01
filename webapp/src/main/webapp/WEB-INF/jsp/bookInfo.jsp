@@ -8,7 +8,7 @@
 <body>
     <%@ include file="components/topBar.jsp" %>
     <div class="container">
-        <img class="activator" src="/css/book-cover.jpg">
+        <img class="book_cover" src="/css/book-cover.jpg">
         <div>
             <h2>${book.title}</h2>
             <h5>${book.writerName} ${book.writerLastName}</h5>
@@ -19,6 +19,6 @@
         </div>
     </div>
     <p>${book.description}</p>
-    <button>Contact Writer</button>
+    <a class="waves-effect waves-light btn">Contact Writer</a>
 </body>
 </html>
