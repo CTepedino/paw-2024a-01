@@ -34,6 +34,13 @@ public class BookController {
         this.is = is;
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/")
+    public ModelAndView home(){
+        final ModelAndView mav = new ModelAndView("home");
+        mav.addObject("books", bs.getBooks());
+        return mav;
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/addbook")
     public ModelAndView otherView(){
         final ModelAndView mav = new ModelAndView("addBook");

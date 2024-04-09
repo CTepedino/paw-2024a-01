@@ -3,8 +3,12 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.BookDao;
 import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.models.Book;
+import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -15,6 +19,11 @@ public class BookServiceImpl implements BookService {
     @Autowired
     public BookServiceImpl(final BookDao bookDao){
         this.bookDao = bookDao;
+    }
+
+    @Override
+    public List<Book> getBooks(){
+        return bookDao.getBooks();
     }
 
     @Override

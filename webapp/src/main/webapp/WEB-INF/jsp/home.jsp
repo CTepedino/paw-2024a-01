@@ -20,21 +20,24 @@
     </div>
     <div class="books">
         <div class="container">
-            <% for (int i = 0; i < 4; i++) { %>
+        <c:forEach var="book" items="${books}">
             <div class="card">
                 <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="/css/book-cover.jpg">
                 </div>
                 <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4">Card Title <%= i %><i class="material-icons right">more_vert</i></span>
-                    <p><a href="#">This is a link</a></p>
+                    <span class="card-title activator grey-text text-darken-4">${book.title}<i class="material-icons right">more_vert</i></span>
+                    <p>${book.genra}</p>
+                    <p>+ ${book.suggestedAge}</p>
+                    <p>$ ${book.price}</p>
+
                 </div>
                 <div class="card-reveal">
-                    <span class="card-title grey-text text-darken-4">Card Title <%= i %><i class="material-icons right">close</i></span>
-                    <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                    <span class="card-title grey-text text-darken-4">Description <i class="material-icons right">close</i></span>
+                    <p>${book.description}</p>
                 </div>
             </div>
-            <% } %>
+        </c:forEach>
         </div>
     </div>
 </body>

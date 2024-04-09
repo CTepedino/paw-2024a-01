@@ -21,11 +21,6 @@ public class HelloWorldController {
         this.us = us;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/")
-    public ModelAndView home(){
-        final ModelAndView mav = new ModelAndView("home");
-        return mav;
-    }
 
     @RequestMapping(method = RequestMethod.POST, path = "/create")
     public ModelAndView register(@RequestParam("username") String username){
