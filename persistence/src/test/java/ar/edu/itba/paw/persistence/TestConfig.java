@@ -17,11 +17,14 @@ import javax.sql.DataSource;
 @Configuration
 public class TestConfig {
 
+    @Value("classpath:pgsql.sql")
+    private Resource pgsqlSql;
+
     @Value("classpath:schema.sql")
     private Resource schemaSql;
 
-    @Value("classpath:pgsql.sql")
-    private Resource pgsqlSql;
+    @Value("classpath:auxData.sql")
+    private Resource auxDataSql;
 
     @Bean
     public DataSource dataSource(){
@@ -50,6 +53,7 @@ public class TestConfig {
 
         dbp.addScript(pgsqlSql);
         dbp.addScript(schemaSql);
+        dbp.addScript(auxDataSql);
 
         return dbp;
     }

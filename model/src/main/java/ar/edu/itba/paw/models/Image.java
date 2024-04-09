@@ -1,29 +1,19 @@
 package ar.edu.itba.paw.models;
 
 public class Image {
-        private long image_id;
-        private byte[] imageBlob;
+    private final long imageId;
+    private final byte[] image;
 
-        public Image(long image_id, byte[] imageBlob) {
-            this.image_id = image_id;
-            this.imageBlob = imageBlob;
-        }
+    public Image(long imageId, byte[] image) {
+        this.imageId = imageId;
+        this.image = image;
+    }
 
-        public long getImageId() {
-            return image_id;
-        }
+    public long getImageId() {
+        return imageId;
+    }
 
-        public void setImageId(long image_id) {
-            this.image_id = image_id;
-        }
-
-        public byte[] getImageBlob() {
-            return imageBlob;
-        }
-
-        public void setImageBlob(byte[] imageBlob) {
-            this.imageBlob = imageBlob;
-        }
+    public byte[] getImage() {
+        return image;
+    }
 }
-
-

@@ -1,18 +1,14 @@
 package ar.edu.itba.paw.interfaces;
 
-import ar.edu.itba.paw.interfaces.exceptions.ImageConvException;
 import ar.edu.itba.paw.models.Image;
+import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 public interface ImageService {
-    Optional<Image> findbyid(long image_id);
+    Optional<Image> findById(long id);
 
-    Optional<Image> findbyid(String imagePath) throws URISyntaxException, IOException, ImageConvException;
+    Image create(MultipartFile image);
 
-    Image uploadImage(byte[] photoBlob);
-
-    void deleteImage(long image_id);
 }

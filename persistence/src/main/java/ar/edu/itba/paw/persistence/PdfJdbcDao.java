@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.ImageDao;
+import ar.edu.itba.paw.interfaces.PdfDao;
 import ar.edu.itba.paw.models.Image;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.Pdf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,32 +10,31 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class ImageJdbcDao implements ImageDao {
+public class PdfJdbcDao implements PdfDao {
 
-    private static final RowMapper<Image> ROW_MAPPER = (rs, rowNum) -> new Image(rs.getLong("image_id"), rs.getBytes("image"));
+    private static final RowMapper<Pdf> ROW_MAPPER = (rs, rowNum) -> new Pdf(rs.getLong("pdf_id"), rs.getBytes("pdf"));
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
     @Autowired
-    public ImageJdbcDao(final DataSource ds){
+    public PdfJdbcDao(final DataSource ds){
         jdbcTemplate = new JdbcTemplate(ds);
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .usingGeneratedKeyColumns("image_id")
-                .withTableName("images");
+                .usingGeneratedKeyColumns("pdf_id")
+                .withTableName("pdfs");
     }
 
     @Override
-    public Optional<Image> findById(long id) {
-        final List<Image> list = jdbcTemplate.query(
-            "SELECT * FROM images WHERE image_id = ?",
+    public Optional<Pdf> findById(long id) {
+        final List<Pdf> list = jdbcTemplate.query(
+                "SELECT * FROM pdfs WHERE pdf_id = ?",
                 new Object[] {id},
                 ROW_MAPPER
         );
@@ -44,10 +43,10 @@ public class ImageJdbcDao implements ImageDao {
     }
 
     @Override
-    public Image create(byte[] image){
-        Map<String, Object> imageData = new HashMap<>();
-        imageData.put("image", image);
-        Number generatedId = simpleJdbcInsert.executeAndReturnKey(imageData);
-        return new Image(generatedId.longValue(), image);
+    public Pdf create(byte[] pdf) {
+        Map<String, Object> pdfData = new HashMap<>();
+        pdfData.put("pdf", pdf);
+        Number generatedId = simpleJdbcInsert.executeAndReturnKey(pdfData);
+        return new Pdf(generatedId.longValue(), pdf);
     }
 }
