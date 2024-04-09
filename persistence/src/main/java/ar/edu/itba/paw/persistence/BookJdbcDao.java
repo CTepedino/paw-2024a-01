@@ -29,7 +29,7 @@ public class BookJdbcDao implements BookDao {
             rs.getLong("pdf_id"),
             rs.getLong("image_id"),
             rs.getInt("suggested_age"),
-            rs.getDate("publish_date"),
+            rs.getDate("published_date"),
             rs.getLong("writer_id"),
 
             rs.getString("writer_name"),

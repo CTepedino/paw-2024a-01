@@ -11,11 +11,11 @@
         <img class="activator" src="/css/book-cover.jpg">
         <div>
             <h2>${book.title}</h2>
-            <h5>${book.writerName} ${book.writerSurname}</h5>
+            <h5>${book.writerName} ${book.writerLastName}</h5>
             <h5>${book.price}</h5>
             <h5>${book.suggestedAge}</h5>
-            <h5>${book.genra}</h5>
-            <h5>${book.pageNumbers}</h5>
+            <h5>${book.genre}</h5>
+            <h5>${book.pageCount}</h5>
         </div>
     </div>
     <p>${book.description}</p>
