@@ -14,7 +14,7 @@
 <header>
     <nav>
         <div class="nav-wrapper">
-            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img src="${pageContext.request.contextPath}/css/cybrary.png" width="100" height="75"></a>
+            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img src="${pageContext.request.contextPath}/images/cybrary.png" width="100" height="75"></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect">Publish Book</a></li>
             </ul>
