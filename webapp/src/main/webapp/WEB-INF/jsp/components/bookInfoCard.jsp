@@ -17,9 +17,9 @@
     <a class="card-info" href="${pageContext.request.contextPath}/${book.bookId}">
         <div class="card-content" >
             <span class="card-title grey-text text-darken-4">${book.title}</span>
-            <p>By ${book.writerName} ${book.writerLastName}</p>
-            <p>${book.genre.displayName}</p>
-            <p>Suggested age: + ${book.suggestedAge}</p>
+            <p class="info">By ${book.writerName} ${book.writerLastName}</p>
+            <p class="info">${book.genre.displayName}</p>
+            <p class="info">Suggested age: + ${book.suggestedAge}</p>
         </div>
         <div class="card-action">
             <p>Price: $${book.price}</p>
