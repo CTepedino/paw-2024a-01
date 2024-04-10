@@ -9,7 +9,7 @@
 <body>
 <object
     type="application/pdf"
-    data="${baseUrl}/pdf/${pdfId}"
+    data="<c:url value="/pdf/${pdfId}">"
     width="600"
     height="700"
 >

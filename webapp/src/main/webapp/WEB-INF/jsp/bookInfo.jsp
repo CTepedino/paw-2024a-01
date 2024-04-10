@@ -54,7 +54,7 @@
                 <h6>Preview: </h6>
                 <object
                         type="application/pdf"
-                        data="${baseUrl}/pdf/${book.previewPdfId}"
+                        data="<c:url value="${baseUrl}/pdf/${book.previewPdfId}" />"
                         width="100%"
                         height="700"
                 >
