@@ -9,7 +9,7 @@
 <body>
     <script>
         alert("Your information has been sent to the seller!\nAwait for further instructions in your inbox.");
-        window.location.href = "/";
+        window.location.href = "${pageContext.request.contextPath}/";
     </script>
 </body>
 
