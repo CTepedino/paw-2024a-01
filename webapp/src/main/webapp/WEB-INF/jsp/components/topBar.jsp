@@ -8,7 +8,7 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <title>Title</title>
-    <link href="/css/topBarStyle.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/topBarStyle.css" rel="stylesheet"/>
 </head>
 <body>
 <header>

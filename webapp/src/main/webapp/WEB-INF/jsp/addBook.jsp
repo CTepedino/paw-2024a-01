@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Publish Book</title>
-    <link href="/css/addBook.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
 </head>
 <body>
 <%@ include file="components/topBar.jsp" %>
