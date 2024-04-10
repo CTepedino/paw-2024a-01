@@ -1,4 +1,20 @@
-.book_card{
-    width: 350px;
-    height: 250px;
+.card-info{
+    width: 100%;
+}
+.card {
+    flex-basis: calc(50% - 10px); /* El ancho de cada tarjeta es el 50% del contenedor menos el margen */
+    display: flex;
+    height: 300px;
+}
+
+.card-image {
+    width: 100%; /* La imagen ocupará todo el ancho de su contenedor */
+    max-width: 200px; /* Ancho máximo para la imagen */
+    max-height: 300px;
+}
+
+
+.card-content,
+.card-reveal {
+    flex: 1;
 }
