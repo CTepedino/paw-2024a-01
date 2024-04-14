@@ -22,7 +22,11 @@
                         <h5>${book.writerName} ${book.writerLastName}</h5>
                     </div>
                     <div class="col s4">
-                        <a class="waves-effect waves-light btn"  href="${pageContext.request.contextPath}/buy?writerEmail=${book.writerEmail}&bookTitle=${book.title}">Contact Writer</a>
+                        <c:url var="buyUrl" value="/buy">
+                            <c:param name="writerEmail" value="${book.writerEmail}" />
+                            <c:param name="bookTitle" value="${book.title}" />
+                        </c:url>
+                        <a class="waves-effect waves-light btn"  href="${buyUrl}">Contact Writer</a>
                     </div>
                 </div>
                 <h5>$${book.price}</h5>

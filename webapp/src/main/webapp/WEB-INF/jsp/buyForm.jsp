@@ -17,8 +17,8 @@
                         </div>
                         <div class="row">
                             <form action="${registerUrl}" method="post" class="col s12">
-                                <input name="writerEmail" value="${writerEmail}" hidden="hidden">
-                                <input name="bookTitle" value="${bookTitle}" hidden="hidden">
+                                <input name="writerEmail" value="<c:out value="${writerEmail}"/>" hidden="hidden">
+                                <input name="bookTitle" value="<c:out value="${bookTitle}"/>" hidden="hidden">
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <input name="name" id="name" type="text" class="validate" required maxlength="15">
