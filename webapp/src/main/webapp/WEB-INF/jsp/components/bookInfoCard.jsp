@@ -16,13 +16,13 @@
     </a>
     <a class="card-info" href="${pageContext.request.contextPath}/${book.bookId}">
         <div class="card-content" >
-            <span class="card-title grey-text text-darken-4">${book.title}</span>
-            <p class="info">By ${book.writerName} ${book.writerLastName}</p>
-            <p class="info">${book.genre.displayName}</p>
-            <p class="info">Suggested age: + ${book.suggestedAge}</p>
+            <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>
+            <p class="info">By <c:out value="${book.writerName}"/> <c:out value="${book.writerLastName}"/></p>
+            <p class="info"><c:out value="${book.genre.displayName}"/></p>
+            <p class="info">Suggested age: + <c:out value="${book.suggestedAge}"/></p>
         </div>
         <div class="card-action">
-            <p>Price: $${book.price}</p>
+            <p>Price: $<c:out value="${book.price}"/></p>
         </div>
     </a>
 </div>

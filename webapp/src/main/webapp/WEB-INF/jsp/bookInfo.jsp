@@ -16,10 +16,10 @@
                 <img class="book_cover" src="<c:url  value="${baseUrl}/image/${book.imageId}"/>" alt="Book cover">
             </div>
             <div class="col s7">
-                <h2>${book.title}</h2>
+                <h2><c:out value="${book.title}"/></h2>
                 <div class="row">
                     <div class="col s8">
-                        <h5>${book.writerName} ${book.writerLastName}</h5>
+                        <h5><c:out value="${book.writerName}"/> <c:out value="${book.writerLastName}"/></h5>
                     </div>
                     <div class="col s4">
                         <c:url var="buyUrl" value="/buy">
@@ -29,30 +29,30 @@
                         <a class="waves-effect waves-light btn"  href="${buyUrl}">Contact Writer</a>
                     </div>
                 </div>
-                <h5>$${book.price}</h5>
+                <h5>$<c:out value="${book.price}"/></h5>
                 <table>
                     <tbody>
                     <tr>
                         <td>Recommended age</td>
-                        <td>${book.suggestedAge}</td>
+                        <td><c:out value="${book.suggestedAge}"/></td>
                     </tr>
                     <tr>
                         <td>Genre</td>
-                        <td>${book.genre}</td>
+                        <td><c:out value="${book.genre}"/></td>
                     </tr>
                     <tr>
                         <td>Page count</td>
-                        <td>${book.pageCount}</td>
+                        <td><c:out value="${book.pageCount}"/></td>
                     </tr>
                     <tr>
                         <td>Publish date</td>
-                        <td>${book.publishDate}</td>
+                        <td><c:out value="${book.publishDate}"/></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="col s12">
-                <p>${book.description}</p>
+                <p><c:out value="${book.description}"/></p>
             </div>
             <div class="col s12">
                 <h6>Preview: </h6>
