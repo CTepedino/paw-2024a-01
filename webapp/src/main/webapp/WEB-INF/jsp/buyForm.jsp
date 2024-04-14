@@ -4,8 +4,8 @@
 <head>
     <title>Contact Information</title>
 </head>
+<%@ include file="components/topBar.jsp" %>
 <body>
-    <%@ include file="components/topBar.jsp" %>
     <c:url value="/sendBuyInfo" var="registerUrl"/>
     <div class="row">
         <div class="col s4 push-s4">

@@ -6,11 +6,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Publish Book</title>
+    <title>Publish</title>
     <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
 </head>
-<body>
 <%@ include file="components/topBar.jsp" %>
+<body>
 <c:url value="/addBook" var="postUrl"/>
 <div class="container">
 <div class="form">

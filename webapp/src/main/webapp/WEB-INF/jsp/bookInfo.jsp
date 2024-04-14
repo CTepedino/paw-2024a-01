@@ -4,12 +4,11 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 <html>
 <head>
-    <title>Title</title>
+    <title><c:out value="${book.title}"/></title>
     <link href="${pageContext.request.contextPath}/css/bookInfo.css" rel="stylesheet"/>
 </head>
+<%@ include file="components/topBar.jsp" %>
 <body>
-    <%@ include file="components/topBar.jsp" %>
-
     <div class="book-container z-depth-2" style="margin: 30px;padding: 20px;">
         <div class="row">
             <div class="col s5">

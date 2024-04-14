@@ -6,11 +6,11 @@
 
 <html>
 <head>
-    <title>Home</title>
+    <title>Cybrary</title>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
 </head>
+<%@ include file="components/topBar.jsp" %>
 <body>
-    <%@ include file="components/topBar.jsp" %>
     <div class="explore_back">
         <div class="container">
             <h5 class="explore_books">Find New Books</h5>
