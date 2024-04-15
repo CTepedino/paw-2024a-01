@@ -12,14 +12,15 @@
 <%@ include file="components/topBar.jsp" %>
 <body>
     <div class="explore_back">
-        <div class="container">
-            <h5 class="explore_books">Find New Books</h5>
-            <div>
-                <h6 class="steps">1. Select your favorite book</h6>
-                <h6 class="steps">2. Share your information with the author</h6>
-                <h6 class="steps">3. Arrange delivery</h6>
-            </div>
-        </div>
+        <img class="home-img" src="${pageContext.request.contextPath}/images/home.png">
+<%--        <div class="container">--%>
+<%--            <h5 class="explore_books">Find New Books</h5>--%>
+<%--            <div>--%>
+<%--                <h6 class="steps">1. Select your favorite book</h6>--%>
+<%--                <h6 class="steps">2. Share your information with the author</h6>--%>
+<%--                <h6 class="steps">3. Arrange delivery</h6>--%>
+<%--            </div>--%>
+<%--        </div>--%>
     </div>
     <div class="books">
         <div class="container">
