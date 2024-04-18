@@ -3,19 +3,48 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.models.BookGenre;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.*;
+
 public class NewBookForm {
+
+    @NotNull
+    @Size(min = 1, max=255)
     private String writerFirstName;
+
+    @NotNull
+    @Size(min = 1, max=255)
     private String writerLastName;
+
+    @NotNull
+    @Size(min = 1, max=255)
+    @Email
     private String writerEmail;
 
+    @Size(min = 1, max=255)
     private String title;
-    private String description;
-    private BookGenre genre;
-    private int suggestedAge;
-    private double price;
-    private int pageCount;
 
+    @Size(min = 1, max=255)
+    private String description;
+
+
+    private BookGenre genre;
+
+    @NotNull
+    @PositiveOrZero
+    private Integer suggestedAge;
+
+    @NotNull
+    @PositiveOrZero
+    private Double price;
+
+    @NotNull
+    @Positive
+    private Integer pageCount;
+
+    @NotNull
     private MultipartFile image;
+
+    @NotNull
     private MultipartFile pdf;
 
     public String getWriterFirstName() {
@@ -66,27 +95,27 @@ public class NewBookForm {
         this.genre = genre;
     }
 
-    public int getSuggestedAge() {
+    public Integer getSuggestedAge() {
         return suggestedAge;
     }
 
-    public void setSuggestedAge(int suggestedAge) {
+    public void setSuggestedAge(Integer suggestedAge) {
         this.suggestedAge = suggestedAge;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public int getPageCount() {
+    public Integer getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(Integer pageCount) {
         this.pageCount = pageCount;
     }
 

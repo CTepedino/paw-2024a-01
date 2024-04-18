@@ -7,11 +7,14 @@ import ar.edu.itba.paw.webapp.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -41,14 +44,19 @@ public class BookController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
-    public ModelAndView addBookForm(){
+    public ModelAndView addBookForm(@ModelAttribute("newBookForm") NewBookForm form){
         ModelAndView mav = new ModelAndView("addBook");
         mav.addObject("genres", BookGenre.values());
+        mav.addObject("newBookForm", form);
         return mav;
     }
 
     @RequestMapping(method = RequestMethod.POST, path="/addBook")
-    public ModelAndView addBook(@ModelAttribute final NewBookForm newBookForm){
+    public ModelAndView addBook(@Valid @ModelAttribute final NewBookForm newBookForm, final BindingResult errors){
+
+        if (errors.hasErrors()){
+            return addBookForm(newBookForm);
+        }
 
         ps.publishBook(
                 newBookForm.getWriterFirstName(),
