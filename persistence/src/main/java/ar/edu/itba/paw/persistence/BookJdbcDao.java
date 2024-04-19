@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.BookDao;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.BookSearchOrderBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,10 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class BookJdbcDao implements BookDao {
@@ -51,8 +49,8 @@ public class BookJdbcDao implements BookDao {
     public Optional<Book> findById(long id){
         final List<Book> list = jdbcTemplate.query(
                 "SELECT * FROM books WHERE book_id = ?",
-                new Object[] {id},
-                ROW_MAPPER
+                ROW_MAPPER,
+                id
         );
         return list.stream().findFirst();
     }
@@ -117,5 +115,70 @@ public class BookJdbcDao implements BookDao {
         return jdbcTemplate.query("SELECT * FROM books", ROW_MAPPER);
     }
 
+    @Override
+    public List<Book> searchByTitle(String title){
+        return jdbcTemplate.query(
+                """
+                    SELECT * FROM books
+                    WHERE title LIKE ?""",
+                ROW_MAPPER,
+                "%"+title+"%"
+        );
+    }
+
+    @Override
+    public List<Book> searchWithParams(
+            String title,
+            BookGenre genre,
+            Double minPrice,
+            Double maxPrice,
+            Integer minPageCount,
+            Integer maxPageCount,
+            Integer minSuggestedAge,
+            Integer maxSuggestedAge,
+            BookSearchOrderBy orderBy,
+            boolean asc
+    ){
+        StringBuilder sqlQuery = new StringBuilder("SELECT * FROM books WHERE lower(title) LIKE lower(?) ");
+        List<Object> params = new ArrayList<>();
+        params.add("%" + (title!=null?title:"") + "%");
+        if (genre != null){
+            sqlQuery.append("AND genre = ? ");
+            params.add(genre);
+        }
+        if (minPrice != null){
+            sqlQuery.append("AND price >= ? ");
+            params.add(minPrice);
+        }
+        if (maxPrice != null){
+            sqlQuery.append("AND price <= ? ");
+            params.add(maxPrice);
+        }
+        if (minPageCount != null){
+            sqlQuery.append("AND page_count >= ? ");
+            params.add(minPageCount);
+        }
+        if (maxPageCount != null){
+            sqlQuery.append("AND page_count <= ? ");
+            params.add(maxPageCount);
+        }
+
+        if (minSuggestedAge != null){
+            sqlQuery.append("AND suggested_age >= ? ");
+            params.add(minSuggestedAge);
+        }
+
+        if (maxSuggestedAge != null){
+            sqlQuery.append("AND suggested_age <= ? ");
+            params.add(maxSuggestedAge);
+        }
+
+        if (orderBy != null){
+            sqlQuery.append("ORDER BY ?");
+            params.add(orderBy + (asc? "asc":"desc"));
+        }
+
+        return jdbcTemplate.query(sqlQuery.toString(), ROW_MAPPER, params.toArray());
+    }
 
 }
