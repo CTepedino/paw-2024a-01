@@ -27,12 +27,12 @@ public class WriterJdbcDao implements WriterDao {
         jdbcTemplate = new JdbcTemplate(ds);
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .usingGeneratedKeyColumns("writer_id")
-                .withTableName("writers");
+                .withTableName("users");
     }
 
     @Override
     public Optional<Writer> findById(long id){
-        final List<Writer> list = jdbcTemplate.query("SELECT * FROM writers WHERE writer_id = ?", new Object[] {id} ,ROW_MAPPER);
+        final List<Writer> list = jdbcTemplate.query("SELECT * FROM users WHERE writer_id = ?", new Object[] {id} ,ROW_MAPPER);
         return list.stream().findFirst();
     }
 
@@ -49,7 +49,7 @@ public class WriterJdbcDao implements WriterDao {
     @Override
     public Optional<Writer> findByEmail(String email){
         final List<Writer> list = jdbcTemplate.query(
-                "SELECT * FROM writers WHERE email = ?",
+                "SELECT * FROM users WHERE email = ?",
                 new Object[] {email},
                 ROW_MAPPER
         );

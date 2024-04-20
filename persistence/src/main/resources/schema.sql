@@ -1,10 +1,13 @@
+/* Sprint 2 modifications:
+
+DROP TABLE users;
+ALTER TABLE IF EXISTS writers RENAME TO users;
+ALTER TABLE users RENAME COLUMN writer_id TO user_id;
+
+*/
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS writers(
-    writer_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE
@@ -37,10 +40,9 @@ CREATE TABLE IF NOT EXISTS books (
     writer_last_name TEXT,
     writer_email TEXT,
 
-    FOREIGN KEY (writer_id) REFERENCES writers (writer_id) ON DELETE CASCADE,
+    FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (image_id) REFERENCES images (image_id) ON DELETE CASCADE,
     FOREIGN KEY (pdf_id) REFERENCES pdfs (pdf_id) ON DELETE CASCADE
 );
-
 
 
