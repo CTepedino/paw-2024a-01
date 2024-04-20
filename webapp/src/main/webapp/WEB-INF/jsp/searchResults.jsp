@@ -9,6 +9,21 @@
 </head>
 <body>
 <%@ include file="components/topBar.jsp" %>
+
+<c:url value="/search" var="searchUrl"/>
+<%--
+<form:form
+    modelAttribute="bookSearchForm"
+    action="${searchUrl}"
+    method="get"
+>
+
+    <form:label path="minPrice">Min price</form:label>
+    <form:input type="number" path="minPrice"/>
+
+</form:form>
+--%>
+
 <div class="books">
     <div class="container">
         <c:forEach var="book" items="${books}">
@@ -20,5 +35,13 @@
         </c:if>
     </div>
 </div>
+
+<script>
+    // Initialize Materialize components
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+</script>
 </body>
 </html>
