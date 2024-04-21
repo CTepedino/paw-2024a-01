@@ -3,14 +3,14 @@
 DROP TABLE users;
 ALTER TABLE IF EXISTS writers RENAME TO users;
 ALTER TABLE users RENAME COLUMN writer_id TO user_id;
-
 */
 
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS pdfs(
@@ -45,4 +45,12 @@ CREATE TABLE IF NOT EXISTS books (
     FOREIGN KEY (pdf_id) REFERENCES pdfs (pdf_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS roles(
+    user_id INT NOT NULL,
+    role VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY (user_id, role),
+
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+);
 

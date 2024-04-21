@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
-import ar.edu.itba.paw.models.Writer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

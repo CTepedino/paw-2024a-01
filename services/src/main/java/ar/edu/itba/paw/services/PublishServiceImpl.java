@@ -15,14 +15,14 @@ public class PublishServiceImpl implements PublishService {
     private final BookService bs;
     private final ImageService is;
     private final PdfService ps;
-    private final WriterService ws;
+    private final UserService us;
 
     @Autowired
-    public PublishServiceImpl(BookService bs, ImageService is, PdfService ps, WriterService ws) {
+    public PublishServiceImpl(BookService bs, ImageService is, PdfService ps, UserService us) {
         this.bs = bs;
         this.is = is;
         this.ps = ps;
-        this.ws = ws;
+        this.us = us;
     }
 
     @Override
@@ -44,10 +44,11 @@ public class PublishServiceImpl implements PublishService {
         Image bookImage = is.create(image);
         Pdf bookPreviewPdf = ps.create(previewPdf);
 
-        Writer writer = ws.createOrGet(
+        User user = us.create(
                 writerFirstName,
                 writerLastName,
-                writerEmail
+                writerEmail,
+                "idk"
         );
 
         return bs.create(
@@ -59,7 +60,7 @@ public class PublishServiceImpl implements PublishService {
                 bookPreviewPdf.getPdfId(),
                 bookImage.getImageId(),
                 suggestedAge,
-                writer.getWriterId(),
+                user.getUserId(),
 
                 writerFirstName,
                 writerLastName,

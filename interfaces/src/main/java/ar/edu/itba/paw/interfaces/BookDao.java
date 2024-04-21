@@ -2,7 +2,7 @@ package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
-import ar.edu.itba.paw.models.Writer;
+
 
 import java.sql.Date;
 import java.util.List;

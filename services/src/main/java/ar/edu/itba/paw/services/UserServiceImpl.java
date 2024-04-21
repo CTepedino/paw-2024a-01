@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(String username){
-        return userDao.create(username);
+    public User create(String firstName, String lastName, String email, String password){
+        return userDao.create(
+                new UserRoles[]{UserRoles.READER},
+                firstName,
+                lastName,
+                email,
+                password
+        );
     }
 }
