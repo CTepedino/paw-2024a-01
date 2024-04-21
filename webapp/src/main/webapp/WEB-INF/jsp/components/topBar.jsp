@@ -19,18 +19,18 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect btn">Publish</a></li>
                 <li>
-                <c:if test="false">
+                <c:if test="true">
                     <a class='dropdown-trigger btn' href='#' data-target='user-dropdown'>
                         <i class="material-icons">account_circle</i>
                     </a>
 
                     <ul id='user-dropdown' class='dropdown-content'>
-                        <li><a href="#!">Account</a></li>
-                        <li><a href="#!">My Orders</a></li>
+                        <li><a href="#">Account</a></li>
+                        <li><a href="#">My Orders</a></li>
                         <c:if test="true">
-                            <li><a href="#!">My Books</a></li>
+                            <li><a href="#">My Books</a></li>
                         </c:if>
-                        <li><a href="#!" class="red-text">Sign Out</a></li>
+                        <li><a href="/logout" class="red-text">Sign Out</a></li>
                     </ul>
                 </c:if>
                 <c:if test="true">
