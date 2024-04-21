@@ -18,10 +18,40 @@
             <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect btn">Publish</a></li>
+                <li>
+                <c:if test="false">
+                    <a class='dropdown-trigger btn' href='#' data-target='user-dropdown'>
+                        <i class="material-icons">account_circle</i>
+                    </a>
+
+                    <ul id='user-dropdown' class='dropdown-content'>
+                        <li><a href="#!">Account</a></li>
+                        <li><a href="#!">My Orders</a></li>
+                        <c:if test="true">
+                            <li><a href="#!">My Books</a></li>
+                        </c:if>
+                        <li><a href="#!" class="red-text">Sign Out</a></li>
+                    </ul>
+                </c:if>
+                <c:if test="true">
+                    <a href="#" class="waves-effect btn">Sign In</a>
+                </c:if>
+                </li>
             </ul>
         </div>
     </nav>
 </header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.dropdown-trigger');
+        var options = {
+            constrainWidth: false,
+            coverTrigger: false
+        };
+        var instances = M.Dropdown.init(elems, options);
+    });
+</script>
 
 </body>
 </html>
