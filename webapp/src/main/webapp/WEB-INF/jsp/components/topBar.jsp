@@ -8,7 +8,8 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="${pageContext.request.contextPath}/css/topBarStyle.css" rel="stylesheet"/>
-    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/images/cybrary.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/images/cybrary_3.png" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -16,7 +17,7 @@
         <div class="nav-wrapper">
             <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect btn">Publish Book</a></li>
+                <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect btn">Publish</a></li>
             </ul>
         </div>
     </nav>
