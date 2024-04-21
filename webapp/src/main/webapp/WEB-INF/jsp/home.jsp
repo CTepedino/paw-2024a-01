@@ -17,19 +17,19 @@
                 <div class="col s4">
                     <div class="card-panel center">
                         <img class="home-image" src="${pageContext.request.contextPath}/images/transparent-background-book-24.png">
-                        <h6 class="white-text">Find a book</h6>
+                        <h6 class="white-text"><spring:message code="book.home.findBook"/></h6>
                     </div>
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
                         <img class="home-image" src="${pageContext.request.contextPath}/images/handshake.png">
-                        <h6 class="white-text">Contact the writer</h6>
+                        <h6 class="white-text"><spring:message code="book.home.contactWriter"/></h6>
                     </div>
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
                         <img class="home-image" src="${pageContext.request.contextPath}/images/book.png">
-                        <h6 class="white-text">Get your copy</h6>
+                        <h6 class="white-text"><spring:message code="book.home.getCopy"/></h6>
                     </div>
                 </div>
             </div>

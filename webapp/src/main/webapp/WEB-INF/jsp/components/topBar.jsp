@@ -17,7 +17,7 @@
         <div class="nav-wrapper">
             <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect btn">Publish</a></li>
+                <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect btn"><spring:message code="topBar.publish"/></a></li>
             </ul>
         </div>
     </nav>

@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Confirmation</title>
@@ -12,10 +12,10 @@
 <body>
     <div class="container">
         <div class="card-panel teal lighten-2 white-text">
-            <h4>Your information has been sent!</h4>
-            <p>Await for further instructions in your inbox.</p>
+            <h4><spring:message code="buy.emailConfirmation.sentInfo"/></h4>
+            <p><spring:message code="buy.emailConfirmation.instructions"/></p>
         </div>
-        <a class="waves-effect waves-light btn" href="${pageContext.request.contextPath}/">Return Home</a>
+        <a class="waves-effect waves-light btn" href="${pageContext.request.contextPath}/"><spring:message code="buy.emailConfirmation.return"/></a>
     </div>
 </body>
 </html>
