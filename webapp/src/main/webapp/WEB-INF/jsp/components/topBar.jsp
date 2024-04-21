@@ -34,7 +34,7 @@
                     </ul>
                 </c:if>
                 <c:if test="true">
-                    <a href="#" class="waves-effect btn">Sign In</a>
+                    <a href="${pageContext.request.contextPath}/login" class="waves-effect btn">Sign In</a>
                 </c:if>
                 </li>
             </ul>
