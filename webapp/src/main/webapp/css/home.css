@@ -1,7 +1,13 @@
 
-.home-img{
-    max-width: 100%;
-    margin: 0;
+
+.explore_back {
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-image: url("/images/booksbackground.png");
+    background-size: cover; /* Ajusta el tamaño de la imagen al tamaño del div */
+    background-position: center; /* Centra la imagen en el div */
+    /* Agrega cualquier otro estilo necesario para el div explore_back */
 }
 
 .container{
@@ -9,6 +15,19 @@
     margin-top: 0;
     display: flex;
     justify-content: space-around;
+}
+
+.row{
+    width: 100%;
+}
+
+.home-image {
+    max-height: 80px;
+}
+
+.card-panel{
+    color: #F7C548;
+    background-color: #F7C548 !important;
 }
 
 a {

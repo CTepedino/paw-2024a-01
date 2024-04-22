@@ -17,12 +17,12 @@
     <a class="card-info" href="${pageContext.request.contextPath}/${book.bookId}">
         <div class="card-content" >
             <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>
-            <p class="info">By <c:out value="${book.writerName}"/> <c:out value="${book.writerLastName}"/></p>
-            <p class="info"><c:out value="${book.genre.displayName}"/></p>
-            <p class="info">Suggested age: + <c:out value="${book.suggestedAge}"/></p>
+            <p class="info"><spring:message code="bookInfoCard.by"/> <c:out value="${book.writerName}"/> <c:out value="${book.writerLastName}"/></p>
+            <p class="info"><spring:message code="book.genre.${book.genre}"/></p>
+            <p class="info"><spring:message code="bookInfoCard.suggestedAge"/> <c:out value="${book.suggestedAge}"/></p>
         </div>
         <div class="card-action">
-            <p>Price: $<c:out value="${book.price}"/></p>
+            <p><spring:message code="bookInfoCard.price"/> $<c:out value="${book.price}"/></p>
         </div>
     </a>
 </div>

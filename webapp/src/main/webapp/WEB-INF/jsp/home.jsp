@@ -12,15 +12,28 @@
 <%@ include file="components/topBar.jsp" %>
 <body>
     <div class="explore_back">
-        <img class="home-img" src="${pageContext.request.contextPath}/images/home.png">
-<%--        <div class="container">--%>
-<%--            <h5 class="explore_books">Find New Books</h5>--%>
-<%--            <div>--%>
-<%--                <h6 class="steps">1. Select your favorite book</h6>--%>
-<%--                <h6 class="steps">2. Share your information with the author</h6>--%>
-<%--                <h6 class="steps">3. Arrange delivery</h6>--%>
-<%--            </div>--%>
-<%--        </div>--%>
+    <div class="container">
+            <div class="row">
+                <div class="col s4">
+                    <div class="card-panel center">
+                        <img class="home-image" src="${pageContext.request.contextPath}/images/transparent-background-book-24.png">
+                        <h6 class="white-text"><spring:message code="book.home.findBook"/></h6>
+                    </div>
+                </div>
+                <div class="col s4">
+                    <div class="card-panel center">
+                        <img class="home-image" src="${pageContext.request.contextPath}/images/handshake.png">
+                        <h6 class="white-text"><spring:message code="book.home.contactWriter"/></h6>
+                    </div>
+                </div>
+                <div class="col s4">
+                    <div class="card-panel center">
+                        <img class="home-image" src="${pageContext.request.contextPath}/images/book.png">
+                        <h6 class="white-text"><spring:message code="book.home.getCopy"/></h6>
+                    </div>
+                </div>
+            </div>
+    </div>
     </div>
     <div class="books">
         <div class="container">
