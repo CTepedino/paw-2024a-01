@@ -64,6 +64,10 @@ public class BookController {
     @RequestMapping(method = RequestMethod.POST, path="/addBook")
     public ModelAndView addBook(@ModelAttribute("user") User user, @ModelAttribute("newBookForm") final NewBookForm newBookForm){
 
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_WRITER"))){
+            return new ModelAndView("redirect:/signup/writer");
+        }
+
         ps.publishBook(
                /* newBookForm.getWriterFirstName(),
                 newBookForm.getWriterLastName(),
