@@ -11,4 +11,6 @@ public interface UserDao {
     Optional<User> findById(long id);
 
     User giveRole(long id, UserRoles role);
+
+    Optional<User> findByEmail(String email);
 }

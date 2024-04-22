@@ -2,10 +2,13 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.interfaces.PublishService;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,15 +22,19 @@ public class BookController {
 
     private final PublishService ps;
     private final BookService bs;
+    private final UserService us;
 
     @Autowired
-    public BookController(PublishService ps, BookService bs){
+    public BookController(PublishService ps, BookService bs, UserService us){
         this.ps = ps;
         this.bs = bs;
+        this.us = us;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(){
+
+
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", bs.getAll());
         return mav;

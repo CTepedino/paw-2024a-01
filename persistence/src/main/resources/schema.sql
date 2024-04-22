@@ -1,8 +1,12 @@
 /* Sprint 2 modifications:
 
-DROP TABLE users;
+DROP TABLE users; (era la tabla que se creó en el ejemplo de la clase teorica, no tenía datos)
 ALTER TABLE IF EXISTS writers RENAME TO users;
-ALTER TABLE users RENAME COLUMN writer_id TO user_id;
+ALTER TABLE users
+    RENAME COLUMN writer_id TO user_id
+    ALTER COLUMN last_name DROP NOT NULL;
+    ALTER COLUMN first_name DROP NOT NULL;
+
 */
 
 CREATE TABLE IF NOT EXISTS users(

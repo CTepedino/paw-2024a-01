@@ -25,6 +25,7 @@
     <org.hibernate.validator>6.2.4.Final</org.hibernate.validator>
     <javax.mail.version>1.6.2</javax.mail.version>
     <org.thymeleaf.version>3.1.2.RELEASE</org.thymeleaf.version>
+    <spring-security.version>5.8.11</spring-security.version>
   </properties>
     
   <dependencyManagement>
@@ -135,6 +136,21 @@
         <groupId>org.thymeleaf</groupId>
         <artifactId>thymeleaf-spring5</artifactId>
         <version>${org.thymeleaf.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+      <dependency><groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>${spring-security.version}</version>
       </dependency>
 
     </dependencies>

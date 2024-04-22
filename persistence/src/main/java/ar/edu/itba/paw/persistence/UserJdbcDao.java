@@ -127,4 +127,20 @@ public class UserJdbcDao implements UserDao {
 
     }
 
+    @Override
+    public Optional<User> findByEmail(String email) {
+
+        List<User> list = jdbcTemplate.query(
+                """
+                    SELECT u.user_id, u.first_name, u.last_name, u.email, u.password, array_agg(r.role) AS roles
+                    FROM users u LEFT JOIN roles r ON u.user_id = r.user_id
+                    WHERE u.email = ?
+                    GROUP BY u.user_id, u.first_name, u.last_name, u.email, u.password
+                    """,
+                ROW_MAPPER,
+                email
+        );
+
+        return list.stream().findFirst();
+    }
 }

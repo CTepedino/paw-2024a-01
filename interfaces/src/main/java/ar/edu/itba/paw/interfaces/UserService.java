@@ -8,4 +8,6 @@ public interface UserService {
     Optional<User> findById(long id);
 
     User create(String firstName, String lastName, String email, String password);
+
+    Optional<User> findByEmail(String email);
 }
