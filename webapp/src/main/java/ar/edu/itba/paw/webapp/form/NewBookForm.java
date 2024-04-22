@@ -4,9 +4,9 @@ import ar.edu.itba.paw.models.BookGenre;
 import org.springframework.web.multipart.MultipartFile;
 
 public class NewBookForm {
-    private String writerFirstName;
+/*    private String writerFirstName;
     private String writerLastName;
-    private String writerEmail;
+    private String writerEmail;*/
 
     private String title;
     private String description;
@@ -18,6 +18,7 @@ public class NewBookForm {
     private MultipartFile image;
     private MultipartFile pdf;
 
+/*
     public String getWriterFirstName() {
         return writerFirstName;
     }
@@ -41,6 +42,7 @@ public class NewBookForm {
     public void setWriterEmail(String writerEmail) {
         this.writerEmail = writerEmail;
     }
+*/
 
     public String getTitle() {
         return title;

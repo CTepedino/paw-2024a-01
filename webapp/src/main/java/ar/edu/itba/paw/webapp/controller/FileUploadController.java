@@ -4,8 +4,8 @@ import ar.edu.itba.paw.interfaces.ImageService;
 import ar.edu.itba.paw.interfaces.PdfService;
 import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.Pdf;
-import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PdfNotFoundException;
+import ar.edu.itba.paw.models.exception.ImageNotFoundException;
+import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.FileNotFoundException;
 import java.util.Optional;
 
 @Controller

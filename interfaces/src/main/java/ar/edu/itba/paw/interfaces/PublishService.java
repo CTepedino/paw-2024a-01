@@ -7,8 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface PublishService {
 
-    Book publishBook(
-            long writerId,
+    void publishBook(
 
             String title,
             String description,

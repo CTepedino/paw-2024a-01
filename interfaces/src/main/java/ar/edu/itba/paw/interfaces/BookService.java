@@ -9,7 +9,7 @@ import java.util.Optional;
 
 
 public interface BookService {
-    Book create(
+    void create(
             String title,
             String description,
             BookGenre genre,

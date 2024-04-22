@@ -5,21 +5,15 @@ import ar.edu.itba.paw.interfaces.PublishService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.auth.CybraryAuthUserDetails;
-import ar.edu.itba.paw.webapp.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpSession;
-import java.util.Objects;
 
 
 @Controller
@@ -62,7 +56,7 @@ public class BookController {
 
 
     @RequestMapping(method = RequestMethod.POST, path="/addBook")
-    public ModelAndView addBook(@ModelAttribute("user") User user, @ModelAttribute("newBookForm") final NewBookForm newBookForm){
+    public ModelAndView addBook(@ModelAttribute("newBookForm") final NewBookForm newBookForm){
 
         if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_WRITER"))){
             return new ModelAndView("redirect:/signup/writer");
@@ -72,8 +66,6 @@ public class BookController {
                /* newBookForm.getWriterFirstName(),
                 newBookForm.getWriterLastName(),
                 newBookForm.getWriterEmail(),*/
-                user.getUserId(),
-
                 newBookForm.getTitle(),
                 newBookForm.getDescription(),
                 newBookForm.getGenre(),
