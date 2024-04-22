@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <html>
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +20,7 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect btn">Publish</a></li>
                 <li>
-                <c:if test="true">
+                <c:if test="${not empty pageContext.request.userPrincipal}">
                     <a class='dropdown-trigger btn' href='#' data-target='user-dropdown'>
                         <i class="material-icons">account_circle</i>
                     </a>
@@ -33,7 +34,7 @@
                         <li><a href="/logout" class="red-text">Sign Out</a></li>
                     </ul>
                 </c:if>
-                <c:if test="true">
+                <c:if test="${empty pageContext.request.userPrincipal}">
                     <a href="${pageContext.request.contextPath}/login" class="waves-effect btn">Sign In</a>
                 </c:if>
                 </li>

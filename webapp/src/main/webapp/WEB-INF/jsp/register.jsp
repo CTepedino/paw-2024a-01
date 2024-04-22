@@ -13,9 +13,9 @@
 <body>
 <div class="small-container">
     <div class="form">
-        <c:url value="/register" var="postUrl"/>
+        <c:url value="/signup" var="postUrl"/>
         <form:form
-            modelAttribute="registerForm"
+            modelAttribute="signUpForm"
             action="${postUrl}"
             method="post"
             enctype="multipart/form-data"
@@ -23,18 +23,6 @@
         >
             <h5 class="center-align">Register your new Account!</h5>
 
-            <div class="row">
-                <div class="input-field col s6">
-                    <form:label path="firstName">First Name</form:label>
-                    <form:input path="firstName" type="text"/>
-                    <form:errors path="firstName" element="p"/>
-                </div>
-                <div class="input-field col s6">
-                    <form:label path="lastName">Last Name</form:label>
-                    <form:input path="lastName" type="text"/>
-                    <form:errors path="lastName" element="p"/>
-                </div>
-            </div>
             <div class="row">
                 <div class="input-field col s12">
                     <form:label path="email">Email Address</form:label>

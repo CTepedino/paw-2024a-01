@@ -31,7 +31,7 @@ public class SessionController {
 
     @RequestMapping(method = RequestMethod.GET, path="/signup")
     public ModelAndView signupForm(@ModelAttribute("signUpForm") final SignUpForm form){
-        return new ModelAndView("test/signup");
+        return new ModelAndView("register");
     }
 
     @RequestMapping(method = RequestMethod.POST, path="/signup")
@@ -51,7 +51,7 @@ public class SessionController {
 
     @RequestMapping(method = RequestMethod.GET, path="/login")
     public ModelAndView loginForm(){
-        return new ModelAndView("test/login");
+        return new ModelAndView("login");
     }
 
 

@@ -14,16 +14,15 @@
         <form
                 action="${postUrl}"
                 method="post"
-                enctype="multipart/form-data"
                 class="z-depth-2"
         >
             <h5 class="center-align">Login to Your Account</h5>
             <div class="input-field">
-                <input id="email" type="text" class="validate">
+                <input id="email" type="text" class="validate" name="email">
                 <label for="email">Email</label>
             </div>
             <div class="input-field">
-                <input id="password" type="password" class="validate">
+                <input id="password" type="password" class="validate" name="password">
                 <label for="password">Password</label>
             </div>
             <div class="input-field center-align">
@@ -31,7 +30,7 @@
                     Sign In
                 </button>
             </div>
-            <p class="center-align">Don't have an account yet? <a href="${pageContext.request.contextPath}/register">Sign up</a></p>
+            <p class="center-align">Don't have an account yet? <a href="${pageContext.request.contextPath}/signup">Sign up</a></p>
         </form>
     </div>
 </div>
