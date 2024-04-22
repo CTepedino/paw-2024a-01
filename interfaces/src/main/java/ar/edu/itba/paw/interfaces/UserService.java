@@ -7,5 +7,11 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> findById(long id);
 
-    User create(String username);
+    User create(String email, String password);
+
+    Optional<User> findByEmail(String email);
+
+    void giveWriterRole(long id, String firstName, String lastName);
+
+    Optional<User> getLoggedUser();
 }

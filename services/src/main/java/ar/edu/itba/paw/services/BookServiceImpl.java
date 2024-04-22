@@ -33,11 +33,7 @@ public class BookServiceImpl implements BookService {
             long pdfId,
             long imageId,
             int suggestedAge,
-            long writerId,
-
-            String writerName,
-            String writerLastName,
-            String writerEmail
+            long writerId
     ){
 
         return bookDao.create(
@@ -50,11 +46,7 @@ public class BookServiceImpl implements BookService {
                 imageId,
                 suggestedAge,
                 new Date(System.currentTimeMillis()),
-                writerId,
-
-                writerName,
-                writerLastName,
-                writerEmail
+                writerId
         );
     }
 

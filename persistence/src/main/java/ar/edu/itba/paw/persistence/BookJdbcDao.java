@@ -30,11 +30,7 @@ public class BookJdbcDao implements BookDao {
             rs.getLong("image_id"),
             rs.getInt("suggested_age"),
             rs.getDate("published_date"),
-            rs.getLong("writer_id"),
-
-            rs.getString("writer_name"),
-            rs.getString("writer_last_name"),
-            rs.getString("writer_email")
+            rs.getLong("writer_id")
     );
 
     private final JdbcTemplate jdbcTemplate;
@@ -68,11 +64,7 @@ public class BookJdbcDao implements BookDao {
             long imageId,
             int suggestedAge,
             Date publishDate,
-            long writerId,
-
-            String writerName,
-            String writerLastName,
-            String writerEmail
+            long writerId
     ) {
         Map<String, Object> bookData = new HashMap<>();
 
@@ -87,10 +79,6 @@ public class BookJdbcDao implements BookDao {
         bookData.put("published_date",publishDate);
         bookData.put("writer_id",writerId);
 
-        bookData.put("writer_name", writerName);
-        bookData.put("writer_last_name", writerLastName);
-        bookData.put("writer_email", writerEmail);
-
         Number generatedId = simpleJdbcInsert.executeAndReturnKey(bookData);
 
         return new Book(
@@ -104,11 +92,7 @@ public class BookJdbcDao implements BookDao {
                 imageId,
                 suggestedAge,
                 publishDate,
-                writerId,
-
-                writerName,
-                writerLastName,
-                writerEmail
+                writerId
             );
     }
 
@@ -116,6 +100,5 @@ public class BookJdbcDao implements BookDao {
     public List<Book> getAll(){
         return jdbcTemplate.query("SELECT * FROM books", ROW_MAPPER);
     }
-
 
 }
