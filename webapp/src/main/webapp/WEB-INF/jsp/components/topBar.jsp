@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,10 +29,10 @@
                         <li><a href="#">Account</a></li>
                         <li><a href="#">My Orders</a></li>
                         <li><a href="${pageContext.request.contextPath}/addBook">Publish</a></li>
-                        <c:if test="${pageContext.request.isUserInRole('WRITER')}">
+                        <sec:authorize access="true">
                             <li><a href="#">My Books</a></li>
-                        </c:if>
-                        <li><a href="/logout" class="red-text">Sign Out</a></li>
+                        </sec:authorize>
+                        <li><a href="${pageContext.request.contextPath}/logout" class="red-text">Sign Out</a></li>
                     </ul>
                 </c:if>
                 <c:if test="${empty pageContext.request.userPrincipal}">

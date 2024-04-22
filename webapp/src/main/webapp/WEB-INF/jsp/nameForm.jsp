@@ -13,32 +13,31 @@
 <body>
 <div class="small-container">
     <div class="form">
-        <c:url value="/signup" var="postUrl"/>
+        <c:url value="/signup/writer" var="postUrl"/>
         <form:form
-            modelAttribute="signUpForm"
-            action="${postUrl}"
-            method="post"
-            enctype="multipart/form-data"
-            cssClass="z-depth-2"
+                modelAttribute="writerNameForm"
+                action="${postUrl}"
+                method="post"
+                cssClass="z-depth-2"
         >
-            <h5 class="center-align">Register your new Account!</h5>
+            <h5 class="center-align">Fill in your details!</h5>
 
 
             <div class="input-field">
-                <form:label path="email">Email Address</form:label>
-                <form:input path="email" type="text"/>
-                <form:errors path="email" element="p"/>
+                <form:label path="firstName">First Name</form:label>
+                <form:input path="firstName" type="text"/>
+                <form:errors path="firstName" element="p"/>
             </div>
 
             <div class="input-field">
-                <form:label path="password">Password</form:label>
-                <form:input path="password" type="password"/>
-                <form:errors path="password" element="p"/>
+                <form:label path="lastName">Last Name</form:label>
+                <form:input path="lastName" type="text"/>
+                <form:errors path="lastName" element="p"/>
             </div>
 
             <div class="input-field center-align">
                 <button class="btn waves-effect waves-light" type="submit" name="action">
-                    Register
+                    Submit
                 </button>
             </div>
         </form:form>

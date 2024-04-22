@@ -25,6 +25,12 @@
                 <input id="password" type="password" class="validate" name="password">
                 <label for="password">Password</label>
             </div>
+            <div>
+                <label>
+                    <input type="checkbox"/>
+                    <span>Remember Me</span>
+                </label>
+            </div>
             <div class="input-field center-align">
                 <button class="btn waves-effect waves-light" type="submit" name="action">
                     Sign In

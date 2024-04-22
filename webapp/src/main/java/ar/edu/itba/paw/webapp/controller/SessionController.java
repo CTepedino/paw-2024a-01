@@ -75,7 +75,7 @@ public class SessionController {
 
     @RequestMapping(method = RequestMethod.GET, path="/signup/writer")
     public ModelAndView registerAsWriterForm(@ModelAttribute("writerNameForm") WriterNameForm form){
-        return new ModelAndView("/test/nameForm");
+        return new ModelAndView("nameForm");
     }
 }
 
