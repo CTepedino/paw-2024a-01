@@ -27,8 +27,7 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
-    public Book publishBook(
-            long writerId,
+    public void publishBook(
 
             String title,
             String description,
@@ -40,12 +39,12 @@ public class PublishServiceImpl implements PublishService {
             MultipartFile image,
             MultipartFile previewPdf
     ) {
+        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Image bookImage = is.create(image);
         Pdf bookPreviewPdf = ps.create(previewPdf);
 
-        //User user = us.findById(writerId).orElseThrow(UserNotFoundException::new);
 
-        return bs.create(
+        bs.create(
                 title,
                 description,
                 genre,
@@ -54,7 +53,7 @@ public class PublishServiceImpl implements PublishService {
                 bookPreviewPdf.getPdfId(),
                 bookImage.getImageId(),
                 suggestedAge,
-                writerId
+                user.getUserId()
         );
 
     }

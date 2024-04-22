@@ -24,7 +24,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book create(
+    public void create(
             String title,
             String description,
             BookGenre genre,
@@ -35,8 +35,7 @@ public class BookServiceImpl implements BookService {
             int suggestedAge,
             long writerId
     ){
-
-        return bookDao.create(
+        bookDao.create(
                 title,
                 description,
                 genre,

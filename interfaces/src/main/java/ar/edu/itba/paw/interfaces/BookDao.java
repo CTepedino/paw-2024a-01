@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface BookDao {
     Optional<Book> findById(long id);
-    Book create(
+    void create(
             String title,
             String description,
             BookGenre genre,

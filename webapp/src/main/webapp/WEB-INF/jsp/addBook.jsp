@@ -16,6 +16,7 @@
 <div class="form">
     <h5>Publish your Book!</h5>
     <form class="z-depth-2" action="${postUrl}" method="post" enctype="multipart/form-data" >
+<%--
         <h6>Fill in your details</h6>
 
         <div>
@@ -39,6 +40,7 @@
                 <span class="helper-text" data-error="Please enter a valid email"></span>
             </div>
         </div>
+--%>
 
         <h6>Fill in the book's details</h6>
 

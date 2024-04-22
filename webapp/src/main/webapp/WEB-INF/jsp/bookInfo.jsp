@@ -18,11 +18,11 @@
                 <h2><c:out value="${book.title}"/></h2>
                 <div class="row">
                     <div class="col s8">
-                        <h5><c:out value="${book.writerName}"/> <c:out value="${book.writerLastName}"/></h5>
+                        <h5><c:out value="${book.writer.firstName}"/> <c:out value="${book.writer.lastName}"/></h5>
                     </div>
                     <div class="col s4">
                         <c:url var="buyUrl" value="/buy">
-                            <c:param name="writerEmail" value="${book.writerEmail}" />
+                            <c:param name="writerEmail" value="${book.writer.email}" />
                             <c:param name="bookTitle" value="${book.title}" />
                         </c:url>
                         <a class="waves-effect waves-light btn"  href="${buyUrl}">Contact Writer</a>

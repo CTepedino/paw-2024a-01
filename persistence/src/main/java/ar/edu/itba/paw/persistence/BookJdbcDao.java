@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.BookDao;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.BookWriterInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -30,7 +31,12 @@ public class BookJdbcDao implements BookDao {
             rs.getLong("image_id"),
             rs.getInt("suggested_age"),
             rs.getDate("published_date"),
-            rs.getLong("writer_id")
+            new BookWriterInfo(
+                    rs.getLong("writer_id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email")
+            )
     );
 
     private final JdbcTemplate jdbcTemplate;
@@ -46,7 +52,11 @@ public class BookJdbcDao implements BookDao {
     @Override
     public Optional<Book> findById(long id){
         final List<Book> list = jdbcTemplate.query(
-                "SELECT * FROM books WHERE book_id = ?",
+            """
+                    SELECT b.*, u.first_name, u.last_name, u.email
+                    FROM books b JOIN users u on b.writer_id = u.user_id
+                    WHERE book_id = ?
+                """,
                 new Object[] {id},
                 ROW_MAPPER
         );
@@ -54,7 +64,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public Book create(
+    public void create(
             String title,
             String description,
             BookGenre genre,
@@ -71,34 +81,26 @@ public class BookJdbcDao implements BookDao {
         bookData.put("title",title);
         bookData.put("description",description);
         bookData.put("genre", genre.toString());
-        bookData.put("pdf_id",pdfId);
-        bookData.put("page_count",pageCount);
-        bookData.put("price",price);
+        bookData.put("pdf_id", pdfId);
+        bookData.put("page_count", pageCount);
+        bookData.put("price", price);
         bookData.put("image_id", imageId);
-        bookData.put("suggested_age",suggestedAge);
-        bookData.put("published_date",publishDate);
-        bookData.put("writer_id",writerId);
+        bookData.put("suggested_age", suggestedAge);
+        bookData.put("published_date", publishDate);
+        bookData.put("writer_id", writerId);
 
-        Number generatedId = simpleJdbcInsert.executeAndReturnKey(bookData);
-
-        return new Book(
-                generatedId.longValue(),
-                title,
-                description,
-                genre,
-                price,
-                pageCount,
-                pdfId,
-                imageId,
-                suggestedAge,
-                publishDate,
-                writerId
-            );
+        simpleJdbcInsert.execute(bookData);
     }
 
     @Override
     public List<Book> getAll(){
-        return jdbcTemplate.query("SELECT * FROM books", ROW_MAPPER);
+        return jdbcTemplate.query(
+        """
+                SELECT b.*, u.first_name, u.last_name, u.email
+                FROM books b JOIN users u ON b.writer_id = u.user_id
+            """,
+            ROW_MAPPER
+        );
     }
 
 }
