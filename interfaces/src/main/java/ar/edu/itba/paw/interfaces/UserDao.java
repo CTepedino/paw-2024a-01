@@ -13,4 +13,6 @@ public interface UserDao {
     User giveRole(long id, UserRoles role);
 
     Optional<User> findByEmail(String email);
+
+    void setNames(long id, String firstName, String lastName);
 }

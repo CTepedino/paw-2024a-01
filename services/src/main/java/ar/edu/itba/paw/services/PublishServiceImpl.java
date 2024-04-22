@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,9 +28,7 @@ public class PublishServiceImpl implements PublishService {
 
     @Override
     public Book publishBook(
-            String writerFirstName,
-            String writerLastName,
-            String writerEmail,
+            long writerId,
 
             String title,
             String description,
@@ -44,12 +43,7 @@ public class PublishServiceImpl implements PublishService {
         Image bookImage = is.create(image);
         Pdf bookPreviewPdf = ps.create(previewPdf);
 
-        User user = us.create(
-                writerFirstName,
-                writerLastName,
-                writerEmail,
-                "idk"
-        );
+        //User user = us.findById(writerId).orElseThrow(UserNotFoundException::new);
 
         return bs.create(
                 title,
@@ -60,11 +54,7 @@ public class PublishServiceImpl implements PublishService {
                 bookPreviewPdf.getPdfId(),
                 bookImage.getImageId(),
                 suggestedAge,
-                user.getUserId(),
-
-                writerFirstName,
-                writerLastName,
-                writerEmail
+                writerId
         );
 
     }

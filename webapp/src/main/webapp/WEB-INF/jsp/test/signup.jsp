@@ -12,13 +12,6 @@
     method="post"
     modelAttribute="signUpForm"
 >
-    <form:label path="firstName">First name</form:label>
-    <form:input path="firstName" type="text"/>
-    <br>
-
-    <form:label path="lastName">Last name</form:label>
-    <form:input path="lastName" type="text"/>
-    <br>
 
     <form:label path="email">Email</form:label>
     <form:input path="email" type="email"/>

@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -47,8 +46,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception{
             http.sessionManagement()
                 .invalidSessionUrl("/login")
-            .and().authorizeRequests()
-                .antMatchers("/signup", "/login").anonymous()
+            .and().authorizeHttpRequests()
+                .requestMatchers("/signup", "/login").anonymous()
                 .anyRequest().authenticated()
             .and().formLogin()
                 .loginPage("/login")
@@ -71,7 +70,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "/403");
+        web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "/403");
     }
 
 

@@ -143,4 +143,17 @@ public class UserJdbcDao implements UserDao {
 
         return list.stream().findFirst();
     }
+
+    @Override
+    public void setNames(long id, String firstName, String lastName) {
+        jdbcTemplate.update(
+                """
+                        UPDATE users
+                        SET first_name = ?,
+                            last_name = ?
+                        WHERE user_id = ?
+                        """,
+                firstName, lastName, id
+        );
+    }
 }

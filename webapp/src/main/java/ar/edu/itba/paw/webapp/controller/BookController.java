@@ -4,7 +4,9 @@ import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.interfaces.PublishService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.webapp.auth.CybraryAuthUserDetails;
 import ar.edu.itba.paw.webapp.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 
 @Controller
 public class BookController {
@@ -23,6 +27,7 @@ public class BookController {
     private final PublishService ps;
     private final BookService bs;
     private final UserService us;
+
 
     @Autowired
     public BookController(PublishService ps, BookService bs, UserService us){
@@ -33,7 +38,6 @@ public class BookController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(){
-
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", bs.getAll());
@@ -54,13 +58,24 @@ public class BookController {
         return mav;
     }
 
+    //TODO: llevar esto a una clase comun para no repetir codigo
+    @ModelAttribute("user")
+    public User loggedUser(final HttpSession session){
+        final CybraryAuthUserDetails userDetails = (CybraryAuthUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userDetails == null){
+            return null;
+        }
+        return us.findByEmail(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
+    }
+
     @RequestMapping(method = RequestMethod.POST, path="/addBook")
-    public ModelAndView addBook(@ModelAttribute final NewBookForm newBookForm){
+    public ModelAndView addBook(@ModelAttribute("user") User user, @ModelAttribute("newBookForm") final NewBookForm newBookForm){
 
         ps.publishBook(
-                newBookForm.getWriterFirstName(),
+               /* newBookForm.getWriterFirstName(),
                 newBookForm.getWriterLastName(),
-                newBookForm.getWriterEmail(),
+                newBookForm.getWriterEmail(),*/
+                user.getUserId(),
 
                 newBookForm.getTitle(),
                 newBookForm.getDescription(),
