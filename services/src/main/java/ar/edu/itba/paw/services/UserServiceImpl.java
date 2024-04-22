@@ -65,7 +65,16 @@ public class UserServiceImpl implements UserService {
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), updatedAuth);
 
-        SecurityContextHolder.getContext().setAuthentication(newAuth); //TODO: preguntar si esta bien que la logica de security esté acá
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
-}
+    @Override
+    public Optional<User> getLoggedUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()){
+            return Optional.empty();
+        }
+        return findByEmail(auth.getName());
+    }
+
+}//TODO: preguntar si esta bien que la logica de security esté acá

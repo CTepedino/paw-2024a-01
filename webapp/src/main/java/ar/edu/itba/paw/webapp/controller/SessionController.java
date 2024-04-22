@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Objects;
 
 @Controller
 public class SessionController {
@@ -61,20 +62,13 @@ public class SessionController {
         return mav;
     }
 
-    @ModelAttribute("user")
-    public User loggedUser(final HttpSession session){
-        final CybraryAuthUserDetails userDetails = (CybraryAuthUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userDetails == null){
-            return null;
-        }
-        return us.findByEmail(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
-    }
 
     @RequestMapping(method = RequestMethod.POST, path="/signup/writer")
-    public ModelAndView registerAsWriter( @ModelAttribute("user") User user, @Valid @ModelAttribute("writerNameForm")WriterNameForm form, final BindingResult errors){
+    public ModelAndView registerAsWriter(@Valid @ModelAttribute("writerNameForm")WriterNameForm form, final BindingResult errors){
         if (errors.hasErrors()){
             return registerAsWriterForm(form);
         }
+        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         us.giveWriterRole(user.getUserId(), form.getFirstName(), form.getLastName());
         return new ModelAndView("redirect:/");
     }

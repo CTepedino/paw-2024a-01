@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 
 @Controller
@@ -58,15 +59,7 @@ public class BookController {
         return mav;
     }
 
-    //TODO: llevar esto a una clase comun para no repetir codigo
-    @ModelAttribute("user")
-    public User loggedUser(final HttpSession session){
-        final CybraryAuthUserDetails userDetails = (CybraryAuthUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userDetails == null){
-            return null;
-        }
-        return us.findByEmail(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
-    }
+
 
     @RequestMapping(method = RequestMethod.POST, path="/addBook")
     public ModelAndView addBook(@ModelAttribute("user") User user, @ModelAttribute("newBookForm") final NewBookForm newBookForm){
