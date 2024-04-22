@@ -1,41 +1,31 @@
 package ar.edu.itba.paw.models;
 
-import java.time.LocalDate;
-
 public class Order {
-
-    private final long orderId;
-    private final long bookId;
+    private final long writerId;
     private final long buyerId;
-    private final PaymentMethod paymentMethod;
-    private final LocalDate date;
+    private final long bookId;
+    private final OrderStatus orderStatus;
 
-
-    public Order(long orderId, long bookId, long buyerId, PaymentMethod paymentMethod, LocalDate date){
-        this.orderId = orderId;
-        this.bookId = bookId;
+    public Order(long writerId, long buyerId, long bookId, OrderStatus orderStatus) {
+        this.writerId = writerId;
         this.buyerId = buyerId;
-        this.paymentMethod = paymentMethod;
-        this.date = date;
+        this.bookId = bookId;
+        this.orderStatus = orderStatus;
     }
 
-    public long getOrderId() {
-        return orderId;
-    }
-
-    public long getBookId() {
-        return bookId;
+    public long getWriterId() {
+        return writerId;
     }
 
     public long getBuyerId() {
         return buyerId;
     }
 
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
+    public long getBookId() {
+        return bookId;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 }
