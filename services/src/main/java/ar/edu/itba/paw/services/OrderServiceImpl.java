@@ -47,4 +47,14 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getAllWriterOrders(long writerId) {
         return orderDao.getAllWriterOrders(writerId);
     }
+
+    @Override
+    public List<Order> getAllNonCompleteReaderOrders(long readerId) {
+        return orderDao.getAllNonCompleteReaderOrders(readerId);
+    }
+
+    @Override
+    public List<Order> getAllNonCompleteWriterOrders(long writerId) {
+        return orderDao.getAllNonCompleteWriterOrders(writerId);
+    }
 }

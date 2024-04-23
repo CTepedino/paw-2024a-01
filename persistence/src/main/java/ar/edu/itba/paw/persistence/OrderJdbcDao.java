@@ -101,6 +101,32 @@ public class OrderJdbcDao implements OrderDao {
                 writerId
         );
     }
+
+    @Override
+    public List<Order> getAllNonCompleteReaderOrders(long readerId) {
+        return jdbcTemplate.query(
+                """
+                    SELECT *
+                    FROM orders
+                    WHERE buyer_id = ? AND status <> 'COMPLETED'
+                    """,
+                ROW_MAPPER,
+                readerId
+        );
+    }
+
+    @Override
+    public List<Order> getAllNonCompleteWriterOrders(long writerId) {
+        return jdbcTemplate.query(
+                """
+                    SELECT *
+                    FROM orders
+                    WHERE writer_id = ? AND status <> 'COMPLETED'
+                    """,
+                ROW_MAPPER,
+                writerId
+        );
+    }
 }
 
 

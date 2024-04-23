@@ -15,5 +15,10 @@ public interface OrderService {
 
     List<Order> getAllReaderOrders(long readerId);
 
+    List<Order> getAllNonCompleteReaderOrders(long readerId);
+
     List<Order> getAllWriterOrders(long writerId);
+
+    List<Order> getAllNonCompleteWriterOrders(long writerId);
+
 }
