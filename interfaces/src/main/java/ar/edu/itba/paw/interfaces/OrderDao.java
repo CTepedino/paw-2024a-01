@@ -10,7 +10,7 @@ public interface OrderDao {
 
     Optional<Order> find(long buyerId, long writerId, long bookId);
 
-    Order create(long buyerId, long writerId, long bookId, OrderStatus orderStatus);
+    void create(long buyerId, long writerId, long bookId, OrderStatus orderStatus);
 
     void setStatus(long buyerId, long writerId, long bookId, OrderStatus orderStatus);
 

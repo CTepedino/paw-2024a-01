@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.OrderDao;
-import ar.edu.itba.paw.models.Order;
-import ar.edu.itba.paw.models.OrderStatus;
+import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,11 +14,40 @@ import java.util.*;
 @Repository
 public class OrderJdbcDao implements OrderDao {
 
+
     private final static RowMapper<Order> ROW_MAPPER = (rs, rowNum) -> new Order(
-            rs.getLong("writer_id"),
-            rs.getLong("buyer_id"),
-            rs.getLong("book_id"),
-            OrderStatus.valueOf(rs.getString("status"))
+            new PublicUserInformation(
+                    rs.getLong("o.writer_id"),
+                    rs.getString("w.first_name"),
+                    rs.getString("w.last_name"),
+                    rs.getString("w.email")
+            ),
+            new PublicUserInformation(
+                    rs.getLong("o.buyer_id"),
+                    rs.getString("r.first_name"),
+                    rs.getString("r.last_name"),
+                    rs.getString("r.email")
+            ),
+            new Book(
+                    rs.getLong("o.book_id"),
+                    rs.getString("b.title"),
+                    rs.getString("b.description"),
+                    BookGenre.valueOf(rs.getString("b.genre")),
+                    rs.getDouble("b.price"),
+                    rs.getInt("b.page_count"),
+                    rs.getLong("b.pdf_id"),
+                    rs.getLong("b.image_id"),
+                    rs.getInt("b.suggested_age"),
+                    rs.getDate("b.published_date"),
+                    new PublicUserInformation(
+                            rs.getLong("o.writer_id"),
+                            rs.getString("w.first_name"),
+                            rs.getString("w.last_name"),
+                            rs.getString("w.email")
+                    )
+            ),
+
+            OrderStatus.valueOf(rs.getString("o.status"))
     );
 
     private final JdbcTemplate jdbcTemplate;
@@ -33,7 +61,7 @@ public class OrderJdbcDao implements OrderDao {
     }
 
     @Override
-    public Order create(long buyerId, long writerId, long bookId, OrderStatus orderStatus) {
+    public void create(long buyerId, long writerId, long bookId, OrderStatus orderStatus) {
         Map<String, Object> orderData = new HashMap<>();
         orderData.put("buyer_id", buyerId);
         orderData.put("writer_id", writerId);
@@ -41,8 +69,6 @@ public class OrderJdbcDao implements OrderDao {
         orderData.put("status", orderStatus);
 
         simpleJdbcInsert.execute(orderData);
-
-        return new Order(writerId, buyerId, bookId, orderStatus);
     }
 
     @Override
@@ -65,8 +91,11 @@ public class OrderJdbcDao implements OrderDao {
         List<Order> list = jdbcTemplate.query(
             """
                 SELECT *
-                FROM orders
-                WHERE buyer_id = ? AND writer_id = ? AND book_id = ?
+                FROM orders o
+                JOIN users w ON o.writer_id = w.user_id
+                JOIN users r ON o.buyer_id = r.user_id
+                JOIN books b ON o.book_id = b.book_id
+                WHERE o.buyer_id = ? AND o.writer_id = ? AND o.book_id = ?
                 """,
                 ROW_MAPPER,
                 buyerId,
@@ -81,8 +110,11 @@ public class OrderJdbcDao implements OrderDao {
         return jdbcTemplate.query(
             """
                 SELECT *
-                FROM orders
-                WHERE buyer_id = ?
+                FROM orders o
+                JOIN users w ON o.writer_id = w.user_id
+                JOIN users r ON o.buyer_id = r.user_id
+                JOIN books b ON o.book_id = b.book_id
+                WHERE o.buyer_id = ?
                 """,
                 ROW_MAPPER,
                 readerId
@@ -93,9 +125,12 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllWriterOrders(long writerId) {
         return jdbcTemplate.query(
                 """
-                    SELECT *
-                    FROM orders
-                    WHERE writer_id = ?
+                SELECT *
+                FROM orders o
+                JOIN users w ON o.writer_id = w.user_id
+                JOIN users r ON o.buyer_id = r.user_id
+                JOIN books b ON o.book_id = b.book_id
+                WHERE o.writer_id = ?
                     """,
                 ROW_MAPPER,
                 writerId
@@ -107,8 +142,11 @@ public class OrderJdbcDao implements OrderDao {
         return jdbcTemplate.query(
                 """
                     SELECT *
-                    FROM orders
-                    WHERE buyer_id = ? AND status <> 'COMPLETED'
+                    FROM orders o
+                    JOIN users w ON o.writer_id = w.user_id
+                    JOIN users r ON o.buyer_id = r.user_id
+                    JOIN books b ON o.book_id = b.book_id
+                    WHERE o.buyer_id = ? AND o.status <> 'COMPLETED'
                     """,
                 ROW_MAPPER,
                 readerId
@@ -120,8 +158,11 @@ public class OrderJdbcDao implements OrderDao {
         return jdbcTemplate.query(
                 """
                     SELECT *
-                    FROM orders
-                    WHERE writer_id = ? AND status <> 'COMPLETED'
+                    FROM orders o
+                    JOIN users w ON o.writer_id = w.user_id
+                    JOIN users r ON o.buyer_id = r.user_id
+                    JOIN books b ON o.book_id = b.book_id
+                    WHERE o.writer_id = ? AND status <> 'COMPLETED'
                     """,
                 ROW_MAPPER,
                 writerId

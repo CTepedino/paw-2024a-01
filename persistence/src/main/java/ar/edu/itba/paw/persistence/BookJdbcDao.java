@@ -3,7 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.BookDao;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
-import ar.edu.itba.paw.models.BookWriterInfo;
+import ar.edu.itba.paw.models.PublicUserInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,7 +31,7 @@ public class BookJdbcDao implements BookDao {
             rs.getLong("image_id"),
             rs.getInt("suggested_age"),
             rs.getDate("published_date"),
-            new BookWriterInfo(
+            new PublicUserInformation(
                     rs.getLong("writer_id"),
                     rs.getString("first_name"),
                     rs.getString("last_name"),

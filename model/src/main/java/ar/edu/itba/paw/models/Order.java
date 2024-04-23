@@ -1,29 +1,31 @@
 package ar.edu.itba.paw.models;
 
 public class Order {
-    private final long writerId;
-    private final long buyerId;
-    private final long bookId;
+    private final PublicUserInformation writer;
+    private final PublicUserInformation buyer;
+    private final Book book;
     private final OrderStatus orderStatus;
 
-    public Order(long writerId, long buyerId, long bookId, OrderStatus orderStatus) {
-        this.writerId = writerId;
-        this.buyerId = buyerId;
-        this.bookId = bookId;
+
+    public Order(PublicUserInformation writer, PublicUserInformation buyer, Book book, OrderStatus orderStatus) {
+        this.writer = writer;
+        this.buyer = buyer;
+        this.book = book;
         this.orderStatus = orderStatus;
     }
 
-    public long getWriterId() {
-        return writerId;
+    public PublicUserInformation getWriter() {
+        return writer;
     }
 
-    public long getBuyerId() {
-        return buyerId;
+    public PublicUserInformation getBuyer() {
+        return buyer;
     }
 
-    public long getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
+
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
