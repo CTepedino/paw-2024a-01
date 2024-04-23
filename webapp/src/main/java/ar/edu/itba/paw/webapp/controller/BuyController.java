@@ -37,14 +37,5 @@ public class BuyController {
         return new ModelAndView("orderSummary");
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/cardBuy")
-    public ModelAndView cardbuy(){
-        return new ModelAndView("salesView");
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/purchasesInfo")
-    public ModelAndView purchasesInfo(){
-        return new ModelAndView("purchasesView");
-    }
 
 }

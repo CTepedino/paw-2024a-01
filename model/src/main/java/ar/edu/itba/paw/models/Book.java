@@ -13,10 +13,10 @@ public class Book {
     private final long imageId;
     private final int suggestedAge;
     private final Date publishDate;
-    private final BookWriterInfo writer;
+    private final PublicUserInformation writer;
 
 
-    public Book(long bookId, String title, String description, BookGenre genre, double price, int pageCount, long previewPdfId, long imageId, int suggestedAge, Date publishDate, BookWriterInfo writer) {
+    public Book(long bookId, String title, String description, BookGenre genre, double price, int pageCount, long previewPdfId, long imageId, int suggestedAge, Date publishDate, PublicUserInformation writer) {
         this.bookId = bookId;
         this.title = title;
         this.description = description;
@@ -70,7 +70,7 @@ public class Book {
         return publishDate;
     }
 
-    public BookWriterInfo getWriter() {
+    public PublicUserInformation getWriter() {
         return writer;
     }
 }

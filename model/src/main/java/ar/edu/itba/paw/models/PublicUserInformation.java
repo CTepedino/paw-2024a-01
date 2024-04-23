@@ -1,13 +1,13 @@
 package ar.edu.itba.paw.models;
 
-public class BookWriterInfo {
+public class PublicUserInformation {
 
     private final long id;
     private final String firstName;
     private final String lastName;
     private final String email;
 
-    public BookWriterInfo(long id, String firstName, String lastName, String email) {
+    public PublicUserInformation(long id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

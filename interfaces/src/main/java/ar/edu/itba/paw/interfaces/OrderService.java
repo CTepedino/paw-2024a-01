@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface OrderService {
 
-    Order create(long buyerId, long writerId, long bookId);
+    void create(long buyerId, long writerId, long bookId);
 
     Optional<Order> find(long buyerId, long writerId, long bookId);
     Order toNextStatus(Order order);

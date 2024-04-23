@@ -22,8 +22,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order create(long buyerId, long writerId, long bookId) {
-        return orderDao.create(buyerId, writerId, bookId, OrderStatus.WAITING_CONTACT);
+    public void create(long buyerId, long writerId, long bookId) {
+        orderDao.create(buyerId, writerId, bookId, OrderStatus.WAITING_CONTACT);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order toNextStatus(Order order){
         OrderStatus newStatus = order.getOrderStatus().getNext();
-        orderDao.setStatus(order.getBuyerId(),order.getWriterId(), order.getBookId(), newStatus);
-        return new Order(order.getWriterId(), order.getBuyerId(), order.getBookId(), newStatus);
+        orderDao.setStatus(order.getBuyer().getId(), order.getWriter().getId(), order.getBook().getBookId(), newStatus);
+        return new Order(order.getBuyer(), order.getWriter(), order.getBook(), newStatus);
     }
 
     @Override
