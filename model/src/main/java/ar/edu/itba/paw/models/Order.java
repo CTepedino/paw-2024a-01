@@ -24,7 +24,6 @@ public class Order {
     public long getBookId() {
         return bookId;
     }
-
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
