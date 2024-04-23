@@ -16,13 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Optional;
 
 @Controller
-public class FileUploadController {
+public class FileController {
 
     private final ImageService is;
     private final PdfService ps;
 
     @Autowired
-    public FileUploadController(ImageService is, PdfService ps){
+    public FileController(ImageService is, PdfService ps){
         this.is = is;
         this.ps = ps;
     }
