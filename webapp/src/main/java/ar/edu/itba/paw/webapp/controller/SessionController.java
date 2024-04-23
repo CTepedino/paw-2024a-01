@@ -47,7 +47,7 @@ public class SessionController {
                 form.getPassword()
         );
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("registerConfirmation");
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/login")
@@ -59,7 +59,7 @@ public class SessionController {
     @RequestMapping(method = RequestMethod.GET, path="/profile")
     public ModelAndView profile(Authentication authentication){
         ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("user", us.findByEmail(authentication.getName()));
+        mav.addObject("user", us.findByEmail(authentication.getName()).get());
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
@@ -79,5 +79,21 @@ public class SessionController {
     public ModelAndView registerAsWriterForm(@ModelAttribute("writerNameForm") WriterNameForm form){
         return new ModelAndView("nameForm");
     }
+
+    @RequestMapping(method = RequestMethod.GET, path="/changePassword")
+    public ModelAndView changePasswordForm(@ModelAttribute("passwordForm") SignUpForm form){
+        form.setEmail(us.getLoggedUser().get().getEmail());
+        return new ModelAndView("changePassword");
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path="/changePassword")
+    public ModelAndView changePassword(@Valid @ModelAttribute("passwordForm") SignUpForm form, final BindingResult errors){
+        if (errors.hasErrors()){
+            return changePasswordForm(form);
+        }
+        us.fillMissingWriterData(us.getLoggedUser().get().getUserId(), form.getPassword());
+        return new ModelAndView("redirect:/profile");
+    }
+
 }
 

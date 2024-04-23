@@ -25,7 +25,7 @@
                     </a>
 
                     <ul id='user-dropdown' class='dropdown-content'>
-                        <li><a href="#">Account</a></li>
+                        <li><a href="${pageContext.request.contextPath}/profile">Profile</a></li>
                         <li><a href="#">Purchases</a></li>
                         <li><a href="${pageContext.request.contextPath}/addBook">Publish</a></li>
                         <c:if test="${param.hasWriterRole}">
