@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.exception.IllegalOrderStatusUpdateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -53,5 +54,15 @@ public class OrderServiceImpl implements OrderService {
 
         orderDao.setStatus(order.getBuyerId(),order.getWriterId(), order.getBookId(), nextStatus);
         return new Order(order.getWriterId(), order.getBuyerId(), order.getBookId(), nextStatus);
+    }
+
+    @Override
+    public List<Order> getAllReaderOrders(long readerId) {
+        return orderDao.getAllReaderOrders(readerId);
+    }
+
+    @Override
+    public List<Order> getAllWriterOrders(long writerId) {
+        return orderDao.getAllWriterOrders(writerId);
     }
 }

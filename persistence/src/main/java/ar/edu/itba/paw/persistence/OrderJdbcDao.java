@@ -50,7 +50,7 @@ public class OrderJdbcDao implements OrderDao {
         jdbcTemplate.update(
             """
                 UPDATE orders
-                SET order_status = ?
+                SET status = ?
                 WHERE buyer_id = ? AND writer_id = ? AND book_id = ?
                 """,
                 orderStatus,
@@ -74,6 +74,32 @@ public class OrderJdbcDao implements OrderDao {
                 bookId
         );
         return list.stream().findFirst();
+    }
+
+    @Override
+    public List<Order> getAllReaderOrders(long readerId) {
+        return jdbcTemplate.query(
+            """
+                SELECT *
+                FROM orders
+                WHERE buyer_id = ?
+                """,
+                ROW_MAPPER,
+                readerId
+        );
+    }
+
+    @Override
+    public List<Order> getAllWriterOrders(long writerId) {
+        return jdbcTemplate.query(
+                """
+                    SELECT *
+                    FROM orders
+                    WHERE writer_id = ?
+                    """,
+                ROW_MAPPER,
+                writerId
+        );
     }
 }
 

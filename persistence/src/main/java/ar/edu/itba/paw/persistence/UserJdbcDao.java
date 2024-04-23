@@ -156,4 +156,17 @@ public class UserJdbcDao implements UserDao {
                 firstName, lastName, id
         );
     }
+
+
+    @Override
+    public void changePassword(long id, String password) {
+        jdbcTemplate.update(
+                """
+                        UPDATE users
+                        SET password = ?
+                        WHERE user_id = ?
+                        """,
+                password, id
+        );
+    }
 }

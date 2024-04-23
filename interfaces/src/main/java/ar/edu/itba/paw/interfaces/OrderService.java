@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces;
 import ar.edu.itba.paw.models.Order;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
@@ -16,4 +17,8 @@ public interface OrderService {
     Order updateToWaitingForBook(Order order);
 
     Order updateToCompleted(Order order);
+
+    List<Order> getAllReaderOrders(long readerId);
+
+    List<Order> getAllWriterOrders(long writerId);
 }

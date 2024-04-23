@@ -15,4 +15,6 @@ public interface UserDao {
     Optional<User> findByEmail(String email);
 
     void setNames(long id, String firstName, String lastName);
+
+    void changePassword(long id, String password);
 }
