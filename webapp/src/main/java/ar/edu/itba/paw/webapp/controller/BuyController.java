@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.MailService;
+import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class BuyController {
         ModelAndView mav = new ModelAndView("buyForm");
         mav.addObject("writerEmail", writerEmail);
         mav.addObject("bookTitle", bookTitle);
+        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
 

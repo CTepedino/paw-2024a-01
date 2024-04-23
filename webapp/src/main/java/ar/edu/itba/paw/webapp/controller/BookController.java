@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ar.edu.itba.paw.webapp.util.SecurityUtils;
 
 
 @Controller
@@ -38,6 +39,7 @@ public class BookController {
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", bs.getAll());
+        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
 
@@ -45,22 +47,21 @@ public class BookController {
     public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
         final ModelAndView mav = new ModelAndView("bookInfo");
         mav.addObject("book", bs.findById(bookId).orElseThrow(BookNotFoundException::new));
+        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
     public ModelAndView addBookForm(){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        boolean hasWriterRole = authentication.getAuthorities().stream()
-                .anyMatch(r -> r.getAuthority().equals("WRITER"));
+        boolean hasWriterRole = SecurityUtils.hasRole("WRITER");
 
         if (!hasWriterRole){
             return new ModelAndView("redirect:/signup/writer");
         }
         ModelAndView mav = new ModelAndView("addBook");
         mav.addObject("genres", BookGenre.values());
+        mav.addObject("hasWriterRole", hasWriterRole);
         return mav;
     }
 

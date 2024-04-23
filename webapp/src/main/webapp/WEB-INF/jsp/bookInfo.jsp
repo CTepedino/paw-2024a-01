@@ -7,7 +7,9 @@
     <title><c:out value="${book.title}"/></title>
     <link href="${pageContext.request.contextPath}/css/bookInfo.css" rel="stylesheet"/>
 </head>
-<%@ include file="components/topBar.jsp" %>
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+</jsp:include>
 <body>
     <div class="book-container z-depth-2" style="margin: 30px;padding: 20px;">
         <div class="row">

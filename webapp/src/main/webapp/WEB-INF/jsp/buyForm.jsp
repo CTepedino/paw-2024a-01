@@ -4,7 +4,9 @@
 <head>
     <title>Contact Information</title>
 </head>
-<%@ include file="components/topBar.jsp" %>
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+</jsp:include>
 <body>
     <c:url value="/sendBuyInfo" var="registerUrl"/>
     <div class="row">

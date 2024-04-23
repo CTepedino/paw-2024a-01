@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,11 +26,11 @@
 
                     <ul id='user-dropdown' class='dropdown-content'>
                         <li><a href="#">Account</a></li>
-                        <li><a href="#">My Orders</a></li>
+                        <li><a href="#">Purchases</a></li>
                         <li><a href="${pageContext.request.contextPath}/addBook">Publish</a></li>
-                        <sec:authorize access="true">
-                            <li><a href="#">My Books</a></li>
-                        </sec:authorize>
+                        <c:if test="${param.hasWriterRole}">
+                            <li><a href="#">Sales</a></li>
+                        </c:if>
                         <li><a href="${pageContext.request.contextPath}/logout" class="red-text">Sign Out</a></li>
                     </ul>
                 </c:if>

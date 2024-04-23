@@ -9,7 +9,9 @@
     <title>Publish</title>
     <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
 </head>
-<%@ include file="components/topBar.jsp" %>
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+</jsp:include>
 <body>
 <c:url value="/addBook" var="postUrl"/>
 <div class="container">

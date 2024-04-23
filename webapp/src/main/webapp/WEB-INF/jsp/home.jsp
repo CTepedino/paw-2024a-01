@@ -9,7 +9,9 @@
     <title>Cybrary</title>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
 </head>
-<%@ include file="components/topBar.jsp" %>
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+</jsp:include>
 <body>
     <div class="explore_back">
     <div class="container">
