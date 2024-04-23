@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -51,8 +52,10 @@ public class SessionController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/login")
-    public ModelAndView loginForm(){
-        return new ModelAndView("login");
+    public ModelAndView loginForm(@RequestParam(name = "error", required = false) String error){
+        ModelAndView mav =  new ModelAndView("login");
+        mav.addObject("error", error);
+        return mav;
     }
 
 

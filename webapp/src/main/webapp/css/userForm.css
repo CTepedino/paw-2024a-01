@@ -1,6 +1,6 @@
 .small-container {
     max-width: 400px;
-    margin: 0 auto;
+    margin: 40px auto 0;
 }
 
 .form {
@@ -8,6 +8,18 @@
 }
 
 form {
-    padding: 50px;
+    padding: 20px 50px 20px 50px;
     width: 100%;
+}
+
+.submit-btn{
+    padding-top: 20px;
+}
+
+.password-toggle-btn{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
 }

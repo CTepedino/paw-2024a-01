@@ -15,6 +15,9 @@ public class SignUpForm {
     @Size(min=6, max=100)
     private String password;
 
+/*    @Size(min=6, max=100)
+    private String repeatPassword;*/
+
     public String getEmail() {
         return email;
     }
@@ -31,4 +34,11 @@ public class SignUpForm {
         this.password = password;
     }
 
+/*    public String getRepeatPassword() {
+        return repeatPassword;
+    }
+
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
+    }*/
 }
