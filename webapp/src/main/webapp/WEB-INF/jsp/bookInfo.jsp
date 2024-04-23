@@ -23,11 +23,15 @@
                         <h5><c:out value="${book.writer.firstName}"/> <c:out value="${book.writer.lastName}"/></h5>
                     </div>
                     <div class="col s4">
-                        <c:url var="buyUrl" value="/buy">
-                            <c:param name="writerEmail" value="${book.writer.email}" />
-                            <c:param name="bookTitle" value="${book.title}" />
-                        </c:url>
-                        <a class="waves-effect waves-light btn"  href="${buyUrl}">Contact Writer</a>
+                        <c:if test="${book.writer.email != user.email}">
+                            <c:url var="buyUrl" value="/sendBuyInfo">
+                                <c:param name="writerEmail" value="${book.writer.email}" />
+                                <c:param name="bookTitle" value="${book.title}" />
+                            </c:url>
+                            <form action="${buyUrl}" method="post">
+                                <button type="submit" class="waves-effect waves-light btn">Contact Writer</button>
+                            </form>
+                        </c:if>
                     </div>
                 </div>
                 <h5>$<c:out value="${book.price}"/></h5>

@@ -47,6 +47,7 @@ public class BookController {
     public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
         final ModelAndView mav = new ModelAndView("bookInfo");
         mav.addObject("book", bs.findById(bookId).orElseThrow(BookNotFoundException::new));
+        mav.addObject("user", us.getLoggedUser().get());
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }

@@ -15,11 +15,11 @@
     <div class="card-panel center-align">
         <i class="material-icons large">account_circle</i>
         <div class="name">
-            <span>${user.firstName}</span>
-            <span>${user.lastName}</span>
+            <span><c:out value="${user.firstName}"/></span>
+            <span>$<c:out value="${user.lastName}"/></span>
         </div>
         <div class="email">
-            <span>Email: ${user.email}</span>
+            <span>Email: <c:out value="${user.email}"/></span>
         </div>
         <div class="edit-profile">
             <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">Change Password</a>
