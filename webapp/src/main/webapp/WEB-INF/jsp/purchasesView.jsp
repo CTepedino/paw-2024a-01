@@ -1,4 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 <html>
 <head>
     <title>Purchases</title>
@@ -44,22 +47,27 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Date</th>
                     <th>Writer</th>
                     <th>Book's Title</th>
-                    <th>Amount</th>
+                    <th>Price</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
+<%--                <c:forEach var="order" items="${order}">--%>
+<%--                    <c:set var="order" value="${order}" scope="request"/>--%>
+<%--                    --%>
+<%--                </c:forEach>--%>
                 <tr>
-                    <td> 2024-05-01 </td>
-                    <td> Mariano Blatt </td>
-                    <td> Mi Juventud Unidad</td>
-                    <td> $500 </td>
-                    <td>Pending</td>
-                    <td><button>Edit</button></td>
+                    <c:forEach var="order" items="${orders}">
+                        <td><c:out value="${order.bookId}"/></td>
+                        <td>Mariano Blatt</td>
+                        <td>Mi Juventud Unidad</td>
+                        <td>$500</td>
+                        <td>Pending</td>
+                        <td><button>Edit</button></td>
+                    </c:forEach>
                 </tr>
                 <tr>
                     <td> 2024-05-01 </td>
