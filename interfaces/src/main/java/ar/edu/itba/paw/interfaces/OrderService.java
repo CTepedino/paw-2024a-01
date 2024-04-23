@@ -11,12 +11,7 @@ public interface OrderService {
     Order create(long buyerId, long writerId, long bookId);
 
     Optional<Order> find(long buyerId, long writerId, long bookId);
-
-    Order updateToWaitingPayment(Order order);
-
-    Order updateToWaitingForBook(Order order);
-
-    Order updateToCompleted(Order order);
+    Order toNextStatus(Order order);
 
     List<Order> getAllReaderOrders(long readerId);
 
