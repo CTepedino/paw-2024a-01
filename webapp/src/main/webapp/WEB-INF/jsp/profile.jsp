@@ -16,7 +16,7 @@
         <i class="material-icons large">account_circle</i>
         <div class="name">
             <span><c:out value="${user.firstName}"/></span>
-            <span>$<c:out value="${user.lastName}"/></span>
+            <span><c:out value="${user.lastName}"/></span>
         </div>
         <div class="email">
             <span>Email: <c:out value="${user.email}"/></span>
