@@ -12,6 +12,7 @@
 <jsp:include page="components/topBar.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
 </jsp:include>
+<%-- <%@include file="components/sideBar.jsp"%> --%>
 <body>
     <div class="explore_back">
     <div class="container">
@@ -35,7 +36,7 @@
                     </div>
                 </div>
             </div>
-    </div>
+        </div>
     </div>
     <div class="books">
         <div class="container">
