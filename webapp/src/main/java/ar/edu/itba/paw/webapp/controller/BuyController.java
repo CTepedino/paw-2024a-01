@@ -29,7 +29,17 @@ public class BuyController {
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
     public ModelAndView sendBuyInfo(@RequestParam("name") String name, @RequestParam("lastName") String lastName, @RequestParam("email") String email, @RequestParam("writerEmail") String writerEmail, @RequestParam("bookTitle") String bookTitle){
         ms.sendEmail(writerEmail, name, lastName, email, bookTitle);
-        return new ModelAndView("emailConfirmation");
+        return new ModelAndView("orderSummary");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/cardBuy")
+    public ModelAndView cardbuy(){
+        return new ModelAndView("salesView");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/purchasesInfo")
+    public ModelAndView purchasesInfo(){
+        return new ModelAndView("purchasesView");
     }
 
 }

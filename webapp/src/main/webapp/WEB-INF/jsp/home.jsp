@@ -10,6 +10,7 @@
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
 </head>
 <%@ include file="components/topBar.jsp" %>
+<%-- <%@include file="components/sideBar.jsp"%> --%>
 <body>
     <div class="explore_back">
     <div class="container">
@@ -34,14 +35,15 @@
                 </div>
             </div>
     </div>
-    </div>
-    <div class="books">
-        <div class="container">
-        <c:forEach var="book" items="${books}">
-            <c:set var="book" value="${book}" scope="request"/>
-            <%@include file="components/bookInfoCard.jsp"%>
-        </c:forEach>
+        <div class="books">
+            <div class="container">
+                <c:forEach var="book" items="${books}">
+                    <c:set var="book" value="${book}" scope="request"/>
+                    <%@include file="components/bookInfoCard.jsp"%>
+                </c:forEach>
+            </div>
         </div>
     </div>
+
 </body>
 </html>
