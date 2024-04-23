@@ -91,7 +91,7 @@ public class SessionController {
         if (errors.hasErrors()){
             return changePasswordForm(form);
         }
-        us.fillMissingWriterData(us.getLoggedUser().get().getUserId(), form.getPassword());
+        us.changePassword(us.getLoggedUser().get().getUserId(), form.getPassword());
         return new ModelAndView("redirect:/profile");
     }
 

@@ -16,4 +16,6 @@ public interface UserService {
     Optional<User> getLoggedUser();
 
     void fillMissingWriterData(long id, String password);
+
+    public void changePassword(long id, String password);
 }

@@ -84,4 +84,9 @@ public class UserServiceImpl implements UserService {
         return findByEmail(auth.getName());
     }
 
+    @Override
+    public void changePassword(long id, String password) {
+        userDao.changePassword(id, passwordEncoder.encode(password));
+    }
+
 }//TODO: preguntar si esta bien que la logica de security esté acá
