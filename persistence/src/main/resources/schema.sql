@@ -57,3 +57,15 @@ CREATE TABLE IF NOT EXISTS roles(
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS orders(
+    buyer_id INT NOT NULL,
+    writer_id INT NOT NULL,
+    book_id INT NOT NULL,
+    status VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY (book_id, buyer_id, writer_id),
+
+    FOREIGN KEY (buyer_id) REFERENCES  users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);

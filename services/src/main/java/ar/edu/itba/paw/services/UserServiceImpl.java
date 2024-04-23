@@ -54,6 +54,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void fillMissingWriterData(long id, String password) {
+        userDao.changePassword(id, passwordEncoder.encode(password));
+        userDao.giveRole(id, UserRoles.READER);
+        userDao.giveRole(id, UserRoles.WRITER);
+    }
+
+    @Override
     public void giveWriterRole(long id, String firstName, String lastName) {
         User user = userDao.giveRole(id, UserRoles.WRITER);
         userDao.setNames(id, firstName, lastName);
