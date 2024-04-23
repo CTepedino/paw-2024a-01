@@ -12,11 +12,6 @@
 </jsp:include>
 <body>
 <div class="container">
-<div class="form">
-    <h5>Publish your Book!</h5>
-    <form class="z-depth-2" action="${postUrl}" method="post" enctype="multipart/form-data" >
-
-        <h6>Fill in your details</h6>
     <div class="form">
         <h5>Publish your Book!</h5>
         <c:url value="/addBook" var="postUrl"/>
@@ -27,25 +22,20 @@
                 enctype="multipart/form-data"
                 cssClass="z-depth-2"
         >
-            <h6>Fill in your details</h6>
+            <c:if test="${!hasWriterRole}">
+                <h6>Fill in your details</h6>
 
-            <div class="input-field">
-                <form:label path="writerFirstName">Author's name<span class="red-text">*</span></form:label><br>
-                <form:input type="text" path="writerFirstName"/>
-                <form:errors path="writerFirstName" element="p"/>
-            </div>
-            <div class="input-field">
-                <form:label path="writerLastName">Author's surname<span class="red-text">*</span></form:label><br>
-                <form:input type="text" path="writerLastName"/>
-                <form:errors path="writerLastName" element="p"/>
-            </div>
-            <div class="input-field">
-                <form:label path="writerEmail">Contact email<span class="red-text">*</span></form:label><br>
-                <form:input type="text" path="writerEmail"/>
-                <form:errors path="writerEmail" element="p"/>
-            </div>
-        </div>
-
+                <div class="input-field">
+                    <form:label path="writerFirstName">Author's name<span class="red-text">*</span></form:label><br>
+                    <form:input type="text" path="writerFirstName"/>
+                    <form:errors path="writerFirstName" element="p"/>
+                </div>
+                <div class="input-field">
+                    <form:label path="writerLastName">Author's surname<span class="red-text">*</span></form:label><br>
+                    <form:input type="text" path="writerLastName"/>
+                    <form:errors path="writerLastName" element="p"/>
+                </div>
+            </c:if>
 
             <h6>Fill in the book's details</h6>
 

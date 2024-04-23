@@ -6,21 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.*;
 
 public class NewBookForm {
-/*    private String writerFirstName;
 
-    @NotNull
-    @Size(min = 1, max=255)
+
     private String writerFirstName;
 
-    @NotNull
-    @Size(min = 1, max=255)
     private String writerLastName;
-    private String writerEmail;*/
 
-    @NotNull
-    @Size(min = 1, max=255)
-    @Email
-    private String writerEmail;
 
     @Size(min = 1, max=255)
     private String title;
@@ -49,7 +40,7 @@ public class NewBookForm {
     @NotNull
     private MultipartFile pdf;
 
-/*
+
     public String getWriterFirstName() {
         return writerFirstName;
     }
@@ -65,15 +56,6 @@ public class NewBookForm {
     public void setWriterLastName(String writerLastName) {
         this.writerLastName = writerLastName;
     }
-
-    public String getWriterEmail() {
-        return writerEmail;
-    }
-
-    public void setWriterEmail(String writerEmail) {
-        this.writerEmail = writerEmail;
-    }
-*/
 
     public String getTitle() {
         return title;

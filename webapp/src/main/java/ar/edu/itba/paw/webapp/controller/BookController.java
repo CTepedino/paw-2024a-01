@@ -52,18 +52,13 @@ public class BookController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
-    public ModelAndView addBookForm(){
+    public ModelAndView addBookForm(@ModelAttribute("newBookForm") NewBookForm form){
 
         boolean hasWriterRole = SecurityUtils.hasRole("WRITER");
 
-        if (!hasWriterRole){
-            return new ModelAndView("redirect:/signup/writer");
-        }
-    public ModelAndView addBookForm(@ModelAttribute("newBookForm") NewBookForm form){
         ModelAndView mav = new ModelAndView("addBook");
         mav.addObject("genres", BookGenre.values());
         mav.addObject("hasWriterRole", hasWriterRole);
-        mav.addObject("newBookForm", form);
         return mav;
     }
 
@@ -75,12 +70,8 @@ public class BookController {
         if (errors.hasErrors()){
             return addBookForm(newBookForm);
         }
-    public ModelAndView addBook(@ModelAttribute("newBookForm") final NewBookForm newBookForm){
 
         ps.publishBook(
-               /* newBookForm.getWriterFirstName(),
-                newBookForm.getWriterLastName(),
-                newBookForm.getWriterEmail(),*/
                 newBookForm.getTitle(),
                 newBookForm.getDescription(),
                 newBookForm.getGenre(),
@@ -89,7 +80,10 @@ public class BookController {
                 newBookForm.getPageCount(),
 
                 newBookForm.getImage(),
-                newBookForm.getPdf()
+                newBookForm.getPdf(),
+
+                newBookForm.getWriterFirstName(),
+                newBookForm.getWriterLastName()
         );
 
         return new ModelAndView("redirect:/");

@@ -37,9 +37,26 @@ public class PublishServiceImpl implements PublishService {
             int pageCount,
 
             MultipartFile image,
-            MultipartFile previewPdf
+            MultipartFile previewPdf,
+
+            String firstName,
+            String lastName
     ) {
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+
+        UserRoles[] roles = user.getRoles();
+        boolean isWriter = false;
+        for (UserRoles role : roles){
+            if (role==UserRoles.WRITER){
+                isWriter=true;
+                break;
+            }
+        }
+
+        if (!isWriter){
+            us.giveWriterRole(user.getUserId(), firstName, lastName);
+        }
+
         Image bookImage = is.create(image);
         Pdf bookPreviewPdf = ps.create(previewPdf);
 
