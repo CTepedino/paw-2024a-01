@@ -144,7 +144,7 @@ public class BookJdbcDao implements BookDao {
         params.add("%" + (title!=null?title:"") + "%");
         if (genre != null){
             sqlQuery.append("AND genre = ? ");
-            params.add(genre);
+            params.add(genre.toString());
         }
         if (minPrice != null){
             sqlQuery.append("AND price >= ? ");

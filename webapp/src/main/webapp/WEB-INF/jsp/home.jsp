@@ -35,6 +35,48 @@
             </div>
     </div>
     </div>
+    <c:url var="searchUrl" value="/search?"/>
+        <div class="row">
+            <div class="col s2">
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=FANTASY"><i class="material-icons left">auto_fix_high</i>Fantasy</a>
+            </div>
+            <div class="col s2">
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=NON_FICTION"><i class="material-icons left">newspaper</i>Non Fiction</a>
+            </div>
+            <div class="col s2">
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=MYSTERY"><i class="material-icons left">search</i>Mystery</a>
+            </div>
+            <div class="col s2">
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=THRILLER"><i class="material-icons left">directions_run</i>Thriller</a>
+            </div>
+            <div class="col s2">
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=ROMANCE"><i class="material-icons left">favorite</i>Romance</a>
+            </div>
+            <div class="col s2">
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SCIENCE_FICTION"><i class="material-icons left">psychology_alt</i>Science Fiction</a>
+            </div>
+        </div>
+    <div class="row">
+        <div class="col s2">
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=FICTION"><i class="material-icons left">menu_book</i>Fiction</a>
+        </div>
+        <div class="col s2">
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=HORROR"><i class="material-icons left">mood_bad</i>Horror</a>
+        </div>
+        <div class="col s2">
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=HISTORICAL_FICTION"><i class="material-icons left">history_edu</i>Historical Fiction</a>
+        </div>
+        <div class="col s2">
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=BIOGRAPHY"><i class="material-icons left">person</i>Biography</a>
+        </div>
+        <div class="col s2">
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SELF_HELP"><i class="material-icons left">healing</i>Self Help</a>
+        </div>
+        <div class="col s2">
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=YOUNG_ADULT"><i class="material-icons left">local_play</i>Young Adult</a>
+        </div>
+    </div>
+
     <div class="books">
         <div class="container">
         <c:forEach var="book" items="${books}">
