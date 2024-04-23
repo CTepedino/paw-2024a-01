@@ -95,5 +95,19 @@ public class SessionController {
         return new ModelAndView("redirect:/profile");
     }
 
+    @RequestMapping(method = RequestMethod.GET, path="/purchases")
+    public ModelAndView purchases(){
+        ModelAndView mav = new ModelAndView("purchasesView");
+        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/sales")
+    public ModelAndView sales(){
+        ModelAndView mav = new ModelAndView("salesView");
+        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
+        return mav;
+    }
+
 }
 

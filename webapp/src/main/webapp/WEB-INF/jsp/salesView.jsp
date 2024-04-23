@@ -6,19 +6,21 @@
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
 </head>
 
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+</jsp:include>
 
 <body>
 <div class="main--content">
-<%--    <%@ include file="components/topBar.jsp" %> --%>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>
-        </div>
-        <style>
-            <%@include file="/css/topBarStyle.css" %>
-        </style>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    </nav>
+<%--    <nav>--%>
+<%--        <div class="nav-wrapper">--%>
+<%--            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>--%>
+<%--        </div>--%>
+<%--        <style>--%>
+<%--            <%@include file="/css/topBarStyle.css" %>--%>
+<%--        </style>--%>
+<%--        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>--%>
+<%--    </nav>--%>
 
 
     <div class="header-wrapper">

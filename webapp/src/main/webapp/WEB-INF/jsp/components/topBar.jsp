@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="${pageContext.request.contextPath}/css/topBarStyle.css" rel="stylesheet"/>
     <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/images/cybrary_3.png" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -25,10 +26,10 @@
 
                     <ul id='user-dropdown' class='dropdown-content'>
                         <li><a href="${pageContext.request.contextPath}/profile">Profile</a></li>
-                        <li><a href="#">Purchases</a></li>
+                        <li><a href="${pageContext.request.contextPath}/purchases">Purchases</a></li>
                         <li><a href="${pageContext.request.contextPath}/addBook">Publish</a></li>
                         <c:if test="${param.hasWriterRole}">
-                            <li><a href="#">Sales</a></li>
+                            <li><a href="${pageContext.request.contextPath}/sales">Sales</a></li>
                         </c:if>
                         <li><a href="${pageContext.request.contextPath}/logout" class="red-text">Sign Out</a></li>
                     </ul>
