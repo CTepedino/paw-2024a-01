@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <html>
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8,7 +9,8 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="${pageContext.request.contextPath}/css/topBarStyle.css" rel="stylesheet"/>
-    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/images/cybrary.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/images/cybrary_3.png" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -16,11 +18,41 @@
         <div class="nav-wrapper">
             <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="${pageContext.request.contextPath}/addBook" class="waves-effect btn">Publish Book</a></li>
+                <li>
+                <c:if test="${not empty pageContext.request.userPrincipal}">
+                    <a class='dropdown-trigger btn' href='#' data-target='user-dropdown'>
+                        <i class="material-icons">account_circle</i>
+                    </a>
+
+                    <ul id='user-dropdown' class='dropdown-content'>
+                        <li><a href="${pageContext.request.contextPath}/profile">Profile</a></li>
+                        <li><a href="${pageContext.request.contextPath}/purchases">Purchases</a></li>
+                        <li><a href="${pageContext.request.contextPath}/addBook">Publish</a></li>
+                        <c:if test="${param.hasWriterRole}">
+                            <li><a href="${pageContext.request.contextPath}/sales">Sales</a></li>
+                        </c:if>
+                        <li><a href="${pageContext.request.contextPath}/logout" class="red-text">Sign Out</a></li>
+                    </ul>
+                </c:if>
+                <c:if test="${empty pageContext.request.userPrincipal}">
+                    <a href="${pageContext.request.contextPath}/login" class="waves-effect btn">Sign In</a>
+                </c:if>
+                </li>
             </ul>
         </div>
     </nav>
 </header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.dropdown-trigger');
+        var options = {
+            constrainWidth: false,
+            coverTrigger: false
+        };
+        var instances = M.Dropdown.init(elems, options);
+    });
+</script>
 
 </body>
 </html>

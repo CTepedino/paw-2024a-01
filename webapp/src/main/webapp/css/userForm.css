@@ -1,0 +1,13 @@
+.small-container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form {
+    width: 100%;
+}
+
+form {
+    padding: 50px;
+    width: 100%;
+}
