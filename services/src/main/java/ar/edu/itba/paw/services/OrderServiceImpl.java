@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.OrderDao;
-import ar.edu.itba.paw.interfaces.OrderService;
+import ar.edu.itba.paw.interfaces.*;
+import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.Order;
 import ar.edu.itba.paw.models.OrderStatus;
+import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +19,25 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderDao orderDao;
 
+    private final BookService bs;
+    private final UserService us;
+    private final MailService ms;
+
     @Autowired
-    public OrderServiceImpl(final OrderDao orderDao){
+    public OrderServiceImpl(final OrderDao orderDao, UserService us, MailService ms, BookService bs){
         this.orderDao = orderDao;
+        this.us = us;
+        this.ms = ms;
+        this.bs = bs;
     }
 
     @Override
-    public void create(long buyerId, long writerId, long bookId) {
-        orderDao.create(buyerId, writerId, bookId, OrderStatus.WAITING_CONTACT);
+    public void create(long bookId) {
+        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        orderDao.create(buyer.getUserId(), book.getWriter().getId(), bookId, OrderStatus.WAITING_CONTACT);
+        ms.sendOrderEmail(buyer.getUserId(), bookId);
     }
 
     @Override

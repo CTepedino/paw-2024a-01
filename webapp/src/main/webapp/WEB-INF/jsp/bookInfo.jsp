@@ -25,8 +25,7 @@
                     <div class="col s4">
                         <c:if test="${book.writer.email != user.email}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
-                                <c:param name="writerEmail" value="${book.writer.email}" />
-                                <c:param name="bookTitle" value="${book.title}" />
+                                <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
                             <form action="${buyUrl}" method="post">
                                 <button type="submit" class="waves-effect waves-light btn">Contact Writer</button>
