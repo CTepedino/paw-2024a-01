@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 
-import ar.edu.itba.paw.webapp.form.validations.UniqueEmail;
+//import ar.edu.itba.paw.webapp.form.validations.UniqueEmail;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -12,7 +12,7 @@ public class SignUpForm {
     @NotNull
     @Size(min=1, max=100)
     @Email
-    @UniqueEmail
+    //@UniqueEmail
     private String email;
 
     @Size(min=6, max=100)

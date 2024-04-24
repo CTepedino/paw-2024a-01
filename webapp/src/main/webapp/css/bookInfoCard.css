@@ -17,8 +17,21 @@
 .card-content,
 .card-reveal {
     flex: 1;
+    width: 100%;
 }
 
 .info {
     color: black;
+}
+
+.content{
+    width: 95%;
+    height: 100%;
+}
+
+.price-number {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 50px; /* Ajusta el margen según sea necesario */
 }

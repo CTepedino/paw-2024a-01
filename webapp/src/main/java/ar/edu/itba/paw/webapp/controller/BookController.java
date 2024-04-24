@@ -3,8 +3,10 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.interfaces.PublishService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.webapp.form.BookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 
 @Controller
@@ -88,6 +92,33 @@ public class BookController {
         );
 
         return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/search")
+    public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") final BookSearchForm form, final BindingResult error){
+        if (error.hasErrors()){
+            return new ModelAndView("home"); //TODO: error page
+        }
+
+        final ModelAndView mav = new ModelAndView("searchResults");
+
+       List<Book> books = bs.searchWithParams(
+                form.getTitle(),
+                form.getGenre(),
+                form.getMinPrice(),
+                form.getMaxPrice(),
+                form.getMinPageCount(),
+                form.getMaxPageCount(),
+                form.getMinSuggestedAge(),
+                form.getMaxSuggestedAge(),
+                form.getOrderBy(),
+                form.getAsc()
+        );
+
+        mav.addObject("bookSearchForm", form);
+        mav.addObject("books", books);
+
+        return mav;
     }
 
 }
