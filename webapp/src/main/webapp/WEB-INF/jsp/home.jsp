@@ -53,7 +53,7 @@
                 <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=ROMANCE"><i class="material-icons left">favorite</i><spring:message code="book.genre.ROMANCE"/></a>
             </div>
             <div class="col s2">
-                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SCIENCE_FICTION"><i class="material-icons left">psychology_alt</i>S<spring:message code="book.genre.SCIENCE_FICTION"/></a>
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SCIENCE_FICTION"><i class="material-icons left">psychology_alt</i><spring:message code="book.genre.SCIENCE_FICTION"/></a>
             </div>
         </div>
     <div class="row">
@@ -77,13 +77,11 @@
         </div>
     </div>
 
-    <div class="books">
-        <div class="container">
+    <div class="row">
         <c:forEach var="book" items="${books}">
             <c:set var="book" value="${book}" scope="request"/>
             <%@include file="components/bookInfoCard.jsp"%>
         </c:forEach>
-        </div>
     </div>
 </body>
 </html>

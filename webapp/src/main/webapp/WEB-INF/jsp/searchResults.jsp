@@ -21,7 +21,7 @@
 
 <div class="row">
     <div class="books col s9">
-            <div class="container">
+        <div class="row">
                 <c:forEach var="book" items="${books}">
                     <c:set var="book" value="${book}" scope="request"/>
                     <%@include file="components/bookInfoCard.jsp"%>
@@ -29,7 +29,7 @@
                 <c:if test="${books.size()==0}">
                     <h5><spring:message code="book.search.noBooks"/></h5>
                 </c:if>
-            </div>
+        </div>
     </div>
     <div class="col s3">
         <div class="row">
@@ -114,13 +114,9 @@
                 <spring:message code="book.search.apply"/>
             </button>
         </div>
-
-
-
     </div>
-    </form:form>
 </div>
-
+</form:form>
 <script type="module">
     // Initialize Materialize components
     document.addEventListener('DOMContentLoaded', function() {

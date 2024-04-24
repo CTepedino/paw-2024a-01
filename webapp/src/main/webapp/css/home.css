@@ -1,5 +1,3 @@
-
-
 .explore_back {
     width: 100%;
     padding-top: 30px;
@@ -8,12 +6,6 @@
     background-size: cover; /* Ajusta el tamaño de la imagen al tamaño del div */
     background-position: center; /* Centra la imagen en el div */
     /* Agrega cualquier otro estilo necesario para el div explore_back */
-}
-
-
-
-.row{
-    width: 100%;
 }
 
 .home-image {
@@ -30,22 +22,6 @@ a {
     text-decoration: none;
     color: inherit;
 }
-
-.explore_books {
-    color: white;
-}
-
-.steps {
-    color: white;
-}
-
-.books .container {
-    width: 95%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
 
 .genre-btn {
     margin-top: 20px;
