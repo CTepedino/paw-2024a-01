@@ -2,14 +2,14 @@
     width: 100%;
     padding-top: 30px;
     padding-bottom: 30px;
-    background-image: url("/images/booksbackground.png");
+    background-image: url("/images/background.svg");
     background-size: cover; /* Ajusta el tamaño de la imagen al tamaño del div */
     background-position: center; /* Centra la imagen en el div */
     /* Agrega cualquier otro estilo necesario para el div explore_back */
 }
 
 .home-image {
-    max-height: 80px;
+    max-height: 120px;
 }
 
 .card-panel{

@@ -8,6 +8,7 @@
     <link href="${pageContext.request.contextPath}/css/topBarStyle2.0.css" rel="stylesheet"/>
     <!-- Font Awesome CDN link-->
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <header class="no-autoinit">
 <div>

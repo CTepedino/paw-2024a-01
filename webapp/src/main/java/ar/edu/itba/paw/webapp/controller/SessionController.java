@@ -48,8 +48,8 @@ public class SessionController {
                 form.getPassword()
         );
 
-        //return new ModelAndView("registerConfirmation");
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("registerConfirmation");
+//        return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/login")
