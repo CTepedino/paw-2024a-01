@@ -61,7 +61,7 @@
 <%--                </c:forEach>--%>
                 <tr>
                     <c:forEach var="order" items="${orders}">
-                        <td><c:out value="${order.bookId}"/></td>
+                        <td><c:out value="${order.book.bookId}"/></td>
                         <td>Mariano Blatt</td>
                         <td>Mi Juventud Unidad</td>
                         <td>$500</td>

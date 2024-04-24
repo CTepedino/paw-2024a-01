@@ -17,37 +17,37 @@ public class OrderJdbcDao implements OrderDao {
 
     private final static RowMapper<Order> ROW_MAPPER = (rs, rowNum) -> new Order(
             new PublicUserInformation(
-                    rs.getLong("o.writer_id"),
-                    rs.getString("w.first_name"),
-                    rs.getString("w.last_name"),
-                    rs.getString("w.email")
+                    rs.getLong("writer_id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email")
             ),
             new PublicUserInformation(
-                    rs.getLong("o.buyer_id"),
-                    rs.getString("r.first_name"),
-                    rs.getString("r.last_name"),
-                    rs.getString("r.email")
+                    rs.getLong("buyer_id"),
+                    null,
+                    null,
+                    rs.getString("reader_email")
             ),
             new Book(
-                    rs.getLong("o.book_id"),
-                    rs.getString("b.title"),
-                    rs.getString("b.description"),
-                    BookGenre.valueOf(rs.getString("b.genre")),
-                    rs.getDouble("b.price"),
-                    rs.getInt("b.page_count"),
-                    rs.getLong("b.pdf_id"),
-                    rs.getLong("b.image_id"),
-                    rs.getInt("b.suggested_age"),
-                    rs.getDate("b.published_date"),
+                    rs.getLong("book_id"),
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    BookGenre.valueOf(rs.getString("genre")),
+                    rs.getDouble("price"),
+                    rs.getInt("page_count"),
+                    rs.getLong("pdf_id"),
+                    rs.getLong("image_id"),
+                    rs.getInt("suggested_age"),
+                    rs.getDate("published_date"),
                     new PublicUserInformation(
-                            rs.getLong("o.writer_id"),
-                            rs.getString("w.first_name"),
-                            rs.getString("w.last_name"),
-                            rs.getString("w.email")
+                            rs.getLong("writer_id"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getString("email")
                     )
             ),
 
-            OrderStatus.valueOf(rs.getString("o.status"))
+            OrderStatus.valueOf(rs.getString("status"))
     );
 
     private final JdbcTemplate jdbcTemplate;
@@ -90,7 +90,7 @@ public class OrderJdbcDao implements OrderDao {
     public Optional<Order> find(long buyerId, long writerId, long bookId) {
         List<Order> list = jdbcTemplate.query(
             """
-                SELECT *
+                SELECT o.*, b.*, w.*, r.email AS reader_email
                 FROM orders o
                 JOIN users w ON o.writer_id = w.user_id
                 JOIN users r ON o.buyer_id = r.user_id
@@ -109,7 +109,7 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllReaderOrders(long readerId) {
         return jdbcTemplate.query(
             """
-                SELECT *
+                SELECT o.*, b.*, w.*, r.email AS reader_email
                 FROM orders o
                 JOIN users w ON o.writer_id = w.user_id
                 JOIN users r ON o.buyer_id = r.user_id
@@ -125,7 +125,7 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllWriterOrders(long writerId) {
         return jdbcTemplate.query(
                 """
-                SELECT *
+                SELECT o.*, b.*, w.*, r.email AS reader_email
                 FROM orders o
                 JOIN users w ON o.writer_id = w.user_id
                 JOIN users r ON o.buyer_id = r.user_id
@@ -141,7 +141,7 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllNonCompleteReaderOrders(long readerId) {
         return jdbcTemplate.query(
                 """
-                    SELECT *
+                    SELECT o.*, b.*, w.*, r.email AS reader_email
                     FROM orders o
                     JOIN users w ON o.writer_id = w.user_id
                     JOIN users r ON o.buyer_id = r.user_id
@@ -157,7 +157,7 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllNonCompleteWriterOrders(long writerId) {
         return jdbcTemplate.query(
                 """
-                    SELECT *
+                    SELECT o.*, b.*, w.*, r.email AS reader_email
                     FROM orders o
                     JOIN users w ON o.writer_id = w.user_id
                     JOIN users r ON o.buyer_id = r.user_id
