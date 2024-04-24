@@ -9,11 +9,13 @@
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
 </head>
 
-<jsp:include page="components/topBar.jsp">
+<%@include file="components/materializeComponent.jsp"%>
+
+<body>
+<jsp:include page="components/topBar2.0.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
 </jsp:include>
 
-<body>
 <div class="main--content">
 <%--    <nav>--%>
 <%--        <div class="nav-wrapper">--%>
@@ -28,14 +30,13 @@
 
     <div class="header-wrapper">
         <div class="header--title">
-            <span>My</span>
-            <h2>Purchases</h2>
+            <h2> My Purchases</h2>
         </div>
-        <div class="user--info">
-            <div class="search--box">
-                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>
-            </div>
-        </div>
+<%--        <div class="user--info">--%>
+<%--            <div class="search--box">--%>
+<%--                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>--%>
+<%--            </div>--%>
+<%--        </div>--%>
 
     </div>
 

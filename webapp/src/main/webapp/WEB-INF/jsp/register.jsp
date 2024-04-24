@@ -8,9 +8,9 @@
     <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 </head>
 
-<%@ include file="components/topBar.jsp" %>
-
+<%@include file="components/materializeComponent.jsp"%>
 <body>
+<%@ include file="components/topBar2.0.jsp" %>
 <div class="small-container">
     <div class="form">
         <c:url value="/signup" var="postUrl"/>

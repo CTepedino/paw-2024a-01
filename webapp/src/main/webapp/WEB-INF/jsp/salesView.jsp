@@ -7,11 +7,12 @@
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
 </head>
 
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
-</jsp:include>
+<%@include file="components/materializeComponent.jsp"%>
 
 <body>
+<jsp:include page="components/topBar2.0.jsp">
+    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+</jsp:include>
 <div class="main--content">
 <%--    <nav>--%>
 <%--        <div class="nav-wrapper">--%>
@@ -26,14 +27,13 @@
 
     <div class="header-wrapper">
         <div class="header--title">
-            <span>My</span>
-            <h2>Sales</h2>
+            <h2>My Sales</h2>
         </div>
-        <div class="user--info">
-            <div class="search--box">
-                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>
-            </div>
-        </div>
+<%--        <div class="user--info">--%>
+<%--            <div class="search--box">--%>
+<%--                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>--%>
+<%--            </div>--%>
+<%--        </div>--%>
 
     </div>
     <div class="card--container">
@@ -96,21 +96,21 @@
                 <thead>
                 <tr>
                     <%--<th>Date</th>--%>
-                    <th>Buyer's email</th>
-                    <th>Book's Title</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th class="my-th">Buyer's email</th>
+                    <th class="my-th">Book's Title</th>
+                    <th class="my-th">Price</th>
+                    <th class="my-th">Status</th>
+                    <th class="my-th">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="order" items="${orders}">
                 <tr>
                     <%--<td> 2024-05-01 </td>--%>
-                    <td><c:out value="${order.buyer.email}"/></td>
-                    <td><c:out value="${order.book.title}"/></td>
-                    <td><c:out value="${order.book.price}"/></td>
-                    <td><c:out value="${order.orderStatus.displayString}"/></td>
+                    <td class="my-td"><c:out value="${order.buyer.email}"/></td>
+                    <td class="my-td"><c:out value="${order.book.title}"/></td>
+                    <td class="my-td"><c:out value="${order.book.price}"/></td>
+                    <td class="my-td"><c:out value="${order.orderStatus.displayString}"/></td>
                     <c:url value="/advanceOrder" var="advanceOrderUrl">
                         <c:param name="bookId" value="${order.book.bookId}"/>
                         <c:param name="buyerId" value="${order.buyer.id}"/>
@@ -118,14 +118,14 @@
                         <c:param name="from" value="sales"/>
                     </c:url>
                         <c:if test="${order.orderStatus.writerCanAdvance}">
-                            <td><form action="${advanceOrderUrl}" method="post">
+                            <td class="my-td"><form action="${advanceOrderUrl}" method="post">
                                 <button
                                         type="submit"
                                 >Advance</button>
                             </form></td>
                         </c:if>
                         <c:if test="${!order.orderStatus.writerCanAdvance}">
-                            <td><form action="${advanceOrderUrl}" method="post">
+                            <td class="my-td"><form action="${advanceOrderUrl}" method="post">
                                 <button type="submit" disabled>Advance</button>
                             </form></td>
                         </c:if>

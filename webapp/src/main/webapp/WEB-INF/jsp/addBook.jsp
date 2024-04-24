@@ -7,10 +7,12 @@
     <title>Publish</title>
     <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
 </head>
-<jsp:include page="components/topBar.jsp">
+
+<%@include file="components/materializeComponent.jsp"%>
+<body>
+<jsp:include page="components/topBar2.0.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
 </jsp:include>
-<body>
 <div class="container">
     <div class="form">
         <h5>Publish your Book!</h5>

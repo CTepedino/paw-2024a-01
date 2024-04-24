@@ -7,10 +7,13 @@
     <link href="${pageContext.request.contextPath}/css/profile.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<jsp:include page="components/topBar.jsp">
+<%@include file="components/materializeComponent.jsp"%>
+
+
+<body>
+<jsp:include page="components/topBar2.0.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
 </jsp:include>
-<body>
 <div class="medium-container">
     <div class="card-panel center-align">
         <i class="material-icons large">account_circle</i>
