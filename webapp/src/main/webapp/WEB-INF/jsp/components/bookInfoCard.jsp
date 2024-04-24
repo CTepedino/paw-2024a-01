@@ -23,7 +23,7 @@
                     <p class="info"><spring:message code="book.genre.${book.genre}"/></p>
                     <p class="info"><spring:message code="bookInfoCard.suggestedAge"/> <c:out value="${book.suggestedAge}"/></p>
                 </div>
-                <p class="price-number">$<c:out value="${book.price}"/></p>
+                <h5 class="price-number">$<c:out value="${book.price}"/></h5>
             </div>
         </a>
     </div>
