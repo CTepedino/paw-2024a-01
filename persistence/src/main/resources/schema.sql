@@ -7,8 +7,8 @@ ALTER TABLE users RENAME COLUMN writer_id TO user_id;
 ALTER TABLE users ADD COLUMN password VARCHAR(255);
 ALTER TABLE users ALTER COLUMN first_name DROP NOT NULL;
 ALTER TABLE users ALTER COLUMN last_name DROP NOT NULL;
-ALTER TABLE books DROP COLUMN writer_name
-ALTER TABLE books DROP COLUMN writer_last_name
+ALTER TABLE books DROP COLUMN writer_name;
+ALTER TABLE books DROP COLUMN writer_last_name;
 ALTER TABLE books DROP COLUMN writer_email; (no se pierden datos, la misma información ya se podia acceder mediante el writer_id en la tabla users)
 */
 
