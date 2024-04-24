@@ -229,7 +229,7 @@
     width: 100%;
 }
 
-table{
+.my-table{
     width: 100%;
     border-collapse: collapse;
 
@@ -240,7 +240,7 @@ thead{
     color: #fff;
 }
 
-th{
+.my-th{
     padding: 15px;
     text-align: left;
 }
@@ -249,13 +249,13 @@ tbody{
     background: #f2f2f2;
 }
 
-td{
+.my-td{
     padding: 15px;
     font-size: 14px;
     color: #333;
 }
 
-tr:nth-child(even){
+.my-tr:nth-child(even){
     background: #fff;
 }
 

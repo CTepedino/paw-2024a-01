@@ -6,6 +6,7 @@
     <title>Login</title>
     <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 </head>
+<%--<%@ include file="components/topBar2.0.jsp" %>--%>
 <%@ include file="components/topBar.jsp" %>
 <body>
 <div class="small-container">

@@ -44,15 +44,15 @@
             Order History
         </h3>
         <div class="table-container">
-            <table>
+            <table class="my-table">
                 <thead>
-                <tr>
-                    <th>Writer</th>
-                    <th>Email</th>
-                    <th>Book's Title</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                <tr class="my-tr">
+                    <th class="my-th">Writer</th>
+                    <th class="my-th">Email</th>
+                    <th class="my-th">Book's Title</th>
+                    <th class="my-th">Price</th>
+                    <th class="my-th">Status</th>
+                    <th class="my-th">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -61,12 +61,12 @@
 <%--                    --%>
 <%--                </c:forEach>--%>
                 <c:forEach var="order" items="${orders}">
-                <tr>
-                        <td><c:out value="${order.writer.firstName} ${order.writer.lastName}"/></td>
-                        <td><c:out value="${order.writer.email}"/></td>
-                        <td><c:out value="${order.book.title}"/></td>
-                        <td><c:out value="${order.book.price}"/></td>
-                        <td><c:out value="${order.orderStatus.displayString}"/></td>
+                <tr class="my-tr">
+                        <td class="my-td"><c:out value="${order.writer.firstName} ${order.writer.lastName}"/></td>
+                        <td class="my-td"><c:out value="${order.writer.email}"/></td>
+                        <td class="my-td"><c:out value="${order.book.title}"/></td>
+                        <td class="my-td"><c:out value="${order.book.price}"/></td>
+                        <td class="my-td"><c:out value="${order.orderStatus.displayString}"/></td>
                         <c:url value="/advanceOrder" var="advanceOrderUrl">
                             <c:param name="bookId" value="${order.book.bookId}"/>
                             <c:param name="buyerId" value="${order.buyer.id}"/>
@@ -75,14 +75,14 @@
                         </c:url>
 
                         <c:if test="${order.orderStatus.readerCanAdvance}">
-                        <td><form action="${advanceOrderUrl}" method="post">
+                        <td class="my-td"><form action="${advanceOrderUrl}" method="post">
                             <button
                                 type="submit"
                             >Advance</button>
                         </form></td>
                         </c:if>
                         <c:if test="${!order.orderStatus.readerCanAdvance}">
-                            <td><form action="${advanceOrderUrl}" method="post">
+                            <td class="my-td"><form action="${advanceOrderUrl}" method="post">
                                 <button type="submit" disabled>Advance</button>
                             </form></td>
                         </c:if>
