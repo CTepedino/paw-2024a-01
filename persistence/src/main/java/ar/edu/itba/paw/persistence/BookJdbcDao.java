@@ -50,14 +50,11 @@ public class BookJdbcDao implements BookDao {
     @Override
     public Optional<Book> findById(long id){
         final List<Book> list = jdbcTemplate.query(
-            """
+                """
                     SELECT b.*, u.first_name, u.last_name, u.email
                     FROM books b JOIN users u on b.writer_id = u.user_id
                     WHERE book_id = ?
                 """,
-                new Object[] {id},
-                ROW_MAPPER
-                "SELECT * FROM books WHERE book_id = ?",
                 ROW_MAPPER,
                 id
         );
@@ -128,42 +125,46 @@ public class BookJdbcDao implements BookDao {
             BookSearchOrderBy orderBy,
             boolean asc
     ){
-        StringBuilder sqlQuery = new StringBuilder("SELECT * FROM books WHERE lower(title) LIKE lower(?) ");
+        StringBuilder sqlQuery = new StringBuilder("""
+                SELECT b.*, u.first_name, u.last_name, u.email
+                FROM books b JOIN users u on b.writer_id = u.user_id
+                WHERE lower(title) LIKE lower(?)
+                """);
         List<Object> params = new ArrayList<>();
         params.add("%" + (title!=null?title:"") + "%");
         if (genre != null){
-            sqlQuery.append("AND genre = ? ");
+            sqlQuery.append(" AND genre = ? ");
             params.add(genre.toString());
         }
         if (minPrice != null){
-            sqlQuery.append("AND price >= ? ");
+            sqlQuery.append(" AND price >= ? ");
             params.add(minPrice);
         }
         if (maxPrice != null){
-            sqlQuery.append("AND price <= ? ");
+            sqlQuery.append(" AND price <= ? ");
             params.add(maxPrice);
         }
         if (minPageCount != null){
-            sqlQuery.append("AND page_count >= ? ");
+            sqlQuery.append(" AND page_count >= ? ");
             params.add(minPageCount);
         }
         if (maxPageCount != null){
-            sqlQuery.append("AND page_count <= ? ");
+            sqlQuery.append(" AND page_count <= ? ");
             params.add(maxPageCount);
         }
 
         if (minSuggestedAge != null){
-            sqlQuery.append("AND suggested_age >= ? ");
+            sqlQuery.append(" AND suggested_age >= ? ");
             params.add(minSuggestedAge);
         }
 
         if (maxSuggestedAge != null){
-            sqlQuery.append("AND suggested_age <= ? ");
+            sqlQuery.append(" AND suggested_age <= ? ");
             params.add(maxSuggestedAge);
         }
 
         if (orderBy != null){
-            sqlQuery.append("ORDER BY ?");
+            sqlQuery.append(" ORDER BY ?");
             params.add(orderBy + (asc? "asc":"desc"));
         }
 

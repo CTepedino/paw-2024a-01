@@ -45,7 +45,7 @@
                 <div class="input-field">
                     <form:label path="orderBy" cssClass="active"><spring:message code="book.search.orderBy"/></form:label><br>
                     <form:select path="orderBy">
-                        <form:option value="" disabled="true"><spring:message code="book.search.selectOrder"/></form:option>
+                        <form:option value=""><spring:message code="book.search.selectOrder"/></form:option>
                         <form:option value="PRICE"><spring:message code="book.bookSearchOrderBy.price"/></form:option>
                         <form:option value="PAGE_COUNT"><spring:message code="book.bookSearchOrderBy.pageCount"/></form:option>
                         <form:option value="PUBLICATION_DATE"><spring:message code="book.bookSearchOrderBy.publicationDate"/></form:option>
@@ -92,7 +92,7 @@
             <div class="input-field">
                 <form:label path="genre" cssClass="active"><spring:message code="book.search.genre"/></form:label><br>
                 <form:select path="genre">
-                    <form:option value="" disabled="true"><spring:message code="book.search.selectGenre"/></form:option>
+                    <form:option value=""><spring:message code="book.search.selectGenre"/></form:option>
                     <form:option value="FANTASY"> <spring:message code="book.genre.FANTASY"/> </form:option>
                     <form:option value="NON_FICTION"> <spring:message code="book.genre.NON_FICTION"/> </form:option>
                     <form:option value="MYSTERY"> <spring:message code="book.genre.MYSTERY"/> </form:option>

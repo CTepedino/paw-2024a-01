@@ -8,23 +8,6 @@
 </header>
 <body>
 
-<div class="card book_card" >
-    <a href="${pageContext.request.contextPath}/${book.bookId}">
-        <div class="card-image waves-effect waves-block waves-light">
-            <img src="<c:url  value="${baseUrl}/image/${book.imageId}"/>" class="activator book_cover" alt="Book cover">
-        </div>
-    </a>
-    <a class="card-info" href="${pageContext.request.contextPath}/${book.bookId}">
-        <div class="card-content" >
-            <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>
-            <p class="info">By <c:out value="${book.writer.firstName}"/> <c:out value="${book.writer.lastName}"/></p>
-            <p class="info"><c:out value="${book.genre.displayName}"/></p>
-            <p class="info">Suggested age: + <c:out value="${book.suggestedAge}"/></p>
-        </div>
-        <div class="card-action">
-            <p>Price: $<c:out value="${book.price}"/></p>
-        </div>
-    </a>
 <div class="col s6">
     <div class="card">
         <a href="${pageContext.request.contextPath}/${book.bookId}">
@@ -36,9 +19,9 @@
             <div class="container content">
                 <div class="card-content" >
                     <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>
-                    <p class="info"><spring:message code="bookInfoCard.by"/> <c:out value="${book.writerName}"/> <c:out value="${book.writerLastName}"/></p>
+                    <p class="info"><spring:message code="bookInfoCard.by"/> <c:out value="${book.writer.firstName}"/> <c:out value="${book.writer.lastName}"/></p>
                     <p class="info"><spring:message code="book.genre.${book.genre}"/></p>
-                    <p class="info"><spring:message code="bookInfoCard.suggestedAge"/> <c:out value="${book.suggestedAge}"/></p>
+                    <p class="info"><spring:message code="bookInfoCard.suggestedAge"/> +<c:out value="${book.suggestedAge}"/></p>
                 </div>
                 <h5 class="price-number">$<c:out value="${book.price}"/></h5>
             </div>

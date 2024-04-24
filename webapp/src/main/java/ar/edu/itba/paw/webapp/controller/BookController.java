@@ -6,7 +6,6 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
-import ar.edu.itba.paw.webapp.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import ar.edu.itba.paw.webapp.util.SecurityUtils;
 
 import javax.validation.Valid;
 
-import javax.validation.Valid;
 import java.util.List;
 
 

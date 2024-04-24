@@ -28,14 +28,9 @@
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
                             <form action="${buyUrl}" method="post">
-                                <button type="submit" class="waves-effect waves-light btn">Contact Writer</button>
+                                <button type="submit" class="waves-effect waves-light btn"><spring:message code="book.bookInfo.buyBook"/></button>
                             </form>
                         </c:if>
-                        <c:url var="buyUrl" value="/buy">
-                            <c:param name="writerEmail" value="${book.writerEmail}" />
-                            <c:param name="bookTitle" value="${book.title}" />
-                        </c:url>
-                        <a class="waves-effect waves-light btn"  href="${buyUrl}"><spring:message code="book.bookInfo.buyBook"/></a>
                     </div>
                 </div>
                 <h5>$<c:out value="${book.price}"/></h5>
