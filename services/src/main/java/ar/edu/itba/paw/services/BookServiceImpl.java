@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.interfaces.ImageService;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.BookSearchOrderBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +58,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getAll() {
         return bookDao.getAll();
+    }
+
+    @Override
+    public List<Book> searchByTitle(String title) {
+        return bookDao.searchByTitle(title);
+    }
+
+    @Override
+    public List<Book> searchWithParams(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, boolean asc) {
+        return bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, asc);
     }
 }

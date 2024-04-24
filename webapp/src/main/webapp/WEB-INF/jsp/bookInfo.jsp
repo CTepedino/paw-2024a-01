@@ -31,25 +31,30 @@
                                 <button type="submit" class="waves-effect waves-light btn">Contact Writer</button>
                             </form>
                         </c:if>
+                        <c:url var="buyUrl" value="/buy">
+                            <c:param name="writerEmail" value="${book.writerEmail}" />
+                            <c:param name="bookTitle" value="${book.title}" />
+                        </c:url>
+                        <a class="waves-effect waves-light btn"  href="${buyUrl}"><spring:message code="book.bookInfo.buyBook"/></a>
                     </div>
                 </div>
                 <h5>$<c:out value="${book.price}"/></h5>
                 <table>
                     <tbody>
                     <tr>
-                        <td>Recommended age</td>
+                        <td><spring:message code="book.bookInfo.recommendedAge"/></td>
                         <td><c:out value="${book.suggestedAge}"/></td>
                     </tr>
                     <tr>
-                        <td>Genre</td>
-                        <td><c:out value="${book.genre}"/></td>
+                        <td><spring:message code="book.bookInfo.genre"/></td>
+                        <td><spring:message code="book.genre.${book.genre}"/></td>
                     </tr>
                     <tr>
-                        <td>Page count</td>
+                        <td><spring:message code="book.bookInfo.pageCount"/></td>
                         <td><c:out value="${book.pageCount}"/></td>
                     </tr>
                     <tr>
-                        <td>Publish date</td>
+                        <td><spring:message code="book.bookInfo.publishDate"/></td>
                         <td><c:out value="${book.publishDate}"/></td>
                     </tr>
                     </tbody>
@@ -59,7 +64,7 @@
                 <p><c:out value="${book.description}"/></p>
             </div>
             <div class="col s12">
-                <h6>Preview: </h6>
+                <h6><spring:message code="book.bookInfo.preview"/></h6>
                 <object
                         type="application/pdf"
                         data="<c:url value="${baseUrl}/pdf/${book.previewPdfId}" />"
