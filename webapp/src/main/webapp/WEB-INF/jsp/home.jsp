@@ -38,42 +38,42 @@
     <c:url var="searchUrl" value="/search?"/>
         <div class="row">
             <div class="col s2">
-                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=FANTASY"><i class="material-icons left">auto_fix_high</i>Fantasy</a>
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=FANTASY"><i class="material-icons left">auto_fix_high</i><spring:message code="book.genre.FANTASY"/></a>
             </div>
             <div class="col s2">
-                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=NON_FICTION"><i class="material-icons left">newspaper</i>Non Fiction</a>
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=NON_FICTION"><i class="material-icons left">newspaper</i><spring:message code="book.genre.NON_FICTION"/></a>
             </div>
             <div class="col s2">
-                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=MYSTERY"><i class="material-icons left">search</i>Mystery</a>
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=MYSTERY"><i class="material-icons left">search</i><spring:message code="book.genre.MYSTERY"/></a>
             </div>
             <div class="col s2">
-                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=THRILLER"><i class="material-icons left">directions_run</i>Thriller</a>
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=THRILLER"><i class="material-icons left">directions_run</i><spring:message code="book.genre.THRILLER"/></a>
             </div>
             <div class="col s2">
-                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=ROMANCE"><i class="material-icons left">favorite</i>Romance</a>
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=ROMANCE"><i class="material-icons left">favorite</i><spring:message code="book.genre.ROMANCE"/></a>
             </div>
             <div class="col s2">
-                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SCIENCE_FICTION"><i class="material-icons left">psychology_alt</i>Science Fiction</a>
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SCIENCE_FICTION"><i class="material-icons left">psychology_alt</i>S<spring:message code="book.genre.SCIENCE_FICTION"/></a>
             </div>
         </div>
     <div class="row">
         <div class="col s2">
-            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=FICTION"><i class="material-icons left">menu_book</i>Fiction</a>
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=FICTION"><i class="material-icons left">menu_book</i><spring:message code="book.genre.FICTION"/></a>
         </div>
         <div class="col s2">
-            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=HORROR"><i class="material-icons left">mood_bad</i>Horror</a>
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=HORROR"><i class="material-icons left">mood_bad</i><spring:message code="book.genre.HORROR"/></a>
         </div>
         <div class="col s2">
-            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=HISTORICAL_FICTION"><i class="material-icons left">history_edu</i>Historical Fiction</a>
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=HISTORICAL_FICTION"><i class="material-icons left">history_edu</i><spring:message code="book.genre.HISTORICAL_FICTION"/></a>
         </div>
         <div class="col s2">
-            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=BIOGRAPHY"><i class="material-icons left">person</i>Biography</a>
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=BIOGRAPHY"><i class="material-icons left">person</i><spring:message code="book.genre.BIOGRAPHY"/></a>
         </div>
         <div class="col s2">
-            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SELF_HELP"><i class="material-icons left">healing</i>Self Help</a>
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SELF_HELP"><i class="material-icons left">healing</i><spring:message code="book.genre.SELF_HELP"/></a>
         </div>
         <div class="col s2">
-            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=YOUNG_ADULT"><i class="material-icons left">local_play</i>Young Adult</a>
+            <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=YOUNG_ADULT"><i class="material-icons left">local_play</i><spring:message code="book.genre.YOUNG_ADULT"/></a>
         </div>
     </div>
 

@@ -10,12 +10,7 @@
     /* Agrega cualquier otro estilo necesario para el div explore_back */
 }
 
-.container{
-    width: 100%;
-    margin-top: 0;
-    display: flex;
-    justify-content: space-around;
-}
+
 
 .row{
     width: 100%;
@@ -48,24 +43,9 @@ a {
     width: 95%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Alinea las tarjetas en filas con espacios entre ellas */
+    justify-content: space-between;
 }
 
-.card {
-    flex-basis: calc(50% - 10px); /* El ancho de cada tarjeta es el 50% del contenedor menos el margen */
-    display: flex;
-}
-
-.card-image {
-    width: 100%; /* La imagen ocupará todo el ancho de su contenedor */
-    max-width: 200px; /* Ancho máximo para la imagen */
-}
-
-
-.card-content,
-.card-reveal {
-    flex: 1;
-}
 
 .genre-btn {
     margin-top: 20px;
