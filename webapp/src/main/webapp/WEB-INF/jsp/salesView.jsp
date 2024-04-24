@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -94,31 +95,51 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Buyer</th>
+                    <%--<th>Date</th>--%>
+                    <th>Buyer's email</th>
                     <th>Book's Title</th>
-                    <th>Amount</th>
+                    <th>Price</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
+                <c:forEach var="order" items="${orders}">
                 <tr>
-                    <td> 2024-05-01 </td>
-                    <td> Federico Madero </td>
-                    <td> Mi Juventud Unidad</td>
-                    <td> $500 </td>
-                    <td>Pending</td>
-                    <td><button>Edit</button></td>
+                    <%--<td> 2024-05-01 </td>--%>
+                    <td><c:out value="${order.buyer.email}"/></td>
+                    <td><c:out value="${order.book.title}"/></td>
+                    <td><c:out value="${order.book.price}"/></td>
+                    <td><c:out value="${order.orderStatus.displayString}"/></td>
+                    <c:url value="/advanceOrder" var="advanceOrderUrl">
+                        <c:param name="bookId" value="${order.book.bookId}"/>
+                        <c:param name="buyerId" value="${order.buyer.id}"/>
+                        <c:param name="writerId" value="${order.writer.id}"/>
+                        <c:param name="from" value="sales"/>
+                    </c:url>
+                        <c:if test="${order.orderStatus.writerCanAdvance}">
+                            <td><form action="${advanceOrderUrl}" method="post">
+                                <button
+                                        type="submit"
+                                >Advance</button>
+                            </form></td>
+                        </c:if>
+                        <c:if test="${!order.orderStatus.writerCanAdvance}">
+                            <td><form action="${advanceOrderUrl}" method="post">
+                                <button type="submit" disabled>Advance</button>
+                            </form></td>
+                        </c:if>
                 </tr>
-                <tr>
+
+                </c:forEach>
+<%--                <tr>
                     <td> 2024-05-01 </td>
                     <td> Federico Madero </td>
                     <td> Harry Potter</td>
                     <td> $500 </td>
                     <td>Completed</td>
                     <td><button>Edit</button></td>
-                </tr>
+                </tr>--%>
                 </tbody>
                 <tfoot>
 

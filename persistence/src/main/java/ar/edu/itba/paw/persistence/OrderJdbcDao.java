@@ -79,7 +79,7 @@ public class OrderJdbcDao implements OrderDao {
                 SET status = ?
                 WHERE buyer_id = ? AND writer_id = ? AND book_id = ?
                 """,
-                orderStatus,
+                orderStatus.toString(),
                 buyerId,
                 writerId,
                 bookId

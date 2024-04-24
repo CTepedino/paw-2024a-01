@@ -50,5 +50,12 @@ public class OrderController {
         return mav;
     }
 
+    @RequestMapping(method = RequestMethod.POST, path="/advanceOrder")
+    public ModelAndView advanceOrder(@RequestParam("bookId") long bookId, @RequestParam("writerId") long writerId, @RequestParam("buyerId") long buyerId, @RequestParam("from") String from){
+        os.toNextStatus(os.find(buyerId, writerId, bookId).get());
+        return new ModelAndView("redirect:/"+from);
+    }
+
+
 }
 
