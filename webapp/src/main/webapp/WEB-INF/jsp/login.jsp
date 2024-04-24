@@ -46,5 +46,5 @@
 </div>
 </body>
 
-<script src="<c:url value="/js/togglePasswordView.js"/>"></script>
+<script src="${pageContext.request.contextPath}/js/togglePasswordView.js"></script>
 </html>
