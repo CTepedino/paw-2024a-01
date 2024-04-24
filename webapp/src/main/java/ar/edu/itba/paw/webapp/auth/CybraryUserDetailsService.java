@@ -37,13 +37,14 @@ public class CybraryUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(UserRoles.READER.toString()));
             authorities.add(new SimpleGrantedAuthority(UserRoles.WRITER.toString()));
             return new CybraryAuthUserDetails(user.getEmail(), user.getEmail(), authorities);
-        }
+        } else {
 
-        final Collection<GrantedAuthority> authorities = new HashSet<>();
-        for (UserRoles role : user.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(role.toString()));
-        }
+            final Collection<GrantedAuthority> authorities = new HashSet<>();
+            for (UserRoles role : user.getRoles()) {
+                authorities.add(new SimpleGrantedAuthority(role.toString()));
+            }
 
-        return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), authorities);
+            return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), authorities);
+        }
     }
 }

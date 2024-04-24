@@ -36,6 +36,7 @@
         </div>
 
     </div>
+    <%--
     <div class="card--container">
         <h3 class="main--title ">Today's data</h3>
         <div class="card-wrapper">
@@ -86,7 +87,7 @@
             </div>
         </div>
     </div>
-
+    --%>
     <div class="tabular-wrapper">
         <h3 class="main--title">
             Order History

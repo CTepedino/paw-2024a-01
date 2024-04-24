@@ -29,7 +29,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 
 @EnableWebMvc
 @EnableAsync
@@ -59,7 +59,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         ms.addBasenames("classpath:i18n/messages");
         ms.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        ms.setCacheSeconds((int) TimeUnit.MINUTES.toSeconds(5));
+        ms.setCacheSeconds(60*5/*(int) TimeUnit.MINUTES.toSeconds(5)*/);
         return ms;
     }
 
