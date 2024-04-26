@@ -17,6 +17,7 @@ import java.util.*;
 
 @Repository
 public class BookJdbcDao implements BookDao {
+
     private final static RowMapper<Book> ROW_MAPPER = (rs, rowNum) -> new Book(
             rs.getLong("book_id"),
             rs.getString("title"),
@@ -89,16 +90,28 @@ public class BookJdbcDao implements BookDao {
         simpleJdbcInsert.execute(bookData);
     }
 
+
     @Override
-    public List<Book> getAll(){
+    public List<Book> getAll(int offset, int limit){
         return jdbcTemplate.query(
-        """
-                SELECT b.*, u.first_name, u.last_name, u.email
-                FROM books b JOIN users u ON b.writer_id = u.user_id
-            """,
-            ROW_MAPPER
+            """
+                    SELECT b.*, u.first_name, u.last_name, u.email
+                    FROM books b JOIN users u ON b.writer_id = u.user_id
+                    ORDER BY b.book_id desc
+                    LIMIT ? OFFSET ?
+                """,
+                ROW_MAPPER,
+                limit,
+                offset
         );
     }
+
+    @Override
+    public int getAllSize() {
+        return DaoUtils.getRowCount(jdbcTemplate, "books");
+    }
+
+
 
     @Override
     public List<Book> searchByTitle(String title){
@@ -169,5 +182,7 @@ public class BookJdbcDao implements BookDao {
 
         return jdbcTemplate.query(sqlQuery.toString(), ROW_MAPPER, params.toArray());
     }
+
+
 
 }

@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.ImageService;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.BookSearchOrderBy;
+import ar.edu.itba.paw.models.PaginatedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,8 +57,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getAll() {
-        return bookDao.getAll();
+    public PaginatedContent<Book> getAll(int pageNumber, int pageSize) {
+        List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getAllSize());
     }
 
     @Override

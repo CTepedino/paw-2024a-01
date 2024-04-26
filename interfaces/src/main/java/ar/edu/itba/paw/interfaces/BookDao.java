@@ -24,7 +24,8 @@ public interface BookDao {
             long writerId
     );
 
-    List<Book> getAll();
+    List<Book> getAll(int offset, int limit);
+    int getAllSize();
 
     List<Book> searchByTitle(String title);
 

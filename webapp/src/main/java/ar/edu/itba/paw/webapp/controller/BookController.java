@@ -42,7 +42,7 @@ public class BookController {
     public ModelAndView home(){
 
         final ModelAndView mav = new ModelAndView("home");
-        mav.addObject("books", bs.getAll());
+        mav.addObject("books", bs.getAll(1, 3).getPage());
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }

@@ -32,8 +32,8 @@ public class PaginatedContent<T> {
         return totalSize;
     }
 
-    public boolean isLastPage(){
-        return pageNumber * pageSize == totalSize;
+    public boolean hasMorePages(){
+        return pageNumber * pageSize < totalSize;
     }
 
     public int getPageCount(){
@@ -41,5 +41,5 @@ public class PaginatedContent<T> {
     }
 }
 
-//LIMIT -> #rows returned
-//OFFSET -> #rows skipped before starting to return
+//LIMIT -> #(rows) returned
+//OFFSET -> #(rows) skipped before starting to return

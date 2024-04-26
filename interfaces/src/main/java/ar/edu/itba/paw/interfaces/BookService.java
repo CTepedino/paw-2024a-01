@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.BookSearchOrderBy;
+import ar.edu.itba.paw.models.PaginatedContent;
 
 import java.sql.Date;
 import java.util.List;
@@ -24,7 +25,7 @@ public interface BookService {
 
     Optional<Book> findById(long id);
 
-    List<Book> getAll();
+    PaginatedContent<Book> getAll(int pageNumber, int pageSize);
 
     List<Book> searchByTitle(String title);
 
