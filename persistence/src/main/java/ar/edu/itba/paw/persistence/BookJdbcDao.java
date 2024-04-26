@@ -17,7 +17,6 @@ import java.util.*;
 
 @Repository
 public class BookJdbcDao implements BookDao {
-
     private final static RowMapper<Book> ROW_MAPPER = (rs, rowNum) -> new Book(
             rs.getLong("book_id"),
             rs.getString("title"),
