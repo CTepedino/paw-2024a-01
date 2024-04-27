@@ -91,7 +91,7 @@
     <c:if test="${books.pageCount > 1}">
         <script src="<c:url value="/js/paginationControls.js"/>"></script>
         <script>
-            const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber});
+            const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber}, false);
             paginationButtons.render();
             paginationButtons.onChange(e => {
                 window.location.href = "<c:url value="?page="/>" + e.target.value;

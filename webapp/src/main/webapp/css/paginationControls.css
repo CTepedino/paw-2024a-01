@@ -24,6 +24,7 @@
     align-items: center;
     justify-content: center;
     gap: 4px;
+    padding-bottom: 50px;
 }
 
 .page-btn[class$="-page"]{
@@ -39,4 +40,14 @@
 
 .page-btn[disabled]{
     opacity: 0.3;
+}
+
+.page-spacer{
+    font-size: 1em;
+    font-weight: bold;
+    color: #2c303a;
+    border-radius: 0 10px;
+    padding: 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }

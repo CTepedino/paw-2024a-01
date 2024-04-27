@@ -13,7 +13,7 @@ const pageNumbers = (total, max, current) => {
     return Array.from({length: max}, (_, i) => (i+1)+from);
 }
 
-function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1){
+function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1, showFinalPageLink = true){
     let pages = pageNumbers(totalPages, maxPageVisible, currentPage);
     let currentPageBtn = null;
     const buttons = new Map();
@@ -27,6 +27,14 @@ function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1){
         end: () => pages.slice(-1)[0] === totalPages,
         next: () => currentPage === totalPages,
     };
+
+    const createSpacer = () => {
+        const spacer = document.createElement("p");
+        spacer.textContent = "...";
+        spacer.className = "page-spacer";
+
+        return spacer;
+    }
 
     const createAndSetupButton = (label = "", cls = "", disabled = false, handleClick = () => {}) => {
         const button = document.createElement("button");
@@ -57,14 +65,22 @@ function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1){
     }
 
     buttons.set(
-        createAndSetupButton("start", "start-page", disabled.start(), () => currentPage = 1),
-        (btn) => btn.disabled = disabled.start()
-    );
-
-    buttons.set(
-        createAndSetupButton("prev", "prev-page", disabled.prev(), () => currentPage -= 1),
+        createAndSetupButton("chevron_left", "prev-page material-icons", disabled.prev(), () => currentPage -= 1),
         (btn) => btn.disabled = disabled.prev()
     );
+
+    if (currentPage - Math.round(maxPageVisible/2) > 0) {
+
+        buttons.set(
+            createAndSetupButton("1", "start-page page-btn", disabled.start(), () => currentPage = 1),
+            (btn) => btn.disabled = disabled.start()
+        );
+
+        buttons.set(
+            createSpacer(),
+            (btn) => {}
+        );
+    }
 
     pages.forEach((pageNumber, index) => {
         const isCurrentPage = pageNumber === currentPage;
@@ -77,15 +93,26 @@ function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1){
         buttons.set(button, onPageButtonUpdate(index))
     });
 
+    if (showFinalPageLink && currentPage + Math.round(maxPageVisible/2) < totalPages) {
+
+        buttons.set(
+            createSpacer(),
+            (btn) => {}
+        );
+
+        buttons.set(
+            createAndSetupButton(totalPages, "end-page page-btn", disabled.end(), () => currentPage = totalPages),
+            (btn) => btn.disabled = disabled.end()
+        );
+
+    }
+
     buttons.set(
-        createAndSetupButton("next", "next-page", disabled.next(), () => currentPage += 1),
+        createAndSetupButton("chevron_right", "next-page material-icons", disabled.next(), () => currentPage += 1),
         (btn) => btn.disabled = disabled.next()
     );
 
-    buttons.set(
-        createAndSetupButton("end", "end-page", disabled.end(), () => currentPage = totalPages),
-        (btn) => btn.disabled = disabled.end()
-    );
+
 
     buttons.forEach((_, btn) => fragment.appendChild(btn));
 
