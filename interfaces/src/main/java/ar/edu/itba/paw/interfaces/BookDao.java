@@ -27,9 +27,22 @@ public interface BookDao {
     List<Book> getAll(int offset, int limit);
     int getAllSize();
 
-    List<Book> searchByTitle(String title);
 
     public List<Book> searchWithParams(
+            String title,
+            BookGenre genre,
+            Double minPrice,
+            Double maxPrice,
+            Integer minPageCount,
+            Integer maxPageCount,
+            Integer minSuggestedAge,
+            Integer maxSuggestedAge,
+            BookSearchOrderBy orderBy,
+            boolean asc,
+            int offset,
+            int limit
+    );
+    int getSearchSize(
             String title,
             BookGenre genre,
             Double minPrice,

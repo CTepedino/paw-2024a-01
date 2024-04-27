@@ -47,6 +47,7 @@ public class BookJdbcDao implements BookDao {
                 .usingGeneratedKeyColumns("book_id")
                 .withTableName("books");
     }
+
     @Override
     public Optional<Book> findById(long id){
         final List<Book> list = jdbcTemplate.query(
@@ -111,19 +112,6 @@ public class BookJdbcDao implements BookDao {
         return DaoUtils.getRowCount(jdbcTemplate, "books");
     }
 
-
-
-    @Override
-    public List<Book> searchByTitle(String title){
-        return jdbcTemplate.query(
-                """
-                    SELECT * FROM books
-                    WHERE title LIKE ?""",
-                ROW_MAPPER,
-                "%"+title+"%"
-        );
-    }
-
     @Override
     public List<Book> searchWithParams(
             String title,
@@ -135,54 +123,60 @@ public class BookJdbcDao implements BookDao {
             Integer minSuggestedAge,
             Integer maxSuggestedAge,
             BookSearchOrderBy orderBy,
-            boolean asc
+            boolean asc,
+            int offset,
+            int limit
     ){
-        StringBuilder sqlQuery = new StringBuilder("""
+        StringBuilder query = new StringBuilder("""
                 SELECT b.*, u.first_name, u.last_name, u.email
                 FROM books b JOIN users u on b.writer_id = u.user_id
-                WHERE lower(title) LIKE lower(?)
                 """);
         List<Object> params = new ArrayList<>();
-        params.add("%" + (title!=null?title:"") + "%");
-        if (genre != null){
-            sqlQuery.append(" AND genre = ? ");
-            params.add(genre.toString());
-        }
-        if (minPrice != null){
-            sqlQuery.append(" AND price >= ? ");
-            params.add(minPrice);
-        }
-        if (maxPrice != null){
-            sqlQuery.append(" AND price <= ? ");
-            params.add(maxPrice);
-        }
-        if (minPageCount != null){
-            sqlQuery.append(" AND page_count >= ? ");
-            params.add(minPageCount);
-        }
-        if (maxPageCount != null){
-            sqlQuery.append(" AND page_count <= ? ");
-            params.add(maxPageCount);
-        }
 
-        if (minSuggestedAge != null){
-            sqlQuery.append(" AND suggested_age >= ? ");
-            params.add(minSuggestedAge);
-        }
+        getBookSearchQueryConditions(query, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, asc);
 
-        if (maxSuggestedAge != null){
-            sqlQuery.append(" AND suggested_age <= ? ");
-            params.add(maxSuggestedAge);
-        }
+        query.append("LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
 
-        if (orderBy != null){
-            sqlQuery.append(" ORDER BY ?");
-            params.add(orderBy + (asc? "asc":"desc"));
-        }
-
-        return jdbcTemplate.query(sqlQuery.toString(), ROW_MAPPER, params.toArray());
+        return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
 
+    @Override
+    public int getSearchSize(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, boolean asc) {
+        StringBuilder conditions = new StringBuilder();
+        List<Object> params = new ArrayList<>();
+        getBookSearchQueryConditions(conditions, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, asc);
+        return DaoUtils.getRowCount(jdbcTemplate, "books", conditions.toString(), params.toArray());
+    }
 
-
+    private void getBookSearchQueryConditions(
+            StringBuilder query,
+            List<Object> params,
+            String title,
+            BookGenre genre,
+            Double minPrice,
+            Double maxPrice,
+            Integer minPageCount,
+            Integer maxPageCount,
+            Integer minSuggestedAge,
+            Integer maxSuggestedAge,
+            BookSearchOrderBy orderBy,
+            boolean asc
+    ){
+            query.append("WHERE lower(title) LIKE lower(?) ");
+            params.add("%" + (title!=null?title:"") + "%");
+            if (genre!=null) {
+                DaoUtils.addQueryCondition(query, params, " AND genre = ? ", genre.toString());
+            }
+            DaoUtils.addQueryCondition(query, params, " AND price >= ? ", minPrice);
+            DaoUtils.addQueryCondition(query, params, " AND price <= ? ", maxPrice);
+            DaoUtils.addQueryCondition(query, params, " AND page_count >= ? ", minPageCount);
+            DaoUtils.addQueryCondition(query, params, " AND page_count <= ? ", maxPageCount);
+            DaoUtils.addQueryCondition(query, params, " AND suggested_age >= ? ", minSuggestedAge);
+            DaoUtils.addQueryCondition(query, params, " AND suggested_age <= ? ", maxSuggestedAge);
+            if (orderBy != null) {
+                DaoUtils.addQueryCondition(query, params, " ORDER BY ? " + (asc ? "asc" : "desc"), orderBy.getColumnName());
+            }
+    }
 }

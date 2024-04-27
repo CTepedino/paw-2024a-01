@@ -7,6 +7,7 @@
     <title>Search</title>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/css/searchOptions.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/paginationControls.css" rel="stylesheet"/>
 </head>
 <body>
 <%@ include file="components/topBar.jsp" %>
@@ -17,19 +18,32 @@
     modelAttribute="bookSearchForm"
     action="${searchUrl}"
     method="get"
->
+    id="search"
+> <%--TODO: auto submit on field update--%>
 
 <div class="row">
     <div class="books col s9">
         <div class="row">
-                <c:forEach var="book" items="${books}">
+                <c:forEach var="book" items="${books.page}">
                     <c:set var="book" value="${book}" scope="request"/>
                     <%@include file="components/bookInfoCard.jsp"%>
                 </c:forEach>
-                <c:if test="${books.size()==0}">
+                <c:if test="${books.page.size()==0}">
                     <h5><spring:message code="book.search.noBooks"/></h5>
                 </c:if>
         </div>
+        <c:if test="${books.pageCount > 1}">
+            <input type="number" id="page" name="page" value="${books.pageNumber}" style="display: none">
+            <script src="<c:url value="/js/paginationControls.js"/>"></script>
+            <script>
+                const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber}, true);
+                paginationButtons.render();
+                paginationButtons.onChange(e => {
+                    document.getElementById('page').value = e.target.value;
+                    document.getElementById("search").submit();
+                })
+            </script>
+        </c:if>
     </div>
     <div class="col s3">
         <div class="row">
@@ -44,7 +58,8 @@
             <div class="col s12">
                 <div class="input-field">
                     <form:label path="orderBy" cssClass="active"><spring:message code="book.search.orderBy"/></form:label><br>
-                    <form:select path="orderBy">
+<%--FIXME:OrderBY--%>
+                        <form:select path="orderBy">
                         <form:option value=""><spring:message code="book.search.selectOrder"/></form:option>
                         <form:option value="PRICE"><spring:message code="book.bookSearchOrderBy.price"/></form:option>
                         <form:option value="PAGE_COUNT"><spring:message code="book.bookSearchOrderBy.pageCount"/></form:option>
@@ -116,7 +131,11 @@
         </div>
     </div>
 </div>
+
 </form:form>
+
+
+
 <script type="module">
     // Initialize Materialize components
     document.addEventListener('DOMContentLoaded', function() {

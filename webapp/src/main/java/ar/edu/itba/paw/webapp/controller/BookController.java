@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.PublishService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
@@ -22,6 +23,8 @@ import java.util.List;
 
 @Controller
 public class BookController {
+
+    private static final int PAGE_SIZE = 20;
 
     private final PublishService ps;
     private final BookService bs;
@@ -44,7 +47,7 @@ public class BookController {
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
         final ModelAndView mav = new ModelAndView("home");
-        mav.addObject("books", bs.getAll(page, 20));
+        mav.addObject("books", bs.getAll(page, PAGE_SIZE));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
@@ -103,10 +106,9 @@ public class BookController {
         if (error.hasErrors()){
             return new ModelAndView("home"); //TODO: error page
         }
-
         final ModelAndView mav = new ModelAndView("searchResults");
 
-       List<Book> books = bs.searchWithParams(
+        PaginatedContent<Book> books = bs.searchWithParams(
                 form.getTitle(),
                 form.getGenre(),
                 form.getMinPrice(),
@@ -116,7 +118,9 @@ public class BookController {
                 form.getMinSuggestedAge(),
                 form.getMaxSuggestedAge(),
                 form.getOrderBy(),
-                form.getAsc()
+                form.getAsc(),
+                form.getPage()==null? 1 : form.getPage(),
+                PAGE_SIZE
         );
 
         mav.addObject("bookSearchForm", form);

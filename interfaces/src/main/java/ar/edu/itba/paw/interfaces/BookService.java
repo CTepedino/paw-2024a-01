@@ -27,9 +27,7 @@ public interface BookService {
 
     PaginatedContent<Book> getAll(int pageNumber, int pageSize);
 
-    List<Book> searchByTitle(String title);
-
-    public List<Book> searchWithParams(
+    public PaginatedContent<Book> searchWithParams(
             String title,
             BookGenre genre,
             Double minPrice,
@@ -39,6 +37,8 @@ public interface BookService {
             Integer minSuggestedAge,
             Integer maxSuggestedAge,
             BookSearchOrderBy orderBy,
-            boolean asc
+            boolean asc,
+            int pageNumber,
+            int pageSize
     );
 }

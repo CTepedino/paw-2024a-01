@@ -15,6 +15,7 @@ public class BookSearchForm {
     private Integer maxSuggestedAge;
     private BookSearchOrderBy orderBy;
     private boolean asc = true;
+    private Integer page;
 
     public String getTitle() {
         return title;
@@ -94,5 +95,13 @@ public class BookSearchForm {
 
     public void setAsc(boolean asc) {
         this.asc = asc;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
     }
 }

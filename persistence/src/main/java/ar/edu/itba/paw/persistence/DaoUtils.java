@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.List;
+
 public class DaoUtils {
     private DaoUtils(){};
 
@@ -18,4 +20,10 @@ public class DaoUtils {
         return getRowCount(jdbcTemplate, tableName, "");
     }
 
+    static void addQueryCondition(StringBuilder query, List<Object> paramList, String condition, Object param){
+        if (param != null){
+            paramList.add(param);
+            query.append(condition);
+        }
+    }
 }
