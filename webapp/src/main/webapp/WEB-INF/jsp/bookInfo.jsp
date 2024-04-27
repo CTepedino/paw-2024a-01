@@ -23,14 +23,14 @@
                         <h5><c:out value="${book.writer.firstName}"/> <c:out value="${book.writer.lastName}"/></h5>
                     </div>
                     <div class="col s4">
-                        <c:if test="${user!=null && book.writer.email != user.email}">
+                       <c:if test="${user!=null && book.writer.email != user.email}">--%>
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
                             <form action="${buyUrl}" method="post">
                                 <button type="submit" class="waves-effect waves-light btn"><spring:message code="book.bookInfo.buyBook"/></button>
                             </form>
-                        </c:if>
+                       </c:if>
                     </div>
                 </div>
                 <h5>$<c:out value="${book.price}"/></h5>

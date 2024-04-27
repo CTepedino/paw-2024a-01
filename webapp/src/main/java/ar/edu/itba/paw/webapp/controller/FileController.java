@@ -22,56 +22,21 @@ public class FileController {
     private final PdfService ps;
 
     @Autowired
-    public FileController(ImageService is, PdfService ps){
+    public FileController(ImageService is, PdfService ps) {
         this.is = is;
         this.ps = ps;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/image/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public @ResponseBody byte[] getImage(@PathVariable("id") long id){
+    @RequestMapping(method = RequestMethod.GET, path = "/image/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public @ResponseBody byte[] getImage(@PathVariable("id") long id) {
         Optional<Image> maybeImage = is.findById(id);
         return maybeImage.orElseThrow(ImageNotFoundException::new).getImage();
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/uploadImage")
-    public ModelAndView uploadImage(@RequestParam("file") MultipartFile file){
-        Image image = is.create(file);
-        return new ModelAndView("redirect:/viewImage/" + image.getImageId());
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path= "/uploadImage")
-    public ModelAndView uploadImageForm(){
-        return new ModelAndView("uploadImageForm");
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/viewImage/{id:\\d+}")
-    public ModelAndView imageView(@PathVariable("id") long id){
-        ModelAndView mav = new ModelAndView("imageView");
-        mav.addObject("imageId", id);
-        return mav;
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path="/pdf/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public @ResponseBody byte[] getPdf(@PathVariable("id") long id){
+    @RequestMapping(method = RequestMethod.GET, path = "/pdf/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public @ResponseBody byte[] getPdf(@PathVariable("id") long id) {
         Optional<Pdf> maybePdf = ps.findById(id);
         return maybePdf.orElseThrow(PdfNotFoundException::new).getPdf();
     }
 
-    @RequestMapping(method = RequestMethod.POST, path= "/uploadPdf")
-    public ModelAndView uploadPdf(@RequestParam("file") MultipartFile file){
-        Pdf pdf = ps.create(file);
-        return new ModelAndView("redirect:/viewPdf/" + pdf.getPdfId());
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path= "/uploadPdf")
-    public ModelAndView uploadPdfForm(){
-        return new ModelAndView("uploadPdfForm");
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/viewPdf/{id:\\d+}")
-    public ModelAndView pdfView(@PathVariable("id") long id){
-        ModelAndView mav = new ModelAndView("pdfView");
-        mav.addObject("pdfId", id);
-        return mav;
-    }
 }

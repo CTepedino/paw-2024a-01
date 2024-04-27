@@ -68,7 +68,7 @@ public class SessionController {
         return mav;
     }
 
-
+/*
     @RequestMapping(method = RequestMethod.POST, path="/signup/writer")
     public ModelAndView registerAsWriter(@Valid @ModelAttribute("writerNameForm")WriterNameForm form, final BindingResult errors){
         if (errors.hasErrors()){
@@ -82,7 +82,7 @@ public class SessionController {
     @RequestMapping(method = RequestMethod.GET, path="/signup/writer")
     public ModelAndView registerAsWriterForm(@ModelAttribute("writerNameForm") WriterNameForm form){
         return new ModelAndView("nameForm");
-    }
+    }*/
 
     @RequestMapping(method = RequestMethod.GET, path="/changePassword")
     public ModelAndView changePasswordForm(@ModelAttribute("passwordForm") SignUpForm form){

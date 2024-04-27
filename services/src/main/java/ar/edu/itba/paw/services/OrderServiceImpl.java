@@ -6,6 +6,8 @@ import ar.edu.itba.paw.models.Order;
 import ar.edu.itba.paw.models.OrderStatus;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.exception.OrderAlreadyExistsException;
+import ar.edu.itba.paw.models.exception.SameWriterAndBuyerException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,13 @@ public class OrderServiceImpl implements OrderService {
     public void create(long bookId) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        if (book.getWriter().getId() == buyer.getUserId()){
+            throw new SameWriterAndBuyerException();
+        }
+        if (orderDao.find(buyer.getUserId(), book.getWriter().getId(), bookId).isPresent()){
+            throw new OrderAlreadyExistsException();
+        }
 
         orderDao.create(buyer.getUserId(), book.getWriter().getId(), bookId, OrderStatus.WAITING_CONTACT);
         ms.sendOrderEmail(buyer.getUserId(), bookId);

@@ -5,7 +5,9 @@ import ar.edu.itba.paw.interfaces.MailService;
 import ar.edu.itba.paw.interfaces.OrderService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Book;
+import ar.edu.itba.paw.models.Order;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +52,11 @@ public class OrderController {
         return mav;
     }
 
+
     @RequestMapping(method = RequestMethod.POST, path="/advanceOrder")
     public ModelAndView advanceOrder(@RequestParam("bookId") long bookId, @RequestParam("writerId") long writerId, @RequestParam("buyerId") long buyerId, @RequestParam("from") String from){
-        os.toNextStatus(os.find(buyerId, writerId, bookId).get());
+        Order order = os.find(buyerId, writerId, bookId).orElseThrow(OrderNotFoundException::new);
+        os.toNextStatus(order);
         return new ModelAndView("redirect:/"+from);
     }
 

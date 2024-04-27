@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.models.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -50,6 +51,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
             .and().authorizeHttpRequests()
                 .requestMatchers("/signup", "/login").anonymous()
                 .requestMatchers("/", "/image/**", "/pdf/**", "/book/**", "/search/**").permitAll()
+                .requestMatchers( "/sales").hasRole(UserRoles.WRITER.toString())
                 .anyRequest().authenticated()
 
             .and().formLogin()
@@ -79,7 +81,5 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "/403", "/pdf/**");
     }
-
-
 
 }
