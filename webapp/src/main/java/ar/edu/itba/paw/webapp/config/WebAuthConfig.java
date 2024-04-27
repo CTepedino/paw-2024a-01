@@ -49,7 +49,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
             .and().authorizeHttpRequests()
                 .requestMatchers("/signup", "/login").anonymous()
-                .requestMatchers("/", "/image/**", "/pdf/**", "/book/**").permitAll()
+                .requestMatchers("/", "/image/**", "/pdf/**", "/book/**", "/search/**").permitAll()
                 .anyRequest().authenticated()
 
             .and().formLogin()

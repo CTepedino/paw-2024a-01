@@ -16,6 +16,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/images/cybrary.png" />
 </head>
 <body>
+
 <c:url value="/search" var="searchUrl"/>
 <header>
     <nav>
@@ -30,7 +31,7 @@
                 </div>
 
                 <div class="col s4">
-                    <c:if test="${not empty pageContext.request.userPrincipal}">
+                    <c:if test="${!hideSearchBar}">
                         <form action="${searchUrl}" <%--class="col s4"--%>>
                               <div class="input-field">
                                 <input id="title" name="title" type="search" required>

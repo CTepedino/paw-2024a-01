@@ -6,7 +6,11 @@
     <title>Login</title>
     <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 </head>
-<%@ include file="components/topBar.jsp" %>
+
+<c:set var="hideSearchBar" value="${true}" scope="request"/>
+<jsp:include page="components/topBar.jsp"/>
+
+
 <body>
 <div class="small-container">
     <div class="form">
