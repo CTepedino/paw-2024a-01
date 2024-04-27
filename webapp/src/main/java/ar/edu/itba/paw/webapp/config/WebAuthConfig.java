@@ -45,25 +45,32 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception{
             http.sessionManagement()
-                .invalidSessionUrl("/login")
+                .invalidSessionUrl("/")
+
             .and().authorizeHttpRequests()
                 .requestMatchers("/signup", "/login").anonymous()
+                .requestMatchers("/", "/image/**", "/pdf/**", "/book/**").permitAll()
                 .anyRequest().authenticated()
+
             .and().formLogin()
                 .loginPage("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", false)
+                .defaultSuccessUrl("/", true)
+
             .and().rememberMe()
                 .rememberMeParameter("rememberMe")
                 .userDetailsService(userDetailsService)
                 .key(StreamUtils.copyToString(rememberMeKey.getInputStream(), StandardCharsets.UTF_8)) //openssl rand -base64 4000 > src/main/resources/rememberMe.key
                 .tokenValiditySeconds(15*24*60*60)//(int) TimeUnit.DAYS.toSeconds(15))
+
             .and().logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("/")
+
             .and().exceptionHandling()
                 .accessDeniedPage("/403")
+
             .and().csrf().disable();
     }
 

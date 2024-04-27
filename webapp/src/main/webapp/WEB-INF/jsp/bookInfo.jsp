@@ -23,7 +23,7 @@
                         <h5><c:out value="${book.writer.firstName}"/> <c:out value="${book.writer.lastName}"/></h5>
                     </div>
                     <div class="col s4">
-                        <c:if test="${book.writer.email != user.email}">
+                        <c:if test="${user!=null && book.writer.email != user.email}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>

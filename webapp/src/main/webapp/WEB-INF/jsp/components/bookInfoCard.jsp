@@ -10,12 +10,12 @@
 
 <div class="col s6">
     <div class="card">
-        <a href="${pageContext.request.contextPath}/${book.bookId}">
+        <a href="${pageContext.request.contextPath}/book/${book.bookId}">
             <div class="card-image waves-effect waves-block waves-light">
                 <img src="<c:url  value="${baseUrl}/image/${book.imageId}"/>" class="activator book_cover" alt="Book cover">
             </div>
         </a>
-        <a class="card-info" href="${pageContext.request.contextPath}/${book.bookId}">
+        <a class="card-info" href="${pageContext.request.contextPath}/book/${book.bookId}">
             <div class="container content">
                 <div class="card-content" >
                     <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>

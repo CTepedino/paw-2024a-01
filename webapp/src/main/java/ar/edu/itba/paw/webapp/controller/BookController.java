@@ -54,11 +54,11 @@ public class BookController {
 
 
 
-    @RequestMapping(method = RequestMethod.GET, path="/{bookId:\\d+}")
+    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
         final ModelAndView mav = new ModelAndView("bookInfo");
         mav.addObject("book", bs.findById(bookId).orElseThrow(BookNotFoundException::new));
-        mav.addObject("user", us.getLoggedUser().get());
+        mav.addObject("user", us.getLoggedUser().orElse(null));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
