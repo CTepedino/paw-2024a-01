@@ -8,6 +8,7 @@
 <head>
     <title>Cybrary</title>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 <jsp:include page="components/topBar.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
@@ -81,10 +82,21 @@
     </div>
 
     <div class="row">
-        <c:forEach var="book" items="${books}">
+        <c:forEach var="book" items="${books.page}">
             <c:set var="book" value="${book}" scope="request"/>
             <%@include file="components/bookInfoCard.jsp"%>
         </c:forEach>
     </div>
+
+    <c:if test="${books.pageCount > 1}">
+        <script src="<c:url value="/js/paginationControls.js"/>"></script>
+        <script>
+            const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber});
+            paginationButtons.render();
+            paginationButtons.onChange(e => {
+                window.location.href = "<c:url value="?page="/>" + e.target.value;
+            })
+        </script>
+    </c:if>
 </body>
 </html>

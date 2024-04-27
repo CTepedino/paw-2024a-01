@@ -11,10 +11,7 @@ import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 
@@ -38,14 +35,21 @@ public class BookController {
         this.us = us;
     }
 
+    @ExceptionHandler({Exception.class})
+    public ModelAndView handleException(Exception ex){
+        return new ModelAndView("errors/403"); //TODO: dedicated error page
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/")
-    public ModelAndView home(){
+    public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
         final ModelAndView mav = new ModelAndView("home");
-        mav.addObject("books", bs.getAll(1, 3).getPage());
+        mav.addObject("books", bs.getAll(page, 20));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
+
+
 
     @RequestMapping(method = RequestMethod.GET, path="/{bookId:\\d+}")
     public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
