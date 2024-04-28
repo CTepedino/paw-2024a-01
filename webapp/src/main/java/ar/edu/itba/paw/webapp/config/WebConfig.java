@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -40,9 +43,13 @@ import java.util.Properties;
         "ar.edu.itba.paw.services",
         "ar.edu.itba.paw.persistence"})
 @Configuration
+@PropertySource("classpath:application.properties")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     private static final long MAX_UPLOAD_SIZE = 10L * 1024 * 1024;
+
+    @Autowired
+    private Environment env;
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -80,9 +87,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost:5432/paw");
-        ds.setUsername("cnt");
-        ds.setPassword("pawDBtest");
+        ds.setUrl(env.getProperty("jdbc.url"));
+        ds.setUsername(env.getProperty("jdbc.username"));
+        ds.setPassword(env.getProperty("jdbc.password"));
         return ds;
     }
 
@@ -115,10 +122,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
+        mailSender.setHost(env.getProperty("mail.host"));
         mailSender.setPort(25);
-        mailSender.setUsername("cybrary.notifications@gmail.com");
-        mailSender.setPassword("pvam tvsh tquh ftpi");
+        mailSender.setUsername(env.getProperty("mail.username"));
+        mailSender.setPassword(env.getProperty("mail.password"));
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
