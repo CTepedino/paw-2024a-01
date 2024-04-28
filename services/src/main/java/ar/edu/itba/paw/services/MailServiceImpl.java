@@ -14,25 +14,44 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Map;
 
 @Service
 public class MailServiceImpl implements MailService{
 
     private final JavaMailSender javaMailSender;
-    private final TemplateEngine templateEngine;
+    private final SpringTemplateEngine thymeleafTemplateEngine;
 
     private final UserService us;
     private final BookService bs;
 
     @Autowired
-    public MailServiceImpl(JavaMailSender javaMailSender, TemplateEngine templateEngine, UserService us, BookService bs) {
+    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, UserService us, BookService bs) {
         this.javaMailSender = javaMailSender;
-        this.templateEngine = templateEngine;
+        this.thymeleafTemplateEngine = thymeleafTemplateEngine;
         this.us = us;
         this.bs = bs;
+    }
+    private void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(htmlBody, true);
+        javaMailSender.send(message);
+    }
+
+    public void sendMessageUsingThymeleafTemplate(String to, String subject, Map<String, Object> templateModel) throws MessagingException {
+
+        Context thymeleafContext = new Context();
+        thymeleafContext.setVariables(templateModel);
+        String htmlBody = thymeleafTemplateEngine.process("template-thymeleaf.html", thymeleafContext);
+
+        sendHtmlMessage(to, subject, htmlBody);
     }
 
     @Override
@@ -42,26 +61,21 @@ public class MailServiceImpl implements MailService{
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         User writer = us.findById(book.getWriter().getId()).orElseThrow(UserNotFoundException::new);
 
+        Context context = new Context();
+        context.setVariable("readerEmail", buyer.getEmail());
+        context.setVariable("bookTitle", book.getTitle());
+
+        String emailContent = thymeleafTemplateEngine.process("contactEmailTemplate", context);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            Context context = new Context();
-            context.setVariable("readerEmail", buyer.getEmail());
-            context.setVariable("bookTitle", book.getTitle());
-
-            //TODO: contactEmailTemplate no deberia estar en la capa de webapp
-            String emailContent = templateEngine.process("contactEmailTemplate", context);
-
-
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             messageHelper.setTo(writer.getEmail());
             messageHelper.setSubject("A reader wants to buy your book");
             messageHelper.setText(emailContent, true);
-
-
             javaMailSender.send(mimeMessage);
-
-        } catch (MessagingException e) {
-            System.err.println("Failed to send email: " + e.getMessage());
+        } catch (MessagingException e){
+            System.err.println("Failed to send email: " + e.getMessage()); //TODO: Replace with logger
         }
     }
+
 }
