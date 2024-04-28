@@ -14,10 +14,12 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -28,6 +30,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.Properties;
 //import java.util.concurrent.TimeUnit;
 
@@ -62,6 +65,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ms.setCacheSeconds(60*5/*(int) TimeUnit.MINUTES.toSeconds(5)*/);
         return ms;
     }
+
+
+    /* Descomentar para ver la pagina en español sin tener que cambiar los settings del browser
+    @Bean
+    public LocaleResolver localeResolver(){
+        SessionLocaleResolver slr = new SessionLocaleResolver();
+        slr.setDefaultLocale(new Locale("es"));
+        return slr;
+    }*/
 
 
     @Bean
