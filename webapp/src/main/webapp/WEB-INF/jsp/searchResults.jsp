@@ -23,26 +23,33 @@
 
 <div class="row">
     <div class="books col s9">
-        <div class="row">
-                <c:forEach var="book" items="${books.page}">
-                    <c:set var="book" value="${book}" scope="request"/>
-                    <%@include file="components/bookInfoCard.jsp"%>
-                </c:forEach>
-                <c:if test="${books.page.size()==0}">
-                    <h5><spring:message code="book.search.noBooks"/></h5>
+        <c:if test="${books.page.size()==0}">
+            <div class="no-books">
+                <h5 class="center center-align"><spring:message code="book.search.noBooks"/></h5>
+            </div>
+
+        </c:if>
+        <c:if test="${books.page.size()>0}">
+            <div class="row">
+                    <c:forEach var="book" items="${books.page}">
+                        <c:set var="book" value="${book}" scope="request"/>
+                        <%@include file="components/bookInfoCard.jsp"%>
+                    </c:forEach>
+            </div>
+            <div class="row">
+                <c:if test="${books.pageCount > 1}">
+                    <input type="number" id="page" name="page" value="${books.pageNumber}" style="display: none">
+                    <script src="<c:url value="/js/paginationControls.js"/>"></script>
+                    <script>
+                        const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber}, true);
+                        paginationButtons.render();
+                        paginationButtons.onChange(e => {
+                            document.getElementById('page').value = e.target.value;
+                            document.getElementById("search").submit();
+                        })
+                    </script>
                 </c:if>
-        </div>
-        <c:if test="${books.pageCount > 1}">
-            <input type="number" id="page" name="page" value="${books.pageNumber}" style="display: none">
-            <script src="<c:url value="/js/paginationControls.js"/>"></script>
-            <script>
-                const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber}, true);
-                paginationButtons.render();
-                paginationButtons.onChange(e => {
-                    document.getElementById('page').value = e.target.value;
-                    document.getElementById("search").submit();
-                })
-            </script>
+            </div>
         </c:if>
     </div>
     <div class="col s3">

@@ -142,8 +142,6 @@ public class BookJdbcDao implements BookDao {
         params.add(limit);
         params.add(offset);
 
-        System.out.println(query);
-
         return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
 
