@@ -38,7 +38,6 @@ public interface BookDao {
             Integer minSuggestedAge,
             Integer maxSuggestedAge,
             BookSearchOrderBy orderBy,
-            boolean asc,
             int offset,
             int limit
     );
@@ -51,7 +50,6 @@ public interface BookDao {
             Integer maxPageCount,
             Integer minSuggestedAge,
             Integer maxSuggestedAge,
-            BookSearchOrderBy orderBy,
-            boolean asc
+            BookSearchOrderBy orderBy
     );
 }

@@ -58,16 +58,16 @@
             <div class="col s12">
                 <div class="input-field">
                     <form:label path="orderBy" cssClass="active"><spring:message code="book.search.orderBy"/></form:label><br>
-<%--FIXME:OrderBY--%>
-                        <form:select path="orderBy">
-                        <form:option value=""><spring:message code="book.search.selectOrder"/></form:option>
-                        <form:option value="PRICE"><spring:message code="book.bookSearchOrderBy.price"/></form:option>
-                        <form:option value="PAGE_COUNT"><spring:message code="book.bookSearchOrderBy.pageCount"/></form:option>
-                        <form:option value="PUBLICATION_DATE"><spring:message code="book.bookSearchOrderBy.publicationDate"/></form:option>
+                    <form:select path="orderBy" onchange="this.form.submit()">
+                        <c:forEach items="${orders}" var="order">
+                            <form:option value="${order}"><spring:message code="book.bookSearchOrderBy.${order.messageCode}"/></form:option>
+                        </c:forEach>
                     </form:select>
                 </div>
             </div>
         </div>
+
+
 
         <div class="row">
             <div class="col s6">
@@ -106,26 +106,17 @@
             <div class="col s12">
             <div class="input-field">
                 <form:label path="genre" cssClass="active"><spring:message code="book.search.genre"/></form:label><br>
-                <form:select path="genre">
+                <form:select path="genre" onchange="this.form.submit()">
                     <form:option value=""><spring:message code="book.search.selectGenre"/></form:option>
-                    <form:option value="FANTASY"> <spring:message code="book.genre.FANTASY"/> </form:option>
-                    <form:option value="NON_FICTION"> <spring:message code="book.genre.NON_FICTION"/> </form:option>
-                    <form:option value="MYSTERY"> <spring:message code="book.genre.MYSTERY"/> </form:option>
-                    <form:option value="THRILLER"> <spring:message code="book.genre.THRILLER"/> </form:option>
-                    <form:option value="ROMANCE"> <spring:message code="book.genre.ROMANCE"/> </form:option>
-                    <form:option value="SCIENCE_FICTION"> <spring:message code="book.genre.SCIENCE_FICTION"/> </form:option>
-                    <form:option value="FICTION"> <spring:message code="book.genre.FICTION"/> </form:option>
-                    <form:option value="HORROR"> <spring:message code="book.genre.HORROR"/> </form:option>
-                    <form:option value="HISTORICAL_FICTION"> <spring:message code="book.genre.HISTORICAL_FICTION"/> </form:option>
-                    <form:option value="BIOGRAPHY"> <spring:message code="book.genre.BIOGRAPHY"/> </form:option>
-                    <form:option value="SELF_HELP"> <spring:message code="book.genre.SELF_HELP"/> </form:option>
-                    <form:option value="YOUNG_ADULT"> <spring:message code="book.genre.YOUNG_ADULT"/> </form:option>
+                    <c:forEach items="${genres}" var="genre">
+                        <form:option value="${genre}"><spring:message code="book.genre.${genre}"/></form:option>
+                    </c:forEach>
                 </form:select>
                 </div>
             </div>
         </div>
-        <div class="input-field">
-            <button class="btn waves-effect waves-light" type="submit" name="action">
+        <div class="input-field center">
+            <button class="btn waves-effect waves-light white-text" type="submit" name="action">
                 <spring:message code="book.search.apply"/>
             </button>
         </div>

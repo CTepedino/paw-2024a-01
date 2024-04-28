@@ -123,7 +123,6 @@ public class BookJdbcDao implements BookDao {
             Integer minSuggestedAge,
             Integer maxSuggestedAge,
             BookSearchOrderBy orderBy,
-            boolean asc,
             int offset,
             int limit
     ){
@@ -133,20 +132,26 @@ public class BookJdbcDao implements BookDao {
                 """);
         List<Object> params = new ArrayList<>();
 
-        getBookSearchQueryConditions(query, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, asc);
+        getBookSearchQueryConditions(query, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
 
-        query.append("LIMIT ? OFFSET ?");
+        if(orderBy != null) {
+            query.append(" ORDER BY ").append(orderBy.getColumnName());
+        }
+
+        query.append(" LIMIT ? OFFSET ?");
         params.add(limit);
         params.add(offset);
+
+        System.out.println(query);
 
         return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
 
     @Override
-    public int getSearchSize(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, boolean asc) {
+    public int getSearchSize(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy) {
         StringBuilder conditions = new StringBuilder();
         List<Object> params = new ArrayList<>();
-        getBookSearchQueryConditions(conditions, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, asc);
+        getBookSearchQueryConditions(conditions, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
         return DaoUtils.getRowCount(jdbcTemplate, "books", conditions.toString(), params.toArray());
     }
 
@@ -160,9 +165,7 @@ public class BookJdbcDao implements BookDao {
             Integer minPageCount,
             Integer maxPageCount,
             Integer minSuggestedAge,
-            Integer maxSuggestedAge,
-            BookSearchOrderBy orderBy,
-            boolean asc
+            Integer maxSuggestedAge
     ){
             query.append("WHERE lower(title) LIKE lower(?) ");
             params.add("%" + (title!=null?title:"") + "%");
@@ -175,8 +178,5 @@ public class BookJdbcDao implements BookDao {
             DaoUtils.addQueryCondition(query, params, " AND page_count <= ? ", maxPageCount);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age >= ? ", minSuggestedAge);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age <= ? ", maxSuggestedAge);
-            if (orderBy != null) {
-                DaoUtils.addQueryCondition(query, params, " ORDER BY ? " + (asc ? "asc" : "desc"), orderBy.getColumnName());
-            }
     }
 }

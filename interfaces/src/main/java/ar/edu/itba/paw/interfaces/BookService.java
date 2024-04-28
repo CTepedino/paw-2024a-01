@@ -37,7 +37,6 @@ public interface BookService {
             Integer minSuggestedAge,
             Integer maxSuggestedAge,
             BookSearchOrderBy orderBy,
-            boolean asc,
             int pageNumber,
             int pageSize
     );

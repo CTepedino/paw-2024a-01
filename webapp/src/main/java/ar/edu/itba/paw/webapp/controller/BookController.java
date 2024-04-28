@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.PublishService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
@@ -118,13 +119,14 @@ public class BookController {
                 form.getMinSuggestedAge(),
                 form.getMaxSuggestedAge(),
                 form.getOrderBy(),
-                form.getAsc(),
                 form.getPage()==null? 1 : form.getPage(),
                 PAGE_SIZE
         );
 
         mav.addObject("bookSearchForm", form);
         mav.addObject("books", books);
+        mav.addObject("genres", BookGenre.values());
+        mav.addObject("orders", BookSearchOrderBy.values());
 
         return mav;
     }

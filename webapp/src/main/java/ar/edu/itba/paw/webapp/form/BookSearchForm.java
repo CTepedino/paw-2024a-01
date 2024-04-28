@@ -13,8 +13,7 @@ public class BookSearchForm {
     private Integer maxPageCount;
     private Integer minSuggestedAge;
     private Integer maxSuggestedAge;
-    private BookSearchOrderBy orderBy;
-    private boolean asc = true;
+    private BookSearchOrderBy orderBy = BookSearchOrderBy.PUBLICATION_DATE_ASC;
     private Integer page;
 
     public String getTitle() {
@@ -87,14 +86,6 @@ public class BookSearchForm {
 
     public void setOrderBy(BookSearchOrderBy orderBy) {
         this.orderBy = orderBy;
-    }
-
-    public boolean getAsc() {
-        return asc;
-    }
-
-    public void setAsc(boolean asc) {
-        this.asc = asc;
     }
 
     public Integer getPage() {

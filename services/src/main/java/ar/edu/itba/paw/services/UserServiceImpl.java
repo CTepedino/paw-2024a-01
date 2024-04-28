@@ -55,9 +55,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void fillMissingWriterData(long id, String password) {
-        userDao.changePassword(id, passwordEncoder.encode(password));
-        userDao.giveRole(id, UserRoles.READER);
-        userDao.giveRole(id, UserRoles.WRITER);
+        if (userDao.findById(id).isPresent()) {
+            userDao.changePassword(id, passwordEncoder.encode(password));
+            userDao.giveRole(id, UserRoles.READER);
+            userDao.giveRole(id, UserRoles.WRITER);
+        }
     }
 
     @Override
@@ -89,4 +91,4 @@ public class UserServiceImpl implements UserService {
         userDao.changePassword(id, passwordEncoder.encode(password));
     }
 
-}//TODO: preguntar si esta bien que la logica de security esté acá
+}
