@@ -1,9 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Sign In</title>
+    <title><spring:message code="user.profile.title"/></title>
     <link href="${pageContext.request.contextPath}/css/profile.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -19,10 +22,12 @@
             <span><c:out value="${user.lastName}"/></span>
         </div>
         <div class="email">
-            <span>Email: <c:out value="${user.email}"/></span>
+            <span><c:out value="${user.email}"/></span>
         </div>
         <div class="edit-profile">
-            <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">Change Password</a>
+            <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">
+                <spring:message code="session.changePassword"/>
+            </a>
         </div>
     </div>
 </div>

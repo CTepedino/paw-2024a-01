@@ -3,10 +3,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Publish</title>
+    <title><spring:message code="book.addBook.publish"/></title>
     <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
 </head>
 <jsp:include page="components/topBar.jsp">

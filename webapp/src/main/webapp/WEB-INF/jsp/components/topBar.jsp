@@ -1,7 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,8 +63,12 @@
                                 </ul>
                             </c:if>
                             <c:if test="${empty pageContext.request.userPrincipal}">
-                                <a href="${pageContext.request.contextPath}/login" class="waves-effect btn white-text">Log In</a>
-                                <a href="${pageContext.request.contextPath}/signup" class="waves-effect btn white-text">Sign Up</a>
+                                <a href="${pageContext.request.contextPath}/login" class="waves-effect btn white-text">
+                                    <spring:message code="session.login"/>
+                                </a>
+                                <a href="${pageContext.request.contextPath}/signup" class="waves-effect btn white-text">
+                                    <spring:message code="session.signup"/>
+                                </a>
                             </c:if>
                         </li>
                     </ul>

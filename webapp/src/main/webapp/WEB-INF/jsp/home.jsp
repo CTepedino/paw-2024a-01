@@ -4,16 +4,18 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
+<!DOCTYPE html>
 <html>
 <head>
     <title>Cybrary</title>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
+
 <jsp:include page="components/topBar.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
 </jsp:include>
-<%-- <%@include file="components/sideBar.jsp"%> --%>
+
 <body>
     <div class="explore_back">
     <div class="container">
@@ -39,6 +41,7 @@
             </div>
         </div>
     </div>
+    <!--TODO: reemplazar por forEach-->
     <c:url var="searchUrl" value="/search?"/>
         <div class="row">
             <div class="col s2">

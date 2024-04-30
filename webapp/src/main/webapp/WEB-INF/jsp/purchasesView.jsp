@@ -2,9 +2,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
+
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Purchases</title>
+    <title><spring:message code="orders.purchases.title"/></title>
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
 </head>
@@ -28,8 +30,7 @@
 
     <div class="header-wrapper">
         <div class="header--title">
-            <span>My</span>
-            <h2>Purchases</h2>
+            <spring:message code="orders.purchases.header"/>
         </div>
         <div class="user--info">
             <div class="search--box">
@@ -41,18 +42,18 @@
 
     <div class="tabular-wrapper">
         <h3 class="main--title">
-            Order History
+            <spring:message code="orders.history"/>
         </h3>
         <div class="table-container">
             <table>
                 <thead>
                 <tr>
-                    <th>Writer</th>
-                    <th>Email</th>
-                    <th>Book's Title</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th><spring:message code="orders.writer"/></th>
+                    <th><spring:message code="orders.email"/></th>
+                    <th><spring:message code="orders.title"/></th>
+                    <th><spring:message code="orders.price"/></th>
+                    <th><spring:message code="orders.status"/></th>
+                    <th><spring:message code="orders.action"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,14 +89,7 @@
                         </c:if>
                 </tr>
                 </c:forEach>
-<%--                <tr>
-                    <td> 2024-05-01 </td>
-                    <td> JK ROWLING </td>
-                    <td> Harry Potter</td>
-                    <td> $500 </td>
-                    <td>Completed</td>
-                    <td><button>Edit</button></td>
-                </tr>--%>
+
                 </tbody>
                 <tfoot>
 

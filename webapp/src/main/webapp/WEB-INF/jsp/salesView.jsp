@@ -1,8 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Sales</title>
+    <title><spring:message code="orders.sales.title"/></title>
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
 </head>
@@ -26,8 +30,7 @@
 
     <div class="header-wrapper">
         <div class="header--title">
-            <span>My</span>
-            <h2>Sales</h2>
+            <spring:message code="orders.sales.header"/>
         </div>
         <div class="user--info">
             <div class="search--box">
@@ -97,11 +100,11 @@
                 <thead>
                 <tr>
                     <%--<th>Date</th>--%>
-                    <th>Buyer's email</th>
-                    <th>Book's Title</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th><spring:message code="orders.buyersEmail"/></th>
+                    <th><spring:message code="orders.title"/></th>
+                    <th><spring:message code="orders.price"/></th>
+                    <th><spring:message code="orders.status"/></th>
+                    <th><spring:message code="orders.action"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -133,14 +136,7 @@
                 </tr>
 
                 </c:forEach>
-<%--                <tr>
-                    <td> 2024-05-01 </td>
-                    <td> Federico Madero </td>
-                    <td> Harry Potter</td>
-                    <td> $500 </td>
-                    <td>Completed</td>
-                    <td><button>Edit</button></td>
-                </tr>--%>
+
                 </tbody>
                 <tfoot>
 
@@ -150,6 +146,6 @@
     </div>
 
 </div>
-</div>
+
 </body>
 </html>

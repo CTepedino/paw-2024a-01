@@ -1,10 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
+    <title><spring:message code="session.signup"/></title>
     <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 </head>
 
@@ -25,15 +28,21 @@
             enctype="multipart/form-data"
             cssClass="z-depth-2"
         >
-            <h5 class="center-align">Create a Cybrary account</h5>
+            <h5 class="center-align">
+                <spring:message code="session.signupTitle"/>
+            </h5>
             <div class="input-field">
-                <form:label path="email">Email Address</form:label>
+                <form:label path="email">
+                    <spring:message code="session.email"/>
+                </form:label>
                 <form:input path="email" type="text"/>
                 <form:errors path="email" element="p" cssClass="red-text"/>
             </div>
 
             <div class="input-field">
-                <form:label path="password">Password</form:label>
+                <form:label path="password">
+                    <spring:message code="session.password"/>
+                </form:label>
                 <form:input path="password" type="password" id="password"/>
                 <span class="material-icons password-toggle-btn" onclick="togglePasswordVisibility()">visibility_off</span>
                 <form:errors path="password" element="p" cssClass="red-text"/>
@@ -47,11 +56,16 @@
 
             <div class="input-field center-align submit-btn">
                 <button class="btn waves-effect waves-light white-text" type="submit" name="action">
-                    Register
+                    <spring:message code="session.signup"/>
                 </button>
             </div>
 
-            <p class="center-align">Already have an account? <a href="${pageContext.request.contextPath}/signup">Log in</a></p>
+            <p class="center-align">
+                <spring:message code="session.toLogin"/>
+                <a href="${pageContext.request.contextPath}/signup">
+                    <spring:message code="session.login"/>
+                </a>
+            </p>
         </form:form>
     </div>
 </div>

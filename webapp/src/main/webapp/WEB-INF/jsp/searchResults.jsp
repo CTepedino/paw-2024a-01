@@ -2,9 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Search</title>
+    <spring:message var="pageTitle" code="book.search.pageTitle" arguments="${bookSearchForm.title}"/>
+    <title><c:out value="${pageTitle}"/></title>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/css/searchOptions.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/css/paginationControls.css" rel="stylesheet"/>
@@ -19,13 +22,15 @@
     action="${searchUrl}"
     method="get"
     id="search"
-> <%--TODO: auto submit on field update--%>
+>
 
 <div class="row">
     <div class="books col s9">
         <c:if test="${books.page.size()==0}">
             <div class="no-books">
-                <h5 class="center center-align"><spring:message code="book.search.noBooks"/></h5>
+                <h5 class="center center-align">
+                    <spring:message code="book.search.noBooks"/>
+                </h5>
             </div>
 
         </c:if>
@@ -56,7 +61,9 @@
         <div class="row">
             <div class="col s12">
 
-        <form:label path="title"><spring:message code="book.search.title"/></form:label>
+        <form:label path="title">
+            <spring:message code="book.search.title"/>
+        </form:label>
         <form:input path="title"/>
             </div>
         </div>
@@ -64,7 +71,9 @@
         <div class="row">
             <div class="col s12">
                 <div class="input-field">
-                    <form:label path="orderBy" cssClass="active"><spring:message code="book.search.orderBy"/></form:label><br>
+                    <form:label path="orderBy" cssClass="active">
+                        <spring:message code="book.search.orderBy"/>
+                    </form:label><br>
                     <form:select path="orderBy" onchange="this.form.submit()">
                         <c:forEach items="${orders}" var="order">
                             <form:option value="${order}"><spring:message code="book.bookSearchOrderBy.${order.messageCode}"/></form:option>
@@ -78,33 +87,45 @@
 
         <div class="row">
             <div class="col s6">
-                <form:label path="minPrice"><spring:message code="book.search.minPrice"/></form:label>
+                <form:label path="minPrice">
+                    <spring:message code="book.search.minPrice"/>
+                </form:label>
                 <form:input type="number" path="minPrice"/>
             </div>
             <div class="col s6">
-                <form:label path="maxPrice"><spring:message code="book.search.maxPrice"/></form:label>
+                <form:label path="maxPrice">
+                    <spring:message code="book.search.maxPrice"/>
+                </form:label>
                 <form:input type="number" path="maxPrice"/>
             </div>
         </div>
 
         <div class="row">
             <div class="col s6">
-                <form:label path="minPageCount"><spring:message code="book.search.minPages"/></form:label>
+                <form:label path="minPageCount">
+                    <spring:message code="book.search.minPages"/>
+                </form:label>
                 <form:input type="number" path="minPageCount"/>
             </div>
             <div class="col s6">
-                <form:label path="maxPageCount"><spring:message code="book.search.maxPages"/></form:label>
+                <form:label path="maxPageCount">
+                    <spring:message code="book.search.maxPages"/>
+                </form:label>
                 <form:input type="number" path="maxPageCount"/>
             </div>
         </div>
 
         <div class="row">
             <div class="col s6">
-                <form:label path="minSuggestedAge"><spring:message code="book.search.minAge"/></form:label>
+                <form:label path="minSuggestedAge">
+                    <spring:message code="book.search.minAge"/>
+                </form:label>
                 <form:input type="number" path="minSuggestedAge"/>
             </div>
             <div class="col s6">
-                <form:label path="maxSuggestedAge"><spring:message code="book.search.maxAge"/></form:label>
+                <form:label path="maxSuggestedAge">
+                    <spring:message code="book.search.maxAge"/>
+                </form:label>
                 <form:input type="number" path="maxSuggestedAge"/>
             </div>
         </div>
@@ -112,7 +133,9 @@
         <div class="row">
             <div class="col s12">
             <div class="input-field">
-                <form:label path="genre" cssClass="active"><spring:message code="book.search.genre"/></form:label><br>
+                <form:label path="genre" cssClass="active">
+                    <spring:message code="book.search.genre"/>
+                </form:label><br>
                 <form:select path="genre" onchange="this.form.submit()">
                     <form:option value=""><spring:message code="book.search.selectGenre"/></form:option>
                     <c:forEach items="${genres}" var="genre">
