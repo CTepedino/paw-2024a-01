@@ -26,11 +26,12 @@
     <javax.mail.version>1.6.2</javax.mail.version>
     <org.thymeleaf.version>3.1.2.RELEASE</org.thymeleaf.version>
     <spring-security.version>5.8.11</spring-security.version>
-    <org.slf4j.version>1.7.5</org.slf4j.version>
-    <logback.version>1.1.2</logback.version>
+    <org.slf4j.version>2.0.6</org.slf4j.version>
+    <logback.version>1.5.6</logback.version>
     <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
   </properties>
-    
+
+
   <dependencyManagement>
     <dependencies>
             
@@ -195,7 +196,9 @@
 
     </dependencies>
   </dependencyManagement>
-    
+
+
+
   <modules>
     <module>webapp</module>
     <module>model</module>
@@ -203,5 +206,6 @@
     <module>persistence</module>
     <module>services</module>
   </modules>
-  
+
+
 </project>

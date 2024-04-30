@@ -10,6 +10,8 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,8 @@ import java.util.List;
 
 @Controller
 public class BookController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(BookController.class);
 
     private static final int PAGE_SIZE = 20;
 
@@ -98,6 +102,8 @@ public class BookController {
                 newBookForm.getWriterFirstName(),
                 newBookForm.getWriterLastName()
         );
+
+        LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();
 
         return new ModelAndView("redirect:/");
     }
