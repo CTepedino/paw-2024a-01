@@ -11,7 +11,7 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    void giveWriterRole(long id, String firstName, String lastName);
+    void giveWriterRole(long id);
 
     Optional<User> getLoggedUser();
 

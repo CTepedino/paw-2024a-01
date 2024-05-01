@@ -17,9 +17,6 @@ public interface PublishService {
             int pageCount,
 
             MultipartFile image,
-            MultipartFile pdf,
-
-            String firstName,
-            String lastName
+            MultipartFile pdf
     );
 }

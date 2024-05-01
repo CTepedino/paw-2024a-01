@@ -65,9 +65,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void giveWriterRole(long id, String firstName, String lastName) {
+    public void giveWriterRole(long id) {
         User user = userDao.giveRole(id, UserRoles.WRITER);
-        userDao.setNames(id, firstName, lastName);
+        //userDao.setNames(id, firstName, lastName);
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 

@@ -37,10 +37,7 @@ public class PublishServiceImpl implements PublishService {
             int pageCount,
 
             MultipartFile image,
-            MultipartFile previewPdf,
-
-            String firstName,
-            String lastName
+            MultipartFile previewPdf
     ) {
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
@@ -54,7 +51,7 @@ public class PublishServiceImpl implements PublishService {
         }
 
         if (!isWriter){
-            us.giveWriterRole(user.getUserId(), firstName, lastName);
+            us.giveWriterRole(user.getUserId());
         }
 
         Image bookImage = is.create(image);

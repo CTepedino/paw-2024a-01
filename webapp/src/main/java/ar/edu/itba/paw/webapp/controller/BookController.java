@@ -97,10 +97,7 @@ public class BookController {
                 newBookForm.getPageCount(),
 
                 newBookForm.getImage(),
-                newBookForm.getPdf(),
-
-                newBookForm.getWriterFirstName(),
-                newBookForm.getWriterLastName()
+                newBookForm.getPdf()
         );
 
         LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();
