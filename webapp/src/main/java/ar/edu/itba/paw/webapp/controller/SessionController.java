@@ -40,6 +40,8 @@ public class SessionController {
     public ModelAndView sigunUp(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors){
 
         if (errors.hasErrors()){
+            form.setPassword(null);
+            form.setRepeatPassword(null);
             return signupForm(form);
         }
 
