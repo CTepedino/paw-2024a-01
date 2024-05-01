@@ -33,7 +33,7 @@
             </h5>
             <div class="input-field">
                 <form:label path="email">
-                    <spring:message code="session.email"/>
+                    <spring:message code="session.email"/><span class="red-text">*</span>
                 </form:label>
                 <form:input path="email" type="text"/>
                 <form:errors path="email" element="p" cssClass="red-text"/>
@@ -41,18 +41,20 @@
 
             <div class="input-field">
                 <form:label path="password">
-                    <spring:message code="session.password"/>
+                    <spring:message code="session.password"/><span class="red-text">*</span>
                 </form:label>
-                <form:input path="password" type="password" id="password"/>
+                <form:input path="password" type="password" id="password" name="password" onkeyup="repeatPasswordCheck()"/>
                 <span class="material-icons password-toggle-btn" onclick="togglePasswordVisibility()">visibility_off</span>
                 <form:errors path="password" element="p" cssClass="red-text"/>
             </div>
 
-<%--            <div class="input-field">
-                <form:label path="repeatPassword">Confirm password</form:label>
-                <form:input path="repeatPassword" type="password"/>
-                <form:errors path="repeatPassword" element="p" cssClass="red-text"/>
-            </div>--%>
+            <div class="input-field">
+                <label for="repeatPassword"><spring:message code="session.repeatPassword"/><span class="red-text">*</span></label>
+                <input id="repeatPassword" type="password" name="repeatPassword" onkeyup="repeatPasswordCheck()"/>
+                <span class="material-icons repeat-password-toggle-btn" onclick="toggleRepeatPasswordVisibility()">visibility_off</span>
+            </div>
+
+            <p class="red-text" id="passwordErrorMessage">Password does not match</p>
 
             <div class="input-field center-align submit-btn">
                 <button class="btn waves-effect waves-light white-text" type="submit" name="action">
@@ -70,6 +72,6 @@
     </div>
 </div>
 <script src="<c:url value="/js/togglePasswordView.js"/>"></script>
-
+<script src="<c:url value="/js/repeatPasswordCheck.js"/>"></script>
 </body>
 </html>
