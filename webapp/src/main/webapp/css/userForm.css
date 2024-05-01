@@ -31,3 +31,7 @@ form {
     transform: translateY(-50%);
     cursor: pointer;
 }
+
+.err-msj{
+    padding-bottom: 20px;
+}

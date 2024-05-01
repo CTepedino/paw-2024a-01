@@ -36,8 +36,8 @@
                     <spring:message code="session.email"/><span class="red-text">*</span>
                 </form:label>
                 <form:input path="email" type="text"/>
-                <form:errors path="email" element="p" cssClass="red-text"/>
             </div>
+            <form:errors path="email" element="p" cssClass="red-text err-msj"/>
 
             <div class="input-field">
                 <form:label path="password">
@@ -45,26 +45,28 @@
                 </form:label>
                 <form:input path="password" type="password" id="password" name="password" onkeyup="repeatPasswordCheck()"/>
                 <span class="material-icons password-toggle-btn" onclick="togglePasswordVisibility()">visibility_off</span>
-                <form:errors path="password" element="p" cssClass="red-text"/>
             </div>
+            <form:errors path="password" element="p" cssClass="red-text err-msj"/>
 
             <div class="input-field">
-                <label for="repeatPassword"><spring:message code="session.repeatPassword"/><span class="red-text">*</span></label>
-                <input id="repeatPassword" type="password" name="repeatPassword" onkeyup="repeatPasswordCheck()"/>
+                <form:label path="repeatPassword">
+                    <spring:message code="session.repeatPassword"/><span class="red-text">*</span>
+                </form:label>
+                <form:input id="repeatPassword" path="repeatPassword" type="password" name="repeatPassword" onkeyup="repeatPasswordCheck()"/>
                 <span class="material-icons repeat-password-toggle-btn" onclick="toggleRepeatPasswordVisibility()">visibility_off</span>
             </div>
 
-            <p class="red-text" id="passwordErrorMessage">Password does not match</p>
+            <p class="red-text" id="passwordErrorMessage" style="visibility: hidden"><spring:message code="session.repeatPasswordError"/></p>
 
             <div class="input-field center-align submit-btn">
-                <button class="btn waves-effect waves-light white-text" type="submit" name="action">
+                <button class="btn waves-effect waves-light white-text" id="submitBtn" type="submit" name="action" disabled="disabled">
                     <spring:message code="session.signup"/>
                 </button>
             </div>
 
             <p class="center-align">
                 <spring:message code="session.toLogin"/>
-                <a href="${pageContext.request.contextPath}/signup">
+                <a href="${pageContext.request.contextPath}/login">
                     <spring:message code="session.login"/>
                 </a>
             </p>
