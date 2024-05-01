@@ -31,6 +31,23 @@
             <h5 class="center-align">
                 <spring:message code="session.signupTitle"/>
             </h5>
+
+            <div class="input-field">
+                <form:label path="firstName">
+                    <spring:message code="book.addBook.writerFirstName"/><span class="red-text">*</span>
+                </form:label>
+                <form:input type="text" path="firstName"/>
+            </div>
+            <form:errors path="firstName" element="p" cssClass="red-text err-msj"/>
+
+            <div class="input-field">
+                <form:label path="lastName">
+                    <spring:message code="book.addBook.writerLastName"/><span class="red-text">*</span>
+                </form:label>
+                <form:input type="text" path="lastName"/>
+            </div>
+            <form:errors path="lastName" element="p" cssClass="red-text err-msj"/>
+
             <div class="input-field">
                 <form:label path="email">
                     <spring:message code="session.email"/><span class="red-text">*</span>

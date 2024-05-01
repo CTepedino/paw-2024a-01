@@ -1,15 +1,22 @@
 package ar.edu.itba.paw.webapp.form;
 
 
-//import ar.edu.itba.paw.webapp.form.validations.UniqueEmail;
-
 import ar.edu.itba.paw.webapp.form.validations.UniqueEmail;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class SignUpForm {
+
+    @Size(min = 1, max = 100)
+    @Pattern(regexp = "[a-zA-Z0-9]+")
+    private String firstName;
+
+    @Size(min = 1, max = 100)
+    @Pattern(regexp = "[a-zA-Z0-9]+")
+    private String lastName;
 
     @NotNull
     @Size(min=1, max=100)
@@ -21,6 +28,22 @@ public class SignUpForm {
     private String password;
 
     private String repeatPassword;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getEmail() {
         return email;

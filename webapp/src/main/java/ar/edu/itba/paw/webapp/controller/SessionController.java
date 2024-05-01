@@ -44,6 +44,8 @@ public class SessionController {
         }
 
         us.create(
+                form.getFirstName(),
+                form.getLastName(),
                 form.getEmail(),
                 form.getPassword()
         );

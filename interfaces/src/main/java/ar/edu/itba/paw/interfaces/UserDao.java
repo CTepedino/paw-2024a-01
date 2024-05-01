@@ -6,7 +6,7 @@ import ar.edu.itba.paw.models.UserRoles;
 import java.util.Optional;
 
 public interface UserDao {
-    User create(UserRoles[] roles, String email, String firstName, String lastName, String password);
+    User create(UserRoles[] roles, String firstName, String lastName, String email, String password);
 
     Optional<User> findById(long id);
 

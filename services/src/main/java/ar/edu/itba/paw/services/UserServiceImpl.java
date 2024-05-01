@@ -40,11 +40,11 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User create(String email, String password){
+    public User create(String firstName, String lastName, String email, String password){
         return userDao.create(
                 new UserRoles[]{UserRoles.READER},
-                null,
-                null,
+                firstName,
+                lastName,
                 email,
                 passwordEncoder.encode(password)
         );
