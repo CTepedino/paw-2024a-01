@@ -38,15 +38,22 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        if (book.getWriter().getId() == buyer.getUserId()){
-            throw new SameWriterAndBuyerException();
-        }
-        if (orderDao.find(buyer.getUserId(), book.getWriter().getId(), bookId).isPresent()){
-            throw new OrderAlreadyExistsException();
-        }
-
         orderDao.create(buyer.getUserId(), book.getWriter().getId(), bookId, OrderStatus.WAITING_CONTACT);
         ms.sendOrderEmail(buyer.getUserId(), bookId);
+    }
+
+    @Override
+    public boolean canCreateOrder(long bookId) {
+        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        if (book.getWriter().getId() == buyer.getUserId()){
+            return false;
+        }
+        if (orderDao.find(buyer.getUserId(), book.getWriter().getId(), bookId).isPresent()){
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -10,6 +10,8 @@ public interface OrderService {
 
     void create(long bookId);
 
+    boolean canCreateOrder(long bookId);
+
     Optional<Order> find(long buyerId, long writerId, long bookId);
     Order toNextStatus(Order order);
 
