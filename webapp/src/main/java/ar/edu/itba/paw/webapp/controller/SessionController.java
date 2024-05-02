@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.MailService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
@@ -24,10 +25,12 @@ import java.util.Objects;
 @Controller
 public class SessionController {
     private final UserService us;
+    private final MailService ms;
 
     @Autowired
-    public SessionController(UserService us){
+    public SessionController(UserService us, MailService ms){
         this.us = us;
+        this.ms = ms;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/signup")
@@ -44,12 +47,14 @@ public class SessionController {
             return signupForm(form);
         }
 
-        us.create(
+        User user = us.create(
                 form.getFirstName(),
                 form.getLastName(),
                 form.getEmail(),
                 form.getPassword()
         );
+
+        ms.sendRegisterEmail(user.getUserId());
 
         //return new ModelAndView("registerConfirmation");
         return new ModelAndView("redirect:/login");

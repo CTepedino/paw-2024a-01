@@ -10,8 +10,6 @@ import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
@@ -94,6 +92,30 @@ public class MailServiceImpl implements MailService{
             LOGGER.atDebug().setMessage("Failed to send order email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
         LOGGER.atDebug().setMessage("Sent order email to: {}").addArgument(to).log();
+    }
+
+    @Override
+    @Async
+    public void sendRegisterEmail(long userId){
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        String to = user.getEmail();
+        String subject = emailMessageSource.getMessage("mail.registerEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("userFirstName", user.getFirstName());
+        data.put("userLastName", user.getLastName());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("profileUrl", env.getProperty("baseUrl") + "/profile");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending register email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "registerEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send register email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent register email to: {}").addArgument(to).log();
+
     }
 
 }
