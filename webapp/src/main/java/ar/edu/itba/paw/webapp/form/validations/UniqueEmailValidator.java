@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
     private final UserService us;
@@ -21,6 +22,5 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
     }
 
     @Override
-    public void initialize(UniqueEmail constraintAnnotation) {
-    }
+    public void initialize(UniqueEmail constraintAnnotation) {}
 }

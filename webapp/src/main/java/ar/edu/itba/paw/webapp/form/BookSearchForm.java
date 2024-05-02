@@ -2,19 +2,42 @@ package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.BookSearchOrderBy;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.*;
 
 public class BookSearchForm {
 
+    @NotNull
+    @NotEmpty
     private String title;
+
     private BookGenre genre;
+
+    @PositiveOrZero
     private Double minPrice;
+
+    @PositiveOrZero
     private Double maxPrice;
+
+    @PositiveOrZero
     private Integer minPageCount;
+
+    @PositiveOrZero
     private Integer maxPageCount;
+
+    @PositiveOrZero
     private Integer minSuggestedAge;
+
+    @PositiveOrZero
     private Integer maxSuggestedAge;
+
+    @NotNull
     private BookSearchOrderBy orderBy = BookSearchOrderBy.PUBLICATION_DATE_ASC;
-    private Integer page;
+
+    @NotNull
+    @Min(1)
+    private Integer page = 1;
 
     public String getTitle() {
         return title;

@@ -64,7 +64,7 @@
         <form:label path="title">
             <spring:message code="book.search.title"/>
         </form:label>
-        <form:input path="title"/>
+        <form:input path="title" required="true"/>
             </div>
         </div>
 
@@ -90,15 +90,21 @@
                 <form:label path="minPrice">
                     <spring:message code="book.search.minPrice"/>
                 </form:label>
-                <form:input type="number" path="minPrice"/>
+                <form:input type="number" path="minPrice" step=".01"/>
             </div>
             <div class="col s6">
                 <form:label path="maxPrice">
                     <spring:message code="book.search.maxPrice"/>
                 </form:label>
-                <form:input type="number" path="maxPrice"/>
+                <form:input type="number" path="maxPrice" step=".01"/>
             </div>
         </div>
+
+        <div class="row">
+            <form:errors path="minPrice" cssClass="red-text" element="p"/>
+            <form:errors path="maxPrice" cssClass="red-text" element="p"/>
+        </div>
+
 
         <div class="row">
             <div class="col s6">
@@ -116,6 +122,11 @@
         </div>
 
         <div class="row">
+            <form:errors path="minPageCount" cssClass="red-text" element="p"/>
+            <form:errors path="maxPageCount" cssClass="red-text" element="p"/>
+        </div>
+
+        <div class="row">
             <div class="col s6">
                 <form:label path="minSuggestedAge">
                     <spring:message code="book.search.minAge"/>
@@ -128,6 +139,11 @@
                 </form:label>
                 <form:input type="number" path="maxSuggestedAge"/>
             </div>
+        </div>
+
+        <div class="row">
+            <form:errors path="minSuggestedAge" cssClass="red-text" element="p"/>
+            <form:errors path="maxSuggestedAge" cssClass="red-text" element="p"/>
         </div>
 
         <div class="row">

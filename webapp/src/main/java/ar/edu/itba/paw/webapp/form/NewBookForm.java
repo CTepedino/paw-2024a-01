@@ -7,12 +7,6 @@ import javax.validation.constraints.*;
 
 public class NewBookForm {
 
-
-//    private String writerFirstName;
-//
-//    private String writerLastName;
-
-
     @Size(min = 1, max=255)
     private String title;
 
@@ -39,23 +33,6 @@ public class NewBookForm {
 
     @NotNull
     private MultipartFile pdf;
-
-
-//    public String getWriterFirstName() {
-//        return writerFirstName;
-//    }
-//
-//    public void setWriterFirstName(String writerFirstName) {
-//        this.writerFirstName = writerFirstName;
-//    }
-//
-//    public String getWriterLastName() {
-//        return writerLastName;
-//    }
-//
-//    public void setWriterLastName(String writerLastName) {
-//        this.writerLastName = writerLastName;
-//    }
 
     public String getTitle() {
         return title;

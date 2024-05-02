@@ -105,11 +105,14 @@ public class BookController {
         return new ModelAndView("redirect:/");
     }
 
+
     @RequestMapping(method = RequestMethod.GET, path="/search")
     public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") final BookSearchForm form, final BindingResult error){
+
         if (error.hasErrors()){
-            return new ModelAndView("home"); //TODO: error page
+            return new ModelAndView("searchResults");
         }
+
         final ModelAndView mav = new ModelAndView("searchResults");
 
         PaginatedContent<Book> books = bs.searchWithParams(
@@ -122,7 +125,7 @@ public class BookController {
                 form.getMinSuggestedAge(),
                 form.getMaxSuggestedAge(),
                 form.getOrderBy(),
-                form.getPage()==null? 1 : form.getPage(),
+                form.getPage(),
                 PAGE_SIZE
         );
 

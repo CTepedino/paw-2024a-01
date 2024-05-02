@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtils {
 
+    private SecurityUtils(){}
     public static boolean hasRole(String role){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

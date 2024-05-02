@@ -3,28 +3,28 @@ package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.form.validations.UniqueEmail;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class SignUpForm {
 
-    @Size(min = 1, max = 100)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @NotNull
+    @NotEmpty
+    @Size(max = 255, message = "MaxSize.regexp")
     private String firstName;
 
-    @Size(min = 1, max = 100)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @NotNull
+    @NotEmpty
+    @Size(max = 255, message = "MaxSize.regexp")
     private String lastName;
 
     @NotNull
-    @Size(min=1, max=100)
+    @NotEmpty
+    @Size(max = 255, message = "MaxSize.regexp")
     @Email
     @UniqueEmail
     private String email;
 
-    @Size(min=6, max=100)
+    @Size(min=6, max=255)
     private String password;
 
     private String repeatPassword;
