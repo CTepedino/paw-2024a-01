@@ -50,11 +50,13 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<User> findByEmail(String email) {
         return userDao.findByEmail(email);
     }
 
+    @Transactional
     @Override
     public void fillMissingWriterData(long id, String password) {
         if (userDao.findById(id).isPresent()) {
@@ -63,7 +65,7 @@ public class UserServiceImpl implements UserService {
             userDao.giveRole(id, UserRoles.WRITER);
         }
     }
-
+    @Transactional
     @Override
     public void giveWriterRole(long id) {
         User user = userDao.giveRole(id, UserRoles.WRITER);
@@ -79,6 +81,7 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<User> getLoggedUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -88,6 +91,7 @@ public class UserServiceImpl implements UserService {
         return findByEmail(auth.getName());
     }
 
+    @Transactional
     @Override
     public void changePassword(long id, String password) {
         userDao.changePassword(id, passwordEncoder.encode(password));

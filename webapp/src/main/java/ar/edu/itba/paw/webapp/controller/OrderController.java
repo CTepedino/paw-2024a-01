@@ -21,15 +21,13 @@ public class OrderController {
 
     private final OrderService os;
     private final UserService us;
-    private final BookService bs;
 
 
 
     @Autowired
-    public OrderController(final OrderService os, final UserService us, final BookService bs){
+    public OrderController(final OrderService os, final UserService us){
         this.os = os;
         this.us = us;
-        this.bs = bs;
     }
 
 

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.PdfService;
 import ar.edu.itba.paw.models.Pdf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,11 +21,13 @@ public class PdfServiceImpl implements PdfService {
         this.pdfDao = pdfDao;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<Pdf> findById(long id) {
         return pdfDao.findById(id);
     }
 
+    @Transactional
     @Override
     public Pdf create(MultipartFile pdf) {
         try {

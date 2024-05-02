@@ -11,6 +11,7 @@ import ar.edu.itba.paw.models.exception.SameWriterAndBuyerException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
         this.bs = bs;
     }
 
+    @Transactional
     @Override
     public void create(long bookId) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
@@ -42,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
         ms.sendOrderEmail(buyer.getUserId(), bookId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean canCreateOrder(long bookId) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
@@ -56,11 +59,13 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<Order> find(long buyerId, long writerId, long bookId) {
         return orderDao.find(buyerId, writerId, bookId);
     }
 
+    @Transactional
     @Override
     public Order toNextStatus(Order order){
         OrderStatus newStatus = order.getOrderStatus().getNext();
@@ -68,21 +73,25 @@ public class OrderServiceImpl implements OrderService {
         return new Order(order.getBuyer(), order.getWriter(), order.getBook(), newStatus);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Order> getAllReaderOrders(long readerId) {
         return orderDao.getAllReaderOrders(readerId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Order> getAllWriterOrders(long writerId) {
         return orderDao.getAllWriterOrders(writerId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Order> getAllNonCompleteReaderOrders(long readerId) {
         return orderDao.getAllNonCompleteReaderOrders(readerId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Order> getAllNonCompleteWriterOrders(long writerId) {
         return orderDao.getAllNonCompleteWriterOrders(writerId);

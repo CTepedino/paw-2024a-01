@@ -9,6 +9,7 @@ import ar.edu.itba.paw.models.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
@@ -25,6 +26,7 @@ public class BookServiceImpl implements BookService {
         this.bookDao = bookDao;
     }
 
+    @Transactional
     @Override
     public void create(
             String title,
@@ -51,17 +53,21 @@ public class BookServiceImpl implements BookService {
         );
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public Optional<Book> findById(long id) {
         return bookDao.findById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getAll(int pageNumber, int pageSize) {
         List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getAllSize());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> searchWithParams(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);

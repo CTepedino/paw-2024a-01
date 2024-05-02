@@ -16,8 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class BuyController {
 
-   // private final MailService ms;
-   // private final UserService us;
     private final OrderService os;
 
     @Autowired
