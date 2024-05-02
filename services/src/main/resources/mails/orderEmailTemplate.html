@@ -37,11 +37,15 @@
         <a href="http://pawserver.it.itba.edu.ar/paw-2024a-01/" style="text-decoration: none; color: #333;">Cybrary</a>
     </div>
     <div class="title">
-        <h2 style="text-align: center;">A reader wants to buy your book!</h2>
+        <h2 style="text-align: center;" th:text="#{mail.orderEmail.subject}"/>
     </div>
     <div class="email-content">
-        <p>A reader is interested in buying "<span th:text="${bookTitle}"></span>"</p>
-        <p>Please contact them at <span th:text="${readerEmail}"></span>.</p>
+        <p>
+            <span th:utext="#{mail.orderEmail.buy(${buyerFirstName}, ${buyerLastName}, ${bookTitle})}"></span>
+        </p>
+        <p>
+            <span th:text="#{mail.orderEmail.notify}"/>
+        </p>
     </div>
 </div>
 </body>
