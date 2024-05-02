@@ -24,6 +24,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class MailServiceImpl implements MailService{
         this.us = us;
         this.bs = bs;
     }
+
     private void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -60,11 +62,11 @@ public class MailServiceImpl implements MailService{
         javaMailSender.send(message);
     }
 
-    public void sendMessageUsingThymeleafTemplate(String to, String subject, Map<String, Object> templateModel) throws MessagingException {
+    private void sendMessageUsingTemplate(String to, String subject, String template, Map<String, Object> templateModel, Locale locale) throws MessagingException {
 
-        Context thymeleafContext = new Context();
+        Context thymeleafContext = new Context(locale);
         thymeleafContext.setVariables(templateModel);
-        String htmlBody = thymeleafTemplateEngine.process("template-thymeleaf.html", thymeleafContext);
+        String htmlBody = thymeleafTemplateEngine.process(template, thymeleafContext);
 
         sendHtmlMessage(to, subject, htmlBody);
     }
@@ -77,25 +79,21 @@ public class MailServiceImpl implements MailService{
         User writer = us.findById(book.getWriter().getId()).orElseThrow(UserNotFoundException::new);
 
         Locale currentLocale = LocaleContextHolder.getLocale();// TODO: Que locale usar para los mails?
+        String to = writer.getEmail();
+        String subject = emailMessageSource.getMessage("mail.orderEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("buyerFirstName", buyer.getFirstName());
+        data.put("buyerLastName", buyer.getLastName());
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
 
-        Context context = new Context(currentLocale);
-        context.setVariable("buyerFirstName", buyer.getFirstName());
-        context.setVariable("buyerLastName", buyer.getLastName());
-        context.setVariable("bookTitle", book.getTitle());
-        context.setVariable("url", env.getProperty("baseUrl"));
-
-        String emailContent = thymeleafTemplateEngine.process("orderEmailTemplate", context);
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            messageHelper.setTo(writer.getEmail());
-            messageHelper.setSubject(emailMessageSource.getMessage("mail.orderEmail.subject", null, currentLocale));
-            messageHelper.setText(emailContent, true);
-            javaMailSender.send(mimeMessage);
+            LOGGER.atDebug().setMessage("Sending order email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "orderEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send email to: {} \n Error Message: {}").addArgument(writer.getEmail()).addArgument(e.getMessage()).log();
+            LOGGER.atDebug().setMessage("Failed to send order email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
-        LOGGER.atDebug().setMessage("Sent order Email to: {}").addArgument(writer.getEmail()).log();
+        LOGGER.atDebug().setMessage("Sent order email to: {}").addArgument(to).log();
     }
 
 }
