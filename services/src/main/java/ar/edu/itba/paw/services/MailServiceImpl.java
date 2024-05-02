@@ -10,8 +10,11 @@ import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -24,12 +27,15 @@ import javax.mail.internet.MimeMessage;
 import java.util.Locale;
 import java.util.Map;
 
+
+
 @Service
 public class MailServiceImpl implements MailService{
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine thymeleafTemplateEngine;
     private final ResourceBundleMessageSource emailMessageSource;
+    private final Environment env;
 
     private final UserService us;
     private final BookService bs;
@@ -37,10 +43,11 @@ public class MailServiceImpl implements MailService{
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, ResourceBundleMessageSource emailMessageSource, UserService us, BookService bs) {
+    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, ResourceBundleMessageSource emailMessageSource, Environment env, UserService us, BookService bs) {
         this.javaMailSender = javaMailSender;
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
         this.emailMessageSource = emailMessageSource;
+        this.env = env;
         this.us = us;
         this.bs = bs;
     }
@@ -75,6 +82,7 @@ public class MailServiceImpl implements MailService{
         context.setVariable("buyerFirstName", buyer.getFirstName());
         context.setVariable("buyerLastName", buyer.getLastName());
         context.setVariable("bookTitle", book.getTitle());
+        context.setVariable("url", env.getProperty("baseUrl"));
 
         String emailContent = thymeleafTemplateEngine.process("orderEmailTemplate", context);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
