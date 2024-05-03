@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.BookDao;
+import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.PublicUserInformation;
@@ -25,8 +25,8 @@ public class BookJdbcDao implements BookDao {
             BookGenre.valueOf(rs.getString("genre")),
             rs.getDouble("price"),
             rs.getInt("page_count"),
-            rs.getLong("pdf_id"),
-            rs.getLong("image_id"),
+            rs.getLong("preview_id"),
+            rs.getLong("cover_id"),
             rs.getInt("suggested_age"),
             rs.getDate("published_date"),
             new PublicUserInformation(
@@ -80,10 +80,10 @@ public class BookJdbcDao implements BookDao {
         bookData.put("title",title);
         bookData.put("description",description);
         bookData.put("genre", genre.toString());
-        bookData.put("pdf_id", pdfId);
+        bookData.put("preview_id", pdfId);
         bookData.put("page_count", pageCount);
         bookData.put("price", price);
-        bookData.put("image_id", imageId);
+        bookData.put("cover_id", imageId);
         bookData.put("suggested_age", suggestedAge);
         bookData.put("published_date", publishDate);
         bookData.put("writer_id", writerId);

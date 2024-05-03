@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.BookService;
-import ar.edu.itba.paw.interfaces.MailService;
-import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.MailService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;

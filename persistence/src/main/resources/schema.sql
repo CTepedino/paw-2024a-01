@@ -12,6 +12,20 @@ ALTER TABLE books DROP COLUMN writer_last_name;
 ALTER TABLE books DROP COLUMN writer_email; (no se pierden datos, la misma información ya se podia acceder mediante el writer_id en la tabla users)
 */
 
+/* Spring 3 modifications:
+ALTER TABLE pdfs RENAME COLUMN pdf_id TO id;
+ALTER TABLE pdfs RENAME COLUMN pdf TO file;
+ALTER TABLE pdfs RENAME TO book_previews;
+
+ALTER TABLE images RENAME COLUMN image_id TO id;
+ALTER TABLE images RENAME COLUMN image TO file;
+ALTER TABLE images RENAME TO cover_images;
+
+ALTER TABLE books RENAME COLUMN pdf_id TO preview_id;
+ALTER TABLE books RENAME COLUMN image_id TO cover_id;
+*/
+
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
@@ -20,14 +34,14 @@ CREATE TABLE IF NOT EXISTS users(
     password VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS pdfs(
-    pdf_id SERIAL PRIMARY KEY,
-    pdf BYTEA NOT NULL
+CREATE TABLE IF NOT EXISTS book_previews(
+    id SERIAL PRIMARY KEY,
+    file BYTEA NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS images(
-    image_id SERIAL PRIMARY KEY,
-    image BYTEA NOT NULL
+CREATE TABLE IF NOT EXISTS cover_images(
+    id SERIAL PRIMARY KEY,
+    file BYTEA NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS books (
@@ -39,13 +53,13 @@ CREATE TABLE IF NOT EXISTS books (
     price DECIMAL(10, 2) NOT NULL,
     suggested_age INT NOT NULL,
     published_date DATE DEFAULT now(),
-    pdf_id INT NOT NULL,
-    image_id INT NOT NULL,
+    preview_id INT NOT NULL,
+    cover_id INT NOT NULL,
     writer_id INT NOT NULL,
 
     FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (image_id) REFERENCES images (image_id) ON DELETE CASCADE,
-    FOREIGN KEY (pdf_id) REFERENCES pdfs (pdf_id) ON DELETE CASCADE
+    FOREIGN KEY (cover_id) REFERENCES cover_images (id) ON DELETE CASCADE,
+    FOREIGN KEY (preview_id) REFERENCES book_previews (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS roles(

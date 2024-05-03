@@ -1,16 +1,16 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.dao;
 
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
+
 import ar.edu.itba.paw.models.BookSearchOrderBy;
-import ar.edu.itba.paw.models.PaginatedContent;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-
-public interface BookService {
+public interface BookDao {
+    Optional<Book> findById(long id);
     void create(
             String title,
             String description,
@@ -20,14 +20,15 @@ public interface BookService {
             long pdfId,
             long imageId,
             int suggestedAge,
+            Date publishDate,
             long writerId
     );
 
-    Optional<Book> findById(long id);
+    List<Book> getAll(int offset, int limit);
+    int getAllSize();
 
-    PaginatedContent<Book> getAll(int pageNumber, int pageSize);
 
-    public PaginatedContent<Book> searchWithParams(
+    public List<Book> searchWithParams(
             String title,
             BookGenre genre,
             Double minPrice,
@@ -37,7 +38,18 @@ public interface BookService {
             Integer minSuggestedAge,
             Integer maxSuggestedAge,
             BookSearchOrderBy orderBy,
-            int pageNumber,
-            int pageSize
+            int offset,
+            int limit
+    );
+    int getSearchSize(
+            String title,
+            BookGenre genre,
+            Double minPrice,
+            Double maxPrice,
+            Integer minPageCount,
+            Integer maxPageCount,
+            Integer minSuggestedAge,
+            Integer maxSuggestedAge,
+            BookSearchOrderBy orderBy
     );
 }

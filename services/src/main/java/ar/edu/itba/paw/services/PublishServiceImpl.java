@@ -1,14 +1,11 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.*;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.sql.Date;
 
 
 @Service
@@ -55,8 +52,6 @@ public class PublishServiceImpl implements PublishService {
             us.giveWriterRole(user.getUserId());
         }
 
-        Image bookImage = is.create(image);
-        Pdf bookPreviewPdf = ps.create(previewPdf);
 
 
         bs.create(
@@ -65,10 +60,10 @@ public class PublishServiceImpl implements PublishService {
                 genre,
                 price,
                 pageCount,
-                bookPreviewPdf.getPdfId(),
-                bookImage.getImageId(),
                 suggestedAge,
-                user.getUserId()
+                user.getUserId(),
+                previewPdf,
+                image
         );
 
     }

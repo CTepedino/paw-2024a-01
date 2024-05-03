@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;

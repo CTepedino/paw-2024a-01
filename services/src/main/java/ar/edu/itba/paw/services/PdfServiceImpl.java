@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.PdfDao;
-import ar.edu.itba.paw.interfaces.PdfService;
+import ar.edu.itba.paw.interfaces.dao.PdfDao;
+import ar.edu.itba.paw.interfaces.service.PdfService;
 import ar.edu.itba.paw.models.Pdf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

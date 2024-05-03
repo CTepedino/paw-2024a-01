@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.ImageDao;
+import ar.edu.itba.paw.interfaces.dao.ImageDao;
 import ar.edu.itba.paw.models.Image;
 import org.junit.Assert;
 import org.junit.Test;

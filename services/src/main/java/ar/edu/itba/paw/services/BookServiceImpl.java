@@ -1,16 +1,25 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.BookDao;
-import ar.edu.itba.paw.interfaces.BookService;
-import ar.edu.itba.paw.interfaces.ImageService;
+import ar.edu.itba.paw.interfaces.dao.BookDao;
+import ar.edu.itba.paw.interfaces.dao.files.BookPreviewDao;
+import ar.edu.itba.paw.interfaces.dao.files.CoverImageDao;
+import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.BookGenre;
 import ar.edu.itba.paw.models.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.exception.ImageNotFoundException;
+import ar.edu.itba.paw.models.exception.PdfNotFoundException;
+import ar.edu.itba.paw.models.exception.UnreadableFileException;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.files.BookPreview;
+import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,39 +29,49 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
+    private final BookPreviewDao previewDao;
+    private final CoverImageDao coverDao;
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao){
+    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao){
         this.bookDao = bookDao;
+        this.coverDao = coverDao;
+        this.previewDao = previewDao;
     }
 
     @Transactional
     @Override
-    public void create(
-            String title,
-            String description,
-            BookGenre genre,
-            double price,
-            int pageCount,
-            long pdfId,
-            long imageId,
-            int suggestedAge,
-            long writerId
-    ){
-        bookDao.create(
-                title,
-                description,
-                genre,
-                price,
-                pageCount,
-                pdfId,
-                imageId,
-                suggestedAge,
-                new Date(System.currentTimeMillis()),
-                writerId
-        );
+    public void create(String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover){
+        try {
+            long previewId = previewDao.create(preview.getBytes());
+            long coverId = coverDao.create(preview.getBytes());
+            bookDao.create(
+                    title,
+                    description,
+                    genre,
+                    price,
+                    pageCount,
+                    previewId,
+                    coverId,
+                    suggestedAge,
+                    new Date(System.currentTimeMillis()),
+                    writerId
+            );
+        } catch (IOException e){
+            throw new UnreadableFileException();
+        }
+
     }
 
+    @Override
+    public CoverImage getCover(long id) {
+        return coverDao.findById(id).orElseThrow(ImageNotFoundException::new);
+    }
+
+    @Override
+    public BookPreview getPreview(long id) {
+        return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
+    }
 
     @Transactional(readOnly = true)
     @Override
