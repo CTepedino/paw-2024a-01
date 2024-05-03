@@ -4,6 +4,8 @@ import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.interfaces.MailService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Book;
+import ar.edu.itba.paw.models.Order;
+import ar.edu.itba.paw.models.PublicUserInformation;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
@@ -116,6 +118,32 @@ public class MailServiceImpl implements MailService{
         }
         LOGGER.atDebug().setMessage("Sent register email to: {}").addArgument(to).log();
 
+    }
+
+    @Override
+    @Async
+    public void sendReceiptUploadedEmail(Order order){
+        PublicUserInformation writer = order.getWriter();
+        PublicUserInformation buyer = order.getBuyer();
+        Book book = order.getBook();
+
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        String to = "lbloise@itba.edu.ar";
+        String subject = emailMessageSource.getMessage("mail.receiptUploadedEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("buyerFirstName", buyer.getFirstName());
+        data.put("buyerLastName", buyer.getLastName());
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("salesUrl", env.getProperty("baseUrl") + "/sales");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Receipt Upload email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "receiptUploadedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send Receipt Upload email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Receipt Upload email to: {}").addArgument(to).log();
     }
 
 }
