@@ -169,4 +169,27 @@ public class MailServiceImpl implements MailService{
         LOGGER.atDebug().setMessage("Sent Receipt Approved email to: {}").addArgument(to).log();
     }
 
+    @Override
+    @Async
+    public void sendReceiptDeniedEmail(Order order){
+        PublicUserInformation buyer = order.getBuyer();
+        Book book = order.getBook();
+
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        String to = buyer.getEmail();
+        String subject = emailMessageSource.getMessage("mail.receiptDeniedEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("purchasesUrl", env.getProperty("baseUrl") + "/purchases");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Receipt Denied email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "receiptDeniedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send Receipt Denied email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Receipt Denied email to: {}").addArgument(to).log();
+    }
+
 }

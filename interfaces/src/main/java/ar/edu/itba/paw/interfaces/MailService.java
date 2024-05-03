@@ -12,6 +12,6 @@ public interface MailService{
 
     void sendReceiptApprovedEmail(Order order);
 
-//    void sendReceiptRejectedEmail(Order order);
+    void sendReceiptDeniedEmail(Order order);
 
 }
