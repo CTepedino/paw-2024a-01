@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.UserRoles;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,35 +15,23 @@ import java.util.*;
 @Repository
 public class UserJdbcDao implements UserDao {
 
-    private final static RowMapper<User> ROW_MAPPER = (rs, rowNum) -> {
+     final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
+            new User(
+                    rs.getLong("user_id"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name")
+            );
 
-        Object[] roles = (Object[]) rs.getArray("roles").getArray();
-        List<UserRoles> list = new ArrayList<>();
-
-        for (Object roleString : roles) {
-            if (roleString != null) {
-                list.add(UserRoles.valueOf((String) roleString));
-            }
-        }
-
-
-        return new User(
-                rs.getLong("user_id"),
-                list.toArray(new UserRoles[0]),
-                rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getString("email"),
-                rs.getString("password")
-        );
-    };
-
+    private final static RowMapper<UserRoles> ROLE_ROW_MAPPER = (rs, rowNum) -> UserRoles.valueOf(rs.getString("role"));
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userJdbcInsert;
     private final SimpleJdbcInsert roleJdbcInsert;
 
     @Autowired
-    public UserJdbcDao(final DataSource ds){
+    public UserJdbcDao(final DataSource ds) {
         jdbcTemplate = new JdbcTemplate(ds);
         userJdbcInsert = new SimpleJdbcInsert(ds)
                 .usingGeneratedKeyColumns("user_id")
@@ -54,44 +41,48 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User create(UserRoles[] roles, String firstName, String lastName, String email, String password) {
+    public User create(String email, String password, String firstName, String lastName) {
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("first_name", firstName);
         userData.put("last_name", lastName);
         userData.put("email", email);
         userData.put("password", password);
-
         Number generatedId = userJdbcInsert.executeAndReturnKey(userData);
-
-        Map<String, Object> roleData;
-        for (UserRoles role : roles){
-            roleData = new HashMap<>();
-            roleData.put("user_id", generatedId);
-            roleData.put("role", role);
-            roleJdbcInsert.execute(roleData);
-        }
 
         return new User(
                 generatedId.longValue(),
-                roles,
-                firstName,
-                lastName,
                 email,
-                password
+                password,
+                firstName,
+                lastName
+        );
+    }
+
+    @Override
+    public int update(long id, String email, String password, String firstName, String lastName) {
+        return jdbcTemplate.update(
+                """
+                UPDATE users
+                SET email = ?,
+                password = ?,
+                first_name = ?,
+                last_name = ?
+                WHERE user_id = ?
+            """,
+            email, password, firstName, lastName, id
         );
     }
 
     @Override
     public Optional<User> findById(long id) {
         final List<User> list = jdbcTemplate.query(
-                """
-                    SELECT u.user_id, u.first_name, u.last_name, u.email, u.password, array_agg(r.role) AS roles
-                    FROM users u LEFT JOIN roles r ON u.user_id = r.user_id
-                    WHERE u.user_id = ?
-                    GROUP BY u.user_id, u.first_name, u.last_name, u.email, u.password
-                    """,
-                ROW_MAPPER,
+            """
+                    SELECT *
+                    FROM users
+                    WHERE user_id = ?
+                """,
+                USER_ROW_MAPPER,
                 id
         );
 
@@ -99,45 +90,14 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User giveRole(long id, UserRoles role) {
-
-        Optional<User> user = findById(id);
-        if (user.isEmpty()){
-            throw new UserNotFoundException();
-        }
-
-        Map<String, Object> roleData = new HashMap<>();
-
-        roleData.put("user_id", id);
-        roleData.put("role", role);
-
-        roleJdbcInsert.execute(roleData);
-
-        UserRoles[] roles = Arrays.copyOf(user.get().getRoles(), user.get().getRoles().length + 1);
-        roles[roles.length-1] = role;
-
-        return new User(
-                id,
-                roles,
-                user.get().getFirstName(),
-                user.get().getLastName(),
-                user.get().getEmail(),
-                user.get().getPassword()
-        );
-
-    }
-
-    @Override
     public Optional<User> findByEmail(String email) {
-
-        List<User> list = jdbcTemplate.query(
-                """
-                    SELECT u.user_id, u.first_name, u.last_name, u.email, u.password, array_agg(r.role) AS roles
-                    FROM users u LEFT JOIN roles r ON u.user_id = r.user_id
-                    WHERE u.email = ?
-                    GROUP BY u.user_id, u.first_name, u.last_name, u.email, u.password
-                    """,
-                ROW_MAPPER,
+        final List<User> list = jdbcTemplate.query(
+            """
+                    SELECT *
+                    FROM users
+                    WHERE email = ?
+                """,
+                USER_ROW_MAPPER,
                 email
         );
 
@@ -145,28 +105,26 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public void setNames(long id, String firstName, String lastName) {
-        jdbcTemplate.update(
-                """
-                        UPDATE users
-                        SET first_name = ?,
-                            last_name = ?
-                        WHERE user_id = ?
-                        """,
-                firstName, lastName, id
-        );
+    public int giveRole(long id, UserRoles role) {
+        Map<String, Object> roleData = new HashMap<>();
+
+        roleData.put("user_id", id);
+        roleData.put("role", role);
+
+        return roleJdbcInsert.execute(roleData);
     }
 
-
     @Override
-    public void changePassword(long id, String password) {
-        jdbcTemplate.update(
-                """
-                        UPDATE users
-                        SET password = ?
-                        WHERE user_id = ?
-                        """,
-                password, id
+    public List<UserRoles> getRoles(long id) {
+        return jdbcTemplate.query(
+            """
+                    SELECT *
+                    FROM roles
+                    WHERE user_id = ?
+                """,
+                ROLE_ROW_MAPPER,
+                id
         );
     }
 }
+

@@ -1,4 +1,6 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.books;
+
+import ar.edu.itba.paw.models.users.User;
 
 import java.sql.Date;
 
@@ -9,24 +11,25 @@ public class Book {
     private final BookGenre genre;
     private final double price;
     private final int pageCount;
-    private final long previewPdfId;
-    private final long imageId;
     private final int suggestedAge;
     private final Date publishDate;
-    private final PublicUserInformation writer;
 
+    private final long previewId;
+    private final long coverId;
 
-    public Book(long bookId, String title, String description, BookGenre genre, double price, int pageCount, long previewPdfId, long imageId, int suggestedAge, Date publishDate, PublicUserInformation writer) {
+    private final User writer;
+
+    public Book(long bookId, String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, Date publishDate, long previewId, long coverId, User writer) {
         this.bookId = bookId;
         this.title = title;
         this.description = description;
         this.genre = genre;
         this.price = price;
         this.pageCount = pageCount;
-        this.previewPdfId = previewPdfId;
-        this.imageId = imageId;
         this.suggestedAge = suggestedAge;
         this.publishDate = publishDate;
+        this.previewId = previewId;
+        this.coverId = coverId;
         this.writer = writer;
     }
 
@@ -54,14 +57,6 @@ public class Book {
         return pageCount;
     }
 
-    public long getPreviewPdfId() {
-        return previewPdfId;
-    }
-
-    public long getImageId() {
-        return imageId;
-    }
-
     public int getSuggestedAge() {
         return suggestedAge;
     }
@@ -70,7 +65,15 @@ public class Book {
         return publishDate;
     }
 
-    public PublicUserInformation getWriter() {
+    public User getWriter() {
         return writer;
+    }
+
+    public long getPreviewId() {
+        return previewId;
+    }
+
+    public long getCoverId() {
+        return coverId;
     }
 }

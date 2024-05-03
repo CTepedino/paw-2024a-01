@@ -5,10 +5,10 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.Order;
-import ar.edu.itba.paw.models.OrderStatus;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        orderDao.create(buyer.getUserId(), book.getWriter().getId(), bookId, OrderStatus.WAITING_CONTACT);
+        orderDao.create(buyer.getUserId(), book.getWriter().getUserId(), bookId, OrderStatus.WAITING_CONTACT);
         ms.sendOrderEmail(buyer.getUserId(), bookId);
     }
 
@@ -52,10 +52,10 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        if (book.getWriter().getId() == buyer.getUserId()){
+        if (book.getWriter().getUserId() == buyer.getUserId()){
             return false;
         }
-        if (orderDao.find(buyer.getUserId(), book.getWriter().getId(), bookId).isPresent()){
+        if (orderDao.find(buyer.getUserId(), book.getWriter().getUserId(), bookId).isPresent()){
             return false;
         }
         return true;
@@ -71,8 +71,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order toNextStatus(Order order){
         OrderStatus newStatus = order.getOrderStatus().getNext();
-        orderDao.setStatus(order.getBuyer().getId(), order.getWriter().getId(), order.getBook().getBookId(), newStatus);
-        return new Order(order.getBuyer(), order.getWriter(), order.getBook(), newStatus);
+        orderDao.setStatus(order.getBuyer().getUserId(), order.getWriter().getUserId(), order.getBook().getBookId(), newStatus);
+        return new Order(order.getBuyer(), order.getBook(), newStatus);
     }
 
     @Transactional(readOnly = true)

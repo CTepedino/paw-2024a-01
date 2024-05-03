@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.books.BookGenre;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;

@@ -1,20 +1,20 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.UserRoles;
+import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserRoles;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserDao {
-    User create(UserRoles[] roles, String firstName, String lastName, String email, String password);
+    User create(String email, String password, String firstName, String lastName);
+
+    int update(long id, String email, String password, String firstName, String lastName);
 
     Optional<User> findById(long id);
-
-    User giveRole(long id, UserRoles role);
-
     Optional<User> findByEmail(String email);
 
-    void setNames(long id, String firstName, String lastName);
+    int giveRole(long id, UserRoles role);
 
-    void changePassword(long id, String password);
+    List<UserRoles> getRoles(long id);
 }

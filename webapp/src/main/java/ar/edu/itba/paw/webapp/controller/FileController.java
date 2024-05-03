@@ -1,10 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.ImageService;
-import ar.edu.itba.paw.interfaces.service.PdfService;
-import ar.edu.itba.paw.models.Image;
-import ar.edu.itba.paw.models.Pdf;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import ar.edu.itba.paw.models.files.CoverImage;

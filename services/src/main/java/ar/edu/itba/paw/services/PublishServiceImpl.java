@@ -1,26 +1,26 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Service
 public class PublishServiceImpl implements PublishService {
 
     private final BookService bs;
-    private final ImageService is;
-    private final PdfService ps;
     private final UserService us;
 
     @Autowired
-    public PublishServiceImpl(BookService bs, ImageService is, PdfService ps, UserService us) {
+    public PublishServiceImpl(BookService bs, UserService us) {
         this.bs = bs;
-        this.is = is;
-        this.ps = ps;
         this.us = us;
     }
 
@@ -39,20 +39,11 @@ public class PublishServiceImpl implements PublishService {
     ) {
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
-        UserRoles[] roles = user.getRoles();
-        boolean isWriter = false;
-        for (UserRoles role : roles){
-            if (role==UserRoles.WRITER){
-                isWriter=true;
-                break;
-            }
-        }
+        List<UserRoles> roles = us.getRoles(user.getUserId());
 
-        if (!isWriter){
+        if (!roles.contains(UserRoles.WRITER)){
             us.giveWriterRole(user.getUserId());
         }
-
-
 
         bs.create(
                 title,

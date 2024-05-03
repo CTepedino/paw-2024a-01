@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.models.BookGenre;
-import ar.edu.itba.paw.models.BookSearchOrderBy;
-import org.hibernate.validator.constraints.Range;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 
 import javax.validation.constraints.*;
 

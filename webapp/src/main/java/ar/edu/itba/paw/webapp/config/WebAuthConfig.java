@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.models.UserRoles;
+import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.webapp.auth.AccessHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

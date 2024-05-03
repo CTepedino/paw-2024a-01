@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.orders;
 
 public enum OrderStatus {
     WAITING_CONTACT("Waiting contact","WAITING_PAYMENT", true, false),

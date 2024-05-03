@@ -1,20 +1,18 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.BookGenre;
-import ar.edu.itba.paw.models.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Date;
-import java.util.List;
 import java.util.Optional;
 
 
 public interface BookService {
-    void create(
+    long create(
             String title,
             String description,
             BookGenre genre,

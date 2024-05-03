@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.models.books.BookGenre;
 import org.springframework.web.multipart.MultipartFile;
 
 

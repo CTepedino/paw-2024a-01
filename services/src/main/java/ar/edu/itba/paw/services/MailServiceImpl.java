@@ -3,8 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.slf4j.Logger;
@@ -67,7 +67,7 @@ public class MailServiceImpl implements MailService{
     public void sendOrderEmail(long buyerId, long bookId){
         User buyer = us.findById(buyerId).orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        User writer = us.findById(book.getWriter().getId()).orElseThrow(UserNotFoundException::new);
+        User writer = us.findById(book.getWriter().getUserId()).orElseThrow(UserNotFoundException::new);
 
         Locale currentLocale = LocaleContextHolder.getLocale();// TODO: Que locale usar para los mails?
 

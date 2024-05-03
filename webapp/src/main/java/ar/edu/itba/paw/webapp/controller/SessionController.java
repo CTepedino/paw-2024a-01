@@ -39,10 +39,10 @@ public class SessionController {
         }
 
         us.create(
-                form.getFirstName(),
-                form.getLastName(),
                 form.getEmail(),
-                form.getPassword()
+                form.getPassword(),
+                form.getFirstName(),
+                form.getLastName()
         );
 
         //return new ModelAndView("registerConfirmation");

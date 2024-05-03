@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.books;
 
 public enum BookGenre {
     FICTION("Fiction"),

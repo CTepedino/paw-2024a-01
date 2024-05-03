@@ -3,9 +3,9 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.PublishService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.BookGenre;
-import ar.edu.itba.paw.models.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
@@ -41,10 +41,12 @@ public class BookController {
         this.us = us;
     }
 
+/*
     @ExceptionHandler({Exception.class})
     public ModelAndView handleException(Exception ex){
-        return new ModelAndView("errors/403"); //TODO: dedicated error page
+        return new ModelAndView("exception/403"); //TODO: dedicated error page
     }
+*/
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){

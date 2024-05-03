@@ -2,8 +2,9 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.UserRoles;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,21 +33,10 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<User> findById(long id){
         return userDao.findById(id);
-    }
-
-    @Transactional
-    @Override
-    public User create(String firstName, String lastName, String email, String password){
-        return userDao.create(
-                new UserRoles[]{UserRoles.READER},
-                firstName,
-                lastName,
-                email,
-                passwordEncoder.encode(password)
-        );
     }
 
     @Transactional(readOnly = true)
@@ -56,18 +47,37 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public User create(String firstName, String lastName, String email, String password){
+        User user =  userDao.create(
+                firstName,
+                lastName,
+                email,
+                passwordEncoder.encode(password)
+        );
+        userDao.giveRole(user.getUserId(), UserRoles.READER);
+        return user;
+    }
+
+    @Override
+    public List<UserRoles> getRoles(long id) {
+        return userDao.getRoles(id);
+    }
+
+    /*
+    @Transactional
+    @Override
     public void fillMissingWriterData(long id, String password) {
         if (userDao.findById(id).isPresent()) {
             userDao.changePassword(id, passwordEncoder.encode(password));
             userDao.giveRole(id, UserRoles.READER);
             userDao.giveRole(id, UserRoles.WRITER);
         }
-    }
+    }*/
+
     @Transactional
     @Override
     public void giveWriterRole(long id) {
-        User user = userDao.giveRole(id, UserRoles.WRITER);
-        //userDao.setNames(id, firstName, lastName);
+        userDao.giveRole(id, UserRoles.WRITER);
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
@@ -92,7 +102,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void changePassword(long id, String password) {
-        userDao.changePassword(id, passwordEncoder.encode(password));
+        User user = userDao.findById(id).orElseThrow(UserNotFoundException::new);
+        userDao.update(user.getUserId(), user.getEmail(), passwordEncoder.encode(password), user.getFirstName(), user.getLastName());
+
     }
 
 }

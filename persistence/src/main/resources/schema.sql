@@ -23,6 +23,8 @@ ALTER TABLE images RENAME TO cover_images;
 
 ALTER TABLE books RENAME COLUMN pdf_id TO preview_id;
 ALTER TABLE books RENAME COLUMN image_id TO cover_id;
+
+
 */
 
 

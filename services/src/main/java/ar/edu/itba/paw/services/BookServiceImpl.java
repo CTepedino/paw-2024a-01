@@ -4,14 +4,13 @@ import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.dao.files.BookPreviewDao;
 import ar.edu.itba.paw.interfaces.dao.files.CoverImageDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.BookGenre;
-import ar.edu.itba.paw.models.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,21 +40,21 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void create(String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover){
+    public long create(String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover){
         try {
             long previewId = previewDao.create(preview.getBytes());
             long coverId = coverDao.create(preview.getBytes());
-            bookDao.create(
+            return bookDao.create(
                     title,
                     description,
                     genre,
                     price,
                     pageCount,
-                    previewId,
-                    coverId,
                     suggestedAge,
                     new Date(System.currentTimeMillis()),
-                    writerId
+                    writerId,
+                    previewId,
+                    coverId
             );
         } catch (IOException e){
             throw new UnreadableFileException();

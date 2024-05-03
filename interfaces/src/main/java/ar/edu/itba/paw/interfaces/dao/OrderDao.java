@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.models.Order;
-import ar.edu.itba.paw.models.OrderStatus;
+import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.orders.OrderStatus;
 
 import java.util.List;
 import java.util.Optional;

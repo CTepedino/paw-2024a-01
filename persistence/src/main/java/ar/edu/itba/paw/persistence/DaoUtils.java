@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.files.File;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class DaoUtils {
     private DaoUtils(){};
+
+
 
     static int getRowCount(JdbcTemplate jdbcTemplate, String tableName, String conditions, Object ... params){
         Integer count = jdbcTemplate.queryForObject(
@@ -31,5 +27,4 @@ public class DaoUtils {
             query.append(condition);
         }
     }
-
 }

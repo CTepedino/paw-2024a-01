@@ -12,11 +12,10 @@
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 
+<body>
 <jsp:include page="components/topBar.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
 </jsp:include>
-
-<body>
     <div class="explore_back">
     <div class="container">
             <div class="row">
