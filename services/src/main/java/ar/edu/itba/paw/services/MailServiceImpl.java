@@ -128,7 +128,7 @@ public class MailServiceImpl implements MailService{
         Book book = order.getBook();
 
         Locale currentLocale = LocaleContextHolder.getLocale();
-        String to = "lbloise@itba.edu.ar";
+        String to = writer.getEmail();
         String subject = emailMessageSource.getMessage("mail.receiptUploadedEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
         data.put("buyerFirstName", buyer.getFirstName());
@@ -144,6 +144,29 @@ public class MailServiceImpl implements MailService{
             LOGGER.atDebug().setMessage("Failed to send Receipt Upload email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
         LOGGER.atDebug().setMessage("Sent Receipt Upload email to: {}").addArgument(to).log();
+    }
+
+    @Override
+    @Async
+    public void sendReceiptApprovedEmail(Order order){
+        PublicUserInformation buyer = order.getBuyer();
+        Book book = order.getBook();
+
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        String to = buyer.getEmail();
+        String subject = emailMessageSource.getMessage("mail.receiptApprovedEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("purchasesUrl", env.getProperty("baseUrl") + "/purchases");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Receipt Approved email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "receiptApprovedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send Receipt Approved email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Receipt Approved email to: {}").addArgument(to).log();
     }
 
 }

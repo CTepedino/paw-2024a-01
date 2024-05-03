@@ -10,4 +10,8 @@ public interface MailService{
 
     void sendReceiptUploadedEmail(Order order);
 
+    void sendReceiptApprovedEmail(Order order);
+
+//    void sendReceiptRejectedEmail(Order order);
+
 }
