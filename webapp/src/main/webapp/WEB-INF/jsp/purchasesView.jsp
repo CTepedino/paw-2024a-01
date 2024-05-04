@@ -70,8 +70,8 @@
                         <td><c:out value="${order.orderStatus.displayString}"/></td>
                         <c:url value="/advanceOrder" var="advanceOrderUrl">
                             <c:param name="bookId" value="${order.book.bookId}"/>
-                            <c:param name="buyerId" value="${order.buyer.id}"/>
-                            <c:param name="writerId" value="${order.writer.id}"/>
+                            <c:param name="buyerId" value="${order.buyer.userId}"/>
+                            <c:param name="writerId" value="${order.writer.userId}"/>
                             <c:param name="from" value="purchases"/>
                         </c:url>
 

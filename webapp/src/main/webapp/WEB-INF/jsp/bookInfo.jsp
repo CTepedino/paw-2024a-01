@@ -18,7 +18,7 @@
             <div class="col s5">
                 <img
                         class="book_cover"
-                        src="<c:url value="${baseUrl}/image/${book.imageId}"/>"
+                        src="<c:url value="${baseUrl}/image/${book.coverId}"/>"
                         alt="<spring:message code="bookInfoCard.cover"/>"
                 />
             </div>
@@ -75,7 +75,7 @@
                 <h6><spring:message code="book.bookInfo.preview"/></h6>
                 <object
                         type="application/pdf"
-                        data="<c:url value="${baseUrl}/pdf/${book.previewPdfId}" />"
+                        data="<c:url value="${baseUrl}/pdf/${book.previewId}" />"
                         width="100%"
                         height="700"
                 >
