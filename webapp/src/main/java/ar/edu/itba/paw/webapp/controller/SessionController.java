@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.MailService;
+import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.webapp.auth.CybraryAuthUserDetails;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +22,12 @@ import javax.validation.Valid;
 @Controller
 public class SessionController {
     private final UserService us;
+    private final MailService ms;
 
     @Autowired
-    public SessionController(UserService us){
+    public SessionController(UserService us, MailService ms){
         this.us = us;
+        this.ms = ms;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/signup")
@@ -38,12 +44,14 @@ public class SessionController {
             return signupForm(form);
         }
 
-        us.create(
+        User user = us.create(
                 form.getEmail(),
                 form.getPassword(),
                 form.getFirstName(),
                 form.getLastName()
         );
+
+        ms.sendRegisterEmail(user.getUserId());
 
         //return new ModelAndView("registerConfirmation");
         return new ModelAndView("redirect:/login");

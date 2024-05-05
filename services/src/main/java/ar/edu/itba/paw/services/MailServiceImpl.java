@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -21,8 +23,11 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+
 
 @Service
 public class MailServiceImpl implements MailService{
@@ -30,6 +35,7 @@ public class MailServiceImpl implements MailService{
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine thymeleafTemplateEngine;
     private final ResourceBundleMessageSource emailMessageSource;
+    private final Environment env;
 
     private final UserService us;
     private final BookService bs;
@@ -37,13 +43,15 @@ public class MailServiceImpl implements MailService{
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, ResourceBundleMessageSource emailMessageSource, UserService us, BookService bs) {
+    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, ResourceBundleMessageSource emailMessageSource, Environment env, UserService us, BookService bs) {
         this.javaMailSender = javaMailSender;
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
         this.emailMessageSource = emailMessageSource;
+        this.env = env;
         this.us = us;
         this.bs = bs;
     }
+
     private void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -53,11 +61,11 @@ public class MailServiceImpl implements MailService{
         javaMailSender.send(message);
     }
 
-    public void sendMessageUsingThymeleafTemplate(String to, String subject, Map<String, Object> templateModel) throws MessagingException {
+    private void sendMessageUsingTemplate(String to, String subject, String template, Map<String, Object> templateModel, Locale locale) throws MessagingException {
 
-        Context thymeleafContext = new Context();
+        Context thymeleafContext = new Context(locale);
         thymeleafContext.setVariables(templateModel);
-        String htmlBody = thymeleafTemplateEngine.process("template-thymeleaf.html", thymeleafContext);
+        String htmlBody = thymeleafTemplateEngine.process(template, thymeleafContext);
 
         sendHtmlMessage(to, subject, htmlBody);
     }
@@ -70,24 +78,117 @@ public class MailServiceImpl implements MailService{
         User writer = us.findById(book.getWriter().getUserId()).orElseThrow(UserNotFoundException::new);
 
         Locale currentLocale = LocaleContextHolder.getLocale();// TODO: Que locale usar para los mails?
+        String to = writer.getEmail();
+        String subject = emailMessageSource.getMessage("mail.orderEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("buyerFirstName", buyer.getFirstName());
+        data.put("buyerLastName", buyer.getLastName());
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
 
-        Context context = new Context(currentLocale);
-        context.setVariable("buyerFirstName", buyer.getFirstName());
-        context.setVariable("buyerLastName", buyer.getLastName());
-        context.setVariable("bookTitle", book.getTitle());
-
-        String emailContent = thymeleafTemplateEngine.process("orderEmailTemplate", context);
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            messageHelper.setTo(writer.getEmail());
-            messageHelper.setSubject(emailMessageSource.getMessage("mail.orderEmail.subject", null, currentLocale));
-            messageHelper.setText(emailContent, true);
-            javaMailSender.send(mimeMessage);
+            LOGGER.atDebug().setMessage("Sending order email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "orderEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send email to: {} \n Error Message: {}").addArgument(writer.getEmail()).addArgument(e.getMessage()).log();
+            LOGGER.atDebug().setMessage("Failed to send order email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
-        LOGGER.atDebug().setMessage("Sent order Email to: {}").addArgument(writer.getEmail()).log();
+        LOGGER.atDebug().setMessage("Sent order email to: {}").addArgument(to).log();
+    }
+
+    @Override
+    @Async
+    public void sendRegisterEmail(long userId){
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        String to = user.getEmail();
+        String subject = emailMessageSource.getMessage("mail.registerEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("userFirstName", user.getFirstName());
+        data.put("userLastName", user.getLastName());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("profileUrl", env.getProperty("baseUrl") + "/profile");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending register email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "registerEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send register email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent register email to: {}").addArgument(to).log();
+
+    }
+
+    @Override
+    @Async
+    public void sendReceiptUploadedEmail(Order order){
+        User writer = order.getWriter();
+        User buyer = order.getBuyer();
+        Book book = order.getBook();
+
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        String to = writer.getEmail();
+        String subject = emailMessageSource.getMessage("mail.receiptUploadedEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("buyerFirstName", buyer.getFirstName());
+        data.put("buyerLastName", buyer.getLastName());
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("salesUrl", env.getProperty("baseUrl") + "/sales");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Receipt Upload email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "receiptUploadedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send Receipt Upload email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Receipt Upload email to: {}").addArgument(to).log();
+    }
+
+    @Override
+    @Async
+    public void sendReceiptApprovedEmail(Order order){
+        User buyer = order.getBuyer();
+        Book book = order.getBook();
+
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        String to = buyer.getEmail();
+        String subject = emailMessageSource.getMessage("mail.receiptApprovedEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("purchasesUrl", env.getProperty("baseUrl") + "/purchases");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Receipt Approved email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "receiptApprovedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send Receipt Approved email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Receipt Approved email to: {}").addArgument(to).log();
+    }
+
+    @Override
+    @Async
+    public void sendReceiptDeniedEmail(Order order){
+        User buyer = order.getBuyer();
+        Book book = order.getBook();
+
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        String to = buyer.getEmail();
+        String subject = emailMessageSource.getMessage("mail.receiptDeniedEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("purchasesUrl", env.getProperty("baseUrl") + "/purchases");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Receipt Denied email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "receiptDeniedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send Receipt Denied email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Receipt Denied email to: {}").addArgument(to).log();
     }
 
 }
