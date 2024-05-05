@@ -2,9 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <html>
 <head>
-    <title>Error</title>
+    <title>Not Found</title>
 </head>
 <body>
-<h1>No such user</h1>
+<h1>Page not found</h1>
 </body>
 </html>

@@ -27,10 +27,4 @@ public class BuyController {
         return new ModelAndView("orderSummary");
     }
 
-    @ExceptionHandler({Exception.class})
-    public ModelAndView handleException(Exception ex){
-        return new ModelAndView("errors/403"); //TODO: dedicated error page
-    }
-
-
 }

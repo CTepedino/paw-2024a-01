@@ -41,13 +41,6 @@ public class BookController {
         this.us = us;
     }
 
-/*
-    @ExceptionHandler({Exception.class})
-    public ModelAndView handleException(Exception ex){
-        return new ModelAndView("exception/403"); //TODO: dedicated error page
-    }
-*/
-
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
