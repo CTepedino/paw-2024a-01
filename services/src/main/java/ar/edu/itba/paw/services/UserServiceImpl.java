@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User create(String firstName, String lastName, String email, String password){
-        User user =  userDao.create(
-                firstName,
-                lastName,
+    public User create(String email, String password, String firstName, String lastName){
+        User user = userDao.create(
                 email,
-                passwordEncoder.encode(password)
+                passwordEncoder.encode(password),
+                firstName,
+                lastName
         );
         userDao.giveRole(user.getUserId(), UserRoles.READER);
         return user;
@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
     public List<UserRoles> getRoles(long id) {
         return userDao.getRoles(id);
     }
+
 
     /*
     @Transactional

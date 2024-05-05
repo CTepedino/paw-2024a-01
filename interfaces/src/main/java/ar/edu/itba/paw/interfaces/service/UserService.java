@@ -18,9 +18,9 @@ public interface UserService {
 
     void giveWriterRole(long id);
 
-    Optional<User> getLoggedUser();
-
 /*    void fillMissingWriterData(long id, String password);*/
 
-    public void changePassword(long id, String password);
+    void changePassword(long id, String password);
+
+    Optional<User> getLoggedUser();
 }

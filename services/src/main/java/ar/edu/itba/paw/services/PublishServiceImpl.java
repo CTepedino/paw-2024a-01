@@ -25,7 +25,7 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
-    public void publishBook(
+    public long publishBook(
 
             String title,
             String description,
@@ -34,8 +34,8 @@ public class PublishServiceImpl implements PublishService {
             double price,
             int pageCount,
 
-            MultipartFile image,
-            MultipartFile previewPdf
+            MultipartFile cover,
+            MultipartFile preview
     ) {
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
@@ -45,7 +45,7 @@ public class PublishServiceImpl implements PublishService {
             us.giveWriterRole(user.getUserId());
         }
 
-        bs.create(
+        return bs.create(
                 title,
                 description,
                 genre,
@@ -53,8 +53,8 @@ public class PublishServiceImpl implements PublishService {
                 pageCount,
                 suggestedAge,
                 user.getUserId(),
-                previewPdf,
-                image
+                preview,
+                cover
         );
 
     }

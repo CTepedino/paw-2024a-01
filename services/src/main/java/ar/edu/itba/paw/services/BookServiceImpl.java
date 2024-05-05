@@ -9,6 +9,7 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
+import ar.edu.itba.paw.models.exception.InvalidPageException;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
 import ar.edu.itba.paw.models.files.BookPreview;
@@ -59,14 +60,15 @@ public class BookServiceImpl implements BookService {
         } catch (IOException e){
             throw new UnreadableFileException();
         }
-
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CoverImage getCover(long id) {
         return coverDao.findById(id).orElseThrow(ImageNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public BookPreview getPreview(long id) {
         return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
@@ -81,6 +83,9 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getAll(int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
         List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getAllSize());
     }
@@ -88,6 +93,9 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> searchWithParams(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
     }

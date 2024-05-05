@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface PublishService {
 
-    void publishBook(
+    long publishBook(
 
             String title,
             String description,
@@ -15,7 +15,7 @@ public interface PublishService {
             double price,
             int pageCount,
 
-            MultipartFile image,
-            MultipartFile pdf
+            MultipartFile cover,
+            MultipartFile preview
     );
 }
