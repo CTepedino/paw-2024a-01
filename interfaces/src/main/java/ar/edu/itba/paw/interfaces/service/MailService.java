@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.models.Order;
+import ar.edu.itba.paw.models.orders.Order;
 
 public interface MailService{
 
