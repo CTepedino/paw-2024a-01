@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.auth.CybraryAuthUserDetails;
+import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,17 +76,16 @@ public class SessionController {
 
 
     @RequestMapping(method = RequestMethod.GET, path="/changePassword")
-    public ModelAndView changePasswordForm(@ModelAttribute("passwordForm") SignUpForm form){
-        form.setEmail(us.getLoggedUser().get().getEmail());
+    public ModelAndView changePasswordForm(@ModelAttribute("passwordForm") ChangePasswordForm form){
         return new ModelAndView("changePassword");
     }
 
     @RequestMapping(method = RequestMethod.POST, path="/changePassword")
-    public ModelAndView changePassword(@Valid @ModelAttribute("passwordForm") SignUpForm form, final BindingResult errors){
+    public ModelAndView changePassword(@Valid @ModelAttribute("passwordForm") ChangePasswordForm form, final BindingResult errors){
         if (errors.hasErrors()){
             return changePasswordForm(form);
         }
-        us.changePassword(us.getLoggedUser().get().getUserId(), form.getPassword());
+        us.changePassword(form.getPassword());
         return new ModelAndView("redirect:/profile");
     }
 
