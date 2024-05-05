@@ -24,7 +24,9 @@ ALTER TABLE images RENAME TO cover_images;
 ALTER TABLE books RENAME COLUMN pdf_id TO preview_id;
 ALTER TABLE books RENAME COLUMN image_id TO cover_id;
 
-
+ALTER TABLE orders DROP CONSTRAINT orders_pkey;
+ALTER TABLE orders DROP COLUMN writer_id;
+ALTER TABLE orders ADD PRIMARY KEY (buyer_id, book_id);
 */
 
 
@@ -75,13 +77,11 @@ CREATE TABLE IF NOT EXISTS roles(
 
 CREATE TABLE IF NOT EXISTS orders(
     buyer_id INT NOT NULL,
-    writer_id INT NOT NULL,
     book_id INT NOT NULL,
     status VARCHAR(20) NOT NULL,
 
-    PRIMARY KEY (book_id, buyer_id, writer_id),
+    PRIMARY KEY (book_id, buyer_id),
 
     FOREIGN KEY (buyer_id) REFERENCES  users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
 );

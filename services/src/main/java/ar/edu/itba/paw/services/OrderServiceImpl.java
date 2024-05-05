@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        orderDao.create(buyer.getUserId(), book.getWriter().getUserId(), bookId, OrderStatus.WAITING_CONTACT);
+        orderDao.create(buyer.getUserId()/*, book.getWriter().getUserId()*/, bookId, OrderStatus.WAITING_CONTACT);
         ms.sendOrderEmail(buyer.getUserId(), bookId);
     }
 
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
         if (book.getWriter().getUserId() == buyer.getUserId()){
             return false;
         }
-        if (orderDao.find(buyer.getUserId(), book.getWriter().getUserId(), bookId).isPresent()){
+        if (orderDao.find(buyer.getUserId()/*,book.getWriter().getUserId()*/, bookId).isPresent()){
             return false;
         }
         return true;
@@ -64,14 +64,14 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public Optional<Order> find(long buyerId, long writerId, long bookId) {
-        return orderDao.find(buyerId, writerId, bookId);
+        return orderDao.find(buyerId,/* writerId,*/ bookId);
     }
 
     @Transactional
     @Override
     public Order toNextStatus(Order order){
         OrderStatus newStatus = order.getOrderStatus().getNext();
-        orderDao.setStatus(order.getBuyer().getUserId(), order.getWriter().getUserId(), order.getBook().getBookId(), newStatus);
+        orderDao.setStatus(order.getBuyer().getUserId()/*, order.getWriter().getUserId()*/, order.getBook().getBookId(), newStatus);
         return new Order(order.getBuyer(), order.getBook(), newStatus);
     }
 
@@ -90,12 +90,12 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public List<Order> getAllNonCompleteReaderOrders(long readerId) {
-        return orderDao.getAllNonCompleteReaderOrders(readerId);
+        return null;//orderDao.getAllNonCompleteReaderOrders(readerId);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Order> getAllNonCompleteWriterOrders(long writerId) {
-        return orderDao.getAllNonCompleteWriterOrders(writerId);
+        return null;//orderDao.getAllNonCompleteWriterOrders(writerId);
     }
 }
