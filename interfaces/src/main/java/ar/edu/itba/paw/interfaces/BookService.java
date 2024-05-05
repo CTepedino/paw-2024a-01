@@ -40,4 +40,8 @@ public interface BookService {
             int pageNumber,
             int pageSize
     );
+
+    List<Book> getAllGenre(BookGenre genre);
+
+    List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook);
 }

@@ -81,6 +81,21 @@
                 >
                 </object>
             </div>
+            <c:if test="${not empty recommendations}">
+                <div class="col s12">
+                    <h6>
+                        <spring:message code="book.bookInfo.recommendations"/>
+                    </h6>
+                </div>
+            </c:if>
+            <div class="col s12">
+                <c:forEach var="recommendedBook" items="${recommendations}" varStatus="loop">
+                    <c:if test="${loop.index < 4}">
+                        <c:set var="cardBook" value="${recommendedBook}" scope="request"/>
+                        <%@include file="components/smallBookCard.jsp"%>
+                    </c:if>
+                </c:forEach>
+            </div>
         </div>
     </div>
 

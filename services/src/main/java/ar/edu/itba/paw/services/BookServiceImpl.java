@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,5 +73,35 @@ public class BookServiceImpl implements BookService {
     public PaginatedContent<Book> searchWithParams(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getAllGenre(BookGenre genre){
+        List<Book> books = getAll(1, 20).getPage();
+        List<Book> genreBooks = new ArrayList<>();
+
+        for (Book book : books) {
+            if (book.getGenre() == genre) {
+                genreBooks.add(book);
+            }
+        }
+
+        return genreBooks;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook){
+        List<Book> books = getAll(1, 20).getPage();
+        List<Book> genreBooks = new ArrayList<>();
+
+        for (Book book : books) {
+            if (book.getGenre() == genre && book.getBookId() != mainBook.getBookId()) {
+                genreBooks.add(book);
+            }
+        }
+
+        return genreBooks;
     }
 }
