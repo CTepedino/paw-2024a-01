@@ -9,7 +9,7 @@ import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
-
+import java.util.List;
 
 public interface BookService {
     long create(
@@ -50,4 +50,8 @@ public interface BookService {
     CoverImage getCover(long id);
 
     BookPreview getPreview(long id);
+
+    List<Book> getAllGenre(BookGenre genre);
+
+    List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook);
 }
