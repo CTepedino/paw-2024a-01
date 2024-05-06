@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Date;
 import java.util.*;
 
 @Repository
@@ -25,7 +24,7 @@ public class BookJdbcDao implements BookDao {
         rs.getDouble("price"),
         rs.getInt("page_count"),
         rs.getInt("suggested_age"),
-        rs.getDate("published_date"),
+        rs.getDate("published_date").toLocalDate(),
         rs.getLong("preview_id"),
         rs.getLong("cover_id"),
         UserJdbcDao.USER_ROW_MAPPER.mapRow(rs, rowNum)
@@ -38,8 +37,9 @@ public class BookJdbcDao implements BookDao {
     public BookJdbcDao(final DataSource ds){
         jdbcTemplate = new JdbcTemplate(ds);
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
+                .withTableName("books")
                 .usingGeneratedKeyColumns("book_id")
-                .withTableName("books");
+                .usingColumns("title", "description", "genre", "page_count", "price", "suggested_age", "preview_id", "cover_id", "writer_id");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public long create(String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, Date publishDate, long writerId, long previewId, long coverId) {
+    public long create(String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, long writerId, long previewId, long coverId) {
         Map<String, Object> bookData = new HashMap<>();
 
         bookData.put("title",title);
@@ -66,7 +66,6 @@ public class BookJdbcDao implements BookDao {
         bookData.put("page_count", pageCount);
         bookData.put("price", price);
         bookData.put("suggested_age", suggestedAge);
-        bookData.put("published_date", publishDate);
         bookData.put("writer_id", writerId);
         bookData.put("preview_id", previewId);
         bookData.put("cover_id", coverId);

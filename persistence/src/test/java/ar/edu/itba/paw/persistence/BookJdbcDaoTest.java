@@ -80,7 +80,6 @@ public class BookJdbcDaoTest {
                 105,
                 123,
                 3,
-                new Date(1),
                 EXISTING_WRITER_ID,
                 EXISTING_PREVIEW_ID,
                 EXISTING_COVER_ID
@@ -102,7 +101,6 @@ public class BookJdbcDaoTest {
                         105,
                         123,
                         3,
-                        new Date(1),
                         NON_EXISTING_WRITER_ID,
                         EXISTING_PREVIEW_ID,
                         EXISTING_COVER_ID
@@ -124,7 +122,6 @@ public class BookJdbcDaoTest {
                         105,
                         123,
                         3,
-                        new Date(1),
                         EXISTING_WRITER_ID,
                         EXISTING_PREVIEW_ID,
                         NON_EXISTING_COVER_ID
@@ -146,7 +143,6 @@ public class BookJdbcDaoTest {
                         105,
                         123,
                         3,
-                        new Date(1),
                         EXISTING_WRITER_ID,
                         NON_EXISTING_PREVIEW_ID,
                         EXISTING_COVER_ID

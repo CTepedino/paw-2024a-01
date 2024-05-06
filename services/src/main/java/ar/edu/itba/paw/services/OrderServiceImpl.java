@@ -71,8 +71,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order toNextStatus(Order order){
         OrderStatus newStatus = order.getOrderStatus().getNext();
-        orderDao.setStatus(order.getBuyer().getUserId()/*, order.getWriter().getUserId()*/, order.getBook().getBookId(), newStatus);
-        return new Order(order.getBuyer(), order.getBook(), newStatus);
+        orderDao.setStatus(order.getBuyer().getUserId(), order.getBook().getBookId(), newStatus);
+        return new Order(order.getBuyer(), order.getBook(), newStatus, order.getDate());
     }
 
     @Transactional(readOnly = true)
@@ -87,15 +87,4 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.getAllWriterOrders(writerId);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Order> getAllNonCompleteReaderOrders(long readerId) {
-        return null;//orderDao.getAllNonCompleteReaderOrders(readerId);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Order> getAllNonCompleteWriterOrders(long writerId) {
-        return null;//orderDao.getAllNonCompleteWriterOrders(writerId);
-    }
 }

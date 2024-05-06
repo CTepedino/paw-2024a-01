@@ -27,6 +27,7 @@ ALTER TABLE books RENAME COLUMN image_id TO cover_id;
 ALTER TABLE orders DROP CONSTRAINT orders_pkey;
 ALTER TABLE orders DROP COLUMN writer_id;
 ALTER TABLE orders ADD PRIMARY KEY (buyer_id, book_id);
+ALTER TABLE orders ADD COLUMN date TIMESTAMP default now();
 */
 
 
@@ -79,6 +80,7 @@ CREATE TABLE IF NOT EXISTS orders(
     buyer_id INT NOT NULL,
     book_id INT NOT NULL,
     status VARCHAR(20) NOT NULL,
+    date DATE default now(),
 
     PRIMARY KEY (book_id, buyer_id),
 

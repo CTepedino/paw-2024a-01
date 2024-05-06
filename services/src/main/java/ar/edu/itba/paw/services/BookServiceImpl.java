@@ -53,7 +53,6 @@ public class BookServiceImpl implements BookService {
                     price,
                     pageCount,
                     suggestedAge,
-                    new Date(System.currentTimeMillis()),
                     writerId,
                     previewId,
                     coverId

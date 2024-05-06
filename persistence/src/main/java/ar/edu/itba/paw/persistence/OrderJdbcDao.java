@@ -26,8 +26,8 @@ public class OrderJdbcDao implements OrderDao {
                 rs.getString("r_last_name")
             ),
             BookJdbcDao.ROW_MAPPER.mapRow(rs, rowNum),
-            OrderStatus.valueOf(rs.getString("status"))
-    );
+            OrderStatus.valueOf(rs.getString("status")),
+            rs.getTimestamp("date").toLocalDateTime());
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -37,7 +37,8 @@ public class OrderJdbcDao implements OrderDao {
     public OrderJdbcDao(final DataSource ds){
         jdbcTemplate = new JdbcTemplate(ds);
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("orders");
+                .withTableName("orders")
+                .usingColumns("buyer_id","book_id","status");
     }
 
     @Override
@@ -68,7 +69,7 @@ public class OrderJdbcDao implements OrderDao {
     public Optional<Order> find(long buyerId, long bookId) {
         List<Order> list = jdbcTemplate.query(
             """
-                SELECT o.status, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
+                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
@@ -86,7 +87,7 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllReaderOrders(long readerId) {
         return jdbcTemplate.query(
             """
-                SELECT o.status, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
+                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
@@ -102,7 +103,7 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllWriterOrders(long writerId) {
         return jdbcTemplate.query(
                 """
-                SELECT o.status, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
+                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id

@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,8 @@ import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserDao userDao;
 
@@ -39,6 +43,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Optional<User> findByEmail(String email) {
+        LOGGER.atDebug().setMessage("Searching user by email {}").addArgument(email).log();
         return userDao.findByEmail(email);
     }
 
