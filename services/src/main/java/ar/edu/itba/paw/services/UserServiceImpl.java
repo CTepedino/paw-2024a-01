@@ -102,6 +102,11 @@ public class UserServiceImpl implements UserService {
         return findByEmail(auth.getName());
     }
 
+    @Override
+    public boolean isLoggedIn() {
+        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+    }
+
     @Transactional(readOnly = true)
     @Override
     public boolean isCurrentUserPassword(String password) {

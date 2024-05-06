@@ -24,4 +24,6 @@ public interface UserService {
     void changePassword(String password);
 
     Optional<User> getLoggedUser();
+
+    boolean isLoggedIn();
 }
