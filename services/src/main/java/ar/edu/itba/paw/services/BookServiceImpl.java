@@ -45,7 +45,7 @@ public class BookServiceImpl implements BookService {
     public long create(String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover){
         try {
             long previewId = previewDao.create(preview.getBytes());
-            long coverId = coverDao.create(preview.getBytes());
+            long coverId = coverDao.create(cover.getBytes());
             return bookDao.create(
                     title,
                     description,
@@ -53,7 +53,6 @@ public class BookServiceImpl implements BookService {
                     price,
                     pageCount,
                     suggestedAge,
-                    new Date(System.currentTimeMillis()),
                     writerId,
                     previewId,
                     coverId

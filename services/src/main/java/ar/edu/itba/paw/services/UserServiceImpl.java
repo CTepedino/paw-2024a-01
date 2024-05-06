@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,13 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserDao userDao;
 
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Optional<User> findByEmail(String email) {
+        LOGGER.atDebug().setMessage("Searching user by email {}").addArgument(email).log();
         return userDao.findByEmail(email);
     }
 
@@ -100,12 +102,24 @@ public class UserServiceImpl implements UserService {
         return findByEmail(auth.getName());
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isCurrentUserPassword(String password) {
+        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
+        return passwordEncoder.matches(password, user.getPassword());
+    }
+
     @Transactional
     @Override
-    public void changePassword(long id, String password) {
-        User user = userDao.findById(id).orElseThrow(UserNotFoundException::new);
-        userDao.update(user.getUserId(), user.getEmail(), passwordEncoder.encode(password), user.getFirstName(), user.getLastName());
+    public void changePassword(String password) {
+        String encodedPassword = passwordEncoder.encode(password);
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
 
+        userDao.update(user.getUserId(), user.getEmail(),encodedPassword, user.getFirstName(), user.getLastName());
+
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), encodedPassword, auth.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 }

@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -47,8 +50,9 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableAsync
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller",
-        "ar.edu.itba.paw.services",
-        "ar.edu.itba.paw.persistence"})
+                "ar.edu.itba.paw.webapp.form.validations",
+                "ar.edu.itba.paw.services",
+                "ar.edu.itba.paw.persistence"})
 @Configuration
 @PropertySource("classpath:application.properties")
 public class WebConfig extends WebMvcConfigurerAdapter {

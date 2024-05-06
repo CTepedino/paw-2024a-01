@@ -20,7 +20,8 @@ public interface UserService {
 
 /*    void fillMissingWriterData(long id, String password);*/
 
-    void changePassword(long id, String password);
+    boolean isCurrentUserPassword(String password);
+    void changePassword(String password);
 
     Optional<User> getLoggedUser();
 }
