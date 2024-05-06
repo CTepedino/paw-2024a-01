@@ -1,0 +1,32 @@
+.purchases{
+    width: 95% !important;
+}
+
+.page-title {
+    color: #437C90 !important;
+}
+
+.table-top {
+    background-color: #437c90;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 0 !important;
+}
+
+.table-title {
+    color: white;
+}
+
+.purchased-book{
+    margin-top: 0;
+    height: 100px;
+}
+
+.card-image {
+    height: 100px;
+}
+.book_cover {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+}
