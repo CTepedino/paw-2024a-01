@@ -8,7 +8,7 @@ public class DaoUtils {
 
 
 
-    static int getRowCount(JdbcTemplate jdbcTemplate, String tableName, String conditions, Object ... params){
+    static long getRowCount(JdbcTemplate jdbcTemplate, String tableName, String conditions, Object ... params){
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM " + tableName + " " + conditions,
                 Integer.class,
@@ -17,7 +17,7 @@ public class DaoUtils {
         return count!=null? count: 0; //para evitar que intellij tire un warning
     }
 
-    static int getRowCount(JdbcTemplate jdbcTemplate, String tableName){
+    static long getRowCount(JdbcTemplate jdbcTemplate, String tableName){
         return getRowCount(jdbcTemplate, tableName, "");
     }
 

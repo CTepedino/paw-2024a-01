@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class ReviewJdbcDao implements ReviewDao {
@@ -40,13 +41,12 @@ public class ReviewJdbcDao implements ReviewDao {
 
     @Transactional
     @Override
-    public void create(long bookId, long reviewerId, int rating, String review, LocalDateTime time) {
+    public void create(long bookId, long reviewerId, int rating, String review) {
         Map<String, Object> reviewData = new HashMap<>();
         reviewData.put("book_id", bookId);
         reviewData.put("reviewer_id", reviewerId);
         reviewData.put("rating", rating);
         reviewData.put("review", review);
-        reviewData.put("time", time);
         simpleJdbcInsert.execute(reviewData);
     }
 
@@ -85,7 +85,7 @@ public class ReviewJdbcDao implements ReviewDao {
         return jdbcTemplate.query(
         """
                 SELECT *
-                FROM reviews r JOIN users u on r.reviewer_id = u.user_id
+                FROM reviews r JOIN users u ON r.reviewer_id = u.user_id
                 WHERE r.book_id = ?
                 ORDER BY ?
                 OFFSET ? LIMIT ?
@@ -96,5 +96,25 @@ public class ReviewJdbcDao implements ReviewDao {
             offset,
             limit
         );
+    }
+
+    @Override
+    public long getAllSize(long bookId) {
+        return DaoUtils.getRowCount(jdbcTemplate, "reviews", "WHERE book_id = ?", bookId);
+    }
+
+    @Override
+    public Optional<Review> get(long bookId, long reviewerId) {
+        List<Review> list = jdbcTemplate.query(
+            """
+                    SELECT *
+                    FROM reviews r JOIN users u ON r.reviewer_id = u.user_id
+                    WHERE r.book_id = ? AND r.reviewer_id = ?
+                """,
+                ROW_MAPPER,
+                bookId,
+                reviewerId
+        );
+        return list.stream().findFirst();
     }
 }

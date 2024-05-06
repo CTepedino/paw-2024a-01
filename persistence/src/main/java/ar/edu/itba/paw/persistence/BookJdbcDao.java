@@ -74,13 +74,13 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public long modify(long bookId, String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge) {
-        return jdbcTemplate.update(
-            """
-                    UPDATE books
-                    SET title = ?, description = ?, genre = ?, price = ?, page_count = ?, suggested_age = ?
-                    WHERE book_id = ?
-                """,
+    public void modify(long bookId, String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge) {
+        jdbcTemplate.update(
+                """
+                            UPDATE books
+                            SET title = ?, description = ?, genre = ?, price = ?, page_count = ?, suggested_age = ?
+                            WHERE book_id = ?
+                        """,
                 title,
                 description,
                 genre,
@@ -107,7 +107,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public int getAllSize() {
+    public long getAllSize() {
         return DaoUtils.getRowCount(jdbcTemplate, "books");
     }
 
@@ -145,7 +145,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public int getSearchSize(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy) {
+    public long getSearchSize(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy) {
         StringBuilder conditions = new StringBuilder();
         List<Object> params = new ArrayList<>();
         getBookSearchQueryConditions(conditions, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
@@ -195,7 +195,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public int getWriterBooksSize(long writerId) {
+    public long getWriterBooksSize(long writerId) {
         return DaoUtils.getRowCount(
                 jdbcTemplate,
                 "books",

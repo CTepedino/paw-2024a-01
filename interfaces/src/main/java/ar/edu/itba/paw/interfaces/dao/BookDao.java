@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.books.BookGenre;
 
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public interface BookDao {
             long coverId
     );
 
-    long modify(
+    void modify(
             long bookId,
 
             String title,
@@ -38,7 +37,7 @@ public interface BookDao {
 
 
     List<Book> getAll(int offset, int limit);
-    int getAllSize();
+    long getAllSize();
 
 
     List<Book> searchWithParams(
@@ -54,7 +53,7 @@ public interface BookDao {
             int offset,
             int limit
     );
-    int getSearchSize(
+    long getSearchSize(
             String title,
             BookGenre genre,
             Double minPrice,
@@ -72,6 +71,6 @@ public interface BookDao {
             int limit
     );
 
-    int getWriterBooksSize(long writerId);
+    long getWriterBooksSize(long writerId);
 
 }
