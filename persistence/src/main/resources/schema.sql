@@ -28,8 +28,8 @@ ALTER TABLE orders DROP CONSTRAINT orders_pkey;
 ALTER TABLE orders DROP COLUMN writer_id;
 ALTER TABLE orders ADD PRIMARY KEY (buyer_id, book_id);
 ALTER TABLE orders ADD COLUMN date TIMESTAMP default now();
+UPDATE orders SET date = now() WHERE date IS NULL;
 */
-
 
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,

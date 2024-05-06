@@ -62,6 +62,12 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Transactional
+    @Override
+    public void editPublication(long bookId, String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge) {
+        bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public CoverImage getCover(long id) {
@@ -129,4 +135,16 @@ public class BookServiceImpl implements BookService {
 
         return genreBooks;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Book> getWriterBooks(long writerId, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books = bookDao.getWriterBooks(writerId, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
+    }
+
+
 }

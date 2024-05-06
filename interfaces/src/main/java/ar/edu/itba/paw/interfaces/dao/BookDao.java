@@ -25,6 +25,18 @@ public interface BookDao {
             long coverId
     );
 
+    long modify(
+            long bookId,
+
+            String title,
+            String description,
+            BookGenre genre,
+            double price,
+            int pageCount,
+            int suggestedAge
+    );
+
+
     List<Book> getAll(int offset, int limit);
     int getAllSize();
 
@@ -53,4 +65,13 @@ public interface BookDao {
             Integer maxSuggestedAge,
             BookSearchOrderBy orderBy
     );
+
+    List<Book> getWriterBooks(
+            long writerId,
+            int offset,
+            int limit
+    );
+
+    int getWriterBooksSize(long writerId);
+
 }

@@ -84,7 +84,7 @@ public class BookController {
             return addBookForm(newBookForm);
         }
 
-        ps.publishBook(
+        long bookId = ps.publishBook(
                 newBookForm.getTitle(),
                 newBookForm.getDescription(),
                 newBookForm.getGenre(),
@@ -98,7 +98,7 @@ public class BookController {
 
         LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/book/"+bookId);
     }
 
 
