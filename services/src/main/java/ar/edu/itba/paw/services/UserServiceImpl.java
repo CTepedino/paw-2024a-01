@@ -79,8 +79,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void giveWriterRole(long id) {
+    public void giveWriterRole(long id, String cbu) {
         userDao.giveRole(id, UserRoles.WRITER);
+        userDao.setCbu(id, cbu);
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 

@@ -16,7 +16,7 @@ public interface UserService {
 
     List<UserRoles> getRoles(long id);
 
-    void giveWriterRole(long id);
+    void giveWriterRole(long id, String cbu);
 
 /*    void fillMissingWriterData(long id, String password);*/
 

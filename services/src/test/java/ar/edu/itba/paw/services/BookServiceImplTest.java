@@ -29,7 +29,7 @@ public class BookServiceImplTest {
     private static final long SIZE = 100;
     private static final int LIMIT = 9;
 
-    private static final Book TEST_BOOK =  new Book(1, "", "", BookGenre.FICTION, 1, 1, 1, LocalDate.now(), 1, 1, new User(1,"","","",""));
+    private static final Book TEST_BOOK =  new Book(1, "", "", BookGenre.FICTION, 1, 1, 1, LocalDate.now(), 1, 1, new User(1,"","","","", ""));
 
     @Mock
     private BookDao bookDao;

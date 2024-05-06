@@ -27,6 +27,7 @@ public class PublishServiceImpl implements PublishService {
     @Override
     public long publishBook(
 
+            String cbu,
             String title,
             String description,
             BookGenre genre,
@@ -42,7 +43,7 @@ public class PublishServiceImpl implements PublishService {
         List<UserRoles> roles = us.getRoles(user.getUserId());
 
         if (!roles.contains(UserRoles.WRITER)){
-            us.giveWriterRole(user.getUserId());
+            us.giveWriterRole(user.getUserId(), cbu);
         }
 
         return bs.create(

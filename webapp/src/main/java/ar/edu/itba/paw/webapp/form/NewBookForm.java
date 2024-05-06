@@ -34,6 +34,9 @@ public class NewBookForm {
     @NotNull
     private MultipartFile pdf;
 
+    @Size(min=22, max=22)
+    private String cbu;
+
     public String getTitle() {
         return title;
     }
@@ -96,5 +99,13 @@ public class NewBookForm {
 
     public void setPdf(MultipartFile pdf) {
         this.pdf = pdf;
+    }
+
+    public String getCbu() {
+        return cbu;
+    }
+
+    public void setCbu(String cbu) {
+        this.cbu = cbu;
     }
 }

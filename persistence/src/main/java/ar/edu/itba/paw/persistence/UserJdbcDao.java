@@ -22,7 +22,8 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("email"),
                     rs.getString("password"),
                     rs.getString("first_name"),
-                    rs.getString("last_name")
+                    rs.getString("last_name"),
+                    rs.getString("cbu")
             );
 
     private final static RowMapper<UserRoles> ROLE_ROW_MAPPER = (rs, rowNum) -> UserRoles.valueOf(rs.getString("role"));
@@ -56,7 +57,8 @@ public class UserJdbcDao implements UserDao {
                 email,
                 password,
                 firstName,
-                lastName
+                lastName,
+                null
         );
     }
 
@@ -125,6 +127,18 @@ public class UserJdbcDao implements UserDao {
                 """,
                 ROLE_ROW_MAPPER,
                 id
+        );
+    }
+
+    @Override
+    public void setCbu(long id, String cbu){
+        jdbcTemplate.update(
+                """
+                        UPDATE users
+                        SET cbu = ?
+                        WHERE user_id = ?
+                        """,
+                cbu, id
         );
     }
 }

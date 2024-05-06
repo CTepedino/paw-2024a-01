@@ -29,6 +29,8 @@ ALTER TABLE orders DROP COLUMN writer_id;
 ALTER TABLE orders ADD PRIMARY KEY (buyer_id, book_id);
 ALTER TABLE orders ADD COLUMN date TIMESTAMP default now();
 UPDATE orders SET date = now() WHERE date IS NULL;
+
+ALTER TABLE users ADD COLUMN cbu VARCHAR(255);
 */
 
 CREATE TABLE IF NOT EXISTS users(
@@ -36,7 +38,8 @@ CREATE TABLE IF NOT EXISTS users(
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255)
+    password VARCHAR(255),
+    cbu VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS book_previews(

@@ -88,6 +88,7 @@ public class BookController {
         }
 
         long bookId = ps.publishBook(
+                newBookForm.getCbu(),
                 newBookForm.getTitle(),
                 newBookForm.getDescription(),
                 newBookForm.getGenre(),

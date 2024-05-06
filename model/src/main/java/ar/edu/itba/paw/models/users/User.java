@@ -8,13 +8,15 @@ public class User {
     private final String password;
     private final String firstName;
     private final String lastName;
+    private final String cbu;
 
-    public User(long userId, String email, String password, String firstName, String lastName) {
+    public User(long userId, String email, String password, String firstName, String lastName, String cbu) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.cbu = cbu;
     }
 
     public long getUserId() {
@@ -35,5 +37,9 @@ public class User {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getCbu() {
+        return cbu;
     }
 }

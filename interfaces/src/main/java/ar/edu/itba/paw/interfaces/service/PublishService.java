@@ -8,6 +8,7 @@ public interface PublishService {
 
     long publishBook(
 
+            String cbu,
             String title,
             String description,
             BookGenre genre,

@@ -41,6 +41,15 @@
 <%--                </div>--%>
 <%--            </c:if>--%>
 
+            <c:if test="${!hasWriterRole}">
+                <h6><spring:message code="book.addBook.cbuTitle"/></h6>
+                <div class="input-field">
+                    <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label><br>
+                    <form:input type="text" path="cbu"/>
+                </div>
+                <form:errors path="cbu" cssClass="red-text" element="p"/>
+            </c:if>
+
             <h6><spring:message code="book.addBook.bookTitle"/></h6>
 
             <div class="input-field">
