@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Repository
@@ -21,12 +22,13 @@ public class BookJdbcDao implements BookDao {
         rs.getString("title"),
         rs.getString("description"),
         BookGenre.valueOf(rs.getString("genre")),
-        rs.getDouble("price"),
+        rs.getBigDecimal("price"),
         rs.getInt("page_count"),
         rs.getInt("suggested_age"),
         rs.getDate("published_date").toLocalDate(),
         rs.getLong("preview_id"),
         rs.getLong("cover_id"),
+        rs.getLong("book_file_id"),
         UserJdbcDao.USER_ROW_MAPPER.mapRow(rs, rowNum)
     );
 
@@ -39,7 +41,7 @@ public class BookJdbcDao implements BookDao {
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("books")
                 .usingGeneratedKeyColumns("book_id")
-                .usingColumns("title", "description", "genre", "page_count", "price", "suggested_age", "preview_id", "cover_id", "writer_id");
+                .usingColumns("title", "description", "genre", "page_count", "price", "suggested_age", "preview_id", "cover_id", "book_file_id", "writer_id");
     }
 
     @Override
@@ -57,7 +59,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public long create(String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, long writerId, long previewId, long coverId) {
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, long writerId, long previewId, long coverId, long bookFileId) {
         Map<String, Object> bookData = new HashMap<>();
 
         bookData.put("title",title);
@@ -69,12 +71,13 @@ public class BookJdbcDao implements BookDao {
         bookData.put("writer_id", writerId);
         bookData.put("preview_id", previewId);
         bookData.put("cover_id", coverId);
+        bookData.put("book_file_id", bookFileId);
 
         return simpleJdbcInsert.executeAndReturnKey(bookData).longValue();
     }
 
     @Override
-    public void modify(long bookId, String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge) {
+    public void modify(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         jdbcTemplate.update(
                 """
                             UPDATE books
@@ -115,8 +118,8 @@ public class BookJdbcDao implements BookDao {
     public List<Book> searchWithParams(
             String title,
             BookGenre genre,
-            Double minPrice,
-            Double maxPrice,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
             Integer minPageCount,
             Integer maxPageCount,
             Integer minSuggestedAge,
@@ -145,7 +148,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public long getSearchSize(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy) {
+    public long getSearchSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy) {
         StringBuilder conditions = new StringBuilder();
         List<Object> params = new ArrayList<>();
         getBookSearchQueryConditions(conditions, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
@@ -157,8 +160,8 @@ public class BookJdbcDao implements BookDao {
             List<Object> params,
             String title,
             BookGenre genre,
-            Double minPrice,
-            Double maxPrice,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
             Integer minPageCount,
             Integer maxPageCount,
             Integer minSuggestedAge,

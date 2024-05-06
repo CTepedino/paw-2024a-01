@@ -95,8 +95,9 @@ public class BookController {
                 newBookForm.getPrice(),
                 newBookForm.getPageCount(),
 
-                newBookForm.getImage(),
-                newBookForm.getPdf()
+                newBookForm.getCover(),
+                newBookForm.getPreview(),
+                newBookForm.getBookFile()
         );
 
         LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();

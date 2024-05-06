@@ -29,6 +29,9 @@ ALTER TABLE orders DROP COLUMN writer_id;
 ALTER TABLE orders ADD PRIMARY KEY (buyer_id, book_id);
 ALTER TABLE orders ADD COLUMN date TIMESTAMP default now();
 UPDATE orders SET date = now() WHERE date IS NULL;
+
+ALTER TABLE books ADD COLUMN book_file_id INT;
+ALTER TABLE books ADD FOREIGN KEY (book_file_id) REFERENCES book_files ON DELETE CASCADE;
 */
 
 CREATE TABLE IF NOT EXISTS users(
@@ -49,6 +52,11 @@ CREATE TABLE IF NOT EXISTS cover_images(
     file BYTEA NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS book_files(
+    id SERIAL PRIMARY KEY,
+    file BYTEA NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS books (
     book_id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
@@ -60,11 +68,13 @@ CREATE TABLE IF NOT EXISTS books (
     published_date DATE DEFAULT now(),
     preview_id INT NOT NULL,
     cover_id INT NOT NULL,
+    book_file_id INT,
     writer_id INT NOT NULL,
 
     FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (cover_id) REFERENCES cover_images (id) ON DELETE CASCADE,
-    FOREIGN KEY (preview_id) REFERENCES book_previews (id) ON DELETE CASCADE
+    FOREIGN KEY (preview_id) REFERENCES book_previews (id) ON DELETE CASCADE,
+    FOREIGN KEY (book_file_id) REFERENCES book_files (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS roles(

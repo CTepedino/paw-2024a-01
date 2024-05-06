@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.List;
 
@@ -16,12 +17,13 @@ public interface BookService {
             String title,
             String description,
             BookGenre genre,
-            double price,
+            BigDecimal price,
             int pageCount,
             int suggestedAge,
             long writerId,
             MultipartFile preview,
-            MultipartFile cover
+            MultipartFile cover,
+            MultipartFile bookFile
     );
 
     void editPublication(
@@ -30,7 +32,7 @@ public interface BookService {
             String title,
             String description,
             BookGenre genre,
-            double price,
+            BigDecimal price,
             int pageCount,
             int suggestedAge
     );
@@ -47,8 +49,8 @@ public interface BookService {
     PaginatedContent<Book> searchWithParams(
             String title,
             BookGenre genre,
-            Double minPrice,
-            Double maxPrice,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
             Integer minPageCount,
             Integer maxPageCount,
             Integer minSuggestedAge,

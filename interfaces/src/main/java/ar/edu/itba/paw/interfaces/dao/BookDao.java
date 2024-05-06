@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.books.BookGenre;
 
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,14 +15,15 @@ public interface BookDao {
             String title,
             String description,
             BookGenre genre,
-            double price,
+            BigDecimal price,
             int pageCount,
             int suggestedAge,
 
             long writerId,
 
             long previewId,
-            long coverId
+            long coverId,
+            long bookFileId
     );
 
     void modify(
@@ -30,7 +32,7 @@ public interface BookDao {
             String title,
             String description,
             BookGenre genre,
-            double price,
+            BigDecimal price,
             int pageCount,
             int suggestedAge
     );
@@ -43,8 +45,8 @@ public interface BookDao {
     List<Book> searchWithParams(
             String title,
             BookGenre genre,
-            Double minPrice,
-            Double maxPrice,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
             Integer minPageCount,
             Integer maxPageCount,
             Integer minSuggestedAge,
@@ -56,8 +58,8 @@ public interface BookDao {
     long getSearchSize(
             String title,
             BookGenre genre,
-            Double minPrice,
-            Double maxPrice,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
             Integer minPageCount,
             Integer maxPageCount,
             Integer minSuggestedAge,

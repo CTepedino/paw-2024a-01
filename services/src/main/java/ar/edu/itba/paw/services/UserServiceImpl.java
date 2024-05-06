@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isLoggedIn() {
-        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        return SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
     @Transactional(readOnly = true)

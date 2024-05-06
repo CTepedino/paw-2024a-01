@@ -86,16 +86,22 @@
             <form:errors path="price" cssClass="red-text"  element="p"/>
             <br>
             <div class="input-field">
-                <form:label path="image" cssClass="active"><spring:message code="book.addBook.image"/><span class="red-text">*</span> (.png, .jpeg)</form:label>
-                <form:input type="file" path="image" accept=".png, .jpeg"/>
+                <form:label path="cover" cssClass="active"><spring:message code="book.addBook.cover"/><span class="red-text">*</span> (.png, .jpeg)</form:label>
+                <form:input type="file" path="cover" accept="image/*"/>
             </div>
-            <form:errors path="image" cssClass="red-text"  element="p"/>
+            <form:errors path="cover" cssClass="red-text"  element="p"/>
             <br>
             <div class="input-field">
-                <form:label path="pdf" cssClass="active"><spring:message code="book.addBook.pdf"/><span class="red-text">*</span> (.pdf)</form:label>
-                <form:input type="file" path="pdf" accept=".pdf"/>
+                <form:label path="preview" cssClass="active"><spring:message code="book.addBook.preview"/><span class="red-text">*</span> (.pdf)</form:label>
+                <form:input type="file" path="preview" accept=".pdf"/>
             </div>
-            <form:errors path="pdf" cssClass="red-text"  element="p"/>
+            <form:errors path="preview" cssClass="red-text"  element="p"/>
+            <br>
+            <div class="input-field">
+                <form:label path="bookFile" cssClass="active"><spring:message code="book.addBook.bookFile"/><span class="red-text">*</span> (.pdf)</form:label>
+                <form:input type="file" path="bookFile" accept=".pdf"/>
+            </div>
+            <form:errors path="bookFile" cssClass="red-text"  element="p"/>
             <br>
             <div class="input-field">
                 <button class="btn waves-effect waves-light" type="submit" name="action">
