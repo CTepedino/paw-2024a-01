@@ -15,4 +15,6 @@ public interface ReviewService {
     boolean hasReviewed(long bookId);
 
     PaginatedContent<Review> getAll(long bookId, ReviewOrderBy orderBy, int pageNumber, int pageSize);
+
+    int getAverageRating(long bookId);
 }

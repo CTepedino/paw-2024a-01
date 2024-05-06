@@ -117,4 +117,18 @@ public class ReviewJdbcDao implements ReviewDao {
         );
         return list.stream().findFirst();
     }
+
+    @Override
+    public int getAverageRating(long bookId) {
+        Integer avg = jdbcTemplate.queryForObject(
+            """
+                   SELECT AVG(rating)
+                   FROM reviews
+                   WHERE book_id = ?
+                """,
+                Integer.class,
+                bookId
+        );
+        return avg!=null?avg:0;
+    }
 }
