@@ -84,6 +84,21 @@ CREATE TABLE IF NOT EXISTS orders(
 
     PRIMARY KEY (book_id, buyer_id),
 
-    FOREIGN KEY (buyer_id) REFERENCES  users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS reviews(
+    reviewer_id INT NOT NULL,
+    book_id INT NOT NULL,
+    rating INT NOT NULL,
+    review TEXT,
+    date TIMESTAMP default now(),
+
+    CHECK (rating BETWEEN 1 AND 10),
+
+    PRIMARY KEY (book_id, reviewer_id),
+
+    FOREIGN KEY (reviewer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
 );
