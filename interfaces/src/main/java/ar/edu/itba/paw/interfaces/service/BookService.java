@@ -24,6 +24,17 @@ public interface BookService {
             MultipartFile cover
     );
 
+    void editPublication(
+            long bookId,
+
+            String title,
+            String description,
+            BookGenre genre,
+            double price,
+            int pageCount,
+            int suggestedAge
+    );
+
 
 
     Optional<Book> findById(long id);
@@ -54,4 +65,6 @@ public interface BookService {
     List<Book> getAllGenre(BookGenre genre);
 
     List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook);
+
+    PaginatedContent<Book> getWriterBooks(long writerId, int pageNumber, int pageSize);
 }

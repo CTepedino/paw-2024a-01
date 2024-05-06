@@ -73,7 +73,23 @@ public class BookJdbcDao implements BookDao {
         return simpleJdbcInsert.executeAndReturnKey(bookData).longValue();
     }
 
-
+    @Override
+    public long modify(long bookId, String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge) {
+        return jdbcTemplate.update(
+            """
+                    UPDATE books
+                    SET title = ?, description = ?, genre = ?, price = ?, page_count = ?, suggested_age = ?
+                    WHERE book_id = ?
+                """,
+                title,
+                description,
+                genre,
+                price,
+                pageCount,
+                suggestedAge,
+                bookId
+        );
+    }
 
     @Override
     public List<Book> getAll(int offset, int limit){
@@ -160,4 +176,32 @@ public class BookJdbcDao implements BookDao {
             DaoUtils.addQueryCondition(query, params, " AND suggested_age >= ? ", minSuggestedAge);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age <= ? ", maxSuggestedAge);
     }
+
+    @Override
+    public List<Book> getWriterBooks(long writerId, int offset, int limit) {
+        return jdbcTemplate.query(
+                """
+                        SELECT b.*
+                        FROM books b JOIN users u ON b.writer_id = u.user_id
+                        WHERE writer_id = ?
+                        ORDER BY book_id DESC
+                        OFFSET ? LIMIT ?
+                        """,
+                ROW_MAPPER,
+                writerId,
+                offset,
+                limit
+        );
+    }
+
+    @Override
+    public int getWriterBooksSize(long writerId) {
+        return DaoUtils.getRowCount(
+                jdbcTemplate,
+                "books",
+                "WHERE writer_id = ?",
+                writerId
+        );
+    }
 }
+
