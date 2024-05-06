@@ -25,11 +25,19 @@
 
             <div class="sub-menu-wrap" id="subMenu">
             <div class="sub-menu">
-                <a href="${pageContext.request.contextPath}/profile" class="sub-menu-link">
+
+
+                <div class="user-info">
+                    <img src="${pageContext.request.contextPath}/images/user.png"/>
+                    <a href="${pageContext.request.contextPath}/profile"> <h3>My profile</h3> </a>
+                </div>
+                <hr>
+
+              <%--  <a href="${pageContext.request.contextPath}/profile" class="sub-menu-link">
                     <i class="fas fa-user"></i>
                     <p>My Profile</p>
                     <span>></span>
-                </a>
+                </a>--%>
                 <a href="${pageContext.request.contextPath}/purchases" class="sub-menu-link">
                     <i class="fa-solid fa-bag-shopping"></i>
                     <p>Purchases</p>
