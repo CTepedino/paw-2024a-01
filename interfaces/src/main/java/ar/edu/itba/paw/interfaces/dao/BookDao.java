@@ -18,7 +18,6 @@ public interface BookDao {
             double price,
             int pageCount,
             int suggestedAge,
-            Date publishDate,
 
             long writerId,
 
