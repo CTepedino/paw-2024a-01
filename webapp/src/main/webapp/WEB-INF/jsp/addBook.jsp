@@ -86,14 +86,13 @@
             <form:errors path="price" cssClass="red-text"  element="p"/>
             <br>
             <div class="input-field">
-                <form:label path="image" cssClass="active"><spring:message code="book.addBook.image"/><span class="red-text">*</span></form:label>
+                <form:label path="image" cssClass="active"><spring:message code="book.addBook.image"/><span class="red-text">*</span> (.png, .jpeg)</form:label>
                 <form:input type="file" path="image" accept=".png, .jpeg"/>
-
             </div>
             <form:errors path="image" cssClass="red-text"  element="p"/>
             <br>
             <div class="input-field">
-                <form:label path="pdf" cssClass="active"><spring:message code="book.addBook.pdf"/><span class="red-text">*</span></form:label>
+                <form:label path="pdf" cssClass="active"><spring:message code="book.addBook.pdf"/><span class="red-text">*</span> (.pdf)</form:label>
                 <form:input type="file" path="pdf" accept=".pdf"/>
             </div>
             <form:errors path="pdf" cssClass="red-text"  element="p"/>
