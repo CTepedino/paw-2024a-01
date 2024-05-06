@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.reviews;
 
 import ar.edu.itba.paw.models.users.User;
 
@@ -9,14 +9,14 @@ public class Review {
     private final User reviewer;
     private final int rating;
     private final String review;
-    private final LocalDateTime time;
+    private final LocalDateTime date;
 
-    public Review(long bookId, User reviewer, int rating, String review, LocalDateTime time) {
+    public Review(long bookId, User reviewer, int rating, String review, LocalDateTime date) {
         this.bookId = bookId;
         this.reviewer = reviewer;
         this.rating = rating;
         this.review = review;
-        this.time = time;
+        this.date = date;
     }
 
     public long getBookId() {
@@ -35,7 +35,7 @@ public class Review {
         return review;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getDate() {
+        return date;
     }
 }
