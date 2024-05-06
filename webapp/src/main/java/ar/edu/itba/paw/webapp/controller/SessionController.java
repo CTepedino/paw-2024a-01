@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.BookService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.Book;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.auth.CybraryAuthUserDetails;
@@ -25,10 +27,13 @@ import java.util.Objects;
 @Controller
 public class SessionController {
     private final UserService us;
+    private final BookService bs;
+
 
     @Autowired
-    public SessionController(UserService us){
+    public SessionController(UserService us, BookService bs){
         this.us = us;
+        this.bs = bs;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/signup")
@@ -64,9 +69,11 @@ public class SessionController {
     public ModelAndView profile(Authentication authentication){
         ModelAndView mav = new ModelAndView("profile");
         mav.addObject("user", us.findByEmail(authentication.getName()).get());
+        mav.addObject("books", bs.getAll());
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
+
 
 
     @RequestMapping(method = RequestMethod.POST, path="/signup/writer")

@@ -3,9 +3,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 <html>
-<header>
+<head>
     <link href="${pageContext.request.contextPath}/css/bookInfoCard.css" rel="stylesheet"/>
-</header>
+</head>
 <body>
 
 <div class="col s6">

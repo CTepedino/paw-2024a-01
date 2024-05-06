@@ -5,29 +5,53 @@
     <meta charset="UTF-8">
     <title>Sign In</title>
     <link href="${pageContext.request.contextPath}/css/profile.css" rel="stylesheet"/>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<%@include file="components/materializeComponent.jsp"%>
 
+<%@include file="components/materializeComponent.jsp"%>
 
 <body>
 <jsp:include page="components/topBar2.0.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
 </jsp:include>
-<div class="medium-container">
-    <div class="card-panel center-align">
-        <i class="material-icons large">account_circle</i>
-        <div class="name">
-            <span><c:out value="${user.firstName}"/></span>
-            <span><c:out value="${user.lastName}"/></span>
-        </div>
-        <div class="email">
-            <span>Email: <c:out value="${user.email}"/></span>
-        </div>
-        <div class="edit-profile">
-            <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">Change Password</a>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div class="header__wrapper">
+    <div class="right__col">
+        <header></header>
+        <div class="left__col">
+            <div class="img__container">
+                <img src="${pageContext.request.contextPath}/images/user.png"/>
+            </div>
+            <h2><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
+            <p> <c:out value="${user.email}"/> </p>
+            <p><a href="${pageContext.request.contextPath}/changePassword" class="btn">Edit Profile</a></p>
+
+            <nav>
+                <ul>
+                    <li><a href="">Buyed Books</a></li>
+                    <li><a href="">My Books</a></li>
+                </ul>
+            </nav>
+
+            <div class="row">
+                <c:forEach var="book" items="${books}">
+                    <c:set var="book" value="${book}" scope="request"/>
+                    <%@include file="components/bookInfoCard.jsp"%>
+                </c:forEach>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="">Suggestions</a></li>
+                </ul>
+            </nav>
+
+
         </div>
     </div>
 </div>
+
 </body>
 </html>
