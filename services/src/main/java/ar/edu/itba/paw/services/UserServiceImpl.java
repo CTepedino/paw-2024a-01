@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService {
         return findByEmail(auth.getName());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean isCurrentUserPassword(String password) {
         User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
