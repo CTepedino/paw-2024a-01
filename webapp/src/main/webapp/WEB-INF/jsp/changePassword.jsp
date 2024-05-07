@@ -54,7 +54,7 @@
                 <span class="material-icons password-toggle-btn" onclick="toggleRepeatPasswordVisibility()">visibility_off</span>
 
             </div>
-            <form:errors path="repeatPassword" cssClass="red-text" element="p"/>
+            <p class="red-text" id="passwordErrorMessage" style="visibility: hidden"><spring:message code="session.repeatPasswordError"/></p>
 
             <div class="input-field center-align submit-btn">
                 <button class="btn waves-effect waves-light white-text" id="submitBtn" type="submit" name="action" disabled="disabled">
