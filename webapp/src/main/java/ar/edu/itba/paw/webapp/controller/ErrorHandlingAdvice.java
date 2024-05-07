@@ -35,5 +35,4 @@ public class ErrorHandlingAdvice {
     @ExceptionHandler(UnreadableFileException.class)
     public ModelAndView unreadableFile(){return new ModelAndView("/exception/400");}
 
-
 }

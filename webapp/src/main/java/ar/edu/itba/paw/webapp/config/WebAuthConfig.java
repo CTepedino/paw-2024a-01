@@ -55,7 +55,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
             .and().authorizeHttpRequests()
                 .requestMatchers("/signup", "/login").anonymous()
-                .requestMatchers( "/sales").hasRole(UserRoles.WRITER.toString())
+                .requestMatchers( "/sales").hasAuthority(UserRoles.WRITER.toString())
                 .requestMatchers(HttpMethod.POST, "/sendBuyInfo").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(a.get(), o.getRequest())))
                 .requestMatchers("/", "/image/**", "/pdf/**", "/book/**", "/search/**").permitAll()
                 .anyRequest().authenticated()
