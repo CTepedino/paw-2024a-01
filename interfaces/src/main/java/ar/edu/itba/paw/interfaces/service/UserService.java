@@ -25,6 +25,12 @@ public interface UserService {
     boolean isCurrentUserPassword(String password);
     void changePassword(String password);
 
+    void changeFirstName(String firstName);
+
+    void changeLastName(String lastName);
+
+    void changeEmail(String email);
+
     Optional<User> getLoggedUser();
 
     boolean isLoggedIn();

@@ -4,8 +4,8 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.auth.CybraryAuthUserDetails;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
+import ar.edu.itba.paw.webapp.form.EditProfileForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +75,26 @@ public class SessionController {
         return mav;
     }
 
+    @RequestMapping(method = RequestMethod.GET, path="/editProfile")
+    public ModelAndView editProfileForm(@ModelAttribute("editProfileForm") EditProfileForm form, Authentication authentication){
+        ModelAndView mav = new ModelAndView("editProfile");
+        mav.addObject("user", us.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new));
+        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path ="/editProfile")
+    public ModelAndView editProfile(@Valid @ModelAttribute("editProfileForm") EditProfileForm form, final BindingResult errors,Authentication authentication ){
+        if (errors.hasErrors()){
+            return editProfileForm(form,authentication);
+        }
+        us.setProfilePicture(form.getProfilePicture());
+        us.changeEmail(form.getNewEmail());
+        us.changeFirstName(form.getNewFirstName());
+        us.changeLastName(form.getNewLastName());
+
+        return new ModelAndView("redirect:/profile");
+    }
 
     @RequestMapping(method = RequestMethod.GET, path="/changePassword")
     public ModelAndView changePasswordForm(@ModelAttribute("passwordForm") ChangePasswordForm form){

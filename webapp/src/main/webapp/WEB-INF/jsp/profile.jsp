@@ -30,7 +30,7 @@
             <h2><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
             <p> <c:out value="${user.email}"/> </p>
             <div class="cart">
-                <p><a href="${pageContext.request.contextPath}/changePassword" >Edit Profile</a></p>
+                <p><a href="${pageContext.request.contextPath}/editProfile" >Edit Profile</a></p>
             </div>
             <nav>
                 <ul>
