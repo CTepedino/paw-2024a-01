@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
+
+<!DOCTYPE html>
 <html>
 <head>
     <title><c:out value="${book.title}"/></title>
@@ -14,23 +16,34 @@
     <div class="book-container z-depth-2" style="margin: 30px;padding: 20px;">
         <div class="row">
             <div class="col s5">
-                <img class="book_cover" src="<c:url  value="${baseUrl}/image/${book.imageId}"/>" alt="Book cover">
+                <img
+                        class="book_cover"
+                        src="<c:url value="${baseUrl}/image/${book.coverId}"/>"
+                        alt="<spring:message code="bookInfoCard.cover"/>"
+                />
             </div>
             <div class="col s7">
-                <h2><c:out value="${book.title}"/></h2>
+                <h2>
+                    <c:out value="${book.title}"/>
+                </h2>
                 <div class="row">
                     <div class="col s8">
-                        <h5><c:out value="${book.writer.firstName}"/> <c:out value="${book.writer.lastName}"/></h5>
+                        <h5>
+                            <spring:message var="author" code="book.bookInfo.author" arguments="${book.writer.firstName},${book.writer.lastName}"/>
+                            <c:out value="${author}"/>
+                        </h5>
                     </div>
                     <div class="col s4">
-                        <c:if test="${book.writer.email != user.email}">
+                       <c:if test="${user!=null && book.writer.email != user.email}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
                             <form action="${buyUrl}" method="post">
-                                <button type="submit" class="waves-effect waves-light btn"><spring:message code="book.bookInfo.buyBook"/></button>
+                                <button type="submit" class="waves-effect waves-light btn">
+                                    <spring:message code="book.bookInfo.buyBook"/>
+                                </button>
                             </form>
-                        </c:if>
+                       </c:if>
                     </div>
                 </div>
                 <h5>$<c:out value="${book.price}"/></h5>
@@ -62,11 +75,26 @@
                 <h6><spring:message code="book.bookInfo.preview"/></h6>
                 <object
                         type="application/pdf"
-                        data="<c:url value="${baseUrl}/pdf/${book.previewPdfId}" />"
+                        data="<c:url value="${baseUrl}/pdf/${book.previewId}" />"
                         width="100%"
                         height="700"
                 >
                 </object>
+            </div>
+            <c:if test="${not empty recommendations}">
+                <div class="col s12">
+                    <h6>
+                        <spring:message code="book.bookInfo.recommendations"/>
+                    </h6>
+                </div>
+            </c:if>
+            <div class="col s12">
+                <c:forEach var="recommendedBook" items="${recommendations}" varStatus="loop">
+                    <c:if test="${loop.index < 4}">
+                        <c:set var="cardBook" value="${recommendedBook}" scope="request"/>
+                        <%@include file="components/smallBookCard.jsp"%>
+                    </c:if>
+                </c:forEach>
             </div>
         </div>
     </div>

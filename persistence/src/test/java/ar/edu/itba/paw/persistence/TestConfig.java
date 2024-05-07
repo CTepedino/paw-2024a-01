@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -23,8 +25,8 @@ public class TestConfig {
     @Value("classpath:schema.sql")
     private Resource schemaSql;
 
-    @Value("classpath:auxData.sql")
-    private Resource auxDataSql;
+    @Value("classpath:testData.sql")
+    private Resource testDataSql;
 
     @Bean
     public DataSource dataSource(){
@@ -39,9 +41,8 @@ public class TestConfig {
     }
 
     @Bean
-    public DataSourceInitializer dataSourceInitializer(DataSource ds){
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
         final DataSourceInitializer dsi = new DataSourceInitializer();
-
         dsi.setDataSource(ds);
         dsi.setDatabasePopulator(databasePopulator());
 
@@ -53,8 +54,13 @@ public class TestConfig {
 
         dbp.addScript(pgsqlSql);
         dbp.addScript(schemaSql);
-        dbp.addScript(auxDataSql);
+        dbp.addScript(testDataSql);
 
         return dbp;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(final DataSource ds) {
+        return new DataSourceTransactionManager(ds);
     }
 }

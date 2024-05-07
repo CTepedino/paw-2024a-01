@@ -1,58 +1,69 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.BookService;
-import ar.edu.itba.paw.interfaces.PublishService;
-import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.BookGenre;
+import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.PublishService;
+import ar.edu.itba.paw.interfaces.service.ReviewService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 
 @Controller
 public class BookController {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(BookController.class);
+
+    private static final int PAGE_SIZE = 20;
+
     private final PublishService ps;
     private final BookService bs;
     private final UserService us;
+    private final ReviewService rs;
 
 
     @Autowired
-    public BookController(PublishService ps, BookService bs, UserService us){
+    public BookController(PublishService ps, BookService bs, UserService us, ReviewService rs){
         this.ps = ps;
         this.bs = bs;
         this.us = us;
+        this.rs = rs;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
-    public ModelAndView home(){
+    public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
         final ModelAndView mav = new ModelAndView("home");
-        mav.addObject("books", bs.getAll());
+        mav.addObject("books", bs.getAll(page, PAGE_SIZE));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path="/{bookId:\\d+}")
+
+    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
         final ModelAndView mav = new ModelAndView("bookInfo");
-        mav.addObject("book", bs.findById(bookId).orElseThrow(BookNotFoundException::new));
-        mav.addObject("user", us.getLoggedUser().get());
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        List<Book> recommendations = bs.getAllGenreExcluding(book.getGenre(), book);
+        mav.addObject("book", book);
+        mav.addObject("user", us.getLoggedUser().orElse(null));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
+        mav.addObject("recommendations", recommendations);
         return mav;
     }
 
@@ -76,7 +87,8 @@ public class BookController {
             return addBookForm(newBookForm);
         }
 
-        ps.publishBook(
+        long bookId = ps.publishBook(
+                newBookForm.getCbu(),
                 newBookForm.getTitle(),
                 newBookForm.getDescription(),
                 newBookForm.getGenre(),
@@ -85,24 +97,25 @@ public class BookController {
                 newBookForm.getPageCount(),
 
                 newBookForm.getImage(),
-                newBookForm.getPdf(),
-
-                newBookForm.getWriterFirstName(),
-                newBookForm.getWriterLastName()
+                newBookForm.getPdf()
         );
 
-        return new ModelAndView("redirect:/");
+        LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();
+
+        return new ModelAndView("redirect:/book/"+bookId);
     }
+
 
     @RequestMapping(method = RequestMethod.GET, path="/search")
     public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") final BookSearchForm form, final BindingResult error){
+
         if (error.hasErrors()){
-            return new ModelAndView("home"); //TODO: error page
+            return new ModelAndView("searchResults");
         }
 
         final ModelAndView mav = new ModelAndView("searchResults");
 
-       List<Book> books = bs.searchWithParams(
+        PaginatedContent<Book> books = bs.searchWithParams(
                 form.getTitle(),
                 form.getGenre(),
                 form.getMinPrice(),
@@ -112,11 +125,14 @@ public class BookController {
                 form.getMinSuggestedAge(),
                 form.getMaxSuggestedAge(),
                 form.getOrderBy(),
-                form.getAsc()
+                form.getPage(),
+                PAGE_SIZE
         );
 
         mav.addObject("bookSearchForm", form);
         mav.addObject("books", books);
+        mav.addObject("genres", BookGenre.values());
+        mav.addObject("orders", BookSearchOrderBy.values());
 
         return mav;
     }

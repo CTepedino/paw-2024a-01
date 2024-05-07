@@ -1,14 +1,19 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.*;
-import ar.edu.itba.paw.models.Book;
-import ar.edu.itba.paw.models.Order;
-import ar.edu.itba.paw.models.OrderStatus;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.interfaces.dao.OrderDao;
+import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.MailService;
+import ar.edu.itba.paw.interfaces.service.OrderService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,44 +36,55 @@ public class OrderServiceImpl implements OrderService {
         this.bs = bs;
     }
 
+    @Transactional
     @Override
     public void create(long bookId) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        orderDao.create(buyer.getUserId(), book.getWriter().getId(), bookId, OrderStatus.WAITING_CONTACT);
+        orderDao.create(buyer.getUserId()/*, book.getWriter().getUserId()*/, bookId, OrderStatus.WAITING_CONTACT);
         ms.sendOrderEmail(buyer.getUserId(), bookId);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Optional<Order> find(long buyerId, long writerId, long bookId) {
-        return orderDao.find(buyerId, writerId, bookId);
+    public boolean canCreateOrder(long bookId) {
+        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        if (book.getWriter().getUserId() == buyer.getUserId()){
+            return false;
+        }
+        if (orderDao.find(buyer.getUserId()/*,book.getWriter().getUserId()*/, bookId).isPresent()){
+            return false;
+        }
+        return true;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Order> find(long buyerId, long writerId, long bookId) {
+        return orderDao.find(buyerId,/* writerId,*/ bookId);
+    }
+
+    @Transactional
     @Override
     public Order toNextStatus(Order order){
         OrderStatus newStatus = order.getOrderStatus().getNext();
-        orderDao.setStatus(order.getBuyer().getId(), order.getWriter().getId(), order.getBook().getBookId(), newStatus);
-        return new Order(order.getBuyer(), order.getWriter(), order.getBook(), newStatus);
+        orderDao.setStatus(order.getBuyer().getUserId(), order.getBook().getBookId(), newStatus);
+        return new Order(order.getBuyer(), order.getBook(), newStatus, order.getDate());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Order> getAllReaderOrders(long readerId) {
         return orderDao.getAllReaderOrders(readerId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Order> getAllWriterOrders(long writerId) {
         return orderDao.getAllWriterOrders(writerId);
     }
 
-    @Override
-    public List<Order> getAllNonCompleteReaderOrders(long readerId) {
-        return orderDao.getAllNonCompleteReaderOrders(readerId);
-    }
-
-    @Override
-    public List<Order> getAllNonCompleteWriterOrders(long writerId) {
-        return orderDao.getAllNonCompleteWriterOrders(writerId);
-    }
 }

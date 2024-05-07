@@ -1,22 +1,41 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cybrary</title>
+    <title><spring:message code="buy.emailConfirmation.title"/></title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/orderSummary.css">
 </head>
-<%--<%@ include file="components/topBar.jsp" %>--%>
+
+<!--TODO: mejorar instrucciones -->
 <body>
 <div class="orderCards">
-    <img class="hero-image" src="${pageContext.request.contextPath}/images/order_summary.svg">
+    <img
+            class="hero-image"
+            src="${pageContext.request.contextPath}/images/order_summary.svg"
+            alt="<spring:message code="buy.emailConfirmation.imageAlt"/>"
+    />
     <div class="container">
-        <h2 class="title">Your information has been sent!</h2>
-        <p class="order-description">Await for further instructions in your inbox. </p>
-        <button class="proceed-button"><a class="a-button" href="${pageContext.request.contextPath}/purchases">View my orders</a>
+        <h2 class="title">
+            <spring:message code="buy.emailConfirmation.sentInfo"/>
+        </h2>
+        <p class="order-description">
+            <spring:message code="buy.emailConfirmation.instructions"/>
+        </p>
+        <button class="proceed-button">
+            <a class="a-button" href="${pageContext.request.contextPath}/purchases">
+                <spring:message code="buy.emailConfirmation.viewMyOrders"/>
+            </a>
         </button>
-        <button class="cancel-button"><a class="cancel-button" href="${pageContext.request.contextPath}/">Return home</a>
-            </button>
+        <button class="cancel-button">
+            <a class="cancel-button" href="${pageContext.request.contextPath}/">
+                <spring:message code="buy.emailConfirmation.goBackHome"/>
+            </a>
+        </button>
     </div>
 </div>
 </body>

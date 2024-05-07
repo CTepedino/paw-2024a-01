@@ -1,0 +1,53 @@
+
+.page-btn{
+    background:none;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    cursor: pointer;
+
+    background: #ddd;
+    color: #2c303a;
+    height: 35px;
+    border-radius: 0 10px;
+    padding: 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-control{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding-bottom: 50px;
+}
+
+.page-btn[class$="-page"]{
+    background: #ccc;
+    font-size: 0.6em;
+    font-weight: bold;
+}
+
+.page-btn.active{
+    background: #437c90;
+    color: white;
+}
+
+.page-btn[disabled]{
+    opacity: 0.3;
+}
+
+.page-spacer{
+    font-size: 1em;
+    font-weight: bold;
+    color: #2c303a;
+    border-radius: 0 10px;
+    padding: 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}

@@ -2,9 +2,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
+
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Purchases</title>
+    <title><spring:message code="orders.purchases.title"/></title>
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
 </head>
@@ -31,6 +33,7 @@
     <div class="header-wrapper">
         <div class="header--title">
             <h2> My Purchases</h2>
+            <spring:message code="orders.purchases.header"/>
         </div>
 <%--        <div class="user--info">--%>
 <%--            <div class="search--box">--%>
@@ -42,18 +45,18 @@
 
     <div class="tabular-wrapper">
         <h3 class="main--title">
-            Order History
+            <spring:message code="orders.history"/>
         </h3>
         <div class="table-container">
             <table class="my-table">
                 <thead>
-                <tr class="my-tr">
-                    <th class="my-th">Writer</th>
-                    <th class="my-th">Email</th>
-                    <th class="my-th">Book's Title</th>
-                    <th class="my-th">Price</th>
-                    <th class="my-th">Status</th>
-                    <th class="my-th">Action</th>
+                <tr>
+                    <th><spring:message code="orders.writer"/></th>
+                    <th><spring:message code="orders.email"/></th>
+                    <th><spring:message code="orders.title"/></th>
+                    <th><spring:message code="orders.price"/></th>
+                    <th><spring:message code="orders.status"/></th>
+                    <th><spring:message code="orders.action"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -70,8 +73,8 @@
                         <td class="my-td"><c:out value="${order.orderStatus.displayString}"/></td>
                         <c:url value="/advanceOrder" var="advanceOrderUrl">
                             <c:param name="bookId" value="${order.book.bookId}"/>
-                            <c:param name="buyerId" value="${order.buyer.id}"/>
-                            <c:param name="writerId" value="${order.writer.id}"/>
+                            <c:param name="buyerId" value="${order.buyer.userId}"/>
+                            <c:param name="writerId" value="${order.writer.userId}"/>
                             <c:param name="from" value="purchases"/>
                         </c:url>
 
@@ -89,14 +92,7 @@
                         </c:if>
                 </tr>
                 </c:forEach>
-<%--                <tr>
-                    <td> 2024-05-01 </td>
-                    <td> JK ROWLING </td>
-                    <td> Harry Potter</td>
-                    <td> $500 </td>
-                    <td>Completed</td>
-                    <td><button>Edit</button></td>
-                </tr>--%>
+
                 </tbody>
                 <tfoot>
 
