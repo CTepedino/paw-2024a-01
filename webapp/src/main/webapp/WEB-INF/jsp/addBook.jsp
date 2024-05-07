@@ -27,25 +27,11 @@
                 enctype="multipart/form-data"
                 cssClass="z-depth-2"
         >
-<%--            <c:if test="${!hasWriterRole}">--%>
-<%--                <h6><spring:message code="book.addBook.writerTitle"/></h6>--%>
-<%--                <div class="input-field">--%>
-<%--                    <form:label path="writerFirstName"><spring:message code="book.addBook.writerFirstName"/><span class="red-text">*</span></form:label><br>--%>
-<%--                    <form:input type="text" path="writerFirstName"/>--%>
-<%--                    <form:errors path="writerFirstName" element="p"/>--%>
-<%--                </div>--%>
-<%--                <div class="input-field">--%>
-<%--                    <form:label path="writerLastName"><spring:message code="book.addBook.writerLastName"/><span class="red-text">*</span></form:label><br>--%>
-<%--                    <form:input type="text" path="writerLastName"/>--%>
-<%--                    <form:errors path="writerLastName" element="p"/>--%>
-<%--                </div>--%>
-<%--            </c:if>--%>
-
             <c:if test="${!hasWriterRole}">
                 <h6><spring:message code="book.addBook.cbuTitle"/></h6>
                 <div class="input-field">
                     <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label><br>
-                    <form:input type="text" path="cbu"/>
+                    <form:input type="text" path="cbu" inputmode="numeric"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>
             </c:if>

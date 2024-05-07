@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.models.books.BookGenre;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
@@ -38,7 +39,8 @@ public class NewBookForm {
     @NotNull
     private MultipartFile bookFile;
 
-    @Size(min=22, max=22)
+    @Size(min = 22, max = 22)
+    @Pattern(regexp = "\\d+")
     private String cbu;
 
     public String getTitle() {
