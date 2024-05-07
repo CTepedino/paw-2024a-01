@@ -23,7 +23,8 @@ public class OrderJdbcDao implements OrderDao {
                 rs.getString("r_email"),
                 rs.getString("r_password"),
                 rs.getString("r_first_name"),
-                rs.getString("r_last_name")
+                rs.getString("r_last_name"),
+                rs.getString("r_cbu")
             ),
             BookJdbcDao.ROW_MAPPER.mapRow(rs, rowNum),
             OrderStatus.valueOf(rs.getString("status")),

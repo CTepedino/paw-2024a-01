@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,10 +27,10 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class BookServiceImplTest {
 
-    private static final int SIZE = 100;
+    private static final long SIZE = 100;
     private static final int LIMIT = 9;
 
-    private static final Book TEST_BOOK =  new Book(1, "", "", BookGenre.FICTION, 1, 1, 1, LocalDate.now(), 1, 1, new User(1,"","","",""));
+    private static final Book TEST_BOOK =  new Book(1, "", "", BookGenre.FICTION, new BigDecimal(1), 1, 1, LocalDate.now(),  new User(1,"","","","", ""));
 
     @Mock
     private BookDao bookDao;
@@ -47,7 +48,7 @@ public class BookServiceImplTest {
     @Test
     public void testGetAll(){
         int page = 2;
-        List<Book> mockedBooks = Collections.nCopies(SIZE, TEST_BOOK);
+        List<Book> mockedBooks = Collections.nCopies((int)SIZE, TEST_BOOK);
         Mockito.when(bookDao.getAllSize()).thenReturn(SIZE);
         Mockito.when(bookDao.getAll(Mockito.eq((page-1)*LIMIT), Mockito.eq(LIMIT)))
                 .thenReturn(mockedBooks.subList((page-1)*LIMIT, page*LIMIT));

@@ -17,4 +17,6 @@ public interface UserDao {
     int giveRole(long id, UserRoles role);
 
     List<UserRoles> getRoles(long id);
+
+    void setCbu(long id, String cbu);
 }

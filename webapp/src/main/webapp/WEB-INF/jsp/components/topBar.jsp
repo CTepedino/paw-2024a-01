@@ -53,13 +53,13 @@
                                 </a>
 
                                 <ul id='user-dropdown' class='dropdown-content'>
-                                    <li><a href="${pageContext.request.contextPath}/profile">Profile</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/purchases">Purchases</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/addBook">Publish</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/profile"><spring:message code="topBar.profile"/></a></li>
+                                    <li><a href="${pageContext.request.contextPath}/purchases"><spring:message code="topBar.purchases"/></a></li>
+                                    <li><a href="${pageContext.request.contextPath}/addBook"><spring:message code="topBar.publish"/></a></li>
                                     <c:if test="${param.hasWriterRole}">
-                                        <li><a href="${pageContext.request.contextPath}/sales">Sales</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/sales"><spring:message code="topBar.sales"/></a></li>
                                     </c:if>
-                                    <li><a href="${pageContext.request.contextPath}/logout" class="red-text">Sign Out</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/logout" class="red-text"><spring:message code="topBar.signOut"/></a></li>
                                 </ul>
                             </c:if>
                             <c:if test="${empty pageContext.request.userPrincipal}">

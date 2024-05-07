@@ -69,7 +69,7 @@ public class SessionController {
     @RequestMapping(method = RequestMethod.GET, path="/profile")
     public ModelAndView profile(Authentication authentication){
         ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("user", us.findByEmail(authentication.getName()).get());
+        mav.addObject("user", us.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
@@ -88,8 +88,6 @@ public class SessionController {
         us.changePassword(form.getPassword());
         return new ModelAndView("redirect:/profile");
     }
-
-
 
 }
 

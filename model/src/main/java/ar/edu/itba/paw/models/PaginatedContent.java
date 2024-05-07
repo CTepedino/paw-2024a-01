@@ -7,9 +7,9 @@ public class PaginatedContent<T> {
     private final List<T> page;
     private final int pageNumber;
     private final int pageSize;
-    private final int totalSize;
+    private final long totalSize;
 
-    public PaginatedContent(List<T> page, int pageNumber, int pageSize, int totalSize) {
+    public PaginatedContent(List<T> page, int pageNumber, int pageSize, long totalSize) {
         this.page = page;
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
@@ -28,18 +28,15 @@ public class PaginatedContent<T> {
         return pageSize;
     }
 
-    public int getTotalSize() {
+    public long getTotalSize() {
         return totalSize;
     }
 
     public boolean hasMorePages(){
-        return pageNumber * pageSize < totalSize;
+        return (long) pageNumber * pageSize < totalSize;
     }
 
     public int getPageCount(){
         return Math.max((int) Math.ceil((double)totalSize/pageSize), 1);
     }
 }
-
-//LIMIT -> #(rows) returned
-//OFFSET -> #(rows) skipped before starting to return

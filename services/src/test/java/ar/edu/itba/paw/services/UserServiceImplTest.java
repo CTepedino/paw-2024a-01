@@ -43,7 +43,7 @@ public class UserServiceImplTest {
         Mockito.when(passwordEncoder.encode(Mockito.eq(PASSWORD)))
                 .thenReturn(ENCODED_PASSWORD);
         Mockito.when(userDao.create(Mockito.eq(EMAIL), Mockito.eq(ENCODED_PASSWORD), Mockito.eq(FIRST_NAME), Mockito.eq(LAST_NAME)))
-                .thenReturn(new User(1, EMAIL,ENCODED_PASSWORD, FIRST_NAME, LAST_NAME));
+                .thenReturn(new User(1, EMAIL,ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, null));
         List<UserRoles> mockRoles = new ArrayList<>();
         Mockito.when(userDao.giveRole(Mockito.anyLong(), Mockito.eq(UserRoles.READER))).thenAnswer((Answer<Void>) invocation -> {
             mockRoles.add(UserRoles.READER);

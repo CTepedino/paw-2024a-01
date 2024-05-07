@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class ErrorHandlingAdvice {
-/*
+
     @ExceptionHandler(UserNotFoundException.class)
     public ModelAndView userNotFound(){
         return new ModelAndView("exception/404");
@@ -34,6 +34,6 @@ public class ErrorHandlingAdvice {
 
     @ExceptionHandler(UnreadableFileException.class)
     public ModelAndView unreadableFile(){return new ModelAndView("/exception/400");}
-*/
+
 
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models.files;
 
+
 public abstract class File {
     private final FileType fileType;
     private final long fileId;
@@ -22,4 +23,5 @@ public abstract class File {
     public byte[] getFile() {
         return file;
     }
+
 }

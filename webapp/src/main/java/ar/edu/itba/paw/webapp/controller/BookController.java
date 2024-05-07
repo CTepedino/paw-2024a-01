@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.PublishService;
+import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
@@ -33,13 +34,15 @@ public class BookController {
     private final PublishService ps;
     private final BookService bs;
     private final UserService us;
+    private final ReviewService rs;
 
 
     @Autowired
-    public BookController(PublishService ps, BookService bs, UserService us){
+    public BookController(PublishService ps, BookService bs, UserService us, ReviewService rs){
         this.ps = ps;
         this.bs = bs;
         this.us = us;
+        this.rs = rs;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
@@ -50,6 +53,7 @@ public class BookController {
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
+
 
 
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
@@ -84,7 +88,8 @@ public class BookController {
             return addBookForm(newBookForm);
         }
 
-        ps.publishBook(
+        long bookId = ps.publishBook(
+                newBookForm.getCbu(),
                 newBookForm.getTitle(),
                 newBookForm.getDescription(),
                 newBookForm.getGenre(),
@@ -92,13 +97,14 @@ public class BookController {
                 newBookForm.getPrice(),
                 newBookForm.getPageCount(),
 
-                newBookForm.getImage(),
-                newBookForm.getPdf()
+                newBookForm.getCover(),
+                newBookForm.getPreview(),
+                newBookForm.getBookFile()
         );
 
         LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/book/"+bookId);
     }
 
 

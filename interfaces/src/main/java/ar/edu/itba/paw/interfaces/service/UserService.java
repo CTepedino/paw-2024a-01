@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +18,7 @@ public interface UserService {
 
     List<UserRoles> getRoles(long id);
 
-    void giveWriterRole(long id);
+    void giveWriterRole(long id, String cbu);
 
 /*    void fillMissingWriterData(long id, String password);*/
 
@@ -24,4 +26,9 @@ public interface UserService {
     void changePassword(String password);
 
     Optional<User> getLoggedUser();
+
+    boolean isLoggedIn();
+
+    void setProfilePicture(MultipartFile profilePicture);
+    Optional<ProfilePicture> getProfilePicture(long id);
 }

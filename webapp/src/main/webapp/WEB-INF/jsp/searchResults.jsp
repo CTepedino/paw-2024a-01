@@ -12,8 +12,11 @@
     <link href="${pageContext.request.contextPath}/css/searchOptions.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/css/paginationControls.css" rel="stylesheet"/>
 </head>
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+    <jsp:param name="hideSearchBar" value="true"/>
+</jsp:include>
 <body>
-<%@ include file="components/topBar.jsp" %>
 
 <c:url value="/search" var="searchUrl"/>
 
@@ -90,13 +93,13 @@
                 <form:label path="minPrice">
                     <spring:message code="book.search.minPrice"/>
                 </form:label>
-                <form:input type="number" path="minPrice" step=".01"/>
+                <form:input type="number" path="minPrice" step=".01" min="0"/>
             </div>
             <div class="col s6">
                 <form:label path="maxPrice">
                     <spring:message code="book.search.maxPrice"/>
                 </form:label>
-                <form:input type="number" path="maxPrice" step=".01"/>
+                <form:input type="number" path="maxPrice" step=".01" min="0"/>
             </div>
         </div>
 
@@ -111,13 +114,13 @@
                 <form:label path="minPageCount">
                     <spring:message code="book.search.minPages"/>
                 </form:label>
-                <form:input type="number" path="minPageCount"/>
+                <form:input type="number" path="minPageCount" min="0"/>
             </div>
             <div class="col s6">
                 <form:label path="maxPageCount">
                     <spring:message code="book.search.maxPages"/>
                 </form:label>
-                <form:input type="number" path="maxPageCount"/>
+                <form:input type="number" path="maxPageCount" min="0"/>
             </div>
         </div>
 
@@ -131,13 +134,13 @@
                 <form:label path="minSuggestedAge">
                     <spring:message code="book.search.minAge"/>
                 </form:label>
-                <form:input type="number" path="minSuggestedAge"/>
+                <form:input type="number" path="minSuggestedAge" min="0"/>
             </div>
             <div class="col s6">
                 <form:label path="maxSuggestedAge">
                     <spring:message code="book.search.maxAge"/>
                 </form:label>
-                <form:input type="number" path="maxSuggestedAge"/>
+                <form:input type="number" path="maxSuggestedAge" min="0"/>
             </div>
         </div>
 
