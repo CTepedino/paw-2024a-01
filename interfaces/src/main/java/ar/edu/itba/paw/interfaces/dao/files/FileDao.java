@@ -8,5 +8,7 @@ public interface FileDao<F extends File> {
 
     Optional<F> findById(long id);
 
+    void update(long id, byte[] file);
+
     long create(long id, byte[] file);
 }

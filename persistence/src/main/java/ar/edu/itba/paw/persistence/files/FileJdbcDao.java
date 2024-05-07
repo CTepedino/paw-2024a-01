@@ -42,6 +42,17 @@ public abstract class FileJdbcDao<F extends File> implements FileDao<F> {
     }
 
     @Override
+    public void update(long id, byte[] file){
+        jdbcTemplate.update(
+            "UPDATE " + tableName +
+                " SET file = ? " +
+                "WHERE id = ?",
+                file,
+                id
+        );
+    }
+
+    @Override
     public long create(long id, byte[] file) {
         Map<String, Object> fileData = new HashMap<>();
         fileData.put("id", id);
