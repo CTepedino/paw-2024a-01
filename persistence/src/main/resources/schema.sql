@@ -48,7 +48,7 @@ ALTER TABLE cover_images RENAME COLUMN book_id TO id;
 ALTER TABLE cover_images ADD PRIMARY KEY (id);
 ALTER TABLE cover_images ADD CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES books (book_id) ON DELETE CASCADE;
 
-ALTER TABLE users ADD COLUMN cbu VARCHAR(255);
+ALTER TABLE users ADD COLUMN cbu VARCHAR(22);
 */
 
 
@@ -59,7 +59,8 @@ CREATE TABLE IF NOT EXISTS users(
     last_name VARCHAR(255),
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255),
-    cbu VARCHAR(255)
+    cbu VARCHAR(22)
+
 );
 
 CREATE TABLE IF NOT EXISTS books (
