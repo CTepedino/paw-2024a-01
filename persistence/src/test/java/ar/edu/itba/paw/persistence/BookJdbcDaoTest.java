@@ -36,17 +36,7 @@ public class BookJdbcDaoTest {
 
     private static final long EXISTING_WRITER_ID = 2;
     private static final long NON_EXISTING_WRITER_ID = 9999;
-
-    private static final long EXISTING_COVER_ID = 1;
-    private static final long NON_EXISTING_COVER_ID = 9999;
-
-    private static final long EXISTING_PREVIEW_ID = 1;
-    private static final long NON_EXISTING_PREVIEW_ID = 9999;
-
-
-    private static final long EXISTING_BOOK_FILE_ID = 1;
-    private static final long NON_EXISTING_BOOK_FILE_ID = 9999;
-
+    
     @Autowired
     private DataSource ds;
 
@@ -85,10 +75,7 @@ public class BookJdbcDaoTest {
                 new BigDecimal(105),
                 123,
                 3,
-                EXISTING_WRITER_ID,
-                EXISTING_PREVIEW_ID,
-                EXISTING_COVER_ID,
-                EXISTING_BOOK_FILE_ID
+                EXISTING_WRITER_ID
         );
 
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere( jdbcTemplate, "books", "book_id = " + bookId));
@@ -107,81 +94,11 @@ public class BookJdbcDaoTest {
                         new BigDecimal(105),
                         123,
                         3,
-                        NON_EXISTING_WRITER_ID,
-                        EXISTING_PREVIEW_ID,
-                        EXISTING_COVER_ID,
-                        EXISTING_BOOK_FILE_ID
+                        NON_EXISTING_WRITER_ID
                 )
         );
         assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "books"));
     }
-
-    @Test
-    public void testCreateNonExistentCoverImage(){
-        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "books");
-
-        assertThrows(
-                DataIntegrityViolationException.class,
-                () -> bookDao.create(
-                        "",
-                        "",
-                        BookGenre.FICTION,
-                        new BigDecimal(105),
-                        123,
-                        3,
-                        EXISTING_WRITER_ID,
-                        EXISTING_PREVIEW_ID,
-                        NON_EXISTING_COVER_ID,
-                        EXISTING_BOOK_FILE_ID
-                )
-        );
-        assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "books"));
-    }
-
-    @Test
-    public void testCreateNonExistentPreview(){
-        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "books");
-
-        assertThrows(
-                DataIntegrityViolationException.class,
-                () -> bookDao.create(
-                        "",
-                        "",
-                        BookGenre.FICTION,
-                        new BigDecimal(105),
-                        123,
-                        3,
-                        EXISTING_WRITER_ID,
-                        NON_EXISTING_PREVIEW_ID,
-                        EXISTING_COVER_ID,
-                        EXISTING_BOOK_FILE_ID
-                )
-        );
-        assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "books"));
-    }
-
-    @Test
-    public void testCreateNonExistentBookFile(){
-        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "books");
-
-        assertThrows(
-                DataIntegrityViolationException.class,
-                () -> bookDao.create(
-                        "",
-                        "",
-                        BookGenre.FICTION,
-                        new BigDecimal(105),
-                        123,
-                        3,
-                        EXISTING_WRITER_ID,
-                        EXISTING_PREVIEW_ID,
-                        EXISTING_COVER_ID,
-                        NON_EXISTING_BOOK_FILE_ID
-                )
-        );
-        assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "books"));
-    }
-
 
     @Test
     public void testGetAllLimitExceeds(){

@@ -15,10 +15,6 @@ public class Book {
     private final int suggestedAge;
     private final LocalDate publishDate;
 
-    private final long previewId;
-    private final long coverId;
-    private final Long bookFileId;
-
     private final User writer;
 
     public long getBookId() {
@@ -53,23 +49,11 @@ public class Book {
         return publishDate;
     }
 
-    public long getPreviewId() {
-        return previewId;
-    }
-
-    public long getCoverId() {
-        return coverId;
-    }
-
-    public Long getBookFileId() {
-        return bookFileId;
-    }
-
     public User getWriter() {
         return writer;
     }
 
-    public Book(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, long previewId, long coverId, long bookFileId, User writer) {
+    public Book(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer) {
         this.bookId = bookId;
         this.title = title;
         this.description = description;
@@ -78,9 +62,6 @@ public class Book {
         this.pageCount = pageCount;
         this.suggestedAge = suggestedAge;
         this.publishDate = publishDate;
-        this.previewId = previewId;
-        this.coverId = coverId;
-        this.bookFileId = bookFileId;
         this.writer = writer;
     }
 }

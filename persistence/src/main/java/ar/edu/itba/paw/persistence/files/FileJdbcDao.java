@@ -26,7 +26,6 @@ public abstract class FileJdbcDao<F extends File> implements FileDao<F> {
         this.rowMapper = rowMapper;
         jdbcTemplate = new JdbcTemplate(ds);
         simpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .usingGeneratedKeyColumns("id")
                 .withTableName(tableName);
     }
 
@@ -43,10 +42,11 @@ public abstract class FileJdbcDao<F extends File> implements FileDao<F> {
     }
 
     @Override
-    public long create(byte[] file) {
+    public long create(long id, byte[] file) {
         Map<String, Object> fileData = new HashMap<>();
+        fileData.put("id", id);
         fileData.put("file", file);
-        Number generatedId = simpleJdbcInsert.executeAndReturnKey(fileData);
-        return generatedId.longValue();
+        simpleJdbcInsert.execute(fileData);
+        return id;
     }
 }

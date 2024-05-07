@@ -49,21 +49,19 @@ public class BookServiceImpl implements BookService {
     @Override
     public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
         try {
-            long previewId = previewDao.create(preview.getBytes());
-            long coverId = coverDao.create(cover.getBytes());
-            long bookFileId = bookFileDao.create(bookFile.getBytes());
-            return bookDao.create(
+            long bookId = bookDao.create(
                     title,
                     description,
                     genre,
                     price,
                     pageCount,
                     suggestedAge,
-                    writerId,
-                    previewId,
-                    coverId,
-                    bookFileId
+                    writerId
             );
+            previewDao.create(bookId, preview.getBytes());
+            coverDao.create(bookId, cover.getBytes());
+            bookFileDao.create(bookId, bookFile.getBytes());
+            return bookId;
         } catch (IOException e){
             throw new UnreadableFileException();
         }
@@ -81,7 +79,7 @@ public class BookServiceImpl implements BookService {
         return coverDao.findById(id).orElseThrow(ImageNotFoundException::new);
     }
 
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     @Override
     public BookPreview getPreview(long id) {
          return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
@@ -153,5 +151,13 @@ public class BookServiceImpl implements BookService {
         return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
     }
 
-
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books = bookDao.getOwnedBooks(readerId, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId));
+    }
 }

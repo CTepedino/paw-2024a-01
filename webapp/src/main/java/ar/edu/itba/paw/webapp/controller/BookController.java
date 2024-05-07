@@ -55,6 +55,7 @@ public class BookController {
     }
 
 
+
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
         final ModelAndView mav = new ModelAndView("bookInfo");

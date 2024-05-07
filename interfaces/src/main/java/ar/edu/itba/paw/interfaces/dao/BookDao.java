@@ -19,11 +19,7 @@ public interface BookDao {
             int pageCount,
             int suggestedAge,
 
-            long writerId,
-
-            long previewId,
-            long coverId,
-            long bookFileId
+            long writerId
     );
 
     void modify(
@@ -75,4 +71,7 @@ public interface BookDao {
 
     long getWriterBooksSize(long writerId);
 
+    List<Book> getOwnedBooks(long readerId, int offset, int limit);
+
+    long getOwnedBooksSize(long readerId);
 }

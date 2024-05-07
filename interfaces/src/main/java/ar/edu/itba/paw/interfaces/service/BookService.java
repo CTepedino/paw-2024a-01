@@ -69,4 +69,6 @@ public interface BookService {
     List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook);
 
     PaginatedContent<Book> getWriterBooks(long writerId, int pageNumber, int pageSize);
+
+    PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize);
 }

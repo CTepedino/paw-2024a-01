@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ public class PublishServiceImpl implements PublishService {
         this.us = us;
     }
 
+    @Transactional
     @Override
     public long publishBook(
 

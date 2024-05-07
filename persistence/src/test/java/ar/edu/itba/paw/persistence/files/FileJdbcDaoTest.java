@@ -63,7 +63,7 @@ public class FileJdbcDaoTest {
 
     @Test
     public void testCreate(){
-        long id = previewDao.create(FILE);
+        long id = previewDao.create(2, FILE);
 
         assertEquals(1,JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "book_previews", "id = " + id));
     }
