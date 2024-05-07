@@ -14,9 +14,11 @@
 
 <%-- <%@include file="components/sideBar.jsp"%>--%>
 <%@include file="components/materializeComponent.jsp"%>
+
 <link href="${pageContext.request.contextPath}/css/cardBook2.css" rel="stylesheet"/>
 
 <body>
+
     <jsp:include page="components/topBar2.0.jsp">
         <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
     </jsp:include>

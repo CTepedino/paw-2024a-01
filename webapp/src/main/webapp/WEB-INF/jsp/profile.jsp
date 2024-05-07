@@ -29,8 +29,9 @@
             </div>
             <h2><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
             <p> <c:out value="${user.email}"/> </p>
-            <p><a href="${pageContext.request.contextPath}/changePassword" class="btn">Edit Profile</a></p>
-
+            <div class="cart">
+                <p><a href="${pageContext.request.contextPath}/changePassword" >Edit Profile</a></p>
+            </div>
             <nav>
                 <ul>
                     <li><a href="">Buyed Books</a></li>
@@ -53,14 +54,13 @@
 
 
         </div>
-        <div class="email">
-            <span><c:out value="${user.email}"/></span>
-        </div>
-        <div class="edit-profile">
-            <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">
-                <spring:message code="session.changePassword"/>
-            </a>
-        </div>
+
+<%--        <div class="edit-profile">--%>
+<%--            <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">--%>
+<%--                <spring:message code="session.changePassword"/>--%>
+<%--            </a>--%>
+<%--        </div>--%>
+
     </div>
 </div>
 

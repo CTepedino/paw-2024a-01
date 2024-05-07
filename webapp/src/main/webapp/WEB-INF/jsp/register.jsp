@@ -13,7 +13,7 @@
 
 
 <c:set var="hideSearchBar" value="${true}" scope="request"/>
-<jsp:include page="components/topBar.jsp"/>
+<%--<jsp:include page="components/topBar.jsp"/>--%>
 
 
 <%@include file="components/materializeComponent.jsp"%>

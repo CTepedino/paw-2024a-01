@@ -27,6 +27,7 @@ nav i {
 
 .logo{
     width: 150px;
+    display: flex;
 }
 
 .user-pic{
@@ -140,3 +141,4 @@ nav ul li a{
 .sub-menu-link:hover p{
     font-weight: 600;
 }
+

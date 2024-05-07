@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
 <head>
@@ -15,6 +16,18 @@
     <nav>
 
         <a href="${pageContext.request.contextPath}/"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>
+
+        <div>
+            <c:if test="${empty pageContext.request.userPrincipal}">
+                <a href="${pageContext.request.contextPath}/login" class="waves-effect btn white-text">
+                    <spring:message code="session.login"/>
+                </a>
+                <a href="${pageContext.request.contextPath}/signup" class="waves-effect btn white-text">
+                    <spring:message code="session.signup"/>
+                </a>
+            </c:if>
+        </div>
+
 
 
         <c:if test="${not empty pageContext.request.userPrincipal}">

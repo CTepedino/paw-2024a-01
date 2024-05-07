@@ -12,9 +12,12 @@
 </head>
 
 <c:set var="hideSearchBar" value="${true}" scope="request"/>
-<jsp:include page="components/topBar.jsp"/>
+<%@include file="components/materializeComponent.jsp"%>
+<link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 
 <body>
+<jsp:include page="components/topBar2.0.jsp">
+</jsp:include>
 <div class="small-container">
     <div class="form">
         <c:url value="/changePassword" var="postUrl"/>
