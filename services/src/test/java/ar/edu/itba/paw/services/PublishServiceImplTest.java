@@ -16,6 +16,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,7 @@ public class PublishServiceImplTest {
 
     private static final MultipartFile PREVIEW = new MockMultipartFile("testPreview", new byte[100]);
     private static final MultipartFile COVER = new MockMultipartFile("testCover", new byte[100]);
+    private static final MultipartFile BOOK_FILE = new MockMultipartFile("testBook", new byte[100]);
 
     @Mock
     private BookService bookService;
@@ -41,7 +43,7 @@ public class PublishServiceImplTest {
     @InjectMocks
     private PublishServiceImpl publishService;
 
-    private List<UserRoles> mockedRoles = new ArrayList<>();
+    private final List<UserRoles> mockedRoles = new ArrayList<>();
 
     @Before
     public void setup(){
@@ -56,12 +58,13 @@ public class PublishServiceImplTest {
                 Mockito.anyString(),
                 Mockito.anyString(),
                 Mockito.any(),
-                Mockito.anyDouble(),
+                Mockito.any(BigDecimal.class),
                 Mockito.anyInt(),
                 Mockito.anyInt(),
                 Mockito.anyLong(),
-                Mockito.any(),
-                Mockito.any()
+                Mockito.any(MultipartFile.class),
+                Mockito.any(MultipartFile.class),
+                Mockito.any(MultipartFile.class)
         )).thenReturn(BOOK_ID);
     }
 
@@ -76,10 +79,11 @@ public class PublishServiceImplTest {
                 "",
                 BookGenre.FICTION,
                 1,
-                1,
+                new BigDecimal(1),
                 1,
                 COVER,
-                PREVIEW
+                PREVIEW,
+                BOOK_FILE
         );
 
         assertEquals(BOOK_ID, bookId);
@@ -99,10 +103,11 @@ public class PublishServiceImplTest {
                 "",
                 BookGenre.FICTION,
                 1,
-                1,
+                new BigDecimal(1),
                 1,
                 COVER,
-                PREVIEW
+                PREVIEW,
+                BOOK_FILE
         );
 
         assertEquals(BOOK_ID, bookId);

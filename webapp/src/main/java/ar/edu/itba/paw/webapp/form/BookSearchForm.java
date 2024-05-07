@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 
 public class BookSearchForm {
 
@@ -14,10 +15,10 @@ public class BookSearchForm {
     private BookGenre genre;
 
     @PositiveOrZero
-    private Double minPrice;
+    private BigDecimal minPrice;
 
     @PositiveOrZero
-    private Double maxPrice;
+    private BigDecimal maxPrice;
 
     @PositiveOrZero
     private Integer minPageCount;
@@ -54,19 +55,19 @@ public class BookSearchForm {
         this.genre = genre;
     }
 
-    public Double getMinPrice() {
+    public BigDecimal getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(Double minPrice) {
+    public void setMinPrice(BigDecimal minPrice) {
         this.minPrice = minPrice;
     }
 
-    public Double getMaxPrice() {
+    public BigDecimal getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(Double maxPrice) {
+    public void setMaxPrice(BigDecimal maxPrice) {
         this.maxPrice = maxPrice;
     }
 

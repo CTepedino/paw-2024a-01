@@ -55,6 +55,7 @@ public class BookController {
     }
 
 
+
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
         final ModelAndView mav = new ModelAndView("bookInfo");
@@ -96,8 +97,9 @@ public class BookController {
                 newBookForm.getPrice(),
                 newBookForm.getPageCount(),
 
-                newBookForm.getImage(),
-                newBookForm.getPdf()
+                newBookForm.getCover(),
+                newBookForm.getPreview(),
+                newBookForm.getBookFile()
         );
 
         LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();

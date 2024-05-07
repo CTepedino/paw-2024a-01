@@ -3,6 +3,8 @@ package ar.edu.itba.paw.interfaces.service;
 import ar.edu.itba.paw.models.books.BookGenre;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+
 
 public interface PublishService {
 
@@ -13,10 +15,11 @@ public interface PublishService {
             String description,
             BookGenre genre,
             int suggestedAge,
-            double price,
+            BigDecimal price,
             int pageCount,
 
             MultipartFile cover,
-            MultipartFile preview
+            MultipartFile preview,
+            MultipartFile bookFile
     );
 }
