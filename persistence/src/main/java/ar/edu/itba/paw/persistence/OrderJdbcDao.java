@@ -70,7 +70,7 @@ public class OrderJdbcDao implements OrderDao {
     public Optional<Order> find(long buyerId, long bookId) {
         List<Order> list = jdbcTemplate.query(
             """
-                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
+                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.cbu AS r_cbu
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
@@ -88,7 +88,7 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllReaderOrders(long readerId) {
         return jdbcTemplate.query(
             """
-                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
+                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.cbu AS r_cbu
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
@@ -104,7 +104,7 @@ public class OrderJdbcDao implements OrderDao {
     public List<Order> getAllWriterOrders(long writerId) {
         return jdbcTemplate.query(
                 """
-                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
+                SELECT o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.cbu AS r_cbu
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
