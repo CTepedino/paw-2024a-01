@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        orderDao.create(buyer.getUserId()/*, book.getWriter().getUserId()*/, bookId, OrderStatus.WAITING_CONTACT);
+        orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_CONTACT);
         ms.sendOrderEmail(buyer.getUserId(), bookId);
     }
 
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
         if (book.getWriter().getUserId() == buyer.getUserId()){
             return false;
         }
-        if (orderDao.find(buyer.getUserId()/*,book.getWriter().getUserId()*/, bookId).isPresent()){
+        if (orderDao.find(buyer.getUserId(), bookId).isPresent()){
             return false;
         }
         return true;
@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public Optional<Order> find(long buyerId, long writerId, long bookId) {
-        return orderDao.find(buyerId,/* writerId,*/ bookId);
+        return orderDao.find(buyerId, bookId);
     }
 
     @Transactional

@@ -78,6 +78,21 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public int update(long id, String email, String password, String firstName, String lastName, String cbu) {
+        return jdbcTemplate.update(
+        """
+                UPDATE users
+                SET email = ?,
+                password = ?,
+                first_name = ?,
+                last_name = ?,
+                cbu = ?
+                WHERE user_id = ?
+            """, email, password, firstName, lastName, cbu, id
+        );
+    }
+
+    @Override
     public Optional<User> findById(long id) {
         final List<User> list = jdbcTemplate.query(
             """
@@ -130,16 +145,5 @@ public class UserJdbcDao implements UserDao {
         );
     }
 
-    @Override
-    public void setCbu(long id, String cbu){
-        jdbcTemplate.update(
-                """
-                        UPDATE users
-                        SET cbu = ?
-                        WHERE user_id = ?
-                        """,
-                cbu, id
-        );
-    }
 }
 

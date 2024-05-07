@@ -11,6 +11,8 @@ public interface UserDao {
 
     int update(long id, String email, String password, String firstName, String lastName);
 
+    int update(long id, String email, String password, String firstName, String lastName, String cbu);
+
     Optional<User> findById(long id);
     Optional<User> findByEmail(String email);
 
@@ -18,5 +20,5 @@ public interface UserDao {
 
     List<UserRoles> getRoles(long id);
 
-    void setCbu(long id, String cbu);
+
 }

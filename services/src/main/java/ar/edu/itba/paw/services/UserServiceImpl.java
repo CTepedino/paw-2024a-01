@@ -87,8 +87,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void giveWriterRole(long id, String cbu) {
+        User user = findById(id).orElseThrow(UserNotFoundException::new);
+
         userDao.giveRole(id, UserRoles.WRITER);
-        userDao.setCbu(id, cbu);
+
+        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu);
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
