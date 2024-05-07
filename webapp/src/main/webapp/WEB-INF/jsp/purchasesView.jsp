@@ -21,33 +21,39 @@
     <h2 class="page-title"><spring:message code="orders.purchases.header"/></h2>
 
     <div class="row table-top">
-        <div class="col s1 table-title"> Cover </div>
-        <div class="col s4 table-title"> Title </div>
-        <div class="col s1 table-title"> Price </div>
-        <div class="col s4 table-title"> Status </div>
+        <div class="col s2 table-title"> Cover </div>
+        <div class="col s3 table-title"> Title </div>
+<%--        <div class="col s1 table-title"> Price </div>--%>
+        <div class="col s2 table-title"> Date </div>
+        <div class="col s3 table-title"> Status </div>
         <div class="col s2 table-title"> Actions </div>
     </div>
     <ul class="collection">
         <c:forEach var="order" items="${orders}">
         <li class="collection-item">
             <div class="row purchased-book">
-                <div class="col s1">
-                    <div class="card-image waves-effect waves-block waves-light">
+                <div class="col s2">
+                    <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
                         <img
                             class="book_cover"
                             src="<c:url value="${baseUrl}/image/${order.book.bookId}"/>"
                             alt="<spring:message code="bookInfoCard.cover"/>"
                         />
-                    </div>
+                    </a>
                 </div>
-                <div class="col s4 purchase-info">
-                    <p><c:out value="${order.book.title}"/></p>
+                <div class="col s3 purchase-info">
+                    <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
                     <p>by <c:out value="${order.writer.firstName} ${order.writer.lastName}"/></p>
+                    <p class="price">$ <c:out value="${order.book.price}"/></p>
                 </div>
-                <div class="col s1 purchase-info">
-                    <p>$ <c:out value="${order.book.price}"/></p>
+<%--                <div class="col s1 purchase-info">--%>
+<%--                    <p>$ <c:out value="${order.book.price}"/></p>--%>
+<%--                </div>--%>
+                <div class="col s2 purchase-info">
+
+                    <p><c:out value="${order.date.toLocalDate()}"/></p>
                 </div>
-                <div class="col s4 purchase-info">
+                <div class="col s3 purchase-info">
                     <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
                 </div>
                 <div class="col s2 purchase-info">
@@ -59,14 +65,14 @@
                     </c:url>
                     <c:if test="${order.orderStatus == 'WAITING_PAYMENT'}">
                         <form action="${advanceOrderUrl}" method="post">
-                            <button class="waves-light btn payment" type="submit"><spring:message code="orders.purchases.action.${order.orderStatus}"/></button>
+                            <button class="waves-light btn payment" type="submit"><spring:message code="orders.purchases.action.${order.orderStatus}" arguments="${order.writer.cbu}"/></button>
                         </form>
                     </c:if>
                     <c:if test="${order.orderStatus == 'COMPLETED'}">
                         <button class="waves-light btn"><spring:message code="orders.purchases.action.${order.orderStatus}"/></button>
                     </c:if>
                     <c:if test="${!order.orderStatus.readerCanAdvance}">
-                        <p><spring:message code="orders.purchases.action.${order.orderStatus}"/></p>
+                        <p><spring:message code="orders.purchases.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i></p>
                     </c:if>
                 </div>
             </div>

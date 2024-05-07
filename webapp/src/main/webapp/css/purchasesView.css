@@ -24,11 +24,11 @@
 .purchased-book{
     margin-top: 0;
     margin-bottom: 0 !important;
-    height: 100px;
+    height: 150px;
 }
 
 .card-image {
-    height: 100px;
+    height: 150px;
 }
 .book_cover {
     width: 100%;
@@ -43,4 +43,12 @@
 
 .payment {
     background-color: red;
+}
+
+.price {
+    color: #437C90;
+}
+
+.book-title{
+    font-weight: bold;
 }
