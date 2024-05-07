@@ -7,6 +7,9 @@ import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.exception.PdfNotFoundException;
+import ar.edu.itba.paw.models.exception.UnreadableFileException;
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +50,14 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_CONTACT);
-        ms.sendOrderEmail(buyer.getUserId(), bookId);
+        try {
+
+            long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_CONTACT);
+            paymentReceiptDao.create(orderId, receipt.getBytes());
+            ms.sendOrderEmail(buyer.getUserId(), bookId);
+        } catch (IOException e){
+            throw new UnreadableFileException();
+        }
     }
 
     @Transactional(readOnly = true)
@@ -75,8 +85,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order toNextStatus(Order order){
         OrderStatus newStatus = order.getOrderStatus().getNext();
-        orderDao.setStatus(order.getBuyer().getUserId(), order.getBook().getBookId(), newStatus);
-        return new Order(order.getBuyer(), order.getBook(), newStatus, order.getDate());
+        orderDao.setStatus(order.getOrderId(), newStatus);
+        return new Order(order.getOrderId(), order.getBuyer(), order.getBook(), newStatus, order.getDate());
     }
 
     @Transactional(readOnly = true)
@@ -89,6 +99,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllWriterOrders(long writerId) {
         return orderDao.getAllWriterOrders(writerId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaymentReceipt getReceipt(long id){
+        return paymentReceiptDao.findById(id).orElseThrow(PdfNotFoundException::new);
     }
 
 }

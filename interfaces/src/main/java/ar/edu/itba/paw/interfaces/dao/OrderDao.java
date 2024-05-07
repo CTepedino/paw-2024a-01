@@ -10,9 +10,11 @@ public interface OrderDao {
 
     Optional<Order> find(long buyerId, long bookId);
 
-    void create(long buyerId, long bookId, OrderStatus orderStatus);
+    Optional<Order> findById(long orderId);
 
-    void setStatus(long buyerId, long bookId, OrderStatus orderStatus);
+    long create(long buyerId, long bookId, OrderStatus orderStatus);
+
+    void setStatus(long orderId, OrderStatus orderStatus);
 
     List<Order> getAllReaderOrders(long readerId);
 

@@ -29,6 +29,7 @@ ALTER TABLE orders DROP COLUMN writer_id;
 ALTER TABLE orders ADD COLUMN date TIMESTAMP default now();
 UPDATE orders SET date = now() WHERE date IS NULL;
 ALTER TABLE orders ADD COLUMN order_id SERIAL PRIMARY KEY;
+UPDATE orders SET order_id = DEFAULT;
 
 ALTER TABLE book_previews ADD COLUMN book_id INT;
 UPDATE book_previews AS bp SET book_id = b.book_id FROM books AS b WHERE bp.id = b.preview_id;

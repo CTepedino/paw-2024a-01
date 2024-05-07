@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,5 +21,5 @@ public interface OrderService {
 
     List<Order> getAllWriterOrders(long writerId);
 
-
+    PaymentReceipt getReceipt(long id);
 }
