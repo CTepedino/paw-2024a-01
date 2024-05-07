@@ -7,8 +7,10 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -24,6 +26,7 @@ public class PublishServiceImpl implements PublishService {
         this.us = us;
     }
 
+    @Transactional
     @Override
     public long publishBook(
 
@@ -32,11 +35,12 @@ public class PublishServiceImpl implements PublishService {
             String description,
             BookGenre genre,
             int suggestedAge,
-            double price,
+            BigDecimal price,
             int pageCount,
 
             MultipartFile cover,
-            MultipartFile preview
+            MultipartFile preview,
+            MultipartFile bookFile
     ) {
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
@@ -55,7 +59,8 @@ public class PublishServiceImpl implements PublishService {
                 suggestedAge,
                 user.getUserId(),
                 preview,
-                cover
+                cover,
+                bookFile
         );
 
     }

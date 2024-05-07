@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
+import ar.edu.itba.paw.interfaces.dao.files.BookFileDao;
 import ar.edu.itba.paw.interfaces.dao.files.BookPreviewDao;
 import ar.edu.itba.paw.interfaces.dao.files.CoverImageDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
@@ -20,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,31 +35,33 @@ public class BookServiceImpl implements BookService {
     private final BookDao bookDao;
     private final BookPreviewDao previewDao;
     private final CoverImageDao coverDao;
+    private final BookFileDao bookFileDao;
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao){
+    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao, final BookFileDao bookFileDao){
         this.bookDao = bookDao;
         this.coverDao = coverDao;
         this.previewDao = previewDao;
+        this.bookFileDao = bookFileDao;
     }
 
     @Transactional
     @Override
-    public long create(String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover){
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
         try {
-            long previewId = previewDao.create(preview.getBytes());
-            long coverId = coverDao.create(cover.getBytes());
-            return bookDao.create(
+            long bookId = bookDao.create(
                     title,
                     description,
                     genre,
                     price,
                     pageCount,
                     suggestedAge,
-                    writerId,
-                    previewId,
-                    coverId
+                    writerId
             );
+            previewDao.create(bookId, preview.getBytes());
+            coverDao.create(bookId, cover.getBytes());
+            bookFileDao.create(bookId, bookFile.getBytes());
+            return bookId;
         } catch (IOException e){
             throw new UnreadableFileException();
         }
@@ -64,7 +69,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, double price, int pageCount, int suggestedAge) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge);
     }
 
@@ -77,7 +82,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public BookPreview getPreview(long id) {
-        return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
+         return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
@@ -98,7 +103,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> searchWithParams(String title, BookGenre genre, Double minPrice, Double maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
+    public PaginatedContent<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
@@ -146,5 +151,13 @@ public class BookServiceImpl implements BookService {
         return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
     }
 
-
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books = bookDao.getOwnedBooks(readerId, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId));
+    }
 }

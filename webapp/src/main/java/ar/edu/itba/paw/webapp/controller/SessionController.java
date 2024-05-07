@@ -90,7 +90,5 @@ public class SessionController {
         return new ModelAndView("redirect:/profile");
     }
 
-
-
 }
 

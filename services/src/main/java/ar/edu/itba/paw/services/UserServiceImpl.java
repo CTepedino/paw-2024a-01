@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.dao.files.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.exception.UnreadableFileException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.slf4j.Logger;
@@ -16,7 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -25,12 +30,14 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserDao userDao;
+    private final ProfilePictureDao profilePictureDao;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder){
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao){
         this.userDao = userDao;
+        this.profilePictureDao = profilePictureDao;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -80,8 +87,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void giveWriterRole(long id, String cbu) {
+        User user = findById(id).orElseThrow(UserNotFoundException::new);
+
         userDao.giveRole(id, UserRoles.WRITER);
-        userDao.setCbu(id, cbu);
+
+        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu);
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
@@ -105,7 +115,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isLoggedIn() {
-        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        return SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
     @Transactional(readOnly = true)
@@ -128,4 +138,21 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
+
+    @Transactional
+    @Override
+    public void setProfilePicture(MultipartFile profilePicture) {
+        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
+        try {
+            profilePictureDao.createOrUpdate(user.getUserId(), profilePicture.getBytes());
+        } catch (IOException e){
+            throw new UnreadableFileException();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<ProfilePicture> getProfilePicture(long id) {
+        return profilePictureDao.findById(id);
+    }
 }

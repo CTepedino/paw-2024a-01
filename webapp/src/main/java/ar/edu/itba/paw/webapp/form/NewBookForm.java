@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.models.books.BookGenre;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 
 public class NewBookForm {
 
@@ -22,19 +24,23 @@ public class NewBookForm {
 
     @NotNull
     @PositiveOrZero
-    private Double price;
+    private BigDecimal price;
 
     @NotNull
     @Positive
     private Integer pageCount;
 
     @NotNull
-    private MultipartFile image;
+    private MultipartFile cover;
 
     @NotNull
-    private MultipartFile pdf;
+    private MultipartFile preview;
 
-    @Size(min=22, max=22)
+    @NotNull
+    private MultipartFile bookFile;
+
+    @Size(min = 22, max = 22)
+    @Pattern(regexp = "\\d+")
     private String cbu;
 
     public String getTitle() {
@@ -69,11 +75,11 @@ public class NewBookForm {
         this.suggestedAge = suggestedAge;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -85,20 +91,29 @@ public class NewBookForm {
         this.pageCount = pageCount;
     }
 
-    public MultipartFile getImage() {
-        return image;
+    public MultipartFile getCover() {
+        return cover;
     }
 
-    public void setImage(MultipartFile image) {
-        this.image = image;
+    public void setCover(MultipartFile cover) {
+        this.cover = cover;
     }
 
-    public MultipartFile getPdf() {
-        return pdf;
+    public MultipartFile getPreview() {
+        return preview;
     }
 
-    public void setPdf(MultipartFile pdf) {
-        this.pdf = pdf;
+    public void setPreview(MultipartFile preview) {
+        this.preview = preview;
+    }
+
+
+    public MultipartFile getBookFile() {
+        return bookFile;
+    }
+
+    public void setBookFile(MultipartFile bookFile) {
+        this.bookFile = bookFile;
     }
 
     public String getCbu() {
