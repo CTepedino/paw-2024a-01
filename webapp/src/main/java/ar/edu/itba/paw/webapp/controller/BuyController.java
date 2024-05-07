@@ -22,7 +22,7 @@ public class BuyController {
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
     public ModelAndView sendBuyInfo(@RequestParam("bookId") long bookId){
 
-        os.create(bookId);
+        os.create(bookId, null);
         //ms.sendEmail(us.getLoggedUser().orElseThrow(UserNotFoundException::new).getEmail(), bookTitle);
         return new ModelAndView("orderSummary");
     }

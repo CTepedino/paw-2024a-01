@@ -1,13 +1,14 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.orders.Order;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
 
-    void create(long bookId);
+    void create(long bookId, MultipartFile receipt);
 
     boolean canCreateOrder(long bookId);
 

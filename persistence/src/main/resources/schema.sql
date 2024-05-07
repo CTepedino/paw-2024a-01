@@ -26,9 +26,9 @@ ALTER TABLE books RENAME COLUMN image_id TO cover_id;
 
 ALTER TABLE orders DROP CONSTRAINT orders_pkey;
 ALTER TABLE orders DROP COLUMN writer_id;
-ALTER TABLE orders ADD PRIMARY KEY (buyer_id, book_id);
 ALTER TABLE orders ADD COLUMN date TIMESTAMP default now();
 UPDATE orders SET date = now() WHERE date IS NULL;
+ALTER TABLE orders ADD COLUMN order_id SERIAL PRIMARY KEY;
 
 ALTER TABLE book_previews ADD COLUMN book_id INT;
 UPDATE book_previews AS bp SET book_id = b.book_id FROM books AS b WHERE bp.id = b.preview_id;
@@ -96,6 +96,11 @@ CREATE TABLE IF NOT EXISTS book_files(
     file BYTEA NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS payment_receipts(
+     id INT PRIMARY KEY REFERENCES orders (order_id) ON DELETE CASCADE,
+     file BYTEA NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS roles(
     user_id INT NOT NULL,
     role VARCHAR(20) NOT NULL,
@@ -106,12 +111,11 @@ CREATE TABLE IF NOT EXISTS roles(
 );
 
 CREATE TABLE IF NOT EXISTS orders(
+    order_id SERIAL PRIMARY KEY,
     buyer_id INT NOT NULL,
     book_id INT NOT NULL,
     status VARCHAR(20) NOT NULL,
     date TIMESTAMP default now(),
-
-    PRIMARY KEY (book_id, buyer_id),
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
