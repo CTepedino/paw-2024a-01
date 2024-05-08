@@ -36,14 +36,17 @@ public class CybraryUserDetailsService implements UserDetailsService {
 
             final Collection<GrantedAuthority> authorities = new HashSet<>();
             List<UserRoles> roles = us.getRoles(user.getUserId());
-            if (roles.contains(UserRoles.UNVALIDATED)){
+            if (!user.isEnabled()){
                 us.resendValidation(username);
-                throw new DisabledException("Email not validated"); //TODO: preguntar si es necesario avisarle al usuario en la pagina
             }
             for (UserRoles role : roles) {
                 authorities.add(new SimpleGrantedAuthority(role.toString()));
             }
 
-            return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), authorities);
+            return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
     }
 }
+
+//isEnabled() en tabla -> no rol UNVALIDATED
+
+//cron @enabledScheduled y @scheduled para avisar update cbu
