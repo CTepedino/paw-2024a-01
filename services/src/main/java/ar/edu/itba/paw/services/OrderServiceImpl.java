@@ -8,14 +8,11 @@ import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.exception.PdfNotFoundException;
-import ar.edu.itba.paw.models.exception.UnreadableFileException;
+import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.exception.BookNotFoundException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -117,4 +114,13 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.findById(orderId);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Order> searchReaderOrdersWithParams(long readerId,  String title, OrderStatus orderStatus, int pageNumber, int pageSize){
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Order> orders = orderDao.getReaderOrdersWithParams(readerId, title, orderStatus, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getAllWriterOrdersSize(readerId));
+    }
 }

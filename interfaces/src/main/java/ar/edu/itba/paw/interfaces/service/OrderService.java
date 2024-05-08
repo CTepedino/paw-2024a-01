@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces.service;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.orders.OrderStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface OrderService {
     PaymentReceipt getReceipt(long id);
 
     Optional<Order> findById(long orderId);
+
+    PaginatedContent<Order> searchReaderOrdersWithParams(long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
 }

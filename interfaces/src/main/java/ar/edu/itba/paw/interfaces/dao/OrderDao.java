@@ -19,6 +19,8 @@ public interface OrderDao {
     List<Order> getAllReaderOrders(long readerId, int offset, int limit);
     long getAllReaderOrdersSize(long readerId);
 
+    List<Order> getReaderOrdersWithParams(long readerId,  String title, OrderStatus orderStatus, int offset, int limit);
+
     List<Order> getAllWriterOrders(long writerId, int offset, int limit);
     long getAllWriterOrdersSize(long writerId);
 }

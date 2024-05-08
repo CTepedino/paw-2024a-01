@@ -3,16 +3,23 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.webapp.form.OrderSearchForm;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+
 @Controller
 public class OrderController {
 
@@ -30,10 +37,19 @@ public class OrderController {
 
 
     @RequestMapping(method = RequestMethod.GET, path="/purchases")
-    public ModelAndView purchases(){
-        ModelAndView mav = new ModelAndView("purchasesView");
+    public ModelAndView purchases(@Valid @ModelAttribute("orderSearchForm") final OrderSearchForm form, final BindingResult error){
+
+        if(error.hasErrors()){
+            return new ModelAndView("purchasesView");
+        }
+
+        final ModelAndView mav = new ModelAndView("purchasesView");
+
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("orders", os.getAllReaderOrders(user.getUserId(), 1, 10));
+
+        mav.addObject("orders", os.searchReaderOrdersWithParams(user.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
+        mav.addObject("orderSearchForm", form);
+        mav.addObject("statuses", OrderStatus.values());
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }

@@ -8,8 +8,7 @@ import java.math.BigDecimal;
 
 public class BookSearchForm {
 
-    @NotNull
-    @NotEmpty
+
     private String title;
 
     private BookGenre genre;

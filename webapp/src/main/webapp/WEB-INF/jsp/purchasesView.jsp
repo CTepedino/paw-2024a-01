@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
@@ -17,8 +18,23 @@
 </jsp:include>
 
 <body>
+<c:url value="/purchases" var="purchasesUrl"/>
 <div class="container purchases">
     <h2 class="page-title"><spring:message code="orders.purchases.header"/></h2>
+
+    <form:form modelAttribute="orderSearchForm"
+               action="${purchasesUrl}"
+               method="get"
+               id="orders">
+
+    <div class="input-field">
+        <form:select path="orderStatus" onchange="this.form.submit()">
+            <form:option value=""><spring:message code="orders.status"/></form:option>
+            <c:forEach items="${statuses}" var="status">
+                <form:option value="${status}"><spring:message code="orders.purchases.status.option.${status}"/></form:option>
+            </c:forEach>
+        </form:select>
+    </div>
 
     <div class="row table-top">
         <div class="col s2 table-title"> Cover </div>
@@ -79,89 +95,21 @@
         </li>
         </c:forEach>
     </ul>
+    </form:form>
 </div>
-<%--<div class="main--content">--%>
-<%--    <nav>--%>
-<%--        <div class="nav-wrapper">--%>
-<%--            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>--%>
-<%--        </div>--%>
-<%--        <style>--%>
-<%--            <%@include file="/css/topBarStyle.css" %>--%>
-<%--        </style>--%>
-<%--        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>--%>
-<%--    </nav>--%>
 
 
-<%--    <div class="header-wrapper">--%>
-<%--        <div class="header--title">--%>
-<%--            <spring:message code="orders.purchases.header"/>--%>
-<%--        </div>--%>
-<%--        <div class="user--info">--%>
-<%--            <div class="search--box">--%>
-<%--                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>--%>
-<%--            </div>--%>
-<%--        </div>--%>
+<script type="module">
+    // Initialize Materialize components
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
 
-<%--    </div>--%>
-
-<%--    <div class="tabular-wrapper">--%>
-<%--        <h3 class="main--title">--%>
-<%--            <spring:message code="orders.history"/>--%>
-<%--        </h3>--%>
-<%--        <div class="table-container">--%>
-<%--            <table>--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th><spring:message code="orders.writer"/></th>--%>
-<%--                    <th><spring:message code="orders.email"/></th>--%>
-<%--                    <th><spring:message code="orders.title"/></th>--%>
-<%--                    <th><spring:message code="orders.price"/></th>--%>
-<%--                    <th><spring:message code="orders.status"/></th>--%>
-<%--                    <th><spring:message code="orders.action"/></th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--&lt;%&ndash;                <c:forEach var="order" items="${order}">&ndash;%&gt;--%>
-<%--&lt;%&ndash;                    <c:set var="order" value="${order}" scope="request"/>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                    &ndash;%&gt;--%>
-<%--&lt;%&ndash;                </c:forEach>&ndash;%&gt;--%>
-<%--                <c:forEach var="order" items="${orders}">--%>
-<%--                <tr>--%>
-<%--                        <td><c:out value="${order.writer.firstName} ${order.writer.lastName}"/></td>--%>
-<%--                        <td><c:out value="${order.writer.email}"/></td>--%>
-<%--                        <td><c:out value="${order.book.title}"/></td>--%>
-<%--                        <td><c:out value="${order.book.price}"/></td>--%>
-<%--                        <td><c:out value="${order.orderStatus.displayString}"/></td>--%>
-<%--                        <c:url value="/advanceOrder" var="advanceOrderUrl">--%>
-<%--                            <c:param name="bookId" value="${order.book.bookId}"/>--%>
-<%--                            <c:param name="buyerId" value="${order.buyer.userId}"/>--%>
-<%--                            <c:param name="writerId" value="${order.writer.userId}"/>--%>
-<%--                            <c:param name="from" value="purchases"/>--%>
-<%--                        </c:url>--%>
-
-<%--                        <c:if test="${order.orderStatus.readerCanAdvance}">--%>
-<%--                        <td><form action="${advanceOrderUrl}" method="post">--%>
-<%--                            <button--%>
-<%--                                type="submit"--%>
-<%--                            >Advance</button>--%>
-<%--                        </form></td>--%>
-<%--                        </c:if>--%>
-<%--                        <c:if test="${!order.orderStatus.readerCanAdvance}">--%>
-<%--                            <td><form action="${advanceOrderUrl}" method="post">--%>
-<%--                                <button type="submit" disabled>Advance</button>--%>
-<%--                            </form></td>--%>
-<%--                        </c:if>--%>
-<%--                </tr>--%>
-<%--                </c:forEach>--%>
-
-<%--                </tbody>--%>
-<%--                <tfoot>--%>
-
-<%--                </tfoot>--%>
-<%--            </table>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-
-<%--</div>--%>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
 </body>
 </html>
