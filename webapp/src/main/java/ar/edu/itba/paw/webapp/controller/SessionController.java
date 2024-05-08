@@ -1,14 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.interfaces.service.MailService;
-import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.auth.CybraryAuthUserDetails;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -58,13 +53,6 @@ public class SessionController {
     public ModelAndView loginForm(@RequestParam(name = "error", required = false) String error){
         ModelAndView mav =  new ModelAndView("login");
         mav.addObject("error", error);
-        return mav;
-    }
-
-
-    @RequestMapping(method = RequestMethod.GET, path="/profile")
-    public ModelAndView profile(){
-        ModelAndView mav = new ModelAndView("profile");
         return mav;
     }
 

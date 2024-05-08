@@ -59,7 +59,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers( "/sales").hasAuthority(UserRoles.WRITER.toString())
                 .requestMatchers(HttpMethod.POST, "/sendBuyInfo").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(a.get(), o.getRequest())))
                 .requestMatchers(HttpMethod.GET, "/receipt/**").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessReceipt(a.get(), o.getRequest())))
-                .requestMatchers("/", "/image/**", "/pdf/**", "/book/**", "/search/**").permitAll()
+                .requestMatchers("/", "/cover/**", "/preview/**", "/book/**", "/search/**").permitAll()
                 .anyRequest().authenticated()
 
             .and().formLogin()
@@ -82,6 +82,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedPage("/403")
 
             .and().csrf().disable();
+
+            http.headers().frameOptions().sameOrigin();
     }
 
 

@@ -10,7 +10,6 @@ import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
-import ar.edu.itba.paw.webapp.form.NewBookForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +23,17 @@ import java.util.List;
 
 
 @Controller
-public class BookController {
+public class HomeController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(BookController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
     private static final int PAGE_SIZE = 20;
 
-    private final PublishService ps;
     private final BookService bs;
-    private final UserService us;
-    private final ReviewService rs;
-
 
     @Autowired
-    public BookController(PublishService ps, BookService bs, UserService us, ReviewService rs){
-        this.ps = ps;
+    public HomeController(BookService bs){
         this.bs = bs;
-        this.us = us;
-        this.rs = rs;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
@@ -52,56 +44,10 @@ public class BookController {
         return mav;
     }
 
-
-
-    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
-    public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
-        final ModelAndView mav = new ModelAndView("bookInfo");
-        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        List<Book> recommendations = bs.getAllGenreExcluding(book.getGenre(), book);
-        mav.addObject("book", book);
-        mav.addObject("user", us.getLoggedUser().orElse(null));
-        mav.addObject("recommendations", recommendations);
-        return mav;
+    @RequestMapping(method = RequestMethod.GET, path="/profile")
+    public ModelAndView profile(){
+        return new ModelAndView("profile");
     }
-
-    @RequestMapping(method = RequestMethod.GET, path="/addBook")
-    public ModelAndView addBookForm(@ModelAttribute("newBookForm") NewBookForm form){
-
-
-        ModelAndView mav = new ModelAndView("addBook");
-        mav.addObject("genres", BookGenre.values());
-        return mav;
-    }
-
-
-
-    @RequestMapping(method = RequestMethod.POST, path="/addBook")
-    public ModelAndView addBook(@Valid @ModelAttribute final NewBookForm newBookForm, final BindingResult errors){
-
-        if (errors.hasErrors()){
-            return addBookForm(newBookForm);
-        }
-
-        long bookId = ps.publishBook(
-                newBookForm.getCbu(),
-                newBookForm.getTitle(),
-                newBookForm.getDescription(),
-                newBookForm.getGenre(),
-                newBookForm.getSuggestedAge(),
-                newBookForm.getPrice(),
-                newBookForm.getPageCount(),
-
-                newBookForm.getCover(),
-                newBookForm.getPreview(),
-                newBookForm.getBookFile()
-        );
-
-        LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();
-
-        return new ModelAndView("redirect:/book/"+bookId);
-    }
-
 
     @RequestMapping(method = RequestMethod.GET, path="/search")
     public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") final BookSearchForm form, final BindingResult error){

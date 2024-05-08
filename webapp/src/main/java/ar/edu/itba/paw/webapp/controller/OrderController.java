@@ -61,6 +61,14 @@ public class OrderController {
     }
 
 
+    @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
+    public ModelAndView sendBuyInfo(@RequestParam("bookId") long bookId){
+
+        //os.create(bookId, null);
+        //ms.sendEmail(us.getLoggedUser().orElseThrow(UserNotFoundException::new).getEmail(), bookTitle);
+        return new ModelAndView("orderSummary");
+    }
+
     @RequestMapping(method = RequestMethod.POST, path="/advanceOrder")
     public ModelAndView advanceOrder(@RequestParam("bookId") long bookId, @RequestParam("writerId") long writerId, @RequestParam("buyerId") long buyerId, @RequestParam("from") String from){
         Order order = os.find(buyerId, writerId, bookId).orElseThrow(OrderNotFoundException::new);
