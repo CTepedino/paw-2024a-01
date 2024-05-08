@@ -98,11 +98,6 @@ CREATE TABLE IF NOT EXISTS book_files(
     file BYTEA NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS payment_receipts(
-     id INT PRIMARY KEY REFERENCES orders (order_id) ON DELETE CASCADE,
-     file BYTEA NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS roles(
     user_id INT NOT NULL,
     role VARCHAR(20) NOT NULL,
@@ -121,6 +116,11 @@ CREATE TABLE IF NOT EXISTS orders(
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS payment_receipts(
+    id INT PRIMARY KEY REFERENCES orders (order_id) ON DELETE CASCADE,
+    file BYTEA NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS reviews(
