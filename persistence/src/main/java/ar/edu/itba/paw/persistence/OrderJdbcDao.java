@@ -102,37 +102,61 @@ public class OrderJdbcDao implements OrderDao {
     }
 
     @Override
-    public List<Order> getAllReaderOrders(long readerId) {
+    public List<Order> getAllReaderOrders(long readerId, int offset, int limit) {
         return jdbcTemplate.query(
-            """
+        """
                 SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
                 JOIN users w ON b.writer_id = w.user_id
                 WHERE o.buyer_id = ?
-                """,
-                ROW_MAPPER,
+                OFFSET ? LIMIT ?
+            """,
+            ROW_MAPPER,
+            readerId,
+            offset,
+            limit
+        );
+    }
+
+    @Override
+    public long getAllReaderOrdersSize(long readerId) {
+        return DaoUtils.getRowCount(
+                jdbcTemplate,
+                "orders",
+                "WHERE buyer_id = ?",
                 readerId
         );
     }
 
     @Override
-    public List<Order> getAllWriterOrders(long writerId) {
+    public List<Order> getAllWriterOrders(long writerId, int offset, int limit) {
         return jdbcTemplate.query(
-                """
+        """
                 SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
                 JOIN users w ON b.writer_id = w.user_id
                 WHERE w.user_id = ?
-                    """,
-                ROW_MAPPER,
-                writerId
+                OFFSET ? LIMIT ?
+            """,
+            ROW_MAPPER,
+            writerId,
+            offset,
+            limit
         );
     }
 
+    @Override
+    public long getAllWriterOrdersSize(long writerId) {
+        return DaoUtils.getRowCount(
+                jdbcTemplate,
+                "orders o JOIN books b ON o.book_id = b.book_id",
+                "WHERE b.writer_id = ?",
+                writerId
+        );
+    }
 }
-
 

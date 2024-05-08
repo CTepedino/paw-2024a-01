@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,9 +18,9 @@ public interface OrderService {
 
     Order toNextStatus(Order order);
 
-    List<Order> getAllReaderOrders(long readerId);
+    PaginatedContent<Order> getAllReaderOrders(long readerId, int pageNumber, int pageSize);
 
-    List<Order> getAllWriterOrders(long writerId);
+    PaginatedContent<Order> getAllWriterOrders(long writerId, int pageNumber, int pageSize);
 
     PaymentReceipt getReceipt(long id);
 

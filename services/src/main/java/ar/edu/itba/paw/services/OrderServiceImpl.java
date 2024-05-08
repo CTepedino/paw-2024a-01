@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
@@ -16,6 +17,7 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -91,14 +93,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Order> getAllReaderOrders(long readerId) {
-        return orderDao.getAllReaderOrders(readerId);
+    public PaginatedContent<Order> getAllReaderOrders(long readerId, int pageNumber, int pageSize) {
+        List<Order> orders =  orderDao.getAllReaderOrders(readerId, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getAllReaderOrdersSize(readerId));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Order> getAllWriterOrders(long writerId) {
-        return orderDao.getAllWriterOrders(writerId);
+    public PaginatedContent<Order> getAllWriterOrders(long writerId, int pageNumber, int pageSize) {
+        List<Order> orders =  orderDao.getAllWriterOrders(writerId, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getAllWriterOrdersSize(writerId));
     }
 
     @Transactional(readOnly = true)

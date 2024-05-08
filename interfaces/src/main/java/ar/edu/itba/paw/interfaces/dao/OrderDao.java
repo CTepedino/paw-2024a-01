@@ -16,8 +16,9 @@ public interface OrderDao {
 
     void setStatus(long orderId, OrderStatus orderStatus);
 
-    List<Order> getAllReaderOrders(long readerId);
+    List<Order> getAllReaderOrders(long readerId, int offset, int limit);
+    long getAllReaderOrdersSize(long readerId);
 
-    List<Order> getAllWriterOrders(long writerId);
-
+    List<Order> getAllWriterOrders(long writerId, int offset, int limit);
+    long getAllWriterOrdersSize(long writerId);
 }

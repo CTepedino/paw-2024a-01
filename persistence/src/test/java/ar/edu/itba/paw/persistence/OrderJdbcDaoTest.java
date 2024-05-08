@@ -134,10 +134,10 @@ public class OrderJdbcDaoTest{
 
     @Test
     public void testAllReaderOrders(){
-        List<Order> orders = orderDao.getAllReaderOrders(EXISTING_BUYER_ID);
+        List<Order> orders = orderDao.getAllReaderOrders(EXISTING_BUYER_ID, 0, 10);
 
         assertNotNull(orders);
-        assertEquals(1, orders.getFirst().getOrderId());
+        assertEquals(1, orders.get(0).getOrderId());
         assertEquals(2, orders.get(1).getOrderId());
     }
 }
