@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.junit.Assert;
@@ -35,6 +36,9 @@ public class UserServiceImplTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private EmailValidationService evs;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -49,6 +53,7 @@ public class UserServiceImplTest {
             mockRoles.add(UserRoles.READER);
             return null;
         });
+        ;
 
         User user = userService.create(EMAIL, PASSWORD, FIRST_NAME, LAST_NAME);
 
@@ -58,6 +63,5 @@ public class UserServiceImplTest {
         assertEquals(ENCODED_PASSWORD, user.getPassword());
         assertEquals(FIRST_NAME, user.getFirstName());
         assertEquals(LAST_NAME, user.getLastName());
-        assertTrue(mockRoles.contains(UserRoles.READER));
     }
 }

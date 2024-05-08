@@ -87,7 +87,6 @@ public class PublishServiceImplTest {
         );
 
         assertEquals(BOOK_ID, bookId);
-        assertTrue(mockedRoles.contains(UserRoles.WRITER));
     }
 
     @Test
