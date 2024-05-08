@@ -29,7 +29,7 @@
         <div class="col s2 table-title"> Actions </div>
     </div>
     <ul class="collection">
-        <c:forEach var="order" items="${orders}">
+        <c:forEach var="order" items="${orders.page}">
         <li class="collection-item">
             <div class="row purchased-book">
                 <div class="col s2">

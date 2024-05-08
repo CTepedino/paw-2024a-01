@@ -33,7 +33,7 @@ public class OrderController {
     public ModelAndView purchases(){
         ModelAndView mav = new ModelAndView("purchasesView");
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("orders", os.getAllReaderOrders(user.getUserId()));
+        mav.addObject("orders", os.getAllReaderOrders(user.getUserId(), 1, 10));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
@@ -42,7 +42,7 @@ public class OrderController {
     public ModelAndView sales(){
         ModelAndView mav = new ModelAndView("salesView");
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("orders", os.getAllWriterOrders(user.getUserId()));
+        mav.addObject("orders", os.getAllWriterOrders(user.getUserId(), 1, 10));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
