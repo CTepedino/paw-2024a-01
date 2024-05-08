@@ -107,4 +107,10 @@ public class OrderServiceImpl implements OrderService {
         return paymentReceiptDao.findById(id).orElseThrow(PdfNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Order> findById(long orderId) {
+        return orderDao.findById(orderId);
+    }
+
 }

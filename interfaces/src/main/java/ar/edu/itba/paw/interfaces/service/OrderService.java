@@ -14,12 +14,14 @@ public interface OrderService {
     boolean canCreateOrder(long bookId);
 
     Optional<Order> find(long buyerId, long writerId, long bookId);
+
     Order toNextStatus(Order order);
 
     List<Order> getAllReaderOrders(long readerId);
 
-
     List<Order> getAllWriterOrders(long writerId);
 
     PaymentReceipt getReceipt(long id);
+
+    Optional<Order> findById(long orderId);
 }
