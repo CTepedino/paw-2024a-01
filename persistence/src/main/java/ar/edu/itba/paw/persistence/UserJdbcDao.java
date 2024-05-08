@@ -150,7 +150,7 @@ public class UserJdbcDao implements UserDao {
                 WHERE user_id = ? AND role = ?
             """,
             id,
-            role
+            role.toString()
         );
     }
 

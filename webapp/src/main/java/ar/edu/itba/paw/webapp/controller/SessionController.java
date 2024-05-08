@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -49,8 +46,13 @@ public class SessionController {
             form.getLastName()
         );
 
-        //return new ModelAndView("registerConfirmation");
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("registerConfirmation");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/validate")
+    public ModelAndView validate(@RequestParam("email") String email, @RequestParam("code") String code){
+        us.validateEmail(email, code);
+        return new ModelAndView("validationSuccess");
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/login")

@@ -100,7 +100,7 @@ public class MailServiceImpl implements MailService{
         data.put("userFirstName", user.getFirstName());
         data.put("userLastName", user.getLastName());
         data.put("url", env.getProperty("baseUrl"));
-        data.put("profileUrl", env.getProperty("baseUrl") + "/profile");
+        data.put("validateUrl", env.getProperty("baseUrl") + "/validate?email=" + user.getEmail() + "&code=" + code);
 
         try {
             LOGGER.atDebug().setMessage("Sending register email to: {}").addArgument(to).log();

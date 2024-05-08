@@ -7,4 +7,7 @@ public interface EmailValidationService {
     void create(User user);
     boolean checkValidation(long id, String email, String code);
 
+    void deleteExpired();
+
+    void resend(User user);
 }

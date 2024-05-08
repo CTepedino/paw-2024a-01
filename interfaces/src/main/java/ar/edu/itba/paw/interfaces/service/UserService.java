@@ -13,6 +13,7 @@ public interface UserService {
     User create(String email, String password, String firstName, String lastName);
 
     void validateEmail(String email, String code);
+    void resendValidation(String email);
 
     void delete(long id);
 

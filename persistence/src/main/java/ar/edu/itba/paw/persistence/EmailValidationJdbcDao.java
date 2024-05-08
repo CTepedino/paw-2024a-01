@@ -44,7 +44,7 @@ public class EmailValidationJdbcDao implements EmailValidationDao {
     public Optional<EmailValidation> get(long id) {
         List<EmailValidation> list = jdbcTemplate.query(
             """
-                    SELECT v.code, u.email
+                    SELECT v.code, v.expiration, u.email
                     FROM email_validations v JOIN users u on v.id = u.user_id
                     WHERE id = ?
                 """,
@@ -60,7 +60,7 @@ public class EmailValidationJdbcDao implements EmailValidationDao {
         """
                 DELETE FROM users
                 WHERE EXISTS (
-                    SELECT 1
+                    SELECT *
                     FROM email_validations
                     WHERE users.user_id = email_validations.id
                     AND email_validations.expiration < now()

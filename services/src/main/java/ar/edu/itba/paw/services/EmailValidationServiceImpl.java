@@ -47,10 +47,17 @@ public class EmailValidationServiceImpl implements EmailValidationService {
         return code.toString();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
+    @Override
+    public void deleteExpired(){
+        emailValidationDao.deleteExpired();
+    }
+
+
+    @Transactional
     @Override
     public boolean checkValidation(long id, String email, String code) {
-        emailValidationDao.deleteExpired();
+        deleteExpired();
 
         EmailValidation validation = emailValidationDao.get(id).orElseThrow(NoValidationCodeException::new);
         if( validation.getCode().equals(code) && validation.getEmail().equals(email)){
@@ -58,5 +65,15 @@ public class EmailValidationServiceImpl implements EmailValidationService {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    @Override
+    public void resend(User user){
+        deleteExpired();
+
+        EmailValidation validation = emailValidationDao.get(user.getUserId()).orElseThrow(NoValidationCodeException::new);
+
+        ms.sendRegisterEmail(user, validation.getCode());
     }
 }

@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
                 lastName
         );
         userDao.giveRole(user.getUserId(), UserRoles.UNVALIDATED);
-        evs.create(user.getUserId());
+        evs.create(user);
 
         return user;
     }
@@ -96,9 +96,16 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new NoValidationCodeException();
         }
-
     }
 
+    @Transactional
+    @Override
+    public void resendValidation(String email) {
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        evs.resend(user);
+    }
+
+    @Transactional
     @Override
     public void delete(long id) {
         userDao.delete(id);
