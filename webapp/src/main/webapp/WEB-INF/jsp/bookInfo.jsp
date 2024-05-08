@@ -20,7 +20,7 @@
             <div class="col s5">
                 <img
                         class="book_cover"
-                        src="<c:url value="${baseUrl}/image/${book.bookId}"/>"
+                        src="<c:url value="${baseUrl}/cover/${book.bookId}"/>"
                         alt="<spring:message code="bookInfoCard.cover"/>"
                 />
             </div>
@@ -36,7 +36,7 @@
                         </h5>
                     </div>
                     <div class="col s4">
-                       <c:if test="${user!=null && book.writer.email != user.email}">
+                       <c:if test="${loggedUser!=null && book.writer.email != loggedUser.email}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
@@ -77,7 +77,7 @@
                 <h6><spring:message code="book.bookInfo.preview"/></h6>
                 <object
                         type="application/pdf"
-                        data="<c:url value="${baseUrl}/pdf/${book.bookId}" />"
+                        data="<c:url value="${baseUrl}/preview/${book.bookId}" />"
                         width="100%"
                         height="700"
                 >

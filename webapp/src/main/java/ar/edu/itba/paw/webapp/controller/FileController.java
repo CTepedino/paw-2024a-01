@@ -24,12 +24,12 @@ public class FileController {
         this.os = os;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/image/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = "/cover/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public @ResponseBody byte[] getImage(@PathVariable("id") long id) {
         return bs.getCover(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/pdf/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @RequestMapping(method = RequestMethod.GET, path = "/preview/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
     public @ResponseBody byte[] getPdf(@PathVariable("id") long id) {
         return bs.getPreview(id).getFile();
     }
