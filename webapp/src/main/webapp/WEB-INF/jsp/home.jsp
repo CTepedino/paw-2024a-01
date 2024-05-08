@@ -21,6 +21,7 @@
 
     <jsp:include page="components/topBar2.0.jsp">
         <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+        <jsp:param name="user" value="${loggedUser}" />
     </jsp:include>
 
     <div class="explore_back">

@@ -41,7 +41,8 @@
 
 
                 <div class="user-info">
-                    <img src="${pageContext.request.contextPath}/images/user.png"/>
+                    <img src="<c:url value="${baseUrl}/profilePicture/${user.userId}"/>" alt="userprofile"/>
+<%--                    <img src="${pageContext.request.contextPath}/images/user.png"/>--%>
                     <a href="${pageContext.request.contextPath}/profile"> <h3>My profile</h3> </a>
                 </div>
                 <hr>

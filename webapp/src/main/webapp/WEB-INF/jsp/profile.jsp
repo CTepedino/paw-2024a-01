@@ -17,6 +17,7 @@
 <body>
 <jsp:include page="components/topBar2.0.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+    <jsp:param name="user" value="${loggedUser}" />
 </jsp:include>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
