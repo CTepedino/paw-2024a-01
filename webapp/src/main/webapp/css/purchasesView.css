@@ -42,7 +42,7 @@
 }
 
 .payment {
-    background-color: red;
+    background-color: red !important;
 }
 
 .price {

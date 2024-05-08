@@ -28,17 +28,17 @@
 <%--    </nav>--%>
 
 
-    <div class="header-wrapper">
-        <div class="header--title">
-            <spring:message code="orders.sales.header"/>
-        </div>
-        <div class="user--info">
-            <div class="search--box">
-                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>
-            </div>
-        </div>
+<%--    <div class="header-wrapper">--%>
+<%--        <div class="header--title">--%>
+<%--            <spring:message code="orders.sales.header"/>--%>
+<%--        </div>--%>
+<%--        <div class="user--info">--%>
+<%--            <div class="search--box">--%>
+<%--                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>--%>
+<%--            </div>--%>
+<%--        </div>--%>
 
-    </div>
+<%--    </div>--%>
     <%--
     <div class="card--container">
         <h3 class="main--title ">Today's data</h3>
