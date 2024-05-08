@@ -8,7 +8,6 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.OrderSearchForm;
-import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -50,7 +49,6 @@ public class OrderController {
         mav.addObject("orders", os.searchReaderOrdersWithParams(user.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
         mav.addObject("orderSearchForm", form);
         mav.addObject("statuses", OrderStatus.values());
-        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
 
@@ -66,7 +64,6 @@ public class OrderController {
         mav.addObject("orders", os.searchWriterOrdersWithParams(user.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
         mav.addObject("orderSearchForm", form);
         mav.addObject("statuses", OrderStatus.values());
-        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
 
