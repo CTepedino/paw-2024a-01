@@ -24,7 +24,7 @@
                 class="z-depth-2"
         >
             <h5 class="center-align"><spring:message code="session.loginTitle"/></h5>
-            <c:if test="${error!=null}">
+            <c:if test="${error != null}">
                 <p class="red-text"><spring:message code="session.loginError"/></p>
             </c:if>
             <div class="input-field">

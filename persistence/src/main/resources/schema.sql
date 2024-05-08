@@ -61,7 +61,6 @@ CREATE TABLE IF NOT EXISTS users(
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255),
     cbu VARCHAR(22)
-
 );
 
 CREATE TABLE IF NOT EXISTS books (
@@ -136,4 +135,10 @@ CREATE TABLE IF NOT EXISTS reviews(
 
     FOREIGN KEY (reviewer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS email_validations(
+    id INT PRIMARY KEY REFERENCES users (user_id) ON DELETE CASCADE,
+    code VARCHAR(5) NOT NULL,
+    expiration TIMESTAMP NOT NULL
 );

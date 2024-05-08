@@ -23,6 +23,7 @@ import org.springframework.util.StreamUtils;
 import java.nio.charset.StandardCharsets;
 
 
+
 @EnableWebSecurity
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 @Configuration
@@ -54,7 +55,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .invalidSessionUrl("/")
 
             .and().authorizeHttpRequests()
-                .requestMatchers("/signup", "/login").anonymous()
+                .requestMatchers("/signup", "/login", "/validate").anonymous()
                 .requestMatchers( "/sales").hasAuthority(UserRoles.WRITER.toString())
                 .requestMatchers(HttpMethod.POST, "/sendBuyInfo").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(a.get(), o.getRequest())))
                 .requestMatchers(HttpMethod.GET, "/receipt/**").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessReceipt(a.get(), o.getRequest())))

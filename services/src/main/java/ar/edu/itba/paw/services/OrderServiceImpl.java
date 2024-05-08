@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
 
             long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_CONTACT);
             paymentReceiptDao.create(orderId, receipt.getBytes());
-            ms.sendOrderEmail(buyer.getUserId(), bookId);
+            ms.sendOrderEmail(buyer, book);;
         } catch (IOException e){
             throw new UnreadableFileException();
         }
