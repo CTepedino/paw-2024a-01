@@ -23,12 +23,9 @@ import javax.validation.Valid;
 @Controller
 public class SessionController {
     private final UserService us;
-    private final MailService ms;
-
     @Autowired
-    public SessionController(UserService us, MailService ms){
+    public SessionController(UserService us){
         this.us = us;
-        this.ms = ms;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/signup")
@@ -45,14 +42,12 @@ public class SessionController {
             return signupForm(form);
         }
 
-        User user = us.create(
-                form.getEmail(),
-                form.getPassword(),
-                form.getFirstName(),
-                form.getLastName()
+        us.create(
+            form.getEmail(),
+            form.getPassword(),
+            form.getFirstName(),
+            form.getLastName()
         );
-
-        ms.sendRegisterEmail(user.getUserId());
 
         //return new ModelAndView("registerConfirmation");
         return new ModelAndView("redirect:/login");

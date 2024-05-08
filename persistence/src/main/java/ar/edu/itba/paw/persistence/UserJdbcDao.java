@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
 import java.util.*;
 
 @Repository
@@ -59,6 +58,17 @@ public class UserJdbcDao implements UserDao {
                 firstName,
                 lastName,
                 null
+        );
+    }
+
+    @Override
+    public void delete(long id) {
+        jdbcTemplate.update(
+        """
+                DELETE FROM users
+                WHERE user_id = ?
+            """,
+            id
         );
     }
 
@@ -130,6 +140,18 @@ public class UserJdbcDao implements UserDao {
         roleData.put("role", role);
 
         return roleJdbcInsert.execute(roleData);
+    }
+
+    @Override
+    public void removeRole(long id, UserRoles role){
+        jdbcTemplate.update(
+        """
+                DELETE FROM roles
+                WHERE user_id = ? AND role = ?
+            """,
+            id,
+            role
+        );
     }
 
     @Override

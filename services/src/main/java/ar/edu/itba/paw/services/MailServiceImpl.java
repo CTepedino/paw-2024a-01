@@ -37,9 +37,6 @@ public class MailServiceImpl implements MailService{
     private final ResourceBundleMessageSource emailMessageSource;
     private final Environment env;
 
-    private final UserService us;
-    private final BookService bs;
-
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired

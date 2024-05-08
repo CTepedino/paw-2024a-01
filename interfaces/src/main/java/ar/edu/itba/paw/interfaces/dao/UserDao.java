@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface UserDao {
     User create(String email, String password, String firstName, String lastName);
 
+    void delete(long id);
+
     int update(long id, String email, String password, String firstName, String lastName);
 
     int update(long id, String email, String password, String firstName, String lastName, String cbu);
@@ -17,6 +19,8 @@ public interface UserDao {
     Optional<User> findByEmail(String email);
 
     int giveRole(long id, UserRoles role);
+
+    void removeRole(long id, UserRoles role);
 
     List<UserRoles> getRoles(long id);
 

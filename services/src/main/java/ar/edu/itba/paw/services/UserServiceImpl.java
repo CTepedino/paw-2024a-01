@@ -1,11 +1,17 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.dao.EmailValidationDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.dao.files.ProfilePictureDao;
+import ar.edu.itba.paw.interfaces.service.EmailValidationService;
+import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.exception.InvalidCodeException;
+import ar.edu.itba.paw.models.exception.NoValidationCodeException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
+import ar.edu.itba.paw.models.users.EmailValidation;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.slf4j.Logger;
@@ -22,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -32,13 +39,19 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final ProfilePictureDao profilePictureDao;
 
+    private final EmailValidationService evs;
+    private final MailService ms;
+
     private final PasswordEncoder passwordEncoder;
 
+
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao){
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs, MailService ms){
         this.userDao = userDao;
         this.profilePictureDao = profilePictureDao;
         this.passwordEncoder = passwordEncoder;
+        this.evs = evs;
+        this.ms = ms;
     }
 
     @Transactional(readOnly = true)
@@ -63,26 +76,43 @@ public class UserServiceImpl implements UserService {
                 firstName,
                 lastName
         );
-        userDao.giveRole(user.getUserId(), UserRoles.READER);
+        userDao.giveRole(user.getUserId(), UserRoles.UNVALIDATED);
+        evs.create(user.getUserId());
+
+        ms.sendRegisterEmail(user.getUserId());
+
         return user;
     }
 
+
+    @Transactional
+    @Override
+    public void validateEmail(String email, String code) {
+        Optional<User> user = userDao.findByEmail(email);
+        if (user.isPresent() && getRoles(user.get().getUserId()).contains(UserRoles.UNVALIDATED)){
+            long id = user.get().getUserId();
+            if (evs.checkValidation(id, email, code)){
+                userDao.giveRole(id, UserRoles.READER);
+                userDao.removeRole(id, UserRoles.UNVALIDATED);
+            } else {
+                throw new InvalidCodeException();
+            }
+        } else {
+            throw new NoValidationCodeException();
+        }
+
+    }
+
+    @Override
+    public void delete(long id) {
+        userDao.delete(id);
+    }
+
+    @Transactional(readOnly = true)
     @Override
     public List<UserRoles> getRoles(long id) {
         return userDao.getRoles(id);
     }
-
-
-    /*
-    @Transactional
-    @Override
-    public void fillMissingWriterData(long id, String password) {
-        if (userDao.findById(id).isPresent()) {
-            userDao.changePassword(id, passwordEncoder.encode(password));
-            userDao.giveRole(id, UserRoles.READER);
-            userDao.giveRole(id, UserRoles.WRITER);
-        }
-    }*/
 
     @Transactional
     @Override

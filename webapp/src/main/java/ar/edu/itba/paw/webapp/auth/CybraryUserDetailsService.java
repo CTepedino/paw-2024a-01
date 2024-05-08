@@ -30,14 +30,7 @@ public class CybraryUserDetailsService implements UserDetailsService {
         final User user = us.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No user by the email" + username));
 
-        //Para los escritores que fueron creados antes de tener usuarios -> les ponemos como password por defecto su mail
-        /*if (user.getPassword() == null){
-            us.fillMissingWriterData(user.getUserId(), user.getEmail());
-            final Collection<GrantedAuthority> authorities = new HashSet<>();
-            authorities.add(new SimpleGrantedAuthority(UserRoles.READER.toString()));
-            authorities.add(new SimpleGrantedAuthority(UserRoles.WRITER.toString()));
-            return new CybraryAuthUserDetails(user.getEmail(), user.getEmail(), authorities);
-        } else {*/
+
 
             final Collection<GrantedAuthority> authorities = new HashSet<>();
             for (UserRoles role : us.getRoles(user.getUserId())) {
@@ -45,6 +38,5 @@ public class CybraryUserDetailsService implements UserDetailsService {
             }
 
             return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), authorities);
-        //}
     }
 }
