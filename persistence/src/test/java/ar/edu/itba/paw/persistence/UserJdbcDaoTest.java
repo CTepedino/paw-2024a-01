@@ -52,7 +52,7 @@ public class UserJdbcDaoTest {
     public void testCreateOK(){
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
 
-        final User user = userDao.create(EMAIL, PASSWORD, FIRST_NAME, LAST_NAME);
+        final User user = userDao.create(EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, false);
 
         assertNotNull(user);
         assertEquals(EMAIL, user.getEmail());
@@ -68,7 +68,7 @@ public class UserJdbcDaoTest {
 
         assertThrows(
                 DuplicateKeyException.class,
-                () -> userDao.create(INSERTED_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME)
+                () -> userDao.create(INSERTED_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, false)
         );
         assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
 
@@ -76,14 +76,14 @@ public class UserJdbcDaoTest {
 
     @Test
     public void testUpdateExisting(){
-        int updatedRows = userDao.update(EXISTING_ID,"","","", "");
+        int updatedRows = userDao.update(EXISTING_ID,"","","", "", false);
 
         assertEquals(1, updatedRows);
     }
 
     @Test
     public void testUpdateNonExisting(){
-        int updatedRows = userDao.update(NON_EXISTING_ID, "", "", "", "");
+        int updatedRows = userDao.update(NON_EXISTING_ID, "", "", "", "", false);
 
         assertEquals(0, updatedRows);
     }
