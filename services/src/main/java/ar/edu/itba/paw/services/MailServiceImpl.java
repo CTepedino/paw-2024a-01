@@ -24,6 +24,9 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -91,7 +94,7 @@ public class MailServiceImpl implements MailService{
 
     @Override
     @Async
-    public void sendRegisterEmail(User user, String code){
+    public void sendRegisterEmail(User user, String code, LocalDateTime expiration){
 
         Locale currentLocale = LocaleContextHolder.getLocale();
         String to = user.getEmail();
@@ -101,6 +104,7 @@ public class MailServiceImpl implements MailService{
         data.put("userLastName", user.getLastName());
         data.put("url", env.getProperty("baseUrl"));
         data.put("validateUrl", env.getProperty("baseUrl") + "/validate?email=" + user.getEmail() + "&code=" + code);
+        data.put("expiration", expiration.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(currentLocale)));
 
         try {
             LOGGER.atDebug().setMessage("Sending register email to: {}").addArgument(to).log();

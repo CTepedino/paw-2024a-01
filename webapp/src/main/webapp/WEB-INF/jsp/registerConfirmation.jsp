@@ -16,14 +16,16 @@
 
 <div class="small-container">
   <div class="form">
-    <h5 class="center-align">
-      <spring:message code="session.emailSent"/>
-    </h5>
-
-    <p>
-      <spring:message code="session.emailSentInstructions"/>
-    </p>
-
+    <div class="formnt z-depth-2">
+      <h5 class="center-align">
+        <spring:message code="session.emailSent"/>
+      </h5>
+      <br/>
+      <br/>
+      <p class="center-align">
+        <spring:message code="session.emailSentInstructions"/>
+      </p>
+    </div>
   </div>
 </div>
 

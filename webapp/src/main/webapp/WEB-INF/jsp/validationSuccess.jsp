@@ -15,14 +15,19 @@
 <body>
 <div class="small-container">
     <div class="form">
-        <h5 class="center-align"><spring:message code="session.validationSuccess"/></h5>
+        <div class="formnt z-depth-2">
+            <h5 class="center-align"><spring:message code="session.validationSuccess"/></h5>
 
-        <p><spring:message code="session.validationSuccessInstructions"/></p>
+            <p class="center-align"><spring:message code="session.validationSuccessInstructions"/></p>
 
-        <div class="input-field center-align submit-btn">
-            <a class="btn waves-effect waves-light white-text" href="<c:url value="/login"/>">
-                <spring:message code="session.login"/>
-            </a>
+            <br/>
+            <br/>
+
+            <div class="input-field center-align submit-btn">
+                <a class="btn waves-effect waves-light white-text" href="<c:url value="/login"/>">
+                    <spring:message code="session.login"/>
+                </a>
+            </div>
         </div>
     </div>
 </div>

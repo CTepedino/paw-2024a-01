@@ -34,8 +34,9 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     @Override
     public void create(User user) {
         String code = generateRandomVerificationCode();
-        emailValidationDao.create(user.getUserId(), code, LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS));
-        ms.sendRegisterEmail(user, code);
+        LocalDateTime expiration = LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS);
+        emailValidationDao.create(user.getUserId(), code, expiration);
+        ms.sendRegisterEmail(user, code, expiration);
     }
 
     private String generateRandomVerificationCode(){
@@ -74,6 +75,6 @@ public class EmailValidationServiceImpl implements EmailValidationService {
 
         EmailValidation validation = emailValidationDao.get(user.getUserId()).orElseThrow(NoValidationCodeException::new);
 
-        ms.sendRegisterEmail(user, validation.getCode());
+        ms.sendRegisterEmail(user, validation.getCode(), validation.getExpiration());
     }
 }
