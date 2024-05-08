@@ -6,17 +6,23 @@ import ar.edu.itba.paw.models.users.User;
 import java.time.LocalDateTime;
 
 public class Order {
+    private final long orderId;
     private final User buyer;
     private final Book book;
     private final OrderStatus orderStatus;
     private final LocalDateTime date;
 
 
-    public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date) {
+    public Order(long orderId, User buyer, Book book, OrderStatus orderStatus, LocalDateTime date) {
+        this.orderId = orderId;
         this.buyer = buyer;
         this.book = book;
         this.orderStatus = orderStatus;
         this.date = date;
+    }
+
+    public long getOrderId() {
+        return orderId;
     }
 
     public User getWriter(){

@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.interfaces.service.OrderService;
+import ar.edu.itba.paw.models.exception.OrderNotFoundException;
+import ar.edu.itba.paw.models.orders.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -24,5 +26,21 @@ public class AccessHelper {
         } catch (NumberFormatException e){
             return false;
         }
+    }
+
+    public boolean canAccessReceipt(Authentication auth, HttpServletRequest request){
+        String uri = request.getRequestURI();
+
+        String[] uriParts = uri.split("/");
+        String idString = uriParts[uriParts.length - 1];
+
+        long orderId =  Long.parseLong(idString);
+        Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        String buyerEmail = order.getBuyer().getEmail();
+        String writerEmail = order.getWriter().getEmail();
+        String userEmail = auth.getName();
+
+        return userEmail.equals(buyerEmail) || userEmail.equals(writerEmail);
     }
 }

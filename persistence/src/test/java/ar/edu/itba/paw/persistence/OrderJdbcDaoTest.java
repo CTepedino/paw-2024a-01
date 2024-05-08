@@ -1,12 +1,13 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.models.users.UserRoles;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 @Transactional
@@ -24,6 +28,15 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 public class OrderJdbcDaoTest{
 
+
+    private static final long NON_EXISTING_BUYER_ID = 99999;
+    private static final long EXISTING_BUYER_ID = 1;
+
+    private static final long EXISTING_BOOK_ID = 2;
+    private static final long NON_EXISTING_BOOK_ID = 9999;
+
+    private static final long EXISTING_ORDER_ID = 1;
+    private static final long NON_EXISTING_ORDER_ID = 9999;
 
     @Autowired
     private DataSource ds;
@@ -40,19 +53,9 @@ public class OrderJdbcDaoTest{
 
     @Test
     public void testCreateOK(){
-        orderDao.create(1, 2, OrderStatus.WAITING_CONTACT);
+        long orderId = orderDao.create(EXISTING_BUYER_ID, EXISTING_BOOK_ID, OrderStatus.WAITING_CONTACT);
 
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "orders", "buyer_id = 1 AND book_id = 2"));
-    }
-
-    @Test
-    public void testCreateAlreadyExists(){
-        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
-        assertThrows(
-                DuplicateKeyException.class,
-                () -> orderDao.create(1, 1, OrderStatus.WAITING_CONTACT)
-        );
-        assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "orders", "order_id = " + orderId));
     }
 
     @Test
@@ -60,7 +63,7 @@ public class OrderJdbcDaoTest{
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
         assertThrows(
                 DataIntegrityViolationException.class,
-                () -> orderDao.create(99999, 1, OrderStatus.WAITING_CONTACT)
+                () -> orderDao.create(NON_EXISTING_BUYER_ID, EXISTING_BOOK_ID, OrderStatus.WAITING_CONTACT)
         );
         assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders"));
     }
@@ -70,8 +73,71 @@ public class OrderJdbcDaoTest{
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
         assertThrows(
                 DataIntegrityViolationException.class,
-                () -> orderDao.create(1, 99999, OrderStatus.WAITING_CONTACT)
+                () -> orderDao.create(EXISTING_BUYER_ID, NON_EXISTING_BOOK_ID, OrderStatus.WAITING_CONTACT)
         );
         assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders"));
+    }
+
+    @Test
+    public void testFindByIdExisting(){
+        Optional<Order> maybeOrder = orderDao.findById(EXISTING_ORDER_ID);
+
+        assertNotNull(maybeOrder);
+        assertTrue(maybeOrder.isPresent());
+    }
+
+    @Test
+    public void testFindByIdNonExisting(){
+        Optional<Order> maybeOrder = orderDao.findById(NON_EXISTING_ORDER_ID);
+
+        assertNotNull(maybeOrder);
+        assertTrue(maybeOrder.isEmpty());
+    }
+
+    @Test
+    public void testFindExisting(){
+        Optional<Order> maybeOrder = orderDao.find(EXISTING_BUYER_ID, EXISTING_BOOK_ID);
+
+        assertNotNull(maybeOrder);
+        assertTrue(maybeOrder.isPresent());
+    }
+
+    @Test
+    public void testFindNonExisting(){
+        Optional<Order> maybeOrder = orderDao.find(NON_EXISTING_BUYER_ID, NON_EXISTING_BOOK_ID);
+
+        assertNotNull(maybeOrder);
+        assertTrue(maybeOrder.isEmpty());
+    }
+
+    @Test
+    public void testSetStatusExistingOrder(){
+        orderDao.setStatus(EXISTING_ORDER_ID, OrderStatus.WAITING_PAYMENT);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "orders", "order_id = " + EXISTING_ORDER_ID + " AND status = '" + OrderStatus.WAITING_PAYMENT + "'"));
+    }
+
+    @Test
+    public void testSetStatusNonExistingOrder(){
+        int rowsBeforeUpdate = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
+
+        orderDao.setStatus(NON_EXISTING_ORDER_ID, OrderStatus.WAITING_PAYMENT);
+
+        int rowsAfterUpdate = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
+
+        assertEquals(rowsBeforeUpdate, rowsAfterUpdate);
+
+        Optional<Order> maybeOrder = orderDao.findById(EXISTING_ORDER_ID);
+        assertTrue(maybeOrder.isPresent());
+        Order existingOrder = maybeOrder.get();
+        assertEquals(OrderStatus.WAITING_CONTACT, existingOrder.getOrderStatus());
+    }
+
+    @Test
+    public void testAllReaderOrders(){
+        List<Order> orders = orderDao.getAllReaderOrders(EXISTING_BUYER_ID);
+
+        assertNotNull(orders);
+        assertEquals(1, orders.getFirst().getOrderId());
+        assertEquals(2, orders.get(1).getOrderId());
     }
 }

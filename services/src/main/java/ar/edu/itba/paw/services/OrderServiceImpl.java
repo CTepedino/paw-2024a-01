@@ -1,11 +1,15 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
+import ar.edu.itba.paw.interfaces.dao.files.PaymentReceiptDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.exception.PdfNotFoundException;
+import ar.edu.itba.paw.models.exception.UnreadableFileException;
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
@@ -14,7 +18,9 @@ import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,14 +29,16 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderDao orderDao;
+    private final PaymentReceiptDao paymentReceiptDao;
 
     private final BookService bs;
     private final UserService us;
     private final MailService ms;
 
     @Autowired
-    public OrderServiceImpl(final OrderDao orderDao, UserService us, MailService ms, BookService bs){
+    public OrderServiceImpl(final OrderDao orderDao, final PaymentReceiptDao paymentReceiptDao, UserService us, MailService ms, BookService bs){
         this.orderDao = orderDao;
+        this.paymentReceiptDao = paymentReceiptDao;
         this.us = us;
         this.ms = ms;
         this.bs = bs;
@@ -38,12 +46,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public void create(long bookId) {
+    public void create(long bookId, MultipartFile receipt) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_CONTACT);
-        ms.sendOrderEmail(buyer, book);
+        try {
+
+            long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_CONTACT);
+            paymentReceiptDao.create(orderId, receipt.getBytes());
+            ms.sendOrderEmail(buyer, book);;
+        } catch (IOException e){
+            throw new UnreadableFileException();
+        }
     }
 
     @Transactional(readOnly = true)
@@ -71,8 +85,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order toNextStatus(Order order){
         OrderStatus newStatus = order.getOrderStatus().getNext();
-        orderDao.setStatus(order.getBuyer().getUserId(), order.getBook().getBookId(), newStatus);
-        return new Order(order.getBuyer(), order.getBook(), newStatus, order.getDate());
+        orderDao.setStatus(order.getOrderId(), newStatus);
+        return new Order(order.getOrderId(), order.getBuyer(), order.getBook(), newStatus, order.getDate());
     }
 
     @Transactional(readOnly = true)
@@ -85,6 +99,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllWriterOrders(long writerId) {
         return orderDao.getAllWriterOrders(writerId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaymentReceipt getReceipt(long id){
+        return paymentReceiptDao.findById(id).orElseThrow(PdfNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Order> findById(long orderId) {
+        return orderDao.findById(orderId);
     }
 
 }
