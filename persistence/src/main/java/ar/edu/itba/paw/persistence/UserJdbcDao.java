@@ -22,7 +22,8 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("password"),
                     rs.getString("first_name"),
                     rs.getString("last_name"),
-                    rs.getString("cbu")
+                    rs.getString("cbu"),
+                    rs.getBoolean("is_enabled")
             );
 
     private final static RowMapper<UserRoles> ROLE_ROW_MAPPER = (rs, rowNum) -> UserRoles.valueOf(rs.getString("role"));
@@ -42,13 +43,14 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User create(String email, String password, String firstName, String lastName) {
+    public User create(String email, String password, String firstName, String lastName, boolean isEnabled) {
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("first_name", firstName);
         userData.put("last_name", lastName);
         userData.put("email", email);
         userData.put("password", password);
+        userData.put("is_enabled", isEnabled);
         Number generatedId = userJdbcInsert.executeAndReturnKey(userData);
 
         return new User(
@@ -57,7 +59,7 @@ public class UserJdbcDao implements UserDao {
                 password,
                 firstName,
                 lastName,
-                null
+                isEnabled
         );
     }
 
@@ -73,22 +75,23 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public int update(long id, String email, String password, String firstName, String lastName) {
+    public int update(long id, String email, String password, String firstName, String lastName, boolean isEnabled) {
         return jdbcTemplate.update(
                 """
                 UPDATE users
                 SET email = ?,
                 password = ?,
                 first_name = ?,
-                last_name = ?
+                last_name = ?,
+                is_enabled = ?
                 WHERE user_id = ?
             """,
-            email, password, firstName, lastName, id
+            email, password, firstName, lastName, isEnabled, id
         );
     }
 
     @Override
-    public int update(long id, String email, String password, String firstName, String lastName, String cbu) {
+    public int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled) {
         return jdbcTemplate.update(
         """
                 UPDATE users
@@ -96,9 +99,10 @@ public class UserJdbcDao implements UserDao {
                 password = ?,
                 first_name = ?,
                 last_name = ?,
-                cbu = ?
+                cbu = ?,
+                is_enabled = ?
                 WHERE user_id = ?
-            """, email, password, firstName, lastName, cbu, id
+            """, email, password, firstName, lastName, cbu, isEnabled, id
         );
     }
 

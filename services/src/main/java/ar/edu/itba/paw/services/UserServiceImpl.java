@@ -72,11 +72,11 @@ public class UserServiceImpl implements UserService {
                 email,
                 passwordEncoder.encode(password),
                 firstName,
-                lastName
+                lastName,
+                false
         );
-        userDao.giveRole(user.getUserId(), UserRoles.UNVALIDATED);
-        evs.create(user);
 
+        evs.create(user);
         return user;
     }
 
@@ -84,12 +84,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void validateEmail(String email, String code) {
-        Optional<User> user = userDao.findByEmail(email);
-        if (user.isPresent() && getRoles(user.get().getUserId()).contains(UserRoles.UNVALIDATED)){
-            long id = user.get().getUserId();
-            if (evs.checkValidation(id, email, code)){
-                userDao.giveRole(id, UserRoles.READER);
-                userDao.removeRole(id, UserRoles.UNVALIDATED);
+        Optional<User> maybeUser = userDao.findByEmail(email);
+        if (maybeUser.isPresent() && !maybeUser.get().isEnabled()){
+            User user = maybeUser.get();
+            if (evs.checkValidation(user.getUserId(), email, code)){
+                userDao.update(user.getUserId(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), true);
+                userDao.giveRole(user.getUserId(), UserRoles.READER);
             } else {
                 throw new InvalidCodeException();
             }
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 
         userDao.giveRole(id, UserRoles.WRITER);
 
-        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu);
+        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu, user.isEnabled());
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
 
-        userDao.update(user.getUserId(), user.getEmail(),encodedPassword, user.getFirstName(), user.getLastName());
+        userDao.update(user.getUserId(), user.getEmail(),encodedPassword, user.getFirstName(), user.getLastName(), user.isEnabled());
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), encodedPassword, auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);

@@ -10,22 +10,26 @@ public class User {
     private final String lastName;
     private final String cbu;
 
-    public User(long userId, String email, String password, String firstName, String lastName){
+    private final boolean isEnabled;
+
+    public User(long userId, String email, String password, String firstName, String lastName, boolean isEnabled){
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.cbu = null;
+        this.isEnabled = isEnabled;
     }
 
-    public User(long userId, String email, String password, String firstName, String lastName, String cbu) {
+    public User(long userId, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.cbu = cbu;
+        this.isEnabled = isEnabled;
     }
 
     public long getUserId() {
@@ -51,4 +55,10 @@ public class User {
     public String getCbu() {
         return cbu;
     }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 }
+
+

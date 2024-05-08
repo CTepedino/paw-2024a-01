@@ -55,6 +55,8 @@ ALTER TABLE cover_images ADD PRIMARY KEY (id);
 ALTER TABLE cover_images ADD CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES books (book_id) ON DELETE CASCADE;
 
 ALTER TABLE users ADD COLUMN cbu VARCHAR(22);
+ALTER TABLE users ADD COLUMN is_enabled BOOLEAN;
+UPDATE users SET is_enabled = TRUE;
 */
 
 
@@ -65,7 +67,8 @@ CREATE TABLE IF NOT EXISTS users(
     last_name VARCHAR(255),
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255),
-    cbu VARCHAR(22)
+    cbu VARCHAR(22),
+    is_enabled BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS books (

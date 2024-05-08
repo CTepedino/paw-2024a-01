@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.models.users;
 
 public enum UserRoles {
-    UNVALIDATED("UNVALIDATED"),
     READER("READER"),
     WRITER("WRITER");
 
