@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import ar.edu.itba.paw.models.files.CoverImage;
+import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -35,9 +36,9 @@ public class FileController {
         return bs.getPreview(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/profile/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = "/profilePicture/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public @ResponseBody byte[] getProfileImage(@PathVariable("id") long id) {
-        return us.getProfilePicture(id).get().getFile();
+        return us.getProfilePictureOrDefault(id).getFile();
     }
 
 

@@ -29,19 +29,19 @@
                 <div class="col s4">
                     <div class="card-panel center">
                         <img class="home-image" src="${pageContext.request.contextPath}/images/searchBook.svg">
-                        <h6 class="white-text"><spring:message code="book.home.findBook"/></h6>
+                        <h6 class="black-text"><spring:message code="book.home.findBook"/></h6>
                     </div>
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
                         <img class="home-image" src="${pageContext.request.contextPath}/images/contactWriter.svg">
-                        <h6 class="white-text"><spring:message code="book.home.contactWriter"/></h6>
+                        <h6 class="black-text"><spring:message code="book.home.contactWriter"/></h6>
                     </div>
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
                         <img class="home-image" src="${pageContext.request.contextPath}/images/contact.svg">
-                        <h6 class="white-text"><spring:message code="book.home.getCopy"/></h6>
+                        <h6 class="black-text"><spring:message code="book.home.getCopy"/></h6>
                     </div>
                 </div>
             </div>

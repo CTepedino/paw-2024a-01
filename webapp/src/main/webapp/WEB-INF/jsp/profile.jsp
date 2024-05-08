@@ -25,9 +25,7 @@
         <header></header>
         <div class="left__col">
             <div class="img__container">
-                <img src="<c:url value="${baseUrl}/image/${user.userId}"
-                        />" alt="userprofile"
-                />
+                <img src="<c:url value="${baseUrl}/profilePicture/${user.userId}"/>" alt="userprofile"/>
 <%--                <img src="${pageContext.request.contextPath}/images/user.png"/>--%>
             </div>
             <h2><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
@@ -37,7 +35,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="">Buyed Books</a></li>
+                    <li><a href="">Bought Books</a></li>
                     <li><a href="">My Books</a></li>
                 </ul>
             </nav>

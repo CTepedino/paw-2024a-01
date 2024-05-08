@@ -26,14 +26,10 @@ public interface UserService {
     void changePassword(String password);
     void updateProfile(String firstName, String lastName, String CBU);
 
-    //Si es READER -> CBU NULL
-    // SOLO SI ES CUALQUIERA updateUser(String firstName, String lastName, String CBU)
-    // WRITER DEBIESE ACTUALIZAR
-
     Optional<User> getLoggedUser();
 
     boolean isLoggedIn();
 
     void setProfilePicture(MultipartFile profilePicture);
-    Optional<ProfilePicture> getProfilePicture(long id);
+    ProfilePicture getProfilePictureOrDefault(long id);
 }

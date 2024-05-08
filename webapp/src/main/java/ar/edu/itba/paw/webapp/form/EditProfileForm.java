@@ -8,8 +8,6 @@ import javax.validation.constraints.*;
 
 public class EditProfileForm {
 
-
-
     @NotNull
     private MultipartFile profilePicture;
 
@@ -26,16 +24,14 @@ public class EditProfileForm {
 
 
     @Size(min = 22, max = 22)
-    //@Pattern(regexp = "\\d+")
+    @Pattern(regexp = "\\d*")
     private String cbu;
 
 
-    @NotNull
+
     public MultipartFile getProfilePicture() {
         return profilePicture;
     }
-
-
 
     public String getNewFirstName() {
         return newFirstName;

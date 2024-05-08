@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.dao.files.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
@@ -11,6 +12,9 @@ import ar.edu.itba.paw.models.users.UserRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @Service
@@ -34,14 +40,18 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final ResourceLoader resourceLoader;
+
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao){
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, ResourceLoader resourceLoader){
         this.userDao = userDao;
         this.profilePictureDao = profilePictureDao;
         this.passwordEncoder = passwordEncoder;
+        this.resourceLoader = resourceLoader;
     }
 
     @Transactional(readOnly = true)
+
     @Override
     public Optional<User> findById(long id){
         return userDao.findById(id);
@@ -159,7 +169,20 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<ProfilePicture> getProfilePicture(long id) {
-        return profilePictureDao.findById(id);
+    public ProfilePicture getProfilePictureOrDefault(long id) {
+        Optional<ProfilePicture> maybePicture = profilePictureDao.findById(id);
+        return maybePicture.orElseGet(() -> new ProfilePicture(id, getDefaultProfilePicture()));
+    }
+
+    private byte[] getDefaultProfilePicture(){
+        InputStream is = getClass().getResourceAsStream("/images/defaultUser.jpg");
+        if (is == null){
+            throw new ImageNotFoundException();
+        }
+        try{
+            return is.readAllBytes();
+        } catch (Exception e){
+            throw new UnreadableFileException();
+        }
     }
 }
