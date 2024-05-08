@@ -32,7 +32,7 @@
             <c:if test="${!hasWriterRole}">
                 <h6><spring:message code="book.addBook.cbuTitle"/></h6>
                 <div class="input-field">
-                    <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label><br>
+                    <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label>
                     <form:input type="text" path="cbu" inputmode="numeric"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>

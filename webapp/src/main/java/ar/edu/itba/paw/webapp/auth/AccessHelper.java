@@ -28,13 +28,9 @@ public class AccessHelper {
         }
     }
 
-    public boolean canAccessReceipt(Authentication auth, HttpServletRequest request){
-        String uri = request.getRequestURI();
+    public boolean canAccessReceipt(Authentication auth, String id){
 
-        String[] uriParts = uri.split("/");
-        String idString = uriParts[uriParts.length - 1];
-
-        long orderId =  Long.parseLong(idString);
+        long orderId =  Long.parseLong(id);
         Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         String buyerEmail = order.getBuyer().getEmail();
