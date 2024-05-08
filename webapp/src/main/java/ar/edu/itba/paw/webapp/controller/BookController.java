@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ar.edu.itba.paw.webapp.util.SecurityUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -50,7 +49,6 @@ public class BookController {
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", bs.getAll(page, PAGE_SIZE));
-        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
 
@@ -63,7 +61,6 @@ public class BookController {
         List<Book> recommendations = bs.getAllGenreExcluding(book.getGenre(), book);
         mav.addObject("book", book);
         mav.addObject("user", us.getLoggedUser().orElse(null));
-        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         mav.addObject("recommendations", recommendations);
         return mav;
     }
@@ -71,11 +68,9 @@ public class BookController {
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
     public ModelAndView addBookForm(@ModelAttribute("newBookForm") NewBookForm form){
 
-        boolean hasWriterRole = SecurityUtils.hasRole("WRITER");
 
         ModelAndView mav = new ModelAndView("addBook");
         mav.addObject("genres", BookGenre.values());
-        mav.addObject("hasWriterRole", hasWriterRole);
         return mav;
     }
 

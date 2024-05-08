@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col s4">
-                    <c:if test="${!hideSearchBar}">
+                    <c:if test="${!param.hideSearchBar}">
                         <form action="${searchUrl}" <%--class="col s4"--%>>
                               <div class="input-field">
                                 <input id="title" name="title" type="search" required>

@@ -139,16 +139,29 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Optional<User> getLoggedUser(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()){
+        if (!isLoggedIn()){
             return Optional.empty();
         }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return findByEmail(auth.getName());
     }
 
     @Override
     public boolean isLoggedIn() {
         return SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+    }
+
+    @Override
+    public boolean hasRole(UserRoles role) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!isLoggedIn()){
+            return false;
+        }
+
+        return authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals(role.toString()));
     }
 
     @Transactional(readOnly = true)

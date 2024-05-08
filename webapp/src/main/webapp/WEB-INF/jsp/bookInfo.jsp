@@ -9,9 +9,11 @@
     <title><c:out value="${book.title}"/></title>
     <link href="${pageContext.request.contextPath}/css/bookInfo.css" rel="stylesheet"/>
 </head>
+
 <jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
 </jsp:include>
+
 <body>
     <div class="book-container z-depth-2" style="margin: 30px;padding: 20px;">
         <div class="row">

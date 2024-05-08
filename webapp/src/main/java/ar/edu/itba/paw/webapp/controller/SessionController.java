@@ -7,7 +7,6 @@ import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.auth.CybraryAuthUserDetails;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
-import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -64,10 +63,8 @@ public class SessionController {
 
 
     @RequestMapping(method = RequestMethod.GET, path="/profile")
-    public ModelAndView profile(Authentication authentication){
+    public ModelAndView profile(){
         ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("user", us.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new));
-        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
 
