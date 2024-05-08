@@ -4,10 +4,7 @@ import ar.edu.itba.paw.webapp.form.validations.LoggedUserPassword;
 import ar.edu.itba.paw.webapp.form.validations.UniqueEmail;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class EditProfileForm {
 
@@ -27,20 +24,18 @@ public class EditProfileForm {
     @Size(max = 255, message = "MaxSize.regexp")
     private String newLastName;
 
-    @NotNull
-    @NotEmpty
-    @Size(max = 255, message = "MaxSize.regexp")
-    @Email
-    @UniqueEmail
-    private String newEmail;
 
+    @Size(min = 22, max = 22)
+    //@Pattern(regexp = "\\d+")
+    private String cbu;
+
+
+    @NotNull
     public MultipartFile getProfilePicture() {
         return profilePicture;
     }
 
-    public String getNewEmail() {
-        return newEmail;
-    }
+
 
     public String getNewFirstName() {
         return newFirstName;
@@ -50,10 +45,14 @@ public class EditProfileForm {
         return newLastName;
     }
 
-    public void setNewEmail(String newEmail) {
-        this.newEmail = newEmail;
+
+    public String getCbu() {
+        return cbu;
     }
 
+    public void setCbu(String cbu) {
+        this.cbu = cbu;
+    }
 
     public void setNewFirstName(String newFirstName) {
         this.newFirstName = newFirstName;

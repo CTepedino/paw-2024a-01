@@ -140,27 +140,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeFirstName(String firstName) {
+    public void updateProfile(String firstName, String lastName, String CBU) {
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
-        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(), firstName, user.getLastName());
-    }
-    @Transactional
-    @Override
-    public void changeLastName(String lastName) {
-        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
-        User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
-        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),user.getFirstName(), lastName);
-    }
-    @Transactional
-    @Override
-    public void changeEmail(String email) {
-        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
-        User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
-        userDao.update(user.getUserId(), email,user.getPassword(),user.getFirstName(), user.getLastName());
-    }
+        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, CBU);
 
-
+    }
     @Transactional
     @Override
     public void setProfilePicture(MultipartFile profilePicture) {

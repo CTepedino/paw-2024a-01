@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.interfaces.service.MailService;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
@@ -9,16 +11,16 @@ import ar.edu.itba.paw.webapp.form.EditProfileForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class SessionController {
@@ -75,10 +77,20 @@ public class SessionController {
         return mav;
     }
 
+    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}")
+    public ModelAndView bookInfo(@PathVariable("userId") final long userId){
+        final ModelAndView mav = new ModelAndView("profile");
+        User user = us.findById(userId).orElseThrow(BookNotFoundException::new);
+        mav.addObject("user", us.getLoggedUser().orElse(null));
+        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
+        return mav;
+    }
+
+
     @RequestMapping(method = RequestMethod.GET, path="/editProfile")
     public ModelAndView editProfileForm(@ModelAttribute("editProfileForm") EditProfileForm form, Authentication authentication){
         ModelAndView mav = new ModelAndView("editProfile");
-        mav.addObject("user", us.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new));
+        mav.addObject("user", us.getLoggedUser().orElseThrow(UserNotFoundException::new));
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }
@@ -89,11 +101,9 @@ public class SessionController {
             return editProfileForm(form,authentication);
         }
         us.setProfilePicture(form.getProfilePicture());
-        us.changeEmail(form.getNewEmail());
-        us.changeFirstName(form.getNewFirstName());
-        us.changeLastName(form.getNewLastName());
-
-        return new ModelAndView("redirect:/profile");
+        us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu());
+        long userID = Objects.requireNonNull(us.getLoggedUser().orElse(null)).getUserId();
+        return new ModelAndView("redirect:/profile/"+userID);
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/changePassword")
@@ -106,9 +116,11 @@ public class SessionController {
         if (errors.hasErrors()){
             return changePasswordForm(form);
         }
+        long userID = Objects.requireNonNull(us.getLoggedUser().orElse(null)).getUserId();
         us.changePassword(form.getPassword());
-        return new ModelAndView("redirect:/profile");
+        return new ModelAndView("redirect:/profile/"+userID);
     }
+
 
 }
 

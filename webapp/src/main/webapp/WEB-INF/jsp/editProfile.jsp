@@ -45,13 +45,15 @@
             <form:errors path="newLastName" cssClass="red-text" element="p"/>
 
 
-            <div class="input-field">
-                <form:label path="newEmail">
-                    Email
-                </form:label>
-                <form:input path="newEmail" type="text" value="${user.email}"/>
-            </div>
-            <form:errors path="newEmail" cssClass="red-text" element="p"/>
+            <c:if test="${hasWriterRole}">
+                <h6><spring:message code="book.addBook.cbuTitle"/></h6>
+                <div class="input-field">
+                    <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label><br>
+                    <form:input type="text" path="cbu" inputmode="numeric" value="${user.cbu}"/>
+                </div>
+                <form:errors path="cbu" cssClass="red-text" element="p"/>
+            </c:if>
+
 
             <div class="input-field">
                 <form:label path="profilePicture" cssClass="active">Sube tu foto de perfil<span class="red-text">*</span> (.png, .jpeg)</form:label>
@@ -61,7 +63,7 @@
 
 
             <div class="input-field center-align submit-btn">
-                <button class="btn waves-effect waves-light white-text" id="submitBtn" type="submit" name="action" disabled="disabled">
+                <button class="btn waves-effect waves-light white-text" id="submitBtn" type="submit" name="action">
                     Guardar Cambios
                 </button>
             </div>
