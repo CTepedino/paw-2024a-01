@@ -23,4 +23,6 @@ public interface OrderDao {
 
     List<Order> getAllWriterOrders(long writerId, int offset, int limit);
     long getAllWriterOrdersSize(long writerId);
+
+    List<Order> getWriterOrdersWithParams(long writerId,  String title, OrderStatus orderStatus, int offset, int limit);
 }

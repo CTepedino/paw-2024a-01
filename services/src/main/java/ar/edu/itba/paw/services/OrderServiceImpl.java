@@ -121,6 +121,16 @@ public class OrderServiceImpl implements OrderService {
             throw new InvalidPageException();
         }
         List<Order> orders = orderDao.getReaderOrdersWithParams(readerId, title, orderStatus, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getAllWriterOrdersSize(readerId));
+        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getAllReaderOrdersSize(readerId));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Order> searchWriterOrdersWithParams(long writerId,  String title, OrderStatus orderStatus, int pageNumber, int pageSize){
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Order> orders = orderDao.getWriterOrdersWithParams(writerId, title, orderStatus, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getAllWriterOrdersSize(writerId));
     }
 }

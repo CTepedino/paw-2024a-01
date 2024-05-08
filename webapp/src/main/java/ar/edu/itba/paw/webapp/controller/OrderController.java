@@ -55,10 +55,17 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/sales")
-    public ModelAndView sales(){
+    public ModelAndView sales(@Valid @ModelAttribute("orderSearchForm") final OrderSearchForm form, final BindingResult error){
+
+        if(error.hasErrors()){
+            return new ModelAndView("salesView");
+        }
+
         ModelAndView mav = new ModelAndView("salesView");
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("orders", os.getAllWriterOrders(user.getUserId(), 1, 10));
+        mav.addObject("orders", os.searchWriterOrdersWithParams(user.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
+        mav.addObject("orderSearchForm", form);
+        mav.addObject("statuses", OrderStatus.values());
         mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
         return mav;
     }

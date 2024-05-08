@@ -28,4 +28,6 @@ public interface OrderService {
     Optional<Order> findById(long orderId);
 
     PaginatedContent<Order> searchReaderOrdersWithParams(long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
+
+    PaginatedContent<Order> searchWriterOrdersWithParams(long writerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
 }

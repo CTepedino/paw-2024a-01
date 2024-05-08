@@ -1,0 +1,58 @@
+.sales{
+    width: 95% !important;
+}
+
+.page-title {
+    color: #437C90 !important;
+}
+
+.table-top {
+    background-color: #437c90;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 0 !important;
+}
+
+.table-title {
+    color: white;
+}
+
+.collection-item{
+    padding: 0 !important;
+}
+
+.purchased-book{
+    margin-top: 0;
+    margin-bottom: 0 !important;
+    height: 150px;
+}
+
+.card-image {
+    height: 150px;
+}
+.book_cover {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+}
+
+.purchase-info {
+    height: 100%;
+    align-content: center;
+}
+
+.decline-button{
+    background-color: red !important;
+}
+
+.accept-button{
+    background-color: green !important;
+}
+
+.price {
+    color: #437C90;
+}
+
+.book-title{
+    font-weight: bold;
+}

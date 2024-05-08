@@ -182,5 +182,30 @@ public class OrderJdbcDao implements OrderDao {
                 writerId
         );
     }
+
+    @Override
+    public List<Order> getWriterOrdersWithParams(long writerId,  String title, OrderStatus orderStatus, int offset, int limit) {
+
+        StringBuilder query = new StringBuilder("""
+                SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name
+                FROM orders o
+                JOIN users r ON o.buyer_id = r.user_id
+                JOIN books b ON o.book_id = b.book_id
+                JOIN users w ON b.writer_id = w.user_id
+                WHERE w.user_id = ?
+                """);
+        List<Object> params = new ArrayList<>();
+        params.add(writerId);
+        query.append("AND lower(title) LIKE lower(?) ");
+        params.add("%" + (title!=null?title:"") + "%");
+        if (orderStatus!=null) {
+            DaoUtils.addQueryCondition(query, params, " AND status = ? ", orderStatus.toString());
+        }
+        query.append(" LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
+        return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
+    }
+
 }
 
