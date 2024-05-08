@@ -12,8 +12,10 @@
 </head>
 
 
-<c:set var="hideSearchBar" value="${true}" scope="request"/>
-<jsp:include page="components/topBar.jsp"/>
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
+    <jsp:param name="hideSearchBar" value="${true}"/>
+</jsp:include>
 
 
 <body>

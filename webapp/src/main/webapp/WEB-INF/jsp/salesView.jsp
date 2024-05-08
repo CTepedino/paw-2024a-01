@@ -12,7 +12,7 @@
 </head>
 
 <jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
 </jsp:include>
 
 <body>

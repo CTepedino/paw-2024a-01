@@ -36,4 +36,6 @@ public interface UserService {
 
     void setProfilePicture(MultipartFile profilePicture);
     Optional<ProfilePicture> getProfilePicture(long id);
+
+    boolean hasRole(UserRoles role);
 }

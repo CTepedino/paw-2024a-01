@@ -11,10 +11,12 @@
     <title><spring:message code="book.addBook.publish"/></title>
     <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
 </head>
+
 <jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
-    <jsp:param name="hideSearchBar" value="true"/>
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
+    <jsp:param name="hideSearchBar" value="${true}"/>
 </jsp:include>
+
 <body>
 <div class="container">
     <div class="form">

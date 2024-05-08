@@ -12,8 +12,9 @@
     <link href="${pageContext.request.contextPath}/css/searchOptions.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/css/paginationControls.css" rel="stylesheet"/>
 </head>
+
 <jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
     <jsp:param name="hideSearchBar" value="true"/>
 </jsp:include>
 <body>
