@@ -2,10 +2,13 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.EmailValidationDao;
 import ar.edu.itba.paw.interfaces.service.EmailValidationService;
+import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.models.exception.NoValidationCodeException;
 import ar.edu.itba.paw.models.users.EmailValidation;
+import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -19,14 +22,20 @@ public class EmailValidationServiceImpl implements EmailValidationService {
 
     private final EmailValidationDao emailValidationDao;
 
+    private final MailService ms;
+
     @Autowired
-    public EmailValidationServiceImpl(EmailValidationDao emailValidationDao){
+    public EmailValidationServiceImpl(EmailValidationDao emailValidationDao, MailService ms){
         this.emailValidationDao = emailValidationDao;
+        this.ms = ms;
     }
 
+    @Transactional
     @Override
-    public void create(long id) {
-        emailValidationDao.create(id, generateRandomVerificationCode(), LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS));
+    public void create(User user) {
+        String code = generateRandomVerificationCode();
+        emailValidationDao.create(user.getUserId(), code, LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS));
+        ms.sendRegisterEmail(user, code);
     }
 
     private String generateRandomVerificationCode(){
@@ -38,6 +47,7 @@ public class EmailValidationServiceImpl implements EmailValidationService {
         return code.toString();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean checkValidation(long id, String email, String code) {
         emailValidationDao.deleteExpired();

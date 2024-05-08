@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
         orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_CONTACT);
-        ms.sendOrderEmail(buyer.getUserId(), bookId);
+        ms.sendOrderEmail(buyer, book);
     }
 
     @Transactional(readOnly = true)

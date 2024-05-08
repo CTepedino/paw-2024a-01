@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.users.EmailValidation;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
@@ -40,13 +41,11 @@ public class MailServiceImpl implements MailService{
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, ResourceBundleMessageSource emailMessageSource, Environment env, UserService us, BookService bs) {
+    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, ResourceBundleMessageSource emailMessageSource, Environment env) {
         this.javaMailSender = javaMailSender;
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
         this.emailMessageSource = emailMessageSource;
         this.env = env;
-        this.us = us;
-        this.bs = bs;
     }
 
     private void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
@@ -69,10 +68,8 @@ public class MailServiceImpl implements MailService{
 
     @Override
     @Async
-    public void sendOrderEmail(long buyerId, long bookId){
-        User buyer = us.findById(buyerId).orElseThrow(UserNotFoundException::new);
-        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        User writer = us.findById(book.getWriter().getUserId()).orElseThrow(UserNotFoundException::new);
+    public void sendOrderEmail(User buyer, Book book){
+        User writer = book.getWriter();
 
         Locale currentLocale = LocaleContextHolder.getLocale();// TODO: Que locale usar para los mails?
         String to = writer.getEmail();
@@ -94,8 +91,7 @@ public class MailServiceImpl implements MailService{
 
     @Override
     @Async
-    public void sendRegisterEmail(long userId){
-        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+    public void sendRegisterEmail(User user, String code){
 
         Locale currentLocale = LocaleContextHolder.getLocale();
         String to = user.getEmail();

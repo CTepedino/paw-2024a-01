@@ -40,18 +40,16 @@ public class UserServiceImpl implements UserService {
     private final ProfilePictureDao profilePictureDao;
 
     private final EmailValidationService evs;
-    private final MailService ms;
 
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs, MailService ms){
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs){
         this.userDao = userDao;
         this.profilePictureDao = profilePictureDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
-        this.ms = ms;
     }
 
     @Transactional(readOnly = true)
@@ -78,8 +76,6 @@ public class UserServiceImpl implements UserService {
         );
         userDao.giveRole(user.getUserId(), UserRoles.UNVALIDATED);
         evs.create(user.getUserId());
-
-        ms.sendRegisterEmail(user.getUserId());
 
         return user;
     }
