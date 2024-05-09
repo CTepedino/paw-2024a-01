@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces.service;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,18 +26,10 @@ public interface OrderService {
     Order acceptReceipt(Order order);
     Order rejectReceipt(Order order);*/
 
-
-
+    @Deprecated
     Order toNextStatus(Order order);
 
-    PaginatedContent<Order> getAllReaderOrders(long readerId, int pageNumber, int pageSize);
+    PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
 
-    PaginatedContent<Order> getAllWriterOrders(long writerId, int pageNumber, int pageSize);
-
-
-
-
-    PaginatedContent<Order> searchReaderOrdersWithParams(long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
-
-    PaginatedContent<Order> searchWriterOrdersWithParams(long writerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
+    PaginatedContent<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
 }

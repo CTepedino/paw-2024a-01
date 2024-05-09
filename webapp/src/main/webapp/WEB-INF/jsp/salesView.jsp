@@ -57,7 +57,7 @@
                             <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
                                 <img
                                         class="book_cover"
-                                        src="<c:url value="${baseUrl}/image/${order.book.bookId}"/>"
+                                        src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
                                         alt="<spring:message code="bookInfoCard.cover"/>"
                                 />
                             </a>

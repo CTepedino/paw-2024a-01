@@ -161,7 +161,7 @@ public class BookJdbcDao implements BookDao {
             Integer minSuggestedAge,
             Integer maxSuggestedAge
     ){
-            query.append("WHERE lower(title) LIKE lower(?) ");
+            query.append("WHERE lower(title) LIKE lower(?)  ");
             params.add("%" + (title!=null?DaoUtils.escapeSearchString(title):"") + "%");
             if (genre!=null) {
                 DaoUtils.addQueryCondition(query, params, " AND genre = ? ", genre.toString());

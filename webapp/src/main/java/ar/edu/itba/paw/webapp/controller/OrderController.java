@@ -46,7 +46,7 @@ public class OrderController {
 
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
-        mav.addObject("orders", os.searchReaderOrdersWithParams(user.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
+        mav.addObject("orders", os.getReaderOrders(user.getUserId(), form.getTitle(), form.getOrderStatus(), null, form.getPage(), 10));
         mav.addObject("orderSearchForm", form);
         mav.addObject("statuses", OrderStatus.values());
         return mav;
@@ -61,7 +61,7 @@ public class OrderController {
 
         ModelAndView mav = new ModelAndView("salesView");
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("orders", os.searchWriterOrdersWithParams(user.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
+        mav.addObject("orders", os.getReaderOrders(user.getUserId(), form.getTitle(), form.getOrderStatus(), null, form.getPage(), 10));
         mav.addObject("orderSearchForm", form);
         mav.addObject("statuses", OrderStatus.values());
         return mav;
