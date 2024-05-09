@@ -15,12 +15,14 @@ public interface OrderDao {
 
     long create(long buyerId, long bookId, OrderStatus orderStatus);
 
-    void setStatus(long orderId, OrderStatus orderStatus);
+    void update(long orderId, OrderStatus orderStatus);
 
     List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit);
     long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);
 
     List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit);
     long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
+
+    void updateAllWriterOrders(long writerId, OrderStatus oldStatus,OrderStatus newStatus);
 
 }

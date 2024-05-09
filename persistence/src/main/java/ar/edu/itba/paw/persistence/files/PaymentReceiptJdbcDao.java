@@ -18,4 +18,13 @@ public class PaymentReceiptJdbcDao extends FileJdbcDao<PaymentReceipt> implement
         super(ds, "payment_receipts", ROW_MAPPER);
     }
 
+    @Override
+    public void createOrUpdate(long id, byte[] file){
+        if (super.findById(id).isPresent()){
+            super.update(id, file);
+        } else {
+            super.create(id, file);
+        }
+    }
+
 }

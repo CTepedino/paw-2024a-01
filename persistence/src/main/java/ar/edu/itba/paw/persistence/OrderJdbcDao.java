@@ -56,7 +56,7 @@ public class OrderJdbcDao implements OrderDao {
     }
 
     @Override
-    public void setStatus(long orderId, OrderStatus orderStatus) {
+    public void update(long orderId, OrderStatus orderStatus) {
         jdbcTemplate.update(
             """
                 UPDATE orders
@@ -183,5 +183,22 @@ public class OrderJdbcDao implements OrderDao {
         return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
 
+
+    @Override
+    public void updateAllWriterOrders(long writerId, OrderStatus oldStatus, OrderStatus newStatus) {
+        jdbcTemplate.update(
+        """
+                UPDATE orders
+                SET status = ?
+                FROM books
+                WHERE orders.book_id = books.book_id
+                AND orders.status = ?
+                AND books.writer_id = ?
+            """,
+            newStatus,
+            oldStatus,
+            writerId
+        );
+    }
 }
 

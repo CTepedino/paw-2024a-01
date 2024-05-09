@@ -21,15 +21,11 @@ public interface OrderService {
 
     PaymentReceipt getReceipt(long id);
 
-
-/*    Order receiptSent(Order order);
-    Order acceptReceipt(Order order);
-    Order rejectReceipt(Order order);*/
-
-    @Deprecated
-    Order toNextStatus(Order order);
+    void atCbuAdded(long writerId);
+    public void updateOrder(long orderId, MultipartFile receipt, Boolean approved);
 
     PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
 
     PaginatedContent<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
+
 }

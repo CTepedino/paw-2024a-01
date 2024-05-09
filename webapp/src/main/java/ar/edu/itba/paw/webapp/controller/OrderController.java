@@ -61,7 +61,7 @@ public class OrderController {
 
         ModelAndView mav = new ModelAndView("salesView");
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("orders", os.getReaderOrders(user.getUserId(), form.getTitle(), form.getOrderStatus(), null, form.getPage(), 10));
+        mav.addObject("orders", os.getWriterOrders(user.getUserId(), form.getTitle(), form.getOrderStatus(), null, form.getPage(), 10));
         mav.addObject("orderSearchForm", form);
         mav.addObject("statuses", OrderStatus.values());
         return mav;
@@ -83,7 +83,7 @@ public class OrderController {
     @RequestMapping(method = RequestMethod.POST, path="/advanceOrder")
     public ModelAndView advanceOrder(@RequestParam("bookId") long bookId, @RequestParam("writerId") long writerId, @RequestParam("buyerId") long buyerId, @RequestParam("from") String from){
         Order order = os.find(buyerId, bookId).orElseThrow(OrderNotFoundException::new);
-        os.toNextStatus(order);
+        os.updateOrder(order.getOrderId(), null, null);
         return new ModelAndView("redirect:/"+from);
     }
 

@@ -47,6 +47,4 @@ public class CybraryUserDetailsService implements UserDetailsService {
     }
 }
 
-//isEnabled() en tabla -> no rol UNVALIDATED
-
 //cron @enabledScheduled y @scheduled para avisar update cbu

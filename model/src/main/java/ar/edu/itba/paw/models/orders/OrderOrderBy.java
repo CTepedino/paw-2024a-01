@@ -5,7 +5,7 @@ public enum OrderOrderBy {
     DATE_ASC("date ASC"),
     DATE_DESC("date DESC");
 
-    private String columnName;
+    private final String columnName;
 
     OrderOrderBy(String columnName){
         this.columnName = columnName;

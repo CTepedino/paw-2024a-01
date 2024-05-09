@@ -15,7 +15,6 @@ import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,24 +68,13 @@ public class OrderServiceImpl implements OrderService {
         if (book.getWriter().getUserId() == buyer.getUserId()){
             return false;
         }
-        if (orderDao.find(buyer.getUserId(), bookId).isPresent()){
-            return false;
-        }
-        return true;
+        return orderDao.find(buyer.getUserId(), bookId).isEmpty();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Order> find(long buyerId, long bookId) {
         return orderDao.find(buyerId, bookId);
-    }
-
-    @Transactional
-    @Override
-    public Order toNextStatus(Order order){
-        OrderStatus newStatus = order.getOrderStatus().getNext();
-        orderDao.setStatus(order.getOrderId(), newStatus);
-        return new Order(order.getOrderId(), order.getBuyer(), order.getBook(), newStatus, order.getDate());
     }
 
     @Transactional(readOnly = true)
@@ -119,5 +107,50 @@ public class OrderServiceImpl implements OrderService {
         }
         List<Order> orders = orderDao.getWriterOrders(writerId, title, orderStatus, orderBy,(pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getWriterOrdersSize(writerId, title, orderStatus));
+    }
+
+    @Transactional
+    @Override
+    public void atCbuAdded(long writerId) {
+        orderDao.updateAllWriterOrders(writerId, OrderStatus.WAITING_CONTACT, OrderStatus.WAITING_PAYMENT);
+    }
+
+
+    private void sendReceipt(long orderId, MultipartFile receipt) {
+        if (receipt == null){
+            throw new InvalidOrderUpdateException();
+        }
+        orderDao.update(orderId, OrderStatus.WAITING_APPROVAL);
+        try {
+            paymentReceiptDao.createOrUpdate(orderId, receipt.getBytes());
+        } catch (IOException e){
+            throw new UnreadableFileException();
+        }
+        //ms.sendReceiptUploadedEmail();
+    }
+
+    private void acceptOrReject(long orderId, Boolean approved){
+        if (approved == null){
+            throw new InvalidOrderUpdateException();
+        }
+        if (approved) {
+            orderDao.update(orderId, OrderStatus.COMPLETED);
+            // ms.sendReceiptApprovedEmail();
+        } else {
+            orderDao.update(orderId, OrderStatus.WAITING_PAYMENT);
+            // ms.sendReceiptDeniedEmail();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void updateOrder(long orderId, MultipartFile receipt, Boolean approved){
+        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        switch (order.getOrderStatus()){
+            case WAITING_CONTACT, COMPLETED -> throw new InvalidOrderUpdateException();
+            case WAITING_PAYMENT -> sendReceipt(orderId, receipt);
+            case WAITING_APPROVAL -> acceptOrReject(orderId, approved);
+        }
     }
 }
