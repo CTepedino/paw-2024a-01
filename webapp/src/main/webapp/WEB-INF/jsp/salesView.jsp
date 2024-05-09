@@ -73,9 +73,9 @@
                         </div>
                         <div class="col s3 purchase-info">
                             <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>
-                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
+                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL' or order.orderStatus == 'COMPLETED'}">
                                 <a href="<c:url value="/receipt/${order.orderId}"/>" target="_blank">
-                                    <button class="waves-light btn payment"><spring:message code="orders.sales.status.${order.orderStatus}.receipt"/></button>
+                                    <button class="waves-light btn payment"><spring:message code="orders.sales.status.seeReceipt"/></button>
                                 </a>
                             </c:if>
                         </div>
