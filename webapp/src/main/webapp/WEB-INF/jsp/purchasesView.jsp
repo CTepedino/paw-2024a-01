@@ -77,6 +77,9 @@
                     </div>
                     <div class="col s3 purchase-info">
                         <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                        <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
+                            <c:out value="${order.writer.cbu}"/>
+                        </c:if>
                     </div>
                     <div class="col s2 purchase-info">
                         <c:url value="/advanceOrder" var="advanceOrderUrl">
@@ -85,9 +88,9 @@
                             <c:param name="writerId" value="${order.writer.userId}"/>
                             <c:param name="from" value="purchases"/>
                         </c:url>
-                        <c:if test="${order.orderStatus == 'WAITING_PAYMENT'}">
+                        <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
                             <form action="${advanceOrderUrl}" method="post">
-                                <button class="waves-light btn payment" type="submit"><spring:message code="orders.purchases.action.${order.orderStatus}" arguments="${order.writer.cbu}"/></button>
+                                <button class="waves-light btn payment" type="submit"><spring:message code="orders.purchases.action.${order.orderStatus}"/></button>
                             </form>
                         </c:if>
                         <c:if test="${order.orderStatus == 'COMPLETED'}">

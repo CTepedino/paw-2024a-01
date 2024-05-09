@@ -73,8 +73,8 @@
                         </div>
                         <div class="col s3 purchase-info">
                             <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>
-                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
-                                    <button class="waves-light btn payment" type="submit"><spring:message code="orders.sales.satus.${order.orderStatus}.receipt"/></button>
+                            <c:if test="${(order.orderStatus == 'WAITING_APPROVAL') || (order.orderStatus == 'COMPLETED')}">
+                                    <button class="waves-light btn payment" type="submit"><spring:message code="orders.sales.status.viewReceipt"/></button>
                             </c:if>
                         </div>
                         <div class="col s2 purchase-info">
@@ -89,7 +89,7 @@
                                 <a href="${pageContext.request.contextPath}/profile"><button class="waves-light btn"><spring:message code="orders.sales.action.${order.orderStatus}.button"/></button></a>
                             </c:if>
 
-                            <c:if test="${order.orderStatus == 'WAITING_PAYMENT'}">
+                            <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
                                 <p><spring:message code="orders.sales.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i></p>
                             </c:if>
 
