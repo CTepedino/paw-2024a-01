@@ -112,7 +112,7 @@ public class OrderJdbcDaoTest{
 
     @Test
     public void testSetStatusExistingOrder(){
-        orderDao.setStatus(EXISTING_ORDER_ID, OrderStatus.WAITING_PAYMENT);
+        orderDao.update(EXISTING_ORDER_ID, OrderStatus.WAITING_PAYMENT);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "orders", "order_id = " + EXISTING_ORDER_ID + " AND status = '" + OrderStatus.WAITING_PAYMENT + "'"));
     }
 
@@ -120,7 +120,7 @@ public class OrderJdbcDaoTest{
     public void testSetStatusNonExistingOrder(){
         int rowsBeforeUpdate = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
 
-        orderDao.setStatus(NON_EXISTING_ORDER_ID, OrderStatus.WAITING_PAYMENT);
+        orderDao.update(NON_EXISTING_ORDER_ID, OrderStatus.WAITING_PAYMENT);
 
         int rowsAfterUpdate = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
 
