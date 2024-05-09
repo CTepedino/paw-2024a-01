@@ -160,4 +160,14 @@ public class BookServiceImpl implements BookService {
         List<Book> books = bookDao.getOwnedBooks(readerId, (pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId));
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Book> getWriterBooksWithParams(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize){
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books =  bookDao.getWriterBooksWithParams(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
+    }
 }

@@ -192,6 +192,36 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
+    public List<Book> getWriterBooksWithParams(
+            long writerId,
+            String title,
+            BookSearchOrderBy orderBy,
+            int offset,
+            int limit
+    ){
+        StringBuilder query = new StringBuilder("""
+                SELECT *
+                FROM books b JOIN users u on b.writer_id = u.user_id
+                """);
+        List<Object> params = new ArrayList<>();
+
+        getBookSearchQueryConditions(query, params, title, null, null, null, null, null, null, null);
+
+        query.append(" AND writer_id = ?");
+        params.add(writerId);
+
+        if(orderBy != null) {
+            query.append(" ORDER BY ").append(orderBy.getColumnName());
+        }
+
+        query.append(" LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
+
+        return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
+    }
+
+    @Override
     public long getWriterBooksSize(long writerId) {
         return DaoUtils.getRowCount(
                 jdbcTemplate,
