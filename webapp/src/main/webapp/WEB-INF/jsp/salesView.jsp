@@ -73,7 +73,7 @@
                         </div>
                         <div class="col s3 purchase-info">
                             <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>
-                            <c:if test="${order.orderStatus == 'WAITING_FOR_BOOK'}">
+                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
                                     <button class="waves-light btn payment" type="submit"><spring:message code="orders.sales.satus.${order.orderStatus}.receipt"/></button>
                             </c:if>
                         </div>
@@ -93,7 +93,7 @@
                                 <p><spring:message code="orders.sales.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i></p>
                             </c:if>
 
-                            <c:if test="${order.orderStatus == 'WAITING_FOR_BOOK'}">
+                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
                                 <form action="${advanceOrderUrl}" method="post">
                                     <button class="waves-light btn accept-button" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></button>
                                 </form>
