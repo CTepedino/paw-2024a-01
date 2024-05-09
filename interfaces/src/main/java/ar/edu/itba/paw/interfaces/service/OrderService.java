@@ -15,7 +15,17 @@ public interface OrderService {
 
     boolean canCreateOrder(long bookId);
 
-    Optional<Order> find(long buyerId, long writerId, long bookId);
+    Optional<Order> find(long buyerId, long bookId);
+    Optional<Order> findById(long orderId);
+
+    PaymentReceipt getReceipt(long id);
+
+
+/*    Order receiptSent(Order order);
+    Order acceptReceipt(Order order);
+    Order rejectReceipt(Order order);*/
+
+
 
     Order toNextStatus(Order order);
 
@@ -23,9 +33,8 @@ public interface OrderService {
 
     PaginatedContent<Order> getAllWriterOrders(long writerId, int pageNumber, int pageSize);
 
-    PaymentReceipt getReceipt(long id);
 
-    Optional<Order> findById(long orderId);
+
 
     PaginatedContent<Order> searchReaderOrdersWithParams(long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
 

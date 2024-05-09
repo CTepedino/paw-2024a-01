@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Order> find(long buyerId, long writerId, long bookId) {
+    public Optional<Order> find(long buyerId, long bookId) {
         return orderDao.find(buyerId, bookId);
     }
 

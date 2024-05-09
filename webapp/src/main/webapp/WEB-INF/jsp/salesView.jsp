@@ -64,7 +64,7 @@
                         </div>
                         <div class="col s3 purchase-info">
                             <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
-                            <p class="price">$ <c:out value="${order.book.price}"/></p>
+                            <p class="price"> <c:out value="${order.book.formattedPrice}"/></p>
                         </div>
                         <div class="col s2 purchase-info">
 

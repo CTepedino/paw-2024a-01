@@ -25,8 +25,7 @@
                     <div class="card-content" >
                         <span class="card-title grey-text text-darken-4"><c:out value="${cardBook.title}"/></span>
                         <h5>
-                            <spring:message var="price" code="bookInfoCard.price" arguments="${cardBook.price}"/>
-                            <c:out value="${price}"/>
+                            <c:out value="${cardBook.formattedPrice}"/>
                         </h5>
                     </div>
                 </div>

@@ -38,8 +38,7 @@
                         </p>
                     </div>
                     <h5 class="price-number">
-                        <spring:message var="price" code="bookInfoCard.price" arguments="${book.price}"/>
-                        <c:out value="${price}"/>
+                        <c:out value="${book.formattedPrice}"/>
                     </h5>
                 </div>
             </div>

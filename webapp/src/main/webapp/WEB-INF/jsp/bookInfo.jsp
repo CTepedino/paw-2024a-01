@@ -48,7 +48,7 @@
                        </c:if>
                     </div>
                 </div>
-                <h5>$<c:out value="${book.price}"/></h5>
+                <h5><c:out value="${book.formattedPrice}"/></h5>
                 <table>
                     <tbody>
                     <tr>

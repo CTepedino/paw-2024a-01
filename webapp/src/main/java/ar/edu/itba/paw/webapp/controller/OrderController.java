@@ -78,7 +78,7 @@ public class OrderController {
 
     @RequestMapping(method = RequestMethod.POST, path="/advanceOrder")
     public ModelAndView advanceOrder(@RequestParam("bookId") long bookId, @RequestParam("writerId") long writerId, @RequestParam("buyerId") long buyerId, @RequestParam("from") String from){
-        Order order = os.find(buyerId, writerId, bookId).orElseThrow(OrderNotFoundException::new);
+        Order order = os.find(buyerId, bookId).orElseThrow(OrderNotFoundException::new);
         os.toNextStatus(order);
         return new ModelAndView("redirect:/"+from);
     }

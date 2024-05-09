@@ -31,10 +31,9 @@ UPDATE orders SET date = now() WHERE date IS NULL;
 ALTER TABLE orders ADD COLUMN order_id SERIAL PRIMARY KEY;
 UPDATE orders SET order_id = DEFAULT;
 
-   ALTER TABLE orders ADD COLUMN order_id SERIAL;
-   ALTER TABLE orders DROP CONSTRAINT orders_pkey;
-   ALTER TABLE orders ADD PRIMARY KEY (orders_id);
-
+ALTER TABLE orders ADD COLUMN order_id SERIAL;
+ALTER TABLE orders DROP CONSTRAINT orders_pkey;
+ALTER TABLE orders ADD PRIMARY KEY (orders_id);
 
 ALTER TABLE book_previews ADD COLUMN book_id INT;
 UPDATE book_previews AS bp SET book_id = b.book_id FROM books AS b WHERE bp.id = b.preview_id;
@@ -58,7 +57,6 @@ ALTER TABLE users ADD COLUMN cbu VARCHAR(22);
 ALTER TABLE users ADD COLUMN is_enabled BOOLEAN;
 UPDATE users SET is_enabled = TRUE;
 */
-
 
 
 CREATE TABLE IF NOT EXISTS users(
