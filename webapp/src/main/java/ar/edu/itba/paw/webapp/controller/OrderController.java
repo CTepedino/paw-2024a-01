@@ -73,6 +73,10 @@ public class OrderController {
 
         //os.create(bookId, null);
         //ms.sendEmail(us.getLoggedUser().orElseThrow(UserNotFoundException::new).getEmail(), bookTitle);
+        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        ModelAndView mav = new ModelAndView("orderSummary");
+        Order order = os.find(user.getUserId(), bookId).orElseThrow(OrderNotFoundException::new);
+        mav.addObject("order", order);
         return new ModelAndView("orderSummary");
     }
 

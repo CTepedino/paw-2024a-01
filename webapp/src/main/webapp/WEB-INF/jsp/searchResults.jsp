@@ -61,7 +61,7 @@
             </div>
         </c:if>
     </div>
-    <div class="col s3">
+    <div class="col s3 search-options">
         <div class="row">
             <div class="col s12">
 

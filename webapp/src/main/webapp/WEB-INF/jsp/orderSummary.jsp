@@ -20,20 +20,22 @@
             alt="<spring:message code="buy.emailConfirmation.imageAlt"/>"
     />
     <div class="container">
-        <h2 class="title">
+        <h3 class="title">
             <spring:message code="buy.emailConfirmation.sentInfo"/>
-        </h2>
+        </h3>
         <p class="order-description">
-            <spring:message code="buy.emailConfirmation.instructions"/>
+            <spring:message code="buy.emailConfirmation.instructions" arguments="${order.book.price},${order.writer.cbu}"/>
         </p>
+        <button class="cancel-button">
+            <a class="cancel-button" href="${pageContext.request.contextPath}/">
+                <spring:message code="buy.emailConfirmation.sendReceipt"/>
+            </a>
+        </button>
+        <div class="divider"></div>
+        <p><spring:message code="buy.emailConfirmation.sendLater"/></p>
         <button class="proceed-button">
             <a class="a-button" href="${pageContext.request.contextPath}/purchases">
                 <spring:message code="buy.emailConfirmation.viewMyOrders"/>
-            </a>
-        </button>
-        <button class="cancel-button">
-            <a class="cancel-button" href="${pageContext.request.contextPath}/">
-                <spring:message code="buy.emailConfirmation.goBackHome"/>
             </a>
         </button>
     </div>

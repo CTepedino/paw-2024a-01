@@ -11,6 +11,7 @@
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
     <link href="<c:url value="/css/salesView.css"/>" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 
 <jsp:include page="components/topBar.jsp">
@@ -85,7 +86,6 @@
                             </c:url>
 
                             <c:if test="${order.orderStatus == 'WAITING_CONTACT'}">
-                                <p><spring:message code="orders.purchases.action.${order.orderStatus}"/></p>
                                 <a href="${pageContext.request.contextPath}/profile"><button class="waves-light btn"><spring:message code="orders.sales.action.${order.orderStatus}.button"/></button></a>
                             </c:if>
 
@@ -108,6 +108,19 @@
                 </li>
             </c:forEach>
         </ul>
+
+        <c:if test="${orders.pageCount > 1}">
+            <input type="number" id="page" name="page" value="${orders.pageNumber}" style="display: none"/>
+            <script src="<c:url value="/js/paginationControls.js"/>"></script>
+            <script>
+                const paginationButtons = new PaginationButtons(${orders.pageCount}, Math.min(10, ${orders.pageCount}), ${orders.pageNumber}, true);
+                paginationButtons.render();
+                paginationButtons.onChange(e => {
+                    document.getElementById('page').value = e.target.value;
+                    document.getElementById("orders").submit();
+                })
+            </script>
+        </c:if>
 
     </form:form>
 </div>

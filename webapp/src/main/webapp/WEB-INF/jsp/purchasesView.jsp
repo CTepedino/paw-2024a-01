@@ -11,6 +11,7 @@
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
     <link href="<c:url value="/css/purchasesView.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 
 <jsp:include page="components/topBar.jsp">
@@ -101,6 +102,18 @@
             </c:forEach>
         </ul>
 
+        <c:if test="${orders.pageCount > 1}">
+            <input type="number" id="page" name="page" value="${orders.pageNumber}" style="display: none"/>
+            <script src="<c:url value="/js/paginationControls.js"/>"></script>
+            <script>
+                const paginationButtons = new PaginationButtons(${orders.pageCount}, Math.min(10, ${orders.pageCount}), ${orders.pageNumber}, true);
+                paginationButtons.render();
+                paginationButtons.onChange(e => {
+                    document.getElementById('page').value = e.target.value;
+                    document.getElementById("orders").submit();
+                })
+            </script>
+        </c:if>
 
     </form:form>
 </div>
