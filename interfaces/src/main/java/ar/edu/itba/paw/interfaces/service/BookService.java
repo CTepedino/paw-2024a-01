@@ -70,5 +70,13 @@ public interface BookService {
 
     PaginatedContent<Book> getWriterBooks(long writerId, int pageNumber, int pageSize);
 
+    PaginatedContent<Book> getWriterBooksWithParams(
+            long writerId,
+            String title,
+            BookSearchOrderBy orderBy,
+            int pageNumber,
+            int pageSize
+    );
+
     PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize);
 }

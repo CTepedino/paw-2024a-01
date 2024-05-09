@@ -69,6 +69,13 @@ public interface BookDao {
             int limit
     );
 
+    public List<Book> getWriterBooksWithParams(
+            long writerId, String title,
+            BookSearchOrderBy orderBy,
+            int offset,
+            int limit
+    );
+
     long getWriterBooksSize(long writerId);
 
     List<Book> getOwnedBooks(long readerId, int offset, int limit);
