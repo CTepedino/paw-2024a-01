@@ -40,7 +40,7 @@
                 </form:select>
             </div>
         </div>
-
+    </form:form>
 
         <div class="row table-top">
             <div class="col s2 table-title"> Cover </div>
@@ -73,17 +73,13 @@
                         </div>
                         <div class="col s3 purchase-info">
                             <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>
-                            <c:if test="${order.orderStatus == 'WAITING_FOR_BOOK'}">
-                                    <button class="waves-light btn payment" type="submit"><spring:message code="orders.sales.satus.${order.orderStatus}.receipt"/></button>
+                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
+                                    <button class="waves-light btn payment" type="submit"><spring:message code="orders.sales.status.${order.orderStatus}.receipt"/></button>
                             </c:if>
                         </div>
                         <div class="col s2 purchase-info">
-                            <c:url value="/advanceOrder" var="advanceOrderUrl">
-                                <c:param name="bookId" value="${order.book.bookId}"/>
-                                <c:param name="buyerId" value="${order.buyer.userId}"/>
-                                <c:param name="writerId" value="${order.writer.userId}"/>
-                                <c:param name="from" value="purchases"/>
-                            </c:url>
+
+                            <c:url value="/advanceOrder/${order.orderId}/sales" var="advanceOrderUrl"/>
 
                             <c:if test="${order.orderStatus == 'WAITING_CONTACT'}">
                                 <a href="${pageContext.request.contextPath}/profile"><button class="waves-light btn"><spring:message code="orders.sales.action.${order.orderStatus}.button"/></button></a>
@@ -93,11 +89,15 @@
                                 <p><spring:message code="orders.sales.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i></p>
                             </c:if>
 
-                            <c:if test="${order.orderStatus == 'WAITING_FOR_BOOK'}">
-                                <form action="${advanceOrderUrl}" method="post">
+                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
+                                <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                    <input type="checkbox" name="approved" value="true" checked style="display: none">
                                     <button class="waves-light btn accept-button" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></button>
-                                </form>
-                                <button class="waves-light btn decline-button" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.decile"/></button>
+                                </form:form>
+                                <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                    <input type="checkbox" name="approved" value="false" checked style="display: none">
+                                    <button class="waves-light btn decline-button" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></button>
+                                </form:form>
                             </c:if>
 
                             <c:if test="${order.orderStatus == 'COMPLETED'}">
@@ -122,7 +122,7 @@
             </script>
         </c:if>
 
-    </form:form>
+
 </div>
 
 

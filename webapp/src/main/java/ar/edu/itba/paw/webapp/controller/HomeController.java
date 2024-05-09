@@ -72,7 +72,6 @@ public class HomeController {
                 PAGE_SIZE
         );
 
-        mav.addObject("bookSearchForm", form);
         mav.addObject("books", books);
         mav.addObject("genres", BookGenre.values());
         mav.addObject("orders", BookSearchOrderBy.values());

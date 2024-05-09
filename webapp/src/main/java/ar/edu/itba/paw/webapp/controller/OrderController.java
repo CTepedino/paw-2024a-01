@@ -8,13 +8,11 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.OrderSearchForm;
+import ar.edu.itba.paw.webapp.form.UpdateOrderForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -36,36 +34,44 @@ public class OrderController {
 
 
     @RequestMapping(method = RequestMethod.GET, path="/purchases")
-    public ModelAndView purchases(@Valid @ModelAttribute("orderSearchForm") final OrderSearchForm form, final BindingResult error){
-
+    public ModelAndView purchases(
+            @ModelAttribute("loggedUser") User loggedUser,
+            @ModelAttribute("updateOrderForm") UpdateOrderForm updateOrderForm,
+            @Valid @ModelAttribute("orderSearchForm") final OrderSearchForm orderSearchForm,
+            final BindingResult error
+    ){
         if(error.hasErrors()){
             return new ModelAndView("purchasesView");
         }
-
         final ModelAndView mav = new ModelAndView("purchasesView");
-
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-
-        mav.addObject("orders", os.getReaderOrders(user.getUserId(), form.getTitle(), form.getOrderStatus(), null, form.getPage(), 10));
-        mav.addObject("orderSearchForm", form);
+        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), null, orderSearchForm.getPage(), 10));
         mav.addObject("statuses", OrderStatus.values());
         return mav;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/sales")
-    public ModelAndView sales(@Valid @ModelAttribute("orderSearchForm") final OrderSearchForm form, final BindingResult error){
-
+    public ModelAndView sales(
+            @ModelAttribute("loggedUser") User loggedUser,
+            @ModelAttribute("updateOrderForm") UpdateOrderForm updateOrderForm,
+            @Valid @ModelAttribute("orderSearchForm") final OrderSearchForm form,
+            final BindingResult error)
+    {
         if(error.hasErrors()){
             return new ModelAndView("salesView");
         }
-
         ModelAndView mav = new ModelAndView("salesView");
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("orders", os.getWriterOrders(user.getUserId(), form.getTitle(), form.getOrderStatus(), null, form.getPage(), 10));
-        mav.addObject("orderSearchForm", form);
+        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), null, form.getPage(), 10));
         mav.addObject("statuses", OrderStatus.values());
         return mav;
     }
+
+    @RequestMapping(method = RequestMethod.POST, path="/advanceOrder/{id:\\d+}/{from:sales|purchases}")
+    public ModelAndView advanceOrder(@ModelAttribute("updateOrderForm") UpdateOrderForm form, @PathVariable long id, @PathVariable String from){
+        os.updateOrder(id, form.getReceipt(), form.getApproved());
+        return new ModelAndView("redirect:/" + from);
+    }
+
+
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
@@ -80,12 +86,13 @@ public class OrderController {
         return new ModelAndView("orderSummary");
     }
 
-    @RequestMapping(method = RequestMethod.POST, path="/advanceOrder")
+   /* @RequestMapping(method = RequestMethod.POST, path="/advanceOrder")
     public ModelAndView advanceOrder(@RequestParam("bookId") long bookId, @RequestParam("writerId") long writerId, @RequestParam("buyerId") long buyerId, @RequestParam("from") String from){
         Order order = os.find(buyerId, bookId).orElseThrow(OrderNotFoundException::new);
         os.updateOrder(order.getOrderId(), null, null);
         return new ModelAndView("redirect:/"+from);
-    }
+    }*/
+
 
 
 }
