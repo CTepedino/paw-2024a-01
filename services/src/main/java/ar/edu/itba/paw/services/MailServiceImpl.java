@@ -74,7 +74,7 @@ public class MailServiceImpl implements MailService{
     public void sendOrderEmail(User buyer, Book book){
         User writer = book.getWriter();
 
-        Locale currentLocale = LocaleContextHolder.getLocale();// TODO: Que locale usar para los mails?
+        Locale currentLocale = writer.getLocale();
         String to = writer.getEmail();
         String subject = emailMessageSource.getMessage("mail.orderEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
@@ -96,7 +96,7 @@ public class MailServiceImpl implements MailService{
     @Async
     public void sendRegisterEmail(User user, String code, LocalDateTime expiration){
 
-        Locale currentLocale = LocaleContextHolder.getLocale();
+        Locale currentLocale = user.getLocale();
         String to = user.getEmail();
         String subject = emailMessageSource.getMessage("mail.registerEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
@@ -123,7 +123,7 @@ public class MailServiceImpl implements MailService{
         User buyer = order.getBuyer();
         Book book = order.getBook();
 
-        Locale currentLocale = LocaleContextHolder.getLocale();
+        Locale currentLocale = writer.getLocale();
         String to = writer.getEmail();
         String subject = emailMessageSource.getMessage("mail.receiptUploadedEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
@@ -148,7 +148,7 @@ public class MailServiceImpl implements MailService{
         User buyer = order.getBuyer();
         Book book = order.getBook();
 
-        Locale currentLocale = LocaleContextHolder.getLocale();
+        Locale currentLocale = buyer.getLocale();
         String to = buyer.getEmail();
         String subject = emailMessageSource.getMessage("mail.receiptApprovedEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
@@ -171,7 +171,7 @@ public class MailServiceImpl implements MailService{
         User buyer = order.getBuyer();
         Book book = order.getBook();
 
-        Locale currentLocale = LocaleContextHolder.getLocale();
+        Locale currentLocale = buyer.getLocale();
         String to = buyer.getEmail();
         String subject = emailMessageSource.getMessage("mail.receiptDeniedEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();

@@ -23,7 +23,8 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("cbu"),
-                    rs.getBoolean("is_enabled")
+                    rs.getBoolean("is_enabled"),
+                    Locale.forLanguageTag(rs.getString("locale"))
             );
 
     private final static RowMapper<UserRoles> ROLE_ROW_MAPPER = (rs, rowNum) -> UserRoles.valueOf(rs.getString("role"));
@@ -43,7 +44,7 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User create(String email, String password, String firstName, String lastName, boolean isEnabled) {
+    public User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("first_name", firstName);
@@ -51,6 +52,7 @@ public class UserJdbcDao implements UserDao {
         userData.put("email", email);
         userData.put("password", password);
         userData.put("is_enabled", isEnabled);
+        userData.put("locale", locale.toLanguageTag());
         Number generatedId = userJdbcInsert.executeAndReturnKey(userData);
 
         return new User(
@@ -59,7 +61,8 @@ public class UserJdbcDao implements UserDao {
                 password,
                 firstName,
                 lastName,
-                isEnabled
+                isEnabled,
+                locale
         );
     }
 

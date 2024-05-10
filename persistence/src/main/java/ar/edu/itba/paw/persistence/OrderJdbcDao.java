@@ -26,7 +26,8 @@ public class OrderJdbcDao implements OrderDao {
                 rs.getString("r_password"),
                 rs.getString("r_first_name"),
                 rs.getString("r_last_name"),
-                rs.getBoolean("r_is_enabled")
+                rs.getBoolean("r_is_enabled"),
+                Locale.forLanguageTag(rs.getString("r_locale"))
             ),
             BookJdbcDao.ROW_MAPPER.mapRow(rs, rowNum),
             OrderStatus.valueOf(rs.getString("status")),
@@ -72,7 +73,7 @@ public class OrderJdbcDao implements OrderDao {
     public Optional<Order> find(long buyerId, long bookId) {
         List<Order> list = jdbcTemplate.query(
             """
-                SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled
+                SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
@@ -90,7 +91,7 @@ public class OrderJdbcDao implements OrderDao {
     public Optional<Order> findById(long orderId){
         List<Order> list = jdbcTemplate.query(
                 """
-                    SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled
+                    SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
                     FROM orders o
                     JOIN users r ON o.buyer_id = r.user_id
                     JOIN books b ON o.book_id = b.book_id
@@ -162,7 +163,7 @@ public class OrderJdbcDao implements OrderDao {
     private List<Order> getOrders(String firstCondition, long id, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit){
         StringBuilder query = new StringBuilder(
                 """
-                SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled
+                SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id

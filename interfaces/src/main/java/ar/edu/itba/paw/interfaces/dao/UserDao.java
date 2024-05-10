@@ -4,10 +4,11 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public interface UserDao {
-    User create(String email, String password, String firstName, String lastName, boolean isEnabled);
+    User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale);
 
     void delete(long id);
 

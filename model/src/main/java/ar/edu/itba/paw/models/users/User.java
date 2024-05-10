@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models.users;
 
+import java.util.Locale;
+
 public class User {
 
     private final long userId;
@@ -9,20 +11,10 @@ public class User {
     private final String firstName;
     private final String lastName;
     private final String cbu;
-
     private final boolean isEnabled;
+    private final Locale locale;
 
-    public User(long userId, String email, String password, String firstName, String lastName, boolean isEnabled){
-        this.userId = userId;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.cbu = null;
-        this.isEnabled = isEnabled;
-    }
-
-    public User(long userId, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled) {
+    public User(long userId, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -30,7 +22,13 @@ public class User {
         this.lastName = lastName;
         this.cbu = cbu;
         this.isEnabled = isEnabled;
+        this.locale = locale;
     }
+
+    public User(long userId, String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale){
+        this(userId, email, password, firstName, lastName, null, isEnabled, locale);
+    }
+
 
     public long getUserId() {
         return userId;
@@ -58,6 +56,10 @@ public class User {
 
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public Locale getLocale() {
+        return locale;
     }
 }
 
