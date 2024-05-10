@@ -87,14 +87,6 @@ public class OrderController {
         return new ModelAndView("orderSummary");
     }
 
-   /* @RequestMapping(method = RequestMethod.POST, path="/advanceOrder")
-    public ModelAndView advanceOrder(@RequestParam("bookId") long bookId, @RequestParam("writerId") long writerId, @RequestParam("buyerId") long buyerId, @RequestParam("from") String from){
-        Order order = os.find(buyerId, bookId).orElseThrow(OrderNotFoundException::new);
-        os.updateOrder(order.getOrderId(), null, null);
-        return new ModelAndView("redirect:/"+from);
-    }*/
-
-
 
 }
 

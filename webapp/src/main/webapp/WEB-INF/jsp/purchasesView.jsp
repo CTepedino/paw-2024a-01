@@ -97,7 +97,7 @@
                         </c:if>
 
                         <c:if test="${order.orderStatus eq 'COMPLETED'}">
-                            <a href="<c:url value="/books/file/${order.book.bookId}"/>" target="_blank">
+                            <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank">
                                 <button class="waves-light btn"><spring:message code="orders.purchases.action.${order.orderStatus}"/></button>
                             </a>
                         </c:if>

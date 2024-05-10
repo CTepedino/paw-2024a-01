@@ -39,7 +39,7 @@ public class FileController {
         return os.getReceipt(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/books/file/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @RequestMapping(method = RequestMethod.GET, path = "/book/file/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
     public @ResponseBody byte[] getBookFile(@PathVariable("id") long id){
         return bs.getBookFile(id).getFile();
     }

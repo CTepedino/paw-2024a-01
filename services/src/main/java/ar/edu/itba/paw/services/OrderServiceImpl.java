@@ -153,4 +153,18 @@ public class OrderServiceImpl implements OrderService {
             case WAITING_APPROVAL -> acceptOrReject(orderId, approved);
         }
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean hasBookFileAccess(long bookId, String email) {
+        return orderDao.hasBookFileAccess(bookId, email);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean canAdvanceOrder(long orderId, String email) {
+        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        return (order.getWriter().getEmail().equals(email) && order.getOrderStatus().getWriterCanAdvance()) ||
+                (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().getReaderCanAdvance());
+    }
 }

@@ -25,4 +25,5 @@ public interface OrderDao {
 
     void updateAllWriterOrders(long writerId, OrderStatus oldStatus,OrderStatus newStatus);
 
+    boolean hasBookFileAccess(long bookId, String email);
 }

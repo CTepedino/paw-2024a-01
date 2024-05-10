@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.interfaces.service.OrderService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,15 @@ public class AccessHelper {
         String userEmail = auth.getName();
 
         return userEmail.equals(buyerEmail) || userEmail.equals(writerEmail);
+    }
+
+    public boolean canAccessBook(Authentication auth, String id){
+        long bookId = Long.parseLong(id);
+        return os.hasBookFileAccess(bookId, auth.getName());
+    }
+
+    public boolean canAdvanceOrder(Authentication auth, String id){
+        long orderId = Long.parseLong(id);
+        return os.canAdvanceOrder(orderId, auth.getName());
     }
 }

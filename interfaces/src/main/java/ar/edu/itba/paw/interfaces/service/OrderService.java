@@ -22,10 +22,14 @@ public interface OrderService {
     PaymentReceipt getReceipt(long id);
 
     void atCbuAdded(long writerId);
-    public void updateOrder(long orderId, MultipartFile receipt, Boolean approved);
+    void updateOrder(long orderId, MultipartFile receipt, Boolean approved);
 
     PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
 
     PaginatedContent<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
+
+    boolean hasBookFileAccess(long bookId, String email);
+
+    boolean canAdvanceOrder(long orderId, String email);
 
 }

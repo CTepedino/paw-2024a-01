@@ -200,5 +200,27 @@ public class OrderJdbcDao implements OrderDao {
             writerId
         );
     }
+
+    @Override
+    public boolean hasBookFileAccess(long bookId, String email) {
+        Boolean exists = jdbcTemplate.queryForObject(
+            """
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM orders o
+                    JOIN books b ON o.book_id = b.book_id
+                    JOIN users w ON b.writer_id = w.user_id
+                    JOIN users r ON o.buyer_id = r.user_id
+                    WHERE (w.email = ? OR (r.email = ? AND o.status = 'COMPLETED'))
+                    AND b.book_id = ?
+                )
+            """,
+            Boolean.class,
+            email,
+            email,
+            bookId
+        );
+        return exists!=null?exists:false;
+    }
 }
 
