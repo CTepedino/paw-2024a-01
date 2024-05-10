@@ -21,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.StandardCharsets;
-
+import java.util.concurrent.TimeUnit;
 
 
 @EnableWebSecurity
@@ -63,7 +63,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers("/book/file/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessBook(a.get(), o.getVariables().get("id"))))
                 .requestMatchers("/book/${id:\\d+}/review").access((a,o) -> new AuthorizationDecision(accessHelper.canReview(a.get(), o.getVariables().get("id"))))
                 .requestMatchers(HttpMethod.POST, "/advanceOrder/{id:\\d+}/**").access((a, o) -> new AuthorizationDecision(accessHelper.canAdvanceOrder(a.get(), o.getVariables().get("id"))))
-                .requestMatchers("/", "/cover/**", "/preview/**", "/book/{id:\\d+}", "/search/**").permitAll()
+                .requestMatchers("/", "/cover/**", "/preview/**", "/book/{id:\\d+}", "/search/**", "/profilePicture/**", "/profile/**").permitAll()
                 .anyRequest().authenticated()
 
             .and().formLogin()
@@ -76,7 +76,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .rememberMeParameter("rememberMe")
                 .userDetailsService(userDetailsService)
                 .key(StreamUtils.copyToString(rememberMeKey.getInputStream(), StandardCharsets.UTF_8)) //openssl rand -base64 4000 > src/main/resources/rememberMe.key
-                .tokenValiditySeconds(15*24*60*60)//(int) TimeUnit.DAYS.toSeconds(15))
+                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(15))
 
             .and().logout()
                 .logoutUrl("/logout")

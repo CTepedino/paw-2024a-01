@@ -45,6 +45,7 @@ import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 //import java.util.concurrent.TimeUnit;
 
 @EnableWebMvc
@@ -81,7 +82,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         ms.addBasenames("classpath:i18n/messages");
         ms.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        ms.setCacheSeconds(60*5/*(int) TimeUnit.MINUTES.toSeconds(5)*/);
+        ms.setCacheSeconds((int) TimeUnit.MINUTES.toSeconds(5));
         return ms;
     }
 

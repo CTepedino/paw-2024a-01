@@ -23,8 +23,7 @@ public class FileController {
     private final UserService us;
 
     @Autowired
-    public FileController(BookService bs, OrderService os) {
-    public FileController(BookService bs, UserService us) {
+    public FileController(BookService bs, OrderService os, UserService us) {
         this.bs = bs;
         this.os = os;
         this.us = us;

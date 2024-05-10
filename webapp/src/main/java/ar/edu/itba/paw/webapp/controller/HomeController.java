@@ -9,6 +9,8 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +32,12 @@ public class HomeController {
     private static final int PAGE_SIZE = 20;
 
     private final BookService bs;
+    private final UserService us;
 
     @Autowired
-    public HomeController(BookService bs){
+    public HomeController(BookService bs, UserService us){
         this.bs = bs;
+        this.us = us;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
@@ -45,8 +49,24 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/profile")
-    public ModelAndView profile(){
-        return new ModelAndView("profile");
+    public ModelAndView bookInfo(@ModelAttribute("loggedUser") User loggedUser){
+        final ModelAndView mav = new ModelAndView("profile");
+
+        mav.addObject("user", loggedUser);
+        mav.addObject("ownsProfile", true);
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}")
+    public ModelAndView bookInfo(@PathVariable("userId") final long userId, @ModelAttribute("loggedUser") User loggedUser){
+        final ModelAndView mav = new ModelAndView("profile");
+
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
+
+        mav.addObject("user", user);
+        mav.addObject("ownsProfile", ownsProfile);
+        return mav;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/search")

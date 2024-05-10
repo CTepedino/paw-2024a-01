@@ -50,15 +50,11 @@ public class UserServiceImpl implements UserService {
 
 
 
-    private final ResourceLoader resourceLoader;
-
     @Autowired
     public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs){
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, ResourceLoader resourceLoader){
         this.userDao = userDao;
         this.profilePictureDao = profilePictureDao;
         this.passwordEncoder = passwordEncoder;
-        this.resourceLoader = resourceLoader;
         this.evs = evs;
     }
 
@@ -197,10 +193,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateProfile(String firstName, String lastName, String CBU) {
-        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
-        User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
-        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, CBU);
+    public void updateProfile(String firstName, String lastName, String cbu) {
+        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
+        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled());
 
     }
     @Transactional

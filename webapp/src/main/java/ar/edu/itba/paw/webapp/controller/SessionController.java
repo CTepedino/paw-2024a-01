@@ -24,7 +24,6 @@ import java.util.Objects;
 @Controller
 public class SessionController {
     private final UserService us;
-    private final MailService ms;
 
 
     @Autowired
@@ -71,41 +70,24 @@ public class SessionController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, path="/profile")
-    public ModelAndView profile(Authentication authentication){
-        ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("user", us.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new));
-        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
-        return mav;
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}")
-    public ModelAndView bookInfo(@PathVariable("userId") final long userId){
-        final ModelAndView mav = new ModelAndView("profile");
-        User user = us.findById(userId).orElseThrow(BookNotFoundException::new);
-        mav.addObject("user", us.getLoggedUser().orElse(null));
-        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
-        return mav;
-    }
-
 
     @RequestMapping(method = RequestMethod.GET, path="/editProfile")
-    public ModelAndView editProfileForm(@ModelAttribute("editProfileForm") EditProfileForm form, Authentication authentication){
-        ModelAndView mav = new ModelAndView("editProfile");
-        mav.addObject("user", us.getLoggedUser().orElseThrow(UserNotFoundException::new));
-        mav.addObject("hasWriterRole", SecurityUtils.hasRole("WRITER"));
-        return mav;
+    public ModelAndView editProfileForm(@ModelAttribute("editProfileForm") EditProfileForm form){
+        return new ModelAndView("editProfile");
     }
 
     @RequestMapping(method = RequestMethod.POST, path ="/editProfile")
-    public ModelAndView editProfile(@Valid @ModelAttribute("editProfileForm") EditProfileForm form, final BindingResult errors,Authentication authentication ){
+    public ModelAndView editProfile(
+            @Valid @ModelAttribute("editProfileForm") EditProfileForm form,
+            final BindingResult errors,
+            @ModelAttribute("loggedUser") User loggedUser
+    ){
         if (errors.hasErrors()){
-            return editProfileForm(form,authentication);
+            return editProfileForm(form);
         }
         us.setProfilePicture(form.getProfilePicture());
         us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu());
-        long userID = Objects.requireNonNull(us.getLoggedUser().orElse(null)).getUserId();
-        return new ModelAndView("redirect:/profile/"+userID);
+        return new ModelAndView("redirect:/profile/"+loggedUser.getUserId());
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/changePassword")
@@ -114,13 +96,17 @@ public class SessionController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path="/changePassword")
-    public ModelAndView changePassword(@Valid @ModelAttribute("passwordForm") ChangePasswordForm form, final BindingResult errors){
+    public ModelAndView changePassword(
+            @Valid @ModelAttribute("passwordForm") ChangePasswordForm form,
+            final BindingResult errors,
+            @ModelAttribute("loggedUser") User loggedUser
+    ){
         if (errors.hasErrors()){
             return changePasswordForm(form);
         }
-        long userID = Objects.requireNonNull(us.getLoggedUser().orElse(null)).getUserId();
+
         us.changePassword(form.getPassword());
-        return new ModelAndView("redirect:/profile/"+userID);
+        return new ModelAndView("redirect:/profile/"+loggedUser.getUserId());
     }
 
 
