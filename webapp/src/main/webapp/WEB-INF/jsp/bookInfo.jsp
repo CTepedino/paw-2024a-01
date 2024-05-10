@@ -40,7 +40,7 @@
                     <div class="col s4">
                         <script src="<c:url value="/js/starRating.js"/>"></script>
                         <script>
-                            const starRating = new FixedStarRating(${avgRating});
+                            new FixedStarRating(${avgRating});
                         </script>
                         <c:if test="${loggedUser!=null && book.writer.email != loggedUser.email}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
@@ -91,9 +91,9 @@
             </div>
             <c:if test="${not empty recommendations}">
                 <div class="col s12">
-                    <h6>
+                    <h5>
                         <spring:message code="book.bookInfo.recommendations"/>
-                    </h6>
+                    </h5>
                 </div>
             </c:if>
             <div class="col s12">
@@ -105,15 +105,34 @@
                     </c:if>
                 </c:forEach>
             </div>
+            <c:if test="${not empty reviews}">
+                <div class="col s12">
+                    <h5>
+                        <spring:message code="book.bookInfo.reviews"/><br/>
+                    </h5>
+                </div>
+                <table>
+                    <tbody>
+                        <c:forEach items="${reviews.page}" var="review">
+                            <th class="col s4">
+                                <script>
+                                    new FixedStarRating(${review.rating});
+
+                                </script><br/>
+                                <spring:message code="bookInfoCard.by" var="reviewer" arguments="${review.reviewer.firstName},${review.reviewer.lastName}"/>
+                                <c:out value="${reviewer}"/><br/>
+                            </th>
+                            <th class="col s8">
+                                <c:out value="${review.review}"/>
+                            </th>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:if>
         </div>
     </div>
 
-    <c:forEach items="${reviews.page}" var="review">
-        ${review.reviewer.firstName} ${review.reviewer.lastName}
-        ${review.rating}
-        ${review.review}
-        <br/>
-    </c:forEach>
+
 
 </body>
 </html>

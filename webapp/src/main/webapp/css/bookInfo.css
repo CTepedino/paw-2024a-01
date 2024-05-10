@@ -1,5 +1,6 @@
 .book_cover {
     margin: 20px;
-    width: 100%; /* La imagen ocupará todo el ancho de su contenedor */
-    max-width: 300px; /* Ancho máximo para la imagen */
+    width: 100%;
+    max-width: 300px;
 }
+
