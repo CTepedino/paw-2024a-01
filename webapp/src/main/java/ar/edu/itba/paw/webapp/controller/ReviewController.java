@@ -55,7 +55,7 @@ public class ReviewController {
 
         rs.createOrUpdate(bookId, user.getUserId(), form.getRating(), form.getReview());
 
-        return new ModelAndView("redirect:book/"+bookId);
+        return new ModelAndView("redirect:/book/"+bookId);
     }
 
 }
