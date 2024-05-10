@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
 
@@ -46,8 +47,8 @@ public class UserServiceImplTest {
     public void testCreateOK(){
         Mockito.when(passwordEncoder.encode(Mockito.eq(PASSWORD)))
                 .thenReturn(ENCODED_PASSWORD);
-        Mockito.when(userDao.create(Mockito.eq(EMAIL), Mockito.eq(ENCODED_PASSWORD), Mockito.eq(FIRST_NAME), Mockito.eq(LAST_NAME), false))
-                .thenReturn(new User(1, EMAIL,ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, false));
+        Mockito.when(userDao.create(Mockito.eq(EMAIL), Mockito.eq(ENCODED_PASSWORD), Mockito.eq(FIRST_NAME), Mockito.eq(LAST_NAME), Mockito.eq(false), Mockito.any(Locale.class)))
+                .thenReturn(new User(1, EMAIL,ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US));
         List<UserRoles> mockRoles = new ArrayList<>();
         Mockito.when(userDao.giveRole(Mockito.anyLong(), Mockito.eq(UserRoles.READER))).thenAnswer((Answer<Void>) invocation -> {
             mockRoles.add(UserRoles.READER);

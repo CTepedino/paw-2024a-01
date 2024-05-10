@@ -3,12 +3,12 @@ package ar.edu.itba.paw.models.users;
 import java.time.LocalDateTime;
 
 public class EmailValidation {
-    private final String email;
+    private final long id;
     private final String code;
     private final LocalDateTime expiration;
 
-    public String getEmail() {
-        return email;
+    public long getId() {
+        return id;
     }
 
     public String getCode() {
@@ -19,8 +19,8 @@ public class EmailValidation {
         return expiration;
     }
 
-    public EmailValidation(String email, String code, LocalDateTime expiration) {
-        this.email = email;
+    public EmailValidation(long id, String code, LocalDateTime expiration) {
+        this.id = id;
         this.code = code;
         this.expiration = expiration;
     }

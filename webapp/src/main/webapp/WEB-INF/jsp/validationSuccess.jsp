@@ -26,8 +26,8 @@
             <br/>
 
             <div class="input-field center-align submit-btn">
-                <a class="btn waves-effect waves-light white-text" href="<c:url value="/login"/>">
-                    <spring:message code="session.login"/>
+                <a class="btn waves-effect waves-light white-text" href="<c:url value="/"/>">
+                    <spring:message code="session.toHome"/>
                 </a>
             </div>
         </div>

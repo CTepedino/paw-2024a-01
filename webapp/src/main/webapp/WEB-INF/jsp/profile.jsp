@@ -11,8 +11,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<jsp:useBean id="loggedUser" scope="request" type="ar.edu.itba.paw.models.users.User"/>
-
 <jsp:include page="components/topBar.jsp">
     <jsp:param name="hasWriterRole" value="${isWriter}" />
 </jsp:include>

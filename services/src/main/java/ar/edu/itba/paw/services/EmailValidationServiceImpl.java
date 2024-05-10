@@ -57,11 +57,11 @@ public class EmailValidationServiceImpl implements EmailValidationService {
 
     @Transactional
     @Override
-    public boolean checkValidation(long id, String email, String code) {
+    public boolean checkValidation(long id, String code) {
         deleteExpired();
 
         EmailValidation validation = emailValidationDao.get(id).orElseThrow(NoValidationCodeException::new);
-        if( validation.getCode().equals(code) && validation.getEmail().equals(email)){
+        if( validation.getCode().equals(code) && validation.getId() == id){
             emailValidationDao.delete(id);
             return true;
         }

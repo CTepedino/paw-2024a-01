@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -52,7 +53,7 @@ public class UserJdbcDaoTest {
     public void testCreateOK(){
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
 
-        final User user = userDao.create(EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, false);
+        final User user = userDao.create(EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US);
 
         assertNotNull(user);
         assertEquals(EMAIL, user.getEmail());
@@ -68,7 +69,7 @@ public class UserJdbcDaoTest {
 
         assertThrows(
                 DuplicateKeyException.class,
-                () -> userDao.create(INSERTED_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, false)
+                () -> userDao.create(INSERTED_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US)
         );
         assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
 

@@ -34,16 +34,13 @@ public class CybraryUserDetailsService implements UserDetailsService {
         final User user = us.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No user by the email" + username));
 
-            final Collection<GrantedAuthority> authorities = new HashSet<>();
-            List<UserRoles> roles = us.getRoles(user.getUserId());
-            if (!user.isEnabled()){
-                us.resendValidation(username);
-            }
-            for (UserRoles role : roles) {
-                authorities.add(new SimpleGrantedAuthority(role.toString()));
-            }
+        if (!user.isEnabled()){
+            us.resendValidation(username);
+        }
 
-            return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
+        List<SimpleGrantedAuthority> authorities = us.getRoles(user.getUserId()).stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+
+        return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
     }
 }
 

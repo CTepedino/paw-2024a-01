@@ -19,7 +19,7 @@ import java.util.Optional;
 @Repository
 public class EmailValidationJdbcDao implements EmailValidationDao {
 
-    private static final RowMapper<EmailValidation> ROW_MAPPER = (rs, rowNum) -> new EmailValidation(rs.getString("email"), rs.getString("code"), rs.getTimestamp("expiration").toLocalDateTime());
+    private static final RowMapper<EmailValidation> ROW_MAPPER = (rs, rowNum) -> new EmailValidation(rs.getLong("id"), rs.getString("code"), rs.getTimestamp("expiration").toLocalDateTime());
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -44,7 +44,7 @@ public class EmailValidationJdbcDao implements EmailValidationDao {
     public Optional<EmailValidation> get(long id) {
         List<EmailValidation> list = jdbcTemplate.query(
             """
-                    SELECT v.code, v.expiration, u.email
+                    SELECT *
                     FROM email_validations v JOIN users u on v.id = u.user_id
                     WHERE id = ?
                 """,

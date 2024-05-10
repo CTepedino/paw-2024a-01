@@ -1,17 +1,14 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.dao.EmailValidationDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.dao.files.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.service.EmailValidationService;
-import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.InvalidCodeException;
 import ar.edu.itba.paw.models.exception.NoValidationCodeException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
-import ar.edu.itba.paw.models.users.EmailValidation;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.slf4j.Logger;
@@ -27,11 +24,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.LocaleResolver;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -87,13 +83,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void validateEmail(String email, String code) {
-        Optional<User> maybeUser = userDao.findByEmail(email);
+    public void validateEmail(long id, String code) {
+        Optional<User> maybeUser = userDao.findById(id);
         if (maybeUser.isPresent() && !maybeUser.get().isEnabled()){
             User user = maybeUser.get();
-            if (evs.checkValidation(user.getUserId(), email, code)){
+            if (evs.checkValidation(id, code)){
                 userDao.update(user.getUserId(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), true);
                 userDao.giveRole(user.getUserId(), UserRoles.READER);
+
+                List<SimpleGrantedAuthority> authorities = getRoles(user.getUserId()).stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+                Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
                 throw new InvalidCodeException();
             }

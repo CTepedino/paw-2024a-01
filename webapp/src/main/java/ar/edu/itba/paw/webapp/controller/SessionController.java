@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +45,11 @@ public class SessionController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/validate")
-    public ModelAndView validate(@RequestParam("email") String email, @RequestParam("code") String code){
-        us.validateEmail(email, code);
+    public ModelAndView validate(@RequestParam("id") long id, @RequestParam("code") String code){
+        us.validateEmail(id, code);
         return new ModelAndView("validationSuccess");
     }
+
 
     @RequestMapping(method = RequestMethod.GET, path="/login")
     public ModelAndView loginForm(@RequestParam(name = "error", required = false) String error){

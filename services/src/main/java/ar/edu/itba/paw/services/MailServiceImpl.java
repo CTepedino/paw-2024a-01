@@ -103,7 +103,7 @@ public class MailServiceImpl implements MailService{
         data.put("userFirstName", user.getFirstName());
         data.put("userLastName", user.getLastName());
         data.put("url", env.getProperty("baseUrl"));
-        data.put("validateUrl", env.getProperty("baseUrl") + "/validate?email=" + user.getEmail() + "&code=" + code);
+        data.put("validateUrl", env.getProperty("baseUrl") + "/validate?id=" + user.getUserId() + "&code=" + code);
         data.put("expiration", expiration.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(currentLocale)));
 
         try {
