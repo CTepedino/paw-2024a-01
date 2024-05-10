@@ -19,7 +19,7 @@
 
 .collection-item{
     padding: 0 !important;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .purchased-book{
@@ -44,6 +44,8 @@
 
 .payment {
     background-color: red !important;
+    width: 100% !important;
+
 }
 
 .price {
@@ -52,4 +54,18 @@
 
 .book-title{
     font-weight: bold;
+}
+
+.label-select {
+    color: black !important;
+    background-color: white !important;
+    transition: .5s !important;
+    text-transform: none !important;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: fade;
+    width: 100% !important;
+    margin-bottom: 8px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
 }

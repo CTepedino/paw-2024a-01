@@ -89,7 +89,10 @@
 
                         <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
                             <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
-                                <form:input type="file" path="receipt" accept=".pdf"/>
+                                <form:label path="receipt" for="files" class="btn label-select">
+                                    <spring:message code="orders.purchases.chooseFile"/>
+                                </form:label>
+                                <form:input type="file" id="files" path="receipt" accept=".pdf" style="display:none;"/>
                                 <button class="waves-light btn payment" type="submit">
                                     <spring:message code="orders.purchases.action.${order.orderStatus}"/>
                                 </button>
@@ -140,6 +143,13 @@
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems);
     });
+
+    document.querySelector("#files").onchange = function() {
+        const fileName = this.files[0]?.name;
+        const label = document.querySelector("label[for=files]");
+        label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
+    };
 </script>
+
 </body>
 </html>
