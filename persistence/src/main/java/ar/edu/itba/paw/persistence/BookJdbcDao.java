@@ -80,7 +80,7 @@ public class BookJdbcDao implements BookDao {
                 """,
                 title,
                 description,
-                genre,
+                genre.toString(),
                 price,
                 pageCount,
                 suggestedAge,
@@ -161,8 +161,8 @@ public class BookJdbcDao implements BookDao {
             Integer minSuggestedAge,
             Integer maxSuggestedAge
     ){
-            query.append("WHERE lower(title) LIKE lower(?) ");
-            params.add("%" + (title!=null?title:"") + "%");
+            query.append("WHERE lower(title) LIKE lower(?)  ");
+            params.add("%" + (title!=null?DaoUtils.escapeSearchString(title):"") + "%");
             if (genre!=null) {
                 DaoUtils.addQueryCondition(query, params, " AND genre = ? ", genre.toString());
             }
@@ -172,6 +172,22 @@ public class BookJdbcDao implements BookDao {
             DaoUtils.addQueryCondition(query, params, " AND page_count <= ? ", maxPageCount);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age >= ? ", minSuggestedAge);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age <= ? ", maxSuggestedAge);
+    }
+
+    @Override
+    public List<Book> getOthersFromGenre(Book book, int max) {
+        return jdbcTemplate.query(
+        """
+                SELECT *
+                FROM books b JOIN users u on b.writer_id = u.user_id
+                WHERE b.book_id <> ? AND b.genre = ?
+                LIMIT ?
+            """,
+            ROW_MAPPER,
+            book.getBookId(),
+            book.getGenre().toString(),
+            max
+        );
     }
 
     @Override
@@ -189,6 +205,36 @@ public class BookJdbcDao implements BookDao {
                 offset,
                 limit
         );
+    }
+
+    @Override
+    public List<Book> getWriterBooksWithParams(
+            long writerId,
+            String title,
+            BookSearchOrderBy orderBy,
+            int offset,
+            int limit
+    ){
+        StringBuilder query = new StringBuilder("""
+                SELECT *
+                FROM books b JOIN users u on b.writer_id = u.user_id
+                """);
+        List<Object> params = new ArrayList<>();
+
+        getBookSearchQueryConditions(query, params, title, null, null, null, null, null, null, null);
+
+        query.append(" AND writer_id = ?");
+        params.add(writerId);
+
+        if(orderBy != null) {
+            query.append(" ORDER BY ").append(orderBy.getColumnName());
+        }
+
+        query.append(" LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
+
+        return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
 
     @Override

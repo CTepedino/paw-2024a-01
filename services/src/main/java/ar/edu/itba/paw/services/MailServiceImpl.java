@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.users.EmailValidation;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
@@ -23,6 +24,9 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -37,19 +41,14 @@ public class MailServiceImpl implements MailService{
     private final ResourceBundleMessageSource emailMessageSource;
     private final Environment env;
 
-    private final UserService us;
-    private final BookService bs;
-
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, ResourceBundleMessageSource emailMessageSource, Environment env, UserService us, BookService bs) {
+    public MailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine thymeleafTemplateEngine, ResourceBundleMessageSource emailMessageSource, Environment env) {
         this.javaMailSender = javaMailSender;
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
         this.emailMessageSource = emailMessageSource;
         this.env = env;
-        this.us = us;
-        this.bs = bs;
     }
 
     private void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
@@ -72,12 +71,10 @@ public class MailServiceImpl implements MailService{
 
     @Override
     @Async
-    public void sendOrderEmail(long buyerId, long bookId){
-        User buyer = us.findById(buyerId).orElseThrow(UserNotFoundException::new);
-        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        User writer = us.findById(book.getWriter().getUserId()).orElseThrow(UserNotFoundException::new);
+    public void sendOrderEmail(User buyer, Book book){
+        User writer = book.getWriter();
 
-        Locale currentLocale = LocaleContextHolder.getLocale();// TODO: Que locale usar para los mails?
+        Locale currentLocale = writer.getLocale();
         String to = writer.getEmail();
         String subject = emailMessageSource.getMessage("mail.orderEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
@@ -97,17 +94,17 @@ public class MailServiceImpl implements MailService{
 
     @Override
     @Async
-    public void sendRegisterEmail(long userId){
-        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+    public void sendRegisterEmail(User user, String code, LocalDateTime expiration){
 
-        Locale currentLocale = LocaleContextHolder.getLocale();
+        Locale currentLocale = user.getLocale();
         String to = user.getEmail();
         String subject = emailMessageSource.getMessage("mail.registerEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
         data.put("userFirstName", user.getFirstName());
         data.put("userLastName", user.getLastName());
         data.put("url", env.getProperty("baseUrl"));
-        data.put("profileUrl", env.getProperty("baseUrl") + "/profile");
+        data.put("validateUrl", env.getProperty("baseUrl") + "/validate?id=" + user.getUserId() + "&code=" + code);
+        data.put("expiration", expiration.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(currentLocale)));
 
         try {
             LOGGER.atDebug().setMessage("Sending register email to: {}").addArgument(to).log();
@@ -126,7 +123,7 @@ public class MailServiceImpl implements MailService{
         User buyer = order.getBuyer();
         Book book = order.getBook();
 
-        Locale currentLocale = LocaleContextHolder.getLocale();
+        Locale currentLocale = writer.getLocale();
         String to = writer.getEmail();
         String subject = emailMessageSource.getMessage("mail.receiptUploadedEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
@@ -151,7 +148,7 @@ public class MailServiceImpl implements MailService{
         User buyer = order.getBuyer();
         Book book = order.getBook();
 
-        Locale currentLocale = LocaleContextHolder.getLocale();
+        Locale currentLocale = buyer.getLocale();
         String to = buyer.getEmail();
         String subject = emailMessageSource.getMessage("mail.receiptApprovedEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
@@ -174,7 +171,7 @@ public class MailServiceImpl implements MailService{
         User buyer = order.getBuyer();
         Book book = order.getBook();
 
-        Locale currentLocale = LocaleContextHolder.getLocale();
+        Locale currentLocale = buyer.getLocale();
         String to = buyer.getEmail();
         String subject = emailMessageSource.getMessage("mail.receiptDeniedEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();

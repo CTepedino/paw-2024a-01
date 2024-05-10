@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -48,7 +49,7 @@ public class PublishServiceImplTest {
     @Before
     public void setup(){
         Mockito.when(userService.getLoggedUser())
-                .thenReturn(Optional.of(new User(USER_ID, "", "", "", "", "")));
+                .thenReturn(Optional.of(new User(USER_ID, "", "", "", "",false, Locale.US)));
         Mockito.when(userService.getRoles(Mockito.eq(USER_ID))).thenReturn(mockedRoles);
         Mockito.doAnswer((Answer<Void>) invocation ->{
             mockedRoles.add(UserRoles.WRITER);
@@ -87,7 +88,6 @@ public class PublishServiceImplTest {
         );
 
         assertEquals(BOOK_ID, bookId);
-        assertTrue(mockedRoles.contains(UserRoles.WRITER));
     }
 
     @Test

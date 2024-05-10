@@ -12,12 +12,18 @@
     <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
 </head>
 
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
+    <jsp:param name="hideSearchBar" value="${true}"/>
+
 <%@include file="components/materializeComponent.jsp"%>
 <body>
 <jsp:include page="components/topBar2.0.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
     <jsp:param name="hideSearchBar" value="true"/>
 </jsp:include>
+
+<body>
 <div class="container">
     <div class="form">
         <h5><spring:message code="book.addBook.pageTitle"/></h5>
@@ -32,7 +38,7 @@
             <c:if test="${!hasWriterRole}">
                 <h6><spring:message code="book.addBook.cbuTitle"/></h6>
                 <div class="input-field">
-                    <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label><br>
+                    <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label>
                     <form:input type="text" path="cbu" inputmode="numeric"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>

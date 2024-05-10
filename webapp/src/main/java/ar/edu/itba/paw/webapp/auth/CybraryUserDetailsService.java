@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,33 +20,28 @@ import java.util.*;
 public class CybraryUserDetailsService implements UserDetailsService {
 
     private final UserService us;
+    private final EmailValidationService evs;
 
     @Autowired
-    public CybraryUserDetailsService(final UserService us){
+    public CybraryUserDetailsService(final UserService us, final EmailValidationService evs){
         this.us = us;
+        this.evs = evs;
     }
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-
+        evs.deleteExpired();
         final User user = us.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No user by the email" + username));
 
-        //Para los escritores que fueron creados antes de tener usuarios -> les ponemos como password por defecto su mail
-        /*if (user.getPassword() == null){
-            us.fillMissingWriterData(user.getUserId(), user.getEmail());
-            final Collection<GrantedAuthority> authorities = new HashSet<>();
-            authorities.add(new SimpleGrantedAuthority(UserRoles.READER.toString()));
-            authorities.add(new SimpleGrantedAuthority(UserRoles.WRITER.toString()));
-            return new CybraryAuthUserDetails(user.getEmail(), user.getEmail(), authorities);
-        } else {*/
+        if (!user.isEnabled()){
+            us.resendValidation(username);
+        }
 
-            final Collection<GrantedAuthority> authorities = new HashSet<>();
-            for (UserRoles role : us.getRoles(user.getUserId())) {
-                authorities.add(new SimpleGrantedAuthority(role.toString()));
-            }
+        List<SimpleGrantedAuthority> authorities = us.getRoles(user.getUserId()).stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
 
-            return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), authorities);
-        //}
+        return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
     }
 }
+
+//cron @enabledScheduled y @scheduled para avisar update cbu

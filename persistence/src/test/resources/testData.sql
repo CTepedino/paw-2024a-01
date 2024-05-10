@@ -11,4 +11,5 @@ INSERT INTO cover_images (id, file) VALUES (1,'');
 INSERT INTO book_previews (id, file) VALUES (1,'');
 INSERT INTO book_files (id, file) VALUES (1,'');
 
-INSERT INTO orders (buyer_id, book_id, status) VALUES (1, 1, 'WAITING_CONTACT');
+INSERT INTO orders (order_id, buyer_id, book_id, status) VALUES (1, 1, 2, 'WAITING_CONTACT');
+INSERT INTO orders (order_id, buyer_id, book_id, status) VALUES (2, 1, 2, 'WAITING_CONTACT');

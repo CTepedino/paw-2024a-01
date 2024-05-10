@@ -27,4 +27,8 @@ public class DaoUtils {
             query.append(condition);
         }
     }
+
+    static String escapeSearchString(String search){
+        return search.replaceAll("[%_]", "\\\\$0");
+    }
 }

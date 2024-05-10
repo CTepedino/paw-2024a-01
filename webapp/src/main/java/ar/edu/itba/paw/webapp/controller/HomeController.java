@@ -1,0 +1,82 @@
+package ar.edu.itba.paw.webapp.controller;
+
+import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.PublishService;
+import ar.edu.itba.paw.interfaces.service.ReviewService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.webapp.form.BookSearchForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+import java.util.List;
+
+
+@Controller
+public class HomeController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
+
+    private static final int PAGE_SIZE = 20;
+
+    private final BookService bs;
+
+    @Autowired
+    public HomeController(BookService bs){
+        this.bs = bs;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/")
+    public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
+
+        final ModelAndView mav = new ModelAndView("home");
+        mav.addObject("books", bs.getAll(page, PAGE_SIZE));
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/profile")
+    public ModelAndView profile(){
+        return new ModelAndView("profile");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/search")
+    public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") final BookSearchForm form, final BindingResult error){
+
+        if (error.hasErrors()){
+            return new ModelAndView("searchResults");
+        }
+
+        final ModelAndView mav = new ModelAndView("searchResults");
+
+        PaginatedContent<Book> books = bs.searchWithParams(
+                form.getTitle(),
+                form.getGenre(),
+                form.getMinPrice(),
+                form.getMaxPrice(),
+                form.getMinPageCount(),
+                form.getMaxPageCount(),
+                form.getMinSuggestedAge(),
+                form.getMaxSuggestedAge(),
+                form.getOrderBy(),
+                form.getPage(),
+                PAGE_SIZE
+        );
+
+        mav.addObject("books", books);
+        mav.addObject("genres", BookGenre.values());
+        mav.addObject("orders", BookSearchOrderBy.values());
+
+        return mav;
+    }
+
+}

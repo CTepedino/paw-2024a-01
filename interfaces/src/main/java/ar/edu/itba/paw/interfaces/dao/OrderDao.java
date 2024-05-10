@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.dao;
 
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 
 import java.util.List;
@@ -10,12 +11,19 @@ public interface OrderDao {
 
     Optional<Order> find(long buyerId, long bookId);
 
-    void create(long buyerId, long bookId, OrderStatus orderStatus);
+    Optional<Order> findById(long orderId);
 
-    void setStatus(long buyerId, long bookId, OrderStatus orderStatus);
+    long create(long buyerId, long bookId, OrderStatus orderStatus);
 
-    List<Order> getAllReaderOrders(long readerId);
+    void update(long orderId, OrderStatus orderStatus);
 
-    List<Order> getAllWriterOrders(long writerId);
+    List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit);
+    long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);
 
+    List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit);
+    long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
+
+    void updateAllWriterOrders(long writerId, OrderStatus oldStatus,OrderStatus newStatus);
+
+    boolean ownsBook(long bookId, String email);
 }

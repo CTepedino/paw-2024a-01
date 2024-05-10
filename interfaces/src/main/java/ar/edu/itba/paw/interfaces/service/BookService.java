@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +35,11 @@ public interface BookService {
             BookGenre genre,
             BigDecimal price,
             int pageCount,
-            int suggestedAge
+            int suggestedAge,
+
+            MultipartFile preview,
+            MultipartFile cover,
+            MultipartFile bookFile
     );
 
 
@@ -64,11 +69,22 @@ public interface BookService {
 
     BookPreview getPreview(long id);
 
-    List<Book> getAllGenre(BookGenre genre);
+    List<Book> getRecommendations(Book book);
 
-    List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook);
 
     PaginatedContent<Book> getWriterBooks(long writerId, int pageNumber, int pageSize);
 
+    PaginatedContent<Book> getWriterBooksWithParams(
+            long writerId,
+            String title,
+            BookSearchOrderBy orderBy,
+            int pageNumber,
+            int pageSize
+    );
+
     PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize);
+
+    BookFile getBookFile(long bookId);
+
+    boolean loggedUserIsAuthor(long bookId);
 }

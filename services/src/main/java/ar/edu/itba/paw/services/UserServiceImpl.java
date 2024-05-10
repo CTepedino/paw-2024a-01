@@ -2,8 +2,11 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.dao.files.ProfilePictureDao;
+import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
+import ar.edu.itba.paw.models.exception.InvalidCodeException;
+import ar.edu.itba.paw.models.exception.NoValidationCodeException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
@@ -12,6 +15,8 @@ import ar.edu.itba.paw.models.users.UserRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -29,6 +34,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,16 +44,22 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final ProfilePictureDao profilePictureDao;
 
+    private final EmailValidationService evs;
+
     private final PasswordEncoder passwordEncoder;
+
+
 
     private final ResourceLoader resourceLoader;
 
     @Autowired
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs){
     public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, ResourceLoader resourceLoader){
         this.userDao = userDao;
         this.profilePictureDao = profilePictureDao;
         this.passwordEncoder = passwordEncoder;
         this.resourceLoader = resourceLoader;
+        this.evs = evs;
     }
 
     @Transactional(readOnly = true)
@@ -71,28 +83,49 @@ public class UserServiceImpl implements UserService {
                 email,
                 passwordEncoder.encode(password),
                 firstName,
-                lastName
+                lastName,
+                false,
+                LocaleContextHolder.getLocale()
         );
-        userDao.giveRole(user.getUserId(), UserRoles.READER);
+
+        evs.create(user);
         return user;
     }
 
+
+    @Transactional
+    @Override
+    public void validateEmail(long id, String code) {
+        Optional<User> maybeUser = userDao.findById(id);
+        if (maybeUser.isPresent() && !maybeUser.get().isEnabled()){
+            User user = maybeUser.get();
+            if (evs.checkValidation(id, code)){
+                userDao.update(user.getUserId(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), true);
+                userDao.giveRole(user.getUserId(), UserRoles.READER);
+
+                List<SimpleGrantedAuthority> authorities = getRoles(user.getUserId()).stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+                Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } else {
+                throw new InvalidCodeException();
+            }
+        } else {
+            throw new NoValidationCodeException();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void resendValidation(String email) {
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        evs.resend(user);
+    }
+
+    @Transactional(readOnly = true)
     @Override
     public List<UserRoles> getRoles(long id) {
         return userDao.getRoles(id);
     }
-
-
-    /*
-    @Transactional
-    @Override
-    public void fillMissingWriterData(long id, String password) {
-        if (userDao.findById(id).isPresent()) {
-            userDao.changePassword(id, passwordEncoder.encode(password));
-            userDao.giveRole(id, UserRoles.READER);
-            userDao.giveRole(id, UserRoles.WRITER);
-        }
-    }*/
 
     @Transactional
     @Override
@@ -101,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
         userDao.giveRole(id, UserRoles.WRITER);
 
-        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu);
+        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu, user.isEnabled());
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
@@ -116,16 +149,30 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Optional<User> getLoggedUser(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()){
+        if (!isLoggedIn()){
             return Optional.empty();
         }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return findByEmail(auth.getName());
     }
 
     @Override
     public boolean isLoggedIn() {
-        return SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
+    }
+
+    @Override
+    public boolean hasRole(UserRoles role) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!isLoggedIn()){
+            return false;
+        }
+
+        return authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals(role.toString()));
     }
 
     @Transactional(readOnly = true)
@@ -142,7 +189,7 @@ public class UserServiceImpl implements UserService {
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
 
-        userDao.update(user.getUserId(), user.getEmail(),encodedPassword, user.getFirstName(), user.getLastName());
+        userDao.update(user.getUserId(), user.getEmail(),encodedPassword, user.getFirstName(), user.getLastName(), user.isEnabled());
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), encodedPassword, auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);

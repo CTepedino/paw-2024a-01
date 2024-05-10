@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col s4">
-                    <c:if test="${!hideSearchBar}">
+                    <c:if test="${!param.hideSearchBar}">
                         <form action="${searchUrl}" <%--class="col s4"--%>>
                               <div class="input-field">
                                 <input id="title" name="title" type="search" required>
@@ -58,6 +58,9 @@
                                     <li><a href="${pageContext.request.contextPath}/addBook"><spring:message code="topBar.publish"/></a></li>
                                     <c:if test="${param.hasWriterRole}">
                                         <li><a href="${pageContext.request.contextPath}/sales"><spring:message code="topBar.sales"/></a></li>
+                                    </c:if>
+                                    <c:if test="${param.hasWriterRole}">
+                                        <li><a href="${pageContext.request.contextPath}/myBooks"><spring:message code="topBar.myBooks"/></a></li>
                                     </c:if>
                                     <li><a href="${pageContext.request.contextPath}/logout" class="red-text"><spring:message code="topBar.signOut"/></a></li>
                                 </ul>

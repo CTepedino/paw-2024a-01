@@ -5,14 +5,13 @@ import ar.edu.itba.paw.interfaces.dao.files.BookFileDao;
 import ar.edu.itba.paw.interfaces.dao.files.BookPreviewDao;
 import ar.edu.itba.paw.interfaces.dao.files.CoverImageDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.exception.ImageNotFoundException;
-import ar.edu.itba.paw.models.exception.InvalidPageException;
-import ar.edu.itba.paw.models.exception.PdfNotFoundException;
-import ar.edu.itba.paw.models.exception.UnreadableFileException;
+import ar.edu.itba.paw.models.exception.*;
+import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +36,15 @@ public class BookServiceImpl implements BookService {
     private final CoverImageDao coverDao;
     private final BookFileDao bookFileDao;
 
+    private final UserService us;
+
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao, final BookFileDao bookFileDao){
+    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao, final BookFileDao bookFileDao, final UserService us){
         this.bookDao = bookDao;
         this.coverDao = coverDao;
         this.previewDao = previewDao;
         this.bookFileDao = bookFileDao;
+        this.us = us;
     }
 
     @Transactional
@@ -69,8 +71,21 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
         bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge);
+        try {
+            if (!cover.isEmpty()) {
+                coverDao.update(bookId, cover.getBytes());
+            }
+            if (!preview.isEmpty()) {
+                previewDao.update(bookId, preview.getBytes());
+            }
+            if (!bookFile.isEmpty()) {
+                bookFileDao.update(bookId, bookFile.getBytes());
+            }
+        } catch (IOException e){
+            throw new UnreadableFileException();
+        }
     }
 
     @Transactional(readOnly = true)
@@ -111,34 +126,11 @@ public class BookServiceImpl implements BookService {
         return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Book> getAllGenre(BookGenre genre){
-        List<Book> books = getAll(1, 20).getPage();
-        List<Book> genreBooks = new ArrayList<>();
-
-        for (Book book : books) {
-            if (book.getGenre() == genre) {
-                genreBooks.add(book);
-            }
-        }
-
-        return genreBooks;
-    }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook){
-        List<Book> books = getAll(1, 20).getPage();
-        List<Book> genreBooks = new ArrayList<>();
-
-        for (Book book : books) {
-            if (book.getGenre() == genre && book.getBookId() != mainBook.getBookId()) {
-                genreBooks.add(book);
-            }
-        }
-
-        return genreBooks;
+    public List<Book> getRecommendations(Book book){
+        return bookDao.getOthersFromGenre(book, 10);
     }
 
     @Transactional(readOnly = true)
@@ -159,5 +151,30 @@ public class BookServiceImpl implements BookService {
         }
         List<Book> books = bookDao.getOwnedBooks(readerId, (pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Book> getWriterBooksWithParams(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize){
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books =  bookDao.getWriterBooksWithParams(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public BookFile getBookFile(long bookId) {
+        return bookFileDao.findById(bookId).orElseThrow(PdfNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean loggedUserIsAuthor(long bookId) {
+        if (us.isLoggedIn()) {
+            return bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(us.getLoggedUser().get().getEmail());
+        }
+        return false;
     }
 }

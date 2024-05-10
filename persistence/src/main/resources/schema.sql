@@ -26,9 +26,14 @@ ALTER TABLE books RENAME COLUMN image_id TO cover_id;
 
 ALTER TABLE orders DROP CONSTRAINT orders_pkey;
 ALTER TABLE orders DROP COLUMN writer_id;
-ALTER TABLE orders ADD PRIMARY KEY (buyer_id, book_id);
 ALTER TABLE orders ADD COLUMN date TIMESTAMP default now();
 UPDATE orders SET date = now() WHERE date IS NULL;
+ALTER TABLE orders ADD COLUMN order_id SERIAL PRIMARY KEY;
+UPDATE orders SET order_id = DEFAULT;
+
+ALTER TABLE orders ADD COLUMN order_id SERIAL;
+ALTER TABLE orders DROP CONSTRAINT orders_pkey;
+ALTER TABLE orders ADD PRIMARY KEY (orders_id);
 
 ALTER TABLE book_previews ADD COLUMN book_id INT;
 UPDATE book_previews AS bp SET book_id = b.book_id FROM books AS b WHERE bp.id = b.preview_id;
@@ -49,8 +54,11 @@ ALTER TABLE cover_images ADD PRIMARY KEY (id);
 ALTER TABLE cover_images ADD CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES books (book_id) ON DELETE CASCADE;
 
 ALTER TABLE users ADD COLUMN cbu VARCHAR(22);
+ALTER TABLE users ADD COLUMN is_enabled BOOLEAN DEFAULT TRUE;
+UPDATE users SET is_enabled = TRUE WHERE is_enabled IS NULL;
+ALTER TABLE users ADD COLUMN locale VARCHAR(10) DEFAULT 'en';
+UPDATE users SET locale = 'en' WHERE locale is NULL;
 */
-
 
 
 CREATE TABLE IF NOT EXISTS users(
@@ -59,8 +67,9 @@ CREATE TABLE IF NOT EXISTS users(
     last_name VARCHAR(255),
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255),
-    cbu VARCHAR(22)
-
+    cbu VARCHAR(22),
+    is_enabled BOOLEAN,
+    locale VARCHAR(10) DEFAULT 'en'
 );
 
 CREATE TABLE IF NOT EXISTS books (
@@ -107,15 +116,19 @@ CREATE TABLE IF NOT EXISTS roles(
 );
 
 CREATE TABLE IF NOT EXISTS orders(
+    order_id SERIAL PRIMARY KEY,
     buyer_id INT NOT NULL,
     book_id INT NOT NULL,
     status VARCHAR(20) NOT NULL,
     date TIMESTAMP default now(),
 
-    PRIMARY KEY (book_id, buyer_id),
-
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS payment_receipts(
+    id INT PRIMARY KEY REFERENCES orders (order_id) ON DELETE CASCADE,
+    file BYTEA NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS reviews(
@@ -131,4 +144,10 @@ CREATE TABLE IF NOT EXISTS reviews(
 
     FOREIGN KEY (reviewer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS email_validations(
+    id INT PRIMARY KEY REFERENCES users (user_id) ON DELETE CASCADE,
+    code VARCHAR(5) NOT NULL,
+    expiration TIMESTAMP NOT NULL
 );

@@ -9,7 +9,6 @@ import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.form.EditProfileForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
-import ar.edu.itba.paw.webapp.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -29,9 +28,8 @@ public class SessionController {
 
 
     @Autowired
-    public SessionController(UserService us, MailService ms){
+    public SessionController(UserService us){
         this.us = us;
-        this.ms = ms;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/signup")
@@ -48,18 +46,22 @@ public class SessionController {
             return signupForm(form);
         }
 
-        User user = us.create(
-                form.getEmail(),
-                form.getPassword(),
-                form.getFirstName(),
-                form.getLastName()
+        us.create(
+            form.getEmail(),
+            form.getPassword(),
+            form.getFirstName(),
+            form.getLastName()
         );
 
-        ms.sendRegisterEmail(user.getUserId());
-
-        //return new ModelAndView("registerConfirmation");
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("registerConfirmation");
     }
+
+    @RequestMapping(method = RequestMethod.GET, path="/validate")
+    public ModelAndView validate(@RequestParam("id") long id, @RequestParam("code") String code){
+        us.validateEmail(id, code);
+        return new ModelAndView("validationSuccess");
+    }
+
 
     @RequestMapping(method = RequestMethod.GET, path="/login")
     public ModelAndView loginForm(@RequestParam(name = "error", required = false) String error){

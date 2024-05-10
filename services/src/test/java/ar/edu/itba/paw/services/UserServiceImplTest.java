@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.junit.Assert;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
 
@@ -35,6 +37,9 @@ public class UserServiceImplTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private EmailValidationService evs;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -42,13 +47,14 @@ public class UserServiceImplTest {
     public void testCreateOK(){
         Mockito.when(passwordEncoder.encode(Mockito.eq(PASSWORD)))
                 .thenReturn(ENCODED_PASSWORD);
-        Mockito.when(userDao.create(Mockito.eq(EMAIL), Mockito.eq(ENCODED_PASSWORD), Mockito.eq(FIRST_NAME), Mockito.eq(LAST_NAME)))
-                .thenReturn(new User(1, EMAIL,ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, null));
+        Mockito.when(userDao.create(Mockito.eq(EMAIL), Mockito.eq(ENCODED_PASSWORD), Mockito.eq(FIRST_NAME), Mockito.eq(LAST_NAME), Mockito.eq(false), Mockito.any(Locale.class)))
+                .thenReturn(new User(1, EMAIL,ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US));
         List<UserRoles> mockRoles = new ArrayList<>();
         Mockito.when(userDao.giveRole(Mockito.anyLong(), Mockito.eq(UserRoles.READER))).thenAnswer((Answer<Void>) invocation -> {
             mockRoles.add(UserRoles.READER);
             return null;
         });
+        ;
 
         User user = userService.create(EMAIL, PASSWORD, FIRST_NAME, LAST_NAME);
 
@@ -58,6 +64,5 @@ public class UserServiceImplTest {
         assertEquals(ENCODED_PASSWORD, user.getPassword());
         assertEquals(FIRST_NAME, user.getFirstName());
         assertEquals(LAST_NAME, user.getLastName());
-        assertTrue(mockRoles.contains(UserRoles.READER));
     }
 }

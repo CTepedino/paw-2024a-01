@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
 import java.util.*;
 
 @Repository
@@ -23,7 +22,9 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("password"),
                     rs.getString("first_name"),
                     rs.getString("last_name"),
-                    rs.getString("cbu")
+                    rs.getString("cbu"),
+                    rs.getBoolean("is_enabled"),
+                    Locale.forLanguageTag(rs.getString("locale"))
             );
 
     private final static RowMapper<UserRoles> ROLE_ROW_MAPPER = (rs, rowNum) -> UserRoles.valueOf(rs.getString("role"));
@@ -43,13 +44,15 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User create(String email, String password, String firstName, String lastName) {
+    public User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("first_name", firstName);
         userData.put("last_name", lastName);
         userData.put("email", email);
         userData.put("password", password);
+        userData.put("is_enabled", isEnabled);
+        userData.put("locale", locale.toLanguageTag());
         Number generatedId = userJdbcInsert.executeAndReturnKey(userData);
 
         return new User(
@@ -58,27 +61,40 @@ public class UserJdbcDao implements UserDao {
                 password,
                 firstName,
                 lastName,
-                null
+                isEnabled,
+                locale
         );
     }
 
     @Override
-    public int update(long id, String email, String password, String firstName, String lastName) {
+    public void delete(long id) {
+        jdbcTemplate.update(
+        """
+                DELETE FROM users
+                WHERE user_id = ?
+            """,
+            id
+        );
+    }
+
+    @Override
+    public int update(long id, String email, String password, String firstName, String lastName, boolean isEnabled) {
         return jdbcTemplate.update(
                 """
                 UPDATE users
                 SET email = ?,
                 password = ?,
                 first_name = ?,
-                last_name = ?
+                last_name = ?,
+                is_enabled = ?
                 WHERE user_id = ?
             """,
-            email, password, firstName, lastName, id
+            email, password, firstName, lastName, isEnabled, id
         );
     }
 
     @Override
-    public int update(long id, String email, String password, String firstName, String lastName, String cbu) {
+    public int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled) {
         return jdbcTemplate.update(
         """
                 UPDATE users
@@ -86,9 +102,10 @@ public class UserJdbcDao implements UserDao {
                 password = ?,
                 first_name = ?,
                 last_name = ?,
-                cbu = ?
+                cbu = ?,
+                is_enabled = ?
                 WHERE user_id = ?
-            """, email, password, firstName, lastName, cbu, id
+            """, email, password, firstName, lastName, cbu, isEnabled, id
         );
     }
 
@@ -130,6 +147,18 @@ public class UserJdbcDao implements UserDao {
         roleData.put("role", role);
 
         return roleJdbcInsert.execute(roleData);
+    }
+
+    @Override
+    public void removeRole(long id, UserRoles role){
+        jdbcTemplate.update(
+        """
+                DELETE FROM roles
+                WHERE user_id = ? AND role = ?
+            """,
+            id,
+            role.toString()
+        );
     }
 
     @Override

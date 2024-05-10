@@ -3,7 +3,9 @@ package ar.edu.itba.paw.models.books;
 import ar.edu.itba.paw.models.users.User;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 
 public class Book {
     private final long bookId;
@@ -16,6 +18,11 @@ public class Book {
     private final LocalDate publishDate;
 
     private final User writer;
+
+    public String getFormattedPrice(){
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
+        return currencyFormatter.format(price);
+    }
 
     public long getBookId() {
         return bookId;

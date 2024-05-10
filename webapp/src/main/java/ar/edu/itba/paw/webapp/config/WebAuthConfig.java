@@ -23,6 +23,7 @@ import org.springframework.util.StreamUtils;
 import java.nio.charset.StandardCharsets;
 
 
+
 @EnableWebSecurity
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 @Configuration
@@ -54,17 +55,22 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .invalidSessionUrl("/")
 
             .and().authorizeHttpRequests()
-                .requestMatchers("/signup", "/login").anonymous()
+                .requestMatchers("/signup", "/login", "/validate").anonymous()
                 .requestMatchers( "/sales").hasAuthority(UserRoles.WRITER.toString())
                 .requestMatchers(HttpMethod.POST, "/sendBuyInfo").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(a.get(), o.getRequest())))
-                .requestMatchers("/", "/image/**", "/pdf/**", "/book/**", "/search/**").permitAll()
+                .requestMatchers("/receipt/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessReceipt(a.get(), o.getVariables().get("id"))))
+                .requestMatchers("/book/edit/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canEditBook(a.get(), o.getVariables().get("id"))))
+                .requestMatchers("/book/file/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessBook(a.get(), o.getVariables().get("id"))))
+                .requestMatchers("/book/${id:\\d+}/review").access((a,o) -> new AuthorizationDecision(accessHelper.canReview(a.get(), o.getVariables().get("id"))))
+                .requestMatchers(HttpMethod.POST, "/advanceOrder/{id:\\d+}/**").access((a, o) -> new AuthorizationDecision(accessHelper.canAdvanceOrder(a.get(), o.getVariables().get("id"))))
+                .requestMatchers("/", "/cover/**", "/preview/**", "/book/{id:\\d+}", "/search/**").permitAll()
                 .anyRequest().authenticated()
 
             .and().formLogin()
                 .loginPage("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/", false)
 
             .and().rememberMe()
                 .rememberMeParameter("rememberMe")
@@ -80,6 +86,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedPage("/403")
 
             .and().csrf().disable();
+
+            http.headers().frameOptions().sameOrigin();
     }
 
 

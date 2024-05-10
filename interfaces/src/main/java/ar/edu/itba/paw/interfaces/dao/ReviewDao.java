@@ -13,7 +13,6 @@ public interface ReviewDao {
 
     void modify(long bookId, long reviewerId, int rating, String review);
 
-    void delete(long bookId, long reviewerId);
 
     List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit);
     long getAllSize(long bookId);
@@ -21,4 +20,5 @@ public interface ReviewDao {
     Optional<Review> get(long bookId, long reviewerId);
 
     int getAverageRating(long bookId);
+
 }

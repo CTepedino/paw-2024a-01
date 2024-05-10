@@ -39,7 +39,7 @@ public class ReviewJdbcDao implements ReviewDao {
                 .usingColumns("reviewer_id", "book_id", "rating", "review");
     }
 
-    @Transactional
+
     @Override
     public void create(long bookId, long reviewerId, int rating, String review) {
         Map<String, Object> reviewData = new HashMap<>();
@@ -50,7 +50,7 @@ public class ReviewJdbcDao implements ReviewDao {
         simpleJdbcInsert.execute(reviewData);
     }
 
-    @Transactional
+
     @Override
     public void modify(long bookId, long reviewerId, int rating, String review) {
         jdbcTemplate.update(
@@ -66,20 +66,7 @@ public class ReviewJdbcDao implements ReviewDao {
         );
     }
 
-    @Transactional
-    @Override
-    public void delete(long bookId, long reviewerId) {
-        jdbcTemplate.update(
-            """
-                DELETE FROM reviews
-                WHERE book_id = ? AND reviewer_id = ?
-            """,
-            bookId,
-            reviewerId
-        );
-    }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit) {
         return jdbcTemplate.query(
@@ -131,4 +118,6 @@ public class ReviewJdbcDao implements ReviewDao {
         );
         return avg!=null?avg:0;
     }
+
+
 }

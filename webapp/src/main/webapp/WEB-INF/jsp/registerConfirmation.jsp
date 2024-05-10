@@ -30,13 +30,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title><spring:message code="session.emailSentTitle"/></title>
+  <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Confirmation</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/orderSummary.css">
 </head>
+
+<jsp:include page="components/topBar.jsp">
+  <jsp:param name="hasWriterRole" value="${isWriter}" />
+  <jsp:param name="hideSearchBar" value="${true}"/>
+</jsp:include>
 <%--<%@ include file="components/topBar.jsp" %>--%>
 <body>
+
+<div class="small-container">
+  <div class="form">
+    <div class="formnt z-depth-2">
+      <h5 class="center-align">
+        <spring:message code="session.emailSent"/>
+      </h5>
+      <br/>
+      <br/>
+      <p class="center-align">
+        <spring:message code="session.emailSentInstructions"/>
+      </p>
+    </div>
 <div class="orderCards">
   <img class="hero-image" src="${pageContext.request.contextPath}/images/registerConfirmation.svg">
   <div class="container">
@@ -48,6 +68,7 @@
 <%--    </button>--%>
   </div>
 </div>
+
 </body>
 
 </html>

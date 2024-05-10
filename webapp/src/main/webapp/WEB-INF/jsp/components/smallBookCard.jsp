@@ -15,8 +15,8 @@
         <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
                 <img
-                        src="<c:url value="${baseUrl}/image/${cardBook.bookId}"/>"
-                        class="activator book_cover"
+                        src="<c:url value="${baseUrl}/cover/${cardBook.bookId}"/>"
+                        class="activator"
                         alt="<spring:message code="bookInfoCard.cover"/>"
                 />
             </div>
@@ -24,9 +24,19 @@
                 <div class="container content">
                     <div class="card-content" >
                         <span class="card-title grey-text text-darken-4"><c:out value="${cardBook.title}"/></span>
+                        <c:if test="${!myBooks}">
+                            <p class="info">
+                                <spring:message var="author" code="bookInfoCard.by" arguments="${book.writer.firstName},${book.writer.lastName}"/>
+                                <c:out value="${author}"/>
+                            </p>
+                        </c:if>
+                        <c:if test="${myBooks}">
+                            <p class="info">
+                                <c:out value="${cardBook.publishDate}"/>
+                            </p>
+                        </c:if>
                         <h5>
-                            <spring:message var="price" code="bookInfoCard.price" arguments="${cardBook.price}"/>
-                            <c:out value="${price}"/>
+                            <c:out value="${cardBook.formattedPrice}"/>
                         </h5>
                     </div>
                 </div>

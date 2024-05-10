@@ -12,6 +12,10 @@ public interface UserService {
 
     User create(String email, String password, String firstName, String lastName);
 
+    void validateEmail(long id, String code);
+
+    void resendValidation(String email);
+
     Optional<User> findById(long id);
 
     Optional<User> findByEmail(String email);
@@ -32,4 +36,7 @@ public interface UserService {
 
     void setProfilePicture(MultipartFile profilePicture);
     ProfilePicture getProfilePictureOrDefault(long id);
+    Optional<ProfilePicture> getProfilePicture(long id);
+
+    boolean hasRole(UserRoles role);
 }

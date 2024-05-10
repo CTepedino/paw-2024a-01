@@ -4,19 +4,24 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public interface UserDao {
-    User create(String email, String password, String firstName, String lastName);
+    User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale);
 
-    int update(long id, String email, String password, String firstName, String lastName);
+    void delete(long id);
 
-    int update(long id, String email, String password, String firstName, String lastName, String cbu);
+    int update(long id, String email, String password, String firstName, String lastName, boolean isEnabled);
+
+    int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled);
 
     Optional<User> findById(long id);
     Optional<User> findByEmail(String email);
 
     int giveRole(long id, UserRoles role);
+
+    void removeRole(long id, UserRoles role);
 
     List<UserRoles> getRoles(long id);
 

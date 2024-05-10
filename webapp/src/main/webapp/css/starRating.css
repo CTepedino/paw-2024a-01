@@ -1,0 +1,12 @@
+
+.star-rating{
+    user-select: none;
+}
+
+.star:hover {
+    cursor:pointer;
+}
+
+textarea {
+    resize: none;
+}

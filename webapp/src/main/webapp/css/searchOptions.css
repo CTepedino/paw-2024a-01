@@ -9,3 +9,11 @@
     position: relative;
     width: 100%;
 }
+
+.books{
+    padding: 20px !important;
+}
+
+.search-options{
+    padding: 20px !important;
+}

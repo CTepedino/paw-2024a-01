@@ -23,12 +23,21 @@
         <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
         <jsp:param name="user" value="${loggedUser}" />
     </jsp:include>
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
+</jsp:include>
 
     <div class="explore_back">
     <div class="container">
             <div class="row">
                 <div class="col s4">
                     <div class="card-panel center">
+                        <div class="home-image waves-effect waves-block waves-light">
+                            <img src="${pageContext.request.contextPath}/images/transparent-background-book-24.png">
+                        </div>
+                        <div class="home-card-content">
+                            <h6 class="home-steps"><spring:message code="book.home.findBook"/></h6>
+                        </div>
                         <img class="home-image" src="${pageContext.request.contextPath}/images/searchBook.svg">
                         <h6 class="black-text"><spring:message code="book.home.findBook"/></h6>
                     </div>
@@ -37,12 +46,24 @@
                     <div class="card-panel center">
                         <img class="home-image" src="${pageContext.request.contextPath}/images/contactWriter.svg">
                         <h6 class="black-text"><spring:message code="book.home.contactWriter"/></h6>
+                        <div class="home-image waves-effect waves-block waves-light">
+                            <img src="${pageContext.request.contextPath}/images/handshake.png">
+                        </div>
+                        <div class="home-card-content">
+                            <h6 class="home-steps"><spring:message code="book.home.contactWriter"/></h6>
+                        </div>
                     </div>
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
                         <img class="home-image" src="${pageContext.request.contextPath}/images/contact.svg">
                         <h6 class="black-text"><spring:message code="book.home.getCopy"/></h6>
+                        <div class="home-image waves-effect waves-block waves-light">
+                            <img src="${pageContext.request.contextPath}/images/book.png">
+                        </div>
+                        <div class="home-card-content">
+                            <h6 class="home-steps"><spring:message code="book.home.getCopy"/></h6>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +31,7 @@ public class BookServiceImplTest {
     private static final long SIZE = 100;
     private static final int LIMIT = 9;
 
-    private static final Book TEST_BOOK =  new Book(1, "", "", BookGenre.FICTION, new BigDecimal(1), 1, 1, LocalDate.now(),  new User(1,"","","","", ""));
+    private static final Book TEST_BOOK =  new Book(1, "", "", BookGenre.FICTION, new BigDecimal(1), 1, 1, LocalDate.now(),  new User(1,"","","","", false, Locale.US));
 
     @Mock
     private BookDao bookDao;

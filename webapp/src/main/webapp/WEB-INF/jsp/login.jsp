@@ -10,6 +10,10 @@
     <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 </head>
 
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
+    <jsp:param name="hideSearchBar" value="${true}"/>
+</jsp:include>
 <c:set var="hideSearchBar" value="${true}" scope="request"/>
 
 <%--<%@ include file="components/topBar.jsp" %>--%>
@@ -26,7 +30,7 @@
                 class="z-depth-2"
         >
             <h5 class="center-align"><spring:message code="session.loginTitle"/></h5>
-            <c:if test="${error!=null}">
+            <c:if test="${error != null}">
                 <p class="red-text"><spring:message code="session.loginError"/></p>
             </c:if>
             <div class="input-field">

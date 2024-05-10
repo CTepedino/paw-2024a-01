@@ -18,6 +18,9 @@
 <jsp:include page="components/topBar2.0.jsp">
     <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
     <jsp:param name="user" value="${loggedUser}" />
+
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
 </jsp:include>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -55,6 +58,22 @@
             </nav>
 
 
+
+<body>
+<div class="medium-container">
+    <div class="card-panel center-align">
+        <i class="material-icons large">account_circle</i>
+        <div class="name">
+            <span><c:out value="${loggedUser.firstName}"/></span>
+            <span><c:out value="${loggedUser.lastName}"/></span>
+        </div>
+        <div class="email">
+            <span><c:out value="${loggedUser.email}"/></span>
+        </div>
+        <div class="edit-profile">
+            <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">
+                <spring:message code="session.changePassword"/>
+            </a>
         </div>
 
 <%--        <div class="edit-profile">--%>
