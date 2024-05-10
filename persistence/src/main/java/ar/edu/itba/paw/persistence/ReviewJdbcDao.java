@@ -68,19 +68,6 @@ public class ReviewJdbcDao implements ReviewDao {
 
 
     @Override
-    public void delete(long bookId, long reviewerId) {
-        jdbcTemplate.update(
-            """
-                DELETE FROM reviews
-                WHERE book_id = ? AND reviewer_id = ?
-            """,
-            bookId,
-            reviewerId
-        );
-    }
-
-
-    @Override
     public List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit) {
         return jdbcTemplate.query(
         """

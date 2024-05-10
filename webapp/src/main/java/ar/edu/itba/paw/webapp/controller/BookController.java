@@ -107,7 +107,7 @@ public class BookController {
         mav.addObject("avgRating", avgRating);
         mav.addObject("ownsBook", ownsBook);
         mav.addObject("isAuthor", isAuthor);
-        mav.addObject("loggedUserReview", loggedUserReview);
+        mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
         return mav;
     }
 

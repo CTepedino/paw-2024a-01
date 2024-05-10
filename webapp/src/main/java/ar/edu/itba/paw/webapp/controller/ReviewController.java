@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.reviews.Review;
+import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,10 +27,10 @@ public class ReviewController {
         this.rs = rs;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/book/{bookId:\\d+}/review/{userId:\\d+}")
-    public ModelAndView createOrUpdateReviewForm(@ModelAttribute("reviewForm") ReviewForm form, @PathVariable("bookId") long bookId, @PathVariable("userId") long userId){
+    @RequestMapping(method = RequestMethod.GET, path = "/book/{bookId:\\d+}/review/")
+    public ModelAndView createOrUpdateReviewForm(@ModelAttribute("reviewForm") ReviewForm form, @PathVariable("bookId") long bookId){
 
-        Optional<Review> maybeReview = rs.get(bookId,userId);
+        Optional<Review> maybeReview = rs.findLoggedUserReview(bookId);
         if (maybeReview.isPresent()){
             form.setReview(maybeReview.get().getReview());
             form.setRating(maybeReview.get().getRating());
@@ -37,18 +38,22 @@ public class ReviewController {
 
         ModelAndView mav = new ModelAndView("reviewForm");
         mav.addObject("bookId", bookId);
-        mav.addObject("userId", userId);
         return mav;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/review/{userId:\\d+}")
-    public ModelAndView createOrUpdateReview(@Valid @ModelAttribute("reviewForm") ReviewForm form, final BindingResult error, @PathVariable("bookId") long bookId, @PathVariable("userId") long userId){
+    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/review/")
+    public ModelAndView createOrUpdateReview(
+            @Valid @ModelAttribute("reviewForm") ReviewForm form,
+            final BindingResult error,
+            @PathVariable("bookId") long bookId,
+            @ModelAttribute("loggedUser") User user
+    ){
 
         if (error.hasErrors()){
-            return createOrUpdateReviewForm(form, bookId, userId);
+            return createOrUpdateReviewForm(form, bookId);
         }
 
-        rs.createOrUpdate(bookId, userId, form.getRating(), form.getReview());
+        rs.createOrUpdate(bookId, user.getUserId(), form.getRating(), form.getReview());
 
         return new ModelAndView("redirect:book/"+bookId);
     }

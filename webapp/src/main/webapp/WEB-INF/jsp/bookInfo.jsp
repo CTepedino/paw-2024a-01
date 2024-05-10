@@ -62,6 +62,13 @@
                                 </button>
                             </a>
                         </c:if>
+                        <c:if test="${ownsBook or isAuthor}">
+                            <a href="<c:url value="/book/file/${book.bookId}"/>" target="_blank">
+                                <button type="submit" class="waves-effect waves-light btn white-text">
+                                    <spring:message code="orders.purchases.action.COMPLETED"/>
+                                </button>
+                            </a>
+                        </c:if>
                     </div>
                 </div>
                 <h5><c:out value="${book.formattedPrice}"/></h5>
@@ -115,8 +122,28 @@
                     </c:if>
                 </c:forEach>
             </div>
-            <c:if test="${ownsBook}">
-                <%--TODO: leave/edit/delete review--%>
+            <c:if test="${ownsBook && loggedUserReview eq null}">
+                <a href="<c:url value="/book/${book.bookId}/review/${loggedUser.userId}"/>">
+                    <button class="waves-effect waves-light btn white-text">
+                        <spring:message code="review.writeReview"/>
+                    </button>
+                </a>
+            </c:if>
+            <c:if test="${loggedUserReview ne null}">
+                <h5><spring:message code="review.yourReview"/></h5>
+                <a href="<c:url value="/book/${book.bookId}/review/${loggedUser.userId}"/>">
+                    <button class="waves-effect waves-light btn white-text">
+                        <spring:message code="review.editReview"/>
+                    </button>
+                </a>
+                <th class="col s4">
+                    <script>new FixedStarRating(${loggedUserReview.rating});</script><br/>
+                    <spring:message code="bookInfoCard.by" var="reviewer" arguments="${loggedUserReview.reviewer.firstName},${loggedUserReview.reviewer.lastName}"/>
+                    <c:out value="${reviewer}"/><br/>
+                </th>
+                <th class="col s8">
+                    <c:out value="${loggedUserReview.review}"/>
+                </th>
             </c:if>
             <c:if test="${not empty reviews}">
                 <div class="col s12">
@@ -144,8 +171,5 @@
             </c:if>
         </div>
     </div>
-
-
-
 </body>
 </html>
