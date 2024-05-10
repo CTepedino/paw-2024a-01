@@ -112,34 +112,11 @@ public class BookServiceImpl implements BookService {
         return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Book> getAllGenre(BookGenre genre){
-        List<Book> books = getAll(1, 20).getPage();
-        List<Book> genreBooks = new ArrayList<>();
-
-        for (Book book : books) {
-            if (book.getGenre() == genre) {
-                genreBooks.add(book);
-            }
-        }
-
-        return genreBooks;
-    }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook){
-        List<Book> books = getAll(1, 20).getPage();
-        List<Book> genreBooks = new ArrayList<>();
-
-        for (Book book : books) {
-            if (book.getGenre() == genre && book.getBookId() != mainBook.getBookId()) {
-                genreBooks.add(book);
-            }
-        }
-
-        return genreBooks;
+    public List<Book> getRecommendations(Book book){
+        return bookDao.getOthersFromGenre(book, 10);
     }
 
     @Transactional(readOnly = true)
@@ -169,7 +146,7 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books =  bookDao.getWriterBooksWithParams(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
     }
 
     @Transactional(readOnly = true)

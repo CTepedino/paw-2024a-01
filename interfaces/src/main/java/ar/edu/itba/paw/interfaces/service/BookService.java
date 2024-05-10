@@ -65,9 +65,8 @@ public interface BookService {
 
     BookPreview getPreview(long id);
 
-    List<Book> getAllGenre(BookGenre genre);
+    List<Book> getRecommendations(Book book);
 
-    List<Book> getAllGenreExcluding(BookGenre genre, Book mainBook);
 
     PaginatedContent<Book> getWriterBooks(long writerId, int pageNumber, int pageSize);
 

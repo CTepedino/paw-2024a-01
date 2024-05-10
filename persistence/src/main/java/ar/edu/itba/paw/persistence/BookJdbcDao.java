@@ -175,6 +175,22 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
+    public List<Book> getOthersFromGenre(Book book, int max) {
+        return jdbcTemplate.query(
+        """
+                SELECT *
+                FROM books b JOIN users u on b.writer_id = u.user_id
+                WHERE b.book_id <> ? AND b.genre = ?
+                LIMIT ?
+            """,
+            ROW_MAPPER,
+            book.getBookId(),
+            book.getGenre(),
+            max
+        );
+    }
+
+    @Override
     public List<Book> getWriterBooks(long writerId, int offset, int limit) {
         return jdbcTemplate.query(
                 """

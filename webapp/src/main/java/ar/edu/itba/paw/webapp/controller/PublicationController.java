@@ -3,13 +3,17 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.PublishService;
+import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.models.reviews.Review;
+import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.form.MyBookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
@@ -19,10 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -35,15 +36,17 @@ public class PublicationController {
 
     private final PublishService ps;
     private final BookService bs;
+    private final ReviewService rs;
 
     private final UserService us;
 
 
     @Autowired
-    public PublicationController(final PublishService ps, final BookService bs, final UserService us){
+    public PublicationController(final PublishService ps, final BookService bs, final UserService us, final ReviewService rs){
         this.ps = ps;
         this.bs = bs;
         this.us = us;
+        this.rs = rs;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
@@ -84,12 +87,18 @@ public class PublicationController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
-    public ModelAndView bookInfo(@PathVariable("bookId") final long bookId){
+    public ModelAndView bookInfo(@PathVariable("bookId") final long bookId, @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewsPage){
         final ModelAndView mav = new ModelAndView("bookInfo");
+
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        List<Book> recommendations = bs.getAllGenreExcluding(book.getGenre(), book);
+        List<Book> recommendations = bs.getRecommendations(book);
+        PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC, reviewsPage,20);
+        int avgRating = rs.getAverageRating(bookId);
+
         mav.addObject("book", book);
         mav.addObject("recommendations", recommendations);
+        mav.addObject("reviews", reviews);
+        mav.addObject("avgRating", avgRating);
         return mav;
     }
 

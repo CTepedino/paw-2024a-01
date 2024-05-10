@@ -102,5 +102,12 @@
         </div>
     </div>
 
+    <c:forEach items="${reviews.page}" var="review">
+        ${review.reviewer.firstName} ${review.reviewer.lastName}
+        ${review.rating}
+        ${review.review}
+        <br/>
+    </c:forEach>
+
 </body>
 </html>
