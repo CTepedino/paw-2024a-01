@@ -16,8 +16,6 @@ public interface UserService {
 
     void resendValidation(String email);
 
-    void delete(long id);
-
     Optional<User> findById(long id);
 
     Optional<User> findByEmail(String email);

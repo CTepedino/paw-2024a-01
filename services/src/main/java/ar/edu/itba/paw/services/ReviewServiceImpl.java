@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -29,29 +30,18 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void create(long bookId, int rating, String review) {
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        reviewDao.create(bookId, user.getUserId(), rating, review);
+    public void createOrUpdate(long bookId, long userId, int rating, String review){
+        if (get(bookId, userId).isPresent()){
+            reviewDao.modify(bookId, userId, rating, review);
+        } else {
+            reviewDao.create(bookId, userId, rating, review);
+        }
     }
 
-    @Transactional
-    @Override
-    public void edit(long bookId, int rating, String review) {
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        reviewDao.modify(bookId, user.getUserId(), rating, review);
-    }
-
-    @Transactional
-    @Override
-    public void delete(long bookId) {
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        reviewDao.delete(bookId, user.getUserId());
-    }
     @Transactional(readOnly = true)
     @Override
-    public boolean hasReviewed(long bookId) {
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        return reviewDao.get(bookId, user.getUserId()).isPresent();
+    public Optional<Review> get(long bookId, long userId) {
+        return reviewDao.get(bookId, userId);
     }
 
     @Transactional(readOnly = true)
@@ -65,5 +55,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public int getAverageRating(long bookId) {
         return reviewDao.getAverageRating(bookId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Review> findLoggedUserReview(long bookId) {
+        if(us.isLoggedIn()){
+            return reviewDao.get(bookId, us.getLoggedUser().get().getUserId());
+        }
+        return Optional.empty();
     }
 }

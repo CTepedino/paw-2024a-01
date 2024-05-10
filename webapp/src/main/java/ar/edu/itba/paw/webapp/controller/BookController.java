@@ -8,13 +8,11 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
-import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.form.MyBookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
-import ar.edu.itba.paw.webapp.form.OrderSearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
-public class PublicationController {
+public class BookController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PublicationController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(BookController.class);
 
     private final PublishService ps;
     private final BookService bs;
@@ -39,7 +38,7 @@ public class PublicationController {
 
 
     @Autowired
-    public PublicationController(final PublishService ps, final BookService bs, final UserService us, final ReviewService rs, final OrderService os){
+    public BookController(final PublishService ps, final BookService bs, final UserService us, final ReviewService rs, final OrderService os){
         this.ps = ps;
         this.bs = bs;
         this.us = us;
@@ -87,16 +86,20 @@ public class PublicationController {
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(
             @PathVariable("bookId") final long bookId,
-            @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewsPage
+            @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage
     ){
         final ModelAndView mav = new ModelAndView("bookInfo");
 
-        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        List<Book> recommendations = bs.getRecommendations(book);
-        PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC, reviewsPage,20);
-        int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = bs.loggedUserIsAuthor(bookId);
+
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        List<Book> recommendations = bs.getRecommendations(book);
+
+        PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC, reviewPage,20);
+        int avgRating = rs.getAverageRating(bookId);
+
+        Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
 
         mav.addObject("book", book);
         mav.addObject("recommendations", recommendations);
@@ -104,6 +107,7 @@ public class PublicationController {
         mav.addObject("avgRating", avgRating);
         mav.addObject("ownsBook", ownsBook);
         mav.addObject("isAuthor", isAuthor);
+        mav.addObject("loggedUserReview", loggedUserReview);
         return mav;
     }
 

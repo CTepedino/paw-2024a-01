@@ -110,12 +110,6 @@ public class UserServiceImpl implements UserService {
         evs.resend(user);
     }
 
-    @Transactional
-    @Override
-    public void delete(long id) {
-        userDao.delete(id);
-    }
-
     @Transactional(readOnly = true)
     @Override
     public List<UserRoles> getRoles(long id) {
