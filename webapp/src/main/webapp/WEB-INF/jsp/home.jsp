@@ -22,20 +22,32 @@
             <div class="row">
                 <div class="col s4">
                     <div class="card-panel center">
-                        <img class="home-image" src="${pageContext.request.contextPath}/images/transparent-background-book-24.png">
-                        <h6><spring:message code="book.home.findBook"/></h6>
+                        <div class="home-image waves-effect waves-block waves-light">
+                            <img src="${pageContext.request.contextPath}/images/transparent-background-book-24.png">
+                        </div>
+                        <div class="home-card-content">
+                            <h6 class="home-steps"><spring:message code="book.home.findBook"/></h6>
+                        </div>
                     </div>
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
-                        <img class="home-image" src="${pageContext.request.contextPath}/images/handshake.png">
-                        <h6><spring:message code="book.home.contactWriter"/></h6>
+                        <div class="home-image waves-effect waves-block waves-light">
+                            <img src="${pageContext.request.contextPath}/images/handshake.png">
+                        </div>
+                        <div class="home-card-content">
+                            <h6 class="home-steps"><spring:message code="book.home.contactWriter"/></h6>
+                        </div>
                     </div>
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
-                        <img class="home-image" src="${pageContext.request.contextPath}/images/book.png">
-                        <h6><spring:message code="book.home.getCopy"/></h6>
+                        <div class="home-image waves-effect waves-block waves-light">
+                            <img src="${pageContext.request.contextPath}/images/book.png">
+                        </div>
+                        <div class="home-card-content">
+                            <h6 class="home-steps"><spring:message code="book.home.getCopy"/></h6>
+                        </div>
                     </div>
                 </div>
             </div>

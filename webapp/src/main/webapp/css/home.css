@@ -9,11 +9,30 @@
 }
 
 .home-image {
-    max-height: 80px;
+    width: 100%;
+    height: 100px;
+}
+
+.home-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+}
+
+.home-card-content{
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .card-panel{
     background-color: #EEEBD3 !important;
+}
+
+.home-steps{
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 a {

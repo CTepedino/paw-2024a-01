@@ -9,7 +9,6 @@
 <head>
     <title><spring:message code="orders.purchases.title"/></title>
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
-    <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
     <link href="<c:url value="/css/purchasesView.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
@@ -28,12 +27,18 @@
                method="get"
                id="orders">
         <div class="row">
-            <div class="col s6">
+            <div class="input-field col s6">
+                <form:label path="title" cssClass="active">
+                    <spring:message code="book.search.title"/>
+                </form:label><br>
                 <form:input path="title"/>
             </div>
             <div class="input-field col s6">
+                <form:label path="orderStatus" cssClass="active">
+                    <spring:message code="orders.status"/>
+                </form:label><br>
                 <form:select path="orderStatus" onchange="this.form.submit()">
-                    <form:option value=""><spring:message code="orders.status"/></form:option>
+                    <form:option value=""><spring:message code="orders.status.all"/></form:option>
                     <c:forEach items="${statuses}" var="status">
                         <form:option value="${status}"><spring:message code="orders.purchases.status.option.${status}"/></form:option>
                     </c:forEach>
