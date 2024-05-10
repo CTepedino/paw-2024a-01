@@ -13,6 +13,7 @@ import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
+import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,5 +170,11 @@ public class BookServiceImpl implements BookService {
         }
         List<Book> books =  bookDao.getWriterBooksWithParams(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public BookFile getBookFile(long bookId) {
+        return bookFileDao.findById(bookId).orElseThrow(PdfNotFoundException::new);
     }
 }

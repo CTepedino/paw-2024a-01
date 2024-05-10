@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,4 +80,6 @@ public interface BookService {
     );
 
     PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize);
+
+    BookFile getBookFile(long bookId);
 }
