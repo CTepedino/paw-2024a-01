@@ -141,6 +141,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.mime.charset", "UTF-8");
 
         return mailSender;
     }
@@ -160,6 +161,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
         templateEngine.setTemplateEngineMessageSource(emailMessageSource());
+
         return templateEngine;
     }
 
