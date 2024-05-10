@@ -19,6 +19,7 @@
 
 .collection-item{
     padding: 0 !important;
+    overflow: auto;
 }
 
 .purchased-book{

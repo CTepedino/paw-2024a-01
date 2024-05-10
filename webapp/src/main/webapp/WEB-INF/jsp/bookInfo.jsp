@@ -94,6 +94,7 @@
                 <c:forEach var="recommendedBook" items="${recommendations}" varStatus="loop">
                     <c:if test="${loop.index < 4}">
                         <c:set var="cardBook" value="${recommendedBook}" scope="request"/>
+                        <c:set var="myBooks" value="${false}" scope="request"/>
                         <%@include file="components/smallBookCard.jsp"%>
                     </c:if>
                 </c:forEach>

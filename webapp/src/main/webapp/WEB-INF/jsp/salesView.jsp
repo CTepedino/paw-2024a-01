@@ -10,7 +10,6 @@
     <title><spring:message code="orders.sales.title"/></title>
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
     <link href="<c:url value="/css/salesView.css"/>" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 
@@ -28,12 +27,18 @@
                method="get"
                id="orders">
         <div class="row">
-            <div class="col s6">
+            <div class="input-field col s6">
+                <form:label path="title" cssClass="active">
+                    <spring:message code="book.search.title"/>
+                </form:label><br>
                 <form:input path="title"/>
             </div>
             <div class="input-field col s6">
+                <form:label path="orderStatus" cssClass="active">
+                    <spring:message code="orders.status"/>
+                </form:label><br>
                 <form:select path="orderStatus" onchange="this.form.submit()">
-                    <form:option value=""><spring:message code="orders.status"/></form:option>
+                    <form:option value=""><spring:message code="orders.status.all"/></form:option>
                     <c:forEach items="${statuses}" var="status">
                         <form:option value="${status}"><spring:message code="orders.sales.status.option.${status}"/></form:option>
                     </c:forEach>
@@ -75,7 +80,7 @@
                             <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>
                             <c:if test="${order.orderStatus == 'WAITING_APPROVAL' or order.orderStatus == 'COMPLETED'}">
                                 <a href="<c:url value="/receipt/${order.orderId}"/>" target="_blank">
-                                    <button class="waves-light btn payment"><spring:message code="orders.sales.status.seeReceipt"/></button>
+                                    <button class="waves-light btn payment"><spring:message code="orders.sales.status.viewReceipt"/></button>
                                 </a>
                             </c:if>
                         </div>
@@ -87,7 +92,7 @@
                                 <a href="<c:url value="/profile"/>"><button class="waves-light btn"><spring:message code="orders.sales.action.${order.orderStatus}.button"/></button></a>
                             </c:if>
 
-                            <c:if test="${order.orderStatus == 'WAITING_PAYMENT'}">
+                            <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
                                 <p><spring:message code="orders.sales.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i></p>
                             </c:if>
 
@@ -123,7 +128,6 @@
                 })
             </script>
         </c:if>
-
 
 </div>
 

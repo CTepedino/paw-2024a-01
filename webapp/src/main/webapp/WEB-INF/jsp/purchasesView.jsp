@@ -9,7 +9,6 @@
 <head>
     <title><spring:message code="orders.purchases.title"/></title>
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
-    <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
     <link href="<c:url value="/css/purchasesView.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
@@ -28,12 +27,18 @@
                method="get"
                id="orders">
         <div class="row">
-            <div class="col s6">
+            <div class="input-field col s6">
+                <form:label path="title" cssClass="active">
+                    <spring:message code="book.search.title"/>
+                </form:label><br>
                 <form:input path="title"/>
             </div>
             <div class="input-field col s6">
+                <form:label path="orderStatus" cssClass="active">
+                    <spring:message code="orders.status"/>
+                </form:label><br>
                 <form:select path="orderStatus" onchange="this.form.submit()">
-                    <form:option value=""><spring:message code="orders.status"/></form:option>
+                    <form:option value=""><spring:message code="orders.status.all"/></form:option>
                     <c:forEach items="${statuses}" var="status">
                         <form:option value="${status}"><spring:message code="orders.purchases.status.option.${status}"/></form:option>
                     </c:forEach>
@@ -77,6 +82,9 @@
                     </div>
                     <div class="col s3 purchase-info">
                         <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                        <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
+                            <c:out value="${order.writer.cbu}"/>
+                        </c:if>
                     </div>
                     <div class="col s2 purchase-info">
                         <c:url value="/advanceOrder" var="advanceOrderUrl">
@@ -85,9 +93,9 @@
                             <c:param name="writerId" value="${order.writer.userId}"/>
                             <c:param name="from" value="purchases"/>
                         </c:url>
-                        <c:if test="${order.orderStatus == 'WAITING_PAYMENT'}">
+                        <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
                             <form action="${advanceOrderUrl}" method="post">
-                                <button class="waves-light btn payment" type="submit"><spring:message code="orders.purchases.action.${order.orderStatus}" arguments="${order.writer.cbu}"/></button>
+                                <button class="waves-light btn payment" type="submit"><spring:message code="orders.purchases.action.${order.orderStatus}"/></button>
                             </form>
                         </c:if>
                         <c:if test="${order.orderStatus == 'COMPLETED'}">

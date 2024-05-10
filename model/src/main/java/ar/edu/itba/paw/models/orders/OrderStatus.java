@@ -4,6 +4,8 @@ public enum OrderStatus {
     WAITING_CONTACT("Waiting contact","WAITING_PAYMENT", false, true),
     WAITING_PAYMENT("Waiting payment","WAITING_FOR_BOOK", true, false),
     WAITING_APPROVAL("Waiting for book","COMPLETED", false, true),
+
+    REJECTED_PAYMENT("Payment rejected","REJECTED_PAYMENT", true, false),
     COMPLETED("Completed","COMPLETED", false, false);
 
     private final String displayString;
