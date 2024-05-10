@@ -185,7 +185,7 @@ public class BookJdbcDao implements BookDao {
             """,
             ROW_MAPPER,
             book.getBookId(),
-            book.getGenre(),
+            book.getGenre().toString(),
             max
         );
     }

@@ -8,6 +8,8 @@
 <head>
     <title><c:out value="${book.title}"/></title>
     <link href="${pageContext.request.contextPath}/css/bookInfo.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
 
 <jsp:include page="components/topBar.jsp">
@@ -36,7 +38,11 @@
                         </h5>
                     </div>
                     <div class="col s4">
-                       <c:if test="${loggedUser!=null && book.writer.email != loggedUser.email}">
+                        <script src="<c:url value="/js/starRating.js"/>"></script>
+                        <script>
+                            const starRating = new FixedStarRating(${avgRating});
+                        </script>
+                        <c:if test="${loggedUser!=null && book.writer.email != loggedUser.email}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
@@ -45,7 +51,7 @@
                                     <spring:message code="book.bookInfo.buyBook"/>
                                 </button>
                             </form>
-                       </c:if>
+                        </c:if>
                     </div>
                 </div>
                 <h5><c:out value="${book.formattedPrice}"/></h5>
