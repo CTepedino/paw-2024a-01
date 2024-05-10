@@ -6,15 +6,45 @@
 <html>
 <head>
     <title><spring:message code="review.title"/></title>
+    <link rel="stylesheet" href="<c:url value="/css/starRating.css"/>"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
+
+<jsp:include page="components/topBar.jsp">
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
+</jsp:include>
 <body>
-<c:url value="/book/${bookId}/review/${userId}" var="postUrl"/>
+
+<c:url value="/book/${bookId}/review" var="postUrl"/>
 <form:form
     action="${postUrl}"
     method="post"
     modelAttribute="reviewForm"
 >
-<h1>TODO</h1>
+    <input type="hidden" id="rating" name="rating" value="rating">
+    <div class="input-field center-align">
+        <div class="star-rating">
+            <i class="material-icons small star" onclick="setRating()">star_border</i>
+            <i class="material-icons small star" onclick="setRating()">star_border</i>
+            <i class="material-icons small star" onclick="setRating()">star_border</i>
+            <i class="material-icons small star" onclick="setRating()">star_border</i>
+            <i class="material-icons small star" onclick="setRating()">star_border</i>
+        </div>
+    </div>
+    <form:errors path="rating"/>
+    <div class="input-field">
+        <form:label path="review"/>
+        <form:textarea path="review"/>
+    </div>
+    <form:errors path="review"/>
+
+    <button type="submit">Submit Review</button>
 </form:form>
+
+<script src="<c:url value="/js/selectableStarRating.js"/>"></script>
+<script>
+    initializeRating(${reviewForm.rating});
+</script>
+
 </body>
 </html>

@@ -123,7 +123,7 @@
                 </c:forEach>
             </div>
             <c:if test="${ownsBook && loggedUserReview eq null}">
-                <a href="<c:url value="/book/${book.bookId}/review/${loggedUser.userId}"/>">
+                <a href="<c:url value="/book/${book.bookId}/review"/>">
                     <button class="waves-effect waves-light btn white-text">
                         <spring:message code="review.writeReview"/>
                     </button>
@@ -131,7 +131,7 @@
             </c:if>
             <c:if test="${loggedUserReview ne null}">
                 <h5><spring:message code="review.yourReview"/></h5>
-                <a href="<c:url value="/book/${book.bookId}/review/${loggedUser.userId}"/>">
+                <a href="<c:url value="/book/${book.bookId}/review"/>">
                     <button class="waves-effect waves-light btn white-text">
                         <spring:message code="review.editReview"/>
                     </button>

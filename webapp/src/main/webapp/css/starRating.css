@@ -1,26 +1,12 @@
-.ratings-wrapper{
-    border: thin solid #555;
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 0 10px;
+
+.star-rating{
+    user-select: none;
 }
 
-.ratings{
-    display: flex;
-    flex-direction: row-reverse;
+.star:hover {
+    cursor:pointer;
 }
 
-.ratings span{
-    cursor: pointer;
-    transition: color .2s, trasform .2s;
-    font-size: 50px;
-}
-
-.ratings span:hover{
-    color: orange;
-    transform: scale(1,3);
-}
-
-.ratings span:hover ~ span{
-    color: orange;
+textarea {
+    resize: none;
 }

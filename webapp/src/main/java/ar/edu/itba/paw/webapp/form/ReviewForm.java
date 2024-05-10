@@ -4,7 +4,7 @@ import javax.validation.constraints.*;
 
 public class ReviewForm {
 
-    @Min(0)
+    @Min(1)
     @Max(10)
     private int rating;
 

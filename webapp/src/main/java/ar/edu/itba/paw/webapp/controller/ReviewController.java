@@ -27,7 +27,7 @@ public class ReviewController {
         this.rs = rs;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/book/{bookId:\\d+}/review/")
+    @RequestMapping(method = RequestMethod.GET, path = "/book/{bookId:\\d+}/review")
     public ModelAndView createOrUpdateReviewForm(@ModelAttribute("reviewForm") ReviewForm form, @PathVariable("bookId") long bookId){
 
         Optional<Review> maybeReview = rs.findLoggedUserReview(bookId);
@@ -41,7 +41,7 @@ public class ReviewController {
         return mav;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/review/")
+    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/review")
     public ModelAndView createOrUpdateReview(
             @Valid @ModelAttribute("reviewForm") ReviewForm form,
             final BindingResult error,
