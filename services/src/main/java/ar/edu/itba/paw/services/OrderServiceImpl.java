@@ -137,8 +137,8 @@ public class OrderServiceImpl implements OrderService {
             orderDao.update(orderId, OrderStatus.COMPLETED);
             // ms.sendReceiptApprovedEmail();
         } else {
-            orderDao.update(orderId, OrderStatus.WAITING_PAYMENT);
-            // ms.sendReceiptDeniedEmail();
+            orderDao.update(orderId, OrderStatus.REJECTED_PAYMENT);
+           // ms.sendReceiptDeniedEmail();
         }
     }
 
@@ -149,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
 
         switch (order.getOrderStatus()){
             case WAITING_CONTACT, COMPLETED -> throw new InvalidOrderUpdateException();
-            case WAITING_PAYMENT -> sendReceipt(orderId, receipt);
+            case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(orderId, receipt);
             case WAITING_APPROVAL -> acceptOrReject(orderId, approved);
         }
     }

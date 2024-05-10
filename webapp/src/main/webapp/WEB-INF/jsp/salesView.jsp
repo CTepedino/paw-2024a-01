@@ -45,6 +45,7 @@
                 </form:select>
             </div>
         </div>
+        <input type="submit" hidden />
     </form:form>
 
         <div class="row table-top">

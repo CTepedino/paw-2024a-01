@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
@@ -44,7 +45,7 @@ public class OrderController {
             return new ModelAndView("purchasesView");
         }
         final ModelAndView mav = new ModelAndView("purchasesView");
-        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), null, orderSearchForm.getPage(), 10));
+        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), OrderOrderBy.DATE_DESC, orderSearchForm.getPage(), 10));
         mav.addObject("statuses", OrderStatus.values());
         return mav;
     }
@@ -60,7 +61,7 @@ public class OrderController {
             return new ModelAndView("salesView");
         }
         ModelAndView mav = new ModelAndView("salesView");
-        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), null, form.getPage(), 10));
+        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), OrderOrderBy.DATE_DESC, form.getPage(), 10));
         mav.addObject("statuses", OrderStatus.values());
         return mav;
     }

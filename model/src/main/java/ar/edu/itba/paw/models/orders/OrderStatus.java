@@ -1,31 +1,18 @@
 package ar.edu.itba.paw.models.orders;
 
 public enum OrderStatus {
-    WAITING_CONTACT("Waiting contact","WAITING_PAYMENT", false, true),
-    WAITING_PAYMENT("Waiting payment","WAITING_FOR_BOOK", true, false),
-    WAITING_APPROVAL("Waiting for book","COMPLETED", false, true),
+    WAITING_CONTACT( false, true),
+    WAITING_PAYMENT( true, false),
+    REJECTED_PAYMENT(true, false),
+    WAITING_APPROVAL(false, true),
+    COMPLETED( false, false);
 
-    REJECTED_PAYMENT("Payment rejected","REJECTED_PAYMENT", true, false),
-    COMPLETED("Completed","COMPLETED", false, false);
-
-    private final String displayString;
-    private final String next;
     private final boolean readerCanAdvance;
     private final boolean writerCanAdvance;
 
-    OrderStatus(String displayString, String next, boolean readerCanAdvance, boolean writerCanAdvance){
-        this.displayString = displayString;
-        this.next = next;
+    OrderStatus(boolean readerCanAdvance, boolean writerCanAdvance){
         this.readerCanAdvance = readerCanAdvance;
         this.writerCanAdvance = writerCanAdvance;
-    }
-
-    public OrderStatus getNext(){
-        return OrderStatus.valueOf(next);
-    }
-
-    public String getDisplayString(){
-        return displayString;
     }
 
     public boolean getReaderCanAdvance() {
