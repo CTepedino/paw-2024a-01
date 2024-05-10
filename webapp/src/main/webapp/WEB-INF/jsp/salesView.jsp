@@ -50,7 +50,7 @@
         <div class="row table-top">
             <div class="col s2 table-title"> Cover </div>
             <div class="col s3 table-title"> Book </div>
-            <div class="col s2 table-title"> Date </div>
+            <div class="col s2 table-title"> Last update </div>
             <div class="col s3 table-title"> Status </div>
             <div class="col s2 table-title"> Actions </div>
         </div>

@@ -51,8 +51,7 @@
         <div class="row table-top">
             <div class="col s2 table-title"> Cover </div>
             <div class="col s3 table-title"> Book </div>
-    <%--        <div class="col s1 table-title"> Price </div>--%>
-            <div class="col s2 table-title"> Date </div>
+            <div class="col s2 table-title"> Last update </div>
             <div class="col s3 table-title"> Status </div>
             <div class="col s2 table-title"> Actions </div>
         </div>
@@ -74,36 +73,40 @@
                         <p>by <c:out value="${order.writer.firstName} ${order.writer.lastName}"/></p>
                         <p class="price">$ <c:out value="${order.book.price}"/></p>
                     </div>
-    <%--                <div class="col s1 purchase-info">--%>
-    <%--                    <p>$ <c:out value="${order.book.price}"/></p>--%>
-    <%--                </div>--%>
+
                     <div class="col s2 purchase-info">
 
                         <p><c:out value="${order.date.toLocalDate()}"/></p>
                     </div>
                     <div class="col s3 purchase-info">
                         <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
-                        <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
+                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
                             <c:out value="${order.writer.cbu}"/>
                         </c:if>
                     </div>
                     <div class="col s2 purchase-info">
                         <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
 
-                        <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
-                            <form action="${advanceOrderUrl}" method="post">
-                                <button class="waves-light btn payment" type="submit"><spring:message code="orders.purchases.action.${order.orderStatus}"/></button>
-                            </form>
+                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
+                                <form:input type="file" path="receipt" accept=".pdf"/>
+                                <button class="waves-light btn payment" type="submit">
+                                    <spring:message code="orders.purchases.action.${order.orderStatus}"/>
+                                </button>
+                            </form:form>
                         </c:if>
-                        <c:if test="${order.orderStatus == 'COMPLETED'}">
+
+                        <c:if test="${order.orderStatus eq 'COMPLETED'}">
                             <a href="<c:url value="/books/file/${order.book.bookId}"/>" target="_blank">
                                 <button class="waves-light btn"><spring:message code="orders.purchases.action.${order.orderStatus}"/></button>
                             </a>
                         </c:if>
+
                         <c:if test="${!order.orderStatus.readerCanAdvance and order.orderStatus ne 'COMPLETED'}">
                             <p><spring:message code="orders.purchases.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i>
                             </p>
                         </c:if>
+
                     </div>
                 </div>
             </li>
