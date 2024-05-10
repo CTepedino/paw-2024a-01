@@ -29,9 +29,8 @@
         <header></header>
         <div class="left__col">
             <div class="img__container">
-                <img src="<c:url value="${baseUrl}/profilePicture/${user.userId}"/>" alt="userprofile"/>
-<%--                <img src="${pageContext.request.contextPath}/images/user.png"/>--%>
-            </div>
+                <img src="<c:url value="${baseUrl}/profilePicture/${user.userId}"/>" alt="user profile picture"/>
+        </div>
             <h2><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
             <p> <c:out value="${user.email}"/> </p>
             <div class="cart">
@@ -56,10 +55,9 @@
                     <li><a href="">Suggestions</a></li>
                 </ul>
             </nav>
-
-
-
-<body>
+        </div>
+    </div>
+</div>
 <div class="medium-container">
     <div class="card-panel center-align">
         <i class="material-icons large">account_circle</i>
@@ -75,13 +73,6 @@
                 <spring:message code="session.changePassword"/>
             </a>
         </div>
-
-<%--        <div class="edit-profile">--%>
-<%--            <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">--%>
-<%--                <spring:message code="session.changePassword"/>--%>
-<%--            </a>--%>
-<%--        </div>--%>
-
     </div>
 </div>
 

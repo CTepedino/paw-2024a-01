@@ -19,10 +19,10 @@
 
 <body>
 
-    <jsp:include page="components/topBar2.0.jsp">
-        <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
-        <jsp:param name="user" value="${loggedUser}" />
-    </jsp:include>
+<jsp:include page="components/topBar2.0.jsp">
+    <jsp:param name="hasWriterRole" value="${isWriter}" />
+    <jsp:param name="user" value="${loggedUser}" />
+</jsp:include>
 <jsp:include page="components/topBar.jsp">
     <jsp:param name="hasWriterRole" value="${isWriter}" />
 </jsp:include>
