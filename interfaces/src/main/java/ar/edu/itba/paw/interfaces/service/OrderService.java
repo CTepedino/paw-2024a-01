@@ -28,6 +28,9 @@ public interface OrderService {
 
     PaginatedContent<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
 
+
+    boolean loggedUserOwnsBook(long bookId);
+
     boolean hasBookFileAccess(long bookId, String email);
 
     boolean canAdvanceOrder(long orderId, String email);

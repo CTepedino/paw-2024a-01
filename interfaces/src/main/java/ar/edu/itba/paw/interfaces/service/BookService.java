@@ -35,7 +35,11 @@ public interface BookService {
             BookGenre genre,
             BigDecimal price,
             int pageCount,
-            int suggestedAge
+            int suggestedAge,
+
+            MultipartFile preview,
+            MultipartFile cover,
+            MultipartFile bookFile
     );
 
 
@@ -81,4 +85,6 @@ public interface BookService {
     PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize);
 
     BookFile getBookFile(long bookId);
+
+    boolean loggedUserIsAuthor(long bookId);
 }

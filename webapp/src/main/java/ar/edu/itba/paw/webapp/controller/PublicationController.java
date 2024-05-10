@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 
-import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.PublishService;
-import ar.edu.itba.paw.interfaces.service.ReviewService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
@@ -37,16 +34,17 @@ public class PublicationController {
     private final PublishService ps;
     private final BookService bs;
     private final ReviewService rs;
-
+    private final OrderService os;
     private final UserService us;
 
 
     @Autowired
-    public PublicationController(final PublishService ps, final BookService bs, final UserService us, final ReviewService rs){
+    public PublicationController(final PublishService ps, final BookService bs, final UserService us, final ReviewService rs, final OrderService os){
         this.ps = ps;
         this.bs = bs;
         this.us = us;
         this.rs = rs;
+        this.os = os;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
@@ -87,18 +85,25 @@ public class PublicationController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
-    public ModelAndView bookInfo(@PathVariable("bookId") final long bookId, @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewsPage){
+    public ModelAndView bookInfo(
+            @PathVariable("bookId") final long bookId,
+            @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewsPage
+    ){
         final ModelAndView mav = new ModelAndView("bookInfo");
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
         PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC, reviewsPage,20);
         int avgRating = rs.getAverageRating(bookId);
+        boolean ownsBook = os.loggedUserOwnsBook(bookId);
+        boolean isAuthor = bs.loggedUserIsAuthor(bookId);
 
         mav.addObject("book", book);
         mav.addObject("recommendations", recommendations);
         mav.addObject("reviews", reviews);
         mav.addObject("avgRating", avgRating);
+        mav.addObject("ownsBook", ownsBook);
+        mav.addObject("isAuthor", isAuthor);
         return mav;
     }
 
@@ -118,7 +123,35 @@ public class PublicationController {
         return mav;
     }
 
-    //TODO: edit book
+
+    @RequestMapping(method = RequestMethod.GET, path="/book/edit/{id:\\d+}")
+    public ModelAndView editBookForm(@ModelAttribute("editBookForm") NewBookForm form, @PathVariable("id") long id){
+
+        Book book = bs.findById(id).orElseThrow(BookNotFoundException::new);
+        form.setTitle(book.getTitle());
+        form.setDescription(book.getDescription());
+        form.setGenre(book.getGenre());
+        form.setPrice(book.getPrice());
+        form.setPageCount(book.getPageCount());
+        form.setSuggestedAge(book.getSuggestedAge());
+
+        ModelAndView mav = new ModelAndView("editBook");
+        mav.addObject("id", id);
+        mav.addObject("genres", BookGenre.values());
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path="/book/edit/{id:\\d+}")
+    public ModelAndView editBook(@Valid @ModelAttribute("editBookForm") NewBookForm form, final BindingResult error, @PathVariable("id") long id){
+
+        if (error.hasErrors()){
+            return editBookForm(form, id);
+        }
+
+        bs.editPublication(id, form.getTitle(), form.getDescription(), form.getGenre(), form.getPrice(), form.getPageCount(), form.getSuggestedAge(), form.getCover(), form.getPreview(), form.getBookFile());
+
+        return new ModelAndView("redirect:/book/"+id);
+    }
 
 }
 

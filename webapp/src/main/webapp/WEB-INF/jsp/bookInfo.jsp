@@ -8,7 +8,6 @@
 <head>
     <title><c:out value="${book.title}"/></title>
     <link href="${pageContext.request.contextPath}/css/bookInfo.css" rel="stylesheet"/>
-    <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
 
@@ -27,9 +26,17 @@
                 />
             </div>
             <div class="col s7">
-                <h2>
-                    <c:out value="${book.title}"/>
-                </h2>
+                <div class="row">
+                    <h2 class="col s8">
+                        <c:out value="${book.title}"/>
+                    </h2>
+                    <div class="col s4 star-rating">
+                        <script src="<c:url value="/js/starRating.js"/>"></script>
+                        <script>
+                            new FixedStarRating(${avgRating});
+                        </script>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col s8">
                         <h5>
@@ -38,19 +45,22 @@
                         </h5>
                     </div>
                     <div class="col s4">
-                        <script src="<c:url value="/js/starRating.js"/>"></script>
-                        <script>
-                            new FixedStarRating(${avgRating});
-                        </script>
-                        <c:if test="${loggedUser!=null && book.writer.email != loggedUser.email}">
+                        <c:if test="${(not isAuthor) and (not ownsBook) and isLoggedIn}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
                             <form action="${buyUrl}" method="post">
-                                <button type="submit" class="waves-effect waves-light btn">
+                                <button type="submit" class="waves-effect waves-light btn white-text">
                                     <spring:message code="book.bookInfo.buyBook"/>
                                 </button>
                             </form>
+                        </c:if>
+                        <c:if test="${isAuthor}">
+                            <a href="<c:url value="/book/edit/${book.bookId}"/>">
+                                <button type="submit" class="waves-effect waves-light btn white-text">
+                                    <spring:message code="book.editBook"/>
+                                </button>
+                            </a>
                         </c:if>
                     </div>
                 </div>
@@ -105,6 +115,9 @@
                     </c:if>
                 </c:forEach>
             </div>
+            <c:if test="${ownsBook}">
+                <%--TODO: leave/edit/delete review--%>
+            </c:if>
             <c:if test="${not empty reviews}">
                 <div class="col s12">
                     <h5>

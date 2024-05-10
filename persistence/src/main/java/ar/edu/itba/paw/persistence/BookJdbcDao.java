@@ -80,7 +80,7 @@ public class BookJdbcDao implements BookDao {
                 """,
                 title,
                 description,
-                genre,
+                genre.toString(),
                 price,
                 pageCount,
                 suggestedAge,

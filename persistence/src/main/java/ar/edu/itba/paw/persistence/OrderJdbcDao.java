@@ -203,7 +203,7 @@ public class OrderJdbcDao implements OrderDao {
     }
 
     @Override
-    public boolean hasBookFileAccess(long bookId, String email) {
+    public boolean ownsBook(long bookId, String email) {
         Boolean exists = jdbcTemplate.queryForObject(
             """
                 SELECT EXISTS (
@@ -212,12 +212,10 @@ public class OrderJdbcDao implements OrderDao {
                     JOIN books b ON o.book_id = b.book_id
                     JOIN users w ON b.writer_id = w.user_id
                     JOIN users r ON o.buyer_id = r.user_id
-                    WHERE (w.email = ? OR (r.email = ? AND o.status = 'COMPLETED'))
-                    AND b.book_id = ?
+                    WHERE r.email = ? AND o.status = 'COMPLETED' AND b.book_id = ?
                 )
             """,
             Boolean.class,
-            email,
             email,
             bookId
         );

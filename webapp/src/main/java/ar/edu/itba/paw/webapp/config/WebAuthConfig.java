@@ -59,6 +59,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers( "/sales").hasAuthority(UserRoles.WRITER.toString())
                 .requestMatchers(HttpMethod.POST, "/sendBuyInfo").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(a.get(), o.getRequest())))
                 .requestMatchers("/receipt/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessReceipt(a.get(), o.getVariables().get("id"))))
+                .requestMatchers("/book/edit/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canEditBook(a.get(), o.getVariables().get("id"))))
                 .requestMatchers("/book/file/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessBook(a.get(), o.getVariables().get("id"))))
                 .requestMatchers(HttpMethod.POST, "/advanceOrder/{id:\\d+}/**").access((a, o) -> new AuthorizationDecision(accessHelper.canAdvanceOrder(a.get(), o.getVariables().get("id"))))
                 .requestMatchers("/", "/cover/**", "/preview/**", "/book/{id:\\d+}", "/search/**").permitAll()

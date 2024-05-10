@@ -5,14 +5,12 @@ import ar.edu.itba.paw.interfaces.dao.files.BookFileDao;
 import ar.edu.itba.paw.interfaces.dao.files.BookPreviewDao;
 import ar.edu.itba.paw.interfaces.dao.files.CoverImageDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.exception.ImageNotFoundException;
-import ar.edu.itba.paw.models.exception.InvalidPageException;
-import ar.edu.itba.paw.models.exception.PdfNotFoundException;
-import ar.edu.itba.paw.models.exception.UnreadableFileException;
+import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -38,12 +36,15 @@ public class BookServiceImpl implements BookService {
     private final CoverImageDao coverDao;
     private final BookFileDao bookFileDao;
 
+    private final UserService us;
+
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao, final BookFileDao bookFileDao){
+    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao, final BookFileDao bookFileDao, final UserService us){
         this.bookDao = bookDao;
         this.coverDao = coverDao;
         this.previewDao = previewDao;
         this.bookFileDao = bookFileDao;
+        this.us = us;
     }
 
     @Transactional
@@ -70,8 +71,21 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
         bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge);
+        try {
+            if (!cover.isEmpty()) {
+                coverDao.update(bookId, cover.getBytes());
+            }
+            if (!preview.isEmpty()) {
+                previewDao.update(bookId, preview.getBytes());
+            }
+            if (!bookFile.isEmpty()) {
+                bookFileDao.update(bookId, bookFile.getBytes());
+            }
+        } catch (IOException e){
+            throw new UnreadableFileException();
+        }
     }
 
     @Transactional(readOnly = true)
@@ -153,5 +167,14 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookFile getBookFile(long bookId) {
         return bookFileDao.findById(bookId).orElseThrow(PdfNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean loggedUserIsAuthor(long bookId) {
+        if (us.isLoggedIn()) {
+            return bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(us.getLoggedUser().get().getEmail());
+        }
+        return false;
     }
 }

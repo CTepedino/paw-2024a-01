@@ -50,8 +50,7 @@ public class OrderServiceImpl implements OrderService {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
         try {
-
-            long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_CONTACT);
+            long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_APPROVAL);
             paymentReceiptDao.create(orderId, receipt.getBytes());
             ms.sendOrderEmail(buyer, book);;
         } catch (IOException e){
@@ -116,29 +115,29 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    private void sendReceipt(long orderId, MultipartFile receipt) {
+    private void sendReceipt(Order order, MultipartFile receipt) {
         if (receipt == null){
             throw new InvalidOrderUpdateException();
         }
-        orderDao.update(orderId, OrderStatus.WAITING_APPROVAL);
+        orderDao.update(order.getOrderId(), OrderStatus.WAITING_APPROVAL);
         try {
-            paymentReceiptDao.createOrUpdate(orderId, receipt.getBytes());
+            paymentReceiptDao.createOrUpdate(order.getOrderId(), receipt.getBytes());
         } catch (IOException e){
             throw new UnreadableFileException();
         }
-        //ms.sendReceiptUploadedEmail();
+        ms.sendReceiptUploadedEmail(order);
     }
 
-    private void acceptOrReject(long orderId, Boolean approved){
+    private void acceptOrReject(Order order, Boolean approved){
         if (approved == null){
             throw new InvalidOrderUpdateException();
         }
         if (approved) {
-            orderDao.update(orderId, OrderStatus.COMPLETED);
-            // ms.sendReceiptApprovedEmail();
+            orderDao.update(order.getOrderId(), OrderStatus.COMPLETED);
+            ms.sendReceiptApprovedEmail(order);
         } else {
-            orderDao.update(orderId, OrderStatus.REJECTED_PAYMENT);
-           // ms.sendReceiptDeniedEmail();
+            orderDao.update(order.getOrderId(), OrderStatus.REJECTED_PAYMENT);
+            ms.sendReceiptDeniedEmail(order);
         }
     }
 
@@ -149,15 +148,24 @@ public class OrderServiceImpl implements OrderService {
 
         switch (order.getOrderStatus()){
             case WAITING_CONTACT, COMPLETED -> throw new InvalidOrderUpdateException();
-            case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(orderId, receipt);
-            case WAITING_APPROVAL -> acceptOrReject(orderId, approved);
+            case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt);
+            case WAITING_APPROVAL -> acceptOrReject(order, approved);
         }
     }
 
     @Transactional(readOnly = true)
     @Override
+    public boolean loggedUserOwnsBook(long bookId){
+        if (us.isLoggedIn()){
+            return orderDao.ownsBook(bookId, us.getLoggedUser().get().getEmail());
+        }
+        return false;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public boolean hasBookFileAccess(long bookId, String email) {
-        return orderDao.hasBookFileAccess(bookId, email);
+        return orderDao.ownsBook(bookId, email) || bs.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(email);
     }
 
     @Transactional(readOnly = true)
@@ -167,4 +175,5 @@ public class OrderServiceImpl implements OrderService {
         return (order.getWriter().getEmail().equals(email) && order.getOrderStatus().getWriterCanAdvance()) ||
                 (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().getReaderCanAdvance());
     }
+
 }
