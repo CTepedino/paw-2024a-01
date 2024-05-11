@@ -72,7 +72,12 @@ public class SessionController {
 
 
     @RequestMapping(method = RequestMethod.GET, path="/editProfile")
-    public ModelAndView editProfileForm(@ModelAttribute("editProfileForm") EditProfileForm form){
+    public ModelAndView editProfileForm(@ModelAttribute("editProfileForm") EditProfileForm form, @ModelAttribute("loggedUser") User loggedUser){
+
+        form.setNewFirstName(loggedUser.getFirstName());
+        form.setNewLastName(loggedUser.getLastName());
+        form.setCbu(loggedUser.getCbu());
+
         return new ModelAndView("editProfile");
     }
 
@@ -83,10 +88,11 @@ public class SessionController {
             @ModelAttribute("loggedUser") User loggedUser
     ){
         if (errors.hasErrors()){
-            return editProfileForm(form);
+            return editProfileForm(form, loggedUser);
         }
-        us.setProfilePicture(form.getProfilePicture());
-        us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu());
+
+        us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu(), form.getProfilePicture());
+
         return new ModelAndView("redirect:/profile/"+loggedUser.getUserId());
     }
 

@@ -28,13 +28,13 @@ public interface UserService {
 
     boolean isCurrentUserPassword(String password);
     void changePassword(String password);
-    void updateProfile(String firstName, String lastName, String CBU);
+    void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture);
 
     Optional<User> getLoggedUser();
 
     boolean isLoggedIn();
 
-    void setProfilePicture(MultipartFile profilePicture);
+
     ProfilePicture getProfilePictureOrDefault(long id);
 
     boolean hasRole(UserRoles role);

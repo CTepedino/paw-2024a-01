@@ -193,21 +193,18 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateProfile(String firstName, String lastName, String cbu) {
+    public void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture) {
         User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
         userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled());
-
-    }
-    @Transactional
-    @Override
-    public void setProfilePicture(MultipartFile profilePicture) {
-        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
-        try {
-            profilePictureDao.createOrUpdate(user.getUserId(), profilePicture.getBytes());
-        } catch (IOException e){
-            throw new UnreadableFileException();
+        if (profilePicture != null && !profilePicture.isEmpty()) {
+            try {
+                profilePictureDao.createOrUpdate(user.getUserId(), profilePicture.getBytes());
+            } catch (IOException e){
+                throw new UnreadableFileException();
+            }
         }
     }
+
 
     @Transactional(readOnly = true)
     @Override
