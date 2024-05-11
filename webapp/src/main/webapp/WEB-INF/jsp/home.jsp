@@ -16,7 +16,7 @@
 
 <%@include file="components/topBar.jsp" %>
 
-    <div class="explore_back">
+<div class="explore_back">
     <div class="container hide-on-small-only">
             <div class="row">
                 <div class="col s4">
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-    </div>
+</div>
 
     <c:url var="searchUrl" value="/search?"/>
         <div class="row hide-on-med-and-down">
