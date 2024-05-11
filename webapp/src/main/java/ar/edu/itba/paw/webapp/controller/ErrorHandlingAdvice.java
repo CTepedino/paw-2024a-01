@@ -9,16 +9,23 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class ErrorHandlingAdvice {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ModelAndView userNotFound(){
-        return new ModelAndView("exception/404");
-    }
+    @ExceptionHandler(BookNotFoundException.class)
+    public ModelAndView bookNotFound(){return new ModelAndView("exception/404");}
 
     @ExceptionHandler(ImageNotFoundException.class)
     public ModelAndView imageNotFound(){return new ModelAndView("/exception/404");}
 
+    @ExceptionHandler(InvalidCodeException.class)
+    public ModelAndView invalidCode(){return new ModelAndView("exception/403");}
+
+    @ExceptionHandler(InvalidOrderUpdateException.class)
+    public ModelAndView invalidOrderUpdate(){return new ModelAndView("exception/400");}
+
     @ExceptionHandler(InvalidPageException.class)
-    public ModelAndView invalidPage(){return new ModelAndView("/exception/500");}
+    public ModelAndView invalidPage(){return new ModelAndView("/exception/404");}
+
+    @ExceptionHandler(NoValidationCodeException.class)
+    public ModelAndView noValidationCode(){return new ModelAndView("exception/404");}
 
     @ExceptionHandler(OrderAlreadyExistsException.class)
     public ModelAndView orderExists(){return new ModelAndView("/exception/403");}
@@ -35,4 +42,9 @@ public class ErrorHandlingAdvice {
     @ExceptionHandler(UnreadableFileException.class)
     public ModelAndView unreadableFile(){return new ModelAndView("/exception/400");}
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ModelAndView userNotFound(){return new ModelAndView("exception/404");}
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView exceptionCatchAll(){return new ModelAndView("exception/500");}
 }
