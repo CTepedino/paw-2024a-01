@@ -195,6 +195,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture) {
         User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
+
+        if (getRoles(user.getUserId()).contains(UserRoles.WRITER) && user.getCbu()==null){
+            userDao.recheckAllPaused(user.getUserId());
+        }
+
         userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled());
         if (profilePicture != null && !profilePicture.isEmpty()) {
             try {
@@ -203,6 +208,7 @@ public class UserServiceImpl implements UserService {
                 throw new UnreadableFileException();
             }
         }
+
     }
 
 

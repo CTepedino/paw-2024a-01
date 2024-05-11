@@ -25,5 +25,5 @@ public interface UserDao {
 
     List<UserRoles> getRoles(long id);
 
-
+    void recheckAllPaused(long userId);
 }
