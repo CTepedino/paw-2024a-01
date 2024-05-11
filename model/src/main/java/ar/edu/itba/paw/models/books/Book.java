@@ -16,6 +16,7 @@ public class Book {
     private final int pageCount;
     private final int suggestedAge;
     private final LocalDate publishDate;
+    private final boolean isPaused;
 
     private final User writer;
 
@@ -60,7 +61,9 @@ public class Book {
         return writer;
     }
 
-    public Book(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer) {
+    public boolean isPaused() {return isPaused;}
+
+    public Book(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
         this.bookId = bookId;
         this.title = title;
         this.description = description;
@@ -70,5 +73,6 @@ public class Book {
         this.suggestedAge = suggestedAge;
         this.publishDate = publishDate;
         this.writer = writer;
+        this.isPaused = isPaused;
     }
 }

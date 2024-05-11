@@ -43,6 +43,8 @@ public class NewBookForm {
     @Pattern(regexp = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9.-]+")
     private String cbu;
 
+    private Boolean isPaused;
+
     public String getTitle() {
         return title;
     }
@@ -122,5 +124,13 @@ public class NewBookForm {
 
     public void setCbu(String cbu) {
         this.cbu = cbu;
+    }
+
+    public Boolean getIsPaused() {
+        return isPaused;
+    }
+
+    public void setIsPaused(Boolean paused) {
+        isPaused = paused;
     }
 }

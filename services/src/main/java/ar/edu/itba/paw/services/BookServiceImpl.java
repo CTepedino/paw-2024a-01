@@ -68,8 +68,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
-        bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge);
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused,MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
         try {
             if (!cover.isEmpty()) {
                 coverDao.update(bookId, cover.getBytes());
@@ -79,10 +78,15 @@ public class BookServiceImpl implements BookService {
             }
             if (!bookFile.isEmpty()) {
                 bookFileDao.update(bookId, bookFile.getBytes());
+                if (isPaused){
+                    isPaused = bookDao.recheckPaused(bookId);
+                }
             }
+
         } catch (IOException e){
             throw new UnreadableFileException();
         }
+        bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge, isPaused);
     }
 
     @Transactional(readOnly = true)

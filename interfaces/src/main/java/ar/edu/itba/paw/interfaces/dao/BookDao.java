@@ -30,7 +30,8 @@ public interface BookDao {
             BookGenre genre,
             BigDecimal price,
             int pageCount,
-            int suggestedAge
+            int suggestedAge,
+            boolean isPaused
     );
 
 
@@ -78,5 +79,7 @@ public interface BookDao {
     List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy,int offset, int limit);
 
     long getOwnedBooksSize(long readerId, String title);
+
+    boolean recheckPaused(long bookId);
 
 }

@@ -26,7 +26,8 @@ public class BookJdbcDao implements BookDao {
         rs.getInt("page_count"),
         rs.getInt("suggested_age"),
         rs.getDate("published_date").toLocalDate(),
-        UserJdbcDao.USER_ROW_MAPPER.mapRow(rs, rowNum)
+        UserJdbcDao.USER_ROW_MAPPER.mapRow(rs, rowNum),
+        rs.getBoolean("is_paused")
     );
 
     private final JdbcTemplate jdbcTemplate;
@@ -71,11 +72,11 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public void modify(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
+    public void modify(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused) {
         jdbcTemplate.update(
                 """
                     UPDATE books
-                    SET title = ?, description = ?, genre = ?, price = ?, page_count = ?, suggested_age = ?
+                    SET title = ?, description = ?, genre = ?, price = ?, page_count = ?, suggested_age = ?, is_paused = ?
                     WHERE book_id = ?
                 """,
                 title,
@@ -84,7 +85,8 @@ public class BookJdbcDao implements BookDao {
                 price,
                 pageCount,
                 suggestedAge,
-                bookId
+                bookId,
+                isPaused
         );
     }
 
@@ -253,6 +255,27 @@ public class BookJdbcDao implements BookDao {
         query.append(" LIMIT ? OFFSET ?");
         params.add(limit);
         params.add(offset);
+    }
+
+    @Override
+    public boolean recheckPaused(long bookId) {
+        Boolean keepPaused =  jdbcTemplate.queryForObject(
+        """
+                SELECT NOT EXISTS (
+                    SELECT 1
+                    FROM books b
+                    JOIN users u ON b.writer_id = u.user_id
+                    WHERE b.book_id = ? AND u.cbu IS NOT NULL AND EXISTS(
+                        SELECT 1
+                        FROM book_files bf
+                        WHERE bf.id = b.book_id
+                    )
+                )
+            """,
+            Boolean.class,
+            bookId
+        );
+        return keepPaused!=null?keepPaused:true;
     }
 }
 
