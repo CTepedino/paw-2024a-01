@@ -44,10 +44,13 @@
 
 .decline-button{
     background-color: red !important;
+    width: 80% !important;
 }
 
 .accept-button{
     background-color: green !important;
+    width: 80% !important;
+    margin-top: 8px !important;
 }
 
 .price {
