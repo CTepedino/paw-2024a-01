@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
 <html>
@@ -20,7 +19,7 @@
                 <div class="info-image">
                     <img
                             class="book-cover"
-                            src="<c:url value="${baseUrl}/cover/${book.bookId}"/>"
+                            src="<c:url value="/cover/${book.bookId}"/>"
                             alt="<spring:message code="bookInfoCard.cover"/>"
                     />
                 </div>
@@ -100,7 +99,7 @@
         <h5><spring:message code="book.bookInfo.preview"/></h5>
         <object
                 type="application/pdf"
-                data="<c:url value="${baseUrl}/preview/${book.bookId}" />"
+                data="<c:url value="/preview/${book.bookId}" />"
                 width="100%"
                 height="700"
         >

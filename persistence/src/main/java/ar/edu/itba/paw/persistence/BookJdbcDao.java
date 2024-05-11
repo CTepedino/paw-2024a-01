@@ -174,7 +174,7 @@ public class BookJdbcDao implements BookDao {
                 SELECT b.*, u.*
                 FROM books b JOIN users u on b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED'
                 WHERE b.book_id <> ? AND (b.genre = ? OR b.writer_id = ?)
-                GROUP BY b.book_id
+                GROUP BY b.book_id, u.user_id
                 ORDER BY COUNT(o.book_id) DESC
                 LIMIT ?
             """,
