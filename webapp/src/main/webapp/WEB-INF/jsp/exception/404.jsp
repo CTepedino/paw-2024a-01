@@ -9,12 +9,9 @@
     <link rel="stylesheet" href="<c:url value="/css/userForm.css"/>">
 </head>
 
-<%@include file="../components/materializeComponent.jsp"%>
 
-<jsp:include page="../components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-</jsp:include>
-
+<c:set value="${true}" var="hideSearchBar" scope="request"/>
+<%@include file="../components/topBar.jsp" %>
 <body>
 
 <div class="small-container">
@@ -22,7 +19,7 @@
         <div class="formnt z-depth-2">
             <h5 class="center-align"><spring:message code="error.404.title"/></h5>
 
-            <p> class="center-align"><spring:message code="error.404.description"/></p>
+            <p class="center-align"><spring:message code="error.404.description"/></p>
 
             <br/>
 

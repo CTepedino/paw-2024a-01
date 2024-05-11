@@ -10,17 +10,10 @@
     <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 </head>
 
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-    <jsp:param name="hideSearchBar" value="${true}"/>
-</jsp:include>
-<c:set var="hideSearchBar" value="${true}" scope="request"/>
-
-<%--<%@ include file="components/topBar.jsp" %>--%>
-<%@include file="components/materializeComponent.jsp"%>
+<c:set value="${true}" scope="request" var="hideSearchBar"/>
+<%@include file="components/topBar.jsp" %>
 
 <body>
-    <%@ include file="components/topBar2.0.jsp" %>
 <div class="small-container">
     <div class="form">
         <c:url value="/login" var="postUrl"/>

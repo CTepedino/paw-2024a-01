@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
 
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-</jsp:include>
+
+<%@include file="components/topBar.jsp" %>
+
 <body>
 
 <c:url value="/book/${bookId}/review" var="postUrl"/>

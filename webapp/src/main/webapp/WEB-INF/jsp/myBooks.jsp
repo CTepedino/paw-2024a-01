@@ -9,9 +9,10 @@
     <link href="${pageContext.request.contextPath}/css/myBooks.css" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-</jsp:include>
+
+
+<%@include file="components/topBar.jsp" %>
+
 <body>
     <c:url value="/myBooks" var="myBooksUrl"/>
     <div class="container myBooks">

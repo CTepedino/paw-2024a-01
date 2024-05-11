@@ -12,17 +12,11 @@
 </head>
 
 
-<c:set var="hideSearchBar" value="${true}" scope="request"/>
-<%--<jsp:include page="components/topBar.jsp"/>--%>
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-    <jsp:param name="hideSearchBar" value="${true}"/>
-</jsp:include>
+<c:set value="${true}" scope="request" var="hideSearchBar"/>
+<%@include file="components/topBar.jsp" %>
 
 
-<%@include file="components/materializeComponent.jsp"%>
 <body>
-<%@ include file="components/topBar2.0.jsp" %>
 <div class="small-container">
     <div class="form">
         <c:url value="/signup" var="postUrl"/>

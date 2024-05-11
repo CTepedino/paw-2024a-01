@@ -12,10 +12,8 @@
     <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
 </head>
 
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-    <jsp:param name="hideSearchBar" value="${true}"/>
-</jsp:include>
+<c:set value="${true}" scope="request" var="hideSearchBar"/>
+<%@include file="components/topBar.jsp" %>
 
 <body>
 <div class="container">

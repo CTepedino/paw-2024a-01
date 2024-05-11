@@ -13,10 +13,9 @@
     <link href="${pageContext.request.contextPath}/css/paginationControls.css" rel="stylesheet"/>
 </head>
 
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-    <jsp:param name="hideSearchBar" value="true"/>
-</jsp:include>
+<c:set value="${true}" scope="request" var="hideSearchBar"/>
+<%@include file="components/topBar.jsp" %>
+
 <body>
 
 <c:url value="/search" var="searchUrl"/>
@@ -167,7 +166,7 @@
         </div>
         <div class="input-field center">
             <button class="btn waves-effect waves-light white-text" type="submit" name="action">
-                <spring:message code="book.search.apply"/>
+                <strong><spring:message code="book.search.apply"/></strong>
             </button>
         </div>
     </div>

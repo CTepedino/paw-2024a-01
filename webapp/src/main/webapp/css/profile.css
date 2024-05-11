@@ -149,7 +149,14 @@ a {
     object-fit: cover;
 }
 
-/* Responsiveness */
+.edit-profile{
+    display: flex;
+    justify-content: center;
+}
+
+.profile-btn{
+    margin: 10px 5px;
+}
 
 @media (min-width: 868px) {
     .header__wrapper   {
@@ -188,7 +195,7 @@ a {
 }
 @media screen and (max-width: 868px) {
     h2 {
-        display: none; /* Oculta el elemento h2 */
+        display: none;
     }
     .header__wrapper .right__col nav {
         display: flex;

@@ -8,9 +8,9 @@
     <title>Edit Profile</title>
     <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 </head>
-<%@include file="components/materializeComponent.jsp"%>
-<c:set var="hideSearchBar" value="${true}" scope="request"/>
-<jsp:include page="components/topBar2.0.jsp" />
+
+<c:set value="${true}" scope="request" var="hideSearchBar"/>
+<%@include file="components/topBar.jsp" %>
 
 <body>
 
@@ -45,10 +45,10 @@
             <form:errors path="newLastName" cssClass="red-text" element="p"/>
 
 
-            <c:if test="${hasWriterRole}">
+            <c:if test="${isWriter}">
                 <h6><spring:message code="book.addBook.cbuTitle"/></h6>
                 <div class="input-field">
-                    <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label><br>
+                    <form:label path="cbu">Update your CBU<span class="red-text">*</span></form:label><br>
                     <form:input type="text" path="cbu" inputmode="numeric" value="${user.cbu}"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>

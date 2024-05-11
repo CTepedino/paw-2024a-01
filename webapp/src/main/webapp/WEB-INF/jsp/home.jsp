@@ -2,7 +2,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
 <html>
@@ -10,50 +9,35 @@
     <title>Cybrary</title>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
-
-<%-- <%@include file="components/sideBar.jsp"%>--%>
-<%@include file="components/materializeComponent.jsp"%>
-
-<link href="${pageContext.request.contextPath}/css/cardBook2.css" rel="stylesheet"/>
 
 <body>
 
-<%@include file="components/topBar3.jsp" %>
-
-<%--<jsp:include page="components/topBar2.0.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-    <jsp:param name="user" value="${loggedUser}" />
-</jsp:include>--%>
-
-<%--
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-</jsp:include>
---%>
+<%@include file="components/topBar.jsp" %>
 
     <div class="explore_back">
     <div class="container">
             <div class="row">
                 <div class="col s4">
                     <div class="card-panel center">
-                        <div class="home-image waves-effect waves-block waves-light">
+<%--                        <div class="home-image waves-effect waves-block waves-light">
                             <img src="${pageContext.request.contextPath}/images/transparent-background-book-24.png">
                         </div>
+                        <h6 class="black-text"><spring:message code="book.home.findBook"/></h6>--%>
+                        <img class="home-image" src="<c:url value="/images/searchBook.svg"/>">
                         <div class="home-card-content">
                             <h6 class="home-steps"><spring:message code="book.home.findBook"/></h6>
                         </div>
-                        <img class="home-image" src="${pageContext.request.contextPath}/images/searchBook.svg">
-                        <h6 class="black-text"><spring:message code="book.home.findBook"/></h6>
                     </div>
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
-                        <img class="home-image" src="${pageContext.request.contextPath}/images/contactWriter.svg">
-                        <h6 class="black-text"><spring:message code="book.home.contactWriter"/></h6>
+                        <img class="home-image" src="<c:url value="/images/contactWriter.svg"/>">
+<%--                        <h6 class="black-text"><spring:message code="book.home.contactWriter"/></h6>
                         <div class="home-image waves-effect waves-block waves-light">
                             <img src="${pageContext.request.contextPath}/images/handshake.png">
-                        </div>
+                        </div>--%>
                         <div class="home-card-content">
                             <h6 class="home-steps"><spring:message code="book.home.contactWriter"/></h6>
                         </div>
@@ -61,11 +45,11 @@
                 </div>
                 <div class="col s4">
                     <div class="card-panel center">
-                        <img class="home-image" src="${pageContext.request.contextPath}/images/contact.svg">
-                        <h6 class="black-text"><spring:message code="book.home.getCopy"/></h6>
+                        <img class="home-image" src="<c:url value="/images/contact.svg"/>">
+<%--                        <h6 class="black-text"><spring:message code="book.home.getCopy"/></h6>
                         <div class="home-image waves-effect waves-block waves-light">
                             <img src="${pageContext.request.contextPath}/images/book.png">
-                        </div>
+                        </div>--%>
                         <div class="home-card-content">
                             <h6 class="home-steps"><spring:message code="book.home.getCopy"/></h6>
                         </div>
@@ -73,7 +57,7 @@
                 </div>
             </div>
     </div>
-    <!--TODO: reemplazar por forEach-->
+
     <c:url var="searchUrl" value="/search?"/>
         <div class="row">
             <div class="col s2">

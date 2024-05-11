@@ -1,8 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
 <html>
@@ -13,25 +12,8 @@
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 
-<%@include file="components/materializeComponent.jsp"%>
+<%@include file="components/topBar.jsp" %>
 
-<body>
-<jsp:include page="components/topBar2.0.jsp">
-    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-</jsp:include>
-
-<div class="main--content">
-<%--    <nav>--%>
-<%--        <div class="nav-wrapper">--%>
-<%--            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>--%>
-<%--        </div>--%>
-<%--        <style>--%>
-<%--            <%@include file="/css/topBarStyle.css" %>--%>
-<%--        </style>--%>
-<%--        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>--%>
-<%--    </nav>--%>
 <body>
 <c:url value="/purchases" var="purchasesUrl"/>
 <div class="container purchases">
@@ -63,32 +45,23 @@
         <input type="submit" hidden />
     </form:form>
 
-    <div class="header-wrapper">
-        <div class="header--title">
-            <h2> My Purchases</h2>
-            <spring:message code="orders.purchases.header"/>
-        <div class="row table-top">
-            <div class="col s2 table-title"> Cover </div>
-            <div class="col s3 table-title"> Book </div>
-            <div class="col s2 table-title"> Last update </div>
-            <div class="col s3 table-title"> Status </div>
-            <div class="col s2 table-title"> Actions </div>
-        </div>
-<%--        <div class="user--info">--%>
-<%--            <div class="search--box">--%>
-<%--                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-        <ul class="collection">
-            <c:forEach var="order" items="${orders.page}">
+    <div class="row table-top">
+        <div class="col s2 table-title"> Cover </div>
+        <div class="col s3 table-title"> Book </div>
+        <div class="col s2 table-title"> Last update </div>
+        <div class="col s3 table-title"> Status </div>
+        <div class="col s2 table-title"> Actions </div>
+    </div>
+    <ul class="collection">
+        <c:forEach var="order" items="${orders.page}">
             <li class="collection-item">
                 <div class="row purchased-book">
                     <div class="col s2">
                         <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
                             <img
-                                class="book_cover"
-                                src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
-                                alt="<spring:message code="bookInfoCard.cover"/>"
+                                    class="book_cover"
+                                    src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
+                                    alt="<spring:message code="bookInfoCard.cover"/>"
                             />
                         </a>
                     </div>
@@ -98,49 +71,6 @@
                         <p class="price">$ <c:out value="${order.book.price}"/></p>
                     </div>
 
-    </div>
-
-    <div class="tabular-wrapper">
-        <h3 class="main--title">
-            <spring:message code="orders.history"/>
-        </h3>
-        <div class="table-container">
-            <table class="my-table">
-                <thead>
-                <tr>
-                    <th><spring:message code="orders.writer"/></th>
-                    <th><spring:message code="orders.email"/></th>
-                    <th><spring:message code="orders.title"/></th>
-                    <th><spring:message code="orders.price"/></th>
-                    <th><spring:message code="orders.status"/></th>
-                    <th><spring:message code="orders.action"/></th>
-                </tr>
-                </thead>
-                <tbody>
-<%--                <c:forEach var="order" items="${order}">--%>
-<%--                    <c:set var="order" value="${order}" scope="request"/>--%>
-<%--                    --%>
-<%--                </c:forEach>--%>
-                <c:forEach var="order" items="${orders}">
-                <tr class="my-tr">
-                        <td class="my-td"><c:out value="${order.writer.firstName} ${order.writer.lastName}"/></td>
-                        <td class="my-td"><c:out value="${order.writer.email}"/></td>
-                        <td class="my-td"><c:out value="${order.book.title}"/></td>
-                        <td class="my-td"><c:out value="${order.book.price}"/></td>
-                        <td class="my-td"><c:out value="${order.orderStatus.displayString}"/></td>
-                        <c:url value="/advanceOrder" var="advanceOrderUrl">
-                            <c:param name="bookId" value="${order.book.bookId}"/>
-                            <c:param name="buyerId" value="${order.buyer.userId}"/>
-                            <c:param name="writerId" value="${order.writer.userId}"/>
-                            <c:param name="from" value="purchases"/>
-                        </c:url>
-
-                        <c:if test="${order.orderStatus.readerCanAdvance}">
-                        <td class="my-td"><form action="${advanceOrderUrl}" method="post">
-                            <button
-                                type="submit"
-                            >Advance</button>
-                        </form></td>
                     <div class="col s2 purchase-info">
 
                         <p><c:out value="${order.date.toLocalDate()}"/></p>
@@ -164,10 +94,6 @@
                                     <spring:message code="orders.purchases.action.${order.orderStatus}"/>
                                 </button>
                             </form:form>
-                        <c:if test="${!order.orderStatus.readerCanAdvance}">
-                            <td class="my-td"><form action="${advanceOrderUrl}" method="post">
-                                <button type="submit" disabled>Advance</button>
-                            </form></td>
                         </c:if>
 
                         <c:if test="${order.orderStatus eq 'COMPLETED'}">
@@ -184,21 +110,21 @@
                     </div>
                 </div>
             </li>
-            </c:forEach>
-        </ul>
+        </c:forEach>
+    </ul>
 
-        <c:if test="${orders.pageCount > 1}">
-            <input type="number" id="page" name="page" value="${orders.pageNumber}" style="display: none"/>
-            <script src="<c:url value="/js/paginationControls.js"/>"></script>
-            <script>
-                const paginationButtons = new PaginationButtons(${orders.pageCount}, Math.min(10, ${orders.pageCount}), ${orders.pageNumber}, true);
-                paginationButtons.render();
-                paginationButtons.onChange(e => {
-                    document.getElementById('page').value = e.target.value;
-                    document.getElementById("orders").submit();
-                })
-            </script>
-        </c:if>
+    <c:if test="${orders.pageCount > 1}">
+        <input type="number" id="page" name="page" value="${orders.pageNumber}" style="display: none"/>
+        <script src="<c:url value="/js/paginationControls.js"/>"></script>
+        <script>
+            const paginationButtons = new PaginationButtons(${orders.pageCount}, Math.min(10, ${orders.pageCount}), ${orders.pageNumber}, true);
+            paginationButtons.render();
+            paginationButtons.onChange(e => {
+                document.getElementById('page').value = e.target.value;
+                document.getElementById("orders").submit();
+            })
+        </script>
+    </c:if>
 
 </div>
 

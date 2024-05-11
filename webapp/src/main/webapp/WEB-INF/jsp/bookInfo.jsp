@@ -7,13 +7,11 @@
 <html>
 <head>
     <title><c:out value="${book.title}"/></title>
-    <link href="${pageContext.request.contextPath}/css/bookInfo.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/bookInfo.css"/>" rel="stylesheet"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
 
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-</jsp:include>
+<%@include file="components/topBar.jsp" %>
 
 <body>
     <div class="book-container z-depth-2" style="margin: 30px;padding: 20px;">

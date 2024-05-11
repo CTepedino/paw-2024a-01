@@ -12,29 +12,27 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<%@include file="components/materializeComponent.jsp"%>
-
 <body>
-<jsp:include page="components/topBar2.0.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-    <jsp:param name="user" value="${loggedUser}" />
-</jsp:include>
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${isWriter}" />
-</jsp:include>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<c:set value="${true}" scope="request" var="hideSearchBar"/>
+<%@include file="components/topBar.jsp" %>
 
 <div class="header__wrapper">
     <div class="right__col">
         <header></header>
         <div class="left__col">
             <div class="img__container">
-                <img src="<c:url value="${baseUrl}/profilePicture/${user.userId}"/>" alt="user profile picture"/>
+                <img src="<c:url value="/profilePicture/${user.userId}"/>" alt="user profile picture"/>
         </div>
             <h2><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
             <p> <c:out value="${user.email}"/> </p>
-            <div class="cart">
-                <p><a href="${pageContext.request.contextPath}/editProfile" >Edit Profile</a></p>
+            <div class="edit-profile">
+                <a href="${pageContext.request.contextPath}/editProfile" class="waves-effect waves-light btn profile-btn">
+                    Edit Profile
+                </a>
+                <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn profile-btn">
+                <spring:message code="session.changePassword"/>
+                </a>
             </div>
             <nav>
                 <ul>
@@ -50,31 +48,10 @@
                 </c:forEach>
             </div>
 
-            <nav>
-                <ul>
-                    <li><a href="">Suggestions</a></li>
-                </ul>
-            </nav>
         </div>
     </div>
 </div>
-<div class="medium-container">
-    <div class="card-panel center-align">
-        <i class="material-icons large">account_circle</i>
-        <div class="name">
-            <span><c:out value="${loggedUser.firstName}"/></span>
-            <span><c:out value="${loggedUser.lastName}"/></span>
-        </div>
-        <div class="email">
-            <span><c:out value="${loggedUser.email}"/></span>
-        </div>
-        <div class="edit-profile">
-            <a href="${pageContext.request.contextPath}/changePassword" class="waves-effect waves-light btn">
-                <spring:message code="session.changePassword"/>
-            </a>
-        </div>
-    </div>
-</div>
+
 
 </body>
 </html>
