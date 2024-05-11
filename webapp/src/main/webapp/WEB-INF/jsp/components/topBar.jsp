@@ -21,7 +21,9 @@
 <header>
     <nav>
         <div class="nav-wrapper">
-            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>
+            <a href="${pageContext.request.contextPath}/" class="brand-logo">
+                <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png" alt="Cybrary">
+            </a>
 
             <div class="nav-wrapper row">
                 <div class="col s4">

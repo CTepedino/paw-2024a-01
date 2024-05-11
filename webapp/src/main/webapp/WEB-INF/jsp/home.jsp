@@ -19,13 +19,18 @@
 
 <body>
 
-<jsp:include page="components/topBar2.0.jsp">
+<%@include file="components/topBar3.jsp" %>
+
+<%--<jsp:include page="components/topBar2.0.jsp">
     <jsp:param name="hasWriterRole" value="${isWriter}" />
     <jsp:param name="user" value="${loggedUser}" />
-</jsp:include>
+</jsp:include>--%>
+
+<%--
 <jsp:include page="components/topBar.jsp">
     <jsp:param name="hasWriterRole" value="${isWriter}" />
 </jsp:include>
+--%>
 
     <div class="explore_back">
     <div class="container">
