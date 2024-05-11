@@ -71,27 +71,44 @@
             </div>
             <form:errors path="price" cssClass="red-text"  element="p"/>
             <br>
-            <div class="input-field">
-                <form:label path="cover" cssClass="active"><spring:message code="book.addBook.cover"/><span class="red-text">*</span> (.png, .jpeg)</form:label>
-                <form:input type="file" path="cover" accept="image/*"/>
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span><spring:message code="book.addBook.cover"/></span>
+                    <input type="file" accept="image/*" name="cover" id="cover">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" \>
+                </div>
             </div>
             <form:errors path="cover" cssClass="red-text"  element="p"/>
-            <br>
-            <div class="input-field">
-                <form:label path="preview" cssClass="active"><spring:message code="book.addBook.preview"/><span class="red-text">*</span> (.pdf)</form:label>
-                <form:input type="file" path="preview" accept=".pdf"/>
+
+
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span><spring:message code="book.addBook.preview"/></span>
+                    <input type="file" accept="image/*" name="preview" id="preview">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" \>
+                </div>
             </div>
             <form:errors path="preview" cssClass="red-text"  element="p"/>
-            <br>
-            <div class="input-field">
-                <form:label path="bookFile" cssClass="active"><spring:message code="book.addBook.bookFile"/><span class="red-text">*</span> (.pdf)</form:label>
-                <form:input type="file" path="bookFile" accept=".pdf"/>
+
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span><spring:message code="book.addBook.bookFile"/></span>
+                    <input type="file" accept="image/*" name="bookFile" id="bookFile">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" \>
+                </div>
             </div>
             <form:errors path="bookFile" cssClass="red-text"  element="p"/>
-            <br>
-            <div class="input-field">
+
+
+            <div class="input-field center">
                 <button class="btn waves-effect waves-light" type="submit" name="action">
-                    <spring:message code="book.addBook.publish"/>
+                    <strong><spring:message code="user.profile.edit.save"/></strong>
                 </button>
             </div>
         </form:form>
