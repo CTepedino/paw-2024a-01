@@ -42,3 +42,8 @@
 .description{
     text-align: justify;
 }
+
+.divider{
+    margin-top: 25px !important;
+    margin-bottom: 25px !important;
+}

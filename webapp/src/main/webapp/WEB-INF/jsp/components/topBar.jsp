@@ -104,6 +104,7 @@
                                 <p><spring:message code="topBar.signOut"/></p>
                                 <span class="go-arrow">></span>
                             </a>
+                            <hr>
                         </div>
                     </div>
                 </c:if>

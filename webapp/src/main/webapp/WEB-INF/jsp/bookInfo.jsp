@@ -97,14 +97,16 @@
             <p class="description"><c:out value="${book.description}"/></p>
         </div>
 
-            <h5><spring:message code="book.bookInfo.preview"/></h5>
-            <object
-                    type="application/pdf"
-                    data="<c:url value="${baseUrl}/preview/${book.bookId}" />"
-                    width="100%"
-                    height="700"
-            >
-            </object>
+        <h5><spring:message code="book.bookInfo.preview"/></h5>
+        <object
+                type="application/pdf"
+                data="<c:url value="${baseUrl}/preview/${book.bookId}" />"
+                width="100%"
+                height="700"
+        >
+        </object>
+
+        <div class="divider"></div>
 
         <c:if test="${not empty recommendations}">
             <h5><spring:message code="book.bookInfo.recommendations"/></h5>
@@ -118,6 +120,7 @@
                 </c:if>
             </c:forEach>
         </div>
+        <div class="divider"></div>
         <c:if test="${ownsBook && loggedUserReview eq null}">
             <a href="<c:url value="/book/${book.bookId}/review"/>">
                 <button class="waves-effect waves-light btn white-text">

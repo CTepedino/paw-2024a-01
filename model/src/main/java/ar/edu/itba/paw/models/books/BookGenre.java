@@ -3,7 +3,7 @@ package ar.edu.itba.paw.models.books;
 public enum BookGenre {
     FICTION("Fiction", "menu_book"),
     NON_FICTION("Non fiction", "newspaper"),
-    MYSTERY("Mystery", "search"),
+    MYSTERY("Mystery", "person_search"),
     THRILLER("Thriller", "directions_run"),
     ROMANCE("Romance", "favorite"),
     SCIENCE_FICTION("Science fiction", "psychology_alt"),

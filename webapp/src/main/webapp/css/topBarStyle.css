@@ -20,6 +20,13 @@ nav {
 .search-bar-box{
     display: flex;
     justify-content: center;
+    padding: 10px !important;
+    height: 100%;
+}
+
+.search{
+    border-radius: 2px !important;
+    height: 100%;
 }
 
 .options-box{
@@ -97,7 +104,7 @@ nav {
     align-items: center;
     text-decoration: none;
     color: #fff;
-
+    height: 50px;
 }
 
 .sub-menu-link p{
@@ -108,14 +115,14 @@ nav {
 
 .go-icon{
     display: inline-block;
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 50px !important;
     background-color: #f7c446;
     border-radius: 50%;
     text-align: center;
-    line-height: 60px;
+    line-height: 50px !important; /* Ajusta esto para que coincida con la altura del círculo */
     margin-right: 10px;
-    font-size: 35px !important;
+    font-size: 25px !important;
 }
 
 

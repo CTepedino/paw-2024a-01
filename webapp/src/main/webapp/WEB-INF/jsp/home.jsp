@@ -67,7 +67,7 @@
                 <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=NON_FICTION&page=1"><i class="material-icons left">newspaper</i><spring:message code="book.genre.NON_FICTION"/></a>
             </div>
             <div class="col s2">
-                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=MYSTERY&page=1"><i class="material-icons left">search</i><spring:message code="book.genre.MYSTERY"/></a>
+                <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=MYSTERY&page=1"><i class="material-icons left">person_search</i><spring:message code="book.genre.MYSTERY"/></a>
             </div>
             <div class="col s2">
                 <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=THRILLER&page=1"><i class="material-icons left">directions_run</i><spring:message code="book.genre.THRILLER"/></a>
