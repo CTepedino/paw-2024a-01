@@ -17,7 +17,7 @@
 <%@include file="components/topBar.jsp" %>
 
     <div class="explore_back">
-    <div class="container">
+    <div class="container hide-on-small-only">
             <div class="row">
                 <div class="col s4">
                     <div class="card-panel center">
@@ -59,7 +59,7 @@
     </div>
 
     <c:url var="searchUrl" value="/search?"/>
-        <div class="row">
+        <div class="row hide-on-med-and-down">
             <div class="col s2">
                 <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=FANTASY&page=1"><i class="material-icons left">auto_fix_high</i><spring:message code="book.genre.FANTASY"/></a>
             </div>
@@ -79,7 +79,7 @@
                 <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=SCIENCE_FICTION&page=1"><i class="material-icons left">psychology_alt</i><spring:message code="book.genre.SCIENCE_FICTION"/></a>
             </div>
         </div>
-    <div class="row">
+    <div class="row hide-on-med-and-down">
         <div class="col s2">
             <a class="genre-btn waves-effect waves-light btn" href="${searchUrl}genre=FICTION&page=1"><i class="material-icons left">menu_book</i><spring:message code="book.genre.FICTION"/></a>
         </div>

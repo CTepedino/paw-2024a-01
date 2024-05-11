@@ -38,9 +38,16 @@ nav {
     display: flex;
     align-items: center;
     margin-top: 5px;
+    min-height: 65px;
 }
 .name-text{
     margin-right: 10px;
+}
+
+.user-picture{
+    width: 40px;
+    border-radius: 50%;
+    height: 40px;
 }
 
 .account-icon{
@@ -48,14 +55,7 @@ nav {
     float: right;
 }
 
-.user-pic{
-    width: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    color: #f7c446;
-    font-size: 25px;
-    min-width: 300px;
-}
+
 
 
 .sub-menu-wrap{
@@ -82,11 +82,7 @@ nav {
 }
 
 
-.user-picture{
-    width: 40px;
-    border-radius: 50%;
-    height: 40px;
-}
+
 
 .sub-menu hr{
     border:0;

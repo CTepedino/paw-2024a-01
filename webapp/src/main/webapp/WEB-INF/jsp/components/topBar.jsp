@@ -36,9 +36,9 @@
                 </a>
             </div>
 
-            <div class="search-bar-box col s4 hide-on-med-and-down">
+            <div class="search-bar-box col s4 ">
                 <c:if test="${!hideSearchBar}">
-                    <form action="${searchUrl}" id="searchForm">
+                    <form action="${searchUrl}" id="searchForm" class="hide-on-small-only">
                         <div class="search">
                             <a href="#" id="submitSearch">
                                 <i class="search-icon material-icons black-text">search</i>
@@ -51,14 +51,14 @@
 
             <div class="options-box col s4">
                 <c:if test="${!isLoggedIn}">
-                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <ul id="nav-mobile" class="right ">
                         <li>
                             <a href="<c:url value="/login"/>" class="waves-effect btn white-text">
                                 <spring:message code="session.login"/>
                             </a>
                         </li>
                         <li>
-                            <a href="<c:url value="signup"/>" class="waves-effect btn white-text">
+                            <a href="<c:url value="signup"/>" class="waves-effect btn white-text hide-on-med-and-down">
                                 <spring:message code="session.signup"/>
                             </a>
                         </li>
@@ -66,8 +66,8 @@
                 </c:if>
                 <c:if test="${isLoggedIn}">
                     <a href="#" onclick="toggleMenu()">
-                        <div class="logged-user-name">
-                            <span class="name-text">${loggedUser.firstName} ${loggedUser.lastName}</span>
+                        <div class="logged-user-name ">
+                            <span class="name-text hide-on-med-and-down">${loggedUser.firstName} ${loggedUser.lastName}</span>
                             <img src="<c:url value="${baseUrl}/profilePicture/${loggedUser.userId}"/>" alt="userprofile" class="user-picture"/>
                         </div>
                     </a>
