@@ -72,17 +72,10 @@ public interface BookService {
     List<Book> getRecommendations(Book book);
 
 
-    PaginatedContent<Book> getWriterBooks(long writerId, int pageNumber, int pageSize);
+    PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
 
-    PaginatedContent<Book> getWriterBooksWithParams(
-            long writerId,
-            String title,
-            BookSearchOrderBy orderBy,
-            int pageNumber,
-            int pageSize
-    );
+    PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
 
-    PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize);
 
     BookFile getBookFile(long bookId);
 

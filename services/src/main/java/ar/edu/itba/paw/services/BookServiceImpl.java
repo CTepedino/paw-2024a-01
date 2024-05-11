@@ -21,9 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,38 +127,29 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> getRecommendations(Book book){
-        return bookDao.getOthersFromGenre(book, 10);
+        return bookDao.getRecommendations(book, 10);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> getWriterBooks(long writerId, int pageNumber, int pageSize) {
+    public PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
-        List<Book> books = bookDao.getWriterBooks(writerId, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
+        List<Book> books =  bookDao.getWriterBooks(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> getOwnedBooks(long readerId, int pageNumber, int pageSize) {
+    public PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
-        List<Book> books = bookDao.getOwnedBooks(readerId, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId));
+        List<Book> books = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title));
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<Book> getWriterBooksWithParams(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize){
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> books =  bookDao.getWriterBooksWithParams(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId));
-    }
 
     @Transactional(readOnly = true)
     @Override

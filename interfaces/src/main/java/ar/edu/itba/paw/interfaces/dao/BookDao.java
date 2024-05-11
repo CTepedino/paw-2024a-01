@@ -63,24 +63,20 @@ public interface BookDao {
             BookSearchOrderBy orderBy
     );
 
-    List<Book> getOthersFromGenre(Book book, int max);
+    List<Book> getRecommendations(Book book, int max);
 
     List<Book> getWriterBooks(
             long writerId,
-            int offset,
-            int limit
-    );
-
-    public List<Book> getWriterBooksWithParams(
-            long writerId, String title,
+            String title,
             BookSearchOrderBy orderBy,
             int offset,
             int limit
     );
 
-    long getWriterBooksSize(long writerId);
+    long getWriterBooksSize(long writerId, String title);
 
-    List<Book> getOwnedBooks(long readerId, int offset, int limit);
+    List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy,int offset, int limit);
 
-    long getOwnedBooksSize(long readerId);
+    long getOwnedBooksSize(long readerId, String title);
+
 }

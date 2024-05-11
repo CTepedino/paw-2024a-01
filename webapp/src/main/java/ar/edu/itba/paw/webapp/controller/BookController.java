@@ -121,7 +121,7 @@ public class BookController {
 
         ModelAndView mav = new ModelAndView("myBooks");
         User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("books", bs.getWriterBooksWithParams(user.getUserId(), form.getTitle(), form.getOrderBy(),1, 20));
+        mav.addObject("books", bs.getWriterBooks(user.getUserId(), form.getTitle(), form.getOrderBy(),1, 20));
         mav.addObject("myBookSearchForm", form);
         mav.addObject("orders", BookSearchOrderBy.values());
         return mav;

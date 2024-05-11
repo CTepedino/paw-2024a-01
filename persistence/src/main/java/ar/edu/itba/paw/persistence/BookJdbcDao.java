@@ -130,13 +130,7 @@ public class BookJdbcDao implements BookDao {
 
         getBookSearchQueryConditions(query, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
 
-        if(orderBy != null) {
-            query.append(" ORDER BY ").append(orderBy.getColumnName());
-        }
-
-        query.append(" LIMIT ? OFFSET ?");
-        params.add(limit);
-        params.add(offset);
+        addQueryOrderByAndLimit(query, params, orderBy, offset, limit);
 
         return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
@@ -161,8 +155,7 @@ public class BookJdbcDao implements BookDao {
             Integer minSuggestedAge,
             Integer maxSuggestedAge
     ){
-            query.append("WHERE lower(title) LIKE lower(?)  ");
-            params.add("%" + (title!=null?DaoUtils.escapeSearchString(title):"") + "%");
+            addTitleQueryCondition(query, params,title);
             if (genre!=null) {
                 DaoUtils.addQueryCondition(query, params, " AND genre = ? ", genre.toString());
             }
@@ -175,57 +168,84 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public List<Book> getOthersFromGenre(Book book, int max) {
+    public List<Book> getRecommendations(Book book, int max) {
         return jdbcTemplate.query(
         """
-                SELECT *
-                FROM books b JOIN users u on b.writer_id = u.user_id
-                WHERE b.book_id <> ? AND b.genre = ?
+                SELECT b.*, u.*
+                FROM books b JOIN users u on b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED'
+                WHERE b.book_id <> ? AND (b.genre = ? OR b.writer_id = ?)
+                GROUP BY b.book_id
+                ORDER BY COUNT(o.book_id) DESC
                 LIMIT ?
             """,
             ROW_MAPPER,
             book.getBookId(),
             book.getGenre().toString(),
+            book.getWriter().getUserId(),
             max
         );
     }
 
     @Override
-    public List<Book> getWriterBooks(long writerId, int offset, int limit) {
-        return jdbcTemplate.query(
-                """
-                    SELECT *
-                    FROM books b JOIN users u ON b.writer_id = u.user_id
-                    WHERE writer_id = ?
-                    ORDER BY book_id DESC
-                    OFFSET ? LIMIT ?
-                """,
-                ROW_MAPPER,
-                writerId,
-                offset,
-                limit
-        );
+    public List<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy,int offset, int limit) {
+        StringBuilder query = new StringBuilder("""
+             SELECT *
+             FROM books b JOIN users u ON b.writer_id = u.user_id
+        """);
+        List<Object> params = new ArrayList<>();
+
+        addTitleQueryCondition(query, params,title);
+
+        addQueryOrderByAndLimit(query, params, orderBy, offset, limit);
+
+        return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
+    }
+
+
+    @Override
+    public long getWriterBooksSize(long writerId, String title) {
+        StringBuilder query = new StringBuilder();
+        List<Object> params = new ArrayList<>();
+
+        addTitleQueryCondition(query, params,title);
+        DaoUtils.addQueryCondition(query, params, " AND writer_id = ?", writerId);
+        return DaoUtils.getRowCount(jdbcTemplate, "books", query.toString(), params.toArray());
+
     }
 
     @Override
-    public List<Book> getWriterBooksWithParams(
-            long writerId,
-            String title,
-            BookSearchOrderBy orderBy,
-            int offset,
-            int limit
-    ){
+    public List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int offset, int limit) {
         StringBuilder query = new StringBuilder("""
-                SELECT *
-                FROM books b JOIN users u on b.writer_id = u.user_id
-                """);
+            SELECT b.*, u.*
+            FROM books b
+            JOIN users u ON b.writer_id = u.user_id
+            JOIN orders o ON b.book_id = o.book_id
+        """);
+        List<Object> params = new ArrayList<>();
+        addTitleQueryCondition(query, params,title);
+        DaoUtils.addQueryCondition(query, params, " AND o.buyer_id = ? ", readerId);
+        query.append("AND o.status = 'COMPLETED'");
+        addQueryOrderByAndLimit(query, params, orderBy, offset, limit);
+        return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
+    }
+
+    @Override
+    public long getOwnedBooksSize(long readerId, String title) {
+        StringBuilder query = new StringBuilder();
         List<Object> params = new ArrayList<>();
 
-        getBookSearchQueryConditions(query, params, title, null, null, null, null, null, null, null);
+        addTitleQueryCondition(query, params,title);
+        DaoUtils.addQueryCondition(query, params, " AND o.buyer_id = ?", readerId);
+        query.append("AND o.status = 'COMPLETED'");
+        return DaoUtils.getRowCount(jdbcTemplate, "books b JOIN user u ON b.writer_id = u.user_id JOIN orders o ON b.book_id = o.book_id", query.toString(), params.toArray());
+    }
 
-        query.append(" AND writer_id = ?");
-        params.add(writerId);
+    private void addTitleQueryCondition(StringBuilder query, List<Object> params, String title) {
+        query.append("WHERE lower(title) LIKE lower(?) ");
+        params.add("%" + (title!=null?DaoUtils.escapeSearchString(title):"") + "%");
+    }
 
+    private void addQueryOrderByAndLimit(StringBuilder query, List<Object> params, BookSearchOrderBy orderBy,int offset, int limit) {
         if(orderBy != null) {
             query.append(" ORDER BY ").append(orderBy.getColumnName());
         }
@@ -233,46 +253,6 @@ public class BookJdbcDao implements BookDao {
         query.append(" LIMIT ? OFFSET ?");
         params.add(limit);
         params.add(offset);
-
-        return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
-    }
-
-    @Override
-    public long getWriterBooksSize(long writerId) {
-        return DaoUtils.getRowCount(
-                jdbcTemplate,
-                "books",
-                "WHERE writer_id = ?",
-                writerId
-        );
-    }
-
-    @Override
-    public List<Book> getOwnedBooks(long readerId, int offset, int limit) {
-        return jdbcTemplate.query(
-            """
-                    SELECT b.*, u.*
-                    FROM books b
-                    JOIN users u on b.writer_id = u.user_id
-                    JOIN orders o on b.book_id = o.book_id
-                    WHERE o.buyer_id = ?
-                    OFFSET ? LIMIT ?
-                """,
-                ROW_MAPPER,
-                readerId,
-                offset,
-                limit
-        );
-    }
-
-    @Override
-    public long getOwnedBooksSize(long readerId) {
-        return DaoUtils.getRowCount(
-                jdbcTemplate,
-                "books b JOIN users u on b.writer_id = u.user_id JOIN orders o on b.book_id = o.book_id",
-                "WHERE o.buyer_id = ?",
-                readerId
-        );
     }
 }
 
