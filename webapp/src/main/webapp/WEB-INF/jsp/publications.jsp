@@ -11,14 +11,13 @@
 </head>
 
 
-<%@include file="components/topBar.jsp" %>
+<%@include file="profile.jsp" %>
 
 <body>
-    <c:url value="/myBooks" var="myBooksUrl"/>
+    <c:url value="/profile/${userId}/publications" var="publicationsUrl"/>
     <div class="container myBooks">
-        <h2 class="page-title"><spring:message code="publication.myBooks.title"/></h2>
         <form:form modelAttribute="myBooksSearchForm"
-                   action="${myBooksUrl}"
+                   action="${publicationsUrl}"
                    method="get"
                    id="books"
         >
@@ -44,7 +43,7 @@
             <div class="row">
                 <c:forEach var="book" items="${books.page}">
                         <c:set var="cardBook" value="${book}" scope="request"/>
-                        <c:set var="myBooks" value="${true}" scope="request"/>
+                        <c:set var="myBooks" value="${ownsProfile}" scope="request"/>
                         <%@include file="components/smallBookCard.jsp"%>
                 </c:forEach>
             </div>

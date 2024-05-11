@@ -113,16 +113,38 @@ public class BookController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, path="myBooks")
-    public ModelAndView myBooks(@Valid @ModelAttribute("myBooksSearchForm") final MyBookSearchForm form, final BindingResult error){
+    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/publications")
+    public ModelAndView publications(@PathVariable("userId") final long userId, @ModelAttribute("loggedUser") User loggedUser, @Valid @ModelAttribute("myBooksSearchForm") final MyBookSearchForm form, final BindingResult error){
 
         if(error.hasErrors()){
-            return new ModelAndView("myBooks");
+            return new ModelAndView("publications");
         }
 
-        ModelAndView mav = new ModelAndView("myBooks");
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        mav.addObject("books", bs.getWriterBooks(user.getUserId(), form.getTitle(), form.getOrderBy(),1, 20));
+        ModelAndView mav = new ModelAndView("publications");
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
+        mav.addObject("user", user);
+        mav.addObject("ownsProfile", ownsProfile);
+        mav.addObject("books", bs.getWriterBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), 20));
+        mav.addObject("myBookSearchForm", form);
+        mav.addObject("orders", BookSearchOrderBy.values());
+        return mav;
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/boughtBooks")
+    public ModelAndView boughtBooks(@PathVariable("userId") final long userId, @ModelAttribute("loggedUser") User loggedUser, @Valid @ModelAttribute("myBooksSearchForm") final MyBookSearchForm form, final BindingResult error){
+
+        if(error.hasErrors()){
+            return new ModelAndView("boughtBooks");
+        }
+
+        ModelAndView mav = new ModelAndView("boughtBooks");
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
+        mav.addObject("user", user);
+        mav.addObject("ownsProfile", ownsProfile);
+        mav.addObject("books", bs.getOwnedBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), 20));
         mav.addObject("myBookSearchForm", form);
         mav.addObject("orders", BookSearchOrderBy.values());
         return mav;

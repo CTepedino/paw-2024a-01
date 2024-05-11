@@ -196,6 +196,8 @@ public class BookJdbcDao implements BookDao {
 
         addTitleQueryCondition(query, params,title);
 
+        DaoUtils.addQueryCondition(query, params, " AND writer_id = ?", writerId);
+
         addQueryOrderByAndLimit(query, params, orderBy, offset, limit);
 
         return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
@@ -234,10 +236,11 @@ public class BookJdbcDao implements BookDao {
         StringBuilder query = new StringBuilder();
         List<Object> params = new ArrayList<>();
 
-        addTitleQueryCondition(query, params,title);
+        addTitleQueryCondition(query, params, title);
         DaoUtils.addQueryCondition(query, params, " AND o.buyer_id = ?", readerId);
-        query.append("AND o.status = 'COMPLETED'");
-        return DaoUtils.getRowCount(jdbcTemplate, "books b JOIN user u ON b.writer_id = u.user_id JOIN orders o ON b.book_id = o.book_id", query.toString(), params.toArray());
+        query.append(" AND o.status = 'COMPLETED'");
+
+        return DaoUtils.getRowCount(jdbcTemplate, "books b JOIN orders o ON b.book_id = o.book_id", query.toString(), params.toArray());
     }
 
     private void addTitleQueryCondition(StringBuilder query, List<Object> params, String title) {

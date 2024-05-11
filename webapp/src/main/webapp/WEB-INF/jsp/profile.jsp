@@ -35,18 +35,12 @@
                 </a>
             </div>
             <nav>
+                <c:url var="profileUrl" value="/profile/${userId}"/>
                 <ul>
-                    <li><a href="">Bought Books</a></li>
-                    <li><a href="">My Books</a></li>
+                    <li><a href="${profileUrl}/boughtBooks">Bought Books</a></li>
+                    <li><a href="${profileUrl}/publications">Publications</a></li>
                 </ul>
             </nav>
-
-            <div class="row">
-                <c:forEach var="book" items="${books}">
-                    <c:set var="book" value="${book}" scope="request"/>
-                    <%@include file="components/bookInfoCard.jsp"%>
-                </c:forEach>
-            </div>
 
         </div>
     </div>

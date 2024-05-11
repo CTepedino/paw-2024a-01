@@ -141,11 +141,13 @@
         var instances = M.FormSelect.init(elems);
     });
 
-    document.querySelector("#files").onchange = function() {
-        const fileName = this.files[0]?.name;
-        const label = document.querySelector("label[for=files]");
-        label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
-    };
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector("#files").onchange = function() {
+            const fileName = this.files[0]?.name;
+            const label = document.querySelector("label[for=files]");
+            label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
+        };
+    });
 </script>
 
 </body>
