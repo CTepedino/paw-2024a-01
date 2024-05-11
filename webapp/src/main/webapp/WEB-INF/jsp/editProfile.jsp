@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Edit Profile</title>
+    <title><spring:message code="user.profile.edit.title"/></title>
     <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
 </head>
 
@@ -25,48 +25,47 @@
                 cssClass="z-depth-2"
         >
             <h5 class="center-align">
-                Editar Perfil
+                <spring:message code="user.profile.edit.title"/>
             </h5>
 
             <div class="input-field">
-                <form:label path="newFirstName">
-                    Nombre
-                </form:label>
+                <form:label path="newFirstName"><spring:message code="user.profile.edit.firstName"/><span class="red-text">*</span></form:label>
                 <form:input path="newFirstName" value="${user.firstName}"/>
             </div>
             <form:errors path="newFirstName" cssClass="red-text" element="p"/>
 
             <div class="input-field">
-                <form:label path="newLastName">
-                    Apellido
-                </form:label>
+                <form:label path="newLastName"><spring:message code="user.profile.edit.lastName"/><span class="red-text">*</span></form:label>
                 <form:input path="newLastName" value="${user.lastName}"/>
             </div>
             <form:errors path="newLastName" cssClass="red-text" element="p"/>
 
 
             <c:if test="${isWriter}">
-                <h6><spring:message code="book.addBook.cbuTitle"/></h6>
                 <div class="input-field">
-                    <form:label path="cbu">Update your CBU<span class="red-text">*</span></form:label><br>
+                    <form:label path="cbu"><spring:message code="user.profile.edit.cbu"/><span class="red-text">*</span></form:label><br>
                     <form:input type="text" path="cbu" inputmode="numeric" value="${user.cbu}"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>
             </c:if>
 
-
-            <div class="input-field">
-                <form:label path="profilePicture" cssClass="active">Sube tu foto de perfil<span class="red-text">*</span> (.png, .jpeg)</form:label>
-                <form:input type="file" path="profilePicture" accept="image/*"/>
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span><spring:message code="user.profile.edit.pfp"/></span>
+                    <input type="file" accept="image/*" name="profilePicture" id="profilePicture">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" \>
+                </div>
             </div>
             <form:errors path="profilePicture" cssClass="red-text"  element="p"/>
 
-
             <div class="input-field center-align submit-btn">
                 <button class="btn waves-effect waves-light white-text" id="submitBtn" type="submit" name="action">
-                    Guardar Cambios
+                    <strong><spring:message code="user.profile.edit.save"/></strong>
                 </button>
             </div>
+
         </form:form>
     </div>
 </div>

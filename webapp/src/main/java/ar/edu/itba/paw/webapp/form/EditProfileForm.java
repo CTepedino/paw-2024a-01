@@ -14,17 +14,17 @@ public class EditProfileForm {
 
     @NotNull
     @NotEmpty
-    @Size(max = 255, message = "MaxSize.regexp")
+    @Size(max = 50, message = "MaxSize.regexp")
     private String newFirstName;
 
     @NotNull
     @NotEmpty
-    @Size(max = 255, message = "MaxSize.regexp")
+    @Size(max = 50, message = "MaxSize.regexp")
     private String newLastName;
 
 
-    @Size(min = 22, max = 22)
-    @Pattern(regexp = "\\d*")
+    @Size(min = 6, max = 22)
+    @Pattern(regexp = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9.-]+")
     private String cbu;
 
 

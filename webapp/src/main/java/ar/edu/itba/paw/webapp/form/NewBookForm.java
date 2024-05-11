@@ -39,8 +39,8 @@ public class NewBookForm {
     @NotNull
     private MultipartFile bookFile;
 
-    @Size(min = 22, max = 22)
-    @Pattern(regexp = "\\d+")
+    @Size(min = 6, max = 22)
+    @Pattern(regexp = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9.-]+")
     private String cbu;
 
     public String getTitle() {
