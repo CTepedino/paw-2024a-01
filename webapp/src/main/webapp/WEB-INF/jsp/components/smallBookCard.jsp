@@ -14,9 +14,9 @@
         <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
                 <img
-                        src="<c:url value="/cover/${cardBook.bookId}"/>"
-                        class="activator"
-                        alt="<spring:message code="bookInfoCard.cover"/>"
+                    src="<c:url value="/cover/${cardBook.bookId}"/>"
+                    class="activator"
+                    alt="<spring:message code="bookInfoCard.cover"/>"
                 />
             </div>
             <div class="card-info" href="<c:url value="/book/${cardBook.bookId}"/>">

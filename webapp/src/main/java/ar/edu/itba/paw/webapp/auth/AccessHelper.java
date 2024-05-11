@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.Optional;
 
 @Component
@@ -19,23 +20,28 @@ public class AccessHelper {
 
     private final OrderService os;
     private final BookService bs;
+    private final UserService us;
 
     @Autowired
-    public AccessHelper(OrderService os, BookService bs){
+    public AccessHelper(OrderService os, BookService bs, UserService us){
         this.os = os;
         this.bs = bs;
+        this.us = us;
     }
 
     public boolean canCreateOrder(Authentication auth, HttpServletRequest request){
         try {
             long bookId = Long.parseLong(request.getParameter("bookId"));
-            return auth.isAuthenticated() && os.canCreateOrder(bookId);
-        } catch (NumberFormatException e){
+            return us.isLoggedIn() && os.canCreateOrder(bookId);
+        } catch (Exception e){
             return false;
         }
     }
 
     public boolean canAccessReceipt(Authentication auth, String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
 
         long orderId =  Long.parseLong(id);
         Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
@@ -48,21 +54,37 @@ public class AccessHelper {
     }
 
     public boolean canAccessBook(Authentication auth, String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
+
         long bookId = Long.parseLong(id);
         return os.hasBookFileAccess(bookId, auth.getName());
     }
 
     public boolean canAdvanceOrder(Authentication auth, String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
+
         long orderId = Long.parseLong(id);
         return os.canAdvanceOrder(orderId, auth.getName());
     }
 
     public boolean canEditBook(Authentication auth, String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
+
         long bookId = Long.parseLong(id);
         return bs.loggedUserIsAuthor(bookId);
     }
 
     public boolean canReview(Authentication auth, String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
+
         long bookId = Long.parseLong(id);
         return os.hasBookFileAccess(bookId, auth.getName());
     }

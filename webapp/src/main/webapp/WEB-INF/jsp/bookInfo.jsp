@@ -18,9 +18,9 @@
             <div class="col s5">
                 <div class="info-image">
                     <img
-                            class="book-cover"
-                            src="<c:url value="/cover/${book.bookId}"/>"
-                            alt="<spring:message code="bookInfoCard.cover"/>"
+                        class="book-cover"
+                        src="<c:url value="/cover/${book.bookId}"/>"
+                        alt="<spring:message code="bookInfoCard.cover"/>"
                     />
                 </div>
             </div>
@@ -41,7 +41,7 @@
                         <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
                     </div>
                     <div class="col s5">
-                        <c:if test="${(not isAuthor) and (not ownsBook) and isLoggedIn}">
+                        <c:if test="${(not isAuthor and not ownsBook) or !isLoggedIn}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
