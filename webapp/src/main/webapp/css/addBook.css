@@ -6,9 +6,18 @@
 
 .form {
     width: 100%;
+    margin-top: 30px;
 }
 
 form {
-    padding: 50px;
+    padding-right: 50px;
+    padding-left: 50px;
+    padding-bottom: 10px;
+
     width: 100%;
+}
+
+.publish-title{
+    text-align: center;
+    padding-top: 20px;
 }

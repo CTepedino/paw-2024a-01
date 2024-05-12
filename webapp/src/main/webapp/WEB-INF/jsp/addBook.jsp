@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title><spring:message code="book.addBook.publish"/></title>
-    <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/addBook.css"/>" rel="stylesheet"/>
 </head>
 
 <c:set value="${true}" scope="request" var="hideSearchBar"/>
@@ -18,7 +18,6 @@
 <body>
 <div class="container">
     <div class="form">
-        <h5><spring:message code="book.addBook.pageTitle"/></h5>
         <c:url value="/addBook" var="postUrl"/>
         <form:form
                 modelAttribute="newBookForm"
@@ -27,13 +26,18 @@
                 enctype="multipart/form-data"
                 cssClass="z-depth-2"
         >
-            <c:if test="${!hasWriterRole}">
+            <h5 class="publish-title"><spring:message code="book.addBook.pageTitle"/></h5>
+            <c:if test="${!isWriter}">
+                <br/>
                 <h6><spring:message code="book.addBook.cbuTitle"/></h6>
                 <div class="input-field">
                     <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label>
                     <form:input type="text" path="cbu" inputmode="numeric"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>
+                <br/>
+                <div class="divider"></div>
+                <br/>
             </c:if>
 
             <h6><spring:message code="book.addBook.bookTitle"/></h6>
