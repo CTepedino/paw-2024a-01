@@ -28,6 +28,7 @@
                 cssClass="z-depth-2"
         >
 
+            <h5 class="publish-title"><spring:message code="book.editBook.title"/></h5>
 
             <div class="input-field">
                 <form:label path="title"><spring:message code="book.addBook.title"/><span class="red-text">*</span></form:label>
