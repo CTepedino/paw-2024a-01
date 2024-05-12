@@ -134,7 +134,7 @@ public class OrderJdbcDaoTest{
 
     @Test
     public void testAllReaderOrders(){
-        List<Order> orders = orderDao.getReaderOrders(EXISTING_BUYER_ID, "", null, null,0, 10);
+        List<Order> orders = orderDao.getReaderOrders(EXISTING_BUYER_ID, "", null, 0, 10);
 
         assertNotNull(orders);
         assertEquals(1, orders.get(0).getOrderId());

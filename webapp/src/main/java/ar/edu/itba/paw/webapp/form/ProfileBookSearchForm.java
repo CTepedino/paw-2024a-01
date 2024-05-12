@@ -5,12 +5,12 @@ import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class MyBookSearchForm {
+public class ProfileBookSearchForm {
 
     private String title;
 
     @NotNull
-    private BookSearchOrderBy orderBy = BookSearchOrderBy.PUBLICATION_DATE_ASC;
+    private BookSearchOrderBy orderBy = BookSearchOrderBy.PUBLICATION_DATE_DESC;
 
     @NotNull
     @Min(1)

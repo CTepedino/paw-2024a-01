@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.models.orders.Order;
-import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,8 +104,8 @@ public class OrderJdbcDao implements OrderDao {
     }
 
     @Override
-    public List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit) {
-        return getOrders(" WHERE o.buyer_id = ? ", readerId, title, orderStatus, orderBy, offset, limit);
+    public List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, int offset, int limit) {
+        return getOrders(" WHERE o.buyer_id = ? ", readerId, title, orderStatus, offset, limit);
     }
 
     @Override
@@ -128,8 +127,8 @@ public class OrderJdbcDao implements OrderDao {
     }
 
     @Override
-    public List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit) {
-        return getOrders(" WHERE w.user_id = ? ", writerId, title, orderStatus, orderBy, offset, limit);
+    public List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, int offset, int limit) {
+        return getOrders(" WHERE w.user_id = ? ", writerId, title, orderStatus, offset, limit);
     }
 
     @Override
@@ -160,7 +159,7 @@ public class OrderJdbcDao implements OrderDao {
         }
     }
 
-    private List<Order> getOrders(String firstCondition, long id, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit){
+    private List<Order> getOrders(String firstCondition, long id, String title, OrderStatus orderStatus, int offset, int limit){
         StringBuilder query = new StringBuilder(
                 """
                 SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
@@ -173,9 +172,8 @@ public class OrderJdbcDao implements OrderDao {
 
         setOrdersWhereConditions(query, params, firstCondition, id, title, orderStatus);
 
-        if (orderBy != null){
-            query.append(" ORDER BY ").append(orderBy.getColumnName());
-        }
+        query.append(" ORDER BY date DESC ");
+
 
         query.append(" LIMIT ? OFFSET ?");
         params.add(limit);

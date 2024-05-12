@@ -3,7 +3,6 @@ package ar.edu.itba.paw.interfaces.service;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
-import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,9 +23,9 @@ public interface OrderService {
     void atCbuAdded(long writerId);
     void updateOrder(long orderId, MultipartFile receipt, Boolean approved);
 
-    PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
+    PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize);
 
-    PaginatedContent<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize);
+    PaginatedContent<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize);
 
 
     boolean loggedUserOwnsBook(long bookId);

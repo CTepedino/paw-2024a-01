@@ -28,7 +28,7 @@
 }
 
 .table-top {
-    height: 81px;
+    height: 80px;
     margin-top: 20px;
     margin-bottom: 20px;
     background-color: #437c90;
@@ -63,5 +63,9 @@
 
 .paused{
     color: red;
+}
+
+.empty-books{
+    text-align: center;
 }
 

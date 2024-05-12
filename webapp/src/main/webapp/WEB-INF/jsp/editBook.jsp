@@ -87,7 +87,7 @@
             <div class="file-field input-field">
                 <div class="btn">
                     <span><spring:message code="book.addBook.preview"/></span>
-                    <input type="file" accept="image/*" name="preview" id="preview">
+                    <input type="file" accept="application/pdf" name="preview" id="preview">
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text" \>
@@ -98,7 +98,7 @@
             <div class="file-field input-field">
                 <div class="btn">
                     <span><spring:message code="book.addBook.bookFile"/></span>
-                    <input type="file" accept="image/*" name="bookFile" id="bookFile">
+                    <input type="file" accept="application/pdf" name="bookFile" id="bookFile">
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text" \>

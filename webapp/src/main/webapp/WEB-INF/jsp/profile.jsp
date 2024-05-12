@@ -1,78 +1,81 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title><spring:message code="user.profile.title"/></title>
-    <link href="<c:url value="/css/profile.css"/>" rel="stylesheet"/>
-
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="<c:url value="/css/myBooks.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 
+
+<%@include file="profileTab.jsp" %>
+
 <body>
-
-<c:set value="${true}" scope="request" var="hideSearchBar"/>
-<%@include file="components/topBar.jsp" %>
-
-<div class="container profile center">
-    <img class="profile-img" src="<c:url value="/profilePicture/${user.userId}"/>" alt="user profile picture"/>
-    <h2 class="writer-name"><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
-    <p class="writer-info"> <c:out value="${user.email}"/> </p>
-    <c:if test="${ownsProfile}">
-        <c:if test="${isWriter}">
-            <p class="writer-info">
-                <spring:message var="cbuMsj" code="user.profile.cbu" arguments="${user.cbu}"/>
-                <c:out value="${cbuMsj}"/>
-            </p>
-        </c:if>
-
-        <c:if test="${empty user.cbu}">
-            <p class="writer-info paused"><spring:message code="user.profile.emptyCBU"/></p>
-        </c:if>
-        <div class="edit-profile">
-            <a href="<c:url value="/editProfile"/>" class="waves-effect waves-light btn profile-btn">
-                <spring:message code="user.profile.edit.title"/>
-            </a>
-            <a href="<c:url value="/changePassword"/>" class="waves-effect waves-light btn profile-btn">
-                <spring:message code="session.changePassword"/>
-            </a>
+<c:url value="/profile/${user.userId}/${tab}" var="readBooksUrl"/>
+<div class="container myBooks">
+    <form:form
+            modelAttribute="profileBookSearchForm"
+            action="${readBooksUrl}"
+            method="get"
+            id="bookSearch"
+    >
+        <input type="submit" hidden/>
+        <div class="row">
+            <div class="input-field col s6">
+                <form:label path="title" cssClass="active">
+                    <spring:message code="book.search.title"/>
+                </form:label><br>
+                <form:input path="title"/>
+            </div>
+            <div class="input-field col s6">
+                <form:label path="orderBy" cssClass="active">
+                    <spring:message code="book.search.orderBy"/>
+                </form:label><br>
+                <form:select path="orderBy" onchange="this.form.submit()">
+                    <c:forEach items="${orders}" var="order">
+                        <form:option value="${order}"><spring:message code="book.bookSearchOrderBy.${order.messageCode}"/></form:option>
+                    </c:forEach>
+                </form:select>
+            </div>
         </div>
-    </c:if>
 
-    <c:url var="profileUrl" value="/profile/${userId}"/>
+        <div class="row">
+            <c:if test="${empty books.page and books.pageNumber eq 1}">
+                <h5 class="empty-books">No books found</h5>
+            </c:if>
+            <c:forEach var="book" items="${books.page}">
+                <c:set var="cardBook" value="${book}" scope="request"/>
+                <c:set var="ownsProfile" value="${ownsProfile}" scope="request"/>
+                <c:set var="publications" value="${false}" scope="request"/>
+                <%@include file="components/smallBookCard.jsp"%>
+            </c:forEach>
+        </div>
 
-    <div class="row table-top">
-        <a href="${profileUrl}/publications">
-            <c:if test="${publicationSelected}">
-                <div class="col s6 table-title active">
-                    <p class="text-active" style="width: 100%"><spring:message code="user.profile.publications"/></p>
-                </div>
-            </c:if>
-            <c:if test="${!publicationSelected}">
-                <div class="col s6 table-title">
-                    <p class="text-not-active" style="width: 100%"><spring:message code="user.profile.publications"/></p>
-                </div>
-            </c:if>
-        </a>
-        <a href="${profileUrl}/boughtBooks">
-            <c:if test="${boughtBooksSelected}">
-                <div class="col s6 table-title active">
-                    <p class="text-active" style="width: 100%"><spring:message code="user.profile.boughtBooks"/></p>
-                </div>
-            </c:if>
-            <c:if test="${!boughtBooksSelected}">
-                <div class="col s6 table-title">
-                    <p class="text-not-active" style="width: 100%"><spring:message code="user.profile.boughtBooks"/></p>
-                </div>
-            </c:if>
-        </a>
-    </div>
-
+        <c:if test="${books.pageCount > 1}">
+            <input type="number" id="page" name="page" value="${books.pageNumber}" style="display: none"/>
+            <script src="<c:url value="/js/paginationControls.js"/>"></script>
+            <script>
+                const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber}, false);
+                paginationButtons.render();
+                paginationButtons.onChange(e => {
+                    document.getElementById('page').value = e.target.value;
+                    document.getElementById("bookSearch").submit();
+                })
+            </script>
+        </c:if>
+    </form:form>
 </div>
-
-
+<script type="module">
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
 </body>
 </html>

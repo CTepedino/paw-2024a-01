@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.orders.Order;
-import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class OrderController {
@@ -32,7 +32,10 @@ public class OrderController {
         this.us = us;
     }
 
-
+    @ModelAttribute("statuses")
+    public List<OrderStatus> statuses() {
+        return List.of(OrderStatus.values());
+    }
 
     @RequestMapping(method = RequestMethod.GET, path="/purchases")
     public ModelAndView purchases(
@@ -45,8 +48,7 @@ public class OrderController {
             return new ModelAndView("purchasesView");
         }
         final ModelAndView mav = new ModelAndView("purchasesView");
-        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), OrderOrderBy.DATE_DESC, orderSearchForm.getPage(), 10));
-        mav.addObject("statuses", OrderStatus.values());
+        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), 10));
         return mav;
     }
 
@@ -61,8 +63,7 @@ public class OrderController {
             return new ModelAndView("salesView");
         }
         ModelAndView mav = new ModelAndView("salesView");
-        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), OrderOrderBy.DATE_DESC, form.getPage(), 10));
-        mav.addObject("statuses", OrderStatus.values());
+        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
         return mav;
     }
 
@@ -71,8 +72,6 @@ public class OrderController {
         os.updateOrder(id, form.getReceipt(), form.getApproved());
         return new ModelAndView("redirect:/" + from);
     }
-
-
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
