@@ -49,7 +49,7 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/profile")
-    public ModelAndView bookInfo(@ModelAttribute("loggedUser") User loggedUser){
+    public ModelAndView profile(@ModelAttribute("loggedUser") User loggedUser){
         final ModelAndView mav = new ModelAndView("profile");
 
         mav.addObject("user", loggedUser);
@@ -58,7 +58,7 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}")
-    public ModelAndView bookInfo(@PathVariable("userId") final long userId, @ModelAttribute("loggedUser") User loggedUser){
+    public ModelAndView profile(@PathVariable("userId") final long userId, @ModelAttribute("loggedUser") User loggedUser){
         final ModelAndView mav = new ModelAndView("profile");
 
         User user = us.findById(userId).orElseThrow(UserNotFoundException::new);

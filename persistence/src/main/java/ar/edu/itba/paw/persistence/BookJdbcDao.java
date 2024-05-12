@@ -26,7 +26,8 @@ public class BookJdbcDao implements BookDao {
         rs.getInt("page_count"),
         rs.getInt("suggested_age"),
         rs.getDate("published_date").toLocalDate(),
-        UserJdbcDao.USER_ROW_MAPPER.mapRow(rs, rowNum)
+        UserJdbcDao.USER_ROW_MAPPER.mapRow(rs, rowNum),
+        rs.getBoolean("is_paused")
     );
 
     private final JdbcTemplate jdbcTemplate;
@@ -71,11 +72,11 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public void modify(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
+    public void modify(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused) {
         jdbcTemplate.update(
                 """
                     UPDATE books
-                    SET title = ?, description = ?, genre = ?, price = ?, page_count = ?, suggested_age = ?
+                    SET title = ?, description = ?, genre = ?, price = ?, page_count = ?, suggested_age = ?, is_paused = ?
                     WHERE book_id = ?
                 """,
                 title,
@@ -84,7 +85,8 @@ public class BookJdbcDao implements BookDao {
                 price,
                 pageCount,
                 suggestedAge,
-                bookId
+                bookId,
+                isPaused
         );
     }
 
@@ -94,6 +96,7 @@ public class BookJdbcDao implements BookDao {
             """
                     SELECT *
                     FROM books b JOIN users u ON b.writer_id = u.user_id
+                    WHERE is_paused = FALSE
                     ORDER BY b.book_id desc
                     LIMIT ? OFFSET ?
                 """,
@@ -132,6 +135,7 @@ public class BookJdbcDao implements BookDao {
 
         addQueryOrderByAndLimit(query, params, orderBy, offset, limit);
 
+
         return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
 
@@ -165,6 +169,8 @@ public class BookJdbcDao implements BookDao {
             DaoUtils.addQueryCondition(query, params, " AND page_count <= ? ", maxPageCount);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age >= ? ", minSuggestedAge);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age <= ? ", maxSuggestedAge);
+
+            query.append(" AND is_paused = FALSE ");
     }
 
     @Override
@@ -173,7 +179,7 @@ public class BookJdbcDao implements BookDao {
         """
                 SELECT b.*, u.*
                 FROM books b JOIN users u on b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED'
-                WHERE b.book_id <> ? AND (b.genre = ? OR b.writer_id = ?)
+                WHERE b.book_id <> ? AND (b.genre = ? OR b.writer_id = ?) AND b.is_paused = FALSE
                 GROUP BY b.book_id, u.user_id
                 ORDER BY COUNT(o.book_id) DESC
                 LIMIT ?
@@ -256,6 +262,27 @@ public class BookJdbcDao implements BookDao {
         query.append(" LIMIT ? OFFSET ?");
         params.add(limit);
         params.add(offset);
+    }
+
+    @Override
+    public boolean recheckPaused(long bookId) {
+        Boolean keepPaused =  jdbcTemplate.queryForObject(
+        """
+                SELECT NOT EXISTS (
+                    SELECT 1
+                    FROM books b
+                    JOIN users u ON b.writer_id = u.user_id
+                    WHERE b.book_id = ? AND u.cbu IS NOT NULL AND EXISTS(
+                        SELECT 1
+                        FROM book_files bf
+                        WHERE bf.id = b.book_id
+                    )
+                )
+            """,
+            Boolean.class,
+            bookId
+        );
+        return keepPaused!=null?keepPaused:true;
     }
 }
 

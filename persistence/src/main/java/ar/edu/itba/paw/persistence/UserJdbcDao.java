@@ -174,5 +174,37 @@ public class UserJdbcDao implements UserDao {
         );
     }
 
+    @Override
+    public void recheckAllPaused(long userId) {
+        jdbcTemplate.update(
+        """
+                UPDATE books b SET is_paused = CASE
+                    WHEN NOT EXISTS(
+                        SELECT 1
+                        FROM book_files bf
+                        WHERE bf.id = b.book_id
+                    ) OR EXISTS(
+                        SELECT 1
+                        FROM users AS u
+                        WHERE u.user_id = b.writer_id AND u.cbu IS NULL
+                    ) THEN TRUE
+                    ELSE FALSE
+                END WHERE b.writer_id = ?;
+            """,
+            userId
+        );
+    }
+
+    @Override
+    public List<User> getUsersWithPausedBooks() {
+        return jdbcTemplate.query(
+        """
+                SELECT *
+                FROM users u JOIN books b ON b.writer_id = u.user_id
+                WHERE b.is_paused = TRUE
+            """,
+            USER_ROW_MAPPER
+        );
+    }
 }
 

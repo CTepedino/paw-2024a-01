@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        if (book.getWriter().getUserId() == buyer.getUserId()){
+        if (book.getWriter().getUserId() == buyer.getUserId() || book.isPaused()){
             return false;
         }
         return orderDao.find(buyer.getUserId(), bookId).isEmpty();
@@ -172,8 +172,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean canAdvanceOrder(long orderId, String email) {
         Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
-        return (order.getWriter().getEmail().equals(email) && order.getOrderStatus().getWriterCanAdvance()) ||
-                (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().getReaderCanAdvance());
+        return !order.getBook().isPaused() &&
+            (order.getWriter().getEmail().equals(email) && order.getOrderStatus().getWriterCanAdvance()) ||
+            (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().getReaderCanAdvance());
     }
 
 }

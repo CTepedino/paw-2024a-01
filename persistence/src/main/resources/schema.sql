@@ -58,6 +58,20 @@ ALTER TABLE users ADD COLUMN is_enabled BOOLEAN DEFAULT TRUE;
 UPDATE users SET is_enabled = TRUE WHERE is_enabled IS NULL;
 ALTER TABLE users ADD COLUMN locale VARCHAR(10) DEFAULT 'en';
 UPDATE users SET locale = 'en' WHERE locale is NULL;
+
+ALTER TABLE books ADD COLUMN is_paused BOOLEAN DEFAULT FALSE;
+UPDATE books b SET is_paused = CASE
+    WHEN NOT EXISTS(
+        SELECT 1
+        FROM book_files bf
+        WHERE bf.id = b.book_id
+    ) OR EXISTS(
+        SELECT 1
+        FROM users AS u
+        WHERE u.user_id = b.writer_id AND u.cbu IS NULL
+    ) THEN TRUE
+    ELSE FALSE
+END;
 */
 
 
@@ -82,6 +96,7 @@ CREATE TABLE IF NOT EXISTS books (
     suggested_age INT NOT NULL,
     published_date DATE DEFAULT now(),
     writer_id INT NOT NULL,
+    is_paused BOOLEAN DEFAULT FALSE,
 
     FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE
 );

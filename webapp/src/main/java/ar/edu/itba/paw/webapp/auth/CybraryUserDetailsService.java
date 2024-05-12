@@ -43,5 +43,3 @@ public class CybraryUserDetailsService implements UserDetailsService {
         return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
     }
 }
-
-//cron @enabledScheduled y @scheduled para avisar update cbu

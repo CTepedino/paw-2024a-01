@@ -19,4 +19,5 @@ public interface MailService{
 
     void sendReceiptDeniedEmail(Order order);
 
+    void sendMissingDataEmail(User user);
 }

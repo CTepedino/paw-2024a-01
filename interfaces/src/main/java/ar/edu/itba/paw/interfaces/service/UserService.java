@@ -38,4 +38,6 @@ public interface UserService {
     ProfilePicture getProfilePictureOrDefault(long id);
 
     boolean hasRole(UserRoles role);
+
+    void sendMissingDataEmails();
 }

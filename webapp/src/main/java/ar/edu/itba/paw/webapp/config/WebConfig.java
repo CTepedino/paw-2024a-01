@@ -22,6 +22,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleResolver;
@@ -57,6 +58,7 @@ import java.util.concurrent.TimeUnit;
                 "ar.edu.itba.paw.persistence"})
 @Configuration
 @PropertySource("classpath:application.properties")
+@EnableScheduling
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     private static final long MAX_UPLOAD_SIZE = 10L * 1024 * 1024;
