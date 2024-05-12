@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title><spring:message code="session.login"/></title>
-    <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/userForm.css"/>" rel="stylesheet"/>
 </head>
 
 <c:set value="${true}" scope="request" var="hideSearchBar"/>
@@ -48,7 +48,7 @@
             </div>
             <p class="center-align">
                 <spring:message code="session.toSignup"/>
-                <a href="${pageContext.request.contextPath}/signup">
+                <a href="<c:url value="/signup"/>">
                     <spring:message code="session.signup"/>
                 </a>
             </p>

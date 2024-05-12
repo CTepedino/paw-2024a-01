@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title><spring:message code="book.editBook"/></title>
-    <link href="${pageContext.request.contextPath}/css/addBook.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/addBook.css"/>" rel="stylesheet"/>
 </head>
 
 <c:set value="${true}" scope="request" var="hideSearchBar"/>

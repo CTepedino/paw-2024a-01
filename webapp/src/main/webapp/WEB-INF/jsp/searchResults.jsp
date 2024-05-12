@@ -8,9 +8,9 @@
 <head>
     <spring:message var="pageTitle" code="book.search.pageTitle" arguments="${bookSearchForm.title}"/>
     <title><c:out value="${pageTitle eq ''? pageTitle:'Search'}"/></title>
-    <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/searchOptions.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/paginationControls.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/home.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/css/searchOptions.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 
 <c:set value="${true}" scope="request" var="hideSearchBar"/>

@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title><spring:message code="session.changePassword"/></title>
-    <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/userForm.css"/>" rel="stylesheet"/>
 </head>
 
 
@@ -67,6 +67,7 @@
         </form:form>
     </div>
 </div>
+
 
 <script src="<c:url value="/js/togglePasswordView.js"/>"></script>
 <script src="<c:url value="/js/repeatPasswordCheck.js"/>"></script>

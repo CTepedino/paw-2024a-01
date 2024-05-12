@@ -187,7 +187,7 @@
                 method="post"
                 modelAttribute="reviewForm"
         >
-            <h5 class="publish-title">Leave your review</h5>
+            <h5 class="publish-title"><spring:message code="review.title"/></h5>
             <input type="hidden" id="rating" name="rating" value="rating">
             <div class="input-field center-align">
                 <div class="star-rating">
@@ -206,7 +206,7 @@
             <form:errors path="review"/>
 
             <div class="btn-centerer">
-                <button class="waves-light btn" type="submit"><strong>Submit Review</strong></button>
+                <button class="waves-light btn" type="submit"><strong><spring:message code="review.submit"/></strong></button>
             </div>
 
         </form:form>

@@ -2,11 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
+
 <html>
 <head>
     <title><spring:message code="publication.myBooks.title"/></title>
-    <link href="${pageContext.request.contextPath}/css/myBooks.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/myBooks.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 

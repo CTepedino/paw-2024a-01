@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title><spring:message code="user.profile.edit.title"/></title>
-    <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/userForm.css"/>" rel="stylesheet"/>
 </head>
 
 <c:set value="${true}" scope="request" var="hideSearchBar"/>
@@ -30,13 +30,13 @@
 
             <div class="input-field">
                 <form:label path="newFirstName"><spring:message code="user.profile.edit.firstName"/><span class="red-text">*</span></form:label>
-                <form:input path="newFirstName" value="${user.firstName}"/>
+                <form:input path="newFirstName"/>
             </div>
             <form:errors path="newFirstName" cssClass="red-text" element="p"/>
 
             <div class="input-field">
                 <form:label path="newLastName"><spring:message code="user.profile.edit.lastName"/><span class="red-text">*</span></form:label>
-                <form:input path="newLastName" value="${user.lastName}"/>
+                <form:input path="newLastName"/>
             </div>
             <form:errors path="newLastName" cssClass="red-text" element="p"/>
 
@@ -44,7 +44,7 @@
             <c:if test="${isWriter}">
                 <div class="input-field">
                     <form:label path="cbu"><spring:message code="user.profile.edit.cbu"/><span class="red-text">*</span></form:label><br>
-                    <form:input type="text" path="cbu" inputmode="numeric" value="${user.cbu}"/>
+                    <form:input type="text" path="cbu" inputmode="numeric"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>
             </c:if>
