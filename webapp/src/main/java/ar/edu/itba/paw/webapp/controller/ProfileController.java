@@ -12,6 +12,7 @@ import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.webapp.form.EditProfileForm;
 import ar.edu.itba.paw.webapp.form.ProfileBookSearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
@@ -62,11 +63,12 @@ public class ProfileController {
         @PathVariable("userId") long userId,
         @PathVariable("tab") String tab,
         @ModelAttribute("loggedUser") User loggedUser,
-        @Valid @ModelAttribute("profileBookSearchForm") final ProfileBookSearchForm form,
+        @Valid @ModelAttribute("profileBookSearchForm") ProfileBookSearchForm form,
         final BindingResult error
     ){
         if(error.hasErrors()){
-            throw new IllegalSearchQueryException();
+            form.setPage(1);
+            form.setOrderBy(BookSearchOrderBy.PUBLICATION_DATE_DESC);
         }
 
         User user = us.findById(userId).orElseThrow(UserNotFoundException::new);

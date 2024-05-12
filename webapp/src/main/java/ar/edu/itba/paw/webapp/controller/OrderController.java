@@ -41,11 +41,11 @@ public class OrderController {
     public ModelAndView purchases(
             @ModelAttribute("loggedUser") User loggedUser,
             @ModelAttribute("updateOrderForm") UpdateOrderForm updateOrderForm,
-            @Valid @ModelAttribute("orderSearchForm") final OrderSearchForm orderSearchForm,
+            @Valid @ModelAttribute("orderSearchForm") OrderSearchForm orderSearchForm,
             final BindingResult error
     ){
         if(error.hasErrors()){
-            return new ModelAndView("purchasesView");
+            orderSearchForm.setOrderStatus(null);
         }
         final ModelAndView mav = new ModelAndView("purchasesView");
         mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), 10));
@@ -56,11 +56,11 @@ public class OrderController {
     public ModelAndView sales(
             @ModelAttribute("loggedUser") User loggedUser,
             @ModelAttribute("updateOrderForm") UpdateOrderForm updateOrderForm,
-            @Valid @ModelAttribute("orderSearchForm") final OrderSearchForm form,
+            @Valid @ModelAttribute("orderSearchForm") OrderSearchForm form,
             final BindingResult error)
     {
         if(error.hasErrors()){
-            return new ModelAndView("salesView");
+            form.setOrderStatus(null);
         }
         ModelAndView mav = new ModelAndView("salesView");
         mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));

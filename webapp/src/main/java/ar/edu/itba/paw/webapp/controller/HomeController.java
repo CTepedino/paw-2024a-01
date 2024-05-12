@@ -42,10 +42,15 @@ public class HomeController {
 
 
     @RequestMapping(method = RequestMethod.GET, path="/search")
-    public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") final BookSearchForm form, final BindingResult error){
+    public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") BookSearchForm form, final BindingResult error){
 
         if (error.hasErrors()){
-            throw new IllegalSearchQueryException();
+            if (error.hasFieldErrors("orderBy")){
+                form.setOrderBy(BookSearchOrderBy.PUBLICATION_DATE_DESC);
+            }
+            if (error.hasFieldErrors("genres")){
+                form.setGenre(null);
+            }
         }
 
         final ModelAndView mav = new ModelAndView("searchResults");

@@ -88,8 +88,13 @@ public class BookController {
             @PathVariable("bookId") final long bookId,
             @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
             @ModelAttribute("reviewForm") ReviewForm form,
-            @ModelAttribute("reviewSortForm") ReviewSortForm sortForm
+            @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
+            final BindingResult error
     ){
+
+        if (error.hasErrors()){
+            sortForm.setOrderBy(ReviewOrderBy.DATE_DESC);
+        }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
