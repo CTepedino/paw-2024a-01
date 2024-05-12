@@ -70,32 +70,6 @@ public class SessionController {
     }
 
 
-
-    @RequestMapping(method = RequestMethod.GET, path="/editProfile")
-    public ModelAndView editProfileForm(@ModelAttribute("editProfileForm") EditProfileForm form, @ModelAttribute("loggedUser") User loggedUser){
-
-        form.setNewFirstName(loggedUser.getFirstName());
-        form.setNewLastName(loggedUser.getLastName());
-        form.setCbu(loggedUser.getCbu());
-
-        return new ModelAndView("editProfile");
-    }
-
-    @RequestMapping(method = RequestMethod.POST, path ="/editProfile")
-    public ModelAndView editProfile(
-            @Valid @ModelAttribute("editProfileForm") EditProfileForm form,
-            final BindingResult errors,
-            @ModelAttribute("loggedUser") User loggedUser
-    ){
-        if (errors.hasErrors()){
-            return editProfileForm(form, loggedUser);
-        }
-
-        us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu(), form.getProfilePicture());
-
-        return new ModelAndView("redirect:/profile/"+loggedUser.getUserId());
-    }
-
     @RequestMapping(method = RequestMethod.GET, path="/changePassword")
     public ModelAndView changePasswordForm(@ModelAttribute("passwordForm") ChangePasswordForm form){
         return new ModelAndView("changePassword");
