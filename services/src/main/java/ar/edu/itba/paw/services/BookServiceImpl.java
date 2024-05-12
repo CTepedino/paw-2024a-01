@@ -131,7 +131,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> getRecommendations(Book book){
-        return bookDao.getRecommendations(book, 10);
+        return bookDao.getRecommendations(book, 4);
     }
 
     @Transactional(readOnly = true)

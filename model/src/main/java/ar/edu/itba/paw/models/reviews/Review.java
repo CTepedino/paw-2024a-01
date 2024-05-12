@@ -3,6 +3,9 @@ package ar.edu.itba.paw.models.reviews;
 import ar.edu.itba.paw.models.users.User;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 
 public class Review {
     private final long bookId;
@@ -37,5 +40,9 @@ public class Review {
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public String getFormattedDate(Locale locale) {
+        return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(locale));
     }
 }

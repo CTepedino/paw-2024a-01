@@ -12,7 +12,7 @@ ALTER TABLE books DROP COLUMN writer_last_name;
 ALTER TABLE books DROP COLUMN writer_email; (no se pierden datos, la misma información ya se podía acceder mediante el writer_id en la tabla users)
 */
 
-/* Spring 3 modifications:
+/* Sprint 3 modifications:
 ALTER TABLE pdfs RENAME COLUMN pdf_id TO id;
 ALTER TABLE pdfs RENAME COLUMN pdf TO file;
 ALTER TABLE pdfs RENAME TO book_previews;

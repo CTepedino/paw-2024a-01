@@ -107,67 +107,55 @@
                 height="700"
         >
         </object>
-
-        <div class="divider"></div>
-
         <c:if test="${not empty recommendations}">
+            <div class="divider"></div>
             <h5><spring:message code="book.bookInfo.recommendations"/></h5>
-        </c:if>
-        <div class="row">
-            <c:forEach var="recommendedBook" items="${recommendations}" varStatus="loop">
-                <c:if test="${loop.index < 4}">
-                    <c:set var="cardBook" value="${recommendedBook}" scope="request"/>
-                    <c:set var="myBooks" value="${false}" scope="request"/>
-                    <%@include file="components/smallBookCard.jsp"%>
-                </c:if>
-            </c:forEach>
-        </div>
-        <div class="divider"></div>
-        <c:if test="${ownsBook && loggedUserReview eq null}">
-            <a href="<c:url value="/book/${book.bookId}/review"/>">
-                <button class="waves-effect waves-light btn white-text">
-                    <spring:message code="review.writeReview"/>
-                </button>
-            </a>
-        </c:if>
-        <c:if test="${loggedUserReview ne null}">
-            <h5><spring:message code="review.yourReview"/></h5>
-            <a href="<c:url value="/book/${book.bookId}/review"/>">
-                <button class="waves-effect waves-light btn white-text">
-                    <spring:message code="review.editReview"/>
-                </button>
-            </a>
-            <th class="col s4">
-                <script>new FixedStarRating(${loggedUserReview.rating});</script><br/>
-                <spring:message code="bookInfoCard.by" var="reviewer" arguments="${loggedUserReview.reviewer.firstName},${loggedUserReview.reviewer.lastName}"/>
-                <c:out value="${reviewer}"/><br/>
-            </th>
-            <th class="col s8">
-                <c:out value="${loggedUserReview.review}"/>
-            </th>
-        </c:if>
-        <c:if test="${not empty reviews}">
-            <div class="col s12">
-                <h5>
-                    <spring:message code="book.bookInfo.reviews"/><br/>
-                </h5>
-            </div>
-            <table>
-                <tbody>
-                <c:forEach items="${reviews.page}" var="review">
-                    <th class="col s4">
-                        <script>
-                            new FixedStarRating(${review.rating});
-                        </script><br/>
-                        <spring:message code="bookInfoCard.by" var="reviewer" arguments="${review.reviewer.firstName},${review.reviewer.lastName}"/>
-                        <c:out value="${reviewer}"/><br/>
-                    </th>
-                    <th class="col s8">
-                        <c:out value="${review.review}"/>
-                    </th>
+            <div class="row">
+                <c:forEach var="recommendedBook" items="${recommendations}" varStatus="loop">
+                    <c:if test="${loop.index < 4}">
+                        <c:set var="cardBook" value="${recommendedBook}" scope="request"/>
+                        <c:set var="myBooks" value="${false}" scope="request"/>
+                        <%@include file="components/smallBookCard.jsp"%>
+                    </c:if>
                 </c:forEach>
-                </tbody>
-            </table>
+            </div>
+        </c:if>
+        <c:if test="${not empty reviews or ownsBook}">
+            <div class="divider"></div>
+            <c:if test="${ownsBook && loggedUserReview eq null}">
+                <a href="<c:url value="/book/${book.bookId}/review"/>">
+                    <button class="waves-effect waves-light btn white-text">
+                        <spring:message code="review.writeReview"/>
+                    </button>
+                </a>
+            </c:if>
+            <c:if test="${loggedUserReview ne null}">
+                <h5><spring:message code="review.yourReview"/></h5>
+                <a href="<c:url value="/book/${book.bookId}/review"/>">
+                    <button class="waves-effect waves-light btn white-text">
+                        <spring:message code="review.editReview"/>
+                    </button>
+                </a>
+                <th class="col s4">
+                    <script>new FixedStarRating(${loggedUserReview.rating});</script><br/>
+                    <spring:message code="bookInfoCard.by" var="reviewer" arguments="${loggedUserReview.reviewer.firstName},${loggedUserReview.reviewer.lastName}"/>
+                    <c:out value="${reviewer}"/><br/>
+                </th>
+                <th class="col s8">
+                    <c:out value="${loggedUserReview.review}"/>
+                </th>
+            </c:if>
+            <c:if test="${not empty reviews}">
+                <div class="col s12">
+                    <h5>
+                        <spring:message code="book.bookInfo.reviews"/><br/>
+                    </h5>
+                </div>
+                <c:forEach items="${reviews.page}" var="review">
+                    <c:set var="review" value="${review}" scope="request"/>
+                    <%@include file="components/reviewCard.jsp" %>
+                </c:forEach>
+            </c:if>
         </c:if>
     </div>
 </body>

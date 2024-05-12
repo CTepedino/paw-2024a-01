@@ -53,8 +53,6 @@ public class UserServiceImpl implements UserService {
 
     private final MailService ms;
 
-
-
     @Autowired
     public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs, MailService ms){
         this.userDao = userDao;
@@ -202,11 +200,15 @@ public class UserServiceImpl implements UserService {
     public void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture) {
         User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
 
-        if (getRoles(user.getUserId()).contains(UserRoles.WRITER) && user.getCbu()==null){
+        String oldCbu = user.getCbu();
+
+        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled());
+
+        if (getRoles(user.getUserId()).contains(UserRoles.WRITER) && oldCbu==null){
             userDao.recheckAllPaused(user.getUserId());
         }
 
-        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled());
+
         if (profilePicture != null && !profilePicture.isEmpty()) {
             try {
                 profilePictureDao.createOrUpdate(user.getUserId(), profilePicture.getBytes());
