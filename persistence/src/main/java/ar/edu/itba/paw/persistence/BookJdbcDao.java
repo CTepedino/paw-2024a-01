@@ -170,7 +170,7 @@ public class BookJdbcDao implements BookDao {
             DaoUtils.addQueryCondition(query, params, " AND suggested_age >= ? ", minSuggestedAge);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age <= ? ", maxSuggestedAge);
 
-            query.append(" AND b.is_paused = FALSE ");
+            query.append(" AND is_paused = FALSE ");
     }
 
     @Override
