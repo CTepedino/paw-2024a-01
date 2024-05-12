@@ -194,5 +194,17 @@ public class UserJdbcDao implements UserDao {
             userId
         );
     }
+
+    @Override
+    public List<User> getUsersWithPausedBooks() {
+        return jdbcTemplate.query(
+        """
+                SELECT *
+                FROM users u JOIN books b ON b.writer_id = u.user_id
+                WHERE b.is_paused = TRUE
+            """,
+            USER_ROW_MAPPER
+        );
+    }
 }
 

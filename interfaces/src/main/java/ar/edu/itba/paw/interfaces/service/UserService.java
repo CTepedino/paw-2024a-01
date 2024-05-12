@@ -39,4 +39,5 @@ public interface UserService {
 
     boolean hasRole(UserRoles role);
 
+    void sendMissingDataEmails();
 }

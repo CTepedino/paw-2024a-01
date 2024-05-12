@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.dao.files.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.service.EmailValidationService;
+import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidCodeException;
@@ -15,7 +16,9 @@ import ar.edu.itba.paw.models.users.UserRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -48,14 +51,17 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final MailService ms;
+
 
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs){
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs, MailService ms){
         this.userDao = userDao;
         this.profilePictureDao = profilePictureDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
+        this.ms = ms;
     }
 
     @Transactional(readOnly = true)
@@ -228,6 +234,15 @@ public class UserServiceImpl implements UserService {
             return is.readAllBytes();
         } catch (Exception e){
             throw new UnreadableFileException();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Scheduled(cron = "0 0 12 * * ?")
+    @Override
+    public void sendMissingDataEmails(){
+        for (User user: userDao.getUsersWithPausedBooks()){
+            ms.sendMissingDataEmail(user);
         }
     }
 }
