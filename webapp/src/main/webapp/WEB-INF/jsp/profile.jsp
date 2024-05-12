@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title><spring:message code="user.profile.title"/></title>
-    <link href="${pageContext.request.contextPath}/css/profile2.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/profile.css" rel="stylesheet"/>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -23,6 +23,9 @@
     <p class="writer-info"> <c:out value="${user.email}"/> </p>
     <c:if test="${ownsProfile}">
         <p class="writer-info">CBU: <c:out value="${user.cbu}"/> </p>
+        <c:if test="${empty user.cbu}">
+            <p class="writer-info paused"><spring:message code="user.profile.emptyCBU"/></p>
+        </c:if>
         <div class="edit-profile">
             <a href="${pageContext.request.contextPath}/editProfile" class="waves-effect waves-light btn profile-btn">
                 <spring:message code="user.profile.edit.title"/>
