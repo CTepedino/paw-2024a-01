@@ -96,6 +96,7 @@ public class BookJdbcDao implements BookDao {
             """
                     SELECT *
                     FROM books b JOIN users u ON b.writer_id = u.user_id
+                    WHERE is_paused = FALSE
                     ORDER BY b.book_id desc
                     LIMIT ? OFFSET ?
                 """,
@@ -134,6 +135,7 @@ public class BookJdbcDao implements BookDao {
 
         addQueryOrderByAndLimit(query, params, orderBy, offset, limit);
 
+
         return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
 
@@ -167,6 +169,8 @@ public class BookJdbcDao implements BookDao {
             DaoUtils.addQueryCondition(query, params, " AND page_count <= ? ", maxPageCount);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age >= ? ", minSuggestedAge);
             DaoUtils.addQueryCondition(query, params, " AND suggested_age <= ? ", maxSuggestedAge);
+
+            query.append(" AND b.is_paused = FALSE ");
     }
 
     @Override
@@ -175,7 +179,7 @@ public class BookJdbcDao implements BookDao {
         """
                 SELECT b.*, u.*
                 FROM books b JOIN users u on b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED'
-                WHERE b.book_id <> ? AND (b.genre = ? OR b.writer_id = ?)
+                WHERE b.book_id <> ? AND (b.genre = ? OR b.writer_id = ?) AND b.is_paused = FALSE
                 GROUP BY b.book_id, u.user_id
                 ORDER BY COUNT(o.book_id) DESC
                 LIMIT ?

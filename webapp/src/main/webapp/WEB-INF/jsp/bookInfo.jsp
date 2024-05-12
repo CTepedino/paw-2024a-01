@@ -41,7 +41,7 @@
                         <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
                     </div>
                     <div class="col s5">
-                        <c:if test="${(not isAuthor and not ownsBook) or !isLoggedIn}">
+                        <c:if test="${((not isAuthor and not ownsBook) or not isLoggedIn) and not book.paused}">
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
@@ -69,6 +69,9 @@
                             <button class="waves-effect waves-light btn btn action-button">
                                 <spring:message code="book.bookInfo.WriteReview"/>
                             </button>
+                        </c:if>
+                        <c:if test="${not ownsBook and book.paused}">
+                            <p class="red-text"><spring:message code="book.bookInfo.paused"/></p>
                         </c:if>
                     </div>
                 </div>
