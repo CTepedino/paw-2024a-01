@@ -69,7 +69,7 @@ function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1, sho
         (btn) => btn.disabled = disabled.prev()
     );
 
-    if (currentPage - Math.round(maxPageVisible/2) > 0) {
+    if ((currentPage - Math.round(maxPageVisible/2) > 0) && maxPageVisible >= 10) {
 
         buttons.set(
             createAndSetupButton("1", "start-page page-btn", disabled.start(), () => currentPage = 1),
@@ -93,7 +93,7 @@ function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1, sho
         buttons.set(button, onPageButtonUpdate(index))
     });
 
-    if (showFinalPageLink && currentPage + Math.round(maxPageVisible/2) < totalPages) {
+    if (showFinalPageLink && (currentPage + Math.round(maxPageVisible/2) < totalPages) && maxPageVisible >= 10) {
 
         buttons.set(
             createSpacer(),
