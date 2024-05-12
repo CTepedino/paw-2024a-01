@@ -43,7 +43,8 @@
             <div class="row">
                 <c:forEach var="book" items="${books.page}">
                         <c:set var="cardBook" value="${book}" scope="request"/>
-                        <c:set var="myBooks" value="${true}" scope="request"/>
+                        <c:set var="ownsProfile" value="${ownsProfile}" scope="request"/>
+                        <c:set var="publications" value="${true}" scope="request"/>
                         <%@include file="components/smallBookCard.jsp"%>
                 </c:forEach>
             </div>

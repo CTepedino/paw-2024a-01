@@ -52,3 +52,7 @@
     margin: 50px;
     overflow: hidden;
 }
+
+.paused{
+    color: red;
+}

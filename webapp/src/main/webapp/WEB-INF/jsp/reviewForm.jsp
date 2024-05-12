@@ -38,7 +38,7 @@
     </div>
     <form:errors path="review"/>
 
-    <button type="submit">Submit Review</button>
+    <button class="waves-light btn" type="submit">Submit Review</button>
 </form:form>
 
 <script src="<c:url value="/js/selectableStarRating.js"/>"></script>
