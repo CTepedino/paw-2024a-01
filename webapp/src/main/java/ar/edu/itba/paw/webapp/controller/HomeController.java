@@ -66,6 +66,8 @@ public class HomeController {
 
         mav.addObject("user", user);
         mav.addObject("ownsProfile", ownsProfile);
+        mav.addObject("publicationSelected", false);
+        mav.addObject("boughtBooksSelected", false);
         return mav;
     }
 

@@ -22,7 +22,6 @@ a {
 
 .header__wrapper header {
     width: 100%;
-    background: white no-repeat 50% 20% / cover;
     min-height: 100px;
 }
 

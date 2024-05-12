@@ -29,6 +29,8 @@ import java.util.Optional;
 @Controller
 public class BookController {
 
+    private final Integer PAGE_SIZE=20;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(BookController.class);
 
     private final PublishService ps;
@@ -97,7 +99,7 @@ public class BookController {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
 
-        PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC, reviewPage,20);
+        PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC, reviewPage,PAGE_SIZE);
         int avgRating = rs.getAverageRating(bookId);
 
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
@@ -125,7 +127,9 @@ public class BookController {
         boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
         mav.addObject("user", user);
         mav.addObject("ownsProfile", ownsProfile);
-        mav.addObject("books", bs.getWriterBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), 20));
+        mav.addObject("publicationSelected", true);
+        mav.addObject("boughtBooksSelected", false);
+        mav.addObject("books", bs.getWriterBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PAGE_SIZE));
         mav.addObject("myBookSearchForm", form);
         mav.addObject("orders", BookSearchOrderBy.values());
         return mav;
@@ -144,7 +148,9 @@ public class BookController {
         boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
         mav.addObject("user", user);
         mav.addObject("ownsProfile", ownsProfile);
-        mav.addObject("books", bs.getOwnedBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), 20));
+        mav.addObject("publicationSelected", false);
+        mav.addObject("boughtBooksSelected", true);
+        mav.addObject("books", bs.getOwnedBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PAGE_SIZE));
         mav.addObject("myBookSearchForm", form);
         mav.addObject("orders", BookSearchOrderBy.values());
         return mav;

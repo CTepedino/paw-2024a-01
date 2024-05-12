@@ -67,7 +67,7 @@
                     </div>
                     <div class="col s3 purchase-info">
                         <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
-                        <p>by <c:out value="${order.writer.firstName} ${order.writer.lastName}"/></p>
+                        <a href="<c:url value="/profile/${order.writer.userId}"/>"><p>by <c:out value="${order.writer.firstName} ${order.writer.lastName}"/></p></a>
                         <p class="price">$ <c:out value="${order.book.price}"/></p>
                     </div>
 
