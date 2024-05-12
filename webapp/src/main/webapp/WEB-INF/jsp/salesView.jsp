@@ -96,14 +96,32 @@
                         </c:if>
 
                         <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
-                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
-                                <input type="checkbox" name="approved" value="false" checked style="display: none">
-                                <button class="waves-light btn decline-button" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></button>
-                            </form:form>
-                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
-                                <input type="checkbox" name="approved" value="true" checked style="display: none">
-                                <button class="waves-light btn accept-button" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></button>
-                            </form:form>
+                            <a class="waves-light btn decline-button modal-trigger" href="#decline"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></a>
+                            <div id="decline" class="modal">
+                                <div class="modal-content">
+                                    <h4><spring:message code="orders.sales.paymentApproval.title"/></h4>
+                                    <p><spring:message code="orders.sales.paymentApproval.decline"/></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                        <input type="checkbox" name="approved" value="false" checked style="display: none">
+                                        <button class="waves-light btn decline-button-modal" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></button>
+                                    </form:form>
+                                </div>
+                            </div>
+                            <a class="waves-light btn accept-button modal-trigger" href="#accept"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></a>
+                            <div id="accept" class="modal">
+                                <div class="modal-content">
+                                    <h4><spring:message code="orders.sales.paymentApproval.title"/></h4>
+                                    <p><spring:message code="orders.sales.paymentApproval.accept"/></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                        <input type="checkbox" name="approved" value="true" checked style="display: none">
+                                        <button class="waves-light btn accept-button-modal" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></button>
+                                    </form:form>
+                                </div>
+                            </div>
                         </c:if>
 
                         <c:if test="${order.orderStatus == 'COMPLETED'}">
@@ -130,7 +148,6 @@
 
 </div>
 
-
 <script type="module">
     // Initialize Materialize components
     document.addEventListener('DOMContentLoaded', function() {
@@ -141,6 +158,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems, {});
     });
 </script>
 </body>

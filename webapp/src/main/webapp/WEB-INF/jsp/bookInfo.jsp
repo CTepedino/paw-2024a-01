@@ -48,11 +48,26 @@
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
-                            <form action="${buyUrl}" method="post">
-                                <button type="submit" class="waves-effect waves-light btn action-button white-text">
-                                    <strong><spring:message code="book.bookInfo.buyBook"/></strong>
-                                </button>
-                            </form>
+                            <a class="waves-effect waves-light btn modal-trigger action-button" href="#modal1"><spring:message code="book.bookInfo.buyBook"/></a>
+                            <div id="modal1" class="modal">
+                                <div class="modal-content">
+                                    <h4><spring:message code="book.bookInfo.buyModalTitle"/></h4>
+                                    <p><spring:message code="book.bookInfo.buyModalText"/></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="${buyUrl}" method="post">
+                                        <button type="submit" class="waves-effect waves-light btn">
+                                            <spring:message code="book.bookInfo.buyBook"/>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    var elems = document.querySelectorAll('.modal');
+                                    var instances = M.Modal.init(elems, {});
+                                });
+                            </script>
                         </c:if>
                         <c:if test="${isAuthor}">
                             <a href="<c:url value="/book/edit/${book.bookId}"/>">

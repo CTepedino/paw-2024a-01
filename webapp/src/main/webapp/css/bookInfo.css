@@ -48,6 +48,10 @@
     margin-bottom: 25px !important;
 }
 
+.modal{
+    padding: 20px;
+}
+
 .review-control{
     display: flex;
     justify-content: end;

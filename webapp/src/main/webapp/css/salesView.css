@@ -47,10 +47,18 @@
     width: 80% !important;
 }
 
+.decline-button-modal{
+    background-color: red !important;
+}
+
 .accept-button{
     background-color: green !important;
     width: 80% !important;
     margin-top: 8px !important;
+}
+
+.accept-button-modal{
+    background-color: green !important;
 }
 
 .price {
