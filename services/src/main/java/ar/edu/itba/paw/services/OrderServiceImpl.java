@@ -115,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    private void sendReceipt(Order order, MultipartFile receipt) {
+    private void sendReceipt(Order order, MultipartFile receipt, OrderStatus fromStatus) {
         if (receipt == null){
             throw new InvalidOrderUpdateException();
         }
@@ -125,7 +125,11 @@ public class OrderServiceImpl implements OrderService {
         } catch (IOException e){
             throw new UnreadableFileException();
         }
-        ms.sendReceiptUploadedEmail(order);
+        if (fromStatus.equals(OrderStatus.REJECTED_PAYMENT)){
+            ms.sendReceiptReuploadedEmail(order);
+        } else {
+            ms.sendReceiptUploadedEmail(order);
+        }
     }
 
     private void acceptOrReject(Order order, Boolean approved){
@@ -148,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
 
         switch (order.getOrderStatus()){
             case WAITING_CONTACT, COMPLETED -> throw new InvalidOrderUpdateException();
-            case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt);
+            case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
             case WAITING_APPROVAL -> acceptOrReject(order, approved);
         }
     }

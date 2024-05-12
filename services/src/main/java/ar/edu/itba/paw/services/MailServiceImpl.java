@@ -144,6 +144,32 @@ public class MailServiceImpl implements MailService{
 
     @Override
     @Async
+    public void sendReceiptReuploadedEmail(Order order) {
+        User writer = order.getWriter();
+        User buyer = order.getBuyer();
+        Book book = order.getBook();
+
+        Locale currentLocale = writer.getLocale();
+        String to = writer.getEmail();
+        String subject = emailMessageSource.getMessage("mail.receiptReuploadedEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("buyerFirstName", buyer.getFirstName());
+        data.put("buyerLastName", buyer.getLastName());
+        data.put("bookTitle", book.getTitle());
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("salesUrl", env.getProperty("baseUrl") + "/sales");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Receipt Reupload email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "receiptReuploadedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atDebug().setMessage("Failed to send Receipt Reupload email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Receipt Reupload email to: {}").addArgument(to).log();
+    }
+
+    @Override
+    @Async
     public void sendReceiptApprovedEmail(Order order){
         User buyer = order.getBuyer();
         Book book = order.getBook();
@@ -206,5 +232,6 @@ public class MailServiceImpl implements MailService{
         }
         LOGGER.atDebug().setMessage("Sent Missing info email to: {}").addArgument(to).log();
     }
+
 
 }
