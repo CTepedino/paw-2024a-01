@@ -23,7 +23,6 @@
                 <div class="container content">
                     <div class="card-content" >
                         <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>
-                        <br/>
                         <p class="info">
                             <spring:message var="author" code="bookInfoCard.by" arguments="${book.writer.firstName},${book.writer.lastName}"/>
                             <c:out value="${author}"/>

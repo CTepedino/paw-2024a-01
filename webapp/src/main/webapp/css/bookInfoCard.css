@@ -19,6 +19,11 @@
     object-position: left;
 }
 
+.card-title{
+    max-height: 65px;
+    overflow: hidden;
+}
+
 
 .card-content,
 .card-reveal {
@@ -28,6 +33,10 @@
 
 .info {
     color: black;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .content{
@@ -40,4 +49,15 @@
     bottom: 0;
     right: 0;
     margin: 50px;
+}
+
+@media screen and (max-width: 600px) {
+    .card-info {
+        width: 200px;
+        height: 300px;
+    }
+
+    .price-number {
+        font-size: 1em;
+    }
 }
