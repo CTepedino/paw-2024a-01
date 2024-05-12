@@ -15,6 +15,7 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.form.MyBookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
+import ar.edu.itba.paw.webapp.form.ReviewSortForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,17 +90,18 @@ public class BookController {
         return new ModelAndView("redirect:/book/"+bookId);
     }
 
+    //TODO: sort reviews
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(
             @PathVariable("bookId") final long bookId,
             @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
             @ModelAttribute("reviewForm") ReviewForm form
+/*            @ModelAttribute("reviewSortForm") ReviewSortForm sortForm*/
     ){
-        final ModelAndView mav = new ModelAndView("bookInfo");
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
-        PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC, reviewPage,PAGE_SIZE);
+        PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC /*sortForm.getOrderBy()*/, reviewPage,PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
@@ -110,6 +112,8 @@ public class BookController {
             form.setReview(loggedUserReview.get().getReview());
         }
 
+        final ModelAndView mav = new ModelAndView("bookInfo");
+
         mav.addObject("book", book);
         mav.addObject("recommendations", recommendations);
         mav.addObject("reviews", reviews);
@@ -117,54 +121,10 @@ public class BookController {
         mav.addObject("avgRating", avgRating);
         mav.addObject("ownsBook", ownsBook);
         mav.addObject("isAuthor", isAuthor);
+/*        mav.addObject("reviewOrders", List.of(ReviewOrderBy.values()));*/
         return mav;
     }
 
-
-    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/publications")
-    public ModelAndView publications(
-            @PathVariable("userId") final long userId,
-            @ModelAttribute("loggedUser") User loggedUser,
-            @Valid @ModelAttribute("myBooksSearchForm") final MyBookSearchForm form,
-            final BindingResult error){
-
-        if(error.hasErrors()){
-            return new ModelAndView("publications");
-        }
-
-        ModelAndView mav = new ModelAndView("publications");
-        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
-        mav.addObject("user", user);
-        mav.addObject("ownsProfile", ownsProfile);
-        mav.addObject("publicationSelected", true);
-        mav.addObject("boughtBooksSelected", false);
-        mav.addObject("books", bs.getWriterBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PAGE_SIZE));
-        mav.addObject("myBookSearchForm", form);
-        mav.addObject("orders", BookSearchOrderBy.values());
-        return mav;
-    }
-
-
-    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/boughtBooks")
-    public ModelAndView boughtBooks(@PathVariable("userId") final long userId, @ModelAttribute("loggedUser") User loggedUser, @Valid @ModelAttribute("myBooksSearchForm") final MyBookSearchForm form, final BindingResult error){
-
-        if(error.hasErrors()){
-            return new ModelAndView("boughtBooks");
-        }
-
-        ModelAndView mav = new ModelAndView("boughtBooks");
-        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
-        mav.addObject("user", user);
-        mav.addObject("ownsProfile", ownsProfile);
-        mav.addObject("publicationSelected", false);
-        mav.addObject("boughtBooksSelected", true);
-        mav.addObject("books", bs.getOwnedBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PAGE_SIZE));
-        mav.addObject("myBookSearchForm", form);
-        mav.addObject("orders", BookSearchOrderBy.values());
-        return mav;
-    }
 
 
     @RequestMapping(method = RequestMethod.GET, path="/book/edit/{id:\\d+}")

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -87,5 +88,10 @@ public class AccessHelper {
 
         long bookId = Long.parseLong(id);
         return os.hasBookFileAccess(bookId, auth.getName());
+    }
+
+    public boolean checkIsWriter(String id){
+        long userId = Long.parseLong(id);
+        return us.getRoles(userId).contains(UserRoles.WRITER);
     }
 }

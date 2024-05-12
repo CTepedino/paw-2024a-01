@@ -12,6 +12,9 @@ public class ErrorHandlingAdvice {
     @ExceptionHandler(BookNotFoundException.class)
     public ModelAndView bookNotFound(){return new ModelAndView("exception/404");}
 
+    @ExceptionHandler(IllegalReviewException.class)
+    public ModelAndView illegalReview(){return new ModelAndView("exception/400");}
+
     @ExceptionHandler(ImageNotFoundException.class)
     public ModelAndView imageNotFound(){return new ModelAndView("/exception/404");}
 

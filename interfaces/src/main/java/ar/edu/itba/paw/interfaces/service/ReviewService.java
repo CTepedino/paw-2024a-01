@@ -18,5 +18,4 @@ public interface ReviewService {
 
     Optional<Review> findLoggedUserReview(long bookId);
 
-    ReviewOrderBy getOrderBy(String reviewOrderByStr);
 }

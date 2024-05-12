@@ -6,8 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <spring:message var="pageTitle" code="book.search.pageTitle" arguments="${bookSearchForm.title}"/>
-    <title><c:out value="${pageTitle eq ''? pageTitle:'Search'}"/></title>
+    <title><c:out value="${title eq ''? title:'Search'}"/></title>
     <link href="<c:url value="/css/home.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/searchOptions.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>

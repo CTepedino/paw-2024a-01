@@ -12,6 +12,7 @@ import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
+import ar.edu.itba.paw.webapp.form.MyBookSearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,11 +96,58 @@ public class HomeController {
                 PAGE_SIZE
         );
 
+        mav.addObject("title", form.getTitle());
         mav.addObject("books", books);
         mav.addObject("genres", BookGenre.values());
         mav.addObject("orders", BookSearchOrderBy.values());
 
         return mav;
     }
+
+    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/publications")
+    public ModelAndView publications(
+            @PathVariable("userId") final long userId,
+            @ModelAttribute("loggedUser") User loggedUser,
+            @Valid @ModelAttribute("myBooksSearchForm") final MyBookSearchForm form,
+            final BindingResult error){
+
+        if(error.hasErrors()){
+            return new ModelAndView("publications");
+        }
+
+        ModelAndView mav = new ModelAndView("publications");
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
+        mav.addObject("user", user);
+        mav.addObject("ownsProfile", ownsProfile);
+        mav.addObject("publicationSelected", true);
+        mav.addObject("boughtBooksSelected", false);
+        mav.addObject("books", bs.getWriterBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PAGE_SIZE));
+        mav.addObject("myBookSearchForm", form);
+        mav.addObject("orders", BookSearchOrderBy.values());
+        return mav;
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/boughtBooks")
+    public ModelAndView boughtBooks(@PathVariable("userId") final long userId, @ModelAttribute("loggedUser") User loggedUser, @Valid @ModelAttribute("myBooksSearchForm") final MyBookSearchForm form, final BindingResult error){
+
+        if(error.hasErrors()){
+            return new ModelAndView("boughtBooks");
+        }
+
+        ModelAndView mav = new ModelAndView("boughtBooks");
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
+        mav.addObject("user", user);
+        mav.addObject("ownsProfile", ownsProfile);
+        mav.addObject("publicationSelected", false);
+        mav.addObject("boughtBooksSelected", true);
+        mav.addObject("books", bs.getOwnedBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PAGE_SIZE));
+        mav.addObject("myBookSearchForm", form);
+        mav.addObject("orders", BookSearchOrderBy.values());
+        return mav;
+    }
+
 
 }

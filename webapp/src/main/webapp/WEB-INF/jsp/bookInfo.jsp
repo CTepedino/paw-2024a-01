@@ -74,6 +74,11 @@
                                 <strong><spring:message code="book.bookInfo.WriteReview"/></strong>
                             </a>
                         </c:if>
+                        <c:if test="${ownsBook and loggedUserReview ne null}">
+                            <a class="waves-effect waves-light btn modal-trigger action-button" href="#reviewModal">
+                                <strong><spring:message code="book.bookInfo.EditReview"/></strong>
+                            </a>
+                        </c:if>
                         <c:if test="${not ownsBook and book.paused}">
                             <p class="red-text"><spring:message code="book.bookInfo.paused"/></p>
                         </c:if>
@@ -143,9 +148,20 @@
                     <div class="divider"></div>
                     <div class="row">
                         <h5 class="col s6"><spring:message code="book.bookInfo.reviews"/><br/></h5>
-                        <div class="review-control col s6">
-                            <c:url value="/book/${book.bookId}#reviews" var="reviewOrderUrl"/>
-                        </div>
+  <%--                      <div class=" col s6">
+                            <c:url value="/book/${book.bookId}" var="reviewOrderUrl"/>
+                            <form:form
+                                action="${reviewOrderUrl}"
+                                modelAttribute="reviewSortForm"
+                                method="get"
+                            >
+                                <form:select path="orderBy" onchange="this.form.submit()">
+                                    <c:forEach items="${reviewOrders}" var="order">
+                                        <form:option value="${order}"><spring:message code="review.${order}"/></form:option>
+                                    </c:forEach>
+                                </form:select>
+                            </form:form>
+                        </div>--%>
                     </div>
                     <c:forEach items="${reviews.page}" var="review">
                         <c:set var="review" value="${review}" scope="request"/>

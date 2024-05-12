@@ -48,11 +48,11 @@
     </form:form>
 
     <div class="row table-top">
-        <div class="col s2 table-title"> Cover </div>
-        <div class="col s3 table-title"> Book </div>
-        <div class="col s2 table-title"> Last update </div>
-        <div class="col s3 table-title"> Status </div>
-        <div class="col s2 table-title"> Actions </div>
+        <div class="col s2 table-title"> <spring:message code="orders.table.cover"/> </div>
+        <div class="col s3 table-title"> <spring:message code="orders.table.book"/></div>
+        <div class="col s2 table-title"> <spring:message code="orders.table.lastUpdate"/> </div>
+        <div class="col s3 table-title"> <spring:message code="orders.table.status"/> </div>
+        <div class="col s2 table-title"> <spring:message code="orders.table.actions"/> </div>
     </div>
     <ul class="collection">
         <c:forEach var="order" items="${orders.page}">

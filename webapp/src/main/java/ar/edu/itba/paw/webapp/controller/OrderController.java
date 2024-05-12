@@ -79,7 +79,6 @@ public class OrderController {
     public ModelAndView sendBuyInfo(@ModelAttribute("loggedUser") User loggedUser, @RequestParam("bookId") long bookId){
 
         os.create(bookId, null);
-        //ms.sendEmail(us.getLoggedUser().orElseThrow(UserNotFoundException::new).getEmail(), bookTitle);
 
         ModelAndView mav = new ModelAndView("orderSummary");
         Order order = os.find(loggedUser.getUserId(), bookId).orElseThrow(OrderNotFoundException::new);
