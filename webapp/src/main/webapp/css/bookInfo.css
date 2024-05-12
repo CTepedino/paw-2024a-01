@@ -58,3 +58,12 @@
     align-items: end;
     margin-top: 13px;
 }
+
+.hidden-link{
+    text-decoration: none;
+    color: black;
+}
+
+.hidden-link:hover{
+    text-decoration: none;
+}

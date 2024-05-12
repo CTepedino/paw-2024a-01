@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html>
@@ -31,7 +32,7 @@
                 </div>
                 <div class="row">
                     <div class="col s7">
-                        <a href="<c:url value="/profile/${book.writer.userId}"/>">
+                        <a class="hidden-link" href="<c:url value="/profile/${book.writer.userId}"/>">
                             <h6>
                                 <spring:message var="author" code="book.bookInfo.author" arguments="${book.writer.firstName},${book.writer.lastName}"/>
                                 <c:out value="${author}"/>
@@ -157,10 +158,11 @@
                 </c:if>
                 <c:if test="${not empty reviews.page}">
                     <div class="divider"></div>
-                    <div class="col s12">
-                        <h5>
-                            <spring:message code="book.bookInfo.reviews"/><br/>
-                        </h5>
+                    <div class="row">
+                        <h5 class="col s6"><spring:message code="book.bookInfo.reviews"/><br/></h5>
+                        <div class="review-control col s6">
+                            <c:url value="/book/${book.bookId}#reviews" var="reviewOrderUrl"/>
+                        </div>
                     </div>
                     <c:forEach items="${reviews.page}" var="review">
                         <c:set var="review" value="${review}" scope="request"/>
@@ -172,7 +174,7 @@
                             const paginationButtons = new PaginationButtons(${reviews.pageCount}, Math.min(10,${reviews.pageCount}), ${reviews.pageNumber}, false);
                             paginationButtons.render();
                             paginationButtons.onChange(e => {
-                                window.location.href = "<c:url value="?reviewPage="/>" + e.target.value;
+                                window.location.href = "<c:url value="?reviewPage="/>" + e.target.value + "#reviews";
                             })
                         </script>
                     </c:if>
@@ -180,5 +182,12 @@
             </section>
         </c:if>
     </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
 </body>
+
 </html>

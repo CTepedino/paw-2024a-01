@@ -17,4 +17,6 @@ public interface ReviewService {
     int getAverageRating(long bookId);
 
     Optional<Review> findLoggedUserReview(long bookId);
+
+    ReviewOrderBy getOrderBy(String reviewOrderByStr);
 }
