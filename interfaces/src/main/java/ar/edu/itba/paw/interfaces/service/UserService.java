@@ -26,6 +26,9 @@ public interface UserService {
 
 /*    void fillMissingWriterData(long id, String password);*/
 
+
+    boolean hasRole(long id, UserRoles role);
+
     boolean isCurrentUserPassword(String password);
     void changePassword(String password);
     void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture);

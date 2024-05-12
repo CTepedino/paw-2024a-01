@@ -10,7 +10,7 @@ public class ProfileBookSearchForm {
     private String title;
 
     @NotNull
-    private BookSearchOrderBy orderBy = BookSearchOrderBy.PUBLICATION_DATE_ASC;
+    private BookSearchOrderBy orderBy = BookSearchOrderBy.PUBLICATION_DATE_DESC;
 
     @NotNull
     @Min(1)

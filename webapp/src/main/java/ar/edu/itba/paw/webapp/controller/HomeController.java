@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.exception.IllegalSearchQueryException;
 import ar.edu.itba.paw.webapp.form.BookSearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,7 +45,7 @@ public class HomeController {
     public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") final BookSearchForm form, final BindingResult error){
 
         if (error.hasErrors()){
-            return new ModelAndView("searchResults"); //TODO: IllegalSearchException 400
+            throw new IllegalSearchQueryException();
         }
 
         final ModelAndView mav = new ModelAndView("searchResults");
