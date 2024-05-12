@@ -73,4 +73,15 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public ReviewOrderBy getOrderBy(String reviewOrderByStr) {
+        List<ReviewOrderBy> orders = List.of(ReviewOrderBy.values());
+        for (ReviewOrderBy order : orders) {
+            if (order.toString().equals(reviewOrderByStr)) {
+                return order;
+            }
+        }
+        return ReviewOrderBy.DATE_DESC;
+    }
 }

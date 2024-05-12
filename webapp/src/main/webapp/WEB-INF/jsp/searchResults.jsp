@@ -20,6 +20,13 @@
 
 <c:url value="/search" var="searchUrl"/>
 
+<form:form
+        modelAttribute="bookSearchForm"
+        action="${searchUrl}"
+        method="get"
+        id="search"
+>
+
 <div class="row">
     <div class="books col s9">
         <c:if test="${books.page.size()==0}">
@@ -28,7 +35,7 @@
                     <spring:message code="book.search.noBooks"/>
                     <br/>
                     <br/>
-                    <a href="?">
+                    <a href="?" id="clear">
                         <button class="btn waves-effect waves-light white-text">
                             <strong><spring:message code="book.search.clear"/></strong>
                         </button>
@@ -63,13 +70,6 @@
     <div class="col s3 search-options">
         <div class="row">
             <div class="col s12">
-
-        <form:form
-                modelAttribute="bookSearchForm"
-                action="${searchUrl}"
-                method="get"
-                id="search"
-        >
 
             <form:label path="title">
                 <spring:message code="book.search.title"/>
@@ -176,11 +176,10 @@
                     <strong><spring:message code="book.search.apply"/></strong>
                 </button>
             </div>
-        </form:form>
     </div>
 </div>
 
-
+</form:form>
 
 
 
@@ -194,6 +193,15 @@
     document.addEventListener('DOMContentLoaded', function () {
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems);
+    });
+
+
+    var clearAnchor = document.getElementById("clear");
+
+    clearAnchor.addEventListener('click', function (event){
+       event.preventDefault();
+       history.replaceState(null, null, window.location.pathname);
+       window.location.reload();
     });
 </script>
 </body>
