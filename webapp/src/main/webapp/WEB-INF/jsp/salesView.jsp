@@ -70,6 +70,7 @@
                     <div class="col s3 purchase-info">
                         <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
                         <p class="price"> <c:out value="${order.book.formattedPrice}"/></p>
+                        <p><spring:message code="orders.sales.buyer"/> <a href="<c:url value="/profile/${order.buyer.userId}"/>"><c:out value="${order.buyer.firstName}"/> <c:out value="${order.buyer.lastName}"/></a></p>
                     </div>
                     <div class="col s2 purchase-info">
 
