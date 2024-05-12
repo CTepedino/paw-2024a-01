@@ -9,7 +9,7 @@ public class ReviewForm {
     private int rating;
 
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 500)
     private String review;
 
     public int getRating() {

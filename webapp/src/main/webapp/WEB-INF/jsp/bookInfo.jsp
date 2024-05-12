@@ -10,6 +10,7 @@
     <link href="<c:url value="/css/bookInfo.css"/>" rel="stylesheet"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
 </head>
 
 <%@include file="components/topBar.jsp" %>
@@ -49,26 +50,10 @@
                             <c:url var="buyUrl" value="/sendBuyInfo">
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
-                            <a class="waves-effect waves-light btn modal-trigger action-button" href="#modal1"><spring:message code="book.bookInfo.buyBook"/></a>
-                            <div id="modal1" class="modal">
-                                <div class="modal-content">
-                                    <h4><spring:message code="book.bookInfo.buyModalTitle"/></h4>
-                                    <p><spring:message code="book.bookInfo.buyModalText"/></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <form action="${buyUrl}" method="post">
-                                        <button type="submit" class="waves-effect waves-light btn">
-                                            <spring:message code="book.bookInfo.buyBook"/>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    var elems = document.querySelectorAll('.modal');
-                                    var instances = M.Modal.init(elems, {});
-                                });
-                            </script>
+                            <a class="waves-effect waves-light btn modal-trigger action-button" href="#buyModal">
+                                <strong><spring:message code="book.bookInfo.buyBook"/></strong>
+                            </a>
+
                         </c:if>
                         <c:if test="${isAuthor}">
                             <a href="<c:url value="/book/edit/${book.bookId}"/>">
@@ -85,9 +70,9 @@
                             </a>
                         </c:if>
                         <c:if test="${ownsBook and loggedUserReview eq null}">
-                            <button class="waves-effect waves-light btn btn action-button">
+                            <a class="waves-effect waves-light btn modal-trigger action-button" href="#reviewModal">
                                 <strong><spring:message code="book.bookInfo.WriteReview"/></strong>
-                            </button>
+                            </a>
                         </c:if>
                         <c:if test="${not ownsBook and book.paused}">
                             <p class="red-text"><spring:message code="book.bookInfo.paused"/></p>
@@ -144,12 +129,10 @@
                 <c:if test="${loggedUserReview ne null}">
                     <div class="divider"></div>
                     <div class="row">
-                        <h5 class="col s6"><spring:message code="review.yourReview"/></h5>
-                        <div class="review-control col s6">
-                            <a href="<c:url value="/book/${book.bookId}/review"/>">
-                                <button class="waves-effect waves-light btn white-text">
-                                    <strong><spring:message code="review.editReview"/></strong>
-                                </button>
+                        <h5 class="col s11"><spring:message code="review.yourReview"/></h5>
+                        <div class="review-control col s1">
+                            <a class="waves-effect waves-light btn modal-trigger action-button edit-rev-btn" href="#reviewModal">
+                                <strong><spring:message code="review.editReview"/></strong>
                             </a>
                         </div>
                     </div>
@@ -182,12 +165,63 @@
             </section>
         </c:if>
     </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems);
-    });
-</script>
+
+    <div id="buyModal" class="modal">
+        <div class="modal-content">
+            <h4><spring:message code="book.bookInfo.buyModalTitle"/></h4>
+            <p><spring:message code="book.bookInfo.buyModalText"/></p>
+        </div>
+        <div class="modal-footer">
+            <form action="${buyUrl}" method="post">
+                <button type="submit" class="waves-effect waves-light btn">
+                    <spring:message code="book.bookInfo.buyBook"/>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="reviewModal" class="modal">
+        <c:url value="/book/${book.bookId}/review" var="postUrl"/>
+        <form:form
+                action="${postUrl}"
+                method="post"
+                modelAttribute="reviewForm"
+        >
+            <h5 class="publish-title">Leave your review</h5>
+            <input type="hidden" id="rating" name="rating" value="rating">
+            <div class="input-field center-align">
+                <div class="star-rating">
+                    <i class="material-icons small star" >star_border</i>
+                    <i class="material-icons small star" >star_border</i>
+                    <i class="material-icons small star" >star_border</i>
+                    <i class="material-icons small star" >star_border</i>
+                    <i class="material-icons small star" >star_border</i>
+                </div>
+            </div>
+            <form:errors path="rating"/>
+            <div class="input-field">
+                <form:label path="review"/>
+                <form:textarea path="review" maxlength="500"/>
+            </div>
+            <form:errors path="review"/>
+
+            <div class="btn-centerer">
+                <button class="waves-light btn" type="submit"><strong>Submit Review</strong></button>
+            </div>
+
+        </form:form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems, {});
+        });
+    </script>
+    <script src="<c:url value="/js/selectableStarRating.js"/>"></script>
+    <script>
+        initializeRating(${reviewForm.rating});
+    </script>
 </body>
 
 </html>

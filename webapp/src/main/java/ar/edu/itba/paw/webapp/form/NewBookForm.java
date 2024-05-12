@@ -12,7 +12,7 @@ public class NewBookForm {
     @Size(min = 1, max=255)
     private String title;
 
-    @Size(min = 1, max=255)
+    @Size(min = 1, max=1000)
     private String description;
 
 

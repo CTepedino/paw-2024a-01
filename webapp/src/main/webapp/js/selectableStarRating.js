@@ -1,4 +1,4 @@
-function initializeRating(value) {
+function initializeRating(value = 0) {
     const allStars = document.querySelectorAll(".star");
 
     document.getElementById('rating').value = value;
@@ -11,20 +11,20 @@ function initializeRating(value) {
     })
 }
 
-function setRating(){
-    const allStars = document.querySelectorAll(".star");
+const allStars = document.querySelectorAll(".star");
 
-    allStars.forEach((star, i) => {
-        star.onclick = function () {
-            let currentStarLevel = (i + 1) * 2;
-            document.getElementById('rating').value = currentStarLevel;
-            allStars.forEach((star, j) => {
-                if (currentStarLevel >= (j + 1) * 2) {
-                    star.innerHTML = 'star';
-                } else {
-                    star.innerHTML = 'star_border';
-                }
-            })
-        }
-    });
-}
+
+allStars.forEach((star, i) => {
+    star.onclick = function () {
+        let currentStarLevel = (i + 1) * 2;
+        document.getElementById('rating').value = currentStarLevel;
+        allStars.forEach((star, j) => {
+            if (currentStarLevel >= (j + 1) * 2) {
+                star.innerHTML = 'star';
+            } else {
+                star.innerHTML = 'star_border';
+            }
+        })
+    }
+});
+

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.exception.IllegalReviewException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
@@ -91,10 +92,10 @@ public class BookController {
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(
             @PathVariable("bookId") final long bookId,
-            @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage
+            @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
+            @ModelAttribute("reviewForm") ReviewForm form
     ){
         final ModelAndView mav = new ModelAndView("bookInfo");
-
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
@@ -104,6 +105,10 @@ public class BookController {
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = bs.loggedUserIsAuthor(bookId);
 
+        if (loggedUserReview.isPresent()){
+            form.setRating(loggedUserReview.get().getRating());
+            form.setReview(loggedUserReview.get().getReview());
+        }
 
         mav.addObject("book", book);
         mav.addObject("recommendations", recommendations);
@@ -192,19 +197,6 @@ public class BookController {
         return new ModelAndView("redirect:/book/"+id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/book/{bookId:\\d+}/review")
-    public ModelAndView createOrUpdateReviewForm(@ModelAttribute("reviewForm") ReviewForm form, @PathVariable("bookId") long bookId){
-
-        Optional<Review> maybeReview = rs.findLoggedUserReview(bookId);
-        if (maybeReview.isPresent()){
-            form.setReview(maybeReview.get().getReview());
-            form.setRating(maybeReview.get().getRating());
-        }
-
-        ModelAndView mav = new ModelAndView("reviewForm");
-        mav.addObject("bookId", bookId);
-        return mav;
-    }
 
     @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/review")
     public ModelAndView createOrUpdateReview(
@@ -215,7 +207,7 @@ public class BookController {
     ){
 
         if (error.hasErrors()){
-            return createOrUpdateReviewForm(form, bookId);
+            throw new IllegalReviewException();
         }
 
         rs.createOrUpdate(bookId, user.getUserId(), form.getRating(), form.getReview());
