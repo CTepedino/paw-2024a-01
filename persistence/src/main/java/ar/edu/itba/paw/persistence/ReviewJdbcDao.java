@@ -74,12 +74,9 @@ public class ReviewJdbcDao implements ReviewDao {
                 SELECT *
                 FROM reviews r JOIN users u ON r.reviewer_id = u.user_id
                 WHERE r.book_id = ?
-                ORDER BY ?
-                OFFSET ? LIMIT ?
-            """,
+                ORDER BY\s""" + orderBy.getColumnName() + " OFFSET ? LIMIT ? ",
             ROW_MAPPER,
             bookId,
-            orderBy.getColumnName(),
             offset,
             limit
         );
@@ -92,13 +89,10 @@ public class ReviewJdbcDao implements ReviewDao {
                         SELECT *
                         FROM reviews r JOIN users u ON r.reviewer_id = u.user_id
                         WHERE r.book_id = ? AND r.reviewer_id <> ?
-                        ORDER BY ?
-                        OFFSET ? LIMIT ?
-                    """,
+                        ORDER BY\s""" + orderBy.getColumnName() + " OFFSET ? LIMIT ? ",
                 ROW_MAPPER,
                 bookId,
                 userId,
-                orderBy.getColumnName(),
                 offset,
                 limit
         );

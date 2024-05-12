@@ -148,7 +148,7 @@
                     <div class="divider"></div>
                     <div class="row">
                         <h5 class="col s6"><spring:message code="book.bookInfo.reviews"/><br/></h5>
-  <%--                      <div class=" col s6">
+                        <div class=" col s6">
                             <c:url value="/book/${book.bookId}" var="reviewOrderUrl"/>
                             <form:form
                                 action="${reviewOrderUrl}"
@@ -161,7 +161,7 @@
                                     </c:forEach>
                                 </form:select>
                             </form:form>
-                        </div>--%>
+                        </div>
                     </div>
                     <c:forEach items="${reviews.page}" var="review">
                         <c:set var="review" value="${review}" scope="request"/>
@@ -232,6 +232,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             var elems = document.querySelectorAll('.modal');
             var instances = M.Modal.init(elems, {});
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
         });
     </script>
     <script src="<c:url value="/js/selectableStarRating.js"/>"></script>

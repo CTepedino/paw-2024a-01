@@ -95,13 +95,13 @@ public class BookController {
     public ModelAndView bookInfo(
             @PathVariable("bookId") final long bookId,
             @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
-            @ModelAttribute("reviewForm") ReviewForm form
-/*            @ModelAttribute("reviewSortForm") ReviewSortForm sortForm*/
+            @ModelAttribute("reviewForm") ReviewForm form,
+            @ModelAttribute("reviewSortForm") ReviewSortForm sortForm
     ){
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
-        PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC /*sortForm.getOrderBy()*/, reviewPage,PAGE_SIZE);
+        PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage,PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
@@ -121,7 +121,7 @@ public class BookController {
         mav.addObject("avgRating", avgRating);
         mav.addObject("ownsBook", ownsBook);
         mav.addObject("isAuthor", isAuthor);
-/*        mav.addObject("reviewOrders", List.of(ReviewOrderBy.values()));*/
+        mav.addObject("reviewOrders", List.of(ReviewOrderBy.values()));
         return mav;
     }
 
