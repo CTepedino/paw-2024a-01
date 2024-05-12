@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title><spring:message code="session.signup"/></title>
-    <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/userForm.css"/>" rel="stylesheet"/>
 </head>
 
 
@@ -83,8 +83,8 @@
 
             <p class="center-align">
                 <spring:message code="session.toLogin"/>
-                <a href="${pageContext.request.contextPath}/login">
-                    <spring:message code="session.login"/>
+                <a href="<c:url value="/login"/>">
+                    <strong><spring:message code="session.login"/></strong>
                 </a>
             </p>
         </form:form>

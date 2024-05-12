@@ -82,4 +82,6 @@ public interface BookDao {
 
     boolean recheckPaused(long bookId);
 
+    List<BookGenre> getGenresByBookCount(int limit, int offset);
+
 }

@@ -82,4 +82,6 @@ public interface BookService {
     BookFile getBookFile(long bookId);
 
     boolean loggedUserIsAuthor(long bookId);
+
+    List<BookGenre> getGenresByBookCount();
 }

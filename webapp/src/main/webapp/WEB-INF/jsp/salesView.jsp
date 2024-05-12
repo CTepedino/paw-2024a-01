@@ -73,7 +73,7 @@
                     </div>
                     <div class="col s2 purchase-info">
 
-                        <p><c:out value="${order.date.toLocalDate()}"/></p>
+                        <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
                     </div>
                     <div class="col s3 purchase-info">
                         <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>

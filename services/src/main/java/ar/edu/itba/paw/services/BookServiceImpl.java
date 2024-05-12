@@ -169,4 +169,20 @@ public class BookServiceImpl implements BookService {
         }
         return false;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<BookGenre> getGenresByBookCount() {
+        List<BookGenre> popularGenres = bookDao.getGenresByBookCount(12, 0);
+        List<BookGenre> booklessGenres = List.of(BookGenre.values());
+        int i = 0;
+        while (popularGenres.size() < 12){
+            BookGenre genre = booklessGenres.get(i);
+            if (!popularGenres.contains(genre)){
+                popularGenres.add(genre);
+            }
+            i++;
+        }
+        return popularGenres;
+    }
 }

@@ -45,6 +45,7 @@ public class HomeController {
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", bs.getAll(page, PAGE_SIZE));
+        mav.addObject("popularGenres", bs.getGenresByBookCount());
         return mav;
     }
 

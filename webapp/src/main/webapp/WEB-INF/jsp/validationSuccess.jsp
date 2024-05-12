@@ -6,7 +6,7 @@
 <html>
 <head>
     <title><spring:message code="session.validationTitle"/></title>
-    <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/userForm.css"/>" rel="stylesheet"/>
 </head>
 
 <c:set value="${true}" scope="request" var="hideSearchBar"/>
@@ -25,7 +25,7 @@
 
             <div class="input-field center-align submit-btn">
                 <a class="btn waves-effect waves-light white-text" href="<c:url value="/"/>">
-                    <spring:message code="session.toHome"/>
+                    <strong><spring:message code="session.toHome"/></strong>
                 </a>
             </div>
         </div>

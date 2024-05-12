@@ -30,6 +30,8 @@ public class BookJdbcDao implements BookDao {
         rs.getBoolean("is_paused")
     );
 
+    final static RowMapper<BookGenre> GENRE_ROW_MAPPER = (rs, rowNum) -> BookGenre.valueOf(rs.getString("genre"));
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
@@ -283,6 +285,22 @@ public class BookJdbcDao implements BookDao {
             bookId
         );
         return keepPaused!=null?keepPaused:true;
+    }
+
+    @Override
+    public List<BookGenre> getGenresByBookCount(int limit, int offset) {
+        return jdbcTemplate.query(
+        """
+                SELECT genre
+                FROM books
+                GROUP BY genre
+                ORDER BY COUNT(genre) DESC
+                LIMIT ? OFFSET ?
+            """,
+            GENRE_ROW_MAPPER,
+            limit,
+            offset
+        );
     }
 }
 

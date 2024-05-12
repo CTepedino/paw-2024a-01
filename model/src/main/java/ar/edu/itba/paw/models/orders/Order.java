@@ -4,6 +4,9 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.users.User;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 
 public class Order {
     private final long orderId;
@@ -43,5 +46,9 @@ public class Order {
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public String getFormattedDate(Locale locale) {
+        return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(locale));
     }
 }

@@ -43,7 +43,7 @@
             </div>
             <div class="input-field center-align submit-btn">
                 <button class="btn waves-effect waves-light white-text" type="submit" name="action">
-                    <spring:message code="session.login"/>
+                    <strong><spring:message code="session.login"/></strong>
                 </button>
             </div>
             <p class="center-align">

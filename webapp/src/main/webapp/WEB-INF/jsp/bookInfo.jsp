@@ -68,7 +68,7 @@
                                 </button>
                             </a>
                         </c:if>
-                        <c:if test="${ownsBook}">
+                        <c:if test="${ownsBook and loggedUserReview eq null}">
                             <button class="waves-effect waves-light btn btn action-button">
                                 <strong><spring:message code="book.bookInfo.WriteReview"/></strong>
                             </button>
