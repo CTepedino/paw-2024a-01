@@ -76,14 +76,14 @@ public class OrderController {
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
-    public ModelAndView sendBuyInfo(@RequestParam("bookId") long bookId){
+    public ModelAndView sendBuyInfo(@ModelAttribute("loggedUser") User loggedUser, @RequestParam("bookId") long bookId){
 
-        //os.create(bookId, null);
+        os.create(bookId, null);
         //ms.sendEmail(us.getLoggedUser().orElseThrow(UserNotFoundException::new).getEmail(), bookTitle);
-/*
+
         ModelAndView mav = new ModelAndView("orderSummary");
-        Order order = os.find(user.getUserId(), bookId).orElseThrow(OrderNotFoundException::new);
-        mav.addObject("order", order);*/
+        Order order = os.find(loggedUser.getUserId(), bookId).orElseThrow(OrderNotFoundException::new);
+        mav.addObject("order", order);
         return new ModelAndView("orderSummary");
     }
 
