@@ -86,6 +86,25 @@ public class ReviewJdbcDao implements ReviewDao {
     }
 
     @Override
+    public List<Review> getAllExcept(long bookId, ReviewOrderBy orderBy, int offset, int limit, long userId) {
+        return jdbcTemplate.query(
+                """
+                        SELECT *
+                        FROM reviews r JOIN users u ON r.reviewer_id = u.user_id
+                        WHERE r.book_id = ? AND r.reviewer_id <> ?
+                        ORDER BY ?
+                        OFFSET ? LIMIT ?
+                    """,
+                ROW_MAPPER,
+                bookId,
+                userId,
+                orderBy.getColumnName(),
+                offset,
+                limit
+        );
+    }
+
+    @Override
     public long getAllSize(long bookId) {
         return DaoUtils.getRowCount(jdbcTemplate, "reviews", "WHERE book_id = ?", bookId);
     }

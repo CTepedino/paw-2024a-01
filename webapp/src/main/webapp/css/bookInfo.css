@@ -47,3 +47,10 @@
     margin-top: 25px !important;
     margin-bottom: 25px !important;
 }
+
+.review-control{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    margin-top: 13px;
+}

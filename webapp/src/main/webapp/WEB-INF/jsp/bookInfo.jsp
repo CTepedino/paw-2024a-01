@@ -8,6 +8,7 @@
     <title><c:out value="${book.title}"/></title>
     <link href="<c:url value="/css/bookInfo.css"/>" rel="stylesheet"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
 </head>
 
 <%@include file="components/topBar.jsp" %>
@@ -48,28 +49,28 @@
                                 <c:param name="bookId" value="${book.bookId}" />
                             </c:url>
                             <form action="${buyUrl}" method="post">
-                                <button type="submit" class="waves-effect waves-light btn action-button">
-                                    <spring:message code="book.bookInfo.buyBook"/>
+                                <button type="submit" class="waves-effect waves-light btn action-button white-text">
+                                    <strong><spring:message code="book.bookInfo.buyBook"/></strong>
                                 </button>
                             </form>
                         </c:if>
                         <c:if test="${isAuthor}">
                             <a href="<c:url value="/book/edit/${book.bookId}"/>">
                                 <button type="submit" class="waves-effect waves-light btn action-button">
-                                    <spring:message code="book.editBook"/>
+                                    <strong><spring:message code="book.editBook"/></strong>
                                 </button>
                             </a>
                         </c:if>
                         <c:if test="${ownsBook or isAuthor}">
                             <a href="<c:url value="/book/file/${book.bookId}"/>" target="_blank">
                                 <button type="submit" class="waves-effect waves-light btn btn action-button">
-                                    <spring:message code="orders.purchases.action.COMPLETED"/>
+                                    <strong><spring:message code="orders.purchases.action.COMPLETED"/></strong>
                                 </button>
                             </a>
                         </c:if>
                         <c:if test="${ownsBook}">
                             <button class="waves-effect waves-light btn btn action-button">
-                                <spring:message code="book.bookInfo.WriteReview"/>
+                                <strong><spring:message code="book.bookInfo.WriteReview"/></strong>
                             </button>
                         </c:if>
                         <c:if test="${not ownsBook and book.paused}">
@@ -122,42 +123,46 @@
                 </c:forEach>
             </div>
         </c:if>
-        <c:if test="${not empty reviews or ownsBook}">
-            <div class="divider"></div>
-            <c:if test="${ownsBook && loggedUserReview eq null}">
-                <a href="<c:url value="/book/${book.bookId}/review"/>">
-                    <button class="waves-effect waves-light btn white-text">
-                        <spring:message code="review.writeReview"/>
-                    </button>
-                </a>
-            </c:if>
-            <c:if test="${loggedUserReview ne null}">
-                <h5><spring:message code="review.yourReview"/></h5>
-                <a href="<c:url value="/book/${book.bookId}/review"/>">
-                    <button class="waves-effect waves-light btn white-text">
-                        <spring:message code="review.editReview"/>
-                    </button>
-                </a>
-                <th class="col s4">
-                    <script>new FixedStarRating(${loggedUserReview.rating});</script><br/>
-                    <spring:message code="bookInfoCard.by" var="reviewer" arguments="${loggedUserReview.reviewer.firstName},${loggedUserReview.reviewer.lastName}"/>
-                    <c:out value="${reviewer}"/><br/>
-                </th>
-                <th class="col s8">
-                    <c:out value="${loggedUserReview.review}"/>
-                </th>
-            </c:if>
-            <c:if test="${not empty reviews}">
-                <div class="col s12">
-                    <h5>
-                        <spring:message code="book.bookInfo.reviews"/><br/>
-                    </h5>
-                </div>
-                <c:forEach items="${reviews.page}" var="review">
-                    <c:set var="review" value="${review}" scope="request"/>
+        <c:if test="${not empty reviews.page or loggedUserReview ne null}">
+            <section id="reviews">
+                <c:if test="${loggedUserReview ne null}">
+                    <div class="divider"></div>
+                    <div class="row">
+                        <h5 class="col s6"><spring:message code="review.yourReview"/></h5>
+                        <div class="review-control col s6">
+                            <a href="<c:url value="/book/${book.bookId}/review"/>">
+                                <button class="waves-effect waves-light btn white-text">
+                                    <strong><spring:message code="review.editReview"/></strong>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <c:set var="review" value="${loggedUserReview}" scope="request"/>
                     <%@include file="components/reviewCard.jsp" %>
-                </c:forEach>
-            </c:if>
+                </c:if>
+                <c:if test="${not empty reviews.page}">
+                    <div class="divider"></div>
+                    <div class="col s12">
+                        <h5>
+                            <spring:message code="book.bookInfo.reviews"/><br/>
+                        </h5>
+                    </div>
+                    <c:forEach items="${reviews.page}" var="review">
+                        <c:set var="review" value="${review}" scope="request"/>
+                        <%@include file="components/reviewCard.jsp" %>
+                    </c:forEach>
+                    <c:if test="${reviews.pageCount gt 1}">
+                        <script src="<c:url value="/js/paginationControls.js"/>"></script>
+                        <script>
+                            const paginationButtons = new PaginationButtons(${reviews.pageCount}, Math.min(10,${reviews.pageCount}), ${reviews.pageNumber}, false);
+                            paginationButtons.render();
+                            paginationButtons.onChange(e => {
+                                window.location.href = "<c:url value="?reviewPage="/>" + e.target.value;
+                            })
+                        </script>
+                    </c:if>
+                </c:if>
+            </section>
         </c:if>
     </div>
 </body>

@@ -93,24 +93,21 @@ public class BookController {
     ){
         final ModelAndView mav = new ModelAndView("bookInfo");
 
-        boolean ownsBook = os.loggedUserOwnsBook(bookId);
-        boolean isAuthor = bs.loggedUserIsAuthor(bookId);
-
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
-
         PaginatedContent<Review> reviews = rs.getAll(bookId, ReviewOrderBy.DATE_DESC, reviewPage,PAGE_SIZE);
-        int avgRating = rs.getAverageRating(bookId);
-
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
+        int avgRating = rs.getAverageRating(bookId);
+        boolean ownsBook = os.loggedUserOwnsBook(bookId);
+        boolean isAuthor = bs.loggedUserIsAuthor(bookId);
 
         mav.addObject("book", book);
         mav.addObject("recommendations", recommendations);
         mav.addObject("reviews", reviews);
+        mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
         mav.addObject("avgRating", avgRating);
         mav.addObject("ownsBook", ownsBook);
         mav.addObject("isAuthor", isAuthor);
-        mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
         return mav;
     }
 

@@ -2,8 +2,11 @@
     width: 100%;
 }
 .card {
-    height: 400px;
     overflow: hidden;
+}
+
+.small-book-card{
+    height: 400px;
 }
 
 .card-image {

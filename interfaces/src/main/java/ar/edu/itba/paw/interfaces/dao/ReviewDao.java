@@ -15,10 +15,13 @@ public interface ReviewDao {
 
 
     List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit);
+    List<Review> getAllExcept(long bookId, ReviewOrderBy orderBy, int offset, int limit, long userId);
+
     long getAllSize(long bookId);
 
     Optional<Review> get(long bookId, long reviewerId);
 
     int getAverageRating(long bookId);
+
 
 }

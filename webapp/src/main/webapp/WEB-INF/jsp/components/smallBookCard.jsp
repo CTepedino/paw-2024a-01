@@ -11,7 +11,7 @@
 
 <div class="col s3">
     <a href="<c:url value="/book/${cardBook.bookId}"/>">
-        <div class="card">
+        <div class="card small-book-card">
             <div class="card-image waves-effect waves-block waves-light">
                 <img
                     src="<c:url value="/cover/${cardBook.bookId}"/>"
