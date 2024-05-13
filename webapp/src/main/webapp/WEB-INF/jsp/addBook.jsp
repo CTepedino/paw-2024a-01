@@ -80,7 +80,7 @@
             <br>
             <div class="input-field">
                 <form:label path="price"><spring:message code="book.addBook.price"/><span class="red-text">*</span></form:label>
-                <form:input type="number" path="price" step=".01" min="0"/>
+                <form:input type="number" path="price" min="0"/>
             </div>
             <form:errors path="price" cssClass="red-text"  element="p"/>
             <br>
