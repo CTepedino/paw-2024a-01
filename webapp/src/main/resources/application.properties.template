@@ -4,8 +4,8 @@ jdbc.url=
 jdbc.username=
 jdbc.password=
 
-mail.host=smtp.gmail.com
-mail.username=cybrary.notifications@gmail.com
-mail.password=pvam tvsh tquh ftpi
+mail.host=
+mail.username=
+mail.password=
 
 baseUrl=
