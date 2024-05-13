@@ -28,7 +28,7 @@ import java.util.Optional;
 @Controller
 public class BookController {
 
-    private final Integer PAGE_SIZE=20;
+    private final Integer REVIEW_PAGE_SIZE=10;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(BookController.class);
 
@@ -98,7 +98,7 @@ public class BookController {
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
-        PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage,PAGE_SIZE);
+        PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);

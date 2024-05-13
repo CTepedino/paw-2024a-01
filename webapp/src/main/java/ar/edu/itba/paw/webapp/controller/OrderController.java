@@ -28,6 +28,8 @@ import java.util.List;
 @Controller
 public class OrderController {
 
+    private static final int ORDER_PAGE_SIZE = 10;
+
     private final OrderService os;
     private final UserService us;
     private final BookService bs;
@@ -54,10 +56,15 @@ public class OrderController {
             final BindingResult error
     ){
         if(error.hasErrors()){
-            orderSearchForm.setOrderStatus(null);
+            if (error.hasFieldErrors("page")){
+                orderSearchForm.setPage(1);
+            }
+            if (error.hasFieldErrors("orderStatus")){
+                orderSearchForm.setOrderStatus(null);
+            }
         }
         final ModelAndView mav = new ModelAndView("purchasesView");
-        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), 10));
+        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE));
         return mav;
     }
 
@@ -69,10 +76,15 @@ public class OrderController {
             final BindingResult error)
     {
         if(error.hasErrors()){
-            orderSearchForm.setOrderStatus(null);
+            if (error.hasFieldErrors("page")){
+                orderSearchForm.setPage(1);
+            }
+            if (error.hasFieldErrors("orderStatus")){
+                orderSearchForm.setOrderStatus(null);
+            }
         }
         ModelAndView mav = new ModelAndView("salesView");
-        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), 10));
+        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE));
         return mav;
     }
 
