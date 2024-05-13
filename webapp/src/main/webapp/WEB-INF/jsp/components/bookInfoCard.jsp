@@ -1,32 +1,52 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
+
+<!DOCTYPE html>
 <html>
-<header>
-    <link href="${pageContext.request.contextPath}/css/bookInfoCard.css" rel="stylesheet"/>
-</header>
+<head>
+    <link href="<c:url value="/css/bookInfoCard.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
+</head>
 <body>
 
 <div class="col s6">
-    <div class="card">
-        <a href="${pageContext.request.contextPath}/${book.bookId}">
+    <a href="<c:url value="/book/${book.bookId}"/>">
+        <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
-                <img src="<c:url  value="${baseUrl}/image/${book.imageId}"/>" class="activator book_cover" alt="Book cover">
+                <img
+                    src="<c:url value="/cover/${book.bookId}"/>"
+                    class="activator book-cover"
+                    alt="<spring:message code="bookInfoCard.cover"/>"
+                />
             </div>
-        </a>
-        <a class="card-info" href="${pageContext.request.contextPath}/${book.bookId}">
-            <div class="container content">
-                <div class="card-content" >
-                    <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>
-                    <p class="info"><spring:message code="bookInfoCard.by"/> <c:out value="${book.writer.firstName}"/> <c:out value="${book.writer.lastName}"/></p>
-                    <p class="info"><spring:message code="book.genre.${book.genre}"/></p>
-                    <p class="info"><spring:message code="bookInfoCard.suggestedAge"/> +<c:out value="${book.suggestedAge}"/></p>
+            <div class="card-info">
+                <div class="container content">
+                    <div class="card-content" >
+                        <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>
+                        <p class="info">
+                            <spring:message var="author" code="bookInfoCard.by" arguments="${book.writer.firstName},${book.writer.lastName}"/>
+                            <c:out value="${author}"/>
+                        </p>
+                        <br/>
+                        <p class="info">
+                            <spring:message var="genre" code="book.genre.${book.genre}"/>
+                            <c:out value="${genre}"/>
+                        </p>
+                        <br/>
+                        <p class="info">
+                            <spring:message var="age" code="bookInfoCard.suggestedAge" arguments="${book.suggestedAge}"/>
+                            <c:out value="${age}"/>
+                        </p>
+                    </div>
+                    <h5 class="price-number">
+                        <c:out value="${book.formattedPrice}"/>
+                    </h5>
                 </div>
-                <h5 class="price-number">$<c:out value="${book.price}"/></h5>
             </div>
-        </a>
-    </div>
+        </div>
+    </a>
 </div>
 
 </body>

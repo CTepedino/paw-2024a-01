@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
-    <meta charset="UTF-8">
-    <title>Cybrary</title>
     <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
     <!-- Font Awesome CDN link-->
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>

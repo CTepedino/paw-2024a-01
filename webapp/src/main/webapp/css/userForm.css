@@ -1,9 +1,14 @@
 .small-container {
     max-width: 400px;
-    margin: 40px auto 0;
+    margin: 40px auto;
 }
 
 .form {
+    width: 100%;
+}
+
+.formnt{
+    padding: 20px 50px 20px 50px;
     width: 100%;
 }
 
@@ -22,4 +27,16 @@ form {
     right: 10px;
     transform: translateY(-50%);
     cursor: pointer;
+}
+
+.repeat-password-toggle-btn{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.err-msj{
+    padding-bottom: 20px;
 }

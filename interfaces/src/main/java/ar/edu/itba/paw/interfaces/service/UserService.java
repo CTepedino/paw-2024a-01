@@ -1,0 +1,48 @@
+package ar.edu.itba.paw.interfaces.service;
+
+import ar.edu.itba.paw.models.files.ProfilePicture;
+import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserRoles;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UserService {
+
+    User create(String email, String password, String firstName, String lastName);
+
+    void validateEmail(long id, String code);
+
+    void resendValidation(String email);
+
+    Optional<User> findById(long id);
+
+    Optional<User> findByEmail(String email);
+
+    List<UserRoles> getRoles(long id);
+
+    void giveWriterRole(long id, String cbu);
+
+/*    void fillMissingWriterData(long id, String password);*/
+
+
+    boolean hasRole(long id, UserRoles role);
+
+    boolean isCurrentUserPassword(String password);
+    void changePassword(String password);
+    void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture);
+
+    Optional<User> getLoggedUser();
+
+    boolean isLoggedIn();
+
+
+    ProfilePicture getProfilePictureOrDefault(long id);
+
+    boolean hasRole(UserRoles role);
+
+    void sendMissingDataEmails();
+
+    String fillMissingWriterData(User user, String password);
+}

@@ -1,0 +1,84 @@
+package ar.edu.itba.paw.webapp.controller;
+
+import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.exception.IllegalSearchQueryException;
+import ar.edu.itba.paw.webapp.form.BookSearchForm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+
+
+@Controller
+public class HomeController {
+
+    private static final int PAGE_SIZE = 20;
+
+    private final BookService bs;
+
+    @Autowired
+    public HomeController(BookService bs){
+        this.bs = bs;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/")
+    public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
+
+        final ModelAndView mav = new ModelAndView("home");
+        mav.addObject("books", bs.getAll(page, PAGE_SIZE));
+        mav.addObject("popularGenres", bs.getGenresByBookCount());
+        return mav;
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, path="/search")
+    public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") BookSearchForm form, final BindingResult error){
+
+        if (error.hasErrors()){
+            if (error.hasFieldErrors("orderBy")){
+                form.setOrderBy(BookSearchOrderBy.PUBLICATION_DATE_DESC);
+            }
+            if (error.hasFieldErrors("genres")){
+                form.setGenre(null);
+            }
+            if (error.hasFieldErrors("page")){
+                form.setPage(1);
+            }
+        }
+
+        final ModelAndView mav = new ModelAndView("searchResults");
+
+        PaginatedContent<Book> books = bs.searchWithParams(
+                form.getTitle(),
+                form.getGenre(),
+                form.getMinPrice(),
+                form.getMaxPrice(),
+                form.getMinPageCount(),
+                form.getMaxPageCount(),
+                form.getMinSuggestedAge(),
+                form.getMaxSuggestedAge(),
+                form.getOrderBy(),
+                form.getPage(),
+                PAGE_SIZE
+        );
+
+        mav.addObject("title", form.getTitle());
+        mav.addObject("books", books);
+        mav.addObject("genres", BookGenre.values());
+        mav.addObject("orders", BookSearchOrderBy.values());
+
+        return mav;
+    }
+
+
+
+
+}

@@ -1,5 +1,79 @@
-.book_cover {
-    margin: 20px;
-    width: 100%; /* La imagen ocupará todo el ancho de su contenedor */
-    max-width: 300px; /* Ancho máximo para la imagen */
+.book-container{
+    width: 80% !important;
+    padding: 20px;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+    overflow: auto;
 }
+
+.star-rating{
+    margin-top: 40px;
+}
+
+.price{
+    color: #437c90;
+}
+
+.info-image {
+    height: 450px;
+    width: 100%;
+}
+
+.book-cover {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    object-fit: scale-down;
+}
+
+.action-button{
+    width: 100%;
+    margin-top: 10px;
+}
+
+.info-boxes{
+    margin-top: 30px;
+}
+
+.info-box {
+    border-right: 1px solid #e0e0e0;
+}
+
+.description{
+    text-align: justify;
+}
+
+.divider{
+    margin-top: 25px !important;
+    margin-bottom: 25px !important;
+}
+
+.modal{
+    padding: 20px;
+}
+
+.review-control{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    margin-bottom: 20px;
+}
+
+.hidden-link{
+    text-decoration: none;
+    color: black;
+}
+
+.hidden-link:hover{
+    text-decoration: none;
+}
+
+.close-btn{
+    margin-right: 10px;
+    background-color: gray !important;
+}
+
+.close-btn:hover{
+    background-color: gray;
+}
+

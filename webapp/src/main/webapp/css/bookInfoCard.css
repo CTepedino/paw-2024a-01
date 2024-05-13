@@ -2,26 +2,41 @@
     width: 100%;
 }
 .card {
-    flex-basis: calc(50% - 10px);
     display: flex;
     height: 250px;
+    overflow: hidden;
 }
 
 .card-image {
+    height: 100%;
+    width: 50%;
+}
+
+.book-cover {
     width: 100%;
-    max-width: 250px;
-    max-height: 250px;
+    height: 100%;
+    object-fit: scale-down;
+    object-position: left;
+}
+
+.card-title{
+    max-height: 65px;
+    overflow: hidden;
 }
 
 
 .card-content,
 .card-reveal {
     flex: 1;
-    width: 100%;
+
 }
 
 .info {
     color: black;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .content{
@@ -33,5 +48,16 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    margin: 50px; /* Ajusta el margen según sea necesario */
+    margin: 50px;
+}
+
+@media screen and (max-width: 600px) {
+    .card-info {
+        width: 200px;
+        height: 300px;
+    }
+
+    .price-number {
+        font-size: 1em;
+    }
 }

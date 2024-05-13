@@ -1,20 +1,42 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.models.BookGenre;
-import ar.edu.itba.paw.models.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 
 public class BookSearchForm {
 
+
     private String title;
+
     private BookGenre genre;
-    private Double minPrice;
-    private Double maxPrice;
+
+    @PositiveOrZero
+    private BigDecimal minPrice;
+
+    @PositiveOrZero
+    private BigDecimal maxPrice;
+
+    @PositiveOrZero
     private Integer minPageCount;
+
+    @PositiveOrZero
     private Integer maxPageCount;
+
+    @PositiveOrZero
     private Integer minSuggestedAge;
+
+    @PositiveOrZero
     private Integer maxSuggestedAge;
-    private BookSearchOrderBy orderBy;
-    private boolean asc = true;
+
+    @NotNull
+    private BookSearchOrderBy orderBy = BookSearchOrderBy.PUBLICATION_DATE_ASC;
+
+    @NotNull
+    @Min(1)
+    private Integer page = 1;
 
     public String getTitle() {
         return title;
@@ -32,19 +54,19 @@ public class BookSearchForm {
         this.genre = genre;
     }
 
-    public Double getMinPrice() {
+    public BigDecimal getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(Double minPrice) {
+    public void setMinPrice(BigDecimal minPrice) {
         this.minPrice = minPrice;
     }
 
-    public Double getMaxPrice() {
+    public BigDecimal getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(Double maxPrice) {
+    public void setMaxPrice(BigDecimal maxPrice) {
         this.maxPrice = maxPrice;
     }
 
@@ -88,11 +110,11 @@ public class BookSearchForm {
         this.orderBy = orderBy;
     }
 
-    public boolean getAsc() {
-        return asc;
+    public Integer getPage() {
+        return page;
     }
 
-    public void setAsc(boolean asc) {
-        this.asc = asc;
+    public void setPage(Integer page) {
+        this.page = page;
     }
 }

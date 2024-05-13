@@ -1,0 +1,58 @@
+.card-info{
+    width: 100%;
+}
+.card {
+    overflow: hidden;
+}
+
+.small-book-card{
+    height: 400px;
+}
+
+.card-image {
+    width: 100%;
+    height: 235px;
+}
+
+.card-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+}
+
+
+.card-content,
+.card-reveal {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.info {
+    color: black;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.content{
+    width: 95%;
+    height: 100%;
+
+}
+.card-title{
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.price-number {
+    bottom: 0;
+    right: 0;
+    margin: 50px;
+    overflow: hidden;
+}
+
+.paused{
+    color: red;
+}

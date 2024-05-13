@@ -1,0 +1,11 @@
+#Antes de ejecutar, crear un archivo application.properties en el mismo directorio y llenar los campos
+
+jdbc.url=
+jdbc.username=
+jdbc.password=
+
+mail.host=
+mail.username=
+mail.password=
+
+baseUrl=

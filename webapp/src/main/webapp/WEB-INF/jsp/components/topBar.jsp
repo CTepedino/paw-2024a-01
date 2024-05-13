@@ -1,87 +1,146 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 
+<!DOCTYPE html>
 <html>
 <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:ital,wght@1,100&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:ital,wght@1,100&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+
+    <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 
-    <link href="${pageContext.request.contextPath}/css/topBarStyle.css" rel="stylesheet"/>
-    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/images/cybrary.png" />
+    <link rel="stylesheet" href="<c:url value="/css/topBarStyle.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/style.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/searchBar.css"/>"/>
 </head>
 <body>
+
+<%@include file="materializeComponent.jsp"%>
+
 <c:url value="/search" var="searchUrl"/>
 <header>
     <nav>
-        <div class="nav-wrapper">
-            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>
+        <div class="nav-wrapper row">
+            <div class="logo-box col s4">
+                <a href="<c:url value="/"/>">
+                    <img class="logo" src="<c:url value="/images/cybrary_3.png"/>" alt="Cybrary"/>
+                </a>
+            </div>
 
-            <div class="nav-wrapper row">
-                <div class="col s4">
-                    <a href="${pageContext.request.contextPath}/" class="brand-logo left">
-                        <img class="logo" alt="Cybrary logo" src="${pageContext.request.contextPath}/images/cybrary_3.png">
-                    </a>
-                </div>
+            <div class="search-bar-box col s4 ">
+                <c:if test="${!hideSearchBar}">
+                    <form action="${searchUrl}" id="searchForm" class="hide-on-small-only">
+                        <div class="search">
+                            <a href="#" id="submitSearch">
+                                <i class="search-icon material-icons black-text">search</i>
+                            </a>
+                            <input class="search-input browser-default" name="title" id="title" required autocomplete="off">
+                        </div>
+                    </form>
+                </c:if>
+            </div>
 
-                <div class="col s4">
-                    <c:if test="${not empty pageContext.request.userPrincipal}">
-                        <form action="${searchUrl}" <%--class="col s4"--%>>
-                              <div class="input-field">
-                                <input id="title" name="title" type="search" required>
-                                <label class="label-icon" for="title"><i class="material-icons">search</i></label>
-                                <i class="material-icons">close</i>
-                            </div>
-                        </form>
-                    </c:if>
-                </div>
-
-                <div class="col s4">
-                    <ul id="nav-mobile" class="right hide-on-med-and-down">
-                        <li>
-                            <c:if test="${not empty pageContext.request.userPrincipal}">
-                                <a class='dropdown-trigger btn' href='#' data-target='user-dropdown'>
-                                    <i class="material-icons">account_circle</i>
+            <div class="options-box col s4">
+                <c:if test="${!hideRightBar}">
+                    <c:if test="${!isLoggedIn}">
+                        <ul id="nav-mobile" class="right ">
+                            <li>
+                                <a href="<c:url value="/login"/>" class="waves-effect btn white-text">
+                                    <spring:message code="session.login"/>
                                 </a>
-
-                                <ul id='user-dropdown' class='dropdown-content'>
-                                    <li><a href="${pageContext.request.contextPath}/profile">Profile</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/purchases">Purchases</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/addBook">Publish</a></li>
-                                    <c:if test="${param.hasWriterRole}">
-                                        <li><a href="${pageContext.request.contextPath}/sales">Sales</a></li>
-                                    </c:if>
-                                    <li><a href="${pageContext.request.contextPath}/logout" class="red-text">Sign Out</a></li>
-                                </ul>
-                            </c:if>
-                            <c:if test="${empty pageContext.request.userPrincipal}">
-                                <a href="${pageContext.request.contextPath}/login" class="waves-effect btn white-text">Log In</a>
-                                <a href="${pageContext.request.contextPath}/signup" class="waves-effect btn white-text">Sign Up</a>
-                            </c:if>
-                        </li>
-                    </ul>
-                </div>
+                            </li>
+                            <li>
+                                <a href="<c:url value="signup"/>" class="waves-effect btn white-text hide-on-med-and-down">
+                                    <spring:message code="session.signup"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </c:if>
+                    <c:if test="${isLoggedIn}">
+                        <a href="#" onclick="toggleMenu()">
+                            <div class="logged-user-name ">
+                                <span class="name-text hide-on-med-and-down">${loggedUser.firstName} ${loggedUser.lastName}</span>
+                                <img src="<c:url value="${baseUrl}/profilePicture/${loggedUser.userId}"/>" alt="userprofile" class="user-picture"/>
+                            </div>
+                        </a>
+                        <div class="sub-menu-wrap" id="subMenu">
+                            <div class="sub-menu">
+                                <a href="<c:url value="/profile/${loggedUser.userId}"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">person</i>
+                                    <p><spring:message code="topBar.profile"/></p>
+                                    <span class="go-arrow">></span>
+                                </a>
+                                <hr>
+                                <a href="<c:url value="/purchases"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">shopping_basket</i>
+                                    <p><spring:message code="topBar.purchases"/></p>
+                                    <span class="go-arrow">></span>
+                                </a>
+                                <hr>
+                                <c:if test="${isWriter}">
+                                    <a href="<c:url value="/sales"/>" class="sub-menu-link">
+                                        <i class="material-icons go-icon">insert_chart</i>
+                                        <p><spring:message code="topBar.sales"/></p>
+                                        <span class="go-arrow">></span>
+                                    </a>
+                                    <hr>
+                                </c:if>
+                                <a href="<c:url value="/addBook"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">book</i>
+                                    <p><spring:message code="topBar.publish"/></p>
+                                    <span class="go-arrow">></span>
+                                </a>
+                                <hr>
+                                <a href="<c:url value="/logout"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">exit_to_app</i>
+                                    <p><spring:message code="topBar.signOut"/></p>
+                                    <span class="go-arrow">></span>
+                                </a>
+                                <hr>
+                            </div>
+                        </div>
+                    </c:if>
+                </c:if>
             </div>
         </div>
     </nav>
 </header>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.dropdown-trigger');
-        var options = {
-            constrainWidth: false,
-            coverTrigger: false
-        };
-        var instances = M.Dropdown.init(elems, options);
-    });
-</script>
+    let subMenu = document.getElementById("subMenu");
 
+    function toggleMenu(){
+        subMenu.classList.toggle("open-menu")
+    }
+</script>
+<c:if test="${!hideSearchBar}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var submitButton = document.getElementById('submitSearch');
+            var form = document.getElementById('searchForm');
+            var input = document.getElementById('title');
+
+            submitButton.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                if (input.checkValidity()){
+                    form.submit();
+                } else {
+                    input.focus();
+                }
+
+            });
+        });
+    </script>
+</c:if>
 </body>
 </html>
+

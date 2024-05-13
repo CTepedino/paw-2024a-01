@@ -1,77 +1,58 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.ImageService;
-import ar.edu.itba.paw.interfaces.PdfService;
-import ar.edu.itba.paw.models.Image;
-import ar.edu.itba.paw.models.Pdf;
+import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
+import ar.edu.itba.paw.models.files.CoverImage;
+import ar.edu.itba.paw.models.files.ProfilePicture;
+import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
 @Controller
 public class FileController {
 
-    private final ImageService is;
-    private final PdfService ps;
+    private final BookService bs;
+    private final OrderService os;
+    private final UserService us;
 
     @Autowired
-    public FileController(ImageService is, PdfService ps){
-        this.is = is;
-        this.ps = ps;
+    public FileController(BookService bs, OrderService os, UserService us) {
+        this.bs = bs;
+        this.os = os;
+        this.us = us;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/image/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public @ResponseBody byte[] getImage(@PathVariable("id") long id){
-        Optional<Image> maybeImage = is.findById(id);
-        return maybeImage.orElseThrow(ImageNotFoundException::new).getImage();
+    @RequestMapping(method = RequestMethod.GET, path = "/cover/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public @ResponseBody byte[] getImage(@PathVariable("id") long id) {
+        return bs.getCover(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/uploadImage")
-    public ModelAndView uploadImage(@RequestParam("file") MultipartFile file){
-        Image image = is.create(file);
-        return new ModelAndView("redirect:/viewImage/" + image.getImageId());
+    @RequestMapping(method = RequestMethod.GET, path = "/preview/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public @ResponseBody byte[] getPdf(@PathVariable("id") long id) {
+        return bs.getPreview(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/uploadImage")
-    public ModelAndView uploadImageForm(){
-        return new ModelAndView("uploadImageForm");
+    @RequestMapping(method = RequestMethod.GET, path = "/receipt/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public @ResponseBody byte[] getReceipt(@PathVariable("id") long id) {
+        return os.getReceipt(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/viewImage/{id:\\d+}")
-    public ModelAndView imageView(@PathVariable("id") long id){
-        ModelAndView mav = new ModelAndView("imageView");
-        mav.addObject("imageId", id);
-        return mav;
+    @RequestMapping(method = RequestMethod.GET, path = "/book/file/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public @ResponseBody byte[] getBookFile(@PathVariable("id") long id){
+        return bs.getBookFile(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path="/pdf/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public @ResponseBody byte[] getPdf(@PathVariable("id") long id){
-        Optional<Pdf> maybePdf = ps.findById(id);
-        return maybePdf.orElseThrow(PdfNotFoundException::new).getPdf();
+    @RequestMapping(method = RequestMethod.GET, path = "/profilePicture/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public @ResponseBody byte[] getProfileImage(@PathVariable("id") long id) {
+        return us.getProfilePictureOrDefault(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.POST, path= "/uploadPdf")
-    public ModelAndView uploadPdf(@RequestParam("file") MultipartFile file){
-        Pdf pdf = ps.create(file);
-        return new ModelAndView("redirect:/viewPdf/" + pdf.getPdfId());
-    }
 
-    @RequestMapping(method = RequestMethod.GET, path= "/uploadPdf")
-    public ModelAndView uploadPdfForm(){
-        return new ModelAndView("uploadPdfForm");
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/viewPdf/{id:\\d+}")
-    public ModelAndView pdfView(@PathVariable("id") long id){
-        ModelAndView mav = new ModelAndView("pdfView");
-        mav.addObject("pdfId", id);
-        return mav;
-    }
 }

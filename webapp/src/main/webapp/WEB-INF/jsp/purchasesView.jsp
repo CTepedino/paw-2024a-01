@@ -1,110 +1,168 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Purchases</title>
+    <title><spring:message code="orders.purchases.title"/></title>
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
-    <link href="${pageContext.request.contextPath}/css/sidebarPlus.css" rel="stylesheet"/>
+    <link href="<c:url value="/css/purchasesView.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
-<jsp:include page="components/topBar.jsp">
-    <jsp:param name="hasWriterRole" value="${hasWriterRole}" />
-</jsp:include>
+<%@include file="components/topBar.jsp" %>
 
 <body>
-<div class="main--content">
-<%--    <nav>--%>
-<%--        <div class="nav-wrapper">--%>
-<%--            <a href="${pageContext.request.contextPath}/" class="brand-logo"> <img class="logo" src="${pageContext.request.contextPath}/images/cybrary_3.png"></a>--%>
-<%--        </div>--%>
-<%--        <style>--%>
-<%--            <%@include file="/css/topBarStyle.css" %>--%>
-<%--        </style>--%>
-<%--        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>--%>
-<%--    </nav>--%>
+<c:url value="/purchases" var="purchasesUrl"/>
+<div class="container purchases">
+    <h2 class="page-title"><spring:message code="orders.purchases.header"/></h2>
 
-
-    <div class="header-wrapper">
-        <div class="header--title">
-            <span>My</span>
-            <h2>Purchases</h2>
-        </div>
-        <div class="user--info">
-            <div class="search--box">
-                <a href="${pageContext.request.contextPath}/" > <i class="fa-solid fa-house"></i></a>
+    <form:form modelAttribute="orderSearchForm"
+               action="${purchasesUrl}"
+               method="get"
+               id="orders">
+        <div class="row">
+            <div class="input-field col s6">
+                <form:label path="title" cssClass="active">
+                    <spring:message code="book.search.title"/>
+                </form:label><br>
+                <form:input path="title"/>
+            </div>
+            <div class="input-field col s6">
+                <form:label path="orderStatus" cssClass="active">
+                    <spring:message code="orders.status"/>
+                </form:label><br>
+                <form:select path="orderStatus" onchange="this.form.submit()">
+                    <form:option value=""><spring:message code="orders.status.all"/></form:option>
+                    <c:forEach items="${statuses}" var="status">
+                        <form:option value="${status}"><spring:message code="orders.purchases.status.option.${status}"/></form:option>
+                    </c:forEach>
+                </form:select>
             </div>
         </div>
+        <input type="submit" hidden />
+        <input name="page" id="page" style="display: none"/>
+    </form:form>
 
+    <div class="row table-top">
+        <div class="col s2 table-title"> <spring:message code="orders.table.cover"/> </div>
+        <div class="col s3 table-title"> <spring:message code="orders.table.book"/> </div>
+        <div class="col s2 table-title"> <spring:message code="orders.table.lastUpdate"/></div>
+        <div class="col s3 table-title"> <spring:message code="orders.table.status"/> </div>
+        <div class="col s2 table-title"> <spring:message code="orders.table.actions"/> </div>
     </div>
+    <ul class="collection">
+        <c:forEach var="order" items="${orders.page}">
+            <li class="collection-item">
+                <div class="row purchased-book">
+                    <div class="col s2">
+                        <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
+                            <img
+                                    class="book_cover"
+                                    src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
+                                    alt="<spring:message code="bookInfoCard.cover"/>"
+                            />
+                        </a>
+                    </div>
+                    <div class="col s3 purchase-info">
+                        <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
+                        <a href="<c:url value="/profile/${order.writer.userId}"/>">
+                            <p><spring:message var="author" code="bookInfoCard.by" arguments="${order.writer.firstName},${order.writer.lastName}"/><c:out value="${author}"/></p>
+                        </a>
+                        <p class="price"><c:out value="${order.book.formattedPrice}"/></p>
+                    </div>
 
-    <div class="tabular-wrapper">
-        <h3 class="main--title">
-            Order History
-        </h3>
-        <div class="table-container">
-            <table>
-                <thead>
-                <tr>
-                    <th>Writer</th>
-                    <th>Email</th>
-                    <th>Book's Title</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-<%--                <c:forEach var="order" items="${order}">--%>
-<%--                    <c:set var="order" value="${order}" scope="request"/>--%>
-<%--                    --%>
-<%--                </c:forEach>--%>
-                <c:forEach var="order" items="${orders}">
-                <tr>
-                        <td><c:out value="${order.writer.firstName} ${order.writer.lastName}"/></td>
-                        <td><c:out value="${order.writer.email}"/></td>
-                        <td><c:out value="${order.book.title}"/></td>
-                        <td><c:out value="${order.book.price}"/></td>
-                        <td><c:out value="${order.orderStatus.displayString}"/></td>
-                        <c:url value="/advanceOrder" var="advanceOrderUrl">
-                            <c:param name="bookId" value="${order.book.bookId}"/>
-                            <c:param name="buyerId" value="${order.buyer.id}"/>
-                            <c:param name="writerId" value="${order.writer.id}"/>
-                            <c:param name="from" value="purchases"/>
-                        </c:url>
+                    <div class="col s2 purchase-info">
 
-                        <c:if test="${order.orderStatus.readerCanAdvance}">
-                        <td><form action="${advanceOrderUrl}" method="post">
-                            <button
-                                type="submit"
-                            >Advance</button>
-                        </form></td>
+                        <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
+                    </div>
+                    <div class="col s3 purchase-info">
+                        <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <p class="red-text"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
                         </c:if>
-                        <c:if test="${!order.orderStatus.readerCanAdvance}">
-                            <td><form action="${advanceOrderUrl}" method="post">
-                                <button type="submit" disabled>Advance</button>
-                            </form></td>
+                        <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
+                            <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
                         </c:if>
-                </tr>
-                </c:forEach>
-<%--                <tr>
-                    <td> 2024-05-01 </td>
-                    <td> JK ROWLING </td>
-                    <td> Harry Potter</td>
-                    <td> $500 </td>
-                    <td>Completed</td>
-                    <td><button>Edit</button></td>
-                </tr>--%>
-                </tbody>
-                <tfoot>
+                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <c:out value="${order.writer.cbu}"/>
+                        </c:if>
 
-                </tfoot>
-            </table>
-        </div>
-    </div>
+                    </div>
+                    <div class="col s2 purchase-info">
+                        <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
+
+                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
+                                <form:label path="receipt" for="files" class="btn label-select">
+                                    <spring:message code="orders.purchases.chooseFile"/>
+                                </form:label>
+                                <form:input type="file" id="files" path="receipt" accept=".pdf" style="display:none;"/>
+                                <form:errors path="receipt"/>
+                                <button class="waves-light btn payment" type="submit">
+                                    <strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong>
+                                </button>
+                            </form:form>
+                        </c:if>
+
+                        <c:if test="${order.orderStatus eq 'COMPLETED'}">
+                            <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
+                                <button class="waves-light btn"><strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong></button>
+                            </a>
+                        </c:if>
+
+                        <c:if test="${!order.orderStatus.readerCanAdvance and order.orderStatus ne 'COMPLETED'}">
+                            <p><spring:message code="orders.purchases.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i>
+                            </p>
+                        </c:if>
+
+                    </div>
+                </div>
+            </li>
+        </c:forEach>
+    </ul>
+
+    <c:if test="${orders.pageCount > 1}">
+        <script src="<c:url value="/js/paginationControls.js"/>"></script>
+        <script>
+            const paginationButtons = new PaginationButtons(${orders.pageCount}, Math.min(10, ${orders.pageCount}), ${orders.pageNumber}, true);
+            paginationButtons.render();
+            paginationButtons.onChange(e => {
+                document.getElementById('page').value = e.target.value;
+                document.getElementById("orders").submit();
+            })
+        </script>
+    </c:if>
 
 </div>
-</div>
+
+
+<script type="module">
+    // Initialize Materialize components
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        if (document.querySelector("#files") != null) {
+            document.querySelector("#files").onchange = function () {
+                const fileName = this.files[0]?.name;
+                const label = document.querySelector("label[for=files]");
+                label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
+            };
+        }
+    });
+</script>
+
 </body>
 </html>

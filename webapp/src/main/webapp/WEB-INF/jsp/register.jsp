@@ -1,14 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <link href="${pageContext.request.contextPath}/css/userForm.css" rel="stylesheet"/>
+    <title><spring:message code="session.signup"/></title>
+    <link href="<c:url value="/css/userForm.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
-<%@ include file="components/topBar.jsp" %>
+
+<c:set value="${true}" scope="request" var="hideSearchBar"/>
+<%@include file="components/topBar.jsp" %>
+
 
 <body>
 <div class="small-container">
@@ -22,36 +30,69 @@
             enctype="multipart/form-data"
             cssClass="z-depth-2"
         >
-            <h5 class="center-align">Create a Cybrary account</h5>
-            <div class="input-field">
-                <form:label path="email">Email Address</form:label>
-                <form:input path="email" type="text"/>
-                <form:errors path="email" element="p" cssClass="red-text"/>
-            </div>
+            <h5 class="center-align">
+                <spring:message code="session.signupTitle"/>
+            </h5>
 
             <div class="input-field">
-                <form:label path="password">Password</form:label>
-                <form:input path="password" type="password" id="password"/>
+                <form:label path="firstName">
+                    <spring:message code="book.addBook.writerFirstName"/><span class="red-text">*</span>
+                </form:label>
+                <form:input type="text" path="firstName" maxlength="255"/>
+            </div>
+            <form:errors path="firstName" element="p" cssClass="red-text err-msj"/>
+
+            <div class="input-field">
+                <form:label path="lastName">
+                    <spring:message code="book.addBook.writerLastName"/><span class="red-text">*</span>
+                </form:label>
+                <form:input type="text" path="lastName" maxlength="255"/>
+            </div>
+            <form:errors path="lastName" element="p" cssClass="red-text err-msj"/>
+
+            <div class="input-field">
+                <form:label path="email">
+                    <spring:message code="session.email"/><span class="red-text">*</span>
+                </form:label>
+                <form:input path="email" type="text" maxlength="255"/>
+            </div>
+            <form:errors path="email" element="p" cssClass="red-text err-msj"/>
+
+            <div class="input-field">
+                <form:label path="password">
+                    <spring:message code="session.password"/><span class="red-text">*</span>
+                </form:label>
+                <form:input path="password" type="password" id="password" name="password" onkeyup="repeatPasswordCheck()" maxlength="255"/>
                 <span class="material-icons password-toggle-btn" onclick="togglePasswordVisibility()">visibility_off</span>
-                <form:errors path="password" element="p" cssClass="red-text"/>
+            </div>
+            <form:errors path="password" element="p" cssClass="red-text err-msj"/>
+
+            <div class="input-field">
+                <form:label path="repeatPassword">
+                    <spring:message code="session.repeatPassword"/><span class="red-text">*</span>
+                </form:label>
+                <form:input id="repeatPassword" path="repeatPassword" type="password" name="repeatPassword" onkeyup="repeatPasswordCheck()"/>
+                <span class="material-icons repeat-password-toggle-btn" onclick="toggleRepeatPasswordVisibility()">visibility_off</span>
             </div>
 
-<%--            <div class="input-field">
-                <form:label path="repeatPassword">Confirm password</form:label>
-                <form:input path="repeatPassword" type="password"/>
-                <form:errors path="repeatPassword" element="p" cssClass="red-text"/>
-            </div>--%>
+            <p class="red-text" id="passwordErrorMessage" style="visibility: hidden"><spring:message code="session.repeatPasswordError"/></p>
 
             <div class="input-field center-align submit-btn">
-                <button class="btn waves-effect waves-light white-text" type="submit" name="action">
-                    Register
+                <button class="btn waves-effect waves-light white-text" id="submitBtn" type="submit" name="action" disabled="disabled">
+                    <spring:message code="session.signup"/>
                 </button>
             </div>
 
-            <p class="center-align">Already have an account? <a href="${pageContext.request.contextPath}/signup">Log in</a></p>
+            <p class="center-align">
+                <spring:message code="session.toLogin"/>
+                <a href="<c:url value="/login"/>">
+                    <strong><spring:message code="session.login"/></strong>
+                </a>
+            </p>
         </form:form>
     </div>
 </div>
-<script src="${pageContext.request.contextPath}/js/togglePasswordView.js"></script>
+<script src="<c:url value="/js/togglePasswordView.js"/>"></script>
+<script src="<c:url value="/js/repeatPasswordCheck.js"/>"></script>
 </body>
 </html>
