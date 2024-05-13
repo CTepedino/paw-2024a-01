@@ -29,9 +29,7 @@ import java.util.Optional;
 @Controller
 public class BookController {
 
-    private final Integer REVIEW_PAGE_SIZE=10;
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(BookController.class);
+    private static final Integer REVIEW_PAGE_SIZE=10;
 
     private final PublishService ps;
     private final BookService bs;

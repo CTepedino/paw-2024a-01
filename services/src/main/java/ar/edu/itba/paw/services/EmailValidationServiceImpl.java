@@ -36,12 +36,14 @@ public class EmailValidationServiceImpl implements EmailValidationService {
 
     @Transactional
     @Override
-    public void create(User user) {
+    public EmailValidation create(User user) {
         String code = generateRandomVerificationCode();
         LocalDateTime expiration = LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS);
         emailValidationDao.create(user.getUserId(), code, expiration);
         ms.sendRegisterEmail(user, code, expiration);
         LOGGER.atDebug().setMessage("Generated Validation Code").log();
+
+        return new EmailValidation(user.getUserId(), code, expiration);
     }
 
     private String generateRandomVerificationCode(){
@@ -66,7 +68,7 @@ public class EmailValidationServiceImpl implements EmailValidationService {
         deleteExpired();
 
         EmailValidation validation = emailValidationDao.get(id).orElseThrow(NoValidationCodeException::new);
-        if( validation.getCode().equals(code) && validation.getId() == id){
+        if( validation.getCode().equals(code)){
             emailValidationDao.delete(id);
             return true;
         }

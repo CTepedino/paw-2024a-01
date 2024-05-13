@@ -50,16 +50,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void create(long bookId, MultipartFile receipt) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-
+        long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_APPROVAL);
         try {
-            long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_APPROVAL);
             paymentReceiptDao.create(orderId, receipt.getBytes());
-            ms.sendReceiptUploadedEmail(findById(orderId).orElseThrow(OrderNotFoundException::new));
-            LOGGER.atDebug().setMessage("Created order for bookId: {}").addArgument(bookId).log();
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to create order for bookId: {} - Error Message: {}").addArgument(bookId).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
+        LOGGER.atDebug().setMessage("Created order for bookId: {}").addArgument(bookId).log();
+        ms.sendReceiptUploadedEmail(findById(orderId).orElseThrow(OrderNotFoundException::new));
     }
 
     @Transactional(readOnly = true)
@@ -136,11 +135,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private void acceptOrReject(Order order, Boolean approved){
-        if (approved == null){
-            LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(order.getOrderId()).log();
-            throw new InvalidOrderUpdateException();
-        }
+    private void acceptOrReject(Order order, boolean approved){
         if (approved) {
             orderDao.update(order.getOrderId(), OrderStatus.COMPLETED);
             ms.sendReceiptApprovedEmail(order);
@@ -153,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public void updateOrderWriterSide(long orderId, Boolean approved){
+    public void updateOrderWriterSide(long orderId, boolean approved){
         Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         if (order.getOrderStatus().equals(OrderStatus.WAITING_APPROVAL)) {
@@ -171,8 +166,10 @@ public class OrderServiceImpl implements OrderService {
 
         switch (order.getOrderStatus()){
             case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
-            case WAITING_CONTACT, COMPLETED, WAITING_APPROVAL -> { LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(orderId).log();
-                                                                    throw new InvalidOrderUpdateException(); }
+            case WAITING_CONTACT, COMPLETED, WAITING_APPROVAL -> {
+                LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(orderId).log();
+                throw new InvalidOrderUpdateException();
+            }
         }
     }
 

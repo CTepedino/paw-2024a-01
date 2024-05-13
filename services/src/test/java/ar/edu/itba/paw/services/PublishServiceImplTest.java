@@ -29,7 +29,6 @@ public class PublishServiceImplTest {
 
     private static final long USER_ID = 1;
     private static final long BOOK_ID = 1;
-    private static final String USER_CBU = "1234567891234567891234";
 
     private static final MultipartFile PREVIEW = new MockMultipartFile("testPreview", new byte[100]);
     private static final MultipartFile COVER = new MockMultipartFile("testCover", new byte[100]);
@@ -51,10 +50,6 @@ public class PublishServiceImplTest {
         Mockito.when(userService.getLoggedUser())
                 .thenReturn(Optional.of(new User(USER_ID, "", "", "", "",false, Locale.US)));
         Mockito.when(userService.getRoles(Mockito.eq(USER_ID))).thenReturn(mockedRoles);
-        Mockito.doAnswer((Answer<Void>) invocation ->{
-            mockedRoles.add(UserRoles.WRITER);
-            return null;
-        }).when(userService).giveWriterRole(Mockito.eq(USER_ID), Mockito.eq(USER_CBU));
         Mockito.when(bookService.create(
                 Mockito.anyString(),
                 Mockito.anyString(),

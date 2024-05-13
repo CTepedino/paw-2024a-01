@@ -93,7 +93,7 @@ public class EmailValidationJdbcDaoTest {
 
     @Test
     public void testExpired(){
-        jdbcTemplate.execute("INSERT INTO email_validations VALUES (2, '12345', NOW())");
+        jdbcTemplate.execute("INSERT INTO email_validations VALUES (2, '12345', NOW() - INTERVAL '1' DAY)");
 
         evDao.deleteExpired();
 
