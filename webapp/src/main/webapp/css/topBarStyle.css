@@ -51,6 +51,7 @@ nav {
     margin-right: 10px;
     overflow: hidden;
     max-height: 70px;
+    text-align: right;
 }
 
 .user-picture{

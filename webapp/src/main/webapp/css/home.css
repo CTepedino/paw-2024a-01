@@ -1,18 +1,8 @@
-/*body{*/
-/*    background-image: url("/images/background.svg");*/
-/*    background-size: cover;*/
-/*    background-position: center;*/
-/*}*/
-
 
 .explore_back {
     height: 100%;
     width: 100%;
     padding-top: 30px;
-/*    padding-bottom: 30px;
-    background-image: url("/images/background.svg");
-    background-size: cover;
-    background-position: center;*/
 }
 
 .home-image {
@@ -52,4 +42,5 @@ a {
 .genre-btn {
     margin-top: 20px;
     width: 100%;
+    word-wrap: break-word;
 }

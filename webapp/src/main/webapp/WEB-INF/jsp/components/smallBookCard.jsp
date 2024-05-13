@@ -27,7 +27,7 @@
                         <span class="card-title grey-text text-darken-4"><c:out value="${cardBook.title}"/></span>
                         <c:if test="${!publications}">
                             <p class="info">
-                                <spring:message var="author" code="bookInfoCard.by" arguments="${book.writer.firstName},${book.writer.lastName}"/>
+                                <spring:message var="author" code="bookInfoCard.by" arguments="${cardBook.writer.firstName},${cardBook.writer.lastName}"/>
                                 <c:out value="${author}"/>
                             </p>
                         </c:if>

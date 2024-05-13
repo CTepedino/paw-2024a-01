@@ -18,7 +18,7 @@
             <a class="reviewer-info-stacked" href="<c:url value="/profile/${review.reviewer.userId}"/>">
                 <div class="image-centerer">
                     <img
-                            src="/profilePicture/${review.reviewer.userId}"
+                            src="<c:url value="/profilePicture/${review.reviewer.userId}"/>"
                             class="review-pfp "
                             alt="<spring:message code="user.profile.edit.pfp"/>"
                     >

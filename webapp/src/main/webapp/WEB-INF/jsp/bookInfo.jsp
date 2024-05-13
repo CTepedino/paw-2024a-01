@@ -222,7 +222,12 @@
                 method="post"
                 modelAttribute="reviewForm"
         >
-            <h5 class="publish-title"><spring:message code="review.title"/></h5>
+            <div class="row">
+                <div class="col s12">
+                    <h5 class="publish-title"><spring:message code="review.title"/></h5>
+                </div>
+            </div>
+
             <input type="hidden" id="rating" name="rating" value="rating">
             <div class="input-field center-align">
                 <div class="star-rating">
@@ -240,9 +245,13 @@
             </div>
             <form:errors path="review"/>
 
-            <div class="btn-centerer">
-                <button class="btn modal-close close-btn" ><strong><spring:message code="cancel"/></strong></button>
-                <button class="waves-light btn" type="submit"><strong><spring:message code="review.submit"/></strong></button>
+            <div class="row">
+                <div class="col s12">
+                    <div class="btn-centerer">
+                        <button class="btn modal-close close-btn" ><strong><spring:message code="cancel"/></strong></button>
+                        <button class="waves-light btn" type="submit"><strong><spring:message code="review.submit"/></strong></button>
+                    </div>
+                </div>
             </div>
 
         </form:form>
