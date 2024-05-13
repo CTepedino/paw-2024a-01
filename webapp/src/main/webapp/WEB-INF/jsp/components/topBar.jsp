@@ -50,63 +50,65 @@
             </div>
 
             <div class="options-box col s4">
-                <c:if test="${!isLoggedIn}">
-                    <ul id="nav-mobile" class="right ">
-                        <li>
-                            <a href="<c:url value="/login"/>" class="waves-effect btn white-text">
-                                <spring:message code="session.login"/>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="<c:url value="signup"/>" class="waves-effect btn white-text hide-on-med-and-down">
-                                <spring:message code="session.signup"/>
-                            </a>
-                        </li>
-                    </ul>
-                </c:if>
-                <c:if test="${isLoggedIn}">
-                    <a href="#" onclick="toggleMenu()">
-                        <div class="logged-user-name ">
-                            <span class="name-text hide-on-med-and-down">${loggedUser.firstName} ${loggedUser.lastName}</span>
-                            <img src="<c:url value="${baseUrl}/profilePicture/${loggedUser.userId}"/>" alt="userprofile" class="user-picture"/>
-                        </div>
-                    </a>
-                    <div class="sub-menu-wrap" id="subMenu">
-                        <div class="sub-menu">
-                            <a href="<c:url value="/profile/${loggedUser.userId}"/>" class="sub-menu-link">
-                                <i class="material-icons go-icon">person</i>
-                                <p><spring:message code="topBar.profile"/></p>
-                                <span class="go-arrow">></span>
-                            </a>
-                            <hr>
-                            <a href="<c:url value="/purchases"/>" class="sub-menu-link">
-                                <i class="material-icons go-icon">shopping_basket</i>
-                                <p><spring:message code="topBar.purchases"/></p>
-                                <span class="go-arrow">></span>
-                            </a>
-                            <hr>
-                            <c:if test="${isWriter}">
-                                <a href="<c:url value="/sales"/>" class="sub-menu-link">
-                                    <i class="material-icons go-icon">insert_chart</i>
-                                    <p><spring:message code="topBar.sales"/></p>
+                <c:if test="${!hideRightBar}">
+                    <c:if test="${!isLoggedIn}">
+                        <ul id="nav-mobile" class="right ">
+                            <li>
+                                <a href="<c:url value="/login"/>" class="waves-effect btn white-text">
+                                    <spring:message code="session.login"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<c:url value="signup"/>" class="waves-effect btn white-text hide-on-med-and-down">
+                                    <spring:message code="session.signup"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </c:if>
+                    <c:if test="${isLoggedIn}">
+                        <a href="#" onclick="toggleMenu()">
+                            <div class="logged-user-name ">
+                                <span class="name-text hide-on-med-and-down">${loggedUser.firstName} ${loggedUser.lastName}</span>
+                                <img src="<c:url value="${baseUrl}/profilePicture/${loggedUser.userId}"/>" alt="userprofile" class="user-picture"/>
+                            </div>
+                        </a>
+                        <div class="sub-menu-wrap" id="subMenu">
+                            <div class="sub-menu">
+                                <a href="<c:url value="/profile/${loggedUser.userId}"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">person</i>
+                                    <p><spring:message code="topBar.profile"/></p>
                                     <span class="go-arrow">></span>
                                 </a>
                                 <hr>
-                            </c:if>
-                            <a href="<c:url value="/addBook"/>" class="sub-menu-link">
-                                <i class="material-icons go-icon">book</i>
-                                <p><spring:message code="topBar.publish"/></p>
-                                <span class="go-arrow">></span>
-                            </a>
-                            <hr>
-                            <a href="<c:url value="/logout"/>" class="sub-menu-link">
-                                <i class="material-icons go-icon">exit_to_app</i>
-                                <p><spring:message code="topBar.signOut"/></p>
-                                <span class="go-arrow">></span>
-                            </a>
-                            <hr>
+                                <a href="<c:url value="/purchases"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">shopping_basket</i>
+                                    <p><spring:message code="topBar.purchases"/></p>
+                                    <span class="go-arrow">></span>
+                                </a>
+                                <hr>
+                                <c:if test="${isWriter}">
+                                    <a href="<c:url value="/sales"/>" class="sub-menu-link">
+                                        <i class="material-icons go-icon">insert_chart</i>
+                                        <p><spring:message code="topBar.sales"/></p>
+                                        <span class="go-arrow">></span>
+                                    </a>
+                                    <hr>
+                                </c:if>
+                                <a href="<c:url value="/addBook"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">book</i>
+                                    <p><spring:message code="topBar.publish"/></p>
+                                    <span class="go-arrow">></span>
+                                </a>
+                                <hr>
+                                <a href="<c:url value="/logout"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">exit_to_app</i>
+                                    <p><spring:message code="topBar.signOut"/></p>
+                                    <span class="go-arrow">></span>
+                                </a>
+                                <hr>
+                            </div>
                         </div>
-                    </div>
+                    </c:if>
                 </c:if>
             </div>
         </div>

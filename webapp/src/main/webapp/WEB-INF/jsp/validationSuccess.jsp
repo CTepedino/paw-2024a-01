@@ -12,6 +12,7 @@
 </head>
 
 <c:set value="${true}" scope="request" var="hideSearchBar"/>
+<c:set value="${true}" var="hideRightBar" scope="request"/>
 <%@include file="components/topBar.jsp" %>
 
 <body>
