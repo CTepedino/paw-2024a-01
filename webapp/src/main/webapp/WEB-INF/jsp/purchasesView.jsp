@@ -70,7 +70,9 @@
                     </div>
                     <div class="col s3 purchase-info">
                         <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
-                        <a href="<c:url value="/profile/${order.writer.userId}"/>"><p>by <c:out value="${order.writer.firstName} ${order.writer.lastName}"/></p></a>
+                        <a href="<c:url value="/profile/${order.writer.userId}"/>">
+                            <p><spring:message var="author" code="bookInfoCard.by" arguments="${order.writer.firstName},${order.writer.lastName}"/><c:out value="${author}"/></p>
+                        </a>
                         <p class="price"><c:out value="${order.book.formattedPrice}"/></p>
                     </div>
 

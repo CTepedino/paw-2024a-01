@@ -88,13 +88,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return ms;
     }
 
-    /* Descomentar para ver la pagina en español sin tener que cambiar los settings del browser
+    /* Descomentar para ver la pagina en español sin tener que cambiar los settings del browser */
     @Bean
     public LocaleResolver localeResolver(){
         SessionLocaleResolver slr = new SessionLocaleResolver();
         slr.setDefaultLocale(new Locale("es"));
         return slr;
-    }*/
+    }
 
     @Bean
     public DataSource dataSource(){
