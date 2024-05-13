@@ -47,13 +47,9 @@
                     </div>
                     <div class="col s5">
                         <c:if test="${((not isAuthor and not ownsBook) or not isLoggedIn) and not book.paused}">
-                            <c:url var="buyUrl" value="/sendBuyInfo">
-                                <c:param name="bookId" value="${book.bookId}" />
-                            </c:url>
-                            <a class="waves-effect waves-light btn modal-trigger action-button" href="#buyModal">
+                            <a href="<c:url value="/sendBuyInfo/${book.bookId}"/>" class="waves-effect waves-light btn action-button">
                                 <strong><spring:message code="book.bookInfo.buyBook"/></strong>
                             </a>
-
                         </c:if>
                         <c:if test="${isAuthor}">
                             <a href="<c:url value="/book/edit/${book.bookId}"/>">
