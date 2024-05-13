@@ -184,23 +184,6 @@ public class OrderJdbcDao implements OrderDao {
 
 
     @Override
-    public void updateAllWriterOrders(long writerId, OrderStatus oldStatus, OrderStatus newStatus) {
-        jdbcTemplate.update(
-        """
-                UPDATE orders
-                SET status = ?
-                FROM books
-                WHERE orders.book_id = books.book_id
-                AND orders.status = ?
-                AND books.writer_id = ?
-            """,
-            newStatus,
-            oldStatus,
-            writerId
-        );
-    }
-
-    @Override
     public boolean ownsBook(long bookId, String email) {
         Boolean exists = jdbcTemplate.queryForObject(
             """

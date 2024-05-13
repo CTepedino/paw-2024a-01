@@ -20,9 +20,9 @@ public interface OrderDao {
     long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);
 
     List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, int offset, int limit);
+
     long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
 
-    void updateAllWriterOrders(long writerId, OrderStatus oldStatus,OrderStatus newStatus);
 
     boolean ownsBook(long bookId, String email);
 }

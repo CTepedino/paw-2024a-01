@@ -107,13 +107,6 @@ public class OrderServiceImpl implements OrderService {
         return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getWriterOrdersSize(writerId, title, orderStatus));
     }
 
-    @Transactional
-    @Override
-    public void atCbuAdded(long writerId) {
-        orderDao.updateAllWriterOrders(writerId, OrderStatus.WAITING_CONTACT, OrderStatus.WAITING_PAYMENT);
-    }
-
-
     private void sendReceipt(Order order, MultipartFile receipt, OrderStatus fromStatus) {
         if (receipt == null){
             throw new InvalidOrderUpdateException();

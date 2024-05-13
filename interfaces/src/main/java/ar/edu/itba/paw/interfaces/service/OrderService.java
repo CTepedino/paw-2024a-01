@@ -20,9 +20,6 @@ public interface OrderService {
 
     PaymentReceipt getReceipt(long id);
 
-    void atCbuAdded(long writerId);
-
-
     PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize);
 
     PaginatedContent<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize);

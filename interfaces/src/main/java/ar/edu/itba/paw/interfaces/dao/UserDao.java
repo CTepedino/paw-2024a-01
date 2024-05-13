@@ -10,18 +10,16 @@ import java.util.Optional;
 public interface UserDao {
     User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale);
 
-    void delete(long id);
-
     int update(long id, String email, String password, String firstName, String lastName, boolean isEnabled);
 
     int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled);
 
     Optional<User> findById(long id);
+
     Optional<User> findByEmail(String email);
 
     int giveRole(long id, UserRoles role);
 
-    void removeRole(long id, UserRoles role);
 
     List<UserRoles> getRoles(long id);
 

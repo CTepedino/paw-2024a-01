@@ -67,17 +67,6 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public void delete(long id) {
-        jdbcTemplate.update(
-        """
-                DELETE FROM users
-                WHERE user_id = ?
-            """,
-            id
-        );
-    }
-
-    @Override
     public int update(long id, String email, String password, String firstName, String lastName, boolean isEnabled) {
         return jdbcTemplate.update(
                 """
@@ -149,17 +138,6 @@ public class UserJdbcDao implements UserDao {
         return roleJdbcInsert.execute(roleData);
     }
 
-    @Override
-    public void removeRole(long id, UserRoles role){
-        jdbcTemplate.update(
-        """
-                DELETE FROM roles
-                WHERE user_id = ? AND role = ?
-            """,
-            id,
-            role.toString()
-        );
-    }
 
     @Override
     public List<UserRoles> getRoles(long id) {
