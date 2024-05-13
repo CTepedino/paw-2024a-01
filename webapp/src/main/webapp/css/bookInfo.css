@@ -67,3 +67,13 @@
 .hidden-link:hover{
     text-decoration: none;
 }
+
+.close-btn{
+    margin-right: 10px;
+    background-color: gray;
+}
+
+.close-btn:hover{
+    background-color: gray;
+}
+

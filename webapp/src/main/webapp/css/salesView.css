@@ -68,3 +68,17 @@
 .book-title{
     font-weight: bold;
 }
+
+button.modal-close{
+    margin-right: 10px !important;
+    background-color: gray;
+}
+
+button.modal-close:hover{
+    background-color: gray;
+}
+
+.footer-aligner{
+    display: flex;
+    justify-content: end;
+}
