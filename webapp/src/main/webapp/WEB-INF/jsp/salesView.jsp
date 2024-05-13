@@ -80,7 +80,7 @@
                         <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>
                         <c:if test="${order.orderStatus == 'WAITING_APPROVAL' or order.orderStatus == 'COMPLETED'}">
                             <a href="<c:url value="/receipt/${order.orderId}"/>" target="_blank">
-                                <button class="waves-light btn payment"><spring:message code="orders.sales.status.viewReceipt"/></button>
+                                <button class="waves-light btn payment"><strong><spring:message code="orders.sales.status.viewReceipt"/></strong></button>
                             </a>
                         </c:if>
                     </div>
@@ -89,7 +89,7 @@
                         <c:url value="/advanceOrder/${order.orderId}/sales" var="advanceOrderUrl"/>
 
                         <c:if test="${order.orderStatus == 'WAITING_CONTACT'}">
-                            <a href="<c:url value="/profile"/>"><button class="waves-light btn"><spring:message code="orders.sales.action.${order.orderStatus}.button"/></button></a>
+                            <a href="<c:url value="/profile"/>"><button class="waves-light btn"><strong><spring:message code="orders.sales.action.${order.orderStatus}.button"/></strong></button></a>
                         </c:if>
 
                         <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
@@ -106,7 +106,7 @@
                                 <div class="modal-footer">
                                     <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
                                         <input type="checkbox" name="approved" value="false" checked style="display: none">
-                                        <button class="waves-light btn decline-button-modal" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></button>
+                                        <button class="waves-light btn decline-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></strong></button>
                                     </form:form>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@
                                 <div class="modal-footer">
                                     <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
                                         <input type="checkbox" name="approved" value="true" checked style="display: none">
-                                        <button class="waves-light btn accept-button-modal" type="submit"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></button>
+                                        <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></strong></button>
                                     </form:form>
                                 </div>
                             </div>

@@ -68,7 +68,7 @@
                     <div class="col s3 purchase-info">
                         <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
                         <a href="<c:url value="/profile/${order.writer.userId}"/>"><p>by <c:out value="${order.writer.firstName} ${order.writer.lastName}"/></p></a>
-                        <p class="price">$ <c:out value="${order.book.price}"/></p>
+                        <p class="price"><c:out value="${order.book.formattedPrice}"/></p>
                     </div>
 
                     <div class="col s2 purchase-info">
@@ -76,10 +76,16 @@
                         <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
                     </div>
                     <div class="col s3 purchase-info">
-                        <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                        <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <p class="red-text"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                        </c:if>
+                        <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
+                            <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                        </c:if>
                         <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
                             <c:out value="${order.writer.cbu}"/>
                         </c:if>
+
                     </div>
                     <div class="col s2 purchase-info">
                         <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
@@ -92,14 +98,14 @@
                                 <form:input type="file" id="files" path="receipt" accept=".pdf" style="display:none;"/>
                                 <form:errors path="receipt"/>
                                 <button class="waves-light btn payment" type="submit">
-                                    <spring:message code="orders.purchases.action.${order.orderStatus}"/>
+                                    <strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong>
                                 </button>
                             </form:form>
                         </c:if>
 
                         <c:if test="${order.orderStatus eq 'COMPLETED'}">
-                            <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank">
-                                <button class="waves-light btn"><spring:message code="orders.purchases.action.${order.orderStatus}"/></button>
+                            <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
+                                <button class="waves-light btn"><strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong></button>
                             </a>
                         </c:if>
 
