@@ -13,6 +13,8 @@ import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,8 @@ public class OrderServiceImpl implements OrderService {
     private final UserService us;
     private final MailService ms;
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+
     @Autowired
     public OrderServiceImpl(final OrderDao orderDao, final PaymentReceiptDao paymentReceiptDao, UserService us, MailService ms, BookService bs){
         this.orderDao = orderDao;
@@ -51,7 +55,9 @@ public class OrderServiceImpl implements OrderService {
             long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_APPROVAL);
             paymentReceiptDao.create(orderId, receipt.getBytes());
             ms.sendReceiptUploadedEmail(findById(orderId).orElseThrow(OrderNotFoundException::new));
+            LOGGER.atDebug().setMessage("Created order for bookId: {}").addArgument(bookId).log();
         } catch (IOException e){
+            LOGGER.atWarn().setMessage("Failed to create order for bookId: {} - Error Message: {}").addArgument(bookId).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
     }
@@ -112,12 +118,15 @@ public class OrderServiceImpl implements OrderService {
 
     private void sendReceipt(Order order, MultipartFile receipt, OrderStatus fromStatus) {
         if (receipt == null){
+            LOGGER.atWarn().setMessage("Failed to send upload receipt for orderId: {} - Error Message: No receipt provided").addArgument(order.getOrderId()).log();
             throw new InvalidOrderUpdateException();
         }
         orderDao.update(order.getOrderId(), OrderStatus.WAITING_APPROVAL);
         try {
             paymentReceiptDao.createOrUpdate(order.getOrderId(), receipt.getBytes());
+            LOGGER.atDebug().setMessage("Uploaded receipt for orderId: {}").addArgument(order.getOrderId()).log();
         } catch (IOException e){
+            LOGGER.atWarn().setMessage("Failed to upload receipt for orderId: {} - Error Message: {}").addArgument(order.getOrderId()).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
         if (fromStatus.equals(OrderStatus.REJECTED_PAYMENT)){
@@ -129,6 +138,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void acceptOrReject(Order order, Boolean approved){
         if (approved == null){
+            LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(order.getOrderId()).log();
             throw new InvalidOrderUpdateException();
         }
         if (approved) {
@@ -138,6 +148,7 @@ public class OrderServiceImpl implements OrderService {
             orderDao.update(order.getOrderId(), OrderStatus.REJECTED_PAYMENT);
             ms.sendReceiptDeniedEmail(order);
         }
+        LOGGER.atDebug().setMessage("Successfully updated order status for orderId: {}").addArgument(order.getOrderId()).log();
     }
 
     @Transactional
@@ -148,6 +159,7 @@ public class OrderServiceImpl implements OrderService {
         if (order.getOrderStatus().equals(OrderStatus.WAITING_APPROVAL)) {
             acceptOrReject(order, approved);
         } else {
+            LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(orderId).log();
             throw new InvalidOrderUpdateException();
         }
     }
@@ -159,7 +171,8 @@ public class OrderServiceImpl implements OrderService {
 
         switch (order.getOrderStatus()){
             case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
-            case WAITING_CONTACT, COMPLETED, WAITING_APPROVAL -> throw new InvalidOrderUpdateException();
+            case WAITING_CONTACT, COMPLETED, WAITING_APPROVAL -> { LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(orderId).log();
+                                                                    throw new InvalidOrderUpdateException(); }
         }
     }
 

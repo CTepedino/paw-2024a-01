@@ -5,6 +5,8 @@ import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ public class PublishServiceImpl implements PublishService {
 
     private final BookService bs;
     private final UserService us;
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
     public PublishServiceImpl(BookService bs, UserService us) {
@@ -50,7 +54,7 @@ public class PublishServiceImpl implements PublishService {
             us.giveWriterRole(user.getUserId(), cbu);
         }
 
-        return bs.create(
+        long bookId = bs.create(
                 title,
                 description,
                 genre,
@@ -63,5 +67,8 @@ public class PublishServiceImpl implements PublishService {
                 bookFile
         );
 
+        LOGGER.atDebug().setMessage("Published book: {}").addArgument(title).log();
+
+        return bookId;
     }
 }
