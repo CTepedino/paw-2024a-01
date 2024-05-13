@@ -60,6 +60,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public boolean canCreateOrder(long bookId) {
+        if (!us.isLoggedIn()){
+            return false;
+        }
+
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 

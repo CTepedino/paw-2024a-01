@@ -48,7 +48,7 @@
                         <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
                     </div>
                     <div class="col s5">
-                        <c:if test="${((not isAuthor and not ownsBook) or not isLoggedIn) and not book.paused}">
+                        <c:if test="${(canBuy or not isLoggedIn) and not book.paused}">
                             <a href="<c:url value="/sendBuyInfo/${book.bookId}"/>" class="waves-effect waves-light btn action-button">
                                 <strong><spring:message code="book.bookInfo.buyBook"/></strong>
                             </a>

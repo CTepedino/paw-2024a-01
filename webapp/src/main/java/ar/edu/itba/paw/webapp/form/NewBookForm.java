@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.webapp.form.validations.FileExists;
+import ar.edu.itba.paw.webapp.form.validations.ImageFile;
+import ar.edu.itba.paw.webapp.form.validations.PdfFile;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,14 +36,17 @@ public class NewBookForm {
 
     @NotNull
     @FileExists
+    @ImageFile
     private MultipartFile cover;
 
     @NotNull
     @FileExists
+    @PdfFile
     private MultipartFile preview;
 
     @NotNull
     @FileExists
+    @PdfFile
     private MultipartFile bookFile;
 
     @Size(min = 6, max = 22)
