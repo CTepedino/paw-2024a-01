@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 public class NewBookForm {
 
-    @Size(min = 1, max=255)
+    @Size(min = 1, max=50)
     private String title;
 
     @Size(min = 1, max=1000)
@@ -23,6 +23,7 @@ public class NewBookForm {
 
     @NotNull
     @PositiveOrZero
+    @Max(value = 100)
     private Integer suggestedAge;
 
     @NotNull
