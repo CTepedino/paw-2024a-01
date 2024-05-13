@@ -68,7 +68,7 @@
                     <c:if test="${isLoggedIn}">
                         <a href="#" onclick="toggleMenu()">
                             <div class="logged-user-name ">
-                                <span class="name-text hide-on-med-and-down">${loggedUser.firstName} ${loggedUser.lastName}</span>
+                                <span class="name-text hide-on-med-and-down"><c:out value="${loggedUser.firstName} ${loggedUser.lastName}"/> </span>
                                 <img src="<c:url value="${baseUrl}/profilePicture/${loggedUser.userId}"/>" alt="userprofile" class="user-picture"/>
                             </div>
                         </a>
