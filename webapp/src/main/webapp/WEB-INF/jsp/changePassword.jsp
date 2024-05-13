@@ -9,6 +9,8 @@
     <meta charset="UTF-8">
     <title><spring:message code="session.changePassword"/></title>
     <link href="<c:url value="/css/userForm.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
 

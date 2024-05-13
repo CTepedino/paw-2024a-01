@@ -6,6 +6,8 @@
 <html>
 <header>
     <link href="<c:url value="/css/smallBookCard.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </header>
 <body>
 

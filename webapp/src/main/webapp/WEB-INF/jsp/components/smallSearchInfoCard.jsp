@@ -6,6 +6,7 @@
 <html>
 <head>
     <link href="<c:url value="/css/smallsearchInfoCard.css"/>" rel="stylesheet"/>
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 <body>
 

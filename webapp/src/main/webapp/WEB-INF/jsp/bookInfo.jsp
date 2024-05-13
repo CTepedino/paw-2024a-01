@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
 <%@include file="components/topBar.jsp" %>
