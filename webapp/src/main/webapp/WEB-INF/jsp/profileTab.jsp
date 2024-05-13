@@ -9,6 +9,8 @@
     <title><spring:message code="user.profile.title"/></title>
     <link href="<c:url value="/css/profile.css"/>" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
 <body>
@@ -21,14 +23,14 @@
     <h2 class="writer-name"><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
     <p class="writer-info"> <c:out value="${user.email}"/> </p>
     <c:if test="${ownsProfile}">
-        <c:if test="${isWriter}">
+        <c:if test="${isWriter and not empty user.cbu}">
             <p class="writer-info">
                 <spring:message var="cbuMsj" code="user.profile.cbu" arguments="${user.cbu}"/>
                 <c:out value="${cbuMsj}"/>
             </p>
         </c:if>
 
-        <c:if test="${empty user.cbu}">
+        <c:if test="${isWriter and empty user.cbu}">
             <p class="writer-info paused"><spring:message code="user.profile.emptyCBU"/></p>
         </c:if>
         <div class="edit-profile">

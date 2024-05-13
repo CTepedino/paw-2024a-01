@@ -10,6 +10,8 @@
     <script src="https://kit.fontawesome.com/0f001c5d7a.js" crossorigin="anonymous"></script>
     <link href="<c:url value="/css/purchasesView.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
 <%@include file="components/topBar.jsp" %>
@@ -43,6 +45,7 @@
             </div>
         </div>
         <input type="submit" hidden />
+        <input name="page" id="page" style="display: none"/>
     </form:form>
 
     <div class="row table-top">
@@ -121,7 +124,6 @@
     </ul>
 
     <c:if test="${orders.pageCount > 1}">
-        <input type="number" id="page" name="page" value="${orders.pageNumber}" style="display: none"/>
         <script src="<c:url value="/js/paginationControls.js"/>"></script>
         <script>
             const paginationButtons = new PaginationButtons(${orders.pageCount}, Math.min(10, ${orders.pageCount}), ${orders.pageNumber}, true);
@@ -148,12 +150,15 @@
         var instances = M.FormSelect.init(elems);
     });
 
+
     document.addEventListener("DOMContentLoaded", function() {
-        document.querySelector("#files").onchange = function() {
-            const fileName = this.files[0]?.name;
-            const label = document.querySelector("label[for=files]");
-            label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
-        };
+        if (document.querySelector("#files") != null) {
+            document.querySelector("#files").onchange = function () {
+                const fileName = this.files[0]?.name;
+                const label = document.querySelector("label[for=files]");
+                label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
+            };
+        }
     });
 </script>
 

@@ -7,6 +7,8 @@
 <head>
     <link href="<c:url value="/css/myBooks.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
 
@@ -48,7 +50,7 @@
             <c:forEach var="book" items="${books.page}">
                 <c:set var="cardBook" value="${book}" scope="request"/>
                 <c:set var="ownsProfile" value="${ownsProfile}" scope="request"/>
-                <c:set var="publications" value="${false}" scope="request"/>
+                <c:set var="publications" value="${tab == 'publications'}" scope="request"/>
                 <%@include file="components/smallBookCard.jsp"%>
             </c:forEach>
         </div>

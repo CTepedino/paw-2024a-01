@@ -10,6 +10,8 @@
     <link href="<c:url value="/css/home.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/searchOptions.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
 <c:set value="${true}" scope="request" var="hideSearchBar"/>
