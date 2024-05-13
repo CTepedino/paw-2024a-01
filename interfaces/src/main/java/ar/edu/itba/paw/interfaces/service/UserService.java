@@ -43,4 +43,6 @@ public interface UserService {
     boolean hasRole(UserRoles role);
 
     void sendMissingDataEmails();
+
+    String fillMissingWriterData(User user, String password);
 }

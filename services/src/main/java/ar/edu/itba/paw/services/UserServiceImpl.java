@@ -256,4 +256,14 @@ public class UserServiceImpl implements UserService {
             ms.sendMissingDataEmail(user);
         }
     }
+
+    @Transactional
+    @Override
+    public String fillMissingWriterData(User user, String password) {
+        String encodedPassword = passwordEncoder.encode(password);
+        userDao.update(user.getUserId(), user.getEmail(), encodedPassword, user.getFirstName(), user.getLastName(),user.isEnabled());
+        userDao.giveRole(user.getUserId(), UserRoles.READER);
+        userDao.giveRole(user.getUserId(), UserRoles.WRITER);
+        return encodedPassword;
+    }
 }
