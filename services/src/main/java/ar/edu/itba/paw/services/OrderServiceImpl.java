@@ -11,7 +11,6 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
-import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,21 +89,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int pageNumber, int pageSize){
+    public PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize){
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
-        List<Order> orders = orderDao.getReaderOrders(readerId, title, orderStatus, orderBy,(pageNumber-1)*pageSize, pageSize);
+        List<Order> orders = orderDao.getReaderOrders(readerId, title, orderStatus,(pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getReaderOrdersSize(readerId, title, orderStatus));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Order> getWriterOrders(long writerId,  String title, OrderStatus orderStatus, OrderOrderBy orderBy,int pageNumber, int pageSize){
+    public PaginatedContent<Order> getWriterOrders(long writerId,  String title, OrderStatus orderStatus, int pageNumber, int pageSize){
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
-        List<Order> orders = orderDao.getWriterOrders(writerId, title, orderStatus, orderBy,(pageNumber-1)*pageSize, pageSize);
+        List<Order> orders = orderDao.getWriterOrders(writerId, title, orderStatus,(pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getWriterOrdersSize(writerId, title, orderStatus));
     }
 

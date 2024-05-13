@@ -27,10 +27,12 @@
                             <spring:message var="author" code="bookInfoCard.by" arguments="${book.writer.firstName},${book.writer.lastName}"/>
                             <c:out value="${author}"/>
                         </p>
+                        <br/>
                         <p class="info">
                             <spring:message var="genre" code="book.genre.${book.genre}"/>
                             <c:out value="${genre}"/>
                         </p>
+                        <br/>
                         <p class="info">
                             <spring:message var="age" code="bookInfoCard.suggestedAge" arguments="${book.suggestedAge}"/>
                             <c:out value="${age}"/>

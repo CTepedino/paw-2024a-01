@@ -22,6 +22,7 @@ public class Book {
 
     public String getFormattedPrice(){
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
+        currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(price);
     }
 

@@ -6,7 +6,6 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
-import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class OrderController {
@@ -39,21 +39,23 @@ public class OrderController {
         this.bs = bs;
     }
 
-
+    @ModelAttribute("statuses")
+    public List<OrderStatus> statuses() {
+        return List.of(OrderStatus.values());
+    }
 
     @RequestMapping(method = RequestMethod.GET, path="/purchases")
     public ModelAndView purchases(
             @ModelAttribute("loggedUser") User loggedUser,
             @ModelAttribute("updateOrderForm") UpdateOrderForm updateOrderForm,
-            @Valid @ModelAttribute("orderSearchForm") final OrderSearchForm orderSearchForm,
+            @Valid @ModelAttribute("orderSearchForm") OrderSearchForm orderSearchForm,
             final BindingResult error
     ){
         if(error.hasErrors()){
-            return new ModelAndView("purchasesView");
+            orderSearchForm.setOrderStatus(null);
         }
         final ModelAndView mav = new ModelAndView("purchasesView");
-        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), OrderOrderBy.DATE_DESC, orderSearchForm.getPage(), 10));
-        mav.addObject("statuses", OrderStatus.values());
+        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), 10));
         return mav;
     }
 
@@ -61,15 +63,14 @@ public class OrderController {
     public ModelAndView sales(
             @ModelAttribute("loggedUser") User loggedUser,
             @ModelAttribute("updateOrderForm") UpdateOrderForm updateOrderForm,
-            @Valid @ModelAttribute("orderSearchForm") final OrderSearchForm form,
+            @Valid @ModelAttribute("orderSearchForm") OrderSearchForm form,
             final BindingResult error)
     {
         if(error.hasErrors()){
-            return new ModelAndView("salesView");
+            form.setOrderStatus(null);
         }
         ModelAndView mav = new ModelAndView("salesView");
-        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), OrderOrderBy.DATE_DESC, form.getPage(), 10));
-        mav.addObject("statuses", OrderStatus.values());
+        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
         return mav;
     }
 

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
 import ar.edu.itba.paw.models.orders.Order;
-import ar.edu.itba.paw.models.orders.OrderOrderBy;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 
 import java.util.List;
@@ -17,10 +16,10 @@ public interface OrderDao {
 
     void update(long orderId, OrderStatus orderStatus);
 
-    List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit);
+    List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, int offset, int limit);
     long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);
 
-    List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, OrderOrderBy orderBy, int offset, int limit);
+    List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, int offset, int limit);
     long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
 
     void updateAllWriterOrders(long writerId, OrderStatus oldStatus,OrderStatus newStatus);

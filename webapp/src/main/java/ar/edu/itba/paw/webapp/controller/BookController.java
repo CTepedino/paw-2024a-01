@@ -5,28 +5,23 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.webapp.form.MyBookSearchForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import ar.edu.itba.paw.webapp.form.ReviewSortForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,14 +36,12 @@ public class BookController {
     private final BookService bs;
     private final ReviewService rs;
     private final OrderService os;
-    private final UserService us;
 
 
     @Autowired
-    public BookController(final PublishService ps, final BookService bs, final UserService us, final ReviewService rs, final OrderService os){
+    public BookController(final PublishService ps, final BookService bs, final ReviewService rs, final OrderService os){
         this.ps = ps;
         this.bs = bs;
-        this.us = us;
         this.rs = rs;
         this.os = os;
     }
@@ -85,19 +78,23 @@ public class BookController {
                 newBookForm.getBookFile()
         );
 
-        LOGGER.atDebug().setMessage("Created the book {}").addArgument(newBookForm::getTitle).log();
 
         return new ModelAndView("redirect:/book/"+bookId);
     }
 
-    //TODO: sort reviews
+
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(
             @PathVariable("bookId") final long bookId,
             @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
             @ModelAttribute("reviewForm") ReviewForm form,
-            @ModelAttribute("reviewSortForm") ReviewSortForm sortForm
+            @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
+            final BindingResult error
     ){
+
+        if (error.hasErrors()){
+            sortForm.setOrderBy(ReviewOrderBy.DATE_DESC);
+        }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
@@ -131,6 +128,7 @@ public class BookController {
     public ModelAndView editBookForm(@ModelAttribute("editBookForm") NewBookForm form, @PathVariable("id") long id){
 
         Book book = bs.findById(id).orElseThrow(BookNotFoundException::new);
+
         form.setTitle(book.getTitle());
         form.setDescription(book.getDescription());
         form.setGenre(book.getGenre());

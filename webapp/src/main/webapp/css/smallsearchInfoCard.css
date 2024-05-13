@@ -35,15 +35,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 10pt
+    font-size: 10pt;
 }
 
 .card-title{
-    display: inline-block;
+    max-height: 65px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 11pt
+    font-size: 11pt;
 }
 
 .content{
@@ -57,4 +55,15 @@
     right: 0;
     margin: 50px;
     font-size: 12pt
+}
+
+@media screen and (max-width: 600px) {
+    .card-info {
+        width: 200px;
+        height: 300px;
+    }
+
+    .price-number {
+        font-size: 1em;
+    }
 }

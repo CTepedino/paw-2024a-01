@@ -185,4 +185,14 @@ public class BookServiceImpl implements BookService {
         }
         return popularGenres;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Book> getProfileBooks(long usedId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter) {
+        if (asWriter){
+            return getWriterBooks(usedId, title, orderBy, pageNumber, pageSize);
+        } else {
+            return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize);
+        }
+    }
 }
