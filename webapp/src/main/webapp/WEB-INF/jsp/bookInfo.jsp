@@ -220,6 +220,7 @@
             <form:errors path="review"/>
 
             <div class="btn-centerer">
+                <button class="btn modal-close close-btn" ><strong><spring:message code="cancel"/></strong></button>
                 <button class="waves-light btn" type="submit"><strong><spring:message code="review.submit"/></strong></button>
             </div>
 

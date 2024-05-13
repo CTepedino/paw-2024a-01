@@ -67,7 +67,9 @@ public class ProfileController {
         final BindingResult error
     ){
         if(error.hasErrors()){
-            form.setPage(1);
+            if (error.hasFieldErrors("page")){
+                form.setPage(1);
+            }
             form.setOrderBy(BookSearchOrderBy.PUBLICATION_DATE_DESC);
         }
 

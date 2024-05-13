@@ -54,7 +54,8 @@
             </div>
             <div class="row">
                 <c:if test="${books.pageCount > 1}">
-                    <input type="number" id="page" name="page" value="${books.pageNumber}" style="display: none">
+                    <input type="submit" hidden />
+                    <input name="page" id="page" style="display: none"/>
                     <script src="<c:url value="/js/paginationControls.js"/>"></script>
                     <script>
                         const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber}, true);
@@ -75,7 +76,7 @@
             <form:label path="title">
                 <spring:message code="book.search.title"/>
             </form:label>
-            <form:input path="title" required="true"/>
+            <form:input path="title"/>
                 </div>
             </div>
 

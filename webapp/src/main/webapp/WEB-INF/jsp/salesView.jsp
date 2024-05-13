@@ -107,10 +107,14 @@
                                     <p><spring:message code="orders.sales.paymentApproval.decline"/></p>
                                 </div>
                                 <div class="modal-footer">
-                                    <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
-                                        <input type="checkbox" name="approved" value="false" checked style="display: none">
-                                        <button class="waves-light btn decline-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></strong></button>
-                                    </form:form>
+                                    <div class="footer-aligner">
+                                        <button class="btn modal-close close-btn"><strong><spring:message code="cancel"/></strong></button>
+                                        <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                            <input type="checkbox" name="approved" value="false" checked style="display: none">
+
+                                            <button class="waves-light btn decline-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></strong></button>
+                                        </form:form>
+                                    </div>
                                 </div>
                             </div>
                             <a class="waves-light btn accept-button modal-trigger" href="#accept"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></a>
@@ -120,10 +124,14 @@
                                     <p><spring:message code="orders.sales.paymentApproval.accept"/></p>
                                 </div>
                                 <div class="modal-footer">
-                                    <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
-                                        <input type="checkbox" name="approved" value="true" checked style="display: none">
-                                        <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></strong></button>
-                                    </form:form>
+                                    <div class="footer-aligner">
+                                        <button class="btn modal-close close-btn" ><strong><spring:message code="cancel"/></strong></button>
+                                        <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                            <input type="checkbox" name="approved" value="true" checked style="display: none">
+
+                                            <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></strong></button>
+                                        </form:form>
+                                    </div>
                                 </div>
                             </div>
                         </c:if>
