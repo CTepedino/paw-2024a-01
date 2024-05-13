@@ -29,7 +29,7 @@ import java.util.Optional;
 @Controller
 public class BookController {
 
-    private static final Integer REVIEW_PAGE_SIZE=10;
+    private static final Integer REVIEW_PAGE_SIZE=5;
 
     private final PublishService ps;
     private final BookService bs;

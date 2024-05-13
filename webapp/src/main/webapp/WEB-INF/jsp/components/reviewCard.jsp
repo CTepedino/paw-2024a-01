@@ -14,7 +14,6 @@
 <body>
 <script src="<c:url value="/js/starRating.js"/>"></script>
 <div class="card row">
-    <div class="row">
         <div class="col s4 l2 reviewer-info">
             <a class="reviewer-info-stacked" href="<c:url value="/profile/${review.reviewer.userId}"/>">
                 <div class="image-centerer">
@@ -40,7 +39,6 @@
             </div>
             <p>${review.review}</p>
         </div>
-    </div>
 </div>
 </body>
 </html>

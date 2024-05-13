@@ -43,6 +43,6 @@ public class Review {
     }
 
     public String getFormattedDate(Locale locale) {
-        return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(locale));
+        return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale));
     }
 }

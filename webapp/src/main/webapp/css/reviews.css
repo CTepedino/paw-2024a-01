@@ -1,3 +1,4 @@
+
 .review-pfp{
     border-radius: 50%;
     height: 100px;
@@ -17,6 +18,8 @@
     align-items: center;
     border-right: 1px solid #e0e0e0;
     margin-top: 10px;
+    overflow: hidden;
+    height: 160px;
 }
 
 .reviewer-info-stacked{
@@ -34,8 +37,10 @@
 }
 
 .review-box{
+    height: 160px;
     margin-top: 20px;
     padding-left: 40px;
+    overflow-y: auto;
 }
 
 .review-box p{
