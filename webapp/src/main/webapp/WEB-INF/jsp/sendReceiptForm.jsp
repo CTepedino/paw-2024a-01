@@ -28,8 +28,12 @@
                 enctype="multipart/form-data"
                 cssClass="z-depth-2"
         >
-            <h5 class="publish-title"><spring:message code="buy.book.title"/></h5>
+            <h5 class="publish-title">
+                <spring:message code="buy.book.title" var="buyTitle" arguments="${book.title}"/>
+                <c:out value="${buyTitle}"/>
+            </h5>
             <br>
+
             <h6><spring:message code="buy.book.description"/></h6>
 
             <h6><spring:message code="buy.book.verification"/></h6>
@@ -57,6 +61,8 @@
 
 
             <div class="input-field center">
+                <button class="btn close-btn" style="background-color: gray" onclick="goBackToBook()"><strong><spring:message code="cancel"/></strong></button>
+
                 <button class="btn waves-effect waves-light" type="submit" name="action">
                     <strong><spring:message code="orders.purchases.action.WAITING_PAYMENT"/></strong>
                 </button>
@@ -70,6 +76,11 @@
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems);
     });
+
+    function goBackToBook() {
+        event.preventDefault();
+        window.location.href = '<c:url value="/book/${book.bookId}"/>';
+    }
 </script>
 </body>
 </html>

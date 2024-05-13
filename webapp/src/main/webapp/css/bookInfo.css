@@ -70,7 +70,7 @@
 
 .close-btn{
     margin-right: 10px;
-    background-color: gray;
+    background-color: gray !important;
 }
 
 .close-btn:hover{
