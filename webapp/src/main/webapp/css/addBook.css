@@ -21,3 +21,8 @@ form {
     text-align: center;
     padding-top: 20px;
 }
+
+textarea {
+    resize: none;
+    min-height: 150px;
+}
