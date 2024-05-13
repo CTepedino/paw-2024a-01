@@ -60,10 +60,18 @@
                                 </button>
                             </a>
                         </c:if>
-                        <c:if test="${ownsBook or isAuthor}">
+                        <c:if test="${ownsBook or (isAuthor and not book.paused)}">
                             <a href="<c:url value="/book/file/${book.bookId}"/>" target="_blank">
                                 <button type="submit" class="waves-effect waves-light btn btn action-button">
                                     <strong><spring:message code="orders.purchases.action.COMPLETED"/></strong>
+                                </button>
+                            </a>
+                        </c:if>
+                        <c:if test="${!ownsBook and not canBuy and not isAuthor and isLoggedIn}">
+                            <p><spring:message code="book.bookInfo.alreadyBought"/></p>
+                            <a href="<c:url value="/purchases"/>">
+                                <button type="submit" class="waves-effect waves-light btn btn action-button">
+                                    <strong><spring:message code="book.bookInfo.gotToPurchases"/></strong>
                                 </button>
                             </a>
                         </c:if>
@@ -77,8 +85,21 @@
                                 <strong><spring:message code="book.bookInfo.EditReview"/></strong>
                             </a>
                         </c:if>
-                        <c:if test="${not ownsBook and book.paused}">
+                        <c:if test="${canBuy and book.paused}">
                             <p class="red-text"><spring:message code="book.bookInfo.paused"/></p>
+                        </c:if>
+                        <c:if test="${isAuthor and book.paused}">
+                            <c:if test="${book.writer.cbu eq null}">
+                                <a href="<c:url value="/profile"/>">
+                                    <button type="submit" class="waves-effect waves-light btn btn action-button">
+                                        <strong><spring:message code="book.bookInfo.gotToProfile"/></strong>
+                                    </button>
+                                </a>
+                                <p class="red-text"><spring:message code="book.bookInfo.noCBU"/></p>
+                            </c:if>
+                            <c:if test="${book.writer.cbu ne null}">
+                                <p class="red-text"><spring:message code="book.bookInfo.noBook"/></p>
+                            </c:if>
                         </c:if>
                     </div>
                 </div>

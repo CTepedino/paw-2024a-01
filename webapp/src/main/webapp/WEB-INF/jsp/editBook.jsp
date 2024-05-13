@@ -18,7 +18,7 @@
 <%@include file="components/topBar.jsp" %>
 
 <body>
-<div class="container">
+<div class="container publish-container">
     <div class="form">
 
         <c:url value="/book/edit/${id}" var="postUrl"/>
