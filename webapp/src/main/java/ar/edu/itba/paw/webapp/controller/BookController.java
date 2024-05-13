@@ -91,6 +91,9 @@ public class BookController {
             @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
             final BindingResult error
     ){
+        if (reviewPage < 1){
+            reviewPage = 1;
+        }
 
         if (error.hasErrors()){
             sortForm.setOrderBy(ReviewOrderBy.DATE_DESC);

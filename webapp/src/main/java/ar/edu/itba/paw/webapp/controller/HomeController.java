@@ -23,12 +23,10 @@ public class HomeController {
     private static final int PAGE_SIZE = 20;
 
     private final BookService bs;
-    private final UserService us;
 
     @Autowired
-    public HomeController(BookService bs, UserService us){
+    public HomeController(BookService bs){
         this.bs = bs;
-        this.us = us;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
@@ -50,6 +48,9 @@ public class HomeController {
             }
             if (error.hasFieldErrors("genres")){
                 form.setGenre(null);
+            }
+            if (error.hasFieldErrors("page")){
+                form.setPage(1);
             }
         }
 
