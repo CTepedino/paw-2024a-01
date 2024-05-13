@@ -6,11 +6,12 @@ import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.OrderSearchForm;
-import ar.edu.itba.paw.webapp.form.UpdateOrderForm;
+import ar.edu.itba.paw.webapp.form.UpdateOrderFormBuyerSide;
+import ar.edu.itba.paw.webapp.form.UpdateOrderFormWriterSide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,7 +41,7 @@ public class OrderController {
     @RequestMapping(method = RequestMethod.GET, path="/purchases")
     public ModelAndView purchases(
             @ModelAttribute("loggedUser") User loggedUser,
-            @ModelAttribute("updateOrderForm") UpdateOrderForm updateOrderForm,
+            @ModelAttribute("updateOrderForm") UpdateOrderFormBuyerSide updateOrderForm,
             @Valid @ModelAttribute("orderSearchForm") OrderSearchForm orderSearchForm,
             final BindingResult error
     ){
@@ -55,23 +56,47 @@ public class OrderController {
     @RequestMapping(method = RequestMethod.GET, path="/sales")
     public ModelAndView sales(
             @ModelAttribute("loggedUser") User loggedUser,
-            @ModelAttribute("updateOrderForm") UpdateOrderForm updateOrderForm,
-            @Valid @ModelAttribute("orderSearchForm") OrderSearchForm form,
+            @ModelAttribute("updateOrderForm") UpdateOrderFormWriterSide updateOrderForm,
+            @Valid @ModelAttribute("orderSearchForm") OrderSearchForm orderSearchForm,
             final BindingResult error)
     {
         if(error.hasErrors()){
-            form.setOrderStatus(null);
+            orderSearchForm.setOrderStatus(null);
         }
         ModelAndView mav = new ModelAndView("salesView");
-        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), form.getTitle(), form.getOrderStatus(), form.getPage(), 10));
+        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), 10));
         return mav;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path="/advanceOrder/{id:\\d+}/{from:sales|purchases}")
-    public ModelAndView advanceOrder(@ModelAttribute("updateOrderForm") UpdateOrderForm form, @PathVariable long id, @PathVariable String from){
-        os.updateOrder(id, form.getReceipt(), form.getApproved());
-        return new ModelAndView("redirect:/" + from);
+    @RequestMapping(method = RequestMethod.POST, path="/advanceOrder/{id:\\d+}/purchases")
+    public ModelAndView advanceOrderBuyerSide(
+            @Valid @ModelAttribute("updateOrderForm") UpdateOrderFormBuyerSide form,
+            final BindingResult error,
+            @PathVariable long id
+    ){
+        if (error.hasErrors()) {
+            return new ModelAndView("redirect:/purchases");
+        }
+
+        os.updateOrderBuyerSide(id, form.getReceipt());
+        return new ModelAndView("redirect:/purchases");
     }
+
+
+    @RequestMapping(method = RequestMethod.POST, path="/advanceOrder/{id:\\d+}/sales")
+    public ModelAndView advanceOrderWriterSide(
+            @Valid @ModelAttribute("updateOrderForm") UpdateOrderFormWriterSide form,
+            final BindingResult error,
+            @PathVariable long id
+    ){
+        if (error.hasErrors()) {
+            return new ModelAndView("redirect:/sales");
+        }
+
+        os.updateOrderWriterSide(id, form.getApproved());
+        return new ModelAndView("redirect:/sales");
+    }
+
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")

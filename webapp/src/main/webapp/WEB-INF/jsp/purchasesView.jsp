@@ -90,6 +90,7 @@
                                     <spring:message code="orders.purchases.chooseFile"/>
                                 </form:label>
                                 <form:input type="file" id="files" path="receipt" accept=".pdf" style="display:none;"/>
+                                <form:errors path="receipt"/>
                                 <button class="waves-light btn payment" type="submit">
                                     <spring:message code="orders.purchases.action.${order.orderStatus}"/>
                                 </button>

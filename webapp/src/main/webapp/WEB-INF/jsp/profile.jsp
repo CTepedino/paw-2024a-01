@@ -43,7 +43,7 @@
 
         <div class="row">
             <c:if test="${empty books.page and books.pageNumber eq 1}">
-                <h5 class="empty-books">No books found</h5>
+                <h5 class="empty-books"><spring:message code="profile.noBooks"/></h5>
             </c:if>
             <c:forEach var="book" items="${books.page}">
                 <c:set var="cardBook" value="${book}" scope="request"/>

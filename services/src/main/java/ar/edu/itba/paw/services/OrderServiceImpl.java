@@ -146,13 +146,24 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public void updateOrder(long orderId, MultipartFile receipt, Boolean approved){
+    public void updateOrderWriterSide(long orderId, Boolean approved){
+        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        if (order.getOrderStatus().equals(OrderStatus.WAITING_APPROVAL)) {
+            acceptOrReject(order, approved);
+        } else {
+            throw new InvalidOrderUpdateException();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void updateOrderBuyerSide(long orderId, MultipartFile receipt){
         Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         switch (order.getOrderStatus()){
-            case WAITING_CONTACT, COMPLETED -> throw new InvalidOrderUpdateException();
             case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
-            case WAITING_APPROVAL -> acceptOrReject(order, approved);
+            case WAITING_CONTACT, COMPLETED, WAITING_APPROVAL -> throw new InvalidOrderUpdateException();
         }
     }
 

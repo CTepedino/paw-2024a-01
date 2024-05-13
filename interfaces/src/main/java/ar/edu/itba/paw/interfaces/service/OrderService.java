@@ -21,7 +21,7 @@ public interface OrderService {
     PaymentReceipt getReceipt(long id);
 
     void atCbuAdded(long writerId);
-    void updateOrder(long orderId, MultipartFile receipt, Boolean approved);
+
 
     PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize);
 
@@ -33,5 +33,9 @@ public interface OrderService {
     boolean hasBookFileAccess(long bookId, String email);
 
     boolean canAdvanceOrder(long orderId, String email);
+
+    void updateOrderWriterSide(long orderId, Boolean approved);
+
+    void updateOrderBuyerSide(long orderId, MultipartFile receipt);
 
 }
