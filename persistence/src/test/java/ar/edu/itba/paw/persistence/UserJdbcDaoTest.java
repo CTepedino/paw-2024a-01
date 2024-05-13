@@ -146,4 +146,33 @@ public class UserJdbcDaoTest {
         assertNotNull(roles);
         assertArrayEquals(new UserRoles[] {UserRoles.READER}, roles.toArray());
     }
+
+    @Test
+    public void testGetUserWithPausedBooks(){
+        List<User> users = userDao.getUsersWithPausedBooks();
+
+        assertNotNull(users);
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users u", "EXISTS (Select * FROM books b WHERE b.writer_id = u.user_id AND b.is_paused = TRUE)"), users.size());
+    }
+
+    @Test
+    public void testUnpauseInvalidConditions(){
+        int oldCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users u", "EXISTS (Select * FROM books b WHERE b.writer_id = u.user_id AND b.is_paused = TRUE)");
+
+        userDao.recheckAllPaused(3);
+
+        assertEquals(oldCount, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users u", "EXISTS (Select * FROM books b WHERE b.writer_id = u.user_id AND b.is_paused = TRUE)"));
+
+    }
+
+    @Test
+    public void testUnpauseValidConditions(){
+        jdbcTemplate.execute("INSERT INTO book_files (id, file) VALUES (3, '')");
+
+        userDao.recheckAllPaused(3);
+
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users u", "EXISTS (Select * FROM books b WHERE b.writer_id = u.user_id AND b.is_paused = TRUE)"));
+    }
+
+
 }

@@ -87,8 +87,8 @@ public class BookJdbcDao implements BookDao {
                 price,
                 pageCount,
                 suggestedAge,
-                bookId,
-                isPaused
+                isPaused,
+                bookId
         );
     }
 
@@ -110,7 +110,7 @@ public class BookJdbcDao implements BookDao {
 
     @Override
     public long getAllSize() {
-        return DaoUtils.getRowCount(jdbcTemplate, "books");
+        return DaoUtils.getRowCount(jdbcTemplate, "books", "WHERE is_paused = FALSE");
     }
 
     @Override

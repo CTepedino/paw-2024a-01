@@ -10,6 +10,7 @@ import ar.edu.itba.paw.models.exception.IllegalReviewException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.webapp.form.EditBookForm;
 import ar.edu.itba.paw.webapp.form.NewBookForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import ar.edu.itba.paw.webapp.form.ReviewSortForm;
@@ -130,7 +131,7 @@ public class BookController {
 
 
     @RequestMapping(method = RequestMethod.GET, path="/book/edit/{id:\\d+}")
-    public ModelAndView editBookForm(@ModelAttribute("editBookForm") NewBookForm form, @PathVariable("id") long id){
+    public ModelAndView editBookForm(@ModelAttribute("editBookForm") EditBookForm form, @PathVariable("id") long id){
 
         Book book = bs.findById(id).orElseThrow(BookNotFoundException::new);
 
@@ -149,7 +150,7 @@ public class BookController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path="/book/edit/{id:\\d+}")
-    public ModelAndView editBook(@Valid @ModelAttribute("editBookForm") NewBookForm form, final BindingResult error, @PathVariable("id") long id){
+    public ModelAndView editBook(@Valid @ModelAttribute("editBookForm") EditBookForm form, final BindingResult error, @PathVariable("id") long id){
 
         if (error.hasErrors()){
             return editBookForm(form, id);

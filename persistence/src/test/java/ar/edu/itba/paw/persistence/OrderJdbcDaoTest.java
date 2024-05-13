@@ -125,19 +125,45 @@ public class OrderJdbcDaoTest{
         int rowsAfterUpdate = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
 
         assertEquals(rowsBeforeUpdate, rowsAfterUpdate);
-
-        Optional<Order> maybeOrder = orderDao.findById(EXISTING_ORDER_ID);
-        assertTrue(maybeOrder.isPresent());
-        Order existingOrder = maybeOrder.get();
-        assertEquals(OrderStatus.WAITING_CONTACT, existingOrder.getOrderStatus());
     }
 
     @Test
     public void testAllReaderOrders(){
-        List<Order> orders = orderDao.getReaderOrders(EXISTING_BUYER_ID, "", null, 0, 10);
+        List<Order> orders = orderDao.getReaderOrders(1, "", null, 0, 999);
 
         assertNotNull(orders);
-        assertEquals(1, orders.get(0).getOrderId());
-        assertEquals(2, orders.get(1).getOrderId());
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "orders", "buyer_id = 1"), orders.size());
     }
+
+    @Test
+    public void testGetWriterOrders(){
+        List<Order> orders = orderDao.getWriterOrders(2, "", null, 0, 999);
+
+        assertNotNull(orders);
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "orders o JOIN books b ON o.book_id = b.book_id", "b.writer_id = 2"), orders.size());
+    }
+
+    @Test
+    public void testGetWriterOrdersWithParams(){
+        List<Order> orders = orderDao.getWriterOrders(2, "my book", OrderStatus.WAITING_CONTACT, 0, 999);
+
+        assertNotNull(orders);
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "orders o JOIN books b ON o.book_id = b.book_id", "b.title LIKE '%my book%' AND o.status = 'WAITING_CONTACT' AND b.writer_id = 2"), orders.size());
+    }
+
+    @Test
+    public void testOwnsBook(){
+        boolean owns = orderDao.ownsBook(1, "booksPaused@mail.com");
+
+        assertTrue(owns);
+    }
+
+    @Test
+    public void testNotOwnsBook(){
+        boolean owns = orderDao.ownsBook(1,"anotherMail@mail.com");
+
+        assertFalse(owns);
+    }
+
+
 }

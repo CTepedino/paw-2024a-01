@@ -25,7 +25,6 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class FileJdbcDaoTest {
-    //La lógica de todos los DAO que manejan tablas de archivos es análoga, y todos extienden a un FileJdbcDao abstracto. Debido a eso, para los tests solo se usa el BookPreviewJdbcDao
 
     private static final byte[] FILE = new byte[100];
     private static final long EXISTING_ID = 1;

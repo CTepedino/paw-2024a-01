@@ -82,6 +82,13 @@ public class BookJdbcDaoTest {
     }
 
     @Test
+    public void testModify(){
+        bookDao.modify(1, "MODIFIED BOOK MODIFIED BOOK MODIFIED BOOK", "", BookGenre.BIOGRAPHY, new BigDecimal(1), 1, 1, false );
+
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "books", "title  = 'MODIFIED BOOK MODIFIED BOOK MODIFIED BOOK'"));
+    }
+
+    @Test
     public void testCreateNonExistentWriter(){
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate, "books");
 
@@ -100,12 +107,13 @@ public class BookJdbcDaoTest {
         assertEquals(rows, JdbcTestUtils.countRowsInTable(jdbcTemplate, "books"));
     }
 
+
     @Test
     public void testGetAllLimitExceeds(){
         List<Book> books = bookDao.getAll(0,99999);
 
         assertNotNull(books);
-        assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, "books"), books.size());
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "books", "is_paused = FALSE"), books.size());
     }
 
     @Test
@@ -125,6 +133,14 @@ public class BookJdbcDaoTest {
     }
 
     @Test
+    public void testGetAllSize(){
+        long size = bookDao.getAllSize();
+
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "books", "is_paused = FALSE"), size);
+    }
+
+
+    @Test
     public void testSearchNullParams(){
         List<Book> books = bookDao.searchWithParams(
                 null,
@@ -141,7 +157,7 @@ public class BookJdbcDaoTest {
         );
 
         assertNotNull(books);
-        assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, "books"), books.size());
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "books", "is_paused = FALSE"), books.size());
     }
 
     @Test
@@ -183,4 +199,39 @@ public class BookJdbcDaoTest {
         return booksCopy;
     }
 
+    @Test
+    public void testGetGenresByBookCount(){
+        List<BookGenre> genres = bookDao.getGenresByBookCount(5, 0);
+
+        assertNotNull(genres);
+        assertEquals(BookGenre.FICTION, genres.getFirst());
+    }
+
+    @Test
+    public void testRecheckedPaused(){
+        jdbcTemplate.update("INSERT INTO book_files (id, file) VALUES (3, '')");
+
+        boolean keepPaused = bookDao.recheckPaused(3);
+
+        assertFalse(keepPaused);
+    }
+
+    @Test
+    public void testGetWriterBooks(){
+        List<Book> books = bookDao.getWriterBooks(2, "", BookSearchOrderBy.PAGE_COUNT_ASC, 0, 999);
+
+        assertNotNull(books);
+        for (Book book : books){
+            assertEquals(2,book.getWriter().getUserId());
+        }
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "books", "writer_id = 2"),books.size());
+    }
+
+    @Test
+    public void testGetOwnedBooks(){
+        List<Book> books = bookDao.getOwnedBooks(2, "", BookSearchOrderBy.PAGE_COUNT_ASC, 0, 999);
+
+        assertNotNull(books);
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "books b JOIN orders o ON b.book_id = o.book_id", "o.buyer_id = 2 AND o.status = 'COMPLETED'"),books.size());
+    }
 }
