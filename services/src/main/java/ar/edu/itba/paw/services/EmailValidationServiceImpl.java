@@ -6,6 +6,8 @@ import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.models.exception.NoValidationCodeException;
 import ar.edu.itba.paw.models.users.EmailValidation;
 import ar.edu.itba.paw.models.users.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class EmailValidationServiceImpl implements EmailValidationService {
 
     private final MailService ms;
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+
     @Autowired
     public EmailValidationServiceImpl(EmailValidationDao emailValidationDao, MailService ms){
         this.emailValidationDao = emailValidationDao;
@@ -37,6 +41,7 @@ public class EmailValidationServiceImpl implements EmailValidationService {
         LocalDateTime expiration = LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS);
         emailValidationDao.create(user.getUserId(), code, expiration);
         ms.sendRegisterEmail(user, code, expiration);
+        LOGGER.atDebug().setMessage("Generated Validation Code").log();
     }
 
     private String generateRandomVerificationCode(){

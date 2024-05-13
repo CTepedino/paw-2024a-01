@@ -39,13 +39,13 @@
             <h6><spring:message code="buy.book.verification"/></h6>
             <br>
             <h6>
-                <spring:message var="price" code="buy.book.transfer" arguments="${book.formattedPrice}"/>
-                <c:out value="${price}"/>
+                <spring:message code="buy.book.transfer"/>
+                <c:out value="${book.formattedPrice}"/>
             </h6>
             <br>
             <h6>
-                <spring:message var="cbu" code="buy.book.cbu" arguments="${book.writer.cbu}"/>
-                <c:out value="${cbu}"/>
+                <spring:message code="buy.book.cbu"/>
+                <c:out value="${book.writer.cbu}"/>
             </h6>
             <br>
             <div class="file-field input-field">
