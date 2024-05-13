@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService {
         );
 
         evs.create(user);
+        LOGGER.atDebug().setMessage("Created user: {}").addArgument(firstName).log();
         return user;
     }
 
@@ -101,11 +102,14 @@ public class UserServiceImpl implements UserService {
                 Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
+                LOGGER.atWarn().setMessage("Failed to Validate email for userId: {} - Invalid Code").addArgument(id).log();
                 throw new InvalidCodeException();
             }
         } else {
+            LOGGER.atWarn().setMessage("Failed to Validated email for userId: {} - No validation code").addArgument(id).log();
             throw new NoValidationCodeException();
         }
+        LOGGER.atDebug().setMessage("Validated email for userId: {}").addArgument(id).log();
     }
 
     @Transactional
@@ -138,6 +142,8 @@ public class UserServiceImpl implements UserService {
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), updatedAuth);
 
         SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(id).log();
     }
 
     @Transactional(readOnly = true)
@@ -193,6 +199,8 @@ public class UserServiceImpl implements UserService {
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), encodedPassword, auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        LOGGER.atDebug().setMessage("Changed password for userId: {}").addArgument(user.getUserId()).log();
     }
 
     @Transactional
@@ -213,10 +221,11 @@ public class UserServiceImpl implements UserService {
             try {
                 profilePictureDao.createOrUpdate(user.getUserId(), profilePicture.getBytes());
             } catch (IOException e){
+                LOGGER.atWarn().setMessage("Failed to update profile for user: {} - Error Message: {}").addArgument(firstName).addArgument(e.getMessage()).log();
                 throw new UnreadableFileException();
             }
         }
-
+        LOGGER.atDebug().setMessage("Updated profile for user: {}").addArgument(firstName).log();
     }
 
 

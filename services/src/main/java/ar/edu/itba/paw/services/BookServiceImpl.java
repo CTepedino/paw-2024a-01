@@ -14,6 +14,8 @@ import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ public class BookServiceImpl implements BookService {
     private final BookFileDao bookFileDao;
 
     private final UserService us;
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
     public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao, final BookFileDao bookFileDao, final UserService us){
@@ -60,8 +64,10 @@ public class BookServiceImpl implements BookService {
             previewDao.create(bookId, preview.getBytes());
             coverDao.create(bookId, cover.getBytes());
             bookFileDao.create(bookId, bookFile.getBytes());
+            LOGGER.atDebug().setMessage("Created book: {}").addArgument(title).log();
             return bookId;
         } catch (IOException e){
+            LOGGER.atWarn().setMessage("Failed to create book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
     }
@@ -84,9 +90,11 @@ public class BookServiceImpl implements BookService {
             }
 
         } catch (IOException e){
+            LOGGER.atWarn().setMessage("Failed to update book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
         bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge, isPaused);
+        LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 
     @Transactional(readOnly = true)

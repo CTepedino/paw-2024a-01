@@ -87,7 +87,7 @@ public class MailServiceImpl implements MailService{
             LOGGER.atDebug().setMessage("Sending order email to: {}").addArgument(to).log();
             sendMessageUsingTemplate(to, subject, "orderEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send order email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+            LOGGER.atWarn().setMessage("Failed to send order email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
         LOGGER.atDebug().setMessage("Sent order email to: {}").addArgument(to).log();
     }
@@ -110,7 +110,7 @@ public class MailServiceImpl implements MailService{
             LOGGER.atDebug().setMessage("Sending register email to: {}").addArgument(to).log();
             sendMessageUsingTemplate(to, subject, "registerEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send register email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+            LOGGER.atWarn().setMessage("Failed to send register email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
         LOGGER.atDebug().setMessage("Sent register email to: {}").addArgument(to).log();
 
@@ -134,12 +134,12 @@ public class MailServiceImpl implements MailService{
         data.put("salesUrl", env.getProperty("baseUrl") + "/sales");
 
         try {
-            LOGGER.atDebug().setMessage("Sending Receipt Upload email to: {}").addArgument(to).log();
+            LOGGER.atDebug().setMessage("Sending Receipt Uploaded email to: {}").addArgument(to).log();
             sendMessageUsingTemplate(to, subject, "receiptUploadedEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send Receipt Upload email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+            LOGGER.atWarn().setMessage("Failed to send Receipt Uploaded email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
-        LOGGER.atDebug().setMessage("Sent Receipt Upload email to: {}").addArgument(to).log();
+        LOGGER.atDebug().setMessage("Sent Receipt Uploaded email to: {}").addArgument(to).log();
     }
 
     @Override
@@ -160,12 +160,12 @@ public class MailServiceImpl implements MailService{
         data.put("salesUrl", env.getProperty("baseUrl") + "/sales");
 
         try {
-            LOGGER.atDebug().setMessage("Sending Receipt Reupload email to: {}").addArgument(to).log();
+            LOGGER.atDebug().setMessage("Sending Receipt Reuploaded email to: {}").addArgument(to).log();
             sendMessageUsingTemplate(to, subject, "receiptReuploadedEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send Receipt Reupload email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+            LOGGER.atWarn().setMessage("Failed to send Receipt Reuploaded email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
-        LOGGER.atDebug().setMessage("Sent Receipt Reupload email to: {}").addArgument(to).log();
+        LOGGER.atDebug().setMessage("Sent Receipt Reuploaded email to: {}").addArgument(to).log();
     }
 
     @Override
@@ -186,7 +186,7 @@ public class MailServiceImpl implements MailService{
             LOGGER.atDebug().setMessage("Sending Receipt Approved email to: {}").addArgument(to).log();
             sendMessageUsingTemplate(to, subject, "receiptApprovedEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send Receipt Approved email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+            LOGGER.atWarn().setMessage("Failed to send Receipt Approved email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
         LOGGER.atDebug().setMessage("Sent Receipt Approved email to: {}").addArgument(to).log();
     }
@@ -209,7 +209,7 @@ public class MailServiceImpl implements MailService{
             LOGGER.atDebug().setMessage("Sending Receipt Denied email to: {}").addArgument(to).log();
             sendMessageUsingTemplate(to, subject, "receiptDeniedEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send Receipt Denied email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+            LOGGER.atWarn().setMessage("Failed to send Receipt Denied email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
         LOGGER.atDebug().setMessage("Sent Receipt Denied email to: {}").addArgument(to).log();
     }
@@ -228,7 +228,7 @@ public class MailServiceImpl implements MailService{
             LOGGER.atDebug().setMessage("Sending Missing info email to: {}").addArgument(to).log();
             sendMessageUsingTemplate(to, subject, "missingInfoEmailTemplate", data, currentLocale);
         } catch (MessagingException e){
-            LOGGER.atDebug().setMessage("Failed to send Missing info email to: {} \n Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+            LOGGER.atWarn().setMessage("Failed to send Missing info email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
         }
         LOGGER.atDebug().setMessage("Sent Missing info email to: {}").addArgument(to).log();
     }

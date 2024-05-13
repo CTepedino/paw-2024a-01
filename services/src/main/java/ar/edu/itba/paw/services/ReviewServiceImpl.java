@@ -8,6 +8,8 @@ import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final UserService us;
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+
     @Autowired
     public ReviewServiceImpl(ReviewDao reviewDao, UserService us){
         this.reviewDao = reviewDao;
@@ -33,8 +37,10 @@ public class ReviewServiceImpl implements ReviewService {
     public void createOrUpdate(long bookId, long userId, int rating, String review){
         if (get(bookId, userId).isPresent()){
             reviewDao.modify(bookId, userId, rating, review);
+            LOGGER.atDebug().setMessage("Modified Review for bookId: {}").addArgument(bookId).log();
         } else {
             reviewDao.create(bookId, userId, rating, review);
+            LOGGER.atDebug().setMessage("Created Review for bookId: {}").addArgument(bookId).log();
         }
     }
 
@@ -69,7 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Optional<Review> findLoggedUserReview(long bookId) {
         if(us.isLoggedIn()){
-            return reviewDao.get(bookId, us.getLoggedUser().get().getUserId());
+            return reviewDao.get(bookId, us.getLoggedUser().orElseThrow(UserNotFoundException::new).getUserId());
         }
         return Optional.empty();
     }
