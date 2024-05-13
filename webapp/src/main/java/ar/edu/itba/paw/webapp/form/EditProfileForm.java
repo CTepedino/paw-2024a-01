@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.form.validations.ImageFile;
 import ar.edu.itba.paw.webapp.form.validations.LoggedUserPassword;
 import ar.edu.itba.paw.webapp.form.validations.UniqueEmail;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +10,7 @@ import javax.validation.constraints.*;
 public class EditProfileForm {
 
     @NotNull
+    @ImageFile
     private MultipartFile profilePicture;
 
 
