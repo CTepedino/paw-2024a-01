@@ -37,8 +37,6 @@ public interface BookService {
             int pageCount,
             int suggestedAge,
 
-            boolean isPaused,
-
             MultipartFile preview,
             MultipartFile cover,
             MultipartFile bookFile

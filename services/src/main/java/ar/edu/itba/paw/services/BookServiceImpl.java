@@ -74,15 +74,16 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused,MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
+        boolean isPaused = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).isPaused();
         try {
-            if (!cover.isEmpty()) {
+            if (cover != null && !cover.isEmpty()) {
                 coverDao.update(bookId, cover.getBytes());
             }
-            if (!preview.isEmpty()) {
+            if (preview != null && !preview.isEmpty()) {
                 previewDao.update(bookId, preview.getBytes());
             }
-            if (!bookFile.isEmpty()) {
+            if (bookFile != null && !bookFile.isEmpty()) {
                 bookFileDao.update(bookId, bookFile.getBytes());
                 if (isPaused){
                     isPaused = bookDao.recheckPaused(bookId);

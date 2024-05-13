@@ -141,7 +141,6 @@ public class BookController {
         form.setPrice(book.getPrice());
         form.setPageCount(book.getPageCount());
         form.setSuggestedAge(book.getSuggestedAge());
-        form.setIsPaused(book.isPaused());
 
         ModelAndView mav = new ModelAndView("editBook");
         mav.addObject("id", id);
@@ -156,7 +155,8 @@ public class BookController {
             return editBookForm(form, id);
         }
 
-        bs.editPublication(id, form.getTitle(), form.getDescription(), form.getGenre(), form.getPrice(), form.getPageCount(), form.getSuggestedAge(), form.getIsPaused(), form.getCover(), form.getPreview(), form.getBookFile());
+
+        bs.editPublication(id, form.getTitle(), form.getDescription(), form.getGenre(), form.getPrice(), form.getPageCount(), form.getSuggestedAge(), form.getCover(), form.getPreview(), form.getBookFile());
 
         return new ModelAndView("redirect:/book/"+id);
     }
