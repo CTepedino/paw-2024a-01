@@ -45,7 +45,7 @@
                 <form:label path="password">
                     <spring:message code="session.newPassword"/><span class="red-text">*</span>
                 </form:label>
-                <form:input path="password" type="password" onkeyup="repeatPasswordCheck()"/>
+                <form:input path="password" type="password" id="password" name="password" onkeyup="repeatPasswordCheck()"/>
                 <span class="material-icons password-toggle-btn" onclick="togglePasswordVisibility()">visibility_off</span>
             </div>
             <form:errors path="password" cssClass="red-text" element="p"/>
@@ -54,8 +54,8 @@
                 <form:label path="repeatPassword">
                     <spring:message code="session.repeatNewPassword"/><span class="red-text">*</span>
                 </form:label>
-                <form:input path="repeatPassword" type="password" onkeyup="repeatPasswordCheck()"/>
-                <span class="material-icons password-toggle-btn" onclick="toggleRepeatPasswordVisibility()">visibility_off</span>
+                <form:input path="repeatPassword" type="password" name="repeatPassword" id="repeatPassword" onkeyup="repeatPasswordCheck()"/>
+                <span class="material-icons repeat-password-toggle-btn" onclick="toggleRepeatPasswordVisibility()">visibility_off</span>
 
             </div>
 
