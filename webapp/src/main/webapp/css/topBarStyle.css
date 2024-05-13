@@ -49,6 +49,8 @@ nav {
 }
 .name-text{
     margin-right: 10px;
+    overflow: hidden;
+    max-height: 70px;
 }
 
 .user-picture{
