@@ -30,9 +30,9 @@ public class AccessHelper {
         this.us = us;
     }
 
-    public boolean canCreateOrder(Authentication auth, HttpServletRequest request){
+    public boolean canCreateOrder(Authentication auth, String id){
         try {
-            long bookId = Long.parseLong(request.getParameter("bookId"));
+            long bookId = Long.parseLong(id);
             return us.isLoggedIn() && os.canCreateOrder(bookId);
         } catch (Exception e){
             return false;

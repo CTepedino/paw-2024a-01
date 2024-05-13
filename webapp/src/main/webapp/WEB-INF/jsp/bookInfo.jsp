@@ -130,8 +130,8 @@
                 <c:if test="${loggedUserReview ne null}">
                     <div class="divider"></div>
                     <div class="row">
-                        <h5 class="col s11"><spring:message code="review.yourReview"/></h5>
-                        <div class="review-control col s1">
+                        <h5 class="col s10"><spring:message code="review.yourReview"/></h5>
+                        <div class="review-control col s2">
                             <a class="waves-effect waves-light btn modal-trigger action-button edit-rev-btn" href="#reviewModal">
                                 <strong><spring:message code="review.editReview"/></strong>
                             </a>

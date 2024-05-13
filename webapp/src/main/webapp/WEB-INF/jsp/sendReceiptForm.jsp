@@ -18,9 +18,7 @@
 <body>
 <div class="container">
     <div class="form">
-        <c:url value="/sendBuyInfo" var="postUrl">
-            <c:param name="bookId" value="${bookId}"/>
-        </c:url>
+        <c:url value="/sendBuyInfo/${book.bookId}" var="postUrl"/>
         <form:form
                 modelAttribute="createOrderForm"
                 action="${postUrl}"
@@ -35,12 +33,12 @@
             <h6><spring:message code="buy.book.verification"/></h6>
             <br>
             <h6>
-                <spring:message var="price" code="buy.book.transfer" arguments="${price}"/>
+                <spring:message var="price" code="buy.book.transfer" arguments="${book.formattedPrice}"/>
                 <c:out value="${price}"/>
             </h6>
             <br>
             <h6>
-                <spring:message var="cbu" code="buy.book.cbu" arguments="${cbu}"/>
+                <spring:message var="cbu" code="buy.book.cbu" arguments="${book.writer.cbu}"/>
                 <c:out value="${cbu}"/>
             </h6>
             <br>

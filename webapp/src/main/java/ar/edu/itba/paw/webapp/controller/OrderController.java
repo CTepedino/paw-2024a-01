@@ -113,17 +113,15 @@ public class OrderController {
         Book book = bs.findById(id).orElseThrow(BookNotFoundException::new);
 
         ModelAndView mav =  new ModelAndView("sendReceiptForm");
-        mav.addObject("bookId", id);
-        mav.addObject("cbu", book.getWriter().getCbu());
-        mav.addObject("price", book.getFormattedPrice());
+        mav.addObject("book", book);
         return mav;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo")
-    public ModelAndView sendBuyInfo(@Valid @ModelAttribute final CreateOrderForm form, final BindingResult errors, @RequestParam("bookId") long bookId){
+    @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo/{id:\\d+}")
+    public ModelAndView sendBuyInfo(@Valid @ModelAttribute final CreateOrderForm form, final BindingResult errors, @PathVariable("id") long bookId){
 
         if(errors.hasErrors()){
-            return new ModelAndView("redirect:/sendBuyInfo/" + bookId);
+            return sendBuyInfoForm(form, bookId);
         }
 
         os.create(bookId, form.getReceipt());
