@@ -1,37 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --pale-blue: hsl(225, 100%, 94%);
-    --very-pale-blue: hsl(225, 100%, 98%);
-    --desaturated-blue: hsl(224, 23%, 55%);
-    --dark-blue: hsl(223, 47%, 23%);
-    --bright-blue-hover: hsl(42.68deg 87.39% 56.47%);
-}
-
-body {
-    font-size: 16px;
-    font-family: "Poppins",sans-serif;
-}
-
-.orderCards {
-    width: 450px;
-    background-color: white;
-    color: var(--desaturated-blue);
-    border-radius: 20px;
-    margin: 50px auto;
-    overflow: hidden;
-    box-shadow: 0px 0px 30px #255957;
-
-}
 
 .title {
-    color: var(--dark-blue);
+    color: black;
     font-weight: 900;
     font-size: 32px;
 }
@@ -40,64 +9,11 @@ body {
     width: 100%;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    padding: 30px;
-    font-size: 18px;
-}
-
-.container > * {
-    margin: 13px 0;
-}
-
-.container strong {
-    color: var(--dark-blue);
-}
-
-.order-description {
-    line-height: 25px;
-}
-
-.plan-description {
-    margin-right: 75px;
-    line-height: 20px;
-}
-
-button {
-    width: 100%;
-    border: none;
-    font-weight: 700;
-    font-size: 0.9rem;
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-.cancel-button {
-    background-color: white;
-    color: var(--desaturated-blue);
-    border: none;
-    margin-top: 22px;
-}
-
-.cancel-button:hover {
-    color: black;
-}
-
-.proceed-button {
-    background-color: hsl(177.45deg 37.01% 24.9%);
-    padding: 1rem 0;
-    color: white;
-    box-shadow: 0 20px 30px -8px rgb(197 189 245);
-}
-
-.proceed-button:hover {
-    background-color: var(--bright-blue-hover);
-}
-
-.a-button{
-    color: white;
-    text-decoration:none;
+.summary-container{
+    padding-left: 0 !important;
+    width: 40% !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+    padding-right: 0 !important;
+    padding-bottom: 20px;
 }
