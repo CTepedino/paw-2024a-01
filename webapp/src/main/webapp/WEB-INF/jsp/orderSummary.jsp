@@ -27,9 +27,14 @@
         </h3>
         <div class="divider"></div>
         <p><spring:message code="buy.book.verification"/></p>
-        <a class="btn" href="<c:url value="/purchases"/>">
-            <spring:message code="buy.emailConfirmation.viewMyOrders"/>
-        </a>
+        <div class="btn-centerer">
+            <a class="btn" href="<c:url value="/"/>" style="margin-right: 10px;">
+                <spring:message code="buy.emailConfirmation.continueExploring"/>
+            </a>
+            <a class="btn" href="<c:url value="/purchases"/>">
+                <spring:message code="buy.emailConfirmation.viewMyOrders"/>
+            </a>
+        </div>
     </div>
 </div>
 </body>
