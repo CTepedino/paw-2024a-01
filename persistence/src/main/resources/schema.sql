@@ -31,14 +31,11 @@ UPDATE orders SET date = now() WHERE date IS NULL;
 ALTER TABLE orders ADD COLUMN order_id SERIAL PRIMARY KEY;
 UPDATE orders SET order_id = DEFAULT;
 
-ALTER TABLE orders ADD COLUMN order_id SERIAL;
-ALTER TABLE orders DROP CONSTRAINT orders_pkey;
-ALTER TABLE orders ADD PRIMARY KEY (orders_id);
 
 ALTER TABLE book_previews ADD COLUMN book_id INT;
 UPDATE book_previews AS bp SET book_id = b.book_id FROM books AS b WHERE bp.id = b.preview_id;
 ALTER TABLE books DROP preview_id;
-ALTER TABLE book_previews DROP CONSTRAINT book_previews_pkey;
+ALTER TABLE book_previews DROP CONSTRAINT pdfs_pkey;
 ALTER TABLE book_previews DROP COLUMN id;
 ALTER TABLE book_previews RENAME COLUMN book_id TO id;
 ALTER TABLE book_previews ADD PRIMARY KEY (id);
@@ -47,7 +44,7 @@ ALTER TABLE book_previews ADD CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES books
 ALTER TABLE cover_images ADD COLUMN book_id INT;
 UPDATE cover_images AS ci SET book_id = b.book_id FROM books AS b WHERE ci.id = b.cover_id;
 ALTER TABLE books DROP cover_id;
-ALTER TABLE cover_images DROP CONSTRAINT cover_images_pkey;
+ALTER TABLE cover_images DROP CONSTRAINT images_pkey;
 ALTER TABLE cover_images DROP COLUMN id;
 ALTER TABLE cover_images RENAME COLUMN book_id TO id;
 ALTER TABLE cover_images ADD PRIMARY KEY (id);
@@ -59,18 +56,23 @@ UPDATE users SET is_enabled = TRUE WHERE is_enabled IS NULL;
 ALTER TABLE users ADD COLUMN locale VARCHAR(10) DEFAULT 'en';
 UPDATE users SET locale = 'en' WHERE locale is NULL;
 
+CREATE TABLE IF NOT EXISTS book_files(
+     id INT PRIMARY KEY REFERENCES books (book_id) ON DELETE CASCADE,
+     file BYTEA NOT NULL
+);
+
 ALTER TABLE books ADD COLUMN is_paused BOOLEAN DEFAULT FALSE;
 UPDATE books b SET is_paused = CASE
-    WHEN NOT EXISTS(
-        SELECT 1
-        FROM book_files bf
-        WHERE bf.id = b.book_id
-    ) OR EXISTS(
-        SELECT 1
-        FROM users AS u
-        WHERE u.user_id = b.writer_id AND u.cbu IS NULL
-    ) THEN TRUE
-    ELSE FALSE
+       WHEN NOT EXISTS(
+           SELECT 1
+           FROM book_files bf
+           WHERE bf.id = b.book_id
+       ) OR EXISTS(
+           SELECT 1
+           FROM users AS u
+           WHERE u.user_id = b.writer_id AND u.cbu IS NULL
+       ) THEN TRUE
+       ELSE FALSE
 END;
 */
 
