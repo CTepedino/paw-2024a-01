@@ -46,12 +46,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void create(long bookId, MultipartFile receipt) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
         try {
             long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_APPROVAL);
             paymentReceiptDao.create(orderId, receipt.getBytes());
-            ms.sendOrderEmail(buyer, book);;
+            ms.sendReceiptUploadedEmail(findById(orderId).orElseThrow(OrderNotFoundException::new));
         } catch (IOException e){
             throw new UnreadableFileException();
         }
