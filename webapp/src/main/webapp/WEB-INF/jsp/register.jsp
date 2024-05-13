@@ -38,7 +38,7 @@
                 <form:label path="firstName">
                     <spring:message code="book.addBook.writerFirstName"/><span class="red-text">*</span>
                 </form:label>
-                <form:input type="text" path="firstName"/>
+                <form:input type="text" path="firstName" maxlength="255"/>
             </div>
             <form:errors path="firstName" element="p" cssClass="red-text err-msj"/>
 
@@ -46,7 +46,7 @@
                 <form:label path="lastName">
                     <spring:message code="book.addBook.writerLastName"/><span class="red-text">*</span>
                 </form:label>
-                <form:input type="text" path="lastName"/>
+                <form:input type="text" path="lastName" maxlength="255"/>
             </div>
             <form:errors path="lastName" element="p" cssClass="red-text err-msj"/>
 
@@ -54,7 +54,7 @@
                 <form:label path="email">
                     <spring:message code="session.email"/><span class="red-text">*</span>
                 </form:label>
-                <form:input path="email" type="text"/>
+                <form:input path="email" type="text" maxlength="255"/>
             </div>
             <form:errors path="email" element="p" cssClass="red-text err-msj"/>
 
@@ -62,7 +62,7 @@
                 <form:label path="password">
                     <spring:message code="session.password"/><span class="red-text">*</span>
                 </form:label>
-                <form:input path="password" type="password" id="password" name="password" onkeyup="repeatPasswordCheck()"/>
+                <form:input path="password" type="password" id="password" name="password" onkeyup="repeatPasswordCheck()" maxlength="255"/>
                 <span class="material-icons password-toggle-btn" onclick="togglePasswordVisibility()">visibility_off</span>
             </div>
             <form:errors path="password" element="p" cssClass="red-text err-msj"/>

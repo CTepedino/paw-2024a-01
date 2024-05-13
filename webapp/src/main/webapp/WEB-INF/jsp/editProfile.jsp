@@ -32,13 +32,13 @@
 
             <div class="input-field">
                 <form:label path="newFirstName"><spring:message code="user.profile.edit.firstName"/><span class="red-text">*</span></form:label>
-                <form:input path="newFirstName"/>
+                <form:input path="newFirstName" maxlength="50"/>
             </div>
             <form:errors path="newFirstName" cssClass="red-text" element="p"/>
 
             <div class="input-field">
                 <form:label path="newLastName"><spring:message code="user.profile.edit.lastName"/><span class="red-text">*</span></form:label>
-                <form:input path="newLastName"/>
+                <form:input path="newLastName" maxlength="50"/>
             </div>
             <form:errors path="newLastName" cssClass="red-text" element="p"/>
 
@@ -46,7 +46,7 @@
             <c:if test="${isWriter}">
                 <div class="input-field">
                     <form:label path="cbu"><spring:message code="user.profile.edit.cbu"/><span class="red-text">*</span></form:label><br>
-                    <form:input type="text" path="cbu" inputmode="numeric"/>
+                    <form:input type="text" path="cbu" inputmode="numeric" maxlength="22"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>
             </c:if>

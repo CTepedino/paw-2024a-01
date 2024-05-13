@@ -34,7 +34,7 @@
                 <h6><spring:message code="book.addBook.cbuTitle"/></h6>
                 <div class="input-field">
                     <form:label path="cbu"><spring:message code="book.addBook.cbu"/><span class="red-text">*</span></form:label>
-                    <form:input type="text" path="cbu" inputmode="numeric"/>
+                    <form:input type="text" path="cbu" inputmode="numeric" maxlength="22"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>
                 <br/>
@@ -46,14 +46,14 @@
 
             <div class="input-field">
                 <form:label path="title"><spring:message code="book.addBook.title"/><span class="red-text">*</span></form:label>
-                <form:input type="text" path="title"/>
+                <form:input type="text" path="title" maxlength="50"/>
             </div>
             <form:errors path="title" cssClass="red-text" element="p"/>
             <br>
 
             <div class="input-field">
                 <form:label path="description"><spring:message code="book.addBook.description"/><span class="red-text">*</span></form:label>
-                <form:input type="text" path="description"/>
+                <form:textarea path="description" maxlength="1000"/>
             </div>
             <form:errors path="description" cssClass="red-text" element="p"/>
             <br>
@@ -76,7 +76,7 @@
             <br>
             <div class="input-field">
                 <form:label path="suggestedAge"><spring:message code="book.addBook.recommendedAge"/><span class="red-text">*</span></form:label>
-                <form:input type="number" path="suggestedAge" min="0"/>
+                <form:input type="number" path="suggestedAge" min="0" max="100"/>
             </div>
             <form:errors path="suggestedAge" cssClass="red-text"  element="p"/>
             <br>
