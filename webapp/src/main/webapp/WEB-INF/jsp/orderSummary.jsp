@@ -24,17 +24,8 @@
         <h3 class="title">
             <spring:message code="buy.emailConfirmation.sentInfo"/>
         </h3>
-        <p class="order-description">
-            <spring:message var="instructions" code="buy.emailConfirmation.instructions" arguments="${order.book.price},${order.writer.cbu}"/>
-            <c:out value="${instructions}"/>
-        </p>
-        <button class="cancel-button">
-            <a class="cancel-button" href="<c:url value="/"/>">
-                <spring:message code="buy.emailConfirmation.sendReceipt"/>
-            </a>
-        </button>
         <div class="divider"></div>
-        <p><spring:message code="buy.emailConfirmation.sendLater"/></p>
+        <p><spring:message code="buy.book.verification"/></p>
         <button class="proceed-button">
             <a class="a-button" href="<c:url value="/purchases"/>">
                 <spring:message code="buy.emailConfirmation.viewMyOrders"/>
