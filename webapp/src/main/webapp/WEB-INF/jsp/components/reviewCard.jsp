@@ -23,7 +23,9 @@
                             alt="<spring:message code="user.profile.edit.pfp"/>"
                     >
                 </div>
-                <p class="text-center">${review.reviewer.firstName} ${review.reviewer.lastName}</p>
+                <p class="text-center">
+                    <c:out value="${review.reviewer.firstName} ${review.reviewer.lastName}"/>
+                </p>
             </a>
         </div>
         <div class="col s8 l10 review-box">
@@ -34,10 +36,15 @@
                     </script>
                 </div>
                 <div class="col s6 date-holder">
-                    <p class="review-date">${review.getFormattedDate(pageContext.request.locale)}</p>
+                    <p class="review-date">
+                        <c:out value="${review.getFormattedDate(pageContext.request.locale)}"/>
+
+                    </p>
                 </div>
             </div>
-            <p>${review.review}</p>
+            <p>
+                <c:out value="${review.review}"/>
+            </p>
         </div>
 </div>
 </body>
