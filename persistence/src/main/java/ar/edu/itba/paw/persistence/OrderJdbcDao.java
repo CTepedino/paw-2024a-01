@@ -30,7 +30,8 @@ public class OrderJdbcDao implements OrderDao {
             ),
             BookJdbcDao.ROW_MAPPER.mapRow(rs, rowNum),
             OrderStatus.valueOf(rs.getString("status")),
-            rs.getTimestamp("date").toLocalDateTime());
+            rs.getTimestamp("date").toLocalDateTime(),
+            rs.getBoolean("is_public"));
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -69,10 +70,23 @@ public class OrderJdbcDao implements OrderDao {
     }
 
     @Override
+    public void recommendBook(long orderId, boolean isRecommended){
+        jdbcTemplate.update(
+                """
+                    UPDATE orders
+                    SET is_public = ?
+                    WHERE order_id = ?
+                    """,
+                isRecommended,
+                orderId
+        );
+    }
+
+    @Override
     public Optional<Order> find(long buyerId, long bookId) {
         List<Order> list = jdbcTemplate.query(
             """
-                SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
+                SELECT o.order_id, o.status, o.date, o.is_public, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id
@@ -90,7 +104,7 @@ public class OrderJdbcDao implements OrderDao {
     public Optional<Order> findById(long orderId){
         List<Order> list = jdbcTemplate.query(
                 """
-                    SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
+                    SELECT o.order_id, o.status, o.date,  o.is_public, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
                     FROM orders o
                     JOIN users r ON o.buyer_id = r.user_id
                     JOIN books b ON o.book_id = b.book_id
@@ -162,7 +176,7 @@ public class OrderJdbcDao implements OrderDao {
     private List<Order> getOrders(String firstCondition, long id, String title, OrderStatus orderStatus, int offset, int limit){
         StringBuilder query = new StringBuilder(
                 """
-                SELECT o.order_id, o.status, o.date, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
+                SELECT o.order_id, o.status, o.date, o.is_public, b.*, w.*, r.user_id AS r_user_id,r.email AS r_email, r.password AS r_password, r.first_name AS r_first_name, r.last_name AS r_last_name, r.is_enabled AS r_is_enabled, r.locale AS r_locale
                 FROM orders o
                 JOIN users r ON o.buyer_id = r.user_id
                 JOIN books b ON o.book_id = b.book_id

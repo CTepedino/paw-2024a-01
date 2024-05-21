@@ -112,6 +112,19 @@
                             <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
                                 <button class="waves-light btn"><strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong></button>
                             </a>
+                            <c:url value="/recommendBook/${order.orderId}/purchases" var="recommendBookUrl"/>
+
+                            <form id="recommendBookForm" action="${recommendBookUrl}" method="post" class="recommendation">
+                                <label for="recommended-${order.orderId}">
+                                    <input type="checkbox" id="recommended-${order.orderId}" name="recommended" ${order.isPublic ? 'checked' : ''}/>
+                                    <span><spring:message code="orders.purchases.recommendBook"/></span>
+                                </label>
+                            </form>
+                            <script>
+                                document.getElementById('recommended-${order.orderId}').addEventListener('change', function() {
+                                    document.getElementById('recommendBookForm').submit();
+                                });
+                            </script>
                         </c:if>
 
                         <c:if test="${!order.orderStatus.readerCanAdvance and order.orderStatus ne 'COMPLETED'}">
@@ -151,7 +164,6 @@
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems);
     });
-
 
     document.addEventListener("DOMContentLoaded", function() {
         if (document.querySelector("#files") != null) {

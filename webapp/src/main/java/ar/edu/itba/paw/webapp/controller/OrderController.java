@@ -10,11 +10,7 @@ import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.form.CreateOrderForm;
-import ar.edu.itba.paw.webapp.form.NewBookForm;
-import ar.edu.itba.paw.webapp.form.OrderSearchForm;
-import ar.edu.itba.paw.webapp.form.UpdateOrderFormBuyerSide;
-import ar.edu.itba.paw.webapp.form.UpdateOrderFormWriterSide;
+import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -98,6 +94,15 @@ public class OrderController {
         }
 
         os.updateOrderBuyerSide(id, form.getReceipt());
+        return new ModelAndView("redirect:/purchases");
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path="/recommendBook/{id:\\d+}/purchases")
+    public ModelAndView recommendBook(
+            @RequestParam(name = "recommended", required = false, defaultValue = "false") boolean recommended,
+            @PathVariable long id
+    ){
+        os.recommendBook(id, recommended);
         return new ModelAndView("redirect:/purchases");
     }
 

@@ -208,4 +208,10 @@ public class OrderServiceImpl implements OrderService {
             (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().getReaderCanAdvance());
     }
 
+    @Transactional
+    @Override
+    public void recommendBook(long orderId, boolean isRecommended){
+        orderDao.recommendBook(orderId, isRecommended);
+    }
+
 }

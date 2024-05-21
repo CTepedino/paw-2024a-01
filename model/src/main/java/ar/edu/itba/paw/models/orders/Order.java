@@ -14,14 +14,16 @@ public class Order {
     private final Book book;
     private final OrderStatus orderStatus;
     private final LocalDateTime date;
+    private final boolean isPublic;
 
 
-    public Order(long orderId, User buyer, Book book, OrderStatus orderStatus, LocalDateTime date) {
+    public Order(long orderId, User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
         this.orderId = orderId;
         this.buyer = buyer;
         this.book = book;
         this.orderStatus = orderStatus;
         this.date = date;
+        this.isPublic=isPublic;
     }
 
     public long getOrderId() {
@@ -48,7 +50,12 @@ public class Order {
         return date;
     }
 
+    public boolean getIsPublic() {
+        return isPublic;
+    }
+
     public String getFormattedDate(Locale locale) {
         return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale));
     }
+
 }

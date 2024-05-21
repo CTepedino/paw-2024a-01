@@ -72,7 +72,7 @@ public class OrderServiceImplTest {
         Mockito.when(userService.isLoggedIn()).thenReturn(true);
         Mockito.when(bookService.findById(Mockito.anyLong())).thenReturn(Optional.of(UNPAUSED_BOOK));
         Mockito.when(userService.getLoggedUser()).thenReturn(Optional.of(TEST_READER));
-        Mockito.when(orderDao.find(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Optional.of(new Order(1, TEST_READER, UNPAUSED_BOOK, null, null)));
+        Mockito.when(orderDao.find(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Optional.of(new Order(1, TEST_READER, UNPAUSED_BOOK, null, null, false)));
 
         boolean canCreate = orderService.canCreateOrder(1);
 
@@ -93,7 +93,7 @@ public class OrderServiceImplTest {
 
     @Test
     public void testUpdateOrderWriterSideIllegalStatus(){
-        Mockito.when(orderDao.findById(Mockito.anyLong())).thenReturn(Optional.of(new Order(1, null,null, OrderStatus.COMPLETED, null)));
+        Mockito.when(orderDao.findById(Mockito.anyLong())).thenReturn(Optional.of(new Order(1, null,null, OrderStatus.COMPLETED, null, false)));
 
         assertThrows(
                 InvalidOrderUpdateException.class,
@@ -103,7 +103,7 @@ public class OrderServiceImplTest {
 
     @Test
     public void testUpdateOrderBuyerSideIllegalStatus(){
-        Mockito.when(orderDao.findById(Mockito.anyLong())).thenReturn(Optional.of(new Order(1, null,null, OrderStatus.WAITING_APPROVAL, null)));
+        Mockito.when(orderDao.findById(Mockito.anyLong())).thenReturn(Optional.of(new Order(1, null,null, OrderStatus.WAITING_APPROVAL, null, false)));
 
         assertThrows(
                 InvalidOrderUpdateException.class,

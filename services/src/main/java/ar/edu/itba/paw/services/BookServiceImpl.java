@@ -155,12 +155,12 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
+    public PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic) {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
-        List<Book> books = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title));
+        List<Book> books = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize, isPublic);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
     }
 
 
@@ -197,11 +197,15 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> getProfileBooks(long usedId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter) {
+    public PaginatedContent<Book> getProfileBooks(long usedId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
         if (asWriter){
             return getWriterBooks(usedId, title, orderBy, pageNumber, pageSize);
         } else {
-            return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize);
+            if(ownsProfile) {
+                return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize, false);
+            } else {
+                return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize, true);
+            }
         }
     }
 }
