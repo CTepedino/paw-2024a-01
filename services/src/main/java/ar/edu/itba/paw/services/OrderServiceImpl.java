@@ -79,6 +79,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
+    public boolean existsOrder(long bookId) {
+        if (!us.isLoggedIn()){
+            return false;
+        }
+
+        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        return orderDao.find(buyer.getUserId(), bookId).isPresent();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public Optional<Order> find(long buyerId, long bookId) {
         return orderDao.find(buyerId, bookId);
     }

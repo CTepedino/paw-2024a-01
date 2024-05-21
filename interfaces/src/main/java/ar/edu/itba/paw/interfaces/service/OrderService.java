@@ -13,6 +13,8 @@ public interface OrderService {
 
     void create(long bookId, MultipartFile receipt);
 
+    boolean existsOrder(long bookId);
+
     boolean canCreateOrder(long bookId);
 
     Optional<Order> find(long buyerId, long bookId);
