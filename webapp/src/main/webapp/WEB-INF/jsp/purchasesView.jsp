@@ -48,82 +48,90 @@
         <input name="page" id="page" style="display: none"/>
     </form:form>
 
-    <div class="row table-top">
-        <div class="col s2 table-title"> <spring:message code="orders.table.cover"/> </div>
-        <div class="col s3 table-title"> <spring:message code="orders.table.book"/> </div>
-        <div class="col s2 table-title"> <spring:message code="orders.table.lastUpdate"/></div>
-        <div class="col s3 table-title"> <spring:message code="orders.table.status"/> </div>
-        <div class="col s2 table-title"> <spring:message code="orders.table.actions"/> </div>
-    </div>
-    <ul class="collection">
-        <c:forEach var="order" items="${orders.page}">
-            <li class="collection-item">
-                <div class="row purchased-book">
-                    <div class="col s2">
-                        <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
-                            <img
-                                    class="book_cover"
-                                    src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
-                                    alt="<spring:message code="bookInfoCard.cover"/>"
-                            />
-                        </a>
-                    </div>
-                    <div class="col s3 purchase-info">
-                        <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
-                        <a href="<c:url value="/profile/${order.writer.userId}"/>">
-                            <p><spring:message var="author" code="bookInfoCard.by" arguments="${order.writer.firstName},${order.writer.lastName}"/><c:out value="${author}"/></p>
-                        </a>
-                        <p class="price"><c:out value="${order.book.formattedPrice}"/></p>
-                    </div>
 
-                    <div class="col s2 purchase-info">
-
-                        <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
-                    </div>
-                    <div class="col s3 purchase-info">
-                        <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
-                            <p class="red-text"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
-                        </c:if>
-                        <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
-                            <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
-                        </c:if>
-                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
-                            <c:out value="${order.writer.cbu}"/>
-                        </c:if>
-
-                    </div>
-                    <div class="col s2 purchase-info">
-                        <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
-
-                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
-                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
-                                <form:label path="receipt" for="files" class="btn label-select">
-                                    <spring:message code="orders.purchases.chooseFile"/>
-                                </form:label>
-                                <form:input type="file" id="files" path="receipt" accept=".pdf" style="display:none;"/>
-                                <form:errors path="receipt"/>
-                                <button class="waves-light btn payment" type="submit">
-                                    <strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong>
-                                </button>
-                            </form:form>
-                        </c:if>
-
-                        <c:if test="${order.orderStatus eq 'COMPLETED'}">
-                            <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
-                                <button class="waves-light btn"><strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong></button>
+    <c:if test="${empty orders.page}">
+        <div class="centerer">
+            <h5><spring:message code="orders.purchases.empty"/></h5>
+        </div>
+    </c:if>
+    <c:if test="${not empty orders.page}">
+        <div class="row table-top">
+            <div class="col s2 table-title"> <spring:message code="orders.table.cover"/> </div>
+            <div class="col s3 table-title"> <spring:message code="orders.table.book"/> </div>
+            <div class="col s2 table-title"> <spring:message code="orders.table.lastUpdate"/></div>
+            <div class="col s3 table-title"> <spring:message code="orders.table.status"/> </div>
+            <div class="col s2 table-title"> <spring:message code="orders.table.actions"/> </div>
+        </div>
+        <ul class="collection">
+            <c:forEach var="order" items="${orders.page}">
+                <li class="collection-item">
+                    <div class="row purchased-book">
+                        <div class="col s2">
+                            <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
+                                <img
+                                        class="book_cover"
+                                        src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
+                                        alt="<spring:message code="bookInfoCard.cover"/>"
+                                />
                             </a>
-                        </c:if>
+                        </div>
+                        <div class="col s3 purchase-info">
+                            <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
+                            <a href="<c:url value="/profile/${order.writer.userId}"/>">
+                                <p><spring:message var="author" code="bookInfoCard.by" arguments="${order.writer.firstName},${order.writer.lastName}"/><c:out value="${author}"/></p>
+                            </a>
+                            <p class="price"><c:out value="${order.book.formattedPrice}"/></p>
+                        </div>
 
-                        <c:if test="${!order.orderStatus.readerCanAdvance and order.orderStatus ne 'COMPLETED'}">
-                            <p><spring:message code="orders.purchases.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i>
-                            </p>
-                        </c:if>
+                        <div class="col s2 purchase-info">
 
+                            <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
+                        </div>
+                        <div class="col s3 purchase-info">
+                            <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
+                                <p class="red-text"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                            </c:if>
+                            <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
+                                <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                            </c:if>
+                            <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                                <c:out value="${order.writer.cbu}"/>
+                            </c:if>
+
+                        </div>
+                        <div class="col s2 purchase-info">
+                            <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
+
+                            <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                                <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
+                                    <form:label path="receipt" for="files" class="btn label-select">
+                                        <spring:message code="orders.purchases.chooseFile"/>
+                                    </form:label>
+                                    <form:input type="file" id="files" path="receipt" accept=".pdf" style="display:none;"/>
+                                    <form:errors path="receipt"/>
+                                    <button class="waves-light btn payment" type="submit">
+                                        <strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong>
+                                    </button>
+                                </form:form>
+                            </c:if>
+
+                            <c:if test="${order.orderStatus eq 'COMPLETED'}">
+                                <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
+                                    <button class="waves-light btn"><strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong></button>
+                                </a>
+                            </c:if>
+
+                            <c:if test="${!order.orderStatus.readerCanAdvance and order.orderStatus ne 'COMPLETED'}">
+                                <p><spring:message code="orders.purchases.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i>
+                                </p>
+                            </c:if>
+
+                        </div>
                     </div>
-                </div>
-            </li>
-        </c:forEach>
-    </ul>
+                </li>
+            </c:forEach>
+        </ul>
+    </c:if>
 
     <c:if test="${orders.pageCount > 1}">
         <script src="<c:url value="/js/paginationControls.js"/>"></script>

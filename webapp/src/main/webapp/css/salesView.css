@@ -82,3 +82,8 @@ button.modal-close:hover{
     display: flex;
     justify-content: end;
 }
+
+.centerer{
+    width: 100%;
+    text-align: center;
+}

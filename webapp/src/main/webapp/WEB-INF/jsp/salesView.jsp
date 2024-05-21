@@ -50,100 +50,107 @@
         <input name="page" id="page" style="display: none"/>
     </form:form>
 
-    <div class="row table-top">
-        <div class="col s2 table-title"> <spring:message code="orders.table.cover"/> </div>
-        <div class="col s3 table-title"> <spring:message code="orders.table.book"/></div>
-        <div class="col s2 table-title"> <spring:message code="orders.table.lastUpdate"/> </div>
-        <div class="col s3 table-title"> <spring:message code="orders.table.status"/> </div>
-        <div class="col s2 table-title"> <spring:message code="orders.table.actions"/> </div>
-    </div>
-    <ul class="collection">
-        <c:forEach var="order" items="${orders.page}">
-            <li class="collection-item">
-                <div class="row purchased-book">
-                    <div class="col s2">
-                        <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
-                            <img
-                                    class="book_cover"
-                                    src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
-                                    alt="<spring:message code="bookInfoCard.cover"/>"
-                            />
-                        </a>
-                    </div>
-                    <div class="col s3 purchase-info">
-                        <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
-                        <p class="price"> <c:out value="${order.book.formattedPrice}"/></p>
-                        <p><spring:message code="orders.sales.buyer"/> <a href="<c:url value="/profile/${order.buyer.userId}"/>"><c:out value="${order.buyer.firstName}"/> <c:out value="${order.buyer.lastName}"/></a></p>
-                    </div>
-                    <div class="col s2 purchase-info">
-
-                        <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
-                    </div>
-                    <div class="col s3 purchase-info">
-                        <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>
-                        <c:if test="${order.orderStatus == 'WAITING_APPROVAL' or order.orderStatus == 'COMPLETED'}">
-                            <a href="<c:url value="/receipt/${order.orderId}"/>" target="_blank">
-                                <button class="waves-light btn payment"><strong><spring:message code="orders.sales.status.viewReceipt"/></strong></button>
+    <c:if test="${empty orders.page}">
+        <div class="centerer">
+            <h5><spring:message code="orders.sales.empty"/></h5>
+        </div>
+    </c:if>
+    <c:if test="${not empty orders.page}">
+        <div class="row table-top">
+            <div class="col s2 table-title"> <spring:message code="orders.table.cover"/> </div>
+            <div class="col s3 table-title"> <spring:message code="orders.table.book"/></div>
+            <div class="col s2 table-title"> <spring:message code="orders.table.lastUpdate"/> </div>
+            <div class="col s3 table-title"> <spring:message code="orders.table.status"/> </div>
+            <div class="col s2 table-title"> <spring:message code="orders.table.actions"/> </div>
+        </div>
+        <ul class="collection">
+            <c:forEach var="order" items="${orders.page}">
+                <li class="collection-item">
+                    <div class="row purchased-book">
+                        <div class="col s2">
+                            <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
+                                <img
+                                        class="book_cover"
+                                        src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
+                                        alt="<spring:message code="bookInfoCard.cover"/>"
+                                />
                             </a>
-                        </c:if>
-                    </div>
-                    <div class="col s2 purchase-info">
+                        </div>
+                        <div class="col s3 purchase-info">
+                            <a class="book-title" href="${pageContext.request.contextPath}/book/${order.book.bookId}"><c:out value="${order.book.title}"/></a>
+                            <p class="price"> <c:out value="${order.book.formattedPrice}"/></p>
+                            <p><spring:message code="orders.sales.buyer"/> <a href="<c:url value="/profile/${order.buyer.userId}"/>"><c:out value="${order.buyer.firstName}"/> <c:out value="${order.buyer.lastName}"/></a></p>
+                        </div>
+                        <div class="col s2 purchase-info">
 
-                        <c:url value="/advanceOrder/${order.orderId}/sales" var="advanceOrderUrl"/>
+                            <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
+                        </div>
+                        <div class="col s3 purchase-info">
+                            <p><spring:message code="orders.sales.status.${order.orderStatus}"/></p>
+                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL' or order.orderStatus == 'COMPLETED'}">
+                                <a href="<c:url value="/receipt/${order.orderId}"/>" target="_blank">
+                                    <button class="waves-light btn payment"><strong><spring:message code="orders.sales.status.viewReceipt"/></strong></button>
+                                </a>
+                            </c:if>
+                        </div>
+                        <div class="col s2 purchase-info">
 
-                        <c:if test="${order.orderStatus == 'WAITING_CONTACT'}">
-                            <a href="<c:url value="/profile"/>"><button class="waves-light btn"><strong><spring:message code="orders.sales.action.${order.orderStatus}.button"/></strong></button></a>
-                        </c:if>
+                            <c:url value="/advanceOrder/${order.orderId}/sales" var="advanceOrderUrl"/>
 
-                        <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
-                            <p><spring:message code="orders.sales.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i></p>
-                        </c:if>
+                            <c:if test="${order.orderStatus == 'WAITING_CONTACT'}">
+                                <a href="<c:url value="/profile"/>"><button class="waves-light btn"><strong><spring:message code="orders.sales.action.${order.orderStatus}.button"/></strong></button></a>
+                            </c:if>
 
-                        <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
-                            <a class="waves-light btn decline-button modal-trigger" href="#decline"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></a>
-                            <div id="decline" class="modal">
-                                <div class="modal-content">
-                                    <h4><spring:message code="orders.sales.paymentApproval.title"/></h4>
-                                    <p><spring:message code="orders.sales.paymentApproval.decline"/></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="footer-aligner">
-                                        <button class="btn modal-close close-btn"><strong><spring:message code="cancel"/></strong></button>
-                                        <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
-                                            <input type="checkbox" name="approved" value="false" checked style="display: none">
+                            <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
+                                <p><spring:message code="orders.sales.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i></p>
+                            </c:if>
 
-                                            <button class="waves-light btn decline-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></strong></button>
-                                        </form:form>
+                            <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
+                                <a class="waves-light btn decline-button modal-trigger" href="#decline"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></a>
+                                <div id="decline" class="modal">
+                                    <div class="modal-content">
+                                        <h4><spring:message code="orders.sales.paymentApproval.title"/></h4>
+                                        <p><spring:message code="orders.sales.paymentApproval.decline"/></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="footer-aligner">
+                                            <button class="btn modal-close close-btn"><strong><spring:message code="cancel"/></strong></button>
+                                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                                <input type="checkbox" name="approved" value="false" checked style="display: none">
+
+                                                <button class="waves-light btn decline-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></strong></button>
+                                            </form:form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <a class="waves-light btn accept-button modal-trigger" href="#accept"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></a>
-                            <div id="accept" class="modal">
-                                <div class="modal-content">
-                                    <h4><spring:message code="orders.sales.paymentApproval.title"/></h4>
-                                    <p><spring:message code="orders.sales.paymentApproval.accept"/></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="footer-aligner">
-                                        <button class="btn modal-close close-btn" ><strong><spring:message code="cancel"/></strong></button>
-                                        <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
-                                            <input type="checkbox" name="approved" value="true" checked style="display: none">
+                                <a class="waves-light btn accept-button modal-trigger" href="#accept"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></a>
+                                <div id="accept" class="modal">
+                                    <div class="modal-content">
+                                        <h4><spring:message code="orders.sales.paymentApproval.title"/></h4>
+                                        <p><spring:message code="orders.sales.paymentApproval.accept"/></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="footer-aligner">
+                                            <button class="btn modal-close close-btn" ><strong><spring:message code="cancel"/></strong></button>
+                                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                                <input type="checkbox" name="approved" value="true" checked style="display: none">
 
-                                            <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></strong></button>
-                                        </form:form>
+                                                <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></strong></button>
+                                            </form:form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </c:if>
+                            </c:if>
 
-                        <c:if test="${order.orderStatus == 'COMPLETED'}">
-                            <p><spring:message code="orders.sales.action.${order.orderStatus}"/></p>
-                        </c:if>
+                            <c:if test="${order.orderStatus == 'COMPLETED'}">
+                                <p><spring:message code="orders.sales.action.${order.orderStatus}"/></p>
+                            </c:if>
+                        </div>
                     </div>
-                </div>
-            </li>
-        </c:forEach>
-    </ul>
+                </li>
+            </c:forEach>
+        </ul>
+    </c:if>
 
     <c:if test="${orders.pageCount > 1}">
         <script src="<c:url value="/js/paginationControls.js"/>"></script>
