@@ -43,15 +43,7 @@ public class HomeController {
     public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") BookSearchForm form, final BindingResult error){
 
         if (error.hasErrors()){
-            if (error.hasFieldErrors("orderBy")){
-                form.setOrderBy(BookSearchOrderBy.PUBLICATION_DATE_DESC);
-            }
-            if (error.hasFieldErrors("genres")){
-                form.setGenre(null);
-            }
-            if (error.hasFieldErrors("page")){
-                form.setPage(1);
-            }
+            throw new IllegalSearchQueryException();
         }
 
         final ModelAndView mav = new ModelAndView("searchResults");
