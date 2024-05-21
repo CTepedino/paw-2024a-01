@@ -26,10 +26,12 @@ public class EditBookForm {
 
     @NotNull
     @PositiveOrZero
+    @DecimalMax(value = "100000000.0")
     private BigDecimal price;
 
     @NotNull
     @Positive
+    @Max(value = 1000000)
     private Integer pageCount;
 
     @NotNull

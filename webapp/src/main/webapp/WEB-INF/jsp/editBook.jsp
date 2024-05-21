@@ -59,7 +59,7 @@
             <br>
             <div class="input-field">
                 <form:label path="pageCount"><spring:message code="book.addBook.pageCount"/><span class="red-text">*</span></form:label>
-                <form:input type="number" path="pageCount" min="0"/>
+                <form:input type="number" path="pageCount" min="0" max="1000000"/>
             </div>
             <form:errors path="pageCount" cssClass="red-text"  element="p"/>
             <br>
@@ -71,7 +71,7 @@
             <br>
             <div class="input-field">
                 <form:label path="price"><spring:message code="book.addBook.price"/><span class="red-text">*</span></form:label>
-                <form:input type="number" path="price" min="0"/>
+                <form:input type="number" path="price" min="0" max="100000000"/>
             </div>
             <form:errors path="price" cssClass="red-text"  element="p"/>
             <br>
