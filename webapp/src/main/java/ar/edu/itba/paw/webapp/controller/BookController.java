@@ -105,7 +105,7 @@ public class BookController {
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = bs.loggedUserIsAuthor(bookId);
-        boolean canBuy = os.canCreateOrder(bookId);
+        boolean existsOrder = os.existsOrder(bookId);
 
         if (loggedUserReview.isPresent()){
             form.setRating(loggedUserReview.get().getRating());
@@ -122,7 +122,7 @@ public class BookController {
         mav.addObject("ownsBook", ownsBook);
         mav.addObject("isAuthor", isAuthor);
         mav.addObject("reviewOrders", List.of(ReviewOrderBy.values()));
-        mav.addObject("canBuy", canBuy);
+        mav.addObject("existsOrder", existsOrder);
         return mav;
     }
 
