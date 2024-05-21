@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_APPROVAL);
         try {
-            paymentReceiptDao.create(orderId, receipt.getBytes());
+            paymentReceiptDao.create(orderId, receipt.getBytes(), receipt.getContentType());
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to create order for bookId: {} - Error Message: {}").addArgument(bookId).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
@@ -122,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
         }
         orderDao.update(order.getOrderId(), OrderStatus.WAITING_APPROVAL);
         try {
-            paymentReceiptDao.createOrUpdate(order.getOrderId(), receipt.getBytes());
+            paymentReceiptDao.createOrUpdate(order.getOrderId(), receipt.getBytes(), receipt.getContentType());
             LOGGER.atDebug().setMessage("Uploaded receipt for orderId: {}").addArgument(order.getOrderId()).log();
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to upload receipt for orderId: {} - Error Message: {}").addArgument(order.getOrderId()).addArgument(e.getMessage()).log();

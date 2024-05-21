@@ -45,6 +45,7 @@ public class AccessHelper {
         }
 
         long orderId =  Long.parseLong(id);
+
         Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         String buyerEmail = order.getBuyer().getEmail();

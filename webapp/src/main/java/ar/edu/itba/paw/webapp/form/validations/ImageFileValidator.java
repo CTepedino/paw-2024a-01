@@ -10,7 +10,7 @@ public class ImageFileValidator implements ConstraintValidator<ImageFile, Multip
 
     @Override
     public boolean isValid(MultipartFile s, ConstraintValidatorContext constraintValidatorContext) {
-        return s.isEmpty() || s.getContentType()==null || s.getContentType().startsWith("image/");
+        return s.isEmpty() || s.getContentType()==null || s.getContentType().toLowerCase().startsWith("image/");
     }
 
     @Override

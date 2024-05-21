@@ -51,7 +51,7 @@
             <div class="file-field input-field">
                 <div class="btn">
                     <span><spring:message code="orders.sales.status.seeReceipt"/></span>
-                    <input type="file" accept="application/pdf" name="receipt" id="receipt">
+                    <input type="file" accept="application/pdf, image/*" name="receipt" id="receipt">
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text" \>

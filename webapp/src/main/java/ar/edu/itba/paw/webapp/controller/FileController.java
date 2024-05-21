@@ -6,10 +6,14 @@ import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import ar.edu.itba.paw.models.files.CoverImage;
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,11 +43,6 @@ public class FileController {
         return bs.getPreview(id).getFile();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/receipt/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public @ResponseBody byte[] getReceipt(@PathVariable("id") long id) {
-        return os.getReceipt(id).getFile();
-    }
-
     @RequestMapping(method = RequestMethod.GET, path = "/book/file/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
     public @ResponseBody byte[] getBookFile(@PathVariable("id") long id){
         return bs.getBookFile(id).getFile();
@@ -54,5 +53,12 @@ public class FileController {
         return us.getProfilePictureOrDefault(id).getFile();
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/receipt/{id:\\d+}")
+    public ResponseEntity<byte[]> getReceipt(@PathVariable("id") long id) {
+        PaymentReceipt receipt = os.getReceipt(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(receipt.getType()));
+        return new ResponseEntity<>(receipt.getFile(), headers, HttpStatus.OK);
+    }
 
 }

@@ -9,7 +9,7 @@ public class PdfFileValidator implements ConstraintValidator<PdfFile, MultipartF
 
     @Override
     public boolean isValid(MultipartFile s, ConstraintValidatorContext constraintValidatorContext) {
-        return s.isEmpty() || s.getContentType()==null || s.getContentType().equals("application/pdf");
+        return s.isEmpty() || s.getContentType()==null || s.getContentType().equalsIgnoreCase("application/pdf");
     }
 
     @Override

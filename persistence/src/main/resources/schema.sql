@@ -76,6 +76,12 @@ UPDATE books b SET is_paused = CASE
 END;
 */
 
+/* Sprint 4 modifications:
+
+ALTER TABLE payment_receipts ADD COLUMN type VARCHAR(20) NOT NULL DEFAULT 'application/pdf';
+
+*/
+
 
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
@@ -145,7 +151,8 @@ CREATE TABLE IF NOT EXISTS orders(
 
 CREATE TABLE IF NOT EXISTS payment_receipts(
     id INT PRIMARY KEY REFERENCES orders (order_id) ON DELETE CASCADE,
-    file BYTEA NOT NULL
+    file BYTEA NOT NULL,
+    type VARCHAR(20) NOT NULL DEFAULT 'application/pdf'
 );
 
 CREATE TABLE IF NOT EXISTS reviews(
