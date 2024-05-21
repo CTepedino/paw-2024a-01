@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
+import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
@@ -85,6 +86,7 @@ public class BookController {
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
     public ModelAndView bookInfo(
             @PathVariable("bookId") final long bookId,
+            @ModelAttribute("loggedUser") User loggedUser,
             @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
             @ModelAttribute("reviewForm") ReviewForm form,
             @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
@@ -102,6 +104,7 @@ public class BookController {
         List<Book> recommendations = bs.getRecommendations(book);
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
+        Optional<Order> order = os.find(loggedUser.getUserId(), bookId);
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = bs.loggedUserIsAuthor(bookId);
@@ -115,6 +118,7 @@ public class BookController {
         final ModelAndView mav = new ModelAndView("bookInfo");
 
         mav.addObject("book", book);
+        mav.addObject("order", order.orElse(null));
         mav.addObject("recommendations", recommendations);
         mav.addObject("reviews", reviews);
         mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
@@ -157,6 +161,15 @@ public class BookController {
         bs.editPublication(id, form.getTitle(), form.getDescription(), form.getGenre(), form.getPrice(), form.getPageCount(), form.getSuggestedAge(), form.getCover(), form.getPreview(), form.getBookFile());
 
         return new ModelAndView("redirect:/book/"+id);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path="/recommendBook/{id:\\d+}/bookInfo")
+    public ModelAndView recommendBook(
+            @RequestParam(name = "recommended", required = false, defaultValue = "false") boolean recommended,
+            @PathVariable long id
+    ){
+        os.recommendBook(id, recommended);
+        return new ModelAndView("redirect:/book/"+os.findById(id).get().getBook().getBookId());
     }
 
 

@@ -63,19 +63,40 @@
         <a href="${profileUrl}/boughtBooks">
             <c:if test="${tab eq 'boughtBooks'}">
                 <div class="col s6 table-title active">
-                    <p class="text-active" style="width: 100%"><spring:message code="user.profile.boughtBooks"/></p>
+                    <p class="text-active" style="width: 100%">
+                        <c:if test="${ownsProfile}">
+                            <spring:message code="user.profile.boughtBooks"/>
+                        </c:if>
+                        <c:if test="${!ownsProfile}">
+                            <spring:message code="user.profile.recommendedBooks"/>
+                        </c:if>
+                    </p>
                 </div>
             </c:if>
             <c:if test="${tab ne 'boughtBooks'}">
                 <div class="col s6 table-title">
-                    <p class="text-not-active" style="width: 100%"><spring:message code="user.profile.boughtBooks"/></p>
+                    <p class="text-not-active" style="width: 100%">
+                        <c:if test="${ownsProfile}">
+                            <spring:message code="user.profile.boughtBooks"/>
+                        </c:if>
+                        <c:if test="${!ownsProfile}">
+                            <spring:message code="user.profile.recommendedBooks"/>
+                        </c:if>
+                    </p>
                 </div>
             </c:if>
         </a>
         </c:if>
         <c:if test="${not showPublicationsTab}">
             <div class="col s12 table-title active">
-                <p class="text-active" style="width: 100%"><spring:message code="user.profile.boughtBooks"/></p>
+                <p class="text-active" style="width: 100%">
+                    <c:if test="${ownsProfile}">
+                        <spring:message code="user.profile.boughtBooks"/>
+                    </c:if>
+                    <c:if test="${!ownsProfile}">
+                        <spring:message code="user.profile.recommendedBooks"/>
+                    </c:if>
+                </p>
             </div>
         </c:if>
     </div>
