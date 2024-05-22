@@ -31,7 +31,7 @@ public interface UserService {
 
     boolean isCurrentUserPassword(String password);
     void changePassword(String password);
-    void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture);
+    void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture, String description);
 
     Optional<User> getLoggedUser();
 

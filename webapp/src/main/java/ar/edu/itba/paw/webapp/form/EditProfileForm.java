@@ -29,6 +29,9 @@ public class EditProfileForm {
     @Pattern(regexp = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9.-]+")
     private String cbu;
 
+    @Size(min = 1, max=500)
+    private String description;
+
 
 
     public MultipartFile getProfilePicture() {
@@ -64,4 +67,11 @@ public class EditProfileForm {
         this.profilePicture = profilePicture;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription(){
+        return description;
+    }
 }

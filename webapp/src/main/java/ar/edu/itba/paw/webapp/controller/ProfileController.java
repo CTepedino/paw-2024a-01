@@ -93,6 +93,7 @@ public class ProfileController {
         form.setNewFirstName(loggedUser.getFirstName());
         form.setNewLastName(loggedUser.getLastName());
         form.setCbu(loggedUser.getCbu());
+        form.setDescription(loggedUser.getDescription());
 
         return new ModelAndView("editProfile");
     }
@@ -107,7 +108,7 @@ public class ProfileController {
             return editProfileForm(form, loggedUser);
         }
 
-        us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu(), form.getProfilePicture());
+        us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu(), form.getProfilePicture(), form.getDescription());
 
         return new ModelAndView("redirect:/profile/"+loggedUser.getUserId());
     }

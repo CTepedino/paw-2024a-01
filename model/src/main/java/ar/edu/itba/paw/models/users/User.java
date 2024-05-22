@@ -14,7 +14,9 @@ public class User {
     private final boolean isEnabled;
     private final Locale locale;
 
-    public User(long userId, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale) {
+    private final String description;
+
+    public User(long userId, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -23,10 +25,11 @@ public class User {
         this.cbu = cbu;
         this.isEnabled = isEnabled;
         this.locale = locale;
+        this.description = description;
     }
 
     public User(long userId, String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale){
-        this(userId, email, password, firstName, lastName, null, isEnabled, locale);
+        this(userId, email, password, firstName, lastName, null, isEnabled, locale, null);
     }
 
 
@@ -60,6 +63,10 @@ public class User {
 
     public Locale getLocale() {
         return locale;
+    }
+
+    public String getDescription(){
+        return description;
     }
 }
 

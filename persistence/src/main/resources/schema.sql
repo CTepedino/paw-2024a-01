@@ -79,6 +79,7 @@ END;
 /* Sprint 4 modifications:
 ALTER TABLE orders ADD COLUMN is_public BOOLEAN DEFAULT FALSE;
 ALTER TABLE payment_receipts ADD COLUMN type VARCHAR(20) NOT NULL DEFAULT 'application/pdf';
+ALTER TABLE users ADD COLUMN description TEXT;
 */
 
 CREATE TABLE IF NOT EXISTS users(
@@ -89,7 +90,8 @@ CREATE TABLE IF NOT EXISTS users(
     password VARCHAR(255),
     cbu VARCHAR(22),
     is_enabled BOOLEAN,
-    locale VARCHAR(10) DEFAULT 'en'
+    locale VARCHAR(10) DEFAULT 'en',
+    description TEXT
 );
 
 CREATE TABLE IF NOT EXISTS books (
@@ -142,6 +144,7 @@ CREATE TABLE IF NOT EXISTS orders(
     book_id INT NOT NULL,
     status VARCHAR(20) NOT NULL,
     date TIMESTAMP default now(),
+    is_public BOOLEAN DEFAULT FALSE,
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE

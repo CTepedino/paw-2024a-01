@@ -27,6 +27,12 @@
     margin: 16px;
 }
 
+.description{
+    font-size: 0.9rem;
+    margin: 16px;
+    overflow: hidden;
+}
+
 .table-top {
     height: 80px;
     margin-top: 20px;

@@ -12,7 +12,7 @@ public interface UserDao {
 
     int update(long id, String email, String password, String firstName, String lastName, boolean isEnabled);
 
-    int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled);
+    int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, String description);
 
     Optional<User> findById(long id);
 

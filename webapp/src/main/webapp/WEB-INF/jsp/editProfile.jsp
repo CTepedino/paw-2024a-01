@@ -51,6 +51,13 @@
                 <form:errors path="cbu" cssClass="red-text" element="p"/>
             </c:if>
 
+            <div class="input-field">
+                <form:label path="description"><spring:message code="book.addBook.description"/><span class="red-text">*</span></form:label>
+                <form:textarea path="description" maxlength="500" class="materialize-textarea"/>
+            </div>
+            <form:errors path="description" cssClass="red-text" element="p"/>
+            <br>
+
             <div class="file-field input-field">
                 <div class="btn">
                     <span><spring:message code="user.profile.edit.pfp"/></span>

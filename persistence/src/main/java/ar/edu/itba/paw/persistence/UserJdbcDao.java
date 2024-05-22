@@ -24,7 +24,8 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("last_name"),
                     rs.getString("cbu"),
                     rs.getBoolean("is_enabled"),
-                    Locale.forLanguageTag(rs.getString("locale"))
+                    Locale.forLanguageTag(rs.getString("locale")),
+                    rs.getString("description")
             );
 
     private final static RowMapper<UserRoles> ROLE_ROW_MAPPER = (rs, rowNum) -> UserRoles.valueOf(rs.getString("role"));
@@ -83,7 +84,7 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled) {
+    public int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, String description) {
         return jdbcTemplate.update(
         """
                 UPDATE users
@@ -92,9 +93,10 @@ public class UserJdbcDao implements UserDao {
                 first_name = ?,
                 last_name = ?,
                 cbu = ?,
-                is_enabled = ?
+                is_enabled = ?,
+                description = ?
                 WHERE user_id = ?
-            """, email, password, firstName, lastName, cbu, isEnabled, id
+            """, email, password, firstName, lastName, cbu, isEnabled, description, id
         );
     }
 

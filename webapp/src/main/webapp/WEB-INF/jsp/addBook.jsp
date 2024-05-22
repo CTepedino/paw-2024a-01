@@ -53,7 +53,7 @@
 
             <div class="input-field">
                 <form:label path="description"><spring:message code="book.addBook.description"/><span class="red-text">*</span></form:label>
-                <form:textarea path="description" maxlength="1000"/>
+                <form:textarea path="description" maxlength="1000" class="materialize-textarea"/>
             </div>
             <form:errors path="description" cssClass="red-text" element="p"/>
             <br>

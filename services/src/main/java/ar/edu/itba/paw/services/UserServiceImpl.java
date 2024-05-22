@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
         userDao.giveRole(id, UserRoles.WRITER);
 
-        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu, user.isEnabled());
+        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu, user.isEnabled(), user.getDescription());
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
@@ -205,12 +205,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture) {
+    public void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture, String description) {
         User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
 
         String oldCbu = user.getCbu();
 
-        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled());
+        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled(), description);
 
         if (getRoles(user.getUserId()).contains(UserRoles.WRITER) && oldCbu==null){
             userDao.recheckAllPaused(user.getUserId());

@@ -33,6 +33,15 @@
         <c:if test="${isWriter and empty user.cbu}">
             <p class="writer-info paused"><spring:message code="user.profile.emptyCBU"/></p>
         </c:if>
+    </c:if>
+    <c:if test="${not empty user.description}">
+        <div class="container">
+            <p class="description">
+                <c:out value="${user.description}"/>
+            </p>
+        </div>
+    </c:if>
+    <c:if test="${ownsProfile}">
         <div class="edit-profile">
             <a href="<c:url value="/editProfile"/>" class="waves-effect waves-light btn profile-btn">
                 <spring:message code="user.profile.edit.title"/>
