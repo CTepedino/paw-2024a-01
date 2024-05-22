@@ -29,7 +29,7 @@ public class EditProfileForm {
     @Pattern(regexp = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9.-]+")
     private String cbu;
 
-    @Size(min = 1, max=500)
+    @Size(max=500)
     private String description;
 
 
