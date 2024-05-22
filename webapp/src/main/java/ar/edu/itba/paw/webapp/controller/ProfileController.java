@@ -75,7 +75,7 @@ public class ProfileController {
 
         User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
         boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
-        PaginatedContent<Book> books = bs.getProfileBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PROFILE_PAGE_SIZE, tab.equals("publications"));
+        PaginatedContent<Book> books = bs.getProfileBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PROFILE_PAGE_SIZE, tab.equals("publications"), ownsProfile);
 
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("tab", tab);

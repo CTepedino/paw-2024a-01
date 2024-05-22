@@ -37,4 +37,5 @@ public interface OrderService {
 
     void updateOrderBuyerSide(long orderId, MultipartFile receipt);
 
+    void recommendBook(long orderId, boolean isRecommended);
 }

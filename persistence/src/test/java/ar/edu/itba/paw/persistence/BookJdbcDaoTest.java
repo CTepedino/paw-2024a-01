@@ -229,7 +229,7 @@ public class BookJdbcDaoTest {
 
     @Test
     public void testGetOwnedBooks(){
-        List<Book> books = bookDao.getOwnedBooks(2, "", BookSearchOrderBy.PAGE_COUNT_ASC, 0, 999);
+        List<Book> books = bookDao.getOwnedBooks(2, "", BookSearchOrderBy.PAGE_COUNT_ASC, 0, 999, false);
 
         assertNotNull(books);
         assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "books b JOIN orders o ON b.book_id = o.book_id", "o.buyer_id = 2 AND o.status = 'COMPLETED'"),books.size());

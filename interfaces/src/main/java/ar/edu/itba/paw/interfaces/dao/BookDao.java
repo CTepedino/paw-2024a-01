@@ -76,9 +76,9 @@ public interface BookDao {
 
     long getWriterBooksSize(long writerId, String title);
 
-    List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy,int offset, int limit);
+    List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy,int offset, int limit, boolean isPublic);
 
-    long getOwnedBooksSize(long readerId, String title);
+    long getOwnedBooksSize(long readerId, String title, boolean isPublic);
 
     boolean recheckPaused(long bookId);
 

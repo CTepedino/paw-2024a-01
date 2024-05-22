@@ -85,6 +85,20 @@
                                 <strong><spring:message code="book.bookInfo.EditReview"/></strong>
                             </a>
                         </c:if>
+                        <c:if test="${ownsBook and order ne null}">
+                            <c:url value="/recommendBook/${order.orderId}/bookInfo" var="recommendBookUrl"/>
+                            <form id="recommendBookForm" action="${recommendBookUrl}" method="post" class="recommendation">
+                                <label for="recommended-${order.orderId}">
+                                    <input type="checkbox" id="recommended-${order.orderId}" name="recommended" ${order.isPublic ? 'checked' : ''}/>
+                                    <span><spring:message code="orders.purchases.recommendBook"/></span>
+                                </label>
+                            </form>
+                            <script>
+                                document.getElementById('recommended-${order.orderId}').addEventListener('change', function() {
+                                    document.getElementById('recommendBookForm').submit();
+                                });
+                            </script>
+                        </c:if>
                         <c:if test="${not existsOrder and book.paused and not isAuthor}">
                             <p class="red-text"><spring:message code="book.bookInfo.paused"/></p>
                         </c:if>

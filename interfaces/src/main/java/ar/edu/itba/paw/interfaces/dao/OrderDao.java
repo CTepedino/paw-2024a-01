@@ -16,6 +16,8 @@ public interface OrderDao {
 
     void update(long orderId, OrderStatus orderStatus);
 
+    void recommendBook(long orderId, boolean isRecommended);
+
     List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, int offset, int limit);
     long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);
 

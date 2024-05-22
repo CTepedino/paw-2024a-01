@@ -224,7 +224,7 @@ public class BookJdbcDao implements BookDao {
     }
 
     @Override
-    public List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int offset, int limit) {
+    public List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int offset, int limit, boolean isPublic) {
         StringBuilder query = new StringBuilder("""
             SELECT b.*, u.*
             FROM books b
@@ -235,17 +235,23 @@ public class BookJdbcDao implements BookDao {
         addTitleQueryCondition(query, params,title);
         DaoUtils.addQueryCondition(query, params, " AND o.buyer_id = ? ", readerId);
         query.append("AND o.status = 'COMPLETED'");
+        if(isPublic){
+            DaoUtils.addQueryCondition(query, params, " AND o.is_public = ?", true);
+        }
         addQueryOrderByAndLimit(query, params, orderBy, offset, limit);
         return jdbcTemplate.query(query.toString(), ROW_MAPPER, params.toArray());
     }
 
     @Override
-    public long getOwnedBooksSize(long readerId, String title) {
+    public long getOwnedBooksSize(long readerId, String title, boolean isPublic) {
         StringBuilder query = new StringBuilder();
         List<Object> params = new ArrayList<>();
 
         addTitleQueryCondition(query, params, title);
         DaoUtils.addQueryCondition(query, params, " AND o.buyer_id = ?", readerId);
+        if(isPublic){
+            DaoUtils.addQueryCondition(query, params, " AND o.is_public = ?", true);
+        }
         query.append(" AND o.status = 'COMPLETED'");
 
         return DaoUtils.getRowCount(jdbcTemplate, "books b JOIN orders o ON b.book_id = o.book_id", query.toString(), params.toArray());

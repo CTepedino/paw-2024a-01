@@ -83,55 +83,67 @@
                             <p class="price"><c:out value="${order.book.formattedPrice}"/></p>
                         </div>
 
-                        <div class="col s2 purchase-info">
+                    <div class="col s2 purchase-info">
 
-                            <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
-                        </div>
-                        <div class="col s3 purchase-info">
-                            <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
-                                <p class="red-text"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
-                            </c:if>
-                            <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
-                                <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
-                            </c:if>
-                            <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
-                                <c:out value="${order.writer.cbu}"/>
-                            </c:if>
-
-                        </div>
-                        <div class="col s2 purchase-info">
-                            <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
-
-                            <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
-                                <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
-                                    <form:label path="receipt" for="files" class="btn label-select">
-                                        <spring:message code="orders.purchases.chooseFile"/>
-                                    </form:label>
-                                    <form:input type="file" id="files" path="receipt" accept=".pdf" style="display:none;"/>
-                                    <form:errors path="receipt"/>
-                                    <button class="waves-light btn payment" type="submit">
-                                        <strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong>
-                                    </button>
-                                </form:form>
-                            </c:if>
-
-                            <c:if test="${order.orderStatus eq 'COMPLETED'}">
-                                <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
-                                    <button class="waves-light btn"><strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong></button>
-                                </a>
-                            </c:if>
-
-                            <c:if test="${!order.orderStatus.readerCanAdvance and order.orderStatus ne 'COMPLETED'}">
-                                <p><spring:message code="orders.purchases.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i>
-                                </p>
-                            </c:if>
-
-                        </div>
+                        <p><c:out value="${order.getFormattedDate(pageContext.request.locale)}"/></p>
                     </div>
-                </li>
-            </c:forEach>
-        </ul>
-    </c:if>
+                    <div class="col s3 purchase-info">
+                        <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <p class="red-text"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                        </c:if>
+                        <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
+                            <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                        </c:if>
+                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <c:out value="${order.writer.cbu}"/>
+                        </c:if>
+
+                    </div>
+                    <div class="col s2 purchase-info">
+                        <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
+
+                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
+                                <form:label path="receipt" for="files" class="btn label-select">
+                                    <spring:message code="orders.purchases.chooseFile"/>
+                                </form:label>
+                                <form:input type="file" id="files" path="receipt" accept=".pdf" style="display:none;"/>
+                                <form:errors path="receipt"/>
+                                <button class="waves-light btn payment" type="submit">
+                                    <strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong>
+                                </button>
+                            </form:form>
+                        </c:if>
+
+                        <c:if test="${order.orderStatus eq 'COMPLETED'}">
+                            <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
+                                <button class="waves-light btn"><strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong></button>
+                            </a>
+                            <c:url value="/recommendBook/${order.orderId}/purchases" var="recommendBookUrl"/>
+
+                            <form id="recommendBookForm" action="${recommendBookUrl}" method="post" class="recommendation">
+                                <label for="recommended-${order.orderId}">
+                                    <input type="checkbox" id="recommended-${order.orderId}" name="recommended" ${order.isPublic ? 'checked' : ''}/>
+                                    <span><spring:message code="orders.purchases.recommendBook"/></span>
+                                </label>
+                            </form>
+                            <script>
+                                document.getElementById('recommended-${order.orderId}').addEventListener('change', function() {
+                                    document.getElementById('recommendBookForm').submit();
+                                });
+                            </script>
+                        </c:if>
+
+                        <c:if test="${!order.orderStatus.readerCanAdvance and order.orderStatus ne 'COMPLETED'}">
+                            <p><spring:message code="orders.purchases.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i>
+                            </p>
+                        </c:if>
+
+                    </div>
+                </div>
+            </li>
+        </c:forEach>
+    </ul>
 
     <c:if test="${orders.pageCount > 1}">
         <script src="<c:url value="/js/paginationControls.js"/>"></script>
