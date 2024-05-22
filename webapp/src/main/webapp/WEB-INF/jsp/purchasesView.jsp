@@ -141,9 +141,10 @@
 
                     </div>
                 </div>
-            </li>
-        </c:forEach>
-    </ul>
+                </li>
+            </c:forEach>
+        </ul>
+    </c:if>
 
     <c:if test="${orders.pageCount > 1}">
         <script src="<c:url value="/js/paginationControls.js"/>"></script>
