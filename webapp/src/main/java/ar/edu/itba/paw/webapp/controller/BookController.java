@@ -104,7 +104,7 @@ public class BookController {
         List<Book> recommendations = bs.getRecommendations(book);
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
-        Optional<Order> order = os.find(loggedUser.getUserId(), bookId);
+        Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = bs.loggedUserIsAuthor(bookId);
