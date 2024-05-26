@@ -53,7 +53,7 @@ public class UserServiceImplTest {
         Mockito.when(passwordEncoder.encode(Mockito.eq(PASSWORD)))
                 .thenReturn(ENCODED_PASSWORD);
         Mockito.when(userDao.create(Mockito.eq(EMAIL), Mockito.eq(ENCODED_PASSWORD), Mockito.eq(FIRST_NAME), Mockito.eq(LAST_NAME), Mockito.eq(false), Mockito.any(Locale.class)))
-                .thenReturn(new User(1, EMAIL,ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US));
+                .thenReturn(/*new User(1, EMAIL,ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US)*/ new User());
 
         User user = userService.create(EMAIL, PASSWORD, FIRST_NAME, LAST_NAME);
 
@@ -79,7 +79,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testValidateEnabledUser(){
-        Mockito.when(userDao.findById(Mockito.anyLong())).thenReturn(Optional.of(new User(1, EMAIL, ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, true, Locale.US)));
+        Mockito.when(userDao.findById(Mockito.anyLong())).thenReturn(Optional.of(/*new User(1, EMAIL, ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, true, Locale.US))*/ new User()));
 
         assertThrows(
                 NoValidationCodeException.class,
@@ -89,7 +89,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testValidateInvalidCheck(){
-        Mockito.when(userDao.findById(Mockito.anyLong())).thenReturn(Optional.of(new User(1, EMAIL, ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US)));
+        Mockito.when(userDao.findById(Mockito.anyLong())).thenReturn(Optional.of(/*new User(1, EMAIL, ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US))*/ new User()));
         Mockito.when(evs.checkValidation(Mockito.anyLong(), Mockito.anyString())).thenReturn(false);
 
         assertThrows(

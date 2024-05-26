@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class EmailValidationServiceImplTest {
 
-    private static final User TEST_USER = new User(1, "", "", "", "", false, Locale.ENGLISH);
+    private static final User TEST_USER = new User();//new User(1, "", "", "", "", false, Locale.ENGLISH);
 
     @Mock
     private MailService ms;

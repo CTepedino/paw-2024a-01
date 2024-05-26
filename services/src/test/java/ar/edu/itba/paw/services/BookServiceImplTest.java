@@ -29,7 +29,7 @@ public class BookServiceImplTest {
     private static final long SIZE = 100;
     private static final int LIMIT = 9;
 
-    private static final Book TEST_BOOK =  new Book(1, "", "", BookGenre.FICTION, new BigDecimal(1), 1, 1, LocalDate.now(),  new User(1,"","","","", false, Locale.US), false);
+    private static final Book TEST_BOOK =  new Book(1, "", "", BookGenre.FICTION, new BigDecimal(1), 1, 1, LocalDate.now(),  /*new User(1,"","","","", false, Locale.US)*/new User(), false);
 
     private static final List<BookGenre> FULL_BOOK_GENRE_LIST = Arrays.asList(Arrays.copyOfRange(BookGenre.values(), 0, 12));
     private static final List<BookGenre> HALF_FULL_BOOK_GENRE_LIST = Arrays.asList(Arrays.copyOfRange(BookGenre.values(), 0, 6));

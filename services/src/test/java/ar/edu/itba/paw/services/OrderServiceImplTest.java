@@ -26,8 +26,8 @@ import static org.junit.Assert.*;
 public class OrderServiceImplTest {
 
 
-    private static final User TEST_WRITER = new User(1, "", "", "", "", true, null);
-    private static final User TEST_READER = new User(2, "", "", "", "", true, null);
+    private static final User TEST_WRITER = /*new User(1, "", "", "", "", true, null);*/ new User();
+    private static final User TEST_READER = /*new User(2, "", "", "", "", true, null);*/ new User();
     private static final Book PAUSED_BOOK = new Book(1, "", "", BookGenre.BIOGRAPHY, BigDecimal.ONE, 0, 0, null, TEST_WRITER, true);
     private static final Book UNPAUSED_BOOK = new Book(1, "", "", BookGenre.BIOGRAPHY, BigDecimal.ONE, 0, 0, null, TEST_WRITER, false);
 

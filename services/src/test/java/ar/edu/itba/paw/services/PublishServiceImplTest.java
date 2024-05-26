@@ -48,7 +48,7 @@ public class PublishServiceImplTest {
     @Before
     public void setup(){
         Mockito.when(userService.getLoggedUser())
-                .thenReturn(Optional.of(new User(USER_ID, "", "", "", "",false, Locale.US)));
+                .thenReturn(Optional.of(/*new User(USER_ID, "", "", "", "",false, Locale.US)*/ new User()));
         Mockito.when(userService.getRoles(Mockito.eq(USER_ID))).thenReturn(mockedRoles);
         Mockito.when(bookService.create(
                 Mockito.anyString(),
