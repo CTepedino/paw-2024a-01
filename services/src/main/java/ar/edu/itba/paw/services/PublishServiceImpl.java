@@ -46,7 +46,7 @@ public class PublishServiceImpl implements PublishService {
             MultipartFile preview,
             MultipartFile bookFile
     ) {
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+/*        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
         List<UserRoles> roles = us.getRoles(user.getUserId());
 
@@ -69,6 +69,7 @@ public class PublishServiceImpl implements PublishService {
 
         LOGGER.atDebug().setMessage("Published book: {}").addArgument(title).log();
 
-        return bookId;
+        return bookId;*/
+        return 0;
     }
 }

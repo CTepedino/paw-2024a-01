@@ -37,13 +37,15 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     @Transactional
     @Override
     public EmailValidation create(User user) {
-        String code = generateRandomVerificationCode();
+        /*String code = generateRandomVerificationCode();
         LocalDateTime expiration = LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS);
         emailValidationDao.create(user.getUserId(), code, expiration);
         ms.sendRegisterEmail(user, code, expiration);
         LOGGER.atDebug().setMessage("Generated Validation Code").log();
 
-        return new EmailValidation(user.getUserId(), code, expiration);
+        return new EmailValidation(user.getUserId(), code, expiration);*/
+
+        return new EmailValidation(1, "", null);
     }
 
     private String generateRandomVerificationCode(){
@@ -58,30 +60,31 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     @Transactional
     @Override
     public void deleteExpired(){
-        emailValidationDao.deleteExpired();
+        //emailValidationDao.deleteExpired();
     }
 
 
     @Transactional
     @Override
     public boolean checkValidation(long id, String code) {
-        deleteExpired();
+/*        deleteExpired();
 
         EmailValidation validation = emailValidationDao.get(id).orElseThrow(NoValidationCodeException::new);
         if( validation.getCode().equals(code)){
             emailValidationDao.delete(id);
             return true;
         }
+        return false;*/
         return false;
     }
 
     @Transactional
     @Override
     public void resend(User user){
-        deleteExpired();
+/*        deleteExpired();
 
         EmailValidation validation = emailValidationDao.get(user.getUserId()).orElseThrow(NoValidationCodeException::new);
 
-        ms.sendRegisterEmail(user, validation.getCode(), validation.getExpiration());
+        ms.sendRegisterEmail(user, validation.getCode(), validation.getExpiration());*/
     }
 }

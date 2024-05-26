@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,25 +36,26 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public void createOrUpdate(long bookId, long userId, int rating, String review){
-        if (get(bookId, userId).isPresent()){
+/*        if (get(bookId, userId).isPresent()){
             reviewDao.modify(bookId, userId, rating, review);
             LOGGER.atDebug().setMessage("Modified Review for bookId: {}").addArgument(bookId).log();
         } else {
             reviewDao.create(bookId, userId, rating, review);
             LOGGER.atDebug().setMessage("Created Review for bookId: {}").addArgument(bookId).log();
-        }
+        }*/
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Review> get(long bookId, long userId) {
-        return reviewDao.get(bookId, userId);
+        //return reviewDao.get(bookId, userId);
+        return Optional.empty();
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Review> getAll(long bookId, ReviewOrderBy orderBy, int pageNumber, int pageSize) {
-        List<Review> reviews;
+/*        List<Review> reviews;
         long size = reviewDao.getAllSize(bookId);;
 
         if (us.isLoggedIn()){
@@ -62,21 +64,24 @@ public class ReviewServiceImpl implements ReviewService {
         } else {
             reviews = reviewDao.getAll(bookId, orderBy, (pageNumber-1)*pageSize, pageSize);
         }
-        return new PaginatedContent<>(reviews, pageNumber, pageSize, size);
+        return new PaginatedContent<>(reviews, pageNumber, pageSize, size);*/
+        return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
     }
 
     @Transactional(readOnly = true)
     @Override
     public int getAverageRating(long bookId) {
-        return reviewDao.getAverageRating(bookId);
+        //return reviewDao.getAverageRating(bookId);
+        return 0;
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Review> findLoggedUserReview(long bookId) {
-        if(us.isLoggedIn()){
+/*        if(us.isLoggedIn()){
             return reviewDao.get(bookId, us.getLoggedUser().orElseThrow(UserNotFoundException::new).getUserId());
         }
+        return Optional.empty();*/
         return Optional.empty();
     }
 
