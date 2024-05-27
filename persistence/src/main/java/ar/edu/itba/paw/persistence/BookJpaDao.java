@@ -58,7 +58,7 @@ public class BookJpaDao implements BookDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Book> getAll(int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE");
+        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE ORDER BY published_date DESC");
         nativeQuery.setMaxResults(limit);
         nativeQuery.setFirstResult(offset);
 
@@ -69,7 +69,7 @@ public class BookJpaDao implements BookDao {
             return Collections.emptyList();
         }
 
-        final TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+        final TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.publishDate DESC", Book.class);
         query.setParameter("idList", idList);
         return query.getResultList();
     }
@@ -146,6 +146,10 @@ public class BookJpaDao implements BookDao {
                 ORDER BY COUNT(DISTINCT b.bookId) DESC
             """,
             BookGenre.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
         return query.getResultList();
+
+        //TODO: preguntar si esta bien hacer esto asi
     }
 }
