@@ -19,10 +19,12 @@ public class Order {
     @Column(name = "order_id")
     private Long orderId;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "buyer_id", referencedColumnName = "user_id", nullable = false)
     private User buyer;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false)
     private Book book;
 
 
