@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -58,8 +59,9 @@ public class ReviewJpaDao implements ReviewDao {
 
     @Override
     public int getAverageRating(long bookId) {
-        Query query = em.createQuery("SELECT AVG(r.rating) FROM Review r WHERE r.bookId = :bookId", Integer.class);
+        TypedQuery<Double> query = em.createQuery("SELECT AVG(r.rating) FROM Review r WHERE r.bookId = :bookId", Double.class);
         query.setParameter("bookId", bookId);
-        return (int) query.getSingleResult();
+        Double rating = query.getSingleResult();
+        return (int) (rating==null?0:rating);
     }
 }

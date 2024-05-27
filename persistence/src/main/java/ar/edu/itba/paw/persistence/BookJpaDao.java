@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,7 +14,6 @@ import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -138,18 +136,10 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public List<BookGenre> getGenresByBookCount(int limit, int offset) {
-        TypedQuery<BookGenre> query = em.createQuery(
-         """
-                SELECT b.genre
-                FROM Book b
-                GROUP BY b.genre
-                ORDER BY COUNT(DISTINCT b.bookId) DESC
-            """,
-            BookGenre.class);
-        query.setFirstResult(offset);
+        Query query = em.createNativeQuery("SELECT genre FROM books GROUP BY genre ORDER BY COUNT(*) DESC");
         query.setMaxResults(limit);
-        return query.getResultList();
+        query.setFirstResult(offset);
 
-        //TODO: preguntar si esta bien hacer esto asi
+        return (List<BookGenre>) query.getResultList().stream().map(genre -> BookGenre.valueOf((String) genre)).collect(Collectors.toList());
     }
 }

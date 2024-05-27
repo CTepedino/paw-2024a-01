@@ -82,6 +82,11 @@ ALTER TABLE payment_receipts ADD COLUMN type VARCHAR(20) NOT NULL DEFAULT 'appli
 ALTER TABLE users ADD COLUMN description TEXT;
 */
 
+/* Sprint 5 modifications:
+ALTER TABLE books ALTER COLUMN title TYPE VARCHAR(50);
+ALTER TABLE books ALTER COLUMN genre TYPE VARCHAR(40);
+*/
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
@@ -96,9 +101,9 @@ CREATE TABLE IF NOT EXISTS users(
 
 CREATE TABLE IF NOT EXISTS books (
     book_id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
+    title VARCHAR(50) NOT NULL,
     description TEXT NOT NULL,
-    genre TEXT NOT NULL,
+    genre VARCHAR(40) NOT NULL,
     page_count INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     suggested_age INT NOT NULL,
