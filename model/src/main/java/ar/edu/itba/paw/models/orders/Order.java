@@ -3,19 +3,40 @@ package ar.edu.itba.paw.models.orders;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.users.User;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
+@Entity
+@Table(name = "orders")
 public class Order {
-    private final long orderId;
-    private final User buyer;
-    private final Book book;
-    private final OrderStatus orderStatus;
-    private final LocalDateTime date;
-    private final boolean isPublic;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_order_id_seq")
+    @SequenceGenerator(sequenceName = "orders_order_id_seq", name = "orders_order_id_seq", allocationSize = 1)
+    @Column(name = "order_id")
+    private Long orderId;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private User buyer;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Book book;
+
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
+    @Column
+    private LocalDateTime date;
+
+    @Column(name = "is_public")
+    private boolean isPublic;
+
+    protected Order(){}
 
     public Order(long orderId, User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
         this.orderId = orderId;

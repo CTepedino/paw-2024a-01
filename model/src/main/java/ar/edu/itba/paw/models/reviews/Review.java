@@ -2,17 +2,39 @@ package ar.edu.itba.paw.models.reviews;
 
 import ar.edu.itba.paw.models.users.User;
 
+import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
+import java.util.Objects;
 
+@Entity
+@Table(name = "reviews")
+@IdClass(ReviewKey.class)
 public class Review {
-    private final long bookId;
-    private final User reviewer;
-    private final int rating;
-    private final String review;
-    private final LocalDateTime date;
+
+    @Id
+    @Column(name = "book_id")
+    private Long bookId;
+
+    @Id
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "reviewer_id", referencedColumnName = "user_id")
+    private User reviewer;
+
+    @Column
+    private int rating;
+
+    @Column
+    private String review;
+
+    @Column
+    private LocalDateTime date;
+
+    protected Review(){}
 
     public Review(long bookId, User reviewer, int rating, String review, LocalDateTime date) {
         this.bookId = bookId;
@@ -44,5 +66,23 @@ public class Review {
 
     public String getFormattedDate(Locale locale) {
         return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale));
+    }
+}
+
+class ReviewKey implements Serializable {
+    private Long bookId;
+    private User reviewer;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReviewKey reviewKey = (ReviewKey) o;
+        return reviewer.getUserId()==reviewKey.reviewer.getUserId() && bookId.equals(reviewKey.bookId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reviewer.getUserId(), bookId);
     }
 }

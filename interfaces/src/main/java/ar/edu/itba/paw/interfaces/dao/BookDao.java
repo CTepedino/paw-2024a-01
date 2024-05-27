@@ -4,13 +4,17 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.users.User;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface BookDao {
+
     Optional<Book> findById(long id);
+
     long create(
             String title,
             String description,
@@ -18,8 +22,9 @@ public interface BookDao {
             BigDecimal price,
             int pageCount,
             int suggestedAge,
-
-            long writerId
+            LocalDate publishDate,
+            User writer,
+            boolean isPaused
     );
 
     void modify(

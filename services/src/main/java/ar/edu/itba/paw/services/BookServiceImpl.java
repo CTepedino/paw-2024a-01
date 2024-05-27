@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +53,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
-        /*try {
+        try {
             long bookId = bookDao.create(
                     title,
                     description,
@@ -60,7 +61,9 @@ public class BookServiceImpl implements BookService {
                     price,
                     pageCount,
                     suggestedAge,
-                    writerId
+                    LocalDate.now(),
+                    us.findById(writerId).get(),
+                    false
             );
             previewDao.create(bookId, preview.getBytes());
             coverDao.create(bookId, cover.getBytes());
@@ -70,14 +73,13 @@ public class BookServiceImpl implements BookService {
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to create book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
-        }*/
-        return 0;
+        }
     }
 
     @Transactional
     @Override
     public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
-        /*boolean isPaused = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).isPaused();
+        boolean isPaused = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).isPaused();
         try {
             if (cover != null && !cover.isEmpty()) {
                 coverDao.update(bookId, cover.getBytes());
@@ -97,105 +99,94 @@ public class BookServiceImpl implements BookService {
             throw new UnreadableFileException();
         }
         bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge, isPaused);
-        LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();*/
+        LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 
     @Transactional(readOnly = true)
     @Override
     public CoverImage getCover(long id) {
-        //return coverDao.findById(id).orElseThrow(ImageNotFoundException::new);
-        return new CoverImage(1, new byte[]{});
+        return coverDao.findById(id).orElseThrow(ImageNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
     @Override
     public BookPreview getPreview(long id) {
-         //return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
-        return new BookPreview(1, new byte[]{});
+        return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Book> findById(long id) {
-        //return bookDao.findById(id);
-        return Optional.empty();
+        return bookDao.findById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getAll(int pageNumber, int pageSize) {
-        /*if (pageNumber < 1){
+        if (pageNumber < 1){
             throw new InvalidPageException();
         }
         List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getAllSize());*/
-        return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
+        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getAllSize());
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
-        /*if (pageNumber < 1){
+        if (pageNumber < 1){
             throw new InvalidPageException();
         }
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
         return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
-        */
-        return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
     }
 
 
     @Transactional(readOnly = true)
     @Override
     public List<Book> getRecommendations(Book book){
-        //return bookDao.getRecommendations(book, 4);
-        return Collections.emptyList();
+        return bookDao.getRecommendations(book, 4);
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
-        /*if (pageNumber < 1){
+        if (pageNumber < 1){
             throw new InvalidPageException();
         }
         List<Book> books =  bookDao.getWriterBooks(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));*/
-        return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic) {
-        /*if (pageNumber < 1){
+        if (pageNumber < 1){
             throw new InvalidPageException();
         }
         List<Book> books = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize, isPublic);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));*/
-        return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
     }
 
 
     @Transactional(readOnly = true)
     @Override
     public BookFile getBookFile(long bookId) {
-        //return bookFileDao.findById(bookId).orElseThrow(PdfNotFoundException::new);
-        return new BookFile(1, new byte[]{});
+        return bookFileDao.findById(bookId).orElseThrow(PdfNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
     @Override
     public boolean loggedUserIsAuthor(long bookId) {
-        /*if (us.isLoggedIn()) {
+        if (us.isLoggedIn()) {
             return bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(us.getLoggedUser().get().getEmail());
         }
-        return false;*/
         return false;
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<BookGenre> getGenresByBookCount() {
-        /*List<BookGenre> popularGenres = bookDao.getGenresByBookCount(12, 0);
+        List<BookGenre> popularGenres = bookDao.getGenresByBookCount(12, 0);
         List<BookGenre> booklessGenres = List.of(BookGenre.values());
         int i = 0;
         while (popularGenres.size() < 12){
@@ -205,14 +196,13 @@ public class BookServiceImpl implements BookService {
             }
             i++;
         }
-        return popularGenres;*/
-        return Collections.emptyList();
+        return popularGenres;
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getProfileBooks(long usedId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
-/*        if (asWriter){
+        if (asWriter){
             return getWriterBooks(usedId, title, orderBy, pageNumber, pageSize);
         } else {
             if(ownsProfile) {
@@ -220,7 +210,6 @@ public class BookServiceImpl implements BookService {
             } else {
                 return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize, true);
             }
-        }*/
-        return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
+        }
     }
 }

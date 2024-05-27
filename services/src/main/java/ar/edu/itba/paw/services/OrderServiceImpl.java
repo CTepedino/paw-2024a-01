@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void create(long bookId, MultipartFile receipt) {
-        /*User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_APPROVAL);
         try {
             paymentReceiptDao.create(orderId, receipt.getBytes(), receipt.getContentType());
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
             throw new UnreadableFileException();
         }
         LOGGER.atDebug().setMessage("Created order for bookId: {}").addArgument(bookId).log();
-        ms.sendReceiptUploadedEmail(findById(orderId).orElseThrow(OrderNotFoundException::new));*/
+        ms.sendReceiptUploadedEmail(findById(orderId).orElseThrow(OrderNotFoundException::new));
     }
 
     @Transactional(readOnly = true)

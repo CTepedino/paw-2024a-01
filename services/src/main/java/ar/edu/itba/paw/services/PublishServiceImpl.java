@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -46,9 +47,9 @@ public class PublishServiceImpl implements PublishService {
             MultipartFile preview,
             MultipartFile bookFile
     ) {
-/*        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
-        List<UserRoles> roles = us.getRoles(user.getUserId());
+        Collection<UserRoles> roles = user.getRoles();
 
         if (!roles.contains(UserRoles.WRITER)){
             us.giveWriterRole(user.getUserId(), cbu);
@@ -69,7 +70,6 @@ public class PublishServiceImpl implements PublishService {
 
         LOGGER.atDebug().setMessage("Published book: {}").addArgument(title).log();
 
-        return bookId;*/
-        return 0;
+        return bookId;
     }
 }

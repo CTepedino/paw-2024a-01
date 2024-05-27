@@ -41,15 +41,18 @@ public class User {
     @Column
     private String description;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRoles.class)
     @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Collection<UserRoles> roles;
 
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    private EmailValidation validation;
 
 
-    public User(){}
+    //TODO: probar con package-private
+    protected User(){}
 
     public User(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
         this.email = email;

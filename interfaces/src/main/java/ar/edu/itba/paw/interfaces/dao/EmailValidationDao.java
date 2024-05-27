@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface EmailValidationDao {
 
-    void create(long id, String code, LocalDateTime expiration);
+    EmailValidation create(long id, String code, LocalDateTime expiration);
 
     Optional<EmailValidation> get(long id);
 
