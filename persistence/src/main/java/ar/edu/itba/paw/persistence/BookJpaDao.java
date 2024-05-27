@@ -13,10 +13,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class BookJpaDao implements BookDao {
@@ -52,16 +55,29 @@ public class BookJpaDao implements BookDao {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Book> getAll(int offset, int limit) {
-        TypedQuery<Book> query = em.createQuery("FROM Book WHERE isPaused = false", Book.class);
+        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE");
+        nativeQuery.setMaxResults(limit);
+        nativeQuery.setFirstResult(offset);
 
+        final List<Long> idList = (List<Long>) nativeQuery.getResultList()
+                .stream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        final TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+        query.setParameter("idList", idList);
         return query.getResultList();
     }
 
     @Override
     public long getAllSize() {
-        return 10;
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM books WHERE is_paused = FALSE");
+        return ((BigInteger) query.getSingleResult()).longValue();
     }
 
     @Override
