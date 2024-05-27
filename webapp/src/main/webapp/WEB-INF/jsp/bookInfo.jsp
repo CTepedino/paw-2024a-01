@@ -151,6 +151,8 @@
         </object>
 
         <div class="divider"></div>
+        <c:set var="questions" value="${questions}" scope="request"/>
+        <c:set var="isAuthor" value="${isAuthor}" scope="request"/>
         <%@include file="components/questions.jsp" %>
 
         <c:if test="${not empty recommendations}">

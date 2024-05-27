@@ -1,9 +1,5 @@
 
-.qa-section {
-    margin-top: 40px;
-}
-
-#question-form {
+.question-form {
     margin-bottom: 20px;
 }
 
@@ -21,8 +17,21 @@
 }
 
 .answer {
-    margin-top: 10px;
+    margin-top: 0;
     display: flex;
     align-items: center;
     color: #555555;
+}
+
+.date{
+    color: #B0B0B0;
+}
+
+
+.answer-form{
+    width:100%;
+}
+
+.answer-input{
+    margin-top: 0;
 }

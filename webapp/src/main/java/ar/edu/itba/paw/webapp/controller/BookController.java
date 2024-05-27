@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,6 +103,10 @@ public class BookController {
         }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        List<Question> questions = new ArrayList<>();
+        questions.add(new Question(bookId, loggedUser, "¿Es bueno?", null, book.getPublishDate(), null));
+        questions.add(new Question(bookId, loggedUser, "¿Cuándo será la próxima actualización del libro?", "La próxima actualización está programada para el próximo mes.", book.getPublishDate(), book.getPublishDate()));
+        questions.add(new Question(bookId, loggedUser, "¿De que trata el libro?", "Lo podes ver en la descripcion.", book.getPublishDate(), book.getPublishDate()));
         List<Book> recommendations = bs.getRecommendations(book);
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
@@ -119,6 +125,7 @@ public class BookController {
 
         mav.addObject("book", book);
         mav.addObject("order", order.orElse(null));
+        mav.addObject("questions", questions);
         mav.addObject("recommendations", recommendations);
         mav.addObject("reviews", reviews);
         mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
