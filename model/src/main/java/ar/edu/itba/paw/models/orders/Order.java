@@ -40,8 +40,7 @@ public class Order {
 
     protected Order(){}
 
-    public Order(long orderId, User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
-        this.orderId = orderId;
+    public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
         this.buyer = buyer;
         this.book = book;
         this.orderStatus = orderStatus;
@@ -81,4 +80,19 @@ public class Order {
         return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale));
     }
 
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
 }

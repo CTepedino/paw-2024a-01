@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +52,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void create(long bookId, MultipartFile receipt) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        long orderId = orderDao.create(buyer.getUserId(), bookId, OrderStatus.WAITING_APPROVAL);
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        long orderId = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false);
         try {
             paymentReceiptDao.create(orderId, receipt.getBytes(), receipt.getContentType());
         } catch (IOException e){
@@ -65,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public boolean canCreateOrder(long bookId) {
-/*        if (!us.isLoggedIn()){
+        if (!us.isLoggedIn()){
             return false;
         }
 
@@ -75,71 +77,64 @@ public class OrderServiceImpl implements OrderService {
         if (book.getWriter().getUserId() == buyer.getUserId() || book.isPaused()){
             return false;
         }
-        return orderDao.find(buyer.getUserId(), bookId).isEmpty();*/
-        return false;
+        return orderDao.find(buyer.getUserId(), bookId).isEmpty();
     }
 
     @Transactional(readOnly = true)
     @Override
     public boolean existsOrder(long bookId) {
-/*        if (!us.isLoggedIn()){
+        if (!us.isLoggedIn()){
             return false;
         }
 
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        return orderDao.find(buyer.getUserId(), bookId).isPresent();*/
-        return false;
+        return orderDao.find(buyer.getUserId(), bookId).isPresent();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Order> find(long buyerId, long bookId) {
-        //return orderDao.find(buyerId, bookId);
-        return Optional.empty();
+        return orderDao.find(buyerId, bookId);
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaymentReceipt getReceipt(long id){
-        //return paymentReceiptDao.findById(id).orElseThrow(PdfNotFoundException::new);
-        return new PaymentReceipt(1, new byte[]{},"");
+        return paymentReceiptDao.findById(id).orElseThrow(PdfNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Order> findById(long orderId) {
-        //return orderDao.findById(orderId);
-        return Optional.empty();
+        return orderDao.findById(orderId);
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize){
-/*        if (pageNumber < 1){
+        if (pageNumber < 1){
             throw new InvalidPageException();
         }
         List<Order> orders = orderDao.getReaderOrders(readerId, title, orderStatus,(pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getReaderOrdersSize(readerId, title, orderStatus));*/
-        return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
+        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getReaderOrdersSize(readerId, title, orderStatus));
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Order> getWriterOrders(long writerId,  String title, OrderStatus orderStatus, int pageNumber, int pageSize){
-/*        if (pageNumber < 1){
+        if (pageNumber < 1){
             throw new InvalidPageException();
         }
         List<Order> orders = orderDao.getWriterOrders(writerId, title, orderStatus,(pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getWriterOrdersSize(writerId, title, orderStatus));*/
-        return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
+        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getWriterOrdersSize(writerId, title, orderStatus));
     }
 
     private void sendReceipt(Order order, MultipartFile receipt, OrderStatus fromStatus) {
-/*        if (receipt == null){
+        if (receipt == null){
             LOGGER.atWarn().setMessage("Failed to send upload receipt for orderId: {} - Error Message: No receipt provided").addArgument(order.getOrderId()).log();
             throw new InvalidOrderUpdateException();
         }
-        orderDao.update(order.getOrderId(), OrderStatus.WAITING_APPROVAL);
+        orderDao.update(order.getOrderId(), OrderStatus.WAITING_APPROVAL, order.getDate(), order.isPublic());
         try {
             paymentReceiptDao.createOrUpdate(order.getOrderId(), receipt.getBytes(), receipt.getContentType());
             LOGGER.atDebug().setMessage("Uploaded receipt for orderId: {}").addArgument(order.getOrderId()).log();
@@ -151,37 +146,37 @@ public class OrderServiceImpl implements OrderService {
             ms.sendReceiptReuploadedEmail(order);
         } else {
             ms.sendReceiptUploadedEmail(order);
-        }*/
+        }
     }
 
     private void acceptOrReject(Order order, boolean approved){
-/*        if (approved) {
-            orderDao.update(order.getOrderId(), OrderStatus.COMPLETED);
+        if (approved) {
+            orderDao.update(order.getOrderId(), OrderStatus.COMPLETED, order.getDate(), order.isPublic());
             ms.sendReceiptApprovedEmail(order);
         } else {
-            orderDao.update(order.getOrderId(), OrderStatus.REJECTED_PAYMENT);
+            orderDao.update(order.getOrderId(), OrderStatus.REJECTED_PAYMENT, order.getDate(), order.isPublic());
             ms.sendReceiptDeniedEmail(order);
         }
-        LOGGER.atDebug().setMessage("Successfully updated order status for orderId: {}").addArgument(order.getOrderId()).log();*/
+        LOGGER.atDebug().setMessage("Successfully updated order status for orderId: {}").addArgument(order.getOrderId()).log();
     }
 
     @Transactional
     @Override
     public void updateOrderWriterSide(long orderId, boolean approved){
-/*        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         if (order.getOrderStatus().equals(OrderStatus.WAITING_APPROVAL)) {
             acceptOrReject(order, approved);
         } else {
             LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(orderId).log();
             throw new InvalidOrderUpdateException();
-        }*/
+        }
     }
 
     @Transactional
     @Override
     public void updateOrderBuyerSide(long orderId, MultipartFile receipt){
-/*        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         switch (order.getOrderStatus()){
             case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
@@ -189,40 +184,38 @@ public class OrderServiceImpl implements OrderService {
                 LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(orderId).log();
                 throw new InvalidOrderUpdateException();
             }
-        }*/
+        }
     }
 
     @Transactional(readOnly = true)
     @Override
     public boolean loggedUserOwnsBook(long bookId){
-/*        if (us.isLoggedIn()){
+        if (us.isLoggedIn()){
             return orderDao.ownsBook(bookId, us.getLoggedUser().get().getEmail());
         }
-        return false;*/
         return false;
     }
 
     @Transactional(readOnly = true)
     @Override
     public boolean hasBookFileAccess(long bookId, String email) {
-        //return orderDao.ownsBook(bookId, email) || bs.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(email);
-        return false;
+        return orderDao.ownsBook(bookId, email) || bs.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(email);
     }
 
     @Transactional(readOnly = true)
     @Override
     public boolean canAdvanceOrder(long orderId, String email) {
-/*        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
         return !order.getBook().isPaused() &&
             (order.getWriter().getEmail().equals(email) && order.getOrderStatus().getWriterCanAdvance()) ||
-            (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().getReaderCanAdvance());*/
-        return false;
+            (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().getReaderCanAdvance());
     }
 
     @Transactional
     @Override
     public void recommendBook(long orderId, boolean isRecommended){
-        //orderDao.recommendBook(orderId, isRecommended);
+        Order order = findById(orderId).orElseThrow(OrderNotFoundException::new);
+        orderDao.update(orderId, order.getOrderStatus(), order.getDate(), isRecommended);
     }
 
 }

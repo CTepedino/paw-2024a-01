@@ -67,22 +67,17 @@ public class Review {
     public String getFormattedDate(Locale locale) {
         return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale));
     }
-}
 
-class ReviewKey implements Serializable {
-    private Long bookId;
-    private User reviewer;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ReviewKey reviewKey = (ReviewKey) o;
-        return reviewer.getUserId()==reviewKey.reviewer.getUserId() && bookId.equals(reviewKey.bookId);
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(reviewer.getUserId(), bookId);
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }
+

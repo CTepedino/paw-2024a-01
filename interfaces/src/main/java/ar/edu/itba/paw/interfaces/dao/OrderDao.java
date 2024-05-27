@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.interfaces.dao;
 
+import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.models.users.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,11 +15,9 @@ public interface OrderDao {
 
     Optional<Order> findById(long orderId);
 
-    long create(long buyerId, long bookId, OrderStatus orderStatus);
+    long create(User user, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
 
-    void update(long orderId, OrderStatus orderStatus);
-
-    void recommendBook(long orderId, boolean isRecommended);
+    void update(long orderId, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
 
     List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, int offset, int limit);
     long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);

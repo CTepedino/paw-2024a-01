@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -36,11 +37,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public void createOrUpdate(long bookId, long userId, int rating, String review){
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
         if (get(bookId, userId).isPresent()){
-            reviewDao.modify(bookId, userId, rating, review);
+            reviewDao.modify(bookId, user, rating, review, LocalDateTime.now());
             LOGGER.atDebug().setMessage("Modified Review for bookId: {}").addArgument(bookId).log();
         } else {
-            reviewDao.create(bookId, userId, rating, review);
+            reviewDao.create(bookId, user, rating, review, LocalDateTime.now());
             LOGGER.atDebug().setMessage("Created Review for bookId: {}").addArgument(bookId).log();
         }
     }
@@ -48,7 +50,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     @Override
     public Optional<Review> get(long bookId, long userId) {
-        return reviewDao.get(bookId, userId);
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        return reviewDao.get(bookId, user);
     }
 
     @Transactional(readOnly = true)
@@ -76,7 +79,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Optional<Review> findLoggedUserReview(long bookId) {
         if(us.isLoggedIn()){
-            return reviewDao.get(bookId, us.getLoggedUser().orElseThrow(UserNotFoundException::new).getUserId());
+            return reviewDao.get(bookId, us.getLoggedUser().orElseThrow(UserNotFoundException::new));
         }
         return Optional.empty();
     }
