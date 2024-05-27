@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models.users;
 
+import ar.edu.itba.paw.models.books.Book;
+
 import javax.management.relation.Role;
 import javax.persistence.*;
 import java.util.Collection;

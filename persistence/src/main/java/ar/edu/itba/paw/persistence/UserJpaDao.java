@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Locale;
@@ -70,14 +71,28 @@ public class UserJpaDao implements UserDao {
         return 0;
     }
 
-    //TODO: despues de books
     @Override
     public void recheckAllPaused(long userId) {
+        Query query = em.createQuery("""
+            UPDATE Book b SET isPaused = CASE
+                WHEN NOT EXISTS(
+                    SELECT 1
+                    FROM BookFile bf
+                    WHERE bf.id = b.bookId
+                ) OR EXISTS(
+                    SELECT 1
+                    FROM User AS u
+                    WHERE u.userId = :userId AND u.cbu IS NULL
+                ) THEN TRUE
+                ELSE FALSE
+                END
+            WHERE b.writer.userId = :userId
+        """);
     }
 
-    //TODO: despues de books
     @Override
     public List<User> getUsersWithPausedBooks() {
-        return List.of();
+        TypedQuery<User> query = em.createQuery("SELECT DISTINCT u FROM User u WHERE EXISTS(SELECT 1 FROM Book b WHERE b.writer.userId = u.userId)", User.class);
+        return query.getResultList();
     }
 }

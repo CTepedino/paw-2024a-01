@@ -43,7 +43,7 @@ public class Book {
     @Column(name = "is_paused")
     private boolean isPaused;
 
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "writer_id", referencedColumnName = "user_id")
     private User writer;
 
