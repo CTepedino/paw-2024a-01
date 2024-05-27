@@ -149,6 +149,10 @@
                 height="700"
         >
         </object>
+
+        <div class="divider"></div>
+        <%@include file="components/questions.jsp" %>
+
         <c:if test="${not empty recommendations}">
             <div class="divider"></div>
             <h5><spring:message code="book.bookInfo.recommendations"/></h5>

@@ -1,0 +1,28 @@
+
+.qa-section {
+    margin-top: 40px;
+}
+
+#question-form {
+    margin-bottom: 20px;
+}
+
+.qa-list {
+    margin-top: 20px;
+}
+
+.qa-item {
+    margin-bottom: 15px;
+}
+
+.question {
+    font-weight: bold;
+    color: #333333;
+}
+
+.answer {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    color: #555555;
+}
