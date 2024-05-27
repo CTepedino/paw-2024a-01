@@ -89,12 +89,25 @@
                     </div>
                     <div class="col s3 purchase-info">
                         <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
-                            <p class="red-text"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                            <p class="red-text rejection"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
+                            <p class="rejection"><c:out value="${order.writer.cbu}"/></p>
+                            <a class="btn modal-trigger btn-small rejection" href="#reason"><strong><spring:message code="orders.purchases.status.reason_rejected"/><strong></a>
+                            <div id="reason" class="modal">
+                                <div class="modal-content">
+                                    <h4><spring:message code="orders.purchases.status.reason_rejected"/></h4>
+                                    <p><c:out value="este pago se rechazo por ..."/></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="footer-aligner">
+                                        <button class="btn modal-close close-btn" ><strong><spring:message code="close"/></strong></button>
+                                    </div>
+                                </div>
+                            </div>
                         </c:if>
                         <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
                             <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
                         </c:if>
-                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT'}">
                             <c:out value="${order.writer.cbu}"/>
                         </c:if>
 
@@ -173,6 +186,10 @@
         var instances = M.FormSelect.init(elems);
     });
 
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems, {});
+    });
 
     document.addEventListener("DOMContentLoaded", function() {
         if (document.querySelector("#files") != null) {

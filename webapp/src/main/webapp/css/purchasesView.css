@@ -76,3 +76,25 @@
     width: 100%;
     text-align: center;
 }
+
+button.modal-close{
+    margin-right: 10px !important;
+    background-color: gray;
+}
+
+button.modal-close:hover{
+    background-color: gray;
+}
+
+.footer-aligner{
+    display: flex;
+    justify-content: end;
+}
+
+.small-size{
+    font-size: 12px;
+}
+
+.rejection{
+    margin: 4px !important;
+}
