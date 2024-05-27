@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
@@ -93,6 +94,7 @@ public class AccessHelper {
 
     public boolean checkIsWriter(String id){
         long userId = Long.parseLong(id);
-        return us.getRoles(userId).contains(UserRoles.WRITER);
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        return user.getRoles().contains(UserRoles.WRITER);
     }
 }

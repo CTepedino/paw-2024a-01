@@ -43,7 +43,7 @@ public class CybraryUserDetailsService implements UserDetailsService {
             us.resendValidation(username);
         }
 
-        List<SimpleGrantedAuthority> authorities = us.getRoles(user.getUserId()).stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+        List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
 
         return new CybraryAuthUserDetails(user.getEmail(), password, user.isEnabled(), true, true, true, authorities);
     }

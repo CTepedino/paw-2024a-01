@@ -18,9 +18,6 @@ public interface UserDao {
 
     int giveRole(long id, UserRoles role);
 
-
-    List<UserRoles> getRoles(long id);
-
     void recheckAllPaused(long userId);
 
     List<User> getUsersWithPausedBooks();

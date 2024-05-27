@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
                 userDao.update(user.getUserId(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getCbu(),true, user.getLocale(), user.getDescription());
                 userDao.giveRole(user.getUserId(), UserRoles.READER);
 
-                List<SimpleGrantedAuthority> authorities = getRoles(user.getUserId()).stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+                List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
                 Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
@@ -115,12 +115,6 @@ public class UserServiceImpl implements UserService {
     public void resendValidation(String email) {
         User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
         evs.resend(user);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<UserRoles> getRoles(long id) {
-        return userDao.getRoles(id);
     }
 
     @Transactional
@@ -176,7 +170,8 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public boolean hasRole(long id, UserRoles role) {
-        return getRoles(id).contains(role);
+        User user = findById(id).orElseThrow(UserNotFoundException::new);
+        return user.getRoles().contains(role);
     }
 
     @Transactional(readOnly = true)
@@ -210,7 +205,7 @@ public class UserServiceImpl implements UserService {
 
         userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled(), user.getLocale(), description);
 
-        if ((getRoles(user.getUserId()).contains(UserRoles.WRITER) && oldCbu==null ) || getRoles(user.getUserId()).isEmpty()){
+        if ((user.getRoles().contains(UserRoles.WRITER) && oldCbu==null ) || user.getRoles().isEmpty()){
             userDao.recheckAllPaused(user.getUserId());
         }
 

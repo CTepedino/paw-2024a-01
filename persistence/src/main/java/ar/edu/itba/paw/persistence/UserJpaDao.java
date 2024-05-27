@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.stereotype.Repository;
@@ -59,14 +60,15 @@ public class UserJpaDao implements UserDao {
 
     @Override
     public int giveRole(long id, UserRoles role) {
+        Optional<User> maybeUser = findById(id);
+        if (maybeUser.isPresent()) {
+            User user = maybeUser.get();
+            user.getRoles().add(role);
+            em.merge(user);
+            return 1;
+        }
         return 0;
     }
-
-    @Override
-    public List<UserRoles> getRoles(long id) {
-        return List.of();
-    }
-
 
     //TODO: despues de books
     @Override

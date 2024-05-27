@@ -1,7 +1,11 @@
 package ar.edu.itba.paw.models.users;
 
+import javax.management.relation.Role;
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -36,6 +40,13 @@ public class User {
 
     @Column
     private String description;
+
+    @ElementCollection
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Collection<UserRoles> roles;
+
 
 
     public User(){}
@@ -97,6 +108,10 @@ public class User {
         return description;
     }
 
+    public Collection<UserRoles> getRoles() {
+        return roles;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -128,6 +143,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
 
 

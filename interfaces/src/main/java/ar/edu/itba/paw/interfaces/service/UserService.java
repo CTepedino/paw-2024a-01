@@ -20,12 +20,7 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    List<UserRoles> getRoles(long id);
-
     void giveWriterRole(long id, String cbu);
-
-/*    void fillMissingWriterData(long id, String password);*/
-
 
     boolean hasRole(long id, UserRoles role);
 
