@@ -7,10 +7,7 @@ import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -89,7 +86,14 @@ public class ReviewJpaDao implements ReviewDao {
         TypedQuery<Review> query = em.createQuery("FROM Review r WHERE r.bookId = :bookId AND r.reviewer.userId = :userId", Review.class);
         query.setParameter("bookId", bookId);
         query.setParameter("userId", reviewer.getUserId());
-        return Optional.ofNullable(query.getSingleResult());
+        Review result;
+        try {
+            result = query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+
+        return Optional.ofNullable(result);
     }
 
     @Override
