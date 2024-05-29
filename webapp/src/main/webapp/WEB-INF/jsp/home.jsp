@@ -74,5 +74,11 @@
             })
         </script>
     </c:if>
+
+    <c:if test="${books.page.size()==0}">
+    <h5 class="center center-align">
+        <spring:message code="book.home.noBooks"/>
+    </h5>
+    </c:if>
 </body>
 </html>
