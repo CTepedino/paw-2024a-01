@@ -65,10 +65,6 @@ public interface BookService {
             int pageSize
     );
 
-    CoverImage getCover(long id);
-
-    BookPreview getPreview(long id);
-
     List<Book> getRecommendations(Book book);
 
 
@@ -77,8 +73,6 @@ public interface BookService {
     PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic);
 
     PaginatedContent<Book> getProfileBooks(long usedId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter, boolean ownsProfile);
-
-    BookFile getBookFile(long bookId);
 
     boolean loggedUserIsAuthor(long bookId);
 

@@ -39,7 +39,8 @@ public class ReviewJpaDao implements ReviewDao {
 
     @Override
     public List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT review_id FROM reviews ORDER BY " + orderBy.getColumnName());
+        Query nativeQuery = em.createNativeQuery("SELECT review_id FROM reviews WHERE book_id = :bookId ORDER BY " + orderBy.getColumnName());
+        nativeQuery.setParameter("bookId", bookId);
         nativeQuery.setMaxResults(limit);
         nativeQuery.setFirstResult(offset);
 
@@ -57,8 +58,9 @@ public class ReviewJpaDao implements ReviewDao {
 
     @Override
     public List<Review> getAllExcept(long bookId, ReviewOrderBy orderBy, int offset, int limit, long userId) {
-        Query nativeQuery = em.createNativeQuery("SELECT review_id FROM reviews WHERE reviewer_id <> :userId ORDER BY " + orderBy.getColumnName());
+        Query nativeQuery = em.createNativeQuery("SELECT review_id FROM reviews WHERE reviewer_id <> :userId AND book_id = :bookId ORDER BY " + orderBy.getColumnName());
         nativeQuery.setParameter("userId", userId);
+        nativeQuery.setParameter("bookId", bookId);
         nativeQuery.setMaxResults(limit);
         nativeQuery.setFirstResult(offset);
 

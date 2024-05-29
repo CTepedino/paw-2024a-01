@@ -66,7 +66,8 @@ public class BookServiceImpl implements BookService {
                     false
             );
             previewDao.create(bookId, preview.getBytes());
-            coverDao.create(bookId, cover.getBytes());
+            //coverDao.create(bookId, cover.getBytes());
+            bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).setCoverImage(new CoverImage(bookId, cover.getBytes()));
             bookFileDao.create(bookId, bookFile.getBytes());
             LOGGER.atDebug().setMessage("Created book: {}").addArgument(title).log();
             return bookId;
@@ -100,18 +101,6 @@ public class BookServiceImpl implements BookService {
         }
         bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge, isPaused);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public CoverImage getCover(long id) {
-        return coverDao.findById(id).orElseThrow(ImageNotFoundException::new);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public BookPreview getPreview(long id) {
-        return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
@@ -165,13 +154,6 @@ public class BookServiceImpl implements BookService {
         }
         List<Book> books = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize, isPublic);
         return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
-    }
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public BookFile getBookFile(long bookId) {
-        return bookFileDao.findById(bookId).orElseThrow(PdfNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
