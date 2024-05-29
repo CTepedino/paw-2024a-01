@@ -61,6 +61,7 @@ public class ReviewJpaDao implements ReviewDao {
     @Override
     public List<Review> getAllExcept(long bookId, ReviewOrderBy orderBy, int offset, int limit, long userId) {
         Query nativeQuery = em.createNativeQuery("SELECT book_id, reviewer_id FROM reviews WHERE reviewer_id <> :userId ORDER BY " + orderBy.getColumnName());
+        nativeQuery.setParameter("userId", userId);
         nativeQuery.setMaxResults(limit);
         nativeQuery.setFirstResult(offset);
 
