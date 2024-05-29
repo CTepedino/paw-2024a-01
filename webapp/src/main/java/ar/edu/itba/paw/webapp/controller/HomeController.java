@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
@@ -32,8 +31,15 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
+        PaginatedContent<Book> paginatedContent = bs.getAll(page, PAGE_SIZE);
+        if(paginatedContent.getPageCount() == 0){
+            paginatedContent = bs.getAll(1, PAGE_SIZE);
+        } else if (paginatedContent.getPage().isEmpty()){
+            paginatedContent = bs.getAll(paginatedContent.getPageCount(), PAGE_SIZE);
+        }
+
         final ModelAndView mav = new ModelAndView("home");
-        mav.addObject("books", bs.getAll(page, PAGE_SIZE));
+        mav.addObject("books", paginatedContent);
         mav.addObject("popularGenres", bs.getGenresByBookCount());
         return mav;
     }
