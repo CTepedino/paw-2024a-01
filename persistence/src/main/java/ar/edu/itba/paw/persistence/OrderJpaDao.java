@@ -11,9 +11,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class OrderJpaDao implements OrderDao {
@@ -53,22 +56,84 @@ public class OrderJpaDao implements OrderDao {
 
     @Override
     public List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, int offset, int limit) {
-        return List.of();
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT o.order_id
+            FROM orders o
+            JOIN books b ON o.book_id = b.book_id
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId AND o.status = :status
+        """);
+        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("readerId", readerId);
+        nativeQuery.setParameter("status", orderStatus.toString());
+        nativeQuery.setFirstResult(offset);
+        nativeQuery.setMaxResults(limit);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList", Order.class);
+        query.setParameter("idList", idList);
+        return query.getResultList();
     }
 
     @Override
     public long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus) {
-        return 0;
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT COUNT(DISTINCT o.order_id)
+            FROM orders o
+            JOIN books b ON o.book_id = b.book_id
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId AND o.status = :status
+        """);
+        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("readerId", readerId);
+        nativeQuery.setParameter("status", orderStatus.toString());
+
+        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }
 
     @Override
     public List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, int offset, int limit) {
-        return List.of();
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT o.order_id
+            FROM orders o
+            JOIN books b ON o.book_id = b.book_id
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId AND o.status = :status
+        """);
+        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("writerId", writerId);
+        nativeQuery.setParameter("status", orderStatus.toString());
+        nativeQuery.setFirstResult(offset);
+        nativeQuery.setMaxResults(limit);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList", Order.class);
+        query.setParameter("idList", idList);
+        return query.getResultList();
     }
 
     @Override
     public long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus) {
-        return 0;
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT COUNT(DISTINCT o.order_id)
+            FROM orders o
+            JOIN books b ON o.book_id = b.book_id
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId AND o.status = :status
+        """);
+        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("writerId", writerId);
+        nativeQuery.setParameter("status", orderStatus.toString());
+
+        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }
 
     @Override

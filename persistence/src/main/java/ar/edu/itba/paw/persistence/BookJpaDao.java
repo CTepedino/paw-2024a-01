@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.users.User;
+import com.sun.istack.NotNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,10 +15,9 @@ import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class BookJpaDao implements BookDao {
@@ -53,15 +53,16 @@ public class BookJpaDao implements BookDao {
         }
     }
 
-    @SuppressWarnings("unchecked")
+
+
     @Override
     public List<Book> getAll(int offset, int limit) {
         Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE ORDER BY published_date DESC");
         nativeQuery.setMaxResults(limit);
         nativeQuery.setFirstResult(offset);
 
-        final List<Long> idList = (List<Long>) nativeQuery.getResultList()
-                .stream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
 
         if (idList.isEmpty()){
             return Collections.emptyList();
@@ -80,37 +81,205 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public List<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int offset, int limit) {
-        return List.of();
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+        nativeQueryStr.append("SELECT b.book_id FROM books b WHERE is_paused = FALSE AND ");
+        nativeQueryStr.append(" LOWER(title) LIKE LOWER(:title) ");
+        params.put("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        if (genre != null) {
+            nativeQueryStr.append(" AND b.genre = :genre");
+            params.put("genre", genre.toString());
+        }
+        if (minPrice != null) {
+            nativeQueryStr.append(" AND b.price >= :minPrice");
+            params.put("minPrice", minPrice);
+        }
+        if (maxPrice != null) {
+            nativeQueryStr.append(" AND b.price <= :maxPrice");
+            params.put("maxPrice", maxPrice);
+        }
+        if (minPageCount != null) {
+            nativeQueryStr.append(" AND b.page_count >= :minPageCount");
+            params.put("minPageCount", minPageCount);
+        }
+        if (maxPageCount != null) {
+            nativeQueryStr.append(" AND b.page_count <= :maxPageCount");
+            params.put("maxPageCount", maxPageCount);
+        }
+        if (minSuggestedAge != null) {
+            nativeQueryStr.append(" AND b.suggested_age >= :minSuggestedAge");
+            params.put("minSuggestedAge", minSuggestedAge);
+        }
+        if (maxSuggestedAge != null) {
+            nativeQueryStr.append(" AND b.suggested_age <= :maxSuggestedAge ");
+            params.put("maxSuggestedAge", maxSuggestedAge);
+        }
+
+        nativeQueryStr.append(" ORDER BY ").append(orderBy.getColumnName());
+
+        Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
+        nativeQuery.setFirstResult(offset);
+        nativeQuery.setMaxResults(limit);
+        for(Map.Entry<String, Object> entry : params.entrySet()) {
+            nativeQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
+        query.setParameter("idList", idList);
+        return query.getResultList();
     }
 
     @Override
     public long getSearchSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy) {
-        return 0;
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+        nativeQueryStr.append("SELECT COUNT(book_id) FROM books b WHERE is_paused = FALSE AND ");
+        nativeQueryStr.append(" LOWER(title) LIKE LOWER(:title) ");
+        params.put("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        if (genre != null) {
+            nativeQueryStr.append(" AND b.genre = :genre");
+            params.put("genre", genre.toString());
+        }
+        if (minPrice != null) {
+            nativeQueryStr.append(" AND b.price >= :minPrice");
+            params.put("minPrice", minPrice);
+        }
+        if (maxPrice != null) {
+            nativeQueryStr.append(" AND b.price <= :maxPrice");
+            params.put("maxPrice", maxPrice);
+        }
+        if (minPageCount != null) {
+            nativeQueryStr.append(" AND b.page_count >= :minPageCount");
+            params.put("minPageCount", minPageCount);
+        }
+        if (maxPageCount != null) {
+            nativeQueryStr.append(" AND b.page_count <= :maxPageCount");
+            params.put("maxPageCount", maxPageCount);
+        }
+        if (minSuggestedAge != null) {
+            nativeQueryStr.append(" AND b.suggested_age >= :minSuggestedAge");
+            params.put("minSuggestedAge", minSuggestedAge);
+        }
+        if (maxSuggestedAge != null) {
+            nativeQueryStr.append(" AND b.suggested_age <= :maxSuggestedAge ");
+            params.put("maxSuggestedAge", maxSuggestedAge);
+        }
+
+        Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
+        for(Map.Entry<String, Object> entry : params.entrySet()) {
+            nativeQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }
 
     @Override
     public List<Book> getRecommendations(Book book, int max) {
-        return List.of();
+        Query nativeQuery = em.createNativeQuery(
+     """
+            SELECT b.book_id
+            FROM books b JOIN users u ON b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED'
+            WHERE b.is_paused = FALSE AND (b.genre = :genre OR b.writer_id = :writerId) AND b.book_id <> :bookId
+            GROUP BY b.book_id, u.user_id
+            ORDER BY COUNT(o.book_id) DESC
+        """);
+        nativeQuery.setParameter("genre", book.getGenre().toString());
+        nativeQuery.setParameter("writerId", book.getWriter().getUserId());
+        nativeQuery.setParameter("bookId", book.getBookId());
+        nativeQuery.setMaxResults(max);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+        query.setParameter("idList", idList);
+        return query.getResultList();
     }
 
     @Override
     public List<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int offset, int limit) {
-        return List.of();
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT book_id
+            FROM books
+            WHERE writer_id = :writerId AND LOWER(title) LIKE LOWER(:title)
+            ORDER BY \s
+       """ + orderBy.getColumnName());
+        nativeQuery.setParameter("writerId", writerId);
+        nativeQuery.setParameter("title", "%"+DaoUtils.escapeSearchString(title)+"%");
+        nativeQuery.setFirstResult(offset);
+        nativeQuery.setMaxResults(limit);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
+        query.setParameter("idList", idList);
+        return query.getResultList();
     }
 
     @Override
     public long getWriterBooksSize(long writerId, String title) {
-        return 0;
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT COUNT(*)
+            FROM books
+            WHERE writer_id = :writerId AND LOWER(title) LIKE LOWER(:title)
+        """);
+        nativeQuery.setParameter("writerId", writerId);
+        nativeQuery.setParameter("title", "%"+DaoUtils.escapeSearchString(title)+"%");
+
+        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }
 
     @Override
     public List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int offset, int limit, boolean isPublic) {
-        return List.of();
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT b.book_id
+            FROM books b JOIN orders o ON b.book_id = o.book_id
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer_id = :readerId
+        """ + (isPublic?" AND o.is_public = TRUE ":"") + " ORDER BY " + orderBy.getColumnName());
+        nativeQuery.setParameter("readerId", readerId);
+        nativeQuery.setParameter("title", "%"+DaoUtils.escapeSearchString(title)+"%");
+        nativeQuery.setFirstResult(offset);
+        nativeQuery.setMaxResults(limit);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
+        query.setParameter("idList", idList);
+        return query.getResultList();
     }
 
     @Override
     public long getOwnedBooksSize(long readerId, String title, boolean isPublic) {
-        return 0;
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT COUNT(DISTINCT b.book_id)
+            FROM books b JOIN orders o ON b.book_id = o.book_id
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer_id = :readerId
+        """ + (isPublic?" AND o.is_public = TRUE ":""));
+        nativeQuery.setParameter("readerId", readerId);
+        nativeQuery.setParameter("title", "%"+DaoUtils.escapeSearchString(title)+"%");
+
+        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }
 
     @Override
@@ -134,12 +303,13 @@ public class BookJpaDao implements BookDao {
         return query.getSingleResult();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<BookGenre> getGenresByBookCount(int limit, int offset) {
         Query query = em.createNativeQuery("SELECT genre FROM books GROUP BY genre ORDER BY COUNT(*) DESC");
         query.setMaxResults(limit);
         query.setFirstResult(offset);
 
-        return (List<BookGenre>) query.getResultList().stream().map(genre -> BookGenre.valueOf((String) genre)).collect(Collectors.toList());
+        return (List<BookGenre>) query.getResultStream().map(genre -> BookGenre.valueOf((String) genre)).collect(Collectors.toList());
     }
 }

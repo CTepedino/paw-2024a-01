@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ReviewDao;
 import ar.edu.itba.paw.models.reviews.Review;
+import ar.edu.itba.paw.models.reviews.ReviewIdDTO;
 import ar.edu.itba.paw.models.reviews.ReviewKey;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -39,17 +41,48 @@ public class ReviewJpaDao implements ReviewDao {
 
     @Override
     public List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit) {
-        return List.of();
+        Query nativeQuery = em.createNativeQuery("SELECT book_id, reviewer_id FROM reviews");
+        nativeQuery.setMaxResults(limit);
+        nativeQuery.setFirstResult(offset);
+
+        List<Object[]> results = nativeQuery.getResultList();
+
+        List<ReviewIdDTO> idList = results.stream().map(id -> new ReviewIdDTO(
+                ((Number) id[0]).longValue(),
+                ((Number) id[1]).longValue()
+        )).toList();
+
+
+        TypedQuery<Review> query = em.createQuery("FROM Review r WHERE (r.bookId, r.reviewer.userId) IN :idList", Review.class);
+        query.setParameter("idList", idList);
+        return query.getResultList();
     }
 
     @Override
     public List<Review> getAllExcept(long bookId, ReviewOrderBy orderBy, int offset, int limit, long userId) {
-        return List.of();
+        Query nativeQuery = em.createNativeQuery("SELECT book_id, reviewer_id FROM reviews WHERE reviewer_id <> :userId");
+        nativeQuery.setParameter("userId", userId);
+        nativeQuery.setMaxResults(limit);
+        nativeQuery.setFirstResult(offset);
+
+        List<Object[]> results = nativeQuery.getResultList();
+
+        List<ReviewIdDTO> idList = results.stream().map(id -> new ReviewIdDTO(
+                ((Number) id[0]).longValue(),
+                ((Number) id[1]).longValue()
+        )).toList();
+
+
+        TypedQuery<Review> query = em.createQuery("FROM Review r WHERE (r.bookId, r.reviewer.userId) IN :idList", Review.class);
+        query.setParameter("idList", idList);
+        return query.getResultList();
     }
 
     @Override
     public long getAllSize(long bookId) {
-        return 0;
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM reviews WHERE book_id = :bookId");
+        query.setParameter("bookId", bookId);
+        return ((BigInteger) query.getSingleResult()).longValue();
     }
 
     @Override
