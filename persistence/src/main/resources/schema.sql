@@ -92,7 +92,7 @@ UPDATE reviews SET review_id = DEFAULT;
 ALTER TABLE reviews ADD CONSTRAINT reviews_unique UNIQUE (reviewer_id, book_id);
 
 ALTER TABLE orders ADD CONSTRAINT orders_unique UNIQUE (book_id, buyer_id);
-
+*/
 
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
