@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
@@ -58,8 +59,16 @@ public class OrderController {
                 orderSearchForm.setOrderStatus(null);
             }
         }
+
+        PaginatedContent<Order> orders = os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE);
+        if(orders.getPageCount() == 0){
+            orders = os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), 1, ORDER_PAGE_SIZE);
+        } else if (orders.getPage().isEmpty()){
+            orders = os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orders.getPageCount(), ORDER_PAGE_SIZE);
+        }
+
         final ModelAndView mav = new ModelAndView("purchasesView");
-        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE));
+        mav.addObject("orders", orders);
         return mav;
     }
 
@@ -78,8 +87,16 @@ public class OrderController {
                 orderSearchForm.setOrderStatus(null);
             }
         }
+
+        PaginatedContent<Order> orders = os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE);
+        if(orders.getPageCount() == 0){
+            orders = os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), 1, ORDER_PAGE_SIZE);
+        } else if (orders.getPage().isEmpty()){
+            orders = os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orders.getPageCount(), ORDER_PAGE_SIZE);
+        }
+
         ModelAndView mav = new ModelAndView("salesView");
-        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE));
+        mav.addObject("orders", orders);
         return mav;
     }
 

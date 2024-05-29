@@ -77,6 +77,12 @@ public class ProfileController {
         boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
         PaginatedContent<Book> books = bs.getProfileBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PROFILE_PAGE_SIZE, tab.equals("publications"), ownsProfile);
 
+        if(books.getPageCount() == 0){
+            books = bs.getProfileBooks(userId, form.getTitle(), form.getOrderBy(), 1, PROFILE_PAGE_SIZE, tab.equals("publications"), ownsProfile);
+        } else if (books.getPage().isEmpty()){
+            books = bs.getProfileBooks(userId, form.getTitle(), form.getOrderBy(), books.getPageCount(), PROFILE_PAGE_SIZE, tab.equals("publications"), ownsProfile);
+        }
+
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("tab", tab);
         mav.addObject("user", user);

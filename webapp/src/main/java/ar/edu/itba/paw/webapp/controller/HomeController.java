@@ -31,15 +31,15 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
-        PaginatedContent<Book> paginatedContent = bs.getAll(page, PAGE_SIZE);
-        if(paginatedContent.getPageCount() == 0){
-            paginatedContent = bs.getAll(1, PAGE_SIZE);
-        } else if (paginatedContent.getPage().isEmpty()){
-            paginatedContent = bs.getAll(paginatedContent.getPageCount(), PAGE_SIZE);
+        PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
+        if(books.getPageCount() == 0){
+            books = bs.getAll(1, PAGE_SIZE);
+        } else if (books.getPage().isEmpty()){
+            books = bs.getAll(books.getPageCount(), PAGE_SIZE);
         }
 
         final ModelAndView mav = new ModelAndView("home");
-        mav.addObject("books", paginatedContent);
+        mav.addObject("books", books);
         mav.addObject("popularGenres", bs.getGenresByBookCount());
         return mav;
     }
