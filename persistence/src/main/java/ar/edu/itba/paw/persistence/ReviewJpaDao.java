@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ReviewDao;
+import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.reviews.Review;
-import ar.edu.itba.paw.models.reviews.ReviewIdDTO;
-import ar.edu.itba.paw.models.reviews.ReviewKey;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
@@ -14,8 +13,10 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class ReviewJpaDao implements ReviewDao {
@@ -41,39 +42,36 @@ public class ReviewJpaDao implements ReviewDao {
 
     @Override
     public List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT book_id, reviewer_id FROM reviews");
+        Query nativeQuery = em.createNativeQuery("SELECT review_id FROM reviews ORDER BY " + orderBy.getColumnName());
         nativeQuery.setMaxResults(limit);
         nativeQuery.setFirstResult(offset);
 
-        List<Object[]> results = nativeQuery.getResultList();
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
 
-        List<ReviewIdDTO> idList = results.stream().map(id -> new ReviewIdDTO(
-                ((Number) id[0]).longValue(),
-                ((Number) id[1]).longValue()
-        )).toList();
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
 
-
-        TypedQuery<Review> query = em.createQuery("FROM Review r WHERE (r.bookId, r.reviewer.userId) IN :idList", Review.class);
+        TypedQuery<Review> query = em.createQuery("FROM Review r WHERE r.reviewId IN :idList ORDER BY " + orderBy.getColumnName(), Review.class);
         query.setParameter("idList", idList);
         return query.getResultList();
     }
 
     @Override
     public List<Review> getAllExcept(long bookId, ReviewOrderBy orderBy, int offset, int limit, long userId) {
-        Query nativeQuery = em.createNativeQuery("SELECT book_id, reviewer_id FROM reviews WHERE reviewer_id <> :userId");
-        nativeQuery.setParameter("userId", userId);
+        Query nativeQuery = em.createNativeQuery("SELECT book_id, reviewer_id FROM reviews WHERE reviewer_id <> :userId ORDER BY " + orderBy.getColumnName());
         nativeQuery.setMaxResults(limit);
         nativeQuery.setFirstResult(offset);
 
-        List<Object[]> results = nativeQuery.getResultList();
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
 
-        List<ReviewIdDTO> idList = results.stream().map(id -> new ReviewIdDTO(
-                ((Number) id[0]).longValue(),
-                ((Number) id[1]).longValue()
-        )).toList();
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
 
-
-        TypedQuery<Review> query = em.createQuery("FROM Review r WHERE (r.bookId, r.reviewer.userId) IN :idList", Review.class);
+        TypedQuery<Review> query = em.createQuery("FROM Review r WHERE r.reviewId IN :idList ORDER BY " + orderBy.getColumnName(), Review.class);
         query.setParameter("idList", idList);
         return query.getResultList();
     }
@@ -87,7 +85,10 @@ public class ReviewJpaDao implements ReviewDao {
 
     @Override
     public Optional<Review> get(long bookId, User reviewer) {
-        return Optional.ofNullable(em.find(Review.class, new ReviewKey(bookId, reviewer)));
+        TypedQuery<Review> query = em.createQuery("FROM Review r WHERE r.bookId = :bookId AND r.reviewer.userId = :userId", Review.class);
+        query.setParameter("bookId", bookId);
+        query.setParameter("userId", reviewer.getUserId());
+        return Optional.ofNullable(query.getSingleResult());
     }
 
     @Override

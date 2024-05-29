@@ -60,11 +60,13 @@ public class OrderJpaDao implements OrderDao {
             SELECT o.order_id
             FROM orders o
             JOIN books b ON o.book_id = b.book_id
-            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId AND o.status = :status
-        """);
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId
+        """ + (orderStatus!=null?" AND o.status = :status":""));
         nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
         nativeQuery.setParameter("readerId", readerId);
-        nativeQuery.setParameter("status", orderStatus.toString());
+        if (orderStatus != null) {
+            nativeQuery.setParameter("status", orderStatus.toString());
+        }
         nativeQuery.setFirstResult(offset);
         nativeQuery.setMaxResults(limit);
 
@@ -86,11 +88,13 @@ public class OrderJpaDao implements OrderDao {
             SELECT COUNT(DISTINCT o.order_id)
             FROM orders o
             JOIN books b ON o.book_id = b.book_id
-            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId AND o.status = :status
-        """);
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId
+        """ + (orderStatus!=null?" AND o.status = :status":""));
         nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
         nativeQuery.setParameter("readerId", readerId);
-        nativeQuery.setParameter("status", orderStatus.toString());
+        if (orderStatus != null) {
+            nativeQuery.setParameter("status", orderStatus.toString());
+        }
 
         return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }
@@ -101,11 +105,13 @@ public class OrderJpaDao implements OrderDao {
             SELECT o.order_id
             FROM orders o
             JOIN books b ON o.book_id = b.book_id
-            WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId AND o.status = :status
-        """);
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId
+        """ + (orderStatus!=null?" AND o.status = :status":""));
         nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
         nativeQuery.setParameter("writerId", writerId);
-        nativeQuery.setParameter("status", orderStatus.toString());
+        if (orderStatus != null) {
+            nativeQuery.setParameter("status", orderStatus.toString());
+        }
         nativeQuery.setFirstResult(offset);
         nativeQuery.setMaxResults(limit);
 
@@ -127,11 +133,13 @@ public class OrderJpaDao implements OrderDao {
             SELECT COUNT(DISTINCT o.order_id)
             FROM orders o
             JOIN books b ON o.book_id = b.book_id
-            WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId AND o.status = :status
-        """);
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId
+        """ + (orderStatus!=null?" AND o.status = :status":""));
         nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
         nativeQuery.setParameter("writerId", writerId);
-        nativeQuery.setParameter("status", orderStatus.toString());
+        if (orderStatus != null) {
+            nativeQuery.setParameter("status", orderStatus.toString());
+        }
 
         return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }

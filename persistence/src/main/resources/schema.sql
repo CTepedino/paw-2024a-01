@@ -85,7 +85,14 @@ ALTER TABLE users ADD COLUMN description TEXT;
 /* Sprint 5 modifications:
 ALTER TABLE books ALTER COLUMN title TYPE VARCHAR(50);
 ALTER TABLE books ALTER COLUMN genre TYPE VARCHAR(40);
-*/
+
+ALTER TABLE reviews DROP CONSTRAINT reviews_pkey;
+ALTER TABLE reviews ADD COLUMN review_id SERIAL PRIMARY KEY;
+UPDATE reviews SET review_id = DEFAULT;
+ALTER TABLE reviews ADD CONSTRAINT reviews_unique UNIQUE (reviewer_id, book_id);
+
+ALTER TABLE orders ADD CONSTRAINT orders_unique UNIQUE (book_id, buyer_id);
+
 
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
@@ -152,7 +159,9 @@ CREATE TABLE IF NOT EXISTS orders(
     is_public BOOLEAN DEFAULT FALSE,
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,
+
+    UNIQUE(buyer_id, book_id)
 );
 
 CREATE TABLE IF NOT EXISTS payment_receipts(
@@ -162,6 +171,7 @@ CREATE TABLE IF NOT EXISTS payment_receipts(
 );
 
 CREATE TABLE IF NOT EXISTS reviews(
+    review_id SERIAL PRIMARY KEY,
     reviewer_id INT NOT NULL,
     book_id INT NOT NULL,
     rating INT NOT NULL,
@@ -170,10 +180,10 @@ CREATE TABLE IF NOT EXISTS reviews(
 
     CHECK (rating BETWEEN 1 AND 10),
 
-    PRIMARY KEY (book_id, reviewer_id),
-
     FOREIGN KEY (reviewer_id) REFERENCES users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,
+
+    UNIQUE(book_id, reviewer_id)
 );
 
 CREATE TABLE IF NOT EXISTS email_validations(

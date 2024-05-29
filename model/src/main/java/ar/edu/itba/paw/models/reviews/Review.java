@@ -13,14 +13,15 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "reviews")
-@IdClass(ReviewKey.class)
 public class Review {
 
     @Id
-    @Column(name = "book_id")
-    private Long bookId;
+    @Column(name = "review_id")
+    private Long reviewId;
 
-    @Id
+    @Column(name = "book_id")
+    private long bookId;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id", referencedColumnName = "user_id")
     private User reviewer;
@@ -42,6 +43,10 @@ public class Review {
         this.rating = rating;
         this.review = review;
         this.date = date;
+    }
+
+    public long getReviewId() {
+        return reviewId;
     }
 
     public long getBookId() {
