@@ -146,9 +146,10 @@ public class OrderJpaDao implements OrderDao {
 
     @Override
     public boolean ownsBook(long bookId, String email) {
-        TypedQuery<Boolean> query = em.createQuery("SELECT EXISTS (SELECT 1 FROM Order o WHERE o.book.bookId = :bookId AND o.buyer.email = :email)", Boolean.class);
+        Query query = em.createQuery("SELECT 1 FROM Order o WHERE EXISTS (SELECT 1 FROM Order o WHERE o.book.bookId = :bookId AND o.buyer.email = :email)");
         query.setParameter("bookId", bookId);
         query.setParameter("email", email);
-        return query.getSingleResult();
+        query.setMaxResults(1);
+        return query.getSingleResult() != null;
     }
 }
