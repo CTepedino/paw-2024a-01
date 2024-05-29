@@ -2,8 +2,7 @@ package ar.edu.itba.paw.models.files;
 
 import javax.persistence.*;
 
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Entity
+@MappedSuperclass
 public abstract class File {
 
     @Id

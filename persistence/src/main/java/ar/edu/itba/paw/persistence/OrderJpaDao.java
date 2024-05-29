@@ -7,10 +7,7 @@ import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -29,7 +26,13 @@ public class OrderJpaDao implements OrderDao {
         TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.buyer.userId = :buyerId AND o.book.bookId = :bookId", Order.class);
         query.setParameter("buyerId", buyerId);
         query.setParameter("bookId", bookId);
-        return Optional.ofNullable(query.getSingleResult());
+        Order order;
+        try {
+            order = query.getSingleResult();
+        } catch (NoResultException e) {
+            order = null;
+        }
+        return Optional.ofNullable(order);
     }
 
     @Override
@@ -150,6 +153,13 @@ public class OrderJpaDao implements OrderDao {
         query.setParameter("bookId", bookId);
         query.setParameter("email", email);
         query.setMaxResults(1);
-        return query.getSingleResult() != null;
+        boolean ownsBook;
+        try {
+           ownsBook = query.getSingleResult() !=null;
+        } catch (NoResultException e) {
+            ownsBook = false;
+        }
+
+        return ownsBook;
     }
 }
