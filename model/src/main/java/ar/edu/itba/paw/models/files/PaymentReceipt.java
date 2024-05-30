@@ -12,7 +12,7 @@ public class PaymentReceipt extends File{
     @Column
     private String type;
 
-    protected PaymentReceipt() {}
+    PaymentReceipt() {}
 
     public PaymentReceipt(long receiptId, byte[] receipt, String type){
         super(receiptId, receipt);

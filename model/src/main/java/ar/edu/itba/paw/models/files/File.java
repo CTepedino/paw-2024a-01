@@ -12,7 +12,7 @@ public abstract class File {
     @Column
     private byte[] file;
 
-    protected File(){}
+    File(){}
 
     File(long fileId, byte[] file){
         this.fileId=fileId;

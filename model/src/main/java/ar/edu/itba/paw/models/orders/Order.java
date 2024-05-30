@@ -38,7 +38,7 @@ public class Order {
     @Column(name = "is_public")
     private boolean isPublic;
 
-    protected Order(){}
+    Order(){}
 
     public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
         this.buyer = buyer;

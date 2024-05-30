@@ -1,9 +1,15 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.books.Book;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DaoUtils {
 
@@ -40,4 +46,20 @@ public class DaoUtils {
         return getRowCount(em, tableName, "", Map.of());
     }
 
+
+    static <T> List<T> paginatedQuery(EntityManager em, Query nativeQuery, TypedQuery<T> query, int offset, int limit){
+
+        nativeQuery.setFirstResult(offset);
+        nativeQuery.setMaxResults(limit);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        query.setParameter("idList", idList);
+        return query.getResultList();
+    }
 }

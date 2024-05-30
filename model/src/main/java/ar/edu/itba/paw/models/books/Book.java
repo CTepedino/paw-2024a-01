@@ -62,7 +62,7 @@ public class Book {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private BookPreview preview;
 
-    protected Book(){}
+    Book(){}
 
     public Book(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
         this.title = title;

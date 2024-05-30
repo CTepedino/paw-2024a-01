@@ -52,9 +52,7 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     private EmailValidation validation;
 
-
-    //TODO: probar con package-private
-    protected User(){}
+    User(){}
 
     public User(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
         this.email = email;
