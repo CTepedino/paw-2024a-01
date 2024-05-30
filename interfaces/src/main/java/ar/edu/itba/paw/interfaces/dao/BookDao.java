@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.users.User;
 
 import java.math.BigDecimal;

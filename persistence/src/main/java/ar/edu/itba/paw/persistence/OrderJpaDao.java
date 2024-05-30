@@ -65,7 +65,7 @@ public class OrderJpaDao implements OrderDao {
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId
         """ + (orderStatus!=null?" AND o.status = :status":""));
-        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("readerId", readerId);
         if (orderStatus != null) {
             nativeQuery.setParameter("status", orderStatus.toString());
@@ -93,7 +93,7 @@ public class OrderJpaDao implements OrderDao {
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId
         """ + (orderStatus!=null?" AND o.status = :status":""));
-        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("readerId", readerId);
         if (orderStatus != null) {
             nativeQuery.setParameter("status", orderStatus.toString());
@@ -110,7 +110,7 @@ public class OrderJpaDao implements OrderDao {
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId
         """ + (orderStatus!=null?" AND o.status = :status":""));
-        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("writerId", writerId);
         if (orderStatus != null) {
             nativeQuery.setParameter("status", orderStatus.toString());
@@ -138,7 +138,7 @@ public class OrderJpaDao implements OrderDao {
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId
         """ + (orderStatus!=null?" AND o.status = :status":""));
-        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("writerId", writerId);
         if (orderStatus != null) {
             nativeQuery.setParameter("status", orderStatus.toString());
