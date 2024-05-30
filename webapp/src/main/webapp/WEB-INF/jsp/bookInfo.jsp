@@ -35,7 +35,7 @@
                 </div>
                 <div class="row">
                     <div class="col s7">
-                        <a class="hidden-link" href="<c:url value="/profile/${book.writer.userId}"/>">
+                        <a href="<c:url value="/profile/${book.writer.userId}"/>">
                             <h6>
                                 <spring:message var="author" code="book.bookInfo.author" arguments="${book.writer.firstName},${book.writer.lastName}"/>
                                 <c:out value="${author}"/>
