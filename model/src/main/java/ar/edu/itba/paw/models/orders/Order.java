@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.orders;
 
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.users.User;
 
 import javax.persistence.*;
@@ -37,6 +38,10 @@ public class Order {
 
     @Column(name = "is_public")
     private boolean isPublic;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private PaymentReceipt paymentReceipt;
 
     Order(){}
 
@@ -94,5 +99,9 @@ public class Order {
 
     public void setPublic(boolean aPublic) {
         isPublic = aPublic;
+    }
+
+    public PaymentReceipt getPaymentReceipt(){
+        return paymentReceipt;
     }
 }

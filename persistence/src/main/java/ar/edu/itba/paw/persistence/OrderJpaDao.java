@@ -2,16 +2,15 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class OrderJpaDao implements OrderDao {
@@ -39,10 +38,10 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public long create(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
+    public Order create(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
         Order order = new Order(buyer, book, orderStatus, date, isPublic);
         em.persist(order);
-        return order.getOrderId();
+        return order;
     }
 
     @Override
@@ -53,6 +52,19 @@ public class OrderJpaDao implements OrderDao {
             order.setPublic(isPublic);
             em.merge(order);
         });
+    }
+
+    @Override
+    public Order createPaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+        PaymentReceipt receipt = new PaymentReceipt(order.getOrderId(), paymentReceipt, type);
+        return order;
+    }
+
+    @Override
+    public Order updatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+        order.getPaymentReceipt().setFile(paymentReceipt);
+        order.getPaymentReceipt().setType(type);
+        return order;
     }
 
     @Override

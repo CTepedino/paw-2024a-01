@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.users;
 
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.files.ProfilePicture;
 
 import javax.management.relation.Role;
 import javax.persistence.*;
@@ -50,7 +51,9 @@ public class User {
     private Collection<UserRoles> roles;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
-    private EmailValidation validation;
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
+    private ProfilePicture profilePicture;
+
 
     User(){}
 
@@ -135,18 +138,22 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
+
+    public ProfilePicture getProfilePicture() {
+        return profilePicture;
+    }
 }
 
 

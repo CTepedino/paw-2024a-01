@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
+import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 
@@ -11,6 +12,10 @@ public interface UserDao {
     User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale);
 
     int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description);
+
+    User createProfilePicture(User user, byte[] profilePicture);
+
+    User updateProfilePicture(User user, byte[] profilePicture);
 
     Optional<User> findById(long id);
 

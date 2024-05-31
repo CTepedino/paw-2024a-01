@@ -4,6 +4,9 @@ import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.files.BookFile;
+import ar.edu.itba.paw.models.files.BookPreview;
+import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.users.User;
 import com.sun.istack.NotNull;
 import org.springframework.stereotype.Repository;
@@ -31,10 +34,10 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
+    public Book create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
         Book book = new Book(title, description, genre, price, pageCount, suggestedAge, publishDate, writer, isPaused);
         em.persist(book);
-        return book.getBookId();
+        return book;
     }
 
     @Override
@@ -51,6 +54,45 @@ public class BookJpaDao implements BookDao {
             book.setPaused(isPaused);
             em.merge(book);
         }
+    }
+
+    @Override
+    public Book createCoverImage(Book book, byte[] coverImage) {
+        CoverImage cover = new CoverImage(book.getBookId(), coverImage);
+        em.persist(cover);
+        return book;
+    }
+
+    @Override
+    public Book createPreviewFile(Book book, byte[] previewFile) {
+        BookPreview preview = new BookPreview(book.getBookId(), previewFile);
+        em.persist(preview);
+        return book;
+    }
+
+    @Override
+    public Book createBookFile(Book book, byte[] bookFile) {
+        BookFile file = new BookFile(book.getBookId(), bookFile);
+        em.persist(file);
+        return book;
+    }
+
+    @Override
+    public Book updateCoverImage(Book book, byte[] coverImage) {
+        book.getCoverImage().setFile(coverImage);
+        return book;
+    }
+
+    @Override
+    public Book updatePreviewFile(Book book, byte[] previewFile) {
+        book.getPreview().setFile(previewFile);
+        return book;
+    }
+
+    @Override
+    public Book updateBookFile(Book book, byte[] bookFile) {
+        book.getBookFile().setFile(bookFile);
+        return book;
     }
 
     @Override

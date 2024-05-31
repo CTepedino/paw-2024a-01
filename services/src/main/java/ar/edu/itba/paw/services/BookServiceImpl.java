@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
-import ar.edu.itba.paw.interfaces.dao.files.BookFileDao;
-import ar.edu.itba.paw.interfaces.dao.files.BookPreviewDao;
-import ar.edu.itba.paw.interfaces.dao.files.CoverImageDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
@@ -33,65 +30,60 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
-    private final BookPreviewDao previewDao;
-    private final CoverImageDao coverDao;
-    private final BookFileDao bookFileDao;
 
     private final UserService us;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao, final BookFileDao bookFileDao, final UserService us){
+    public BookServiceImpl(final BookDao bookDao, final UserService us){
         this.bookDao = bookDao;
-        this.coverDao = coverDao;
-        this.previewDao = previewDao;
-        this.bookFileDao = bookFileDao;
         this.us = us;
     }
 
     @Transactional
     @Override
     public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
+
+        Book book = bookDao.create(
+                title,
+                description,
+                genre,
+                price,
+                pageCount,
+                suggestedAge,
+                LocalDate.now(),
+                us.findById(writerId).get(),
+                false
+        );
         try {
-            long bookId = bookDao.create(
-                    title,
-                    description,
-                    genre,
-                    price,
-                    pageCount,
-                    suggestedAge,
-                    LocalDate.now(),
-                    us.findById(writerId).get(),
-                    false
-            );
-            previewDao.create(bookId, preview.getBytes());
-            //coverDao.create(bookId, cover.getBytes());
-            bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).setCoverImage(new CoverImage(bookId, cover.getBytes()));
-            bookFileDao.create(bookId, bookFile.getBytes());
-            LOGGER.atDebug().setMessage("Created book: {}").addArgument(title).log();
-            return bookId;
+            bookDao.createPreviewFile(book, preview.getBytes());
+            bookDao.createCoverImage(book, cover.getBytes());
+            bookDao.createBookFile(book, bookFile.getBytes());
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to create book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
+        LOGGER.atDebug().setMessage("Created book: {}").addArgument(title).log();
+        return book.getBookId();
     }
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
-        boolean isPaused = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).isPaused();
+    public void editPublication(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
+        boolean isPaused = book.isPaused();
+
         try {
             if (cover != null && !cover.isEmpty()) {
-                coverDao.update(bookId, cover.getBytes());
+                bookDao.updateCoverImage(book, cover.getBytes());
             }
             if (preview != null && !preview.isEmpty()) {
-                previewDao.update(bookId, preview.getBytes());
+                bookDao.updatePreviewFile(book, preview.getBytes());
             }
             if (bookFile != null && !bookFile.isEmpty()) {
-                bookFileDao.update(bookId, bookFile.getBytes());
+                bookDao.updateBookFile(book, bookFile.getBytes());
                 if (isPaused){
-                    isPaused = bookDao.recheckPaused(bookId);
+                    isPaused = bookDao.recheckPaused(book.getBookId());
                 }
             }
 
@@ -99,7 +91,7 @@ public class BookServiceImpl implements BookService {
             LOGGER.atWarn().setMessage("Failed to update book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
-        bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge, isPaused);
+        bookDao.modify(book.getBookId(), title, description, genre, price, pageCount, suggestedAge, isPaused);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 
@@ -116,7 +108,7 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getAllSize());
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getAllSize());
     }
 
     @Transactional(readOnly = true)
@@ -126,7 +118,7 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
     }
 
 

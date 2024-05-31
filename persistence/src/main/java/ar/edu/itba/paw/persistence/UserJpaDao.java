@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.stereotype.Repository;
@@ -39,10 +40,22 @@ public class UserJpaDao implements UserDao {
             user.setCbu(cbu);
             user.setEnabled(isEnabled);
             user.setDescription(description);
-            em.merge(user);
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public User createProfilePicture(User user, byte[] profilePicture){
+        ProfilePicture pfp = new ProfilePicture(user.getUserId(), profilePicture);
+        em.persist(pfp);
+        return user;
+    }
+
+    @Override
+    public User updateProfilePicture(User user, byte[] profilePicture){
+        user.getProfilePicture().setFile(profilePicture);
+        return user;
     }
 
     @Override

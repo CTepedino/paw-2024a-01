@@ -158,7 +158,7 @@ public class BookController {
         }
 
 
-        bs.editPublication(id, form.getTitle(), form.getDescription(), form.getGenre(), form.getPrice(), form.getPageCount(), form.getSuggestedAge(), form.getCover(), form.getPreview(), form.getBookFile());
+        bs.editPublication(bs.findById(id).orElseThrow(BookNotFoundException::new), form.getTitle(), form.getDescription(), form.getGenre(), form.getPrice(), form.getPageCount(), form.getSuggestedAge(), form.getCover(), form.getPreview(), form.getBookFile());
 
         return new ModelAndView("redirect:/book/"+id);
     }

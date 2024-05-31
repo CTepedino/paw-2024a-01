@@ -16,7 +16,7 @@ public interface BookDao {
 
     Optional<Book> findById(long id);
 
-    long create(
+    Book create(
             String title,
             String description,
             BookGenre genre,
@@ -40,6 +40,13 @@ public interface BookDao {
             boolean isPaused
     );
 
+    Book createCoverImage(Book book, byte[] coverImage);
+    Book createPreviewFile(Book book, byte[] previewFile);
+    Book createBookFile(Book book, byte[] bookFile);
+
+    Book updateCoverImage(Book book, byte[] coverImage);
+    Book updatePreviewFile(Book book, byte[] previewFile);
+    Book updateBookFile(Book book, byte[] bookFile);
 
     List<Book> getAll(int offset, int limit);
     long getAllSize();
