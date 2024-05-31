@@ -82,10 +82,7 @@ public class ReviewJpaDao implements ReviewDao {
         TypedQuery<Double> query = em.createQuery("SELECT AVG(r.rating) FROM Review r WHERE r.bookId = :bookId", Double.class);
         query.setParameter("bookId", bookId);
 
-        try {
-            return (int) Math.round(query.getSingleResult());
-        } catch (NoResultException e) {
-            return 0;
-        }
+        Double review = query.getSingleResult();
+        return (int) (review!=null?Math.ceil(review):0);
     }
 }
