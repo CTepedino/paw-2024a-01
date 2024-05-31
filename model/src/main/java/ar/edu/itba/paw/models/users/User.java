@@ -50,8 +50,8 @@ public class User {
     @Column(name = "role")
     private Collection<UserRoles> roles;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private ProfilePicture profilePicture;
 
 

@@ -165,7 +165,7 @@ public class BookController {
         return new ModelAndView("redirect:/book/"+id);
     }
 
-    //TODO: add to access helper
+
     @RequestMapping(method = RequestMethod.POST, path="/recommendBook/{id:\\d+}/bookInfo")
     public ModelAndView recommendBook(
             @RequestParam(name = "recommended", required = false, defaultValue = "false") boolean recommended,

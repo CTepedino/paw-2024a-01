@@ -47,10 +47,7 @@ public class ProfileController {
             @ModelAttribute("profileBookSearchForm") final ProfileBookSearchForm form
     ){
         return new ModelAndView("redirect:/profile/" + loggedUser.getUserId() + (isWriter?"/publications":"/boughtBooks"));
-        //return defaultProfileTab(loggedUser.getUserId(), loggedUser, form);
     }
-
-    //TODO: test redirects
 
     @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}")
     public ModelAndView defaultProfileTab(
@@ -59,7 +56,6 @@ public class ProfileController {
             @ModelAttribute("profileBookSearchForm") final ProfileBookSearchForm form
     ){
         return new ModelAndView("redirect:/profile/" + id + (us.findById(id).orElseThrow(UserNotFoundException::new).getRoles().contains(UserRoles.WRITER)?"/publications":"/boughtBooks"));
-        //return profileView(id, , loggedUser, form, new BeanPropertyBindingResult(form, "profileBookSearchForm"));
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/{tab:publications|boughtBooks}")

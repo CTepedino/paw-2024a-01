@@ -55,7 +55,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public PaginatedContent<Review> getAll(long bookId, ReviewOrderBy orderBy, int pageNumber, int pageSize) {
         List<Review> reviews;
-        long size = reviewDao.getAllSize(bookId);;
+        long size = reviewDao.getAllSize(bookId);
 
         if (us.isLoggedIn()){
             reviews = reviewDao.getAllExcept(bookId, orderBy, (pageNumber-1)*pageSize, pageSize, us.getLoggedUser().get().getUserId());
