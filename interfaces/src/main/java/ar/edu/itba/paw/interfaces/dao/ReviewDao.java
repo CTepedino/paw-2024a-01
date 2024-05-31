@@ -12,7 +12,7 @@ public interface ReviewDao {
 
     Review create(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date);
 
-    void modify(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date);
+    void modify(Review review, int rating, String reviewText, LocalDateTime date);
 
 
     List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit);

@@ -35,8 +35,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public void createOrUpdate(long bookId, User user, int rating, String review){
-        if (find(bookId, user).isPresent()){
-            reviewDao.modify(bookId, user, rating, review, LocalDateTime.now());
+        Optional<Review> maybeReview = reviewDao.find(bookId, user);
+        if (maybeReview.isPresent()){
+            reviewDao.modify(maybeReview.get(), rating, review, LocalDateTime.now());
             LOGGER.atDebug().setMessage("Modified Review for bookId: {}").addArgument(bookId).log();
         } else {
             reviewDao.create(bookId, user, rating, review, LocalDateTime.now());
