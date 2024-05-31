@@ -90,8 +90,9 @@ public class UserServiceImpl implements UserService {
         if (maybeUser.isPresent() && !maybeUser.get().isEnabled()){
             User user = maybeUser.get();
             if (evs.checkValidation(id, code)){
-                userDao.update(user.getUserId(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getCbu(),true, user.getLocale(), user.getDescription());
-                userDao.giveRole(user.getUserId(), UserRoles.READER);
+                //TODO: cleanup
+                userDao.update(user, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getCbu(),true, user.getLocale(), user.getDescription());
+                userDao.giveRole(user, UserRoles.READER);
 
                 List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
                 Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
@@ -116,12 +117,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void giveWriterRole(long id, String cbu) {
-        User user = findById(id).orElseThrow(UserNotFoundException::new);
+    public void giveWriterRole(User user, String cbu) {
+        userDao.giveRole(user, UserRoles.WRITER);
 
-        userDao.giveRole(id, UserRoles.WRITER);
-
-        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu, user.isEnabled(), user.getLocale(), user.getDescription());
+        userDao.update(user, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu, user.isEnabled(), user.getLocale(), user.getDescription());
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
@@ -132,7 +131,7 @@ public class UserServiceImpl implements UserService {
 
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
-        LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(id).log();
+        LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(user.getUserId()).log();
     }
 
     @Transactional(readOnly = true)
@@ -166,13 +165,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public boolean hasRole(long id, UserRoles role) {
-        User user = findById(id).orElseThrow(UserNotFoundException::new);
-        return user.getRoles().contains(role);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public boolean isCurrentUserPassword(String password) {
         User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
         return passwordEncoder.matches(password, user.getPassword());
@@ -185,7 +177,8 @@ public class UserServiceImpl implements UserService {
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
 
-        userDao.update(user.getUserId(), user.getEmail(),encodedPassword, user.getFirstName(), user.getLastName(),user.getCbu(), user.isEnabled(), user.getLocale(), user.getDescription());
+        //TODO: cleanup
+        userDao.update(user, user.getEmail(),encodedPassword, user.getFirstName(), user.getLastName(),user.getCbu(), user.isEnabled(), user.getLocale(), user.getDescription());
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), encodedPassword, auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
@@ -200,7 +193,8 @@ public class UserServiceImpl implements UserService {
 
         String oldCbu = user.getCbu();
 
-        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled(), user.getLocale(), description);
+        //TODO: cleanup
+        userDao.update(user, user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled(), user.getLocale(), description);
 
         if ((user.getRoles().contains(UserRoles.WRITER) && oldCbu==null ) || user.getRoles().isEmpty()){
             userDao.recheckAllPaused(user.getUserId());
@@ -221,7 +215,6 @@ public class UserServiceImpl implements UserService {
         }
         LOGGER.atDebug().setMessage("Updated profile for user: {}").addArgument(firstName).log();
     }
-
 
     @Transactional(readOnly = true)
     @Override
@@ -258,9 +251,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public String fillMissingWriterData(User user, String password) {
         String encodedPassword = passwordEncoder.encode(password);
-        userDao.update(user.getUserId(), user.getEmail(), encodedPassword, user.getFirstName(), user.getLastName(), user.getCbu(),user.isEnabled(), user.getLocale(), user.getDescription());
-        userDao.giveRole(user.getUserId(), UserRoles.READER);
-        userDao.giveRole(user.getUserId(), UserRoles.WRITER);
+        //TODO: cleanup
+        userDao.update(user, user.getEmail(), encodedPassword, user.getFirstName(), user.getLastName(), user.getCbu(),user.isEnabled(), user.getLocale(), user.getDescription());
+        userDao.giveRole(user, UserRoles.READER);
+        userDao.giveRole(user, UserRoles.WRITER);
         return encodedPassword;
     }
 }

@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.dao.ReviewDao;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,9 +34,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void createOrUpdate(long bookId, long userId, int rating, String review){
-        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        if (get(bookId, userId).isPresent()){
+    public void createOrUpdate(long bookId, User user, int rating, String review){
+        if (find(bookId, user).isPresent()){
             reviewDao.modify(bookId, user, rating, review, LocalDateTime.now());
             LOGGER.atDebug().setMessage("Modified Review for bookId: {}").addArgument(bookId).log();
         } else {
@@ -49,9 +46,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Review> get(long bookId, long userId) {
-        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        return reviewDao.get(bookId, user);
+    public Optional<Review> find(long bookId, User user) {
+        return reviewDao.find(bookId, user);
     }
 
     @Transactional(readOnly = true)
@@ -79,7 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Optional<Review> findLoggedUserReview(long bookId) {
         if(us.isLoggedIn()){
-            return reviewDao.get(bookId, us.getLoggedUser().orElseThrow(UserNotFoundException::new));
+            return reviewDao.find(bookId, us.getLoggedUser().get());
         }
         return Optional.empty();
     }

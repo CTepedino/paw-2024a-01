@@ -4,9 +4,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.files.BookFile;
-import ar.edu.itba.paw.models.files.BookPreview;
-import ar.edu.itba.paw.models.files.CoverImage;
+import ar.edu.itba.paw.models.users.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
@@ -21,7 +19,9 @@ public interface BookService {
             BigDecimal price,
             int pageCount,
             int suggestedAge,
-            long writerId,
+
+            User writer,
+
             MultipartFile preview,
             MultipartFile cover,
             MultipartFile bookFile
@@ -43,13 +43,9 @@ public interface BookService {
     );
 
 
-
     Optional<Book> findById(long id);
 
-
     PaginatedContent<Book> getAll(int pageNumber, int pageSize);
-
-
 
     PaginatedContent<Book> searchWithParams(
             String title,
@@ -67,14 +63,14 @@ public interface BookService {
 
     List<Book> getRecommendations(Book book);
 
-
     PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
 
     PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic);
 
-    PaginatedContent<Book> getProfileBooks(long usedId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter, boolean ownsProfile);
+    PaginatedContent<Book> getProfileBooks(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter, boolean ownsProfile);
 
-    boolean loggedUserIsAuthor(long bookId);
+    boolean isAuthor(Book book, long userId);
+    boolean isAuthor(long bookId, String email);
 
     List<BookGenre> getGenresByBookCount();
 }

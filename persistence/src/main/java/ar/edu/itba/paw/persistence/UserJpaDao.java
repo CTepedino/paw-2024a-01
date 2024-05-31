@@ -29,18 +29,14 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
-    public void update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
-        Optional<User> maybeUser = findById(id);
-        if (maybeUser.isPresent()) {
-            User user = maybeUser.get();
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setCbu(cbu);
-            user.setEnabled(isEnabled);
-            user.setDescription(description);
-        }
+    public void update(User user, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setCbu(cbu);
+        user.setEnabled(isEnabled);
+        user.setDescription(description);
     }
 
     @Override
@@ -56,12 +52,8 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
-    public void giveRole(long id, UserRoles role) {
-        Optional<User> maybeUser = findById(id);
-        if (maybeUser.isPresent()) {
-            User user = maybeUser.get();
-            user.getRoles().add(role);
-        }
+    public void giveRole(User user, UserRoles role) {
+        user.getRoles().add(role);
     }
 
     @Override

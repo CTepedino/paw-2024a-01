@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public void create(long bookId, MultipartFile receipt) {
+    public Order create(long bookId, MultipartFile receipt) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false);
@@ -59,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
         }
         LOGGER.atDebug().setMessage("Created order for bookId: {}").addArgument(bookId).log();
         ms.sendReceiptUploadedEmail(order);
+        return order;
     }
 
     @Transactional(readOnly = true)
@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
             return false;
         }
 
-        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        User buyer = us.getLoggedUser().get();
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
 
         if (book.getWriter().getUserId() == buyer.getUserId() || book.isPaused()){
@@ -131,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.atWarn().setMessage("Failed to send upload receipt for orderId: {} - Error Message: No receipt provided").addArgument(order.getOrderId()).log();
             throw new InvalidOrderUpdateException();
         }
-        orderDao.update(order.getOrderId(), OrderStatus.WAITING_APPROVAL, order.getDate(), order.isPublic());
+        orderDao.update(order, OrderStatus.WAITING_APPROVAL, order.getDate(), order.isPublic());
         try {
             orderDao.updatePaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
             LOGGER.atDebug().setMessage("Uploaded receipt for orderId: {}").addArgument(order.getOrderId()).log();
@@ -148,10 +148,10 @@ public class OrderServiceImpl implements OrderService {
 
     private void acceptOrReject(Order order, boolean approved){
         if (approved) {
-            orderDao.update(order.getOrderId(), OrderStatus.COMPLETED, order.getDate(), order.isPublic());
+            orderDao.update(order, OrderStatus.COMPLETED, order.getDate(), order.isPublic());
             ms.sendReceiptApprovedEmail(order);
         } else {
-            orderDao.update(order.getOrderId(), OrderStatus.REJECTED_PAYMENT, order.getDate(), order.isPublic());
+            orderDao.update(order, OrderStatus.REJECTED_PAYMENT, order.getDate(), order.isPublic());
             ms.sendReceiptDeniedEmail(order);
         }
         LOGGER.atDebug().setMessage("Successfully updated order status for orderId: {}").addArgument(order.getOrderId()).log();
@@ -165,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
         if (order.getOrderStatus().equals(OrderStatus.WAITING_APPROVAL)) {
             acceptOrReject(order, approved);
         } else {
-            LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(orderId).log();
+            LOGGER.atWarn().setMessage("Failed to update order status from writer side for orderId: {}").addArgument(orderId).log();
             throw new InvalidOrderUpdateException();
         }
     }
@@ -178,7 +178,7 @@ public class OrderServiceImpl implements OrderService {
         switch (order.getOrderStatus()){
             case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
             case WAITING_CONTACT, COMPLETED, WAITING_APPROVAL -> {
-                LOGGER.atWarn().setMessage("Failed to update order status for orderId: {}").addArgument(orderId).log();
+                LOGGER.atWarn().setMessage("Failed to update order status from buyer side for orderId: {}").addArgument(orderId).log();
                 throw new InvalidOrderUpdateException();
             }
         }
@@ -212,7 +212,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void recommendBook(long orderId, boolean isRecommended){
         Order order = findById(orderId).orElseThrow(OrderNotFoundException::new);
-        orderDao.update(orderId, order.getOrderStatus(), order.getDate(), isRecommended);
+        orderDao.update(order, order.getOrderStatus(), order.getDate(), isRecommended);
     }
 
 }

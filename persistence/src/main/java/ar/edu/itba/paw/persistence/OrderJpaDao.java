@@ -45,13 +45,10 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public void update(long orderId, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
-        findById(orderId).ifPresent(order -> {
-            order.setOrderStatus(orderStatus);
-            order.setDate(date);
-            order.setPublic(isPublic);
-            em.merge(order);
-        });
+    public void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
+        order.setOrderStatus(orderStatus);
+        order.setDate(date);
+        order.setPublic(isPublic);
     }
 
     @Override

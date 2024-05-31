@@ -18,7 +18,7 @@ public interface OrderDao {
 
     Order create(User user, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
 
-    void update(long orderId, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
+    void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
 
     PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type);
 

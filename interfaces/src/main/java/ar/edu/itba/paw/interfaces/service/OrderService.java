@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface OrderService {
 
-    void create(long bookId, MultipartFile receipt);
+    Order create(long bookId, MultipartFile receipt);
 
     boolean existsOrder(long bookId);
 

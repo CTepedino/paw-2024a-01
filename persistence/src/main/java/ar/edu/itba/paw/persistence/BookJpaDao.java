@@ -41,19 +41,14 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public void modify(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused) {
-        Optional<Book> maybeBook = findById(bookId);
-        if (maybeBook.isPresent()) {
-            Book book = maybeBook.get();
-            book.setTitle(title);
-            book.setDescription(description);
-            book.setGenre(genre);
-            book.setPrice(price);
-            book.setPageCount(pageCount);
-            book.setSuggestedAge(suggestedAge);
-            book.setPaused(isPaused);
-            em.merge(book);
-        }
+    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused) {
+        book.setTitle(title);
+        book.setDescription(description);
+        book.setGenre(genre);
+        book.setPrice(price);
+        book.setPageCount(pageCount);
+        book.setSuggestedAge(suggestedAge);
+        book.setPaused(isPaused);
     }
 
     @Override

@@ -3,14 +3,15 @@ package ar.edu.itba.paw.interfaces.service;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
+import ar.edu.itba.paw.models.users.User;
 
 import java.util.Optional;
 
 public interface ReviewService {
 
-    void createOrUpdate(long bookId, long userId, int rating, String review);
+    void createOrUpdate(long bookId, User user, int rating, String review);
 
-    Optional<Review> get(long bookId, long userId);
+    Optional<Review> find(long bookId, User user);
 
     PaginatedContent<Review> getAll(long bookId, ReviewOrderBy orderBy, int pageNumber, int pageSize);
 

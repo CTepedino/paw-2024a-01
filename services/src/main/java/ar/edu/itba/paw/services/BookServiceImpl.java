@@ -2,12 +2,12 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.*;
+import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,19 +28,16 @@ public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
 
-    private final UserService us;
-
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, final UserService us){
+    public BookServiceImpl(final BookDao bookDao){
         this.bookDao = bookDao;
-        this.us = us;
     }
 
     @Transactional
     @Override
-    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, User writer, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
 
         Book book = bookDao.create(
                 title,
@@ -49,7 +47,7 @@ public class BookServiceImpl implements BookService {
                 pageCount,
                 suggestedAge,
                 LocalDate.now(),
-                us.findById(writerId).get(),
+                writer,
                 false
         );
         try {
@@ -87,7 +85,7 @@ public class BookServiceImpl implements BookService {
             LOGGER.atWarn().setMessage("Failed to update book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
-        bookDao.modify(book.getBookId(), title, description, genre, price, pageCount, suggestedAge, isPaused);
+        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, isPaused);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 
@@ -144,13 +142,16 @@ public class BookServiceImpl implements BookService {
         return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
     }
 
-    @Transactional(readOnly = true)
+
     @Override
-    public boolean loggedUserIsAuthor(long bookId) {
-        if (us.isLoggedIn()) {
-            return bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(us.getLoggedUser().get().getEmail());
-        }
-        return false;
+    public boolean isAuthor(Book book, long userId) {
+        return book.getWriter().getUserId() == userId;
+    }
+
+    @Override
+    public boolean isAuthor(long bookId, String email) {
+        Optional<Book> maybeBook = bookDao.findById(bookId);
+        return maybeBook.isPresent() && maybeBook.get().getWriter().getEmail().equals(email);
     }
 
     @Transactional(readOnly = true)
@@ -171,14 +172,14 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> getProfileBooks(long usedId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
+    public PaginatedContent<Book> getProfileBooks(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
         if (asWriter){
-            return getWriterBooks(usedId, title, orderBy, pageNumber, pageSize);
+            return getWriterBooks(userId, title, orderBy, pageNumber, pageSize);
         } else {
             if(ownsProfile) {
-                return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize, false);
+                return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, false);
             } else {
-                return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize, true);
+                return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, true);
             }
         }
     }

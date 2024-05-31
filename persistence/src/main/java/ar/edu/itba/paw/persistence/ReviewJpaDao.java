@@ -1,20 +1,16 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ReviewDao;
-import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class ReviewJpaDao implements ReviewDao {
@@ -30,13 +26,10 @@ public class ReviewJpaDao implements ReviewDao {
     }
 
     @Override
-    public void modify(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date) {
-        get(bookId, reviewer).ifPresent(review -> {
-            review.setRating(rating);
-            review.setReview(reviewText);
-            review.setDate(date);
-            em.merge(review);
-        });
+    public void modify(Review review, int rating, String reviewText, LocalDateTime date) {
+        review.setRating(rating);
+        review.setReview(reviewText);
+        review.setDate(date);
     }
 
     @Override
@@ -66,7 +59,12 @@ public class ReviewJpaDao implements ReviewDao {
     }
 
     @Override
-    public Optional<Review> get(long bookId, User reviewer) {
+    public Optional<Review> findById(long id) {
+        return Optional.ofNullable(em.find(Review.class, id));
+    }
+
+    @Override
+    public Optional<Review> find(long bookId, User reviewer) {
         TypedQuery<Review> query = em.createQuery("FROM Review r WHERE r.bookId = :bookId AND r.reviewer.userId = :userId", Review.class);
         query.setParameter("bookId", bookId);
         query.setParameter("userId", reviewer.getUserId());

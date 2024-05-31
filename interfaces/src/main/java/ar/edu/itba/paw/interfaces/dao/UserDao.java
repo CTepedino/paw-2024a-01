@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface UserDao {
     User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale);
 
-    void update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description);
+    void update(User user, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description);
 
     ProfilePicture createProfilePicture(User user, byte[] profilePicture);
 
@@ -21,8 +21,10 @@ public interface UserDao {
 
     Optional<User> findByEmail(String email);
 
-    void giveRole(long id, UserRoles role);
+    void giveRole(User user, UserRoles role);
 
+
+    //TODO: mover a BookDao?
     void recheckAllPaused(long userId);
 
     List<User> getUsersWithPausedBooks();

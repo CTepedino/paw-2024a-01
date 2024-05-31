@@ -134,16 +134,15 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo/{id:\\d+}")
-    public ModelAndView sendBuyInfo(@Valid @ModelAttribute final CreateOrderForm form, final BindingResult errors, @PathVariable("id") long bookId){
+    public ModelAndView sendBuyInfo(@Valid @ModelAttribute final CreateOrderForm form, final BindingResult errors, @PathVariable("id") long bookId, @ModelAttribute("loggedUser") User loggedUser){
 
         if(errors.hasErrors()){
             return sendBuyInfoForm(form, bookId);
         }
 
-        os.create(bookId, form.getReceipt());
+        Order order = os.create(bookId, form.getReceipt());
 
         ModelAndView mav = new ModelAndView("orderSummary");
-        Order order = os.find(us.getLoggedUser().orElseThrow(UserNotFoundException::new).getUserId(), bookId).orElseThrow(OrderNotFoundException::new);
         mav.addObject("order", order);
         return mav;
     }

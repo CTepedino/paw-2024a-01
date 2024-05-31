@@ -46,8 +46,11 @@ public class ProfileController {
             @ModelAttribute("isWriter") boolean isWriter,
             @ModelAttribute("profileBookSearchForm") final ProfileBookSearchForm form
     ){
-        return defaultProfileTab(loggedUser.getUserId(), loggedUser, form);
+        return new ModelAndView("redirect:/profile/" + loggedUser.getUserId() + (isWriter?"/publications":"/boughtBooks"));
+        //return defaultProfileTab(loggedUser.getUserId(), loggedUser, form);
     }
+
+    //TODO: test redirects
 
     @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}")
     public ModelAndView defaultProfileTab(
@@ -55,7 +58,8 @@ public class ProfileController {
             @ModelAttribute("loggedUser") User loggedUser,
             @ModelAttribute("profileBookSearchForm") final ProfileBookSearchForm form
     ){
-        return profileView(id, us.hasRole(id, UserRoles.WRITER)?"publications":"boughtBooks", loggedUser, form, new BeanPropertyBindingResult(form, "profileBookSearchForm"));
+        return new ModelAndView("redirect:/profile/" + id + (us.findById(id).orElseThrow(UserNotFoundException::new).getRoles().contains(UserRoles.WRITER)?"/publications":"/boughtBooks"));
+        //return profileView(id, , loggedUser, form, new BeanPropertyBindingResult(form, "profileBookSearchForm"));
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/{tab:publications|boughtBooks}")
@@ -80,7 +84,7 @@ public class ProfileController {
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("tab", tab);
         mav.addObject("user", user);
-        mav.addObject("showPublicationsTab", us.hasRole(userId, UserRoles.WRITER));
+        mav.addObject("showPublicationsTab", user.getRoles().contains(UserRoles.WRITER));
         mav.addObject("ownsProfile", ownsProfile);
         mav.addObject("books", books);
         mav.addObject("orders", BookSearchOrderBy.values());

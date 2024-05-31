@@ -32,7 +32,7 @@ public interface BookDao {
     );
 
     void modify(
-            long bookId,
+            Book book,
 
             String title,
             String description,
@@ -92,7 +92,7 @@ public interface BookDao {
 
     long getWriterBooksSize(long writerId, String title);
 
-    List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy,int offset, int limit, boolean isPublic);
+    List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int offset, int limit, boolean isPublic);
 
     long getOwnedBooksSize(long readerId, String title, boolean isPublic);
 

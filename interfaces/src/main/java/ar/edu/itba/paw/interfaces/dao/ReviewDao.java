@@ -20,7 +20,9 @@ public interface ReviewDao {
 
     long getAllSize(long bookId);
 
-    Optional<Review> get(long bookId, User reviewer);
+    Optional<Review> find(long bookId, User reviewer);
+
+    Optional<Review> findById(long id);
 
     int getAverageRating(long bookId);
 
