@@ -29,6 +29,8 @@ public interface UserService {
 
     boolean isLoggedIn();
 
+    boolean hasRole(UserRoles role);
+
     ProfilePicture getProfilePictureOrDefault(long id);
 
     void sendMissingDataEmails();

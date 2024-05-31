@@ -151,6 +151,17 @@ public class UserServiceImpl implements UserService {
         return auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
     }
 
+    @Override
+    public boolean hasRole(UserRoles role) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!isLoggedIn()){
+            return false;
+        }
+
+        return authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals(role.toString()));
+    }
 
     @Transactional(readOnly = true)
     @Override
