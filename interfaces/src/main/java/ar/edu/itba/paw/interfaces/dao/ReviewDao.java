@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ReviewDao {
 
-    void create(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date);
+    Review create(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date);
 
     void modify(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date);
 

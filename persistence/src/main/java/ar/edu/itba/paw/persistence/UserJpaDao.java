@@ -29,7 +29,7 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
-    public int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
+    public void update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
         Optional<User> maybeUser = findById(id);
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
@@ -40,22 +40,28 @@ public class UserJpaDao implements UserDao {
             user.setCbu(cbu);
             user.setEnabled(isEnabled);
             user.setDescription(description);
-            return 1;
         }
-        return 0;
     }
 
     @Override
-    public User createProfilePicture(User user, byte[] profilePicture){
+    public ProfilePicture createProfilePicture(User user, byte[] profilePicture){
         ProfilePicture pfp = new ProfilePicture(user.getUserId(), profilePicture);
         em.persist(pfp);
-        return user;
+        return pfp;
     }
 
     @Override
-    public User updateProfilePicture(User user, byte[] profilePicture){
+    public void updateProfilePicture(User user, byte[] profilePicture){
         user.getProfilePicture().setFile(profilePicture);
-        return user;
+    }
+
+    @Override
+    public void giveRole(long id, UserRoles role) {
+        Optional<User> maybeUser = findById(id);
+        if (maybeUser.isPresent()) {
+            User user = maybeUser.get();
+            user.getRoles().add(role);
+        }
     }
 
     @Override
@@ -69,18 +75,6 @@ public class UserJpaDao implements UserDao {
         query.setParameter("email", email);
 
         return query.getResultList().stream().findFirst();
-    }
-
-    @Override
-    public int giveRole(long id, UserRoles role) {
-        Optional<User> maybeUser = findById(id);
-        if (maybeUser.isPresent()) {
-            User user = maybeUser.get();
-            user.getRoles().add(role);
-            em.merge(user);
-            return 1;
-        }
-        return 0;
     }
 
     @Override
@@ -100,6 +94,7 @@ public class UserJpaDao implements UserDao {
                 END
             WHERE b.writer.userId = :userId
         """);
+        query.executeUpdate();
     }
 
     @Override

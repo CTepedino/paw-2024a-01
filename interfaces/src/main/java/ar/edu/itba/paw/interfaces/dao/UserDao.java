@@ -11,17 +11,17 @@ import java.util.Optional;
 public interface UserDao {
     User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale);
 
-    int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description);
+    void update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description);
 
-    User createProfilePicture(User user, byte[] profilePicture);
+    ProfilePicture createProfilePicture(User user, byte[] profilePicture);
 
-    User updateProfilePicture(User user, byte[] profilePicture);
+    void updateProfilePicture(User user, byte[] profilePicture);
 
     Optional<User> findById(long id);
 
     Optional<User> findByEmail(String email);
 
-    int giveRole(long id, UserRoles role);
+    void giveRole(long id, UserRoles role);
 
     void recheckAllPaused(long userId);
 

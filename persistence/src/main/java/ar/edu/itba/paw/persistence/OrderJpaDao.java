@@ -55,16 +55,16 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public Order createPaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+    public PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type) {
         PaymentReceipt receipt = new PaymentReceipt(order.getOrderId(), paymentReceipt, type);
-        return order;
+        em.persist(receipt);
+        return receipt;
     }
 
     @Override
-    public Order updatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+    public void updatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
         order.getPaymentReceipt().setFile(paymentReceipt);
         order.getPaymentReceipt().setType(type);
-        return order;
     }
 
     @Override

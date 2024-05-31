@@ -4,7 +4,10 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.files.BookFile;
+import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.users.User;
 
 import java.math.BigDecimal;
@@ -40,13 +43,13 @@ public interface BookDao {
             boolean isPaused
     );
 
-    Book createCoverImage(Book book, byte[] coverImage);
-    Book createPreviewFile(Book book, byte[] previewFile);
-    Book createBookFile(Book book, byte[] bookFile);
+    CoverImage createCoverImage(Book book, byte[] coverImage);
+    BookPreview createPreviewFile(Book book, byte[] previewFile);
+    BookFile createBookFile(Book book, byte[] bookFile);
 
-    Book updateCoverImage(Book book, byte[] coverImage);
-    Book updatePreviewFile(Book book, byte[] previewFile);
-    Book updateBookFile(Book book, byte[] bookFile);
+    void updateCoverImage(Book book, byte[] coverImage);
+    void updatePreviewFile(Book book, byte[] previewFile);
+    void updateBookFile(Book book, byte[] bookFile);
 
     List<Book> getAll(int offset, int limit);
     long getAllSize();
@@ -93,6 +96,7 @@ public interface BookDao {
 
     long getOwnedBooksSize(long readerId, String title, boolean isPublic);
 
+    //TODO: make it auto update
     boolean recheckPaused(long bookId);
 
     List<BookGenre> getGenresByBookCount(int limit, int offset);

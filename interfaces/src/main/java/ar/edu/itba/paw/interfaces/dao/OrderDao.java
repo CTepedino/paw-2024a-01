@@ -20,17 +20,15 @@ public interface OrderDao {
 
     void update(long orderId, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
 
-    Order createPaymentReceipt(Order order, byte[] paymentReceipt, String type);
+    PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type);
 
-    Order updatePaymentReceipt(Order order, byte[] paymentReceipt, String type);
+    void updatePaymentReceipt(Order order, byte[] paymentReceipt, String type);
 
     List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, int offset, int limit);
     long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);
 
     List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, int offset, int limit);
-
     long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
-
 
     boolean ownsBook(long bookId, String email);
 }

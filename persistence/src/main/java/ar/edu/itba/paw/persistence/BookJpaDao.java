@@ -57,42 +57,39 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public Book createCoverImage(Book book, byte[] coverImage) {
+    public CoverImage createCoverImage(Book book, byte[] coverImage) {
         CoverImage cover = new CoverImage(book.getBookId(), coverImage);
         em.persist(cover);
-        return book;
+        return cover;
     }
 
     @Override
-    public Book createPreviewFile(Book book, byte[] previewFile) {
+    public BookPreview createPreviewFile(Book book, byte[] previewFile) {
         BookPreview preview = new BookPreview(book.getBookId(), previewFile);
         em.persist(preview);
-        return book;
+        return preview;
     }
 
     @Override
-    public Book createBookFile(Book book, byte[] bookFile) {
+    public BookFile createBookFile(Book book, byte[] bookFile) {
         BookFile file = new BookFile(book.getBookId(), bookFile);
         em.persist(file);
-        return book;
+        return file;
     }
 
     @Override
-    public Book updateCoverImage(Book book, byte[] coverImage) {
+    public void updateCoverImage(Book book, byte[] coverImage) {
         book.getCoverImage().setFile(coverImage);
-        return book;
     }
 
     @Override
-    public Book updatePreviewFile(Book book, byte[] previewFile) {
+    public void updatePreviewFile(Book book, byte[] previewFile) {
         book.getPreview().setFile(previewFile);
-        return book;
     }
 
     @Override
-    public Book updateBookFile(Book book, byte[] bookFile) {
+    public void updateBookFile(Book book, byte[] bookFile) {
         book.getBookFile().setFile(bookFile);
-        return book;
     }
 
     @Override

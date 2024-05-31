@@ -23,9 +23,10 @@ public class ReviewJpaDao implements ReviewDao {
     private EntityManager em;
 
     @Override
-    public void create(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date) {
+    public Review create(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date) {
         Review review = new Review(bookId, reviewer, rating, reviewText, date);
         em.persist(review);
+        return review;
     }
 
     @Override
