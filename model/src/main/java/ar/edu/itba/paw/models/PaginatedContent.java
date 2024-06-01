@@ -37,6 +37,6 @@ public class PaginatedContent<T> {
     }
 
     public int getPageCount(){
-        return Math.max((int) Math.ceil((double)totalSize/pageSize), 1);
+        return (int) Math.ceil((double)totalSize/pageSize);
     }
 }
