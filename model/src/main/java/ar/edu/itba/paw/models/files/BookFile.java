@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Table(name = "book_files")
 public class BookFile extends File{
 
-    protected BookFile() {}
+    BookFile() {}
 
     public BookFile(long bookFileId, byte[] book){
         super(bookFileId, book);

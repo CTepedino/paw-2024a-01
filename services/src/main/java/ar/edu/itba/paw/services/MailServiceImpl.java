@@ -1,18 +1,12 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.MailService;
-import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.orders.Order;
-import ar.edu.itba.paw.models.users.EmailValidation;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.exception.BookNotFoundException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -67,29 +61,6 @@ public class MailServiceImpl implements MailService{
         String htmlBody = thymeleafTemplateEngine.process(template, thymeleafContext);
 
         sendHtmlMessage(to, subject, htmlBody);
-    }
-
-    @Override
-    @Async
-    public void sendOrderEmail(User buyer, Book book){
-        User writer = book.getWriter();
-
-        Locale currentLocale = writer.getLocale();
-        String to = writer.getEmail();
-        String subject = emailMessageSource.getMessage("mail.orderEmail.subject", null, currentLocale);
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("buyerFirstName", buyer.getFirstName());
-        data.put("buyerLastName", buyer.getLastName());
-        data.put("bookTitle", book.getTitle());
-        data.put("url", env.getProperty("baseUrl"));
-
-        try {
-            LOGGER.atDebug().setMessage("Sending order email to: {}").addArgument(to).log();
-            sendMessageUsingTemplate(to, subject, "orderEmailTemplate", data, currentLocale);
-        } catch (MessagingException e){
-            LOGGER.atWarn().setMessage("Failed to send order email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
-        }
-        LOGGER.atDebug().setMessage("Sent order email to: {}").addArgument(to).log();
     }
 
     @Override

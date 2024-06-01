@@ -2,18 +2,15 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Repository
 public class OrderJpaDao implements OrderDao {
@@ -41,20 +38,30 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public long create(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
+    public Order create(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
         Order order = new Order(buyer, book, orderStatus, date, isPublic);
         em.persist(order);
-        return order.getOrderId();
+        return order;
     }
 
     @Override
-    public void update(long orderId, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
-        findById(orderId).ifPresent(order -> {
-            order.setOrderStatus(orderStatus);
-            order.setDate(date);
-            order.setPublic(isPublic);
-            em.merge(order);
-        });
+    public void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
+        order.setOrderStatus(orderStatus);
+        order.setDate(date);
+        order.setPublic(isPublic);
+    }
+
+    @Override
+    public PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+        PaymentReceipt receipt = new PaymentReceipt(order.getOrderId(), paymentReceipt, type);
+        em.persist(receipt);
+        return receipt;
+    }
+
+    @Override
+    public void updatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+        order.getPaymentReceipt().setFile(paymentReceipt);
+        order.getPaymentReceipt().setType(type);
     }
 
     @Override
@@ -65,41 +72,31 @@ public class OrderJpaDao implements OrderDao {
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId
         """ + (orderStatus!=null?" AND o.status = :status":""));
-        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("readerId", readerId);
         if (orderStatus != null) {
             nativeQuery.setParameter("status", orderStatus.toString());
         }
-        nativeQuery.setFirstResult(offset);
-        nativeQuery.setMaxResults(limit);
-
-        @SuppressWarnings("unchecked")
-        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
-
-        if (idList.isEmpty()){
-            return Collections.emptyList();
-        }
 
         TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList", Order.class);
-        query.setParameter("idList", idList);
-        return query.getResultList();
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
     public long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus) {
-        Query nativeQuery = em.createNativeQuery("""
-            SELECT COUNT(DISTINCT o.order_id)
-            FROM orders o
-            JOIN books b ON o.book_id = b.book_id
-            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId
-        """ + (orderStatus!=null?" AND o.status = :status":""));
-        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
-        nativeQuery.setParameter("readerId", readerId);
-        if (orderStatus != null) {
-            nativeQuery.setParameter("status", orderStatus.toString());
+        Map<String, Object> params = new HashMap<>();
+        params.put("title", DaoUtils.prepareSearchString(title));
+        params.put("readerId", readerId);
+        if (orderStatus != null){
+            params.put("status", orderStatus.toString());
         }
 
-        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
+        return DaoUtils.getRowCount(em,
+                "orders o LEFT JOIN books b ON o.book_id = b.book_id",
+                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId" + (orderStatus!=null?" AND o.status = :status":""),
+                params
+        );
     }
 
     @Override
@@ -110,41 +107,31 @@ public class OrderJpaDao implements OrderDao {
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId
         """ + (orderStatus!=null?" AND o.status = :status":""));
-        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
+        nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("writerId", writerId);
         if (orderStatus != null) {
             nativeQuery.setParameter("status", orderStatus.toString());
         }
-        nativeQuery.setFirstResult(offset);
-        nativeQuery.setMaxResults(limit);
-
-        @SuppressWarnings("unchecked")
-        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
-
-        if (idList.isEmpty()){
-            return Collections.emptyList();
-        }
 
         TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList", Order.class);
-        query.setParameter("idList", idList);
-        return query.getResultList();
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
     public long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus) {
-        Query nativeQuery = em.createNativeQuery("""
-            SELECT COUNT(DISTINCT o.order_id)
-            FROM orders o
-            JOIN books b ON o.book_id = b.book_id
-            WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId
-        """ + (orderStatus!=null?" AND o.status = :status":""));
-        nativeQuery.setParameter("title", "%" + DaoUtils.escapeSearchString(title) + "%");
-        nativeQuery.setParameter("writerId", writerId);
-        if (orderStatus != null) {
-            nativeQuery.setParameter("status", orderStatus.toString());
+        Map<String, Object> params = new HashMap<>();
+        params.put("title", DaoUtils.prepareSearchString(title));
+        params.put("writerId", writerId);
+        if (orderStatus != null){
+            params.put("status", orderStatus.toString());
         }
 
-        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
+        return DaoUtils.getRowCount(em,
+            "orders o LEFT JOIN books b ON o.book_id = b.book_id",
+            "WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId" + (orderStatus!=null?" AND o.status = :status":""),
+             params
+        );
     }
 
     @Override
@@ -153,13 +140,11 @@ public class OrderJpaDao implements OrderDao {
         query.setParameter("bookId", bookId);
         query.setParameter("email", email);
         query.setMaxResults(1);
-        boolean ownsBook;
-        try {
-           ownsBook = query.getSingleResult() !=null;
-        } catch (NoResultException e) {
-            ownsBook = false;
-        }
 
-        return ownsBook;
+        try {
+            return query.getSingleResult() != null;
+        } catch (NoResultException e) {
+            return false;
+        }
     }
 }

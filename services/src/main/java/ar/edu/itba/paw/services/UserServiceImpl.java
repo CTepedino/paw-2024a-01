@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
-import ar.edu.itba.paw.interfaces.dao.files.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
@@ -39,7 +38,6 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserDao userDao;
-    private final ProfilePictureDao profilePictureDao;
 
     private final EmailValidationService evs;
 
@@ -48,9 +46,8 @@ public class UserServiceImpl implements UserService {
     private final MailService ms;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, ProfilePictureDao profilePictureDao, EmailValidationService evs, MailService ms){
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, EmailValidationService evs, MailService ms){
         this.userDao = userDao;
-        this.profilePictureDao = profilePictureDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
         this.ms = ms;
@@ -93,8 +90,9 @@ public class UserServiceImpl implements UserService {
         if (maybeUser.isPresent() && !maybeUser.get().isEnabled()){
             User user = maybeUser.get();
             if (evs.checkValidation(id, code)){
-                userDao.update(user.getUserId(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getCbu(),true, user.getLocale(), user.getDescription());
-                userDao.giveRole(user.getUserId(), UserRoles.READER);
+
+                userDao.updateIsEnabled(user,true);
+                userDao.giveRole(user, UserRoles.READER);
 
                 List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
                 Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
@@ -119,12 +117,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void giveWriterRole(long id, String cbu) {
-        User user = findById(id).orElseThrow(UserNotFoundException::new);
+    public void giveWriterRole(String cbu) {
+        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
 
-        userDao.giveRole(id, UserRoles.WRITER);
+        userDao.giveRole(user, UserRoles.WRITER);
 
-        userDao.update(id, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu, user.isEnabled(), user.getLocale(), user.getDescription());
+        userDao.update(user, user.getFirstName(), user.getLastName(), cbu, user.getDescription());
 
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
@@ -135,7 +133,7 @@ public class UserServiceImpl implements UserService {
 
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
-        LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(id).log();
+        LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(user.getUserId()).log();
     }
 
     @Transactional(readOnly = true)
@@ -169,13 +167,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public boolean hasRole(long id, UserRoles role) {
-        User user = findById(id).orElseThrow(UserNotFoundException::new);
-        return user.getRoles().contains(role);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public boolean isCurrentUserPassword(String password) {
         User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
         return passwordEncoder.matches(password, user.getPassword());
@@ -188,7 +179,8 @@ public class UserServiceImpl implements UserService {
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
 
-        userDao.update(user.getUserId(), user.getEmail(),encodedPassword, user.getFirstName(), user.getLastName(),user.getCbu(), user.isEnabled(), user.getLocale(), user.getDescription());
+
+        userDao.updatePassword(user, encodedPassword);
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), encodedPassword, auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
@@ -203,7 +195,7 @@ public class UserServiceImpl implements UserService {
 
         String oldCbu = user.getCbu();
 
-        userDao.update(user.getUserId(), user.getEmail(),user.getPassword(),firstName, lastName, cbu, user.isEnabled(), user.getLocale(), description);
+        userDao.update(user, firstName, lastName, cbu, description);
 
         if ((user.getRoles().contains(UserRoles.WRITER) && oldCbu==null ) || user.getRoles().isEmpty()){
             userDao.recheckAllPaused(user.getUserId());
@@ -212,7 +204,11 @@ public class UserServiceImpl implements UserService {
 
         if (profilePicture != null && !profilePicture.isEmpty()) {
             try {
-                profilePictureDao.createOrUpdate(user.getUserId(), profilePicture.getBytes());
+                if (user.getProfilePicture()==null){
+                    userDao.createProfilePicture(user, profilePicture.getBytes());
+                } else {
+                    userDao.updateProfilePicture(user, profilePicture.getBytes());
+                }
             } catch (IOException e){
                 LOGGER.atWarn().setMessage("Failed to update profile for user: {} - Error Message: {}").addArgument(firstName).addArgument(e.getMessage()).log();
                 throw new UnreadableFileException();
@@ -221,12 +217,14 @@ public class UserServiceImpl implements UserService {
         LOGGER.atDebug().setMessage("Updated profile for user: {}").addArgument(firstName).log();
     }
 
-
     @Transactional(readOnly = true)
     @Override
     public ProfilePicture getProfilePictureOrDefault(long id) {
-        Optional<ProfilePicture> maybePicture = profilePictureDao.findById(id);
-        return maybePicture.orElseGet(() -> new ProfilePicture(id, getDefaultProfilePicture()));
+        User user = userDao.findById(id).orElseThrow(UserNotFoundException::new);
+        if (user.getProfilePicture()!=null) {
+            return user.getProfilePicture();
+        }
+        return new ProfilePicture(user.getUserId(), getDefaultProfilePicture());
     }
 
     private byte[] getDefaultProfilePicture(){
@@ -252,11 +250,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public String fillMissingWriterData(User user, String password) {
+    public String fillMissingWriterData(long userId, String password) {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
         String encodedPassword = passwordEncoder.encode(password);
-        userDao.update(user.getUserId(), user.getEmail(), encodedPassword, user.getFirstName(), user.getLastName(), user.getCbu(),user.isEnabled(), user.getLocale(), user.getDescription());
-        userDao.giveRole(user.getUserId(), UserRoles.READER);
-        userDao.giveRole(user.getUserId(), UserRoles.WRITER);
+
+        userDao.updatePassword(user, encodedPassword);
+        userDao.giveRole(user, UserRoles.READER);
+        userDao.giveRole(user, UserRoles.WRITER);
         return encodedPassword;
     }
 }

@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public interface ReviewDao {
 
-    void create(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date);
+    Review create(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date);
 
-    void modify(long bookId, User reviewer, int rating, String reviewText, LocalDateTime date);
+    void modify(Review review, int rating, String reviewText, LocalDateTime date);
 
 
     List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit);
@@ -20,7 +20,9 @@ public interface ReviewDao {
 
     long getAllSize(long bookId);
 
-    Optional<Review> get(long bookId, User reviewer);
+    Optional<Review> find(long bookId, User reviewer);
+
+    Optional<Review> findById(long id);
 
     int getAverageRating(long bookId);
 

@@ -7,7 +7,7 @@ import javax.persistence.Table;
 @Table(name = "book_previews")
 public class BookPreview extends File{
 
-    protected BookPreview() {}
+    BookPreview() {}
 
     public BookPreview(long previewId, byte[] preview){
         super(previewId, preview);

@@ -9,8 +9,6 @@ import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.exception.OrderNotFoundException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,15 +25,13 @@ public class OrderController {
     private static final int ORDER_PAGE_SIZE = 10;
 
     private final OrderService os;
-    private final UserService us;
     private final BookService bs;
 
 
 
     @Autowired
-    public OrderController(final OrderService os, final UserService us, final BookService bs){
+    public OrderController(final OrderService os, final BookService bs){
         this.os = os;
-        this.us = us;
         this.bs = bs;
     }
 
@@ -151,16 +147,15 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo/{id:\\d+}")
-    public ModelAndView sendBuyInfo(@Valid @ModelAttribute final CreateOrderForm form, final BindingResult errors, @PathVariable("id") long bookId){
+    public ModelAndView sendBuyInfo(@Valid @ModelAttribute final CreateOrderForm form, final BindingResult errors, @PathVariable("id") long bookId, @ModelAttribute("loggedUser") User loggedUser){
 
         if(errors.hasErrors()){
             return sendBuyInfoForm(form, bookId);
         }
 
-        os.create(bookId, form.getReceipt());
+        Order order = os.create(bookId, form.getReceipt());
 
         ModelAndView mav = new ModelAndView("orderSummary");
-        Order order = os.find(us.getLoggedUser().orElseThrow(UserNotFoundException::new).getUserId(), bookId).orElseThrow(OrderNotFoundException::new);
         mav.addObject("order", order);
         return mav;
     }

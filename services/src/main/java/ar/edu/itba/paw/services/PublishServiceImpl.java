@@ -34,6 +34,7 @@ public class PublishServiceImpl implements PublishService {
     @Transactional
     @Override
     public long publishBook(
+            User user,
 
             String cbu,
             String title,
@@ -47,12 +48,10 @@ public class PublishServiceImpl implements PublishService {
             MultipartFile preview,
             MultipartFile bookFile
     ) {
-        User user = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
-        Collection<UserRoles> roles = user.getRoles();
 
-        if (!roles.contains(UserRoles.WRITER)){
-            us.giveWriterRole(user.getUserId(), cbu);
+        if (!us.hasRole(UserRoles.WRITER)){
+            us.giveWriterRole(cbu);
         }
 
         long bookId = bs.create(
@@ -62,7 +61,7 @@ public class PublishServiceImpl implements PublishService {
                 price,
                 pageCount,
                 suggestedAge,
-                user.getUserId(),
+                user,
                 preview,
                 cover,
                 bookFile

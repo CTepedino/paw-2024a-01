@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.models.books;
 
+import ar.edu.itba.paw.models.files.BookFile;
+import ar.edu.itba.paw.models.files.BookPreview;
+import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.users.User;
 
 import javax.persistence.*;
@@ -47,8 +50,19 @@ public class Book {
     @JoinColumn(name = "writer_id", referencedColumnName = "user_id")
     private User writer;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private BookFile bookFile;
 
-    protected Book(){}
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private CoverImage coverImage;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private BookPreview preview;
+
+    Book(){}
 
     public Book(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
         this.title = title;
@@ -148,5 +162,29 @@ public class Book {
 
     public void setPaused(boolean paused) {
         isPaused = paused;
+    }
+
+    public BookFile getBookFile(){
+        return bookFile;
+    }
+
+    public CoverImage getCoverImage() {
+        return coverImage;
+    }
+
+    public BookPreview getPreview() {
+        return preview;
+    }
+
+    public void setBookFile(BookFile bookFile) {
+        this.bookFile = bookFile;
+    }
+
+    public void setCoverImage(CoverImage coverImage) {
+        this.coverImage = coverImage;
+    }
+
+    public void setPreview(BookPreview preview) {
+        this.preview = preview;
     }
 }

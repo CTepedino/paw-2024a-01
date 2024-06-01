@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
+import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 
@@ -10,14 +11,22 @@ import java.util.Optional;
 public interface UserDao {
     User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale);
 
-    int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description);
+    void update(User user, String firstName, String lastName, String cbu, String description);
+    void updateIsEnabled(User user, boolean enabled);
+    void updatePassword(User user, String password);
+
+    ProfilePicture createProfilePicture(User user, byte[] profilePicture);
+
+    void updateProfilePicture(User user, byte[] profilePicture);
 
     Optional<User> findById(long id);
 
     Optional<User> findByEmail(String email);
 
-    int giveRole(long id, UserRoles role);
+    void giveRole(User user, UserRoles role);
 
+
+    //TODO: mover a BookDao?
     void recheckAllPaused(long userId);
 
     List<User> getUsersWithPausedBooks();

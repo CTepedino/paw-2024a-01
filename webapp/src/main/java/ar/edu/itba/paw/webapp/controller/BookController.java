@@ -58,13 +58,15 @@ public class BookController {
 
 
     @RequestMapping(method = RequestMethod.POST, path="/addBook")
-    public ModelAndView addBook(@Valid @ModelAttribute final NewBookForm newBookForm, final BindingResult errors){
+    public ModelAndView addBook(@Valid @ModelAttribute final NewBookForm newBookForm, final BindingResult errors, @ModelAttribute("loggedUser") User loggedUser){
 
         if (errors.hasErrors()){
             return addBookForm(newBookForm);
         }
 
         long bookId = ps.publishBook(
+                loggedUser,
+
                 newBookForm.getCbu(),
                 newBookForm.getTitle(),
                 newBookForm.getDescription(),
@@ -107,7 +109,7 @@ public class BookController {
         Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
-        boolean isAuthor = bs.loggedUserIsAuthor(bookId);
+        boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         boolean existsOrder = os.existsOrder(bookId);
 
         if(reviews.getPageCount() == 0){
@@ -164,10 +166,11 @@ public class BookController {
         }
 
 
-        bs.editPublication(id, form.getTitle(), form.getDescription(), form.getGenre(), form.getPrice(), form.getPageCount(), form.getSuggestedAge(), form.getCover(), form.getPreview(), form.getBookFile());
+        bs.editPublication(bs.findById(id).orElseThrow(BookNotFoundException::new).getBookId(), form.getTitle(), form.getDescription(), form.getGenre(), form.getPrice(), form.getPageCount(), form.getSuggestedAge(), form.getCover(), form.getPreview(), form.getBookFile());
 
         return new ModelAndView("redirect:/book/"+id);
     }
+
 
     @RequestMapping(method = RequestMethod.POST, path="/recommendBook/{id:\\d+}/bookInfo")
     public ModelAndView recommendBook(
@@ -175,7 +178,7 @@ public class BookController {
             @PathVariable long id
     ){
         os.recommendBook(id, recommended);
-        return new ModelAndView("redirect:/book/"+os.findById(id).get().getBook().getBookId());
+        return new ModelAndView("redirect:/book/"+os.findById(id).orElseThrow(BookNotFoundException::new).getBook().getBookId());
     }
 
 
@@ -191,7 +194,7 @@ public class BookController {
             throw new IllegalReviewException();
         }
 
-        rs.createOrUpdate(bookId, user.getUserId(), form.getRating(), form.getReview());
+        rs.createOrUpdate(bookId, user, form.getRating(), form.getReview());
 
         return new ModelAndView("redirect:/book/"+bookId);
     }

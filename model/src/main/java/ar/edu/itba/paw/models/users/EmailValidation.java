@@ -21,7 +21,7 @@ public class EmailValidation {
     @JoinColumn(name = "id", nullable = false)
     private User user;
 
-    protected EmailValidation(){}
+    EmailValidation(){}
 
     public EmailValidation(long id, String code, LocalDateTime expiration) {
         this.id = id;

@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Table(name = "profile_pictures")
 public class ProfilePicture extends File{
 
-    protected ProfilePicture() {}
+    ProfilePicture() {}
 
     public ProfilePicture(long fileId, byte[] file){
         super(fileId, file);

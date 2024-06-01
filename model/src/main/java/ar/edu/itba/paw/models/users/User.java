@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.users;
 
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.files.ProfilePicture;
 
 import javax.management.relation.Role;
 import javax.persistence.*;
@@ -49,12 +50,12 @@ public class User {
     @Column(name = "role")
     private Collection<UserRoles> roles;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
-    private EmailValidation validation;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private ProfilePicture profilePicture;
 
 
-    //TODO: probar con package-private
-    protected User(){}
+    User(){}
 
     public User(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
         this.email = email;
@@ -137,18 +138,22 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
+
+    public ProfilePicture getProfilePicture() {
+        return profilePicture;
+    }
 }
 
 

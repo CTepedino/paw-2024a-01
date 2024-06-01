@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.stereotype.Repository;
@@ -28,21 +29,38 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
-    public int update(long id, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
-        Optional<User> maybeUser = findById(id);
-        if (maybeUser.isPresent()) {
-            User user = maybeUser.get();
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setCbu(cbu);
-            user.setEnabled(isEnabled);
-            user.setDescription(description);
-            em.merge(user);
-            return 1;
-        }
-        return 0;
+    public void update(User user, String firstName, String lastName, String cbu, String description) {
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setCbu(cbu);
+        user.setDescription(description);
+    }
+
+    @Override
+    public void updateIsEnabled(User user, boolean enabled) {
+        user.setEnabled(enabled);
+    }
+
+    @Override
+    public void updatePassword(User user, String password) {
+        user.setPassword(password);
+    }
+
+    @Override
+    public ProfilePicture createProfilePicture(User user, byte[] profilePicture){
+        ProfilePicture pfp = new ProfilePicture(user.getUserId(), profilePicture);
+        em.persist(pfp);
+        return pfp;
+    }
+
+    @Override
+    public void updateProfilePicture(User user, byte[] profilePicture){
+        user.getProfilePicture().setFile(profilePicture);
+    }
+
+    @Override
+    public void giveRole(User user, UserRoles role) {
+        user.getRoles().add(role);
     }
 
     @Override
@@ -56,18 +74,6 @@ public class UserJpaDao implements UserDao {
         query.setParameter("email", email);
 
         return query.getResultList().stream().findFirst();
-    }
-
-    @Override
-    public int giveRole(long id, UserRoles role) {
-        Optional<User> maybeUser = findById(id);
-        if (maybeUser.isPresent()) {
-            User user = maybeUser.get();
-            user.getRoles().add(role);
-            em.merge(user);
-            return 1;
-        }
-        return 0;
     }
 
     @Override
@@ -87,6 +93,7 @@ public class UserJpaDao implements UserDao {
                 END
             WHERE b.writer.userId = :userId
         """);
+        query.executeUpdate();
     }
 
     @Override

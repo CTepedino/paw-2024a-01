@@ -47,9 +47,13 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET, path="/search")
     public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") BookSearchForm form, final BindingResult error){
-
+        Integer page = form.getPage();
         if (error.hasErrors()){
-            throw new IllegalSearchQueryException();
+            if (page == null){ //FIXME: Antes esto andaba bien siempre, pero ahora si intentas volver a buscar sin haber cambiado de pagina se envia como null en lugar de 1. Esto es un fix temporal hasta que encuentre la causa
+                page = 1;
+            } else {
+                throw new IllegalSearchQueryException();
+            }
         }
 
         final ModelAndView mav = new ModelAndView("searchResults");
@@ -64,7 +68,7 @@ public class HomeController {
                 form.getMinSuggestedAge(),
                 form.getMaxSuggestedAge(),
                 form.getOrderBy(),
-                form.getPage(),
+                page,
                 PAGE_SIZE
         );
 

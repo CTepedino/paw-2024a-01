@@ -36,7 +36,7 @@ public class CybraryUserDetailsService implements UserDetailsService {
         String password = user.getPassword();
 
         if (user.getPassword() == null){
-            password = us.fillMissingWriterData(user, user.getEmail());
+            password = us.fillMissingWriterData(user.getUserId(),user.getEmail());
         }
 
         if (!user.isEnabled()){

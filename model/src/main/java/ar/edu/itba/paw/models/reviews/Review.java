@@ -35,7 +35,7 @@ public class Review {
     @Column
     private LocalDateTime date;
 
-    protected Review(){}
+    Review(){}
 
     public Review(long bookId, User reviewer, int rating, String review, LocalDateTime date) {
         this.bookId = bookId;
