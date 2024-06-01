@@ -112,12 +112,6 @@ public class BookController {
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         boolean existsOrder = os.existsOrder(bookId);
 
-        if(reviews.getPageCount() == 0){
-            reviews = rs.getAll(bookId,sortForm.getOrderBy(), 1, REVIEW_PAGE_SIZE);
-        } else if (reviews.getPage().isEmpty()){
-            reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage, REVIEW_PAGE_SIZE);
-        }
-
         if (loggedUserReview.isPresent()){
             form.setRating(loggedUserReview.get().getRating());
             form.setReview(loggedUserReview.get().getReview());

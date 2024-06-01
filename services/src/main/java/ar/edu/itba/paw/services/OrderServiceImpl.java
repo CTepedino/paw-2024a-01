@@ -11,6 +11,7 @@ import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,7 +114,13 @@ public class OrderServiceImpl implements OrderService {
             throw new InvalidPageException();
         }
         List<Order> orders = orderDao.getReaderOrders(readerId, title, orderStatus,(pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getReaderOrdersSize(readerId, title, orderStatus));
+        PaginatedContent<Order> page = new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getReaderOrdersSize(readerId, title, orderStatus));
+
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getReaderOrders(readerId, title, orderStatus, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -123,7 +130,13 @@ public class OrderServiceImpl implements OrderService {
             throw new InvalidPageException();
         }
         List<Order> orders = orderDao.getWriterOrders(writerId, title, orderStatus,(pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getWriterOrdersSize(writerId, title, orderStatus));
+
+        PaginatedContent<Order> page = new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getWriterOrdersSize(writerId, title, orderStatus));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getWriterOrders(writerId, title, orderStatus,page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
     private void sendReceipt(Order order, MultipartFile receipt, OrderStatus fromStatus) {

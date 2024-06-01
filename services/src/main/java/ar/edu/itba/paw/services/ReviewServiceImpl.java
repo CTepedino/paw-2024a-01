@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.ReviewDao;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.exception.InvalidPageException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
@@ -54,6 +55,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Review> getAll(long bookId, ReviewOrderBy orderBy, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+
         List<Review> reviews;
         long size = reviewDao.getAllSize(bookId);
 
@@ -63,7 +68,12 @@ public class ReviewServiceImpl implements ReviewService {
         } else {
             reviews = reviewDao.getAll(bookId, orderBy, (pageNumber-1)*pageSize, pageSize);
         }
-        return new PaginatedContent<>(reviews, pageNumber, pageSize, size);
+        PaginatedContent<Review> page = new PaginatedContent<>(reviews, pageNumber, pageSize, size);
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAll(bookId, orderBy, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
     @Transactional(readOnly = true)

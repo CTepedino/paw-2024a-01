@@ -32,11 +32,6 @@ public class HomeController {
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
         PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
-        if(books.getPageCount() == 0){
-            books = bs.getAll(1, PAGE_SIZE);
-        } else if (books.getPage().isEmpty()){
-            books = bs.getAll(books.getPageCount(), PAGE_SIZE);
-        }
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", books);

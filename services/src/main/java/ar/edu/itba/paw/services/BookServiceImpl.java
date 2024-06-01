@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.*;
+import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +105,13 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getAllSize());
+
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getAllSize());
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAll(page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -114,7 +121,13 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
+
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
 
@@ -131,7 +144,13 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books =  bookDao.getWriterBooks(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
+
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getWriterBooks(writerId, title, orderBy, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -141,7 +160,13 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize, isPublic);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
+
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getOwnedBooks(readerId, title, orderBy, page.getPageCount(), pageSize, isPublic);
+        } else {
+            return page;
+        }
     }
 
 
@@ -178,11 +203,7 @@ public class BookServiceImpl implements BookService {
         if (asWriter){
             return getWriterBooks(userId, title, orderBy, pageNumber, pageSize);
         } else {
-            if(ownsProfile) {
-                return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, false);
-            } else {
-                return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, true);
-            }
+            return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, !ownsProfile);
         }
     }
 }
