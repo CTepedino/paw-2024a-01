@@ -29,14 +29,21 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
-    public void update(User user, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
-        user.setEmail(email);
-        user.setPassword(password);
+    public void update(User user, String firstName, String lastName, String cbu, String description) {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setCbu(cbu);
-        user.setEnabled(isEnabled);
         user.setDescription(description);
+    }
+
+    @Override
+    public void updateIsEnabled(User user, boolean enabled) {
+        user.setEnabled(enabled);
+    }
+
+    @Override
+    public void updatePassword(User user, String password) {
+        user.setPassword(password);
     }
 
     @Override

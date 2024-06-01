@@ -11,7 +11,9 @@ import java.util.Optional;
 public interface UserDao {
     User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale);
 
-    void update(User user, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description);
+    void update(User user, String firstName, String lastName, String cbu, String description);
+    void updateIsEnabled(User user, boolean enabled);
+    void updatePassword(User user, String password);
 
     ProfilePicture createProfilePicture(User user, byte[] profilePicture);
 
