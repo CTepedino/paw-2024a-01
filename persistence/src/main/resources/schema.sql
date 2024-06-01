@@ -92,6 +92,9 @@ UPDATE reviews SET review_id = DEFAULT;
 ALTER TABLE reviews ADD CONSTRAINT reviews_unique UNIQUE (reviewer_id, book_id);
 
 ALTER TABLE orders ADD CONSTRAINT orders_unique UNIQUE (book_id, buyer_id);
+
+ALTER TABLE reviews DROP CONSTRAINT reviews_rating_check;
+ALTER TABLE reviews ADD CONSTRAINT reviews_rating_check CHECK (rating BETWEEN 0 AND 10);
 */
 
 CREATE TABLE IF NOT EXISTS users(
@@ -178,7 +181,7 @@ CREATE TABLE IF NOT EXISTS reviews(
     review TEXT,
     date TIMESTAMP default now(),
 
-    CHECK (rating BETWEEN 1 AND 10),
+    CHECK (rating BETWEEN 0 AND 10),
 
     FOREIGN KEY (reviewer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,

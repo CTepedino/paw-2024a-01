@@ -11,7 +11,7 @@ import java.time.format.FormatStyle;
 import java.util.Locale;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", uniqueConstraints = {@UniqueConstraint(columnNames = {"buyer_id", "book_id"})})
 public class Order {
 
     @Id

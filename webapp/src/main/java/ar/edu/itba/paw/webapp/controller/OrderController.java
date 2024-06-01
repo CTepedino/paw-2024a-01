@@ -79,7 +79,7 @@ public class OrderController {
             }
         }
 
-        PaginatedContent<Order> orders = os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE);
+        PaginatedContent<Order> orders = os.getWriterOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE);
 
         ModelAndView mav = new ModelAndView("salesView");
         mav.addObject("orders", orders);

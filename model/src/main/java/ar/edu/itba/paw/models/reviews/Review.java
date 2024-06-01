@@ -12,10 +12,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 @Entity
-@Table(name = "reviews")
+@Table(name = "reviews", uniqueConstraints = @UniqueConstraint(columnNames = {"book_id", "reviewer_id"}))
 public class Review {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reviews_review_id_seq")
+    @SequenceGenerator(sequenceName = "reviews_review_id_seq", name = "reviews_review_id_seq", allocationSize = 1)
     @Column(name = "review_id")
     private Long reviewId;
 

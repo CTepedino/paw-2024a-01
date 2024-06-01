@@ -70,7 +70,7 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-  <error-page>
+<!--  <error-page>
     <error-code>500</error-code>
     <location>/WEB-INF/jsp/exception/500.jsp</location>
   </error-page>
@@ -88,6 +88,6 @@
   <error-page>
     <error-code>403</error-code>
     <location>/WEB-INF/jsp/exception/403.jsp</location>
-  </error-page>
+  </error-page>-->
 
 </web-app>
