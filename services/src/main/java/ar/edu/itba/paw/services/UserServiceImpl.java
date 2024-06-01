@@ -117,7 +117,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void giveWriterRole(User user, String cbu) {
+    public void giveWriterRole(String cbu) {
+        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
+
         userDao.giveRole(user, UserRoles.WRITER);
 
         userDao.update(user, user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName() , cbu, user.isEnabled(), user.getLocale(), user.getDescription());
@@ -249,7 +251,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public String fillMissingWriterData(User user, String password) {
+    public String fillMissingWriterData(long userId, String password) {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
         String encodedPassword = passwordEncoder.encode(password);
         //TODO: cleanup
         userDao.update(user, user.getEmail(), encodedPassword, user.getFirstName(), user.getLastName(), user.getCbu(),user.isEnabled(), user.getLocale(), user.getDescription());

@@ -64,7 +64,9 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
+        Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
+
         boolean isPaused = book.isPaused();
 
         try {

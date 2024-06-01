@@ -28,7 +28,7 @@ public interface BookService {
     );
 
     void editPublication(
-            Book book,
+            long bookId,
 
             String title,
             String description,

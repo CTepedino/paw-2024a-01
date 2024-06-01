@@ -49,10 +49,9 @@ public class PublishServiceImpl implements PublishService {
             MultipartFile bookFile
     ) {
 
-        Collection<UserRoles> roles = user.getRoles();
 
-        if (!roles.contains(UserRoles.WRITER)){
-            us.giveWriterRole(user, cbu);
+        if (!us.hasRole(UserRoles.WRITER)){
+            us.giveWriterRole(cbu);
         }
 
         long bookId = bs.create(
