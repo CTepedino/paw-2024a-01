@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
@@ -32,8 +31,10 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
+        PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
+
         final ModelAndView mav = new ModelAndView("home");
-        mav.addObject("books", bs.getAll(page, PAGE_SIZE));
+        mav.addObject("books", books);
         mav.addObject("popularGenres", bs.getGenresByBookCount());
         return mav;
     }
@@ -41,7 +42,8 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET, path="/search")
     public ModelAndView search(@Valid @ModelAttribute("bookSearchForm") BookSearchForm form, final BindingResult error){
-
+        Integer page = form.getPage();
+        page = page == null ? 1 : page;
         if (error.hasErrors()){
             throw new IllegalSearchQueryException();
         }
@@ -58,7 +60,7 @@ public class HomeController {
                 form.getMinSuggestedAge(),
                 form.getMaxSuggestedAge(),
                 form.getOrderBy(),
-                form.getPage(),
+                page,
                 PAGE_SIZE
         );
 

@@ -1,24 +1,96 @@
 package ar.edu.itba.paw.models.books;
 
+import ar.edu.itba.paw.models.files.BookFile;
+import ar.edu.itba.paw.models.files.BookPreview;
+import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.users.User;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
 
+@Entity
+@Table(name = "books")
 public class Book {
-    private final long bookId;
-    private final String title;
-    private final String description;
-    private final BookGenre genre;
-    private final BigDecimal price;
-    private final int pageCount;
-    private final int suggestedAge;
-    private final LocalDate publishDate;
-    private final boolean isPaused;
 
-    private final User writer;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "books_book_id_seq")
+    @SequenceGenerator(sequenceName = "books_book_id_seq", name = "books_book_id_seq", allocationSize = 1)
+    @Column(name = "book_id")
+    private Long bookId;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BookGenre genre;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(name = "page_count", nullable = false)
+    private int pageCount;
+
+    @Column(name = "suggested_age", nullable = false)
+    private int suggestedAge;
+
+    @Column(name = "published_date")
+    private LocalDate publishDate;
+
+    @Column(name = "is_paused")
+    private boolean isPaused;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "writer_id", referencedColumnName = "user_id")
+    private User writer;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private BookFile bookFile;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private CoverImage coverImage;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private BookPreview preview;
+
+    Book(){}
+
+    public Book(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
+        this.title = title;
+        this.description = description;
+        this.genre = genre;
+        this.price = price;
+        this.pageCount = pageCount;
+        this.suggestedAge = suggestedAge;
+        this.publishDate = publishDate;
+        this.writer = writer;
+        this.isPaused = isPaused;
+    }
+
+    public Book(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
+        this.bookId = bookId;
+        this.title = title;
+        this.description = description;
+        this.genre = genre;
+        this.price = price;
+        this.pageCount = pageCount;
+        this.suggestedAge = suggestedAge;
+        this.publishDate = publishDate;
+        this.writer = writer;
+        this.isPaused = isPaused;
+    }
+
+
+
 
     public String getFormattedPrice(){
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
@@ -64,16 +136,55 @@ public class Book {
 
     public boolean isPaused() {return isPaused;}
 
-    public Book(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
-        this.bookId = bookId;
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setGenre(BookGenre genre) {
         this.genre = genre;
+    }
+
+    public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public void setPageCount(int pageCount) {
         this.pageCount = pageCount;
+    }
+
+    public void setSuggestedAge(int suggestedAge) {
         this.suggestedAge = suggestedAge;
-        this.publishDate = publishDate;
-        this.writer = writer;
-        this.isPaused = isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
+
+    public BookFile getBookFile(){
+        return bookFile;
+    }
+
+    public CoverImage getCoverImage() {
+        return coverImage;
+    }
+
+    public BookPreview getPreview() {
+        return preview;
+    }
+
+    public void setBookFile(BookFile bookFile) {
+        this.bookFile = bookFile;
+    }
+
+    public void setCoverImage(CoverImage coverImage) {
+        this.coverImage = coverImage;
+    }
+
+    public void setPreview(BookPreview preview) {
+        this.preview = preview;
     }
 }

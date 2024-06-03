@@ -39,11 +39,11 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     public EmailValidation create(User user) {
         String code = generateRandomVerificationCode();
         LocalDateTime expiration = LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS);
-        emailValidationDao.create(user.getUserId(), code, expiration);
+        EmailValidation validation = emailValidationDao.create(user.getUserId(), code, expiration);
         ms.sendRegisterEmail(user, code, expiration);
         LOGGER.atDebug().setMessage("Generated Validation Code").log();
 
-        return new EmailValidation(user.getUserId(), code, expiration);
+        return validation;
     }
 
     private String generateRandomVerificationCode(){

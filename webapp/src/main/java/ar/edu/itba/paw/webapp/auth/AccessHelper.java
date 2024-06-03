@@ -4,7 +4,9 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
@@ -77,22 +79,33 @@ public class AccessHelper {
         if (!us.isLoggedIn()) {
             return false;
         }
-
+        User user = us.getLoggedUser().get();
         long bookId = Long.parseLong(id);
-        return bs.loggedUserIsAuthor(bookId);
+        Optional<Book> maybeBook = bs.findById(bookId);
+
+        return maybeBook.isPresent() &&  bs.isAuthor(bs.findById(bookId).get(), user.getUserId());
     }
 
     public boolean canReview(Authentication auth, String id){
         if (!us.isLoggedIn()) {
             return false;
         }
-
         long bookId = Long.parseLong(id);
-        return os.hasBookFileAccess(bookId, auth.getName());
+        return os.hasBookFileAccess(bookId, auth.getName()) && !bs.isAuthor(bookId, auth.getName());
     }
 
     public boolean checkIsWriter(String id){
         long userId = Long.parseLong(id);
-        return us.getRoles(userId).contains(UserRoles.WRITER);
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        return user.getRoles().contains(UserRoles.WRITER);
+    }
+
+    public boolean canRecommendBook(Authentication auth, String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
+
+        long bookId = Long.parseLong(id);
+        return os.hasBookFileAccess(bookId, auth.getName()) && !bs.isAuthor(bookId, auth.getName());
     }
 }

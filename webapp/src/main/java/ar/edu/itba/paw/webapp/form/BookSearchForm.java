@@ -34,7 +34,6 @@ public class BookSearchForm {
     @NotNull
     private BookSearchOrderBy orderBy = BookSearchOrderBy.PUBLICATION_DATE_ASC;
 
-    @NotNull
     @Min(1)
     private Integer page = 1;
 

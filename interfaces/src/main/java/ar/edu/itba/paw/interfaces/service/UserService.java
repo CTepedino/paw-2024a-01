@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -20,29 +19,22 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    List<UserRoles> getRoles(long id);
-
-    void giveWriterRole(long id, String cbu);
-
-/*    void fillMissingWriterData(long id, String password);*/
-
-
-    boolean hasRole(long id, UserRoles role);
+    void giveWriterRole(String cbu);
 
     boolean isCurrentUserPassword(String password);
     void changePassword(String password);
+
     void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture, String description);
 
     Optional<User> getLoggedUser();
 
     boolean isLoggedIn();
 
+    boolean hasRole(UserRoles role);
 
     ProfilePicture getProfilePictureOrDefault(long id);
 
-    boolean hasRole(UserRoles role);
-
     void sendMissingDataEmails();
 
-    String fillMissingWriterData(User user, String password);
+    String fillMissingWriterData(long userId, String password);
 }

@@ -3,13 +3,12 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.exception.OrderNotFoundException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,15 +25,13 @@ public class OrderController {
     private static final int ORDER_PAGE_SIZE = 10;
 
     private final OrderService os;
-    private final UserService us;
     private final BookService bs;
 
 
 
     @Autowired
-    public OrderController(final OrderService os, final UserService us, final BookService bs){
+    public OrderController(final OrderService os, final BookService bs){
         this.os = os;
-        this.us = us;
         this.bs = bs;
     }
 
@@ -58,8 +55,11 @@ public class OrderController {
                 orderSearchForm.setOrderStatus(null);
             }
         }
+
+        PaginatedContent<Order> orders = os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE);
+
         final ModelAndView mav = new ModelAndView("purchasesView");
-        mav.addObject("orders", os.getReaderOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE));
+        mav.addObject("orders", orders);
         return mav;
     }
 
@@ -78,8 +78,11 @@ public class OrderController {
                 orderSearchForm.setOrderStatus(null);
             }
         }
+
+        PaginatedContent<Order> orders = os.getWriterOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE);
+
         ModelAndView mav = new ModelAndView("salesView");
-        mav.addObject("orders", os.getWriterOrders(loggedUser.getUserId(), orderSearchForm.getTitle(), orderSearchForm.getOrderStatus(), orderSearchForm.getPage(), ORDER_PAGE_SIZE));
+        mav.addObject("orders", orders);
         return mav;
     }
 
@@ -134,16 +137,15 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/sendBuyInfo/{id:\\d+}")
-    public ModelAndView sendBuyInfo(@Valid @ModelAttribute final CreateOrderForm form, final BindingResult errors, @PathVariable("id") long bookId){
+    public ModelAndView sendBuyInfo(@Valid @ModelAttribute final CreateOrderForm form, final BindingResult errors, @PathVariable("id") long bookId, @ModelAttribute("loggedUser") User loggedUser){
 
         if(errors.hasErrors()){
             return sendBuyInfoForm(form, bookId);
         }
 
-        os.create(bookId, form.getReceipt());
+        Order order = os.create(bookId, form.getReceipt());
 
         ModelAndView mav = new ModelAndView("orderSummary");
-        Order order = os.find(us.getLoggedUser().orElseThrow(UserNotFoundException::new).getUserId(), bookId).orElseThrow(OrderNotFoundException::new);
         mav.addObject("order", order);
         return mav;
     }

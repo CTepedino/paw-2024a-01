@@ -82,6 +82,21 @@ ALTER TABLE payment_receipts ADD COLUMN type VARCHAR(20) NOT NULL DEFAULT 'appli
 ALTER TABLE users ADD COLUMN description TEXT;
 */
 
+/* Sprint 5 modifications:
+ALTER TABLE books ALTER COLUMN title TYPE VARCHAR(50);
+ALTER TABLE books ALTER COLUMN genre TYPE VARCHAR(40);
+
+ALTER TABLE reviews DROP CONSTRAINT reviews_pkey;
+ALTER TABLE reviews ADD COLUMN review_id SERIAL PRIMARY KEY;
+UPDATE reviews SET review_id = DEFAULT;
+ALTER TABLE reviews ADD CONSTRAINT reviews_unique UNIQUE (reviewer_id, book_id);
+
+ALTER TABLE orders ADD CONSTRAINT orders_unique UNIQUE (book_id, buyer_id);
+
+ALTER TABLE reviews DROP CONSTRAINT reviews_rating_check;
+ALTER TABLE reviews ADD CONSTRAINT reviews_rating_check CHECK (rating BETWEEN 0 AND 10);
+*/
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
@@ -96,9 +111,9 @@ CREATE TABLE IF NOT EXISTS users(
 
 CREATE TABLE IF NOT EXISTS books (
     book_id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
+    title VARCHAR(50) NOT NULL,
     description TEXT NOT NULL,
-    genre TEXT NOT NULL,
+    genre VARCHAR(40) NOT NULL,
     page_count INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     suggested_age INT NOT NULL,
@@ -147,27 +162,31 @@ CREATE TABLE IF NOT EXISTS orders(
     is_public BOOLEAN DEFAULT FALSE,
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,
+
+    UNIQUE(buyer_id, book_id)
 );
 
 CREATE TABLE IF NOT EXISTS payment_receipts(
     id INT PRIMARY KEY REFERENCES orders (order_id) ON DELETE CASCADE,
-    file BYTEA NOT NULL
+    file BYTEA NOT NULL,
+    type VARCHAR(20) NOT NULL DEFAULT 'application/pdf'
 );
 
 CREATE TABLE IF NOT EXISTS reviews(
+    review_id SERIAL PRIMARY KEY,
     reviewer_id INT NOT NULL,
     book_id INT NOT NULL,
     rating INT NOT NULL,
     review TEXT,
     date TIMESTAMP default now(),
 
-    CHECK (rating BETWEEN 1 AND 10),
-
-    PRIMARY KEY (book_id, reviewer_id),
+    CHECK (rating BETWEEN 0 AND 10),
 
     FOREIGN KEY (reviewer_id) REFERENCES users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,
+
+    UNIQUE(book_id, reviewer_id)
 );
 
 CREATE TABLE IF NOT EXISTS email_validations(

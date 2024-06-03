@@ -1,35 +1,80 @@
 package ar.edu.itba.paw.models.users;
 
-import java.util.Locale;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.files.ProfilePicture;
 
+import javax.management.relation.Role;
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+@Entity
+@Table(name = "users")
 public class User {
 
-    private final long userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_user_id_seq")
+    @SequenceGenerator(sequenceName = "users_user_id_seq", name = "users_user_id_seq", allocationSize = 1)
+    @Column(name = "user_id")
+    private Long userId;
 
-    private final String email;
-    private final String password;
-    private final String firstName;
-    private final String lastName;
-    private final String cbu;
-    private final boolean isEnabled;
-    private final Locale locale;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    private final String description;
+    @Column
+    private String password;
 
-    public User(long userId, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
-        this.userId = userId;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(length = 22)
+    private String cbu;
+
+    @Column(name = "is_enabled", nullable = false)
+    private boolean isEnabled;
+
+    @Column(length = 10)
+    private String locale;
+
+    @Column
+    private String description;
+
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRoles.class)
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Collection<UserRoles> roles;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private ProfilePicture profilePicture;
+
+
+    User(){}
+
+    public User(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.cbu = cbu;
         this.isEnabled = isEnabled;
-        this.locale = locale;
+        this.locale = locale.toLanguageTag();
+    }
+
+    public User(String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
+        this(email, password, firstName, lastName, isEnabled, locale);
+        this.cbu = cbu;
         this.description = description;
     }
 
-    public User(long userId, String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale){
-        this(userId, email, password, firstName, lastName, null, isEnabled, locale, null);
+    public User(Long userId, String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
+        this(email, password, firstName, lastName, cbu, isEnabled, locale, description);
+        this.userId = userId;
     }
 
 
@@ -62,11 +107,52 @@ public class User {
     }
 
     public Locale getLocale() {
-        return locale;
+        return Locale.forLanguageTag(locale);
     }
 
     public String getDescription(){
         return description;
+    }
+
+    public Collection<UserRoles> getRoles() {
+        return roles;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public void setCbu(String cbu) {
+        this.cbu = cbu;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+    public ProfilePicture getProfilePicture() {
+        return profilePicture;
     }
 }
 

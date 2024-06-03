@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
+import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.PdfNotFoundException;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -35,17 +36,17 @@ public class FileController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/cover/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public @ResponseBody byte[] getImage(@PathVariable("id") long id) {
-        return bs.getCover(id).getFile();
+        return bs.findById(id).orElseThrow(BookNotFoundException::new).getCoverImage().getFile();
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/preview/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public @ResponseBody byte[] getPdf(@PathVariable("id") long id) {
-        return bs.getPreview(id).getFile();
+    public @ResponseBody byte[] getPreview(@PathVariable("id") long id) {
+        return bs.findById(id).orElseThrow(BookNotFoundException::new).getPreview().getFile();
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/book/file/{id:\\d+}", produces = MediaType.APPLICATION_PDF_VALUE)
     public @ResponseBody byte[] getBookFile(@PathVariable("id") long id){
-        return bs.getBookFile(id).getFile();
+        return bs.findById(id).orElseThrow(BookNotFoundException::new).getBookFile().getFile();
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/profilePicture/{id:\\d+}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})

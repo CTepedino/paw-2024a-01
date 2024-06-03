@@ -5,16 +5,13 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
-import ar.edu.itba.paw.models.exception.IllegalSearchQueryException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.webapp.form.EditProfileForm;
 import ar.edu.itba.paw.webapp.form.ProfileBookSearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,7 +43,7 @@ public class ProfileController {
             @ModelAttribute("isWriter") boolean isWriter,
             @ModelAttribute("profileBookSearchForm") final ProfileBookSearchForm form
     ){
-        return defaultProfileTab(loggedUser.getUserId(), loggedUser, form);
+        return new ModelAndView("redirect:/profile/" + loggedUser.getUserId() + (isWriter?"/publications":"/boughtBooks"));
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}")
@@ -55,7 +52,7 @@ public class ProfileController {
             @ModelAttribute("loggedUser") User loggedUser,
             @ModelAttribute("profileBookSearchForm") final ProfileBookSearchForm form
     ){
-        return profileView(id, us.hasRole(id, UserRoles.WRITER)?"publications":"boughtBooks", loggedUser, form, new BeanPropertyBindingResult(form, "profileBookSearchForm"));
+        return new ModelAndView("redirect:/profile/" + id + (us.findById(id).orElseThrow(UserNotFoundException::new).getRoles().contains(UserRoles.WRITER)?"/publications":"/boughtBooks"));
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/profile/{userId:\\d+}/{tab:publications|boughtBooks}")
@@ -75,12 +72,13 @@ public class ProfileController {
 
         User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
         boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
+
         PaginatedContent<Book> books = bs.getProfileBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PROFILE_PAGE_SIZE, tab.equals("publications"), ownsProfile);
 
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("tab", tab);
         mav.addObject("user", user);
-        mav.addObject("showPublicationsTab", us.hasRole(userId, UserRoles.WRITER));
+        mav.addObject("showPublicationsTab", user.getRoles().contains(UserRoles.WRITER));
         mav.addObject("ownsProfile", ownsProfile);
         mav.addObject("books", books);
         mav.addObject("orders", BookSearchOrderBy.values());

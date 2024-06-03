@@ -1,19 +1,14 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
-import ar.edu.itba.paw.interfaces.dao.files.BookFileDao;
-import ar.edu.itba.paw.interfaces.dao.files.BookPreviewDao;
-import ar.edu.itba.paw.interfaces.dao.files.CoverImageDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.*;
-import ar.edu.itba.paw.models.files.BookFile;
-import ar.edu.itba.paw.models.files.BookPreview;
-import ar.edu.itba.paw.models.files.CoverImage;
+import ar.edu.itba.paw.models.reviews.Review;
+import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,62 +28,59 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
-    private final BookPreviewDao previewDao;
-    private final CoverImageDao coverDao;
-    private final BookFileDao bookFileDao;
-
-    private final UserService us;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, final BookPreviewDao previewDao, final CoverImageDao coverDao, final BookFileDao bookFileDao, final UserService us){
+    public BookServiceImpl(final BookDao bookDao){
         this.bookDao = bookDao;
-        this.coverDao = coverDao;
-        this.previewDao = previewDao;
-        this.bookFileDao = bookFileDao;
-        this.us = us;
     }
 
     @Transactional
     @Override
-    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, long writerId, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, User writer, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
+
+        Book book = bookDao.create(
+                title,
+                description,
+                genre,
+                price,
+                pageCount,
+                suggestedAge,
+                LocalDate.now(),
+                writer,
+                false
+        );
         try {
-            long bookId = bookDao.create(
-                    title,
-                    description,
-                    genre,
-                    price,
-                    pageCount,
-                    suggestedAge,
-                    writerId
-            );
-            previewDao.create(bookId, preview.getBytes());
-            coverDao.create(bookId, cover.getBytes());
-            bookFileDao.create(bookId, bookFile.getBytes());
-            LOGGER.atDebug().setMessage("Created book: {}").addArgument(title).log();
-            return bookId;
+            bookDao.createPreviewFile(book, preview.getBytes());
+            bookDao.createCoverImage(book, cover.getBytes());
+            bookDao.createBookFile(book, bookFile.getBytes());
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to create book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
+        LOGGER.atDebug().setMessage("Created book: {}").addArgument(title).log();
+        return book.getBookId();
     }
 
     @Transactional
     @Override
     public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
-        boolean isPaused = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).isPaused();
+        Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        boolean isPaused = book.isPaused();
+
         try {
             if (cover != null && !cover.isEmpty()) {
-                coverDao.update(bookId, cover.getBytes());
+                bookDao.updateCoverImage(book, cover.getBytes());
             }
             if (preview != null && !preview.isEmpty()) {
-                previewDao.update(bookId, preview.getBytes());
+                bookDao.updatePreviewFile(book, preview.getBytes());
             }
             if (bookFile != null && !bookFile.isEmpty()) {
-                bookFileDao.update(bookId, bookFile.getBytes());
+                bookDao.updateBookFile(book, bookFile.getBytes());
                 if (isPaused){
-                    isPaused = bookDao.recheckPaused(bookId);
+                    isPaused = bookDao.recheckPaused(book.getBookId());
                 }
             }
 
@@ -94,20 +88,8 @@ public class BookServiceImpl implements BookService {
             LOGGER.atWarn().setMessage("Failed to update book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
-        bookDao.modify(bookId, title, description, genre, price, pageCount, suggestedAge, isPaused);
+        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, isPaused);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public CoverImage getCover(long id) {
-        return coverDao.findById(id).orElseThrow(ImageNotFoundException::new);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public BookPreview getPreview(long id) {
-         return previewDao.findById(id).orElseThrow(PdfNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
@@ -123,7 +105,13 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getAllSize());
+
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getAllSize());
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAll(page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -133,7 +121,13 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<Book>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
+
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
 
@@ -150,7 +144,13 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books =  bookDao.getWriterBooks(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
+
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getWriterBooks(writerId, title, orderBy, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -160,23 +160,25 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
         List<Book> books = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize, isPublic);
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
-    }
 
-
-    @Transactional(readOnly = true)
-    @Override
-    public BookFile getBookFile(long bookId) {
-        return bookFileDao.findById(bookId).orElseThrow(PdfNotFoundException::new);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public boolean loggedUserIsAuthor(long bookId) {
-        if (us.isLoggedIn()) {
-            return bookDao.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(us.getLoggedUser().get().getEmail());
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getOwnedBooks(readerId, title, orderBy, page.getPageCount(), pageSize, isPublic);
+        } else {
+            return page;
         }
-        return false;
+    }
+
+
+    @Override
+    public boolean isAuthor(Book book, long userId) {
+        return book.getWriter().getUserId() == userId;
+    }
+
+    @Override
+    public boolean isAuthor(long bookId, String email) {
+        Optional<Book> maybeBook = bookDao.findById(bookId);
+        return maybeBook.isPresent() && maybeBook.get().getWriter().getEmail().equals(email);
     }
 
     @Transactional(readOnly = true)
@@ -197,15 +199,11 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> getProfileBooks(long usedId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
+    public PaginatedContent<Book> getProfileBooks(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
         if (asWriter){
-            return getWriterBooks(usedId, title, orderBy, pageNumber, pageSize);
+            return getWriterBooks(userId, title, orderBy, pageNumber, pageSize);
         } else {
-            if(ownsProfile) {
-                return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize, false);
-            } else {
-                return getOwnedBooks(usedId, title, orderBy, pageNumber, pageSize, true);
-            }
+            return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, !ownsProfile);
         }
     }
 }

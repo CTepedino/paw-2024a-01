@@ -36,14 +36,14 @@ public class CybraryUserDetailsService implements UserDetailsService {
         String password = user.getPassword();
 
         if (user.getPassword() == null){
-            password = us.fillMissingWriterData(user, user.getEmail());
+            password = us.fillMissingWriterData(user.getUserId(),user.getEmail());
         }
 
         if (!user.isEnabled()){
             us.resendValidation(username);
         }
 
-        List<SimpleGrantedAuthority> authorities = us.getRoles(user.getUserId()).stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+        List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
 
         return new CybraryAuthUserDetails(user.getEmail(), password, user.isEnabled(), true, true, true, authorities);
     }
