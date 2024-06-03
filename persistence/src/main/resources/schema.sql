@@ -194,3 +194,16 @@ CREATE TABLE IF NOT EXISTS email_validations(
     code VARCHAR(5) NOT NULL,
     expiration TIMESTAMP NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS questions(
+    question_id SERIAL PRIMARY KEY,
+    book_id INT NOT NULL,
+    questioner_id INT NOT NULL,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    question_date TIMESTAMP default now(),
+    answer_date TIMESTAMP,
+
+    FOREIGN KEY (questioner_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);

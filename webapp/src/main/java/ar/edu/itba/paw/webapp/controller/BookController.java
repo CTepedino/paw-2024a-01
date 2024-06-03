@@ -6,16 +6,14 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.exception.IllegalQuestionException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.webapp.form.EditBookForm;
-import ar.edu.itba.paw.webapp.form.NewBookForm;
-import ar.edu.itba.paw.webapp.form.ReviewForm;
-import ar.edu.itba.paw.webapp.form.ReviewSortForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +36,16 @@ public class BookController {
     private final BookService bs;
     private final ReviewService rs;
     private final OrderService os;
+    private final QuestionService qs;
 
 
     @Autowired
-    public BookController(final PublishService ps, final BookService bs, final ReviewService rs, final OrderService os){
+    public BookController(final PublishService ps, final BookService bs, final ReviewService rs, final OrderService os, final QuestionService qs){
         this.ps = ps;
         this.bs = bs;
         this.rs = rs;
         this.os = os;
+        this.qs = qs;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
@@ -93,6 +93,8 @@ public class BookController {
             @ModelAttribute("loggedUser") User loggedUser,
             @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
             @ModelAttribute("reviewForm") ReviewForm form,
+            @ModelAttribute("questionForm") QuestionForm questionForm,
+            @ModelAttribute("answerForm") AnswerForm answerForm,
             @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
             final BindingResult error
     ){
@@ -105,11 +107,8 @@ public class BookController {
         }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        List<Question> questions = new ArrayList<>();
-        questions.add(new Question(bookId, loggedUser, "¿Es bueno?", null, book.getPublishDate(), null));
-        questions.add(new Question(bookId, loggedUser, "¿Cuándo será la próxima actualización del libro?", "La próxima actualización está programada para el próximo mes.", book.getPublishDate(), book.getPublishDate()));
-        questions.add(new Question(bookId, loggedUser, "¿De que trata el libro?", "Lo podes ver en la descripcion.", book.getPublishDate(), book.getPublishDate()));
         List<Book> recommendations = bs.getRecommendations(book);
+        PaginatedContent<Question> questions = qs.getAll(bookId, 1, 10);
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
@@ -197,6 +196,33 @@ public class BookController {
 
         rs.createOrUpdate(bookId, user, form.getRating(), form.getReview());
 
+        return new ModelAndView("redirect:/book/"+bookId);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/question")
+    public ModelAndView createQuestion(
+            @Valid @ModelAttribute("QuestionForm") QuestionForm questionForm,
+            final BindingResult error,
+            @PathVariable("bookId") long bookId
+    ){
+        if (error.hasErrors()){
+            throw new IllegalQuestionException();
+        }
+        qs.create(bookId, questionForm.getQuestion());
+        return new ModelAndView("redirect:/book/"+bookId);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/{questionId:\\d+}/answer")
+    public ModelAndView answerQuestion(
+            @Valid @ModelAttribute("answerForm") AnswerForm answerForm,
+            final BindingResult error,
+            @PathVariable("bookId") long bookId,
+            @PathVariable("questionId") long questionId
+    ){
+        if (error.hasErrors()){
+            throw new IllegalQuestionException();
+        }
+        qs.answer(questionId, answerForm.getAnswer());
         return new ModelAndView("redirect:/book/"+bookId);
     }
 

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
-
+    <link href="<c:url value="/css/questions.css"/>" rel="stylesheet"/>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
@@ -150,10 +150,73 @@
         >
         </object>
 
-        <div class="divider"></div>
-        <c:set var="questions" value="${questions}" scope="request"/>
-        <c:set var="isAuthor" value="${isAuthor}" scope="request"/>
-        <%@include file="components/questions.jsp" %>
+        <c:if test="${isLoggedIn}">
+            <div class="divider"></div>
+            <h5><spring:message code="book.bookInfo.questions.title"/></h5>
+            <c:if test="${not isAuthor}">
+                <c:url value="/book/${bookId}/question" var="questionPostUrl"/>
+                <form:form
+                        modelAttribute="questionForm"
+                        action="${questionPostUrl}"
+                        method="post"
+                >
+                    <div class="row">
+                    <div class="input-field col s9">
+                        <i class="material-icons prefix">question_answer</i>
+                        <form:label path="question"  maxlength="500"><spring:message code="book.bookInfo.questions.label"/></form:label>
+                        <form:textarea path="question" class="materialize-textarea"/>
+                    </div>
+                <div class="col s3 send-button">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                        <spring:message code="book.bookInfo.questions.send"/>
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+                </div>
+            </form:form>
+        </c:if>
+        <div class="qa-list">
+            <c:forEach var="question" items="${questions.page}">
+                <c:if test="${question.answer ne null}">
+                    <span class="question"><c:out value="${question.question}"/> </span>
+                    <span class="date"><c:out value="${question.getFormattedDate(pageContext.request.locale)}"/></span>
+                    <div class="answer">
+                        <i class="material-icons prefix">subdirectory_arrow_right</i>
+                        <span><c:out value="${question.answer}"/></span>
+                        <span class="date"><c:out value="${question.getFormattedAnswerDate(pageContext.request.locale)}"/></span>
+                    </div>
+                    <br/>
+                </c:if>
+                <c:if test="${question.answer eq null and isAuthor}">
+                    <span class="question"><c:out value="${question.question}"/> </span>
+                    <span class="date"><c:out value="${question.getFormattedDate(pageContext.request.locale)}"/></span>
+                    <div class="answer">
+                        <c:url value="/book/${bookId}/${question.questionId}/answer" var="answerPostUrl"/>
+                        <form:form
+                                modelAttribute="answerForm"
+                                action="${answerPostUrl}"
+                                method="post"
+                                class="answer-form"
+                        >
+                            <div class="row">
+                                <div class="input-field col s9 answer-input">
+                                    <i class="material-icons prefix">subdirectory_arrow_right</i>
+                                    <form:label path="answer"><spring:message code="book.bookInfo.answer.label"/></form:label>
+                                    <form:textarea class="materialize-textarea" path="answer"/>
+                                </div>
+                                <div class="col s3">
+                                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                                        <spring:message code="book.bookInfo.answer.send"/>
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </c:if>
+            </c:forEach>
+        </div>
+        </c:if>
 
         <c:if test="${not empty recommendations}">
             <div class="divider"></div>
