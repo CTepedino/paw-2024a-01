@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -215,6 +216,7 @@ public class BookJpaDao implements BookDao {
         );
     }
 
+
     @Override
     public boolean recheckPaused(long bookId) {
         TypedQuery<Boolean> query = em.createQuery(
@@ -244,5 +246,30 @@ public class BookJpaDao implements BookDao {
         query.setFirstResult(offset);
 
         return (List<BookGenre>) query.getResultStream().map(genre -> BookGenre.valueOf((String) genre)).collect(Collectors.toList());
+    }
+
+    @Override
+    public WishlistItem addToWishlist(User user, Book book){
+        WishlistItem wishlistItem = new WishlistItem(user, book);
+        em.persist(wishlistItem);
+        return wishlistItem;
+    }
+
+    @Override
+    public void removeFromWishlist(long userId, long bookId){
+        Query deleteQuery = em.createQuery("DELETE FROM WishlistItem w WHERE w.user.userId = :userId AND w.book.bookId = :bookId");
+        deleteQuery.setParameter("userId", userId);
+        deleteQuery.setParameter("bookId", bookId);
+        deleteQuery.executeUpdate();
+    }
+
+    @Override
+    public List<Book> getWishlist(long userId, int offset, int limit){
+        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM wishlist WHERE user_id = :userId");
+        nativeQuery.setParameter("userId", userId);
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 }
