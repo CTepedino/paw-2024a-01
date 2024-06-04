@@ -65,8 +65,7 @@ public class BookJpaDao implements BookDao {
         return preview;
     }
 
-    @Override
-    public BookFile createBookFile(Book book, byte[] bookFile) {
+    private BookFile createBookFile(Book book, byte[] bookFile) {
         BookFile file = new BookFile(book.getBookId(), bookFile);
         em.persist(file);
         return file;
@@ -82,9 +81,18 @@ public class BookJpaDao implements BookDao {
         book.getPreview().setFile(previewFile);
     }
 
-    @Override
-    public void updateBookFile(Book book, byte[] bookFile) {
+    private void updateBookFile(Book book, byte[] bookFile) {
         book.getBookFile().setFile(bookFile);
+    }
+
+    @Override
+    public BookFile createOrUpdateBookFile(Book book, byte[] bookFile) {
+        if (book.getBookFile()==null){
+            createBookFile(book, bookFile);
+        } else {
+            updateBookFile(book, bookFile);
+        }
+        return book.getBookFile();
     }
 
     @Override
@@ -215,26 +223,6 @@ public class BookJpaDao implements BookDao {
         );
     }
 
-    @Override
-    public boolean recheckPaused(long bookId) {
-        TypedQuery<Boolean> query = em.createQuery(
-            """
-                    SELECT NOT EXISTS (
-                        SELECT 1
-                        FROM Book b
-                        JOIN User u ON b.writer.userId = u.userId
-                        WHERE b.bookId = :bookId AND u.cbu IS NOT NULL AND EXISTS(
-                            SELECT 1
-                            FROM BookFile bf
-                            WHERE bf.id = b.bookId
-                        )
-                    )
-                """,
-            Boolean.class
-        );
-        query.setParameter("bookId", bookId);
-        return query.getSingleResult();
-    }
 
     @SuppressWarnings("unchecked")
     @Override

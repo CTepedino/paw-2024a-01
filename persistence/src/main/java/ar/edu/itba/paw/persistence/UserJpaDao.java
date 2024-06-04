@@ -93,6 +93,7 @@ public class UserJpaDao implements UserDao {
                 END
             WHERE b.writer.userId = :userId
         """);
+        query.setParameter("userId",userId);
         query.executeUpdate();
     }
 
