@@ -67,6 +67,8 @@ public class BookServiceImpl implements BookService {
     public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
         Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
 
+        boolean pause = book.isPaused();
+
         try {
             if (cover != null && !cover.isEmpty()) {
                 bookDao.updateCoverImage(book, cover.getBytes());
@@ -76,8 +78,10 @@ public class BookServiceImpl implements BookService {
             }
             if (bookFile != null && !bookFile.isEmpty()) {
                 bookDao.createOrUpdateBookFile(book, bookFile.getBytes());
-                if (book.isPaused()){
-                    bookDao.recheckPaused(book);
+                if (pause){
+                    if (book.getWriter().getCbu()!=null){
+                        pause = false;
+                    }
                 }
             }
 
@@ -85,7 +89,7 @@ public class BookServiceImpl implements BookService {
             LOGGER.atWarn().setMessage("Failed to update book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
-        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge);
+        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, pause);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 

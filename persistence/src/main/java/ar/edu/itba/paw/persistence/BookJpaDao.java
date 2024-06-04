@@ -41,13 +41,14 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
+    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused) {
         book.setTitle(title);
         book.setDescription(description);
         book.setGenre(genre);
         book.setPrice(price);
         book.setPageCount(pageCount);
         book.setSuggestedAge(suggestedAge);
+        book.setPaused(isPaused);
     }
 
     @Override
@@ -222,12 +223,6 @@ public class BookJpaDao implements BookDao {
         );
     }
 
-    @Override
-    public void recheckPaused(Book book) {
-        if (book.getBookFile()!=null && book.getWriter().getCbu()!=null){
-            book.setPaused(false);
-        }
-    }
 
     @SuppressWarnings("unchecked")
     @Override

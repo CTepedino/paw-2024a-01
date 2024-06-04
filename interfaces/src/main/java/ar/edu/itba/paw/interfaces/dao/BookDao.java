@@ -39,7 +39,8 @@ public interface BookDao {
             BookGenre genre,
             BigDecimal price,
             int pageCount,
-            int suggestedAge
+            int suggestedAge,
+            boolean isPaused
     );
 
     CoverImage createCoverImage(Book book, byte[] coverImage);
@@ -94,8 +95,6 @@ public interface BookDao {
     List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int offset, int limit, boolean isPublic);
 
     long getOwnedBooksSize(long readerId, String title, boolean isPublic);
-
-    void recheckPaused(Book book);
 
     List<BookGenre> getGenresByBookCount(int limit, int offset);
 
