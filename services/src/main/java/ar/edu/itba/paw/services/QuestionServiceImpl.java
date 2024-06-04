@@ -76,4 +76,84 @@ public class QuestionServiceImpl implements QuestionService {
             return page;
         }
     }
+
+    @Override
+    public PaginatedContent<Question> getAllFromUser(long userId, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+
+
+        long size = questionDao.getAllFromUserSize(userId);
+
+        List<Question> questions = questionDao.getAllFromUser(userId, (pageNumber-1)*pageSize, pageSize);
+
+        PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
+
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAllFromUser(userId, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
+    }
+
+    @Override
+    public PaginatedContent<Question> getAllFromUserAndBook(long userId, long bookId, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+
+
+        long size = questionDao.getAllFromUserAndBookSize(userId, bookId);
+
+        List<Question> questions = questionDao.getAllFromUserAndBook(userId, bookId, (pageNumber-1)*pageSize, pageSize);
+
+        PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
+
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAllFromUserAndBook(userId, bookId, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
+    }
+
+    @Override
+    public PaginatedContent<Question> getAllFromWriter(long userId, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+
+
+        long size = questionDao.getAllFromWriterSize(userId);
+
+        List<Question> questions = questionDao.getAllFromWriter(userId, (pageNumber-1)*pageSize, pageSize);
+
+        PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
+
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAllFromWriter(userId, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
+    }
+
+    @Override
+    public PaginatedContent<Question> getAllFullQuestionsNotUser(long userId, long bookId, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+
+
+        long size = questionDao.getAllFullQuestionsNotSUsersSize(bookId, userId);
+
+        List<Question> questions = questionDao.getAllFullQuestionsNotUser(bookId, userId, (pageNumber-1)*pageSize, pageSize);
+
+        PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
+
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAllFullQuestionsNotUser(bookId, userId, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
+    }
 }

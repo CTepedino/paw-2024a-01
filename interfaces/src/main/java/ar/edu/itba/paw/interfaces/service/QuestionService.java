@@ -10,4 +10,13 @@ public interface QuestionService {
     void answer(long questionId, String answer);
 
     PaginatedContent<Question> getAll(long bookId, int pageNumber, int pageSize);
+
+    PaginatedContent<Question> getAllFromUser(long userId, int pageNumber, int pageSize);
+
+    PaginatedContent<Question> getAllFromUserAndBook(long userId, long bookId, int pageNumber, int pageSize);
+
+    PaginatedContent<Question> getAllFromWriter(long userId, int pageNumber, int pageSize);
+
+    PaginatedContent<Question> getAllFullQuestionsNotUser(long userId, long bookId, int pageNumber, int pageSize);
+
 }

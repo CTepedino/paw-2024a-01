@@ -32,6 +32,7 @@ public class BookController {
 
     private static final Integer REVIEW_PAGE_SIZE=5;
 
+    private static final Integer QUESTION_PAGE_SIZE=5;
     private final PublishService ps;
     private final BookService bs;
     private final ReviewService rs;
@@ -93,7 +94,9 @@ public class BookController {
             @ModelAttribute("loggedUser") User loggedUser,
             @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
             @ModelAttribute("reviewForm") ReviewForm form,
+            @RequestParam(value = "myQuestionsPage", defaultValue = "1") Integer myQuestionsPage,
             @ModelAttribute("questionForm") QuestionForm questionForm,
+            @RequestParam(value = "questionsPage", defaultValue = "1") Integer questionsPage,
             @ModelAttribute("answerForm") AnswerForm answerForm,
             @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
             final BindingResult error
@@ -108,7 +111,7 @@ public class BookController {
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
-        PaginatedContent<Question> questions = qs.getAll(bookId, 1, 10);
+        PaginatedContent<Question> myQuestions = loggedUser!=null? qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, myQuestionsPage, QUESTION_PAGE_SIZE): null;
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
@@ -116,6 +119,8 @@ public class BookController {
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         boolean existsOrder = os.existsOrder(bookId);
+        PaginatedContent<Question> questions = null;
+        questions = isAuthor? qs.getAll(bookId, questionsPage, QUESTION_PAGE_SIZE) : (loggedUser!=null? qs.getAllFullQuestionsNotUser(loggedUser.getUserId(), bookId, questionsPage, QUESTION_PAGE_SIZE) : null);
 
         if (loggedUserReview.isPresent()){
             form.setRating(loggedUserReview.get().getRating());
@@ -127,6 +132,7 @@ public class BookController {
         mav.addObject("book", book);
         mav.addObject("order", order.orElse(null));
         mav.addObject("questions", questions);
+        mav.addObject("myQuestions", myQuestions);
         mav.addObject("recommendations", recommendations);
         mav.addObject("reviews", reviews);
         mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
@@ -201,12 +207,12 @@ public class BookController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/question")
     public ModelAndView createQuestion(
-            @Valid @ModelAttribute("QuestionForm") QuestionForm questionForm,
-            final BindingResult error,
-            @PathVariable("bookId") long bookId
+            @PathVariable("bookId") final long bookId,
+            @Valid @ModelAttribute("questionForm") final QuestionForm questionForm,
+            final BindingResult error
     ){
         if (error.hasErrors()){
-            throw new IllegalQuestionException();
+            return new ModelAndView("redirect:/book/"+bookId);
         }
         qs.create(bookId, questionForm.getQuestion());
         return new ModelAndView("redirect:/book/"+bookId);
@@ -214,13 +220,13 @@ public class BookController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/{questionId:\\d+}/answer")
     public ModelAndView answerQuestion(
-            @Valid @ModelAttribute("answerForm") AnswerForm answerForm,
+            @PathVariable("bookId") final long bookId,
+            @Valid @ModelAttribute("answerForm") final AnswerForm answerForm,
             final BindingResult error,
-            @PathVariable("bookId") long bookId,
             @PathVariable("questionId") long questionId
     ){
         if (error.hasErrors()){
-            throw new IllegalQuestionException();
+            return new ModelAndView("redirect:/book/"+bookId);
         }
         qs.answer(questionId, answerForm.getAnswer());
         return new ModelAndView("redirect:/book/"+bookId);
