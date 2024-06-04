@@ -41,14 +41,13 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused) {
+    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         book.setTitle(title);
         book.setDescription(description);
         book.setGenre(genre);
         book.setPrice(price);
         book.setPageCount(pageCount);
         book.setSuggestedAge(suggestedAge);
-        book.setPaused(isPaused);
     }
 
     @Override
@@ -65,8 +64,7 @@ public class BookJpaDao implements BookDao {
         return preview;
     }
 
-    @Override
-    public BookFile createBookFile(Book book, byte[] bookFile) {
+    private BookFile createBookFile(Book book, byte[] bookFile) {
         BookFile file = new BookFile(book.getBookId(), bookFile);
         em.persist(file);
         return file;
@@ -82,9 +80,18 @@ public class BookJpaDao implements BookDao {
         book.getPreview().setFile(previewFile);
     }
 
-    @Override
-    public void updateBookFile(Book book, byte[] bookFile) {
+    private void updateBookFile(Book book, byte[] bookFile) {
         book.getBookFile().setFile(bookFile);
+    }
+
+    @Override
+    public BookFile createOrUpdateBookFile(Book book, byte[] bookFile) {
+        if (book.getBookFile()==null){
+            createBookFile(book, bookFile);
+        } else {
+            updateBookFile(book, bookFile);
+        }
+        return book.getBookFile();
     }
 
     @Override
@@ -216,24 +223,10 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public boolean recheckPaused(long bookId) {
-        TypedQuery<Boolean> query = em.createQuery(
-            """
-                    SELECT NOT EXISTS (
-                        SELECT 1
-                        FROM Book b
-                        JOIN User u ON b.writer.userId = u.userId
-                        WHERE b.bookId = :bookId AND u.cbu IS NOT NULL AND EXISTS(
-                            SELECT 1
-                            FROM BookFile bf
-                            WHERE bf.id = b.bookId
-                        )
-                    )
-                """,
-            Boolean.class
-        );
-        query.setParameter("bookId", bookId);
-        return query.getSingleResult();
+    public void recheckPaused(Book book) {
+        if (book.getBookFile()!=null && book.getWriter().getCbu()!=null){
+            book.setPaused(false);
+        }
     }
 
     @SuppressWarnings("unchecked")

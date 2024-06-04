@@ -7,7 +7,7 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.*;
-import ar.edu.itba.paw.models.reviews.Review;
+
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -54,7 +53,7 @@ public class BookServiceImpl implements BookService {
         try {
             bookDao.createPreviewFile(book, preview.getBytes());
             bookDao.createCoverImage(book, cover.getBytes());
-            bookDao.createBookFile(book, bookFile.getBytes());
+            bookDao.createOrUpdateBookFile(book, bookFile.getBytes());
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to create book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
@@ -68,8 +67,6 @@ public class BookServiceImpl implements BookService {
     public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
         Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        boolean isPaused = book.isPaused();
-
         try {
             if (cover != null && !cover.isEmpty()) {
                 bookDao.updateCoverImage(book, cover.getBytes());
@@ -78,9 +75,9 @@ public class BookServiceImpl implements BookService {
                 bookDao.updatePreviewFile(book, preview.getBytes());
             }
             if (bookFile != null && !bookFile.isEmpty()) {
-                bookDao.updateBookFile(book, bookFile.getBytes());
-                if (isPaused){
-                    isPaused = bookDao.recheckPaused(book.getBookId());
+                bookDao.createOrUpdateBookFile(book, bookFile.getBytes());
+                if (book.isPaused()){
+                    bookDao.recheckPaused(book);
                 }
             }
 
@@ -88,7 +85,7 @@ public class BookServiceImpl implements BookService {
             LOGGER.atWarn().setMessage("Failed to update book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
         }
-        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, isPaused);
+        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 

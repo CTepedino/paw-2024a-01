@@ -25,8 +25,6 @@ public interface UserDao {
 
     void giveRole(User user, UserRoles role);
 
-
-    //TODO: mover a BookDao?
     void recheckAllPaused(long userId);
 
     List<User> getUsersWithPausedBooks();
