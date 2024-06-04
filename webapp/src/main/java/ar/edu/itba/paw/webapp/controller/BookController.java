@@ -6,7 +6,6 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
-import ar.edu.itba.paw.models.exception.IllegalQuestionException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
@@ -16,8 +15,6 @@ import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.webapp.form.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +30,9 @@ public class BookController {
 
     private static final Integer REVIEW_PAGE_SIZE=5;
 
-    private static final Integer QUESTION_PAGE_SIZE=5;
+    private static final Integer BOOK_INFO_QUESTION_PAGE_SIZE=5;
+
+    private static final Integer QUESTION_PAGE_SIZE=10;
     private final PublishService ps;
     private final BookService bs;
     private final ReviewService rs;
@@ -118,7 +116,7 @@ public class BookController {
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
-        PaginatedContent<Question> myQuestions = loggedUser!=null? qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, QUESTION_PAGE_SIZE): null;
+        PaginatedContent<Question> myQuestions = loggedUser!=null? qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE): null;
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), page, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
@@ -127,7 +125,7 @@ public class BookController {
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         boolean existsOrder = os.existsOrder(bookId);
         PaginatedContent<Question> questions = null;
-        questions = isAuthor? qs.getAll(bookId, page, QUESTION_PAGE_SIZE) : (loggedUser!=null? qs.getAllFullQuestionsNotUser(loggedUser.getUserId(), bookId, page, QUESTION_PAGE_SIZE) : null);
+        questions = isAuthor? qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE) : (loggedUser!=null? qs.getAllFullQuestionsNotUser(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE) : null);
 
         if (loggedUserReview.isPresent()){
             form.setRating(loggedUserReview.get().getRating());
@@ -208,9 +206,9 @@ public class BookController {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/review")
+    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/reviews/review")
     public ModelAndView createOrUpdateReview(
-            @Valid @ModelAttribute("reviewForm") ReviewForm form,
+            @Valid @ModelAttribute("reviewForm") final ReviewForm form,
             final BindingResult error,
             @PathVariable("bookId") long bookId,
             @ModelAttribute("loggedUser") User user
@@ -232,13 +230,13 @@ public class BookController {
             final BindingResult error
     ){
         if (error.hasErrors()){
-            return new ModelAndView("redirect:/book/"+bookId);
+            return new ModelAndView("redirect:/book/"+bookId+"/myQuestions");
         }
         qs.create(bookId, questionForm.getQuestion());
-        return new ModelAndView("redirect:/book/"+bookId);
+        return new ModelAndView("redirect:/book/"+bookId+"/myQuestions");
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/{questionId:\\d+}/answer")
+    @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/questions/{questionId:\\d+}/answer")
     public ModelAndView answerQuestion(
             @PathVariable("bookId") final long bookId,
             @Valid @ModelAttribute("answerForm") final AnswerForm answerForm,
@@ -246,18 +244,53 @@ public class BookController {
             @PathVariable("questionId") long questionId
     ){
         if (error.hasErrors()){
-            return new ModelAndView("redirect:/book/"+bookId);
+            return new ModelAndView("redirect:/book/"+bookId+"/questions");
         }
         qs.answer(questionId, answerForm.getAnswer());
-        return new ModelAndView("redirect:/book/"+bookId);
+        return new ModelAndView("redirect:/book/"+bookId+"/questions");
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/questions")
-    public ModelAndView questions(@ModelAttribute("loggedUser") User user){
-        PaginatedContent<Question> myQuestions = qs.getAllFromUser(user.getUserId(), 1, 10);
-        ModelAndView mav = new ModelAndView("myQuestions");
-        mav.addObject("questions", myQuestions);
+    public ModelAndView defaultQuestions(){
+        return new ModelAndView("redirect:/questions/myQuestions");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/questions/{tab:myQuestions|questions}")
+    public ModelAndView questions(
+            @ModelAttribute("loggedUser") User user,
+            @PathVariable("tab") String tab,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @ModelAttribute("answerForm") AnswerForm answerForm
+    ){
+        PaginatedContent<Question> myQuestions = qs.getAllFromUser(user.getUserId(), page, QUESTION_PAGE_SIZE);
+        PaginatedContent<Question> questions = qs.getAllFromWriter(user.getUserId(), page, QUESTION_PAGE_SIZE);
+        ModelAndView mav = new ModelAndView("questions");
+        mav.addObject("myQuestions", myQuestions);
+        mav.addObject("questions", questions);
+        mav.addObject("tab", tab);
+        mav.addObject("isAuthor", user.getRoles().contains(UserRoles.WRITER));
+        if(tab.matches("myQuestions")){
+            mav.addObject("pageNumber", myQuestions.getPageNumber());
+            mav.addObject("pageCount", myQuestions.getPageCount());
+        }
+        if(tab.matches("questions")){
+            mav.addObject("pageNumber", questions.getPageNumber());
+            mav.addObject("pageCount", questions.getPageCount());
+        }
         return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/questions/questions/{questionId:\\d+}/answer")
+    public ModelAndView answerQuestion2(
+            @Valid @ModelAttribute("answerForm") final AnswerForm answerForm,
+            final BindingResult error,
+            @PathVariable("questionId") long questionId
+    ){
+        if (error.hasErrors()){
+            return new ModelAndView("redirect:/questions/questions");
+        }
+        qs.answer(questionId, answerForm.getAnswer());
+        return new ModelAndView("redirect:/questions/questions");
     }
 
 

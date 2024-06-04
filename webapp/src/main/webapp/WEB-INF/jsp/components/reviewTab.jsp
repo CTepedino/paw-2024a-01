@@ -29,7 +29,7 @@
             <div class="row">
                 <h5 class="col s6"><spring:message code="book.bookInfo.reviews"/><br/></h5>
                 <div class=" col s6">
-                    <c:url value="/book/${book.bookId}" var="reviewOrderUrl"/>
+                    <c:url value="/book/${book.bookId}/reviews" var="reviewOrderUrl"/>
                     <%--@elvariable id="reviewSortForm" type="reviewSortForm"--%>
                     <form:form
                             action="${reviewOrderUrl}"
@@ -64,7 +64,7 @@
 </div>
 
 <div id="reviewModal" class="modal">
-    <c:url value="/book/${book.bookId}/review" var="postUrl"/>
+    <c:url value="/book/${book.bookId}/reviews/review" var="postUrl"/>
     <%--@elvariable id="reviewForm" type="reviewForm"--%>
     <form:form
             action="${postUrl}"

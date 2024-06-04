@@ -107,7 +107,7 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public long getAllFromWriterSize(long userId) {
-        return DaoUtils.getRowCount(em, "questions", "WHERE q.book.writer.id = :userId", Map.of("userId", userId));
+        return DaoUtils.getRowCount(em, "questions q LEFT JOIN books b ON q.book_id = b.book_id", "WHERE b.writer_id = :userId", Map.of("userId", userId));
     }
 
     @Override

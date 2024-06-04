@@ -270,14 +270,14 @@
         <c:if test="${tab eq 'myQuestions'}">
             <c:set var="myQuestions" value="${myQuestions}" scope="request"/>
             <c:set var="myQuestionsPage" value="${myQuestionsPage}" scope="request"/>
-            <%@include file="components/myQuestions.jsp"%>
+            <%@include file="components/myQuestionsTab.jsp"%>
         </c:if>
 
         <c:if test="${tab eq 'questions'}">
             <c:set var="questions" value="${questions}" scope="request"/>
             <c:set var="isAuthor" value="${isAuthor}" scope="request"/>
             <c:set var="answerForm" value="${answerForm}" scope="request"/>
-            <%@include file="components/questions.jsp"%>
+            <%@include file="components/questionsTab.jsp"%>
         </c:if>
 
         <c:if test="${tab eq 'reviews'}">
