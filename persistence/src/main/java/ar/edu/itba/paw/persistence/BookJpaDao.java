@@ -249,15 +249,15 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public WishlistItem addToWishlist(User user, Book book){
-        WishlistItem wishlistItem = new WishlistItem(user, book);
+    public WishlistItem addToWishlist(long userId, long bookId){
+        WishlistItem wishlistItem = new WishlistItem(userId, bookId);
         em.persist(wishlistItem);
         return wishlistItem;
     }
 
     @Override
     public void removeFromWishlist(long userId, long bookId){
-        Query deleteQuery = em.createQuery("DELETE FROM WishlistItem w WHERE w.user.userId = :userId AND w.book.bookId = :bookId");
+        Query deleteQuery = em.createQuery("DELETE FROM WishlistItem w WHERE w.userId = :userId AND w.bookId = :bookId");
         deleteQuery.setParameter("userId", userId);
         deleteQuery.setParameter("bookId", bookId);
         deleteQuery.executeUpdate();
@@ -271,5 +271,10 @@ public class BookJpaDao implements BookDao {
         TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public long getWishlistSize(long userId) {
+        return DaoUtils.getRowCount(em, "wishlists", "WHERE user_id = :userId", Map.of("userId", userId));
     }
 }

@@ -101,10 +101,11 @@ public interface BookDao {
 
     List<BookGenre> getGenresByBookCount(int limit, int offset);
 
-    WishlistItem addToWishlist(User user, Book book);
+    WishlistItem addToWishlist(long userId, long bookId);
 
     void removeFromWishlist(long userId, long bookId);
 
     List<Book> getWishlist(long userId, int offset, int limit);
 
+    long getWishlistSize(long userId);
 }
