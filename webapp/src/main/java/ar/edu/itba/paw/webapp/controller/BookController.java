@@ -8,11 +8,13 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.IllegalQuestionException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,22 +89,27 @@ public class BookController {
         return new ModelAndView("redirect:/book/"+bookId);
     }
 
-
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
+    public ModelAndView defaultbookInfo(
+            @PathVariable("bookId") final long bookId
+    ){
+        return new ModelAndView("redirect:/book/" + bookId + "/reviews");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/{tab:myQuestions|questions|reviews}")
     public ModelAndView bookInfo(
             @PathVariable("bookId") final long bookId,
+            @PathVariable("tab") String tab,
             @ModelAttribute("loggedUser") User loggedUser,
-            @RequestParam(value = "reviewPage", defaultValue = "1") Integer reviewPage,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
             @ModelAttribute("reviewForm") ReviewForm form,
-            @RequestParam(value = "myQuestionsPage", defaultValue = "1") Integer myQuestionsPage,
             @ModelAttribute("questionForm") QuestionForm questionForm,
-            @RequestParam(value = "questionsPage", defaultValue = "1") Integer questionsPage,
             @ModelAttribute("answerForm") AnswerForm answerForm,
             @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
             final BindingResult error
     ){
-        if (reviewPage < 1){
-            reviewPage = 1;
+        if (page < 1){
+            page = 1;
         }
 
         if (error.hasErrors()){
@@ -111,8 +118,8 @@ public class BookController {
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         List<Book> recommendations = bs.getRecommendations(book);
-        PaginatedContent<Question> myQuestions = loggedUser!=null? qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, myQuestionsPage, QUESTION_PAGE_SIZE): null;
-        PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), reviewPage, REVIEW_PAGE_SIZE);
+        PaginatedContent<Question> myQuestions = loggedUser!=null? qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, QUESTION_PAGE_SIZE): null;
+        PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), page, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
         int avgRating = rs.getAverageRating(bookId);
@@ -120,7 +127,7 @@ public class BookController {
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         boolean existsOrder = os.existsOrder(bookId);
         PaginatedContent<Question> questions = null;
-        questions = isAuthor? qs.getAll(bookId, questionsPage, QUESTION_PAGE_SIZE) : (loggedUser!=null? qs.getAllFullQuestionsNotUser(loggedUser.getUserId(), bookId, questionsPage, QUESTION_PAGE_SIZE) : null);
+        questions = isAuthor? qs.getAll(bookId, page, QUESTION_PAGE_SIZE) : (loggedUser!=null? qs.getAllFullQuestionsNotUser(loggedUser.getUserId(), bookId, page, QUESTION_PAGE_SIZE) : null);
 
         if (loggedUserReview.isPresent()){
             form.setRating(loggedUserReview.get().getRating());
@@ -141,6 +148,19 @@ public class BookController {
         mav.addObject("isAuthor", isAuthor);
         mav.addObject("reviewOrders", List.of(ReviewOrderBy.values()));
         mav.addObject("existsOrder", existsOrder);
+        mav.addObject("tab", tab);
+        if(tab.matches("reviews")){
+            mav.addObject("pageNumber", reviews.getPageNumber());
+            mav.addObject("pageCount", reviews.getPageCount());
+        }
+        if(tab.matches("myQuestions")){
+            mav.addObject("pageNumber", myQuestions.getPageNumber());
+            mav.addObject("pageCount", myQuestions.getPageCount());
+        }
+        if(tab.matches("questions")){
+            mav.addObject("pageNumber", questions.getPageNumber());
+            mav.addObject("pageCount", questions.getPageCount());
+        }
         return mav;
     }
 
@@ -230,6 +250,14 @@ public class BookController {
         }
         qs.answer(questionId, answerForm.getAnswer());
         return new ModelAndView("redirect:/book/"+bookId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/questions")
+    public ModelAndView questions(@ModelAttribute("loggedUser") User user){
+        PaginatedContent<Question> myQuestions = qs.getAllFromUser(user.getUserId(), 1, 10);
+        ModelAndView mav = new ModelAndView("myQuestions");
+        mav.addObject("questions", myQuestions);
+        return mav;
     }
 
 

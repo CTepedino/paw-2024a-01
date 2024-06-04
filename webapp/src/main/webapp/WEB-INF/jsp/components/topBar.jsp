@@ -94,6 +94,12 @@
                                     </a>
                                     <hr>
                                 </c:if>
+                                <a href="<c:url value="/questions"/>" class="sub-menu-link">
+                                    <i class="material-icons go-icon">question_answer</i>
+                                    <p><spring:message code="topBar.questions"/></p>
+                                    <span class="go-arrow">></span>
+                                </a>
+                                <hr>
                                 <a href="<c:url value="/addBook"/>" class="sub-menu-link">
                                     <i class="material-icons go-icon">book</i>
                                     <p><spring:message code="topBar.publish"/></p>

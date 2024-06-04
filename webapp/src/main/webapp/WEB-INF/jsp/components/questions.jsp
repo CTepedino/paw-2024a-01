@@ -5,14 +5,13 @@
 <html>
 <head>
     <link rel="stylesheet" href="<c:url value="/css/questions.css"/>"/>
+    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
 <body>
 
 <div class="qa-list">
 
-    <c:if test="${not isAuthor}">
-        <h5><spring:message code="book.bookInfo.questions.otherQuestions"/></h5>
-    </c:if>
     <c:if test="${questions.page.size()==0}">
         <h6><spring:message code="book.bookInfo.questions.noQuestions"/></h6>
     </c:if>
@@ -57,16 +56,16 @@
             </div>
         </c:if>
     </c:forEach>
-    <c:if test="${questions.pageCount gt 1}">
-        <script src="<c:url value="/js/paginationControls.js"/>"></script>
-        <script>
-            const paginationButtonsQuestions = new PaginationButtons(${questions.pageCount}, Math.min(10,${questions.pageCount}), ${questions.pageNumber}, false);
-            paginationButtonsQuestions.render();
-            paginationButtonsQuestions.onChange(e => {
-                window.location.href = "<c:url value="?questionsPage="/>" + e.target.value + "#questions";
-            });
-        </script>
-    </c:if>
+<%--    <c:if test="${questions.pageCount gt 1}">--%>
+<%--        <script src="<c:url value="/js/paginationControls.js"/>"></script>--%>
+<%--        <script>--%>
+<%--            const paginationButtonsQuestions = new PaginationButtons(${questions.pageCount}, Math.min(10,${questions.pageCount}), ${questions.pageNumber}, false);--%>
+<%--            paginationButtonsQuestions.render();--%>
+<%--            paginationButtonsQuestions.onChange(e => {--%>
+<%--                window.location.href = "<c:url value="?page="/>" + e.target.value;--%>
+<%--            });--%>
+<%--        </script>--%>
+<%--    </c:if>--%>
 </div>
 
 </body>

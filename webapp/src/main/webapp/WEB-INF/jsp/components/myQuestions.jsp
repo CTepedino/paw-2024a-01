@@ -4,11 +4,11 @@
 <html>
 <head>
     <link rel="stylesheet" href="<c:url value="/css/questions.css"/>"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
 <body>
 <section id="myQuestions">
     <c:if test="${myQuestions ne null}">
-        <h5><spring:message code="book.bookInfo.questions.myQuestions"/></h5>
         <c:if test="${myQuestions.page.size()==0}">
             <h6><spring:message code="book.bookInfo.questions.noQuestions"/></h6>
         </c:if>
@@ -28,18 +28,18 @@
             </div>
             <br/>
         </c:forEach>
-        <c:if test="${myQuestions.pageCount gt 1}">
-            <script src="<c:url value="/js/paginationControls.js"/>"></script>
-            <script>
-                const paginationButtonsMyQuestions = new PaginationButtons(${myQuestions.pageCount}, Math.min(10, ${myQuestions.pageCount}), ${myQuestions.pageNumber}, false);
-                paginationButtonsMyQuestions.render();
-                paginationButtonsMyQuestions.onChange(e => {
-                    window.location.href = "<c:url value='?myQuestionsPage='/>" + e.target.value + "#myQuestions";
-                });
-            </script>
-        </c:if>
-        <div class="divider"></div>
+<%--        <c:if test="${questions.pageCount gt 1}">--%>
+<%--            <script src="<c:url value="/js/paginationControls.js"/>"></script>--%>
+<%--            <script>--%>
+<%--                const paginationButtonsQuestions = new PaginationButtons(${myQuestions.pageCount}, Math.min(10,${myQuestions.pageCount}), ${myQuestions.pageNumber}, false);--%>
+<%--                paginationButtonsQuestions.render();--%>
+<%--                paginationButtonsQuestions.onChange(e => {--%>
+<%--                    window.location.href = "<c:url value="?page="/>" + e.target.value + "#myQuestions";--%>
+<%--                });--%>
+<%--            </script>--%>
+<%--        </c:if>--%>
     </c:if>
 </section>
 </body>
+
 </html>
