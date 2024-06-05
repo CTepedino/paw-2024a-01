@@ -33,7 +33,7 @@ public interface OrderService {
 
     boolean canAdvanceOrder(long orderId, String email);
 
-    void updateOrderWriterSide(long orderId, boolean approved);
+    void updateOrderWriterSide(long orderId, boolean approved, String rejectedReason);
 
     void updateOrderBuyerSide(long orderId, MultipartFile receipt);
 

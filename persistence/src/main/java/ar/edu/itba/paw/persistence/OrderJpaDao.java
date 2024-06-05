@@ -52,6 +52,12 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
+    public void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, String rejectedReason){
+        update(order, orderStatus, date, isPublic);
+        order.setRejectedReason(rejectedReason);
+    }
+
+    @Override
     public PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type) {
         PaymentReceipt receipt = new PaymentReceipt(order.getOrderId(), paymentReceipt, type);
         em.persist(receipt);

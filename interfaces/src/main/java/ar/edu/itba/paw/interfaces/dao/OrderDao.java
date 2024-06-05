@@ -20,6 +20,8 @@ public interface OrderDao {
 
     void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
 
+    void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, String rejectedReason);
+
     PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type);
 
     void updatePaymentReceipt(Order order, byte[] paymentReceipt, String type);

@@ -95,7 +95,7 @@
                             <div id="reason" class="modal">
                                 <div class="modal-content">
                                     <h4><spring:message code="orders.purchases.status.reason_rejected"/></h4>
-                                    <p><c:out value="este pago se rechazo por ..."/></p>
+                                    <p><c:out value="${order.rejectedReason}"/></p>
                                 </div>
                                 <div class="modal-footer">
                                     <div class="footer-aligner">

@@ -92,6 +92,7 @@ UPDATE reviews SET review_id = DEFAULT;
 ALTER TABLE reviews ADD CONSTRAINT reviews_unique UNIQUE (reviewer_id, book_id);
 
 ALTER TABLE orders ADD CONSTRAINT orders_unique UNIQUE (book_id, buyer_id);
+ALTER TABLE orders ADD COLUMN rejectedReason VARCHAR(255);
 
 ALTER TABLE reviews DROP CONSTRAINT reviews_rating_check;
 ALTER TABLE reviews ADD CONSTRAINT reviews_rating_check CHECK (rating BETWEEN 0 AND 10);
@@ -160,6 +161,7 @@ CREATE TABLE IF NOT EXISTS orders(
     status VARCHAR(20) NOT NULL,
     date TIMESTAMP default now(),
     is_public BOOLEAN DEFAULT FALSE,
+    rejectedReason VARCHAR(255),
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,

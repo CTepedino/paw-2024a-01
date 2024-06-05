@@ -120,7 +120,7 @@ public class OrderController {
             return new ModelAndView("redirect:/sales");
         }
 
-        os.updateOrderWriterSide(id, form.getApproved());
+        os.updateOrderWriterSide(id, form.getApproved(), form.getReason());
         return new ModelAndView("redirect:/sales");
     }
 

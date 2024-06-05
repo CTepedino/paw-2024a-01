@@ -43,6 +43,9 @@ public class Order {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private PaymentReceipt paymentReceipt;
 
+    @Column(name = "rejectedReason")
+    private String rejectedReason;
+
     Order(){}
 
     public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
@@ -85,6 +88,10 @@ public class Order {
         return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale));
     }
 
+    public String getRejectedReason() {
+        return rejectedReason;
+    }
+
     public boolean isPublic() {
         return isPublic;
     }
@@ -103,5 +110,9 @@ public class Order {
 
     public PaymentReceipt getPaymentReceipt(){
         return paymentReceipt;
+    }
+
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
     }
 }

@@ -159,12 +159,12 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private void acceptOrReject(Order order, boolean approved){
+    private void acceptOrReject(Order order, boolean approved, String rejectedReason){
         if (approved) {
             orderDao.update(order, OrderStatus.COMPLETED, order.getDate(), order.isPublic());
             ms.sendReceiptApprovedEmail(order);
         } else {
-            orderDao.update(order, OrderStatus.REJECTED_PAYMENT, order.getDate(), order.isPublic());
+            orderDao.update(order, OrderStatus.REJECTED_PAYMENT, order.getDate(), order.isPublic(), rejectedReason);
             ms.sendReceiptDeniedEmail(order);
         }
         LOGGER.atDebug().setMessage("Successfully updated order status for orderId: {}").addArgument(order.getOrderId()).log();
@@ -172,11 +172,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public void updateOrderWriterSide(long orderId, boolean approved){
+    public void updateOrderWriterSide(long orderId, boolean approved, String rejectedReason){
         Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         if (order.getOrderStatus().equals(OrderStatus.WAITING_APPROVAL)) {
-            acceptOrReject(order, approved);
+            acceptOrReject(order, approved, rejectedReason);
         } else {
             LOGGER.atWarn().setMessage("Failed to update order status from writer side for orderId: {}").addArgument(orderId).log();
             throw new InvalidOrderUpdateException();
