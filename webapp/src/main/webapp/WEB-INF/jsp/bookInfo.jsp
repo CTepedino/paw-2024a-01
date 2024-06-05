@@ -42,10 +42,12 @@
                                 <c:out value="${author}"/>
                             </h6>
                         </a>
-                        <script src="<c:url value="/js/starRating.js"/>"></script>
-                        <script>
-                            new FixedStarRating(${avgRating});
-                        </script>
+                        <c:if test="${not empty reviews.page or loggedUserReview ne null}">
+                            <script src="<c:url value="/js/starRating.js"/>"></script>
+                            <script>
+                                new FixedStarRating(${avgRating});
+                            </script>
+                        </c:if>
                         <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
                     </div>
                     <div class="col s5">
