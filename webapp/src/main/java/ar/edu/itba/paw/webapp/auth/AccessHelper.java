@@ -41,6 +41,7 @@ public class AccessHelper {
         }
     }
 
+
     public boolean canAccessReceipt(Authentication auth, String id){
         if (!us.isLoggedIn()) {
             return false;
@@ -93,6 +94,24 @@ public class AccessHelper {
         long bookId = Long.parseLong(id);
         return os.hasBookFileAccess(bookId, auth.getName()) && !bs.isAuthor(bookId, auth.getName());
     }
+
+
+    public boolean canQuestion(Authentication auth, String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
+        long bookId = Long.parseLong(id);
+        return !bs.isAuthor(bookId, auth.getName());
+    }
+
+    public boolean canAnswer(Authentication auth, String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
+        long bookId = Long.parseLong(id);
+        return bs.isAuthor(bookId, auth.getName());
+    }
+
 
     public boolean checkIsWriter(String id){
         long userId = Long.parseLong(id);

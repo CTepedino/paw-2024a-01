@@ -12,7 +12,7 @@ public class PdfOrImageFileValidator implements ConstraintValidator<PdfOrImageFi
 
     @Override
     public boolean isValid(MultipartFile s, ConstraintValidatorContext constraintValidatorContext) {
-        return s.isEmpty() || s.getContentType()==null || s.getContentType().toLowerCase().startsWith("image") || s.getContentType().equalsIgnoreCase("application/pdf");
+        return s == null || s.isEmpty() || s.getContentType()==null || s.getContentType().toLowerCase().startsWith("image") || s.getContentType().equalsIgnoreCase("application/pdf");
     }
 
     @Override

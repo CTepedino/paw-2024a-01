@@ -67,6 +67,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers("/profile/{userId:\\d+}/wishlist").access((a, o) -> new AuthorizationDecision(accessHelper.checkIsLoggedUser(o.getVariables().get("userId"))))
                 .requestMatchers(HttpMethod.POST,"/wishlist/{bookId:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(o.getVariables().get("bookId"))))
                 .requestMatchers(HttpMethod.POST,"/recommendBook/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canRecommendBook(a.get(), o.getVariables().get("id"))))
+                    .requestMatchers("/book/${id:\\d+}/question").access((a,o) -> new AuthorizationDecision(accessHelper.canQuestion(a.get(), o.getVariables().get("id"))))
+                    .requestMatchers("/book/{bookId:\\d+}/{questionId:\\d+}/answer").access((a,o) -> new AuthorizationDecision(accessHelper.canAnswer(a.get(), o.getVariables().get("id"))))
                 .requestMatchers("/", "/cover/**", "/preview/**", "/book/{id:\\d+}", "/search/**", "/profilePicture/**", "/profile/{userId:\\d+}/**").permitAll()
                 .anyRequest().authenticated()
 

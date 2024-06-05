@@ -108,20 +108,25 @@
                             <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
                                 <a class="waves-light btn decline-button modal-trigger" href="#decline"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></a>
                                 <div id="decline" class="modal">
+                                    <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
                                     <div class="modal-content">
                                         <h4><spring:message code="orders.sales.paymentApproval.title"/></h4>
                                         <p><spring:message code="orders.sales.paymentApproval.decline"/></p>
+                                        <div class="input-field">
+                                            <form:label path="reason"><spring:message code="orders.sales.action.reason_decline"/></form:label>
+                                            <form:textarea path="reason" maxlength="500" class="materialize-textarea"/>
+                                        </div>
+                                        <form:errors path="reason" cssClass="red-text" element="p"/>
                                     </div>
                                     <div class="modal-footer">
                                         <div class="footer-aligner">
                                             <button class="btn modal-close close-btn"><strong><spring:message code="cancel"/></strong></button>
-                                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
                                                 <input type="checkbox" name="approved" value="false" checked style="display: none">
 
                                                 <button class="waves-light btn decline-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></strong></button>
-                                            </form:form>
                                         </div>
                                     </div>
+                                    </form:form>
                                 </div>
                                 <a class="waves-light btn accept-button modal-trigger" href="#accept"><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></a>
                                 <div id="accept" class="modal">

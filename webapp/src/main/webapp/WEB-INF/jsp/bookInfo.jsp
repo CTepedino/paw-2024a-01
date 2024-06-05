@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
-
+    <link href="<c:url value="/css/questions.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/css/profile.css"/>" rel="stylesheet"/>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
@@ -162,6 +163,8 @@
                 height="700"
         >
         </object>
+
+
         <c:if test="${not empty recommendations}">
             <div class="divider"></div>
             <h5><spring:message code="book.bookInfo.recommendations"/></h5>
@@ -175,58 +178,141 @@
                 </c:forEach>
             </div>
         </c:if>
-        <c:if test="${not empty reviews.page or loggedUserReview ne null}">
-            <section id="reviews">
-                <c:if test="${loggedUserReview ne null}">
-                    <div class="divider"></div>
+
+        <c:if test="${isLoggedIn}">
+            <div class="divider"></div>
+            <c:if test="${not isAuthor}">
+                <c:url value="/book/${bookId}/question" var="questionPostUrl"/>
+                <form:form
+                        modelAttribute="questionForm"
+                        action="${questionPostUrl}"
+                        method="post"
+                        enctype="multipart/form-data"
+                >
                     <div class="row">
-                        <h5 class="col s10"><spring:message code="review.yourReview"/></h5>
-                        <div class="review-control col s2">
-                            <a class="waves-effect waves-light btn modal-trigger action-button edit-rev-btn" href="#reviewModal">
-                                <strong><spring:message code="review.editReview"/></strong>
-                            </a>
+                        <div class="input-field col s9">
+                            <i class="material-icons prefix">question_answer</i>
+                            <form:label path="question"><spring:message code="book.bookInfo.questions.label"/></form:label>
+                            <form:textarea path="question" type="text" class="materialize-textarea"/>
+                            <form:errors path="question" cssClass="red-text" element="p"/>
+                        </div>
+                        <div class="col s3 send-button">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">
+                                <spring:message code="book.bookInfo.questions.send"/>
+                                <i class="material-icons right">send</i>
+                            </button>
                         </div>
                     </div>
-                    <c:set var="review" value="${loggedUserReview}" scope="request"/>
-                    <%@include file="components/reviewCard.jsp" %>
-                </c:if>
-                <c:if test="${not empty reviews.page}">
-                    <div class="divider"></div>
-                    <div class="row">
-                        <h5 class="col s6"><spring:message code="book.bookInfo.reviews"/><br/></h5>
-                        <div class=" col s6">
-                            <c:url value="/book/${book.bookId}" var="reviewOrderUrl"/>
-                            <form:form
-                                action="${reviewOrderUrl}"
-                                modelAttribute="reviewSortForm"
-                                method="get"
-                            >
-                                <form:select path="orderBy" onchange="this.form.submit()">
-                                    <c:forEach items="${reviewOrders}" var="order">
-                                        <form:option value="${order}"><spring:message code="review.${order}"/></form:option>
-                                    </c:forEach>
-                                </form:select>
-                            </form:form>
-                        </div>
-                    </div>
-                    <c:forEach items="${reviews.page}" var="review">
-                        <c:set var="review" value="${review}" scope="request"/>
-                        <%@include file="components/reviewCard.jsp" %>
-                    </c:forEach>
-                    <c:if test="${reviews.pageCount gt 1}">
-                        <script src="<c:url value="/js/paginationControls.js"/>"></script>
-                        <script>
-                            const paginationButtons = new PaginationButtons(${reviews.pageCount}, Math.min(10,${reviews.pageCount}), ${reviews.pageNumber}, false);
-                            paginationButtons.render();
-                            paginationButtons.onChange(e => {
-                                window.location.href = "<c:url value="?reviewPage="/>" + e.target.value + "#reviews";
-                            })
-                        </script>
-                    </c:if>
-                </c:if>
-            </section>
+                </form:form>
+            </c:if>
         </c:if>
-    </div>
+
+        <c:url var="bookInfoUrl" value="/book/${bookId}"/>
+
+        <c:if test="${not isAuthor}">
+            <div class="row table-top">
+                <a href="${bookInfoUrl}/reviews">
+                    <c:if test="${tab eq 'reviews'}">
+                        <div class="col s4 table-title active">
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                        </div>
+                    </c:if>
+                    <c:if test="${tab ne 'reviews'}">
+                        <div class="col s4 table-title">
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                        </div>
+                    </c:if>
+                </a>
+                <a href="${bookInfoUrl}/questions">
+                    <c:if test="${tab eq 'questions'}">
+                        <div class="col s4 table-title active">
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                        </div>
+                    </c:if>
+                    <c:if test="${tab ne 'questions'}">
+                        <div class="col s4 table-title">
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                        </div>
+                    </c:if>
+                </a>
+
+                <a href="${bookInfoUrl}/myQuestions">
+                    <c:if test="${tab eq 'myQuestions'}">
+                        <div class="col s4 table-title active">
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/></p>
+                        </div>
+                    </c:if>
+                    <c:if test="${tab ne 'myQuestions'}">
+                        <div class="col s4 table-title">
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/></p>
+                        </div>
+                    </c:if>
+                </a>
+            </div>
+        </c:if>
+
+        <c:if test="${isAuthor}">
+            <div class="row table-top">
+                <a href="${bookInfoUrl}/reviews">
+                    <c:if test="${tab eq 'reviews'}">
+                        <div class="col s6 table-title active">
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                        </div>
+                    </c:if>
+                    <c:if test="${tab ne 'reviews'}">
+                        <div class="col s6 table-title">
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                        </div>
+                    </c:if>
+                </a>
+                <a href="${bookInfoUrl}/questions">
+                    <c:if test="${tab eq 'questions'}">
+                        <div class="col s6 table-title active">
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                        </div>
+                    </c:if>
+                    <c:if test="${tab ne 'questions'}">
+                        <div class="col s6 table-title">
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                        </div>
+                    </c:if>
+                </a>
+            </div>
+        </c:if>
+
+        <c:if test="${tab eq 'myQuestions'}">
+            <c:set var="myQuestions" value="${myQuestions}" scope="request"/>
+            <c:set var="myQuestionsPage" value="${myQuestionsPage}" scope="request"/>
+            <%@include file="components/myQuestionsTab.jsp"%>
+        </c:if>
+
+        <c:if test="${tab eq 'questions'}">
+            <c:set var="questions" value="${questions}" scope="request"/>
+            <c:set var="isAuthor" value="${isAuthor}" scope="request"/>
+            <c:set var="answerForm" value="${answerForm}" scope="request"/>
+            <%@include file="components/questionsTab.jsp"%>
+        </c:if>
+
+        <c:if test="${tab eq 'reviews'}">
+            <c:set var="reviews" value="${reviews}" scope="request"/>
+            <c:set var="loggedUserReview" value="${loggedUserReview}" scope="request"/>
+            <c:set var="reviewSortForm" value="${reviewSortForm}" scope="request"/>
+            <c:set var="reviewOrders" value="${reviewOrders}" scope="request"/>
+            <c:set var="book" value="${book}" scope="request"/>
+            <c:set var="reviewForm" value="${reviewForm}" scope="request"/>
+            <%@include file="components/reviewTab.jsp"%>
+        </c:if>
+
+        <c:if test="${pageCount gt 1}">
+        <script src="<c:url value="/js/paginationControls.js"/>"></script>
+        <script>
+            const paginationButtonsQuestions = new PaginationButtons(${pageCount}, Math.min(10,${pageCount}), ${pageNumber}, false);
+            paginationButtonsQuestions.render();
+            paginationButtonsQuestions.onChange(e => {
+                window.location.href = "<c:url value="?page="/>" + e.target.value;
+            });
+        </script>
+        </c:if>
 
     <div id="buyModal" class="modal">
         <div class="modal-content">
@@ -242,47 +328,7 @@
         </div>
     </div>
 
-    <div id="reviewModal" class="modal">
-        <c:url value="/book/${book.bookId}/review" var="postUrl"/>
-        <form:form
-                action="${postUrl}"
-                method="post"
-                modelAttribute="reviewForm"
-        >
-            <div class="row">
-                <div class="col s12">
-                    <h5 class="publish-title"><spring:message code="review.title"/></h5>
-                </div>
-            </div>
 
-            <input type="hidden" id="rating" name="rating" value="rating">
-            <div class="input-field center-align">
-                <div class="star-rating">
-                    <i class="material-icons small star" >star_border</i>
-                    <i class="material-icons small star" >star_border</i>
-                    <i class="material-icons small star" >star_border</i>
-                    <i class="material-icons small star" >star_border</i>
-                    <i class="material-icons small star" >star_border</i>
-                </div>
-            </div>
-            <form:errors path="rating"/>
-            <div class="input-field">
-                <form:label path="review"/>
-                <form:textarea path="review" maxlength="500"/>
-            </div>
-            <form:errors path="review"/>
-
-            <div class="row">
-                <div class="col s12">
-                    <div class="btn-centerer">
-                        <button class="btn modal-close close-btn" ><strong><spring:message code="cancel"/></strong></button>
-                        <button class="waves-light btn" type="submit"><strong><spring:message code="review.submit"/></strong></button>
-                    </div>
-                </div>
-            </div>
-
-        </form:form>
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
