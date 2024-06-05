@@ -43,7 +43,7 @@ public class Order {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private PaymentReceipt paymentReceipt;
 
-    @Column(name = "rejectedReason")
+    @Column(name = "rejected_reason")
     private String rejectedReason;
 
     Order(){}
