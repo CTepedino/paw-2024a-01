@@ -83,3 +83,21 @@
     margin-top: 15px;
 }
 
+@media (max-width: 600px) {
+    .button-text {
+        font-size: 0.9em; /* Ajustar tamaño del texto para pantallas pequeñas */
+    }
+}
+
+.action-button {
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    overflow: hidden; /* Oculta cualquier desbordamiento de texto */
+    text-overflow: ellipsis; /* Añade "..." si el texto es demasiado largo */
+}
+
+.waves-effect.waves-light.btn.action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
