@@ -180,7 +180,7 @@
             </div>
         </c:if>
 
-        <c:if test="${isLoggedIn}">
+
             <div class="divider"></div>
             <c:if test="${not isAuthor}">
                 <c:url value="/book/${bookId}/question" var="questionPostUrl"/>
@@ -206,11 +206,11 @@
                     </div>
                 </form:form>
             </c:if>
-        </c:if>
+
 
         <c:url var="bookInfoUrl" value="/book/${bookId}"/>
 
-        <c:if test="${not isAuthor}">
+        <c:if test="${not isAuthor and isLoggedIn}">
             <div class="row table-top">
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
@@ -252,7 +252,7 @@
             </div>
         </c:if>
 
-        <c:if test="${isAuthor}">
+        <c:if test="${isAuthor or not isLoggedIn}">
             <div class="row table-top">
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
