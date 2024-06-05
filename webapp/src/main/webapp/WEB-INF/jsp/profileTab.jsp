@@ -67,6 +67,9 @@
                     <p class="text-not-active" style="width: 100%"><spring:message code="user.profile.publications"/></p>
                 </div>
             </c:if>
+            <c:if test="${ownsProfile}">
+                <div class="col s4 table-title"
+            </c:if>
         </a>
 
         <a href="${profileUrl}/boughtBooks">

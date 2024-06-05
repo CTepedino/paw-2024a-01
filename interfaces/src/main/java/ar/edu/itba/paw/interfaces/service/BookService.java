@@ -4,7 +4,6 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -79,5 +78,5 @@ public interface BookService {
 
     void removeFromWishList(long userId, long bookId);
 
-    PaginatedContent<Book> getWishList(long userId, int pageNumber, int pageSize);
+    PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize);
 }

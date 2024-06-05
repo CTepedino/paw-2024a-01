@@ -7,7 +7,6 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.*;
-import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -218,7 +216,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public PaginatedContent<Book> getWishList(long userId, int pageNumber, int pageSize) {
+    public PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
@@ -226,7 +224,7 @@ public class BookServiceImpl implements BookService {
 
         PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWishlistSize(userId));
         if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getWishList(userId, page.getPageCount(), pageSize);
+            return getWishlist(userId, page.getPageCount(), pageSize);
         } else {
             return page;
         }
