@@ -58,10 +58,10 @@
                             <form action="<c:url value="/wishlist/${book.bookId}"/>" method="post">
                                 <button type="submit" class="waves-effect waves-light btn action-button">
                                     <c:if test="${not isWishlisted}">
-                                        <strong>Add to wishlist</strong>
+                                        <strong><spring:message code="wishlist.add"/></strong>
                                     </c:if>
                                     <c:if test="${isWishlisted}">
-                                        <strong>Remove from wishlist</strong>
+                                        <strong><spring:message code="wishlist.remove"/></strong>
                                     </c:if>
                                 </button>
                             </form>

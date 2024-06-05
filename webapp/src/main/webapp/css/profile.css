@@ -75,3 +75,19 @@
     text-align: center;
 }
 
+.profile-tabs{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    text-align: center;
+}
+
+.profile-tab{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.tab-text{
+    width: 100%;
+}

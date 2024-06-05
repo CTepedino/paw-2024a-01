@@ -15,6 +15,7 @@
 <%@include file="profileTab.jsp" %>
 
 <body>
+<div class="container myBooks">
     <div class="row">
         <c:if test="${empty wishlist.page and wishlist.pageNumber eq 1}">
             <h5 class="empty-books"><spring:message code="profile.noBooks"/></h5>
@@ -39,4 +40,5 @@
             })
         </script>
     </c:if>
+</div>
 </body>
