@@ -75,9 +75,9 @@
             </div>
         </a>
         <c:if test="${ownsProfile}">
-        <a href="${profileUrl}/publications" class="profile-tab">
-            <div class="tab-text table-title ${tab eq 'publications'?'active':''}">
-                <p class="${tab eq 'publications'?'text-active':'text-not-active'}" style="width: 100%"><spring:message code="user.profile.wishlist"/></p>
+        <a href="${profileUrl}/wishlist" class="profile-tab">
+            <div class="tab-text table-title ${tab eq 'wishlist'?'active':''}">
+                <p class="${tab eq 'wishlist'?'text-active':'text-not-active'}" style="width: 100%"><spring:message code="user.profile.wishlist"/></p>
             </div>
         </a>
         </c:if>

@@ -11,8 +11,9 @@
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
-
+<c:set var="user" value="${loggedUser}" scope="request"/>
 <%@include file="profileTab.jsp" %>
+
 
 <body>
 <div class="container myBooks">

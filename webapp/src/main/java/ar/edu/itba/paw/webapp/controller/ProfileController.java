@@ -91,6 +91,9 @@ public class ProfileController {
 
         final ModelAndView mav = new ModelAndView("wishlist");
         mav.addObject("wishlist", wishlist);
+        mav.addObject("tab", "wishlist");
+        mav.addObject("ownsProfile", true);
+        mav.addObject("showPublicationsTab", us.hasRole(UserRoles.WRITER));
         return mav;
     }
 
