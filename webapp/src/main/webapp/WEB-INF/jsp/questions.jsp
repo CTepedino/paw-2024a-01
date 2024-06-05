@@ -47,7 +47,13 @@
             </div>
         </c:if>
 
-        <c:if test="${tab eq 'myQuestions'}">
+        <c:if test="${(tab eq 'myQuestions' and empty myQuestions.page) or (tab eq 'questions' and empty questions.page)}">
+            <div class="container question-container">
+                <h6><spring:message code="book.bookInfo.questions.noQuestions"/></h6>
+            </div>
+        </c:if>
+
+        <c:if test="${tab eq 'myQuestions' and not empty myQuestions.page}">
             <ul class="collection">
                 <c:forEach var="question" items="${myQuestions.page}">
                     <c:set var="question" value="${question}" scope="request"/>
@@ -58,7 +64,7 @@
             </ul>
         </c:if>
 
-        <c:if test="${tab eq 'questions'}">
+        <c:if test="${tab eq 'questions' and not empty questions.page}">
             <ul class="collection">
                 <c:forEach var="question" items="${questions.page}">
                     <c:set var="question" value="${question}" scope="request"/>

@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
 <body>
+<c:if test="${empty reviews.page and loggedUserReview eq null}">
+<div class="container" style="width: 90%!important;">
+    <h6><spring:message code="review.noReviews"/></h6>
+</c:if>
 <c:if test="${not empty reviews.page or loggedUserReview ne null}">
     <section id="reviews">
         <c:if test="${loggedUserReview ne null}">

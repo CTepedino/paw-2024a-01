@@ -42,10 +42,12 @@
                                 <c:out value="${author}"/>
                             </h6>
                         </a>
-                        <script src="<c:url value="/js/starRating.js"/>"></script>
-                        <script>
-                            new FixedStarRating(${avgRating});
-                        </script>
+                        <c:if test="${not empty reviews.page or loggedUserReview ne null}">
+                            <script src="<c:url value="/js/starRating.js"/>"></script>
+                            <script>
+                                new FixedStarRating(${avgRating});
+                            </script>
+                        </c:if>
                         <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
                     </div>
                     <div class="col s5">
@@ -178,7 +180,7 @@
             </div>
         </c:if>
 
-        <c:if test="${isLoggedIn}">
+
             <div class="divider"></div>
             <c:if test="${not isAuthor}">
                 <c:url value="/book/${bookId}/question" var="questionPostUrl"/>
@@ -204,11 +206,11 @@
                     </div>
                 </form:form>
             </c:if>
-        </c:if>
+
 
         <c:url var="bookInfoUrl" value="/book/${bookId}"/>
 
-        <c:if test="${not isAuthor}">
+        <c:if test="${not isAuthor and isLoggedIn}">
             <div class="row table-top">
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
@@ -250,7 +252,7 @@
             </div>
         </c:if>
 
-        <c:if test="${isAuthor}">
+        <c:if test="${isAuthor or not isLoggedIn}">
             <div class="row table-top">
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
