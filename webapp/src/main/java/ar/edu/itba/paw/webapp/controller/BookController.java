@@ -111,6 +111,7 @@ public class BookController {
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         boolean existsOrder = os.existsOrder(bookId);
+        boolean isWishlisted = loggedUser != null && bs.isWishlisted(loggedUser.getUserId(), bookId);
 
         if (loggedUserReview.isPresent()){
             form.setRating(loggedUserReview.get().getRating());
@@ -129,6 +130,8 @@ public class BookController {
         mav.addObject("isAuthor", isAuthor);
         mav.addObject("reviewOrders", List.of(ReviewOrderBy.values()));
         mav.addObject("existsOrder", existsOrder);
+        mav.addObject("isWishlisted", isWishlisted);
+
         return mav;
     }
 
@@ -193,6 +196,10 @@ public class BookController {
         return new ModelAndView("redirect:/book/"+bookId);
     }
 
-
+    @RequestMapping(method = RequestMethod.POST, path = "/wishlist/{bookId:\\d+}")
+    public ModelAndView toggleWishlist(@ModelAttribute("loggedUser") User user, @PathVariable("bookId") long bookId){
+        bs.toggleWishlist(user.getUserId(), bookId);
+        return new ModelAndView("redirect:/book/"+bookId);
+    }
 }
 

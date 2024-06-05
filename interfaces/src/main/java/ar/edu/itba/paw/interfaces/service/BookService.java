@@ -74,9 +74,11 @@ public interface BookService {
 
     List<BookGenre> getGenresByBookCount();
 
-    void addToWishlist(long userId, long bookId);
+    boolean isWishlisted(long userId, long bookId);
 
-    void removeFromWishList(long userId, long bookId);
+    void toggleWishlist(long userId, long bookId);
+
+    void removeFromWishlist(long userId, long bookId);
 
     PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize);
 }

@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false);
-        bs.removeFromWishList(buyer.getUserId(), bookId);
+        bs.removeFromWishlist(buyer.getUserId(), bookId);
         try {
             orderDao.createPaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
         } catch (IOException e){

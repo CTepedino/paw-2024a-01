@@ -12,10 +12,7 @@ import ar.edu.itba.paw.models.users.User;
 import com.sun.istack.NotNull;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -248,6 +245,20 @@ public class BookJpaDao implements BookDao {
         return (List<BookGenre>) query.getResultStream().map(genre -> BookGenre.valueOf((String) genre)).collect(Collectors.toList());
     }
 
+
+    @Override
+    public Optional<WishlistItem> findWishlistItem(long userId, long bookId) {
+        TypedQuery<WishlistItem> query = em.createQuery("FROM WishlistItem w WHERE w.userId = :userId AND w.bookId = :bookId", WishlistItem.class);
+        query.setParameter("userId", userId);
+        query.setParameter("bookId", bookId);
+
+        try {
+            return Optional.ofNullable(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
     @Override
     public WishlistItem addToWishlist(long userId, long bookId){
         WishlistItem wishlistItem = new WishlistItem(userId, bookId);
@@ -275,6 +286,6 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public long getWishlistSize(long userId) {
-        return DaoUtils.getRowCount(em, "wishlists", "WHERE user_id = :userId", Map.of("userId", userId));
+        return DaoUtils.getRowCount(em, "wishlist", "WHERE user_id = :userId", Map.of("userId", userId));
     }
 }

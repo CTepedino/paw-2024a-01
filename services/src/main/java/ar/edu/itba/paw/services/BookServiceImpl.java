@@ -205,16 +205,29 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public void addToWishlist(long userId, long bookId) {
-        bookDao.addToWishlist(userId, bookId);
+    public boolean isWishlisted(long userId, long bookId){
+        return bookDao.findWishlistItem(userId, bookId).isPresent();
     }
 
+    @Transactional
     @Override
-    public void removeFromWishList(long userId, long bookId) {
+    public void toggleWishlist(long userId, long bookId) {
+        if (isWishlisted(userId, bookId)){
+            bookDao.removeFromWishlist(userId, bookId);
+        } else {
+            bookDao.addToWishlist(userId, bookId);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void removeFromWishlist(long userId, long bookId) {
         bookDao.removeFromWishlist(userId, bookId);
     }
 
+    @Transactional
     @Override
     public PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
