@@ -10,7 +10,6 @@ public class UpdateOrderFormWriterSide {
 
     private Boolean approved;
 
-    @NotNull
     @Size(max = 500)
     private String reason;
 
