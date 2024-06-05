@@ -175,6 +175,7 @@ public class MailServiceImpl implements MailService{
         data.put("bookTitle", book.getTitle());
         data.put("url", env.getProperty("baseUrl"));
         data.put("purchasesUrl", env.getProperty("baseUrl") + "/purchases");
+        data.put("rejectedReason", order.getRejectedReason());
 
         try {
             LOGGER.atDebug().setMessage("Sending Receipt Denied email to: {}").addArgument(to).log();
