@@ -22,7 +22,6 @@
     <div class="container book-container z-depth-2" >
         <div class="row">
             <div class="col s5">
-                ${isWishlisted?"w":"l"}
                 <div class="info-image">
                     <img
                         class="book-cover"
