@@ -207,4 +207,42 @@ public class BookServiceImpl implements BookService {
             return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, !ownsProfile);
         }
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isWishlisted(long userId, long bookId){
+        return bookDao.findWishlistItem(userId, bookId).isPresent();
+    }
+
+    @Transactional
+    @Override
+    public void toggleWishlist(long userId, long bookId) {
+        if (isWishlisted(userId, bookId)){
+            bookDao.removeFromWishlist(userId, bookId);
+        } else {
+            bookDao.addToWishlist(userId, bookId);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void removeFromWishlist(long userId, long bookId) {
+        bookDao.removeFromWishlist(userId, bookId);
+    }
+
+    @Transactional
+    @Override
+    public PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books = bookDao.getWishlist(userId, (pageNumber-1)*pageSize, pageSize);
+
+        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWishlistSize(userId));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getWishlist(userId, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
+    }
 }

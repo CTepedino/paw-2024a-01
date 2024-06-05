@@ -32,7 +32,7 @@ public class AccessHelper {
         this.us = us;
     }
 
-    public boolean canCreateOrder(Authentication auth, String id){
+    public boolean canCreateOrder(String id){
         try {
             long bookId = Long.parseLong(id);
             return us.isLoggedIn() && os.canCreateOrder(bookId);
@@ -75,7 +75,7 @@ public class AccessHelper {
         return os.canAdvanceOrder(orderId, auth.getName());
     }
 
-    public boolean canEditBook(Authentication auth, String id){
+    public boolean canEditBook(String id){
         if (!us.isLoggedIn()) {
             return false;
         }
@@ -107,5 +107,13 @@ public class AccessHelper {
 
         long bookId = Long.parseLong(id);
         return os.hasBookFileAccess(bookId, auth.getName()) && !bs.isAuthor(bookId, auth.getName());
+    }
+
+    public boolean checkIsLoggedUser(String id){
+        if (!us.isLoggedIn()) {
+            return false;
+        }
+        long userId = Long.parseLong(id);
+        return us.getLoggedUser().get().getUserId() == userId;
     }
 }

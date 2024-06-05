@@ -11,7 +11,6 @@ import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
-import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false);
+        bs.removeFromWishlist(buyer.getUserId(), bookId);
         try {
             orderDao.createPaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
         } catch (IOException e){

@@ -21,6 +21,7 @@
     <div class="container book-container z-depth-2" >
         <div class="row">
             <div class="col s5">
+                ${isWishlisted?"w":"l"}
                 <div class="info-image">
                     <img
                         class="book-cover"
@@ -52,6 +53,18 @@
                             <a href="<c:url value="/sendBuyInfo/${book.bookId}"/>" class="waves-effect waves-light btn action-button">
                                 <strong><spring:message code="book.bookInfo.buyBook"/></strong>
                             </a>
+                        </c:if>
+                        <c:if test="${not existsOrder and isLoggedIn and not isAuthor}">
+                            <form action="<c:url value="/wishlist/${book.bookId}"/>" method="post">
+                                <button type="submit" class="waves-effect waves-light btn action-button">
+                                    <c:if test="${not isWishlisted}">
+                                        <strong><spring:message code="wishlist.add"/></strong>
+                                    </c:if>
+                                    <c:if test="${isWishlisted}">
+                                        <strong><spring:message code="wishlist.remove"/></strong>
+                                    </c:if>
+                                </button>
+                            </form>
                         </c:if>
                         <c:if test="${isAuthor}">
                             <a href="<c:url value="/book/edit/${book.bookId}"/>">

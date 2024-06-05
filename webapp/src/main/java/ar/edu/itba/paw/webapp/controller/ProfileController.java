@@ -13,10 +13,7 @@ import ar.edu.itba.paw.webapp.form.ProfileBookSearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -82,6 +79,18 @@ public class ProfileController {
         mav.addObject("ownsProfile", ownsProfile);
         mav.addObject("books", books);
         mav.addObject("orders", BookSearchOrderBy.values());
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/profile/{userId:\\d+}/wishlist")
+    public ModelAndView wishlistView(
+            @PathVariable("userId") long userId,
+            @RequestParam(name = "page", defaultValue = "1") Integer page
+    ){
+        PaginatedContent<Book> wishlist = bs.getWishlist(userId, page, PROFILE_PAGE_SIZE);
+
+        final ModelAndView mav = new ModelAndView("wishlist");
+        mav.addObject("wishlist", wishlist);
         return mav;
     }
 

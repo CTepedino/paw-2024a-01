@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -11,10 +12,7 @@ import ar.edu.itba.paw.models.users.User;
 import com.sun.istack.NotNull;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -224,6 +222,27 @@ public class BookJpaDao implements BookDao {
     }
 
 
+    @Override
+    public boolean recheckPaused(long bookId) {
+        TypedQuery<Boolean> query = em.createQuery(
+            """
+                    SELECT NOT EXISTS (
+                        SELECT 1
+                        FROM Book b
+                        JOIN User u ON b.writer.userId = u.userId
+                        WHERE b.bookId = :bookId AND u.cbu IS NOT NULL AND EXISTS(
+                            SELECT 1
+                            FROM BookFile bf
+                            WHERE bf.id = b.bookId
+                        )
+                    )
+                """,
+            Boolean.class
+        );
+        query.setParameter("bookId", bookId);
+        return query.getSingleResult();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public List<BookGenre> getGenresByBookCount(int limit, int offset) {
@@ -232,5 +251,49 @@ public class BookJpaDao implements BookDao {
         query.setFirstResult(offset);
 
         return (List<BookGenre>) query.getResultStream().map(genre -> BookGenre.valueOf((String) genre)).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Optional<WishlistItem> findWishlistItem(long userId, long bookId) {
+        TypedQuery<WishlistItem> query = em.createQuery("FROM WishlistItem w WHERE w.userId = :userId AND w.bookId = :bookId", WishlistItem.class);
+        query.setParameter("userId", userId);
+        query.setParameter("bookId", bookId);
+
+        try {
+            return Optional.ofNullable(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public WishlistItem addToWishlist(long userId, long bookId){
+        WishlistItem wishlistItem = new WishlistItem(userId, bookId);
+        em.persist(wishlistItem);
+        return wishlistItem;
+    }
+
+    @Override
+    public void removeFromWishlist(long userId, long bookId){
+        Query deleteQuery = em.createQuery("DELETE FROM WishlistItem w WHERE w.userId = :userId AND w.bookId = :bookId");
+        deleteQuery.setParameter("userId", userId);
+        deleteQuery.setParameter("bookId", bookId);
+        deleteQuery.executeUpdate();
+    }
+
+    @Override
+    public List<Book> getWishlist(long userId, int offset, int limit){
+        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM wishlist WHERE user_id = :userId");
+        nativeQuery.setParameter("userId", userId);
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public long getWishlistSize(long userId) {
+        return DaoUtils.getRowCount(em, "wishlist", "WHERE user_id = :userId", Map.of("userId", userId));
     }
 }

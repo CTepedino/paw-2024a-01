@@ -73,4 +73,12 @@ public interface BookService {
     boolean isAuthor(long bookId, String email);
 
     List<BookGenre> getGenresByBookCount();
+
+    boolean isWishlisted(long userId, long bookId);
+
+    void toggleWishlist(long userId, long bookId);
+
+    void removeFromWishlist(long userId, long bookId);
+
+    PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize);
 }

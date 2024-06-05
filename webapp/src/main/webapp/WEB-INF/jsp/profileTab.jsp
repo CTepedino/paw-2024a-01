@@ -54,51 +54,17 @@
 
     <c:url var="profileUrl" value="/profile/${user.userId}"/>
 
-    <div class="row table-top">
+    <div class="row table-top profile-tabs">
         <c:if test="${showPublicationsTab}">
-        <a href="${profileUrl}/publications">
-            <c:if test="${tab eq 'publications'}">
-                <div class="col s6 table-title active">
-                    <p class="text-active" style="width: 100%"><spring:message code="user.profile.publications"/></p>
-                </div>
-            </c:if>
-            <c:if test="${tab ne 'publications'}">
-                <div class="col s6 table-title">
-                    <p class="text-not-active" style="width: 100%"><spring:message code="user.profile.publications"/></p>
-                </div>
-            </c:if>
-        </a>
-
-        <a href="${profileUrl}/boughtBooks">
-            <c:if test="${tab eq 'boughtBooks'}">
-                <div class="col s6 table-title active">
-                    <p class="text-active" style="width: 100%">
-                        <c:if test="${ownsProfile}">
-                            <spring:message code="user.profile.boughtBooks"/>
-                        </c:if>
-                        <c:if test="${!ownsProfile}">
-                            <spring:message code="user.profile.recommendedBooks"/>
-                        </c:if>
-                    </p>
-                </div>
-            </c:if>
-            <c:if test="${tab ne 'boughtBooks'}">
-                <div class="col s6 table-title">
-                    <p class="text-not-active" style="width: 100%">
-                        <c:if test="${ownsProfile}">
-                            <spring:message code="user.profile.boughtBooks"/>
-                        </c:if>
-                        <c:if test="${!ownsProfile}">
-                            <spring:message code="user.profile.recommendedBooks"/>
-                        </c:if>
-                    </p>
-                </div>
-            </c:if>
+        <a href="${profileUrl}/publications" class="profile-tab">
+            <div class="tab-text table-title ${tab eq 'publications'?'active':''}">
+                <p class="${tab eq 'publications'?'text-active':'text-not-active'}" style="width: 100%"><spring:message code="user.profile.publications"/></p>
+            </div>
         </a>
         </c:if>
-        <c:if test="${not showPublicationsTab}">
-            <div class="col s12 table-title active">
-                <p class="text-active" style="width: 100%">
+        <a href="${profileUrl}/boughtBooks" class="profile-tab">
+            <div class="tab-text table-title ${tab eq 'boughtBooks'?'active':''}">
+                <p class="${tab eq 'boughtBooks'?'text-active':'text-not-active'}" style="width: 100%">
                     <c:if test="${ownsProfile}">
                         <spring:message code="user.profile.boughtBooks"/>
                     </c:if>
@@ -107,6 +73,13 @@
                     </c:if>
                 </p>
             </div>
+        </a>
+        <c:if test="${ownsProfile}">
+        <a href="${profileUrl}/publications" class="profile-tab">
+            <div class="tab-text table-title ${tab eq 'publications'?'active':''}">
+                <p class="${tab eq 'publications'?'text-active':'text-not-active'}" style="width: 100%"><spring:message code="user.profile.wishlist"/></p>
+            </div>
+        </a>
         </c:if>
     </div>
 

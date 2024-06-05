@@ -194,3 +194,14 @@ CREATE TABLE IF NOT EXISTS email_validations(
     code VARCHAR(5) NOT NULL,
     expiration TIMESTAMP NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS wishlist(
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    book_id INT,
+
+    UNIQUE (book_id, user_id),
+
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+);
