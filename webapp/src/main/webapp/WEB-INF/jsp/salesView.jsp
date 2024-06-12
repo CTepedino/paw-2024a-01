@@ -108,7 +108,7 @@
                             <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
                                 <a class="waves-light btn decline-button modal-trigger" href="#decline"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></a>
                                 <div id="decline" class="modal">
-                                    <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                    <form:form id="advanceOrder-${order.orderId}-decline" action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
                                     <div class="modal-content">
                                         <h4><spring:message code="orders.sales.paymentApproval.title"/></h4>
                                         <p><spring:message code="orders.sales.paymentApproval.decline"/></p>
@@ -137,7 +137,7 @@
                                     <div class="modal-footer">
                                         <div class="footer-aligner">
                                             <button class="btn modal-close close-btn" ><strong><spring:message code="cancel"/></strong></button>
-                                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
+                                            <form:form id="advanceOrder-${order.orderId}-accept"  action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm">
                                                 <input type="checkbox" name="approved" value="true" checked style="display: none">
 
                                                 <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.accept"/></strong></button>

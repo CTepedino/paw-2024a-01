@@ -69,9 +69,9 @@
                         <div class="col s2">
                             <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
                                 <img
-                                        class="book_cover"
-                                        src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
-                                        alt="<spring:message code="bookInfoCard.cover"/>"
+                                    class="book_cover"
+                                    src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
+                                    alt="<spring:message code="bookInfoCard.cover"/>"
                                 />
                             </a>
                         </div>
@@ -116,17 +116,29 @@
                         <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
 
                         <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
-                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
-                                <form:label path="receipt" for="files" class="btn label-select">
+                            <form:form id="advanceOrder-${order.orderId}-sendFile"  action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
+                                <form:label path="receipt" for="files-${order.orderId}" cssClass="btn label-select">
                                     <spring:message code="orders.purchases.chooseFile"/>
                                 </form:label>
-                                <form:input type="file" id="files" path="receipt" accept="application/pdf, image/*" style="display:none;"/>
+                                <form:input type="file" id="files-${order.orderId}" path="receipt" accept="application/pdf, image/*" style="display:none;"/>
                                 <form:errors path="receipt"/>
                                 <button class="waves-light btn payment" type="submit">
                                     <strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong>
                                 </button>
                             </form:form>
                         </c:if>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                if (document.querySelector("#files-${order.orderId}") != null) {
+                                    document.querySelector("#files-${order.orderId}").onchange = function () {
+                                        const fileName = this.files[0]?.name;
+                                        const label = document.querySelector("label[for=files-${order.orderId}]");
+                                        label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
+                                    };
+                                }
+                            });
+                        </script>
 
                         <c:if test="${order.orderStatus eq 'COMPLETED'}">
                             <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
@@ -189,16 +201,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.modal');
         var instances = M.Modal.init(elems, {});
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        if (document.querySelector("#files") != null) {
-            document.querySelector("#files").onchange = function () {
-                const fileName = this.files[0]?.name;
-                const label = document.querySelector("label[for=files]");
-                label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
-            };
-        }
     });
 </script>
 
