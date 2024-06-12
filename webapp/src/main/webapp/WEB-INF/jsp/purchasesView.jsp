@@ -91,7 +91,7 @@
                         <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
                             <p class="red-text rejection"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
                             <p class="rejection"><c:out value="${order.writer.cbu}"/></p>
-                            <a class="btn modal-trigger btn-small rejection" href="#reason"><strong><spring:message code="orders.purchases.status.reason_rejected"/><strong></a>
+                            <a class="btn modal-trigger btn-small rejection" href="#reason"><strong><spring:message code="orders.purchases.status.reason_rejected"/></strong></a>
                             <div id="reason" class="modal">
                                 <div class="modal-content">
                                     <h4><spring:message code="orders.purchases.status.reason_rejected"/></h4>
@@ -134,7 +134,7 @@
                             </a>
                             <c:url value="/recommendBook/${order.orderId}/purchases" var="recommendBookUrl"/>
 
-                            <form id="recommendBookForm" action="${recommendBookUrl}" method="post" class="recommendation">
+                            <form id="recommendBookForm-${order.orderId}" action="${recommendBookUrl}" method="post" class="recommendation">
                                 <label for="recommended-${order.orderId}">
                                     <input type="checkbox" id="recommended-${order.orderId}" name="recommended" ${order.isPublic ? 'checked' : ''}/>
                                     <span><spring:message code="orders.purchases.recommendBook"/></span>
@@ -142,7 +142,7 @@
                             </form>
                             <script>
                                 document.getElementById('recommended-${order.orderId}').addEventListener('change', function() {
-                                    document.getElementById('recommendBookForm').submit();
+                                    document.getElementById('recommendBookForm-${order.orderId}').submit();
                                 });
                             </script>
                         </c:if>
