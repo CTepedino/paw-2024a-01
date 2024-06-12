@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -37,7 +38,14 @@ public class OrderController {
 
     @ModelAttribute("statuses")
     public List<OrderStatus> statuses() {
-        return List.of(OrderStatus.values());
+
+        List<OrderStatus> immutableList = List.of(OrderStatus.values());
+
+        List<OrderStatus> mutableList = new ArrayList<>(immutableList);
+
+        mutableList.remove(OrderStatus.WAITING_CONTACT);
+
+        return mutableList;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/purchases")
