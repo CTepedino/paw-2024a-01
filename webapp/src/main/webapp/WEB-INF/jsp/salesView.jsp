@@ -120,10 +120,12 @@
                                     </div>
                                     <div class="modal-footer">
                                         <div class="footer-aligner">
-                                            <button class="btn modal-close close-btn"><strong><spring:message code="cancel"/></strong></button>
-                                                <input type="checkbox" name="approved" value="false" checked style="display: none">
+                                            <button class="btn modal-close close-btn">
+                                                <strong><spring:message code="cancel"/></strong>
+                                            </button>
 
-                                                <button class="waves-light btn decline-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></strong></button>
+                                            <input type="checkbox" name="approved" value="false" checked style="display: none">
+                                            <button class="waves-light btn decline-button-modal" type="submit"><strong><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></strong></button>
                                         </div>
                                     </div>
                                     </form:form>

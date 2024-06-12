@@ -22,9 +22,7 @@ public interface OrderDao {
 
     void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, String rejectedReason);
 
-    PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type);
-
-    void updatePaymentReceipt(Order order, byte[] paymentReceipt, String type);
+    PaymentReceipt createOrUpdatePaymentReceipt(Order order, byte[] paymentReceipt, String type);
 
     List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, int offset, int limit);
     long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);

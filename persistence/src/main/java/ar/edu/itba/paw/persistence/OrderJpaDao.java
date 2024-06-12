@@ -57,17 +57,27 @@ public class OrderJpaDao implements OrderDao {
         order.setRejectedReason(rejectedReason);
     }
 
-    @Override
-    public PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+
+    private PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type) {
         PaymentReceipt receipt = new PaymentReceipt(order.getOrderId(), paymentReceipt, type);
         em.persist(receipt);
         return receipt;
     }
 
-    @Override
-    public void updatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+
+    private void updatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
         order.getPaymentReceipt().setFile(paymentReceipt);
         order.getPaymentReceipt().setType(type);
+    }
+
+    @Override
+    public PaymentReceipt createOrUpdatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+        if (order.getPaymentReceipt() == null) {
+            return createPaymentReceipt(order, paymentReceipt, type);
+        } else {
+            updatePaymentReceipt(order, paymentReceipt, type);
+            return order.getPaymentReceipt();
+        }
     }
 
     @Override

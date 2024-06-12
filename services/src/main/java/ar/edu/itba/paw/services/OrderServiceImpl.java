@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false);
         bs.removeFromWishlist(buyer.getUserId(), bookId);
         try {
-            orderDao.createPaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
+            orderDao.createOrUpdatePaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to create order for bookId: {} - Error Message: {}").addArgument(bookId).addArgument(e.getMessage()).log();
             throw new UnreadableFileException();
@@ -146,7 +146,7 @@ public class OrderServiceImpl implements OrderService {
         }
         orderDao.update(order, OrderStatus.WAITING_APPROVAL, order.getDate(), order.isPublic());
         try {
-            orderDao.updatePaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
+            orderDao.createOrUpdatePaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
             LOGGER.atDebug().setMessage("Uploaded receipt for orderId: {}").addArgument(order.getOrderId()).log();
         } catch (IOException e){
             LOGGER.atWarn().setMessage("Failed to upload receipt for orderId: {} - Error Message: {}").addArgument(order.getOrderId()).addArgument(e.getMessage()).log();
