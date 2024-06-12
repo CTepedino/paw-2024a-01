@@ -124,8 +124,7 @@ public class BookController {
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         boolean existsOrder = os.existsOrder(bookId);
-        PaginatedContent<Question> questions = null;
-        questions = isAuthor? qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE) : (loggedUser!=null? qs.getAllFullQuestionsNotUser(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE) : qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE));
+        PaginatedContent<Question> questions = qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE);
         boolean isWishlisted = loggedUser != null && bs.isWishlisted(loggedUser.getUserId(), bookId);
 
         if (loggedUserReview.isPresent()){

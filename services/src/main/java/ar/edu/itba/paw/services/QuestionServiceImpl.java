@@ -63,10 +63,17 @@ public class QuestionServiceImpl implements QuestionService {
             throw new InvalidPageException();
         }
 
+        List<Question> questions;
+        long size;
 
-        long size = questionDao.getAllSize(bookId);
+        if (us.isLoggedIn()){
+            questions =  questionDao.getAllFullQuestionsNotUser(bookId, us.getLoggedUser().get().getUserId(), (pageNumber-1)*pageSize, pageSize);
+            size = questionDao.getAllFullQuestionsNotSUsersSize(bookId, us.getLoggedUser().get().getUserId());
+        } else {
+            questions = questionDao.getAll(bookId, (pageNumber-1)*pageSize, pageSize);
+            size = questionDao.getAllSize(bookId);
+        }
 
-        List<Question> questions = questionDao.getAll(bookId, (pageNumber-1)*pageSize, pageSize);
 
         PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
 
