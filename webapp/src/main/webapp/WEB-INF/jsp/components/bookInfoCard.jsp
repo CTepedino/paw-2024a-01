@@ -35,9 +35,19 @@
                             <c:out value="${genre}"/>
                         </p>
                         <br/>
+                        <i class="material-icons black-icons">face</i>
                         <p class="info">
-                            <spring:message var="age" code="bookInfoCard.suggestedAge" arguments="${book.suggestedAge}"/>
-                            <c:out value="${age}"/>
+                            +<c:out value="${book.suggestedAge}"/>
+                        </p>
+                        <br/>
+                        <i class="material-icons black-icons">description</i>
+                        <p class="info">
+                            <c:out value="${book.pageCount}"/>
+                        </p>
+                        <br/>
+                        <i class="material-icons black-icons">calendar_month</i>
+                        <p class="info">
+                            <c:out value="${book.publishDate.year}"/>
                         </p>
                     </div>
                     <h5 class="price-number">
