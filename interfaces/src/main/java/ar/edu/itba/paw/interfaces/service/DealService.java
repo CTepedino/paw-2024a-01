@@ -14,5 +14,5 @@ public interface DealService {
 
     public void update(long bookId, BigDecimal price, int duration);
 
-    void endDeal(long bookId, BigDecimal price);
+    void endDeal(long bookId);
 }

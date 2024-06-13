@@ -28,6 +28,10 @@
         >
             <h5 class="publish-title"><spring:message code="book.addDeal.title"/></h5>
 
+            <h6><c:out value="${book.title}"/></h6>
+
+            <p><spring:message code="book.addDeal.previousPrice"/> <c:out value="${book.formattedPrice}"/></p>
+
             <div class="input-field">
                 <form:label path="price"><spring:message code="book.addDeal.newPrice"/><span class="red-text">*</span></form:label>
                 <form:input type="number" path="price" min="0" max="100000000"/>

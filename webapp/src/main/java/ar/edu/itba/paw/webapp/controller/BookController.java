@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
@@ -124,6 +125,7 @@ public class BookController {
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), page, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
+        Optional<Deal> deal = ds.get(bookId);
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
@@ -140,6 +142,7 @@ public class BookController {
 
         mav.addObject("book", book);
         mav.addObject("order", order.orElse(null));
+        mav.addObject("deal", deal.orElse(null));
         mav.addObject("questions", questions);
         mav.addObject("myQuestions", myQuestions);
         mav.addObject("recommendations", recommendations);
@@ -238,7 +241,10 @@ public class BookController {
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/deal")
     public ModelAndView addDealForm(@ModelAttribute("dealForm") DealFrom form, @PathVariable("bookId") long bookId){
 
-        return new ModelAndView("createDeal");
+        ModelAndView mav = new ModelAndView("createDeal");
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        mav.addObject("book", book);
+        return mav;
     }
 
 
@@ -256,6 +262,14 @@ public class BookController {
         return new ModelAndView("redirect:/book/"+bookId);
     }
 
+    @RequestMapping(method = RequestMethod.POST, path="/book/{bookId:\\d+}/{dealId:\\d+}/endDeal")
+    public ModelAndView endDeal(@PathVariable("dealId") long dealId, @PathVariable("bookId") long bookId){
+
+        ds.endDeal(dealId);
+
+        return new ModelAndView("redirect:/book/"+bookId);
+    }
+
     @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/question")
     public ModelAndView createQuestion(
             @PathVariable("bookId") final long bookId,
@@ -268,6 +282,8 @@ public class BookController {
         qs.create(bookId, questionForm.getQuestion());
         return new ModelAndView("redirect:/book/"+bookId+"/myQuestions");
     }
+
+
 
     @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/questions/{questionId:\\d+}/answer")
     public ModelAndView answerQuestion(

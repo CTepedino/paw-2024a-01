@@ -5,14 +5,16 @@ import ar.edu.itba.paw.models.users.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface DealDao {
 
     Deal create(long bookId, BigDecimal price, LocalDate startDate,LocalDate endDate);
 
-    Optional<Deal> find(long bookId);
+    List<Deal> find(long bookId);
 
     void update(Deal bookId, BigDecimal price, LocalDate endDate);
 
+    Optional<Deal> findById(long dealId);
 }

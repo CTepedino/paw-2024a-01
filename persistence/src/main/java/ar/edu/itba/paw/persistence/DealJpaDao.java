@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -31,9 +32,17 @@ public class DealJpaDao implements DealDao {
     }
 
     @Override
-    public Optional<Deal> find(long bookId) {
+    public List<Deal> find(long bookId) {
         TypedQuery<Deal> query = em.createQuery("FROM Deal d WHERE d.bookId = :bookId", Deal.class);
         query.setParameter("bookId", bookId);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Optional<Deal> findById(long dealId) {
+        TypedQuery<Deal> query = em.createQuery("FROM Deal d WHERE d.dealId = :dealId", Deal.class);
+        query.setParameter("dealId", dealId);
 
         try {
             return Optional.ofNullable(query.getSingleResult());

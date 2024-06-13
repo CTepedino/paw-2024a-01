@@ -75,11 +75,18 @@
                                 </button>
                             </a>
 
-                            <a href="<c:url value="/book/${book.bookId}/deal"/>">
-                                <button type="submit" class="waves-effect waves-light btn action-button">
-                                    <strong><spring:message code="book.bookInfo.createDeal"/></strong>
-                                </button>
-                            </a>
+                            <c:if test="${deal eq null}">
+                                <a href="<c:url value="/book/${book.bookId}/deal"/>">
+                                    <button type="submit" class="waves-effect waves-light btn action-button">
+                                        <strong><spring:message code="book.bookInfo.createDeal"/></strong>
+                                    </button>
+                                </a>
+                            </c:if>
+                            <c:if test="${deal ne null}">
+                                <a class="waves-effect waves-light btn modal-trigger action-button" href="#dealModal">
+                                    <strong><spring:message code="book.bookInfo.viewDeal"/></strong>
+                                </a>
+                            </c:if>
 
                         </c:if>
                         <c:if test="${ownsBook or (isAuthor and not book.paused)}">
@@ -335,6 +342,26 @@
             </form>
         </div>
     </div>
+
+        <c:url value="/book/${bookId}/${deal.dealId}/endDeal" var="endDealUrl"/>
+        <div id="dealModal" class="modal">
+            <div class="modal-content">
+                <h4><spring:message code="book.bookInfo.deal"/></h4>
+                <p><spring:message code="book.addDeal.previousPrice"/> <c:out value="${book.formattedPrice}"/></p>
+                <p><spring:message code="book.addDeal.newPrice"/> <c:out value="${deal.formattedPrice}"/></p>
+                <p><spring:message code="book.bookInfo.deal.startDate"/> $<c:out value="${deal.startDate}"/></p>
+                <p><spring:message code="book.bookInfo.deal.endDate"/> $<c:out value="${deal.endDate}"/></p>
+            </div>
+            <div class="modal-footer">
+                <div class="footer-aligner">
+                    <button class="btn modal-close close-btn" ><strong><spring:message code="close"/></strong></button>
+                    <button class="btn modal-close close-btn" ><strong><spring:message code="book.bookInfo.editDeal"/></strong></button>
+                    <form id="end-deal"  action="${endDealUrl}" method="post">
+                        <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="book.bookInfo.endDeal"/></strong></button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 
