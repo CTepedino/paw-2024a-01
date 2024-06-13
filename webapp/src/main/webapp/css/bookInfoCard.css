@@ -51,6 +51,13 @@
     margin: 50px;
 }
 
+.price-number-crossed {
+    position: absolute;
+    bottom: 40px;
+    right: 0;
+    margin: 50px;
+}
+
 @media screen and (max-width: 600px) {
     .card-info {
         width: 200px;
@@ -64,4 +71,8 @@
 
 .black-icons {
     color: black;
+}
+
+.strikethrough {
+    text-decoration: line-through;
 }

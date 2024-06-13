@@ -48,7 +48,13 @@
                                 new FixedStarRating(${avgRating});
                             </script>
                         </c:if>
-                        <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
+                        <c:if test="${deal eq null}">
+                            <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
+                        </c:if>
+                        <c:if test="${deal ne null}">
+                            <h6 class="price strikethrough"><c:out value="${book.formattedPrice}"/></h6>
+                            <h5 class="price"><c:out value="${deal.formattedPrice}"/></h5>
+                        </c:if>
                     </div>
                     <div class="col s5">
                         <c:if test="${(not existsOrder or not isLoggedIn) and not book.paused and not isAuthor}">
@@ -349,13 +355,13 @@
                 <h4><spring:message code="book.bookInfo.deal"/></h4>
                 <p><spring:message code="book.addDeal.previousPrice"/> <c:out value="${book.formattedPrice}"/></p>
                 <p><spring:message code="book.addDeal.newPrice"/> <c:out value="${deal.formattedPrice}"/></p>
-                <p><spring:message code="book.bookInfo.deal.startDate"/> $<c:out value="${deal.startDate}"/></p>
-                <p><spring:message code="book.bookInfo.deal.endDate"/> $<c:out value="${deal.endDate}"/></p>
+                <p><spring:message code="book.bookInfo.deal.startDate"/> <c:out value="${deal.startDate}"/></p>
+                <p><spring:message code="book.bookInfo.deal.endDate"/> <c:out value="${deal.endDate}"/></p>
             </div>
             <div class="modal-footer">
                 <div class="footer-aligner">
                     <button class="btn modal-close close-btn" ><strong><spring:message code="close"/></strong></button>
-                    <button class="btn modal-close close-btn" ><strong><spring:message code="book.bookInfo.editDeal"/></strong></button>
+<%--                    <button class="btn modal-close close-btn" ><strong><spring:message code="book.bookInfo.editDeal"/></strong></button>--%>
                     <form id="end-deal"  action="${endDealUrl}" method="post">
                         <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="book.bookInfo.endDeal"/></strong></button>
                     </form>

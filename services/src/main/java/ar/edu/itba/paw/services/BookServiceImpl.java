@@ -2,10 +2,14 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.DealService;
+import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.*;
 
 import ar.edu.itba.paw.models.users.User;
@@ -21,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -28,11 +33,14 @@ public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
 
+    private final DealService dealService;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao){
+    public BookServiceImpl(final BookDao bookDao, DealService dealService){
         this.bookDao = bookDao;
+        this.dealService=dealService;
     }
 
     @Transactional
@@ -99,6 +107,7 @@ public class BookServiceImpl implements BookService {
         return bookDao.findById(id);
     }
 
+
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getAll(int pageNumber, int pageSize) {
@@ -110,6 +119,30 @@ public class BookServiceImpl implements BookService {
         PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getAllSize());
         if (page.getPage().isEmpty() && page.getPageCount() != 0){
             return getAll(page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<BookAndDeal> getAllWithDeals(int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
+
+        List<BookAndDeal> booksAndDeals = books.stream()
+                .map(book -> {
+                    Optional<Deal> dealOptional = dealService.get(book.getBookId());
+                    Deal deal = dealOptional.orElse(null);
+                    return new BookAndDeal(book, deal);
+                })
+                .toList();
+
+        PaginatedContent<BookAndDeal> page = new PaginatedContent<>(booksAndDeals, pageNumber, pageSize, bookDao.getAllSize());
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAllWithDeals(page.getPageCount(), pageSize);
         } else {
             return page;
         }

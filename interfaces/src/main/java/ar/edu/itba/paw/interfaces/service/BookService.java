@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
@@ -46,6 +47,8 @@ public interface BookService {
     Optional<Book> findById(long id);
 
     PaginatedContent<Book> getAll(int pageNumber, int pageSize);
+
+    PaginatedContent<BookAndDeal> getAllWithDeals(int pageNumber, int pageSize);
 
     PaginatedContent<Book> searchWithParams(
             String title,
