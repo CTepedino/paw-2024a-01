@@ -164,6 +164,31 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<BookAndDeal> searchWithParamsWithDeal(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
+
+        List<BookAndDeal> booksAndDeals = books.stream()
+                .map(book -> {
+                    Optional<Deal> dealOptional = dealService.get(book.getBookId());
+                    Deal deal = dealOptional.orElse(null);
+                    return new BookAndDeal(book, deal);
+                })
+                .toList();
+
+
+        PaginatedContent<BookAndDeal> page = new PaginatedContent<>(booksAndDeals, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return searchWithParamsWithDeal(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
+    }
+
 
     @Transactional(readOnly = true)
     @Override

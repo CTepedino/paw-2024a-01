@@ -57,6 +57,14 @@
     font-size: 12pt
 }
 
+.price-number-crossed {
+    position: absolute;
+    bottom: 30px;
+    right: 0;
+    margin: 50px;
+    font-size: 8pt
+}
+
 @media screen and (max-width: 600px) {
     .card-info {
         width: 200px;
@@ -70,4 +78,8 @@
 
 .black-icons {
     color: black;
+}
+
+.strikethrough {
+    text-decoration: line-through;
 }

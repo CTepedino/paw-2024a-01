@@ -51,7 +51,7 @@ public class HomeController {
 
         final ModelAndView mav = new ModelAndView("searchResults");
 
-        PaginatedContent<Book> books = bs.searchWithParams(
+        PaginatedContent<BookAndDeal> books = bs.searchWithParamsWithDeal(
                 form.getTitle(),
                 form.getGenre(),
                 form.getMinPrice(),

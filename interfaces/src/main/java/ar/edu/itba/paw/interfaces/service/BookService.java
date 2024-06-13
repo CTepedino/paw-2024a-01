@@ -64,6 +64,20 @@ public interface BookService {
             int pageSize
     );
 
+    PaginatedContent<BookAndDeal> searchWithParamsWithDeal(
+            String title,
+            BookGenre genre,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            Integer minPageCount,
+            Integer maxPageCount,
+            Integer minSuggestedAge,
+            Integer maxSuggestedAge,
+            BookSearchOrderBy orderBy,
+            int pageNumber,
+            int pageSize
+    );
+
     List<Book> getRecommendations(Book book);
 
     PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
