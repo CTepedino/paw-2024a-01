@@ -39,14 +39,17 @@ public class BookController {
     private final OrderService os;
     private final QuestionService qs;
 
+    private final DealService ds;
+
 
     @Autowired
-    public BookController(final PublishService ps, final BookService bs, final ReviewService rs, final OrderService os, final QuestionService qs){
+    public BookController(final PublishService ps, final BookService bs, final ReviewService rs, final OrderService os, final QuestionService qs, DealService ds){
         this.ps = ps;
         this.bs = bs;
         this.rs = rs;
         this.os = os;
         this.qs = qs;
+        this.ds = ds;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
@@ -104,6 +107,7 @@ public class BookController {
             @ModelAttribute("questionForm") QuestionForm questionForm,
             @ModelAttribute("answerForm") AnswerForm answerForm,
             @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
+            @Valid @ModelAttribute("dealForm") DealFrom dealForm,
             final BindingResult error
     ){
         if (page < 1){
@@ -230,6 +234,28 @@ public class BookController {
         bs.toggleWishlist(user.getUserId(), bookId);
         return new ModelAndView("redirect:/book/"+bookId);
     }
+
+    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/deal")
+    public ModelAndView addDealForm(@ModelAttribute("dealForm") DealFrom form, @PathVariable("bookId") long bookId){
+
+        return new ModelAndView("createDeal");
+    }
+
+
+
+    @RequestMapping(method = RequestMethod.POST, path="/book/{bookId:\\d+}/deal")
+    public ModelAndView addDeal(@Valid @ModelAttribute final DealFrom dealForm, final BindingResult errors, @PathVariable("bookId") long bookId){
+
+        if (errors.hasErrors()){
+            return addDealForm(dealForm, bookId);
+        }
+
+        ds.create(bookId, dealForm.getPrice(), dealForm.getDuration());
+
+
+        return new ModelAndView("redirect:/book/"+bookId);
+    }
+
     @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/question")
     public ModelAndView createQuestion(
             @PathVariable("bookId") final long bookId,

@@ -74,6 +74,13 @@
                                     <strong><spring:message code="book.editBook"/></strong>
                                 </button>
                             </a>
+
+                            <a href="<c:url value="/book/${book.bookId}/deal"/>">
+                                <button type="submit" class="waves-effect waves-light btn action-button">
+                                    <strong><spring:message code="book.bookInfo.createDeal"/></strong>
+                                </button>
+                            </a>
+
                         </c:if>
                         <c:if test="${ownsBook or (isAuthor and not book.paused)}">
                             <a href="<c:url value="/book/file/${book.bookId}"/>" target="_blank">
