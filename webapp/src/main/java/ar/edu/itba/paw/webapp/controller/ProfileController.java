@@ -122,4 +122,11 @@ public class ProfileController {
 
         return new ModelAndView("redirect:/profile/"+loggedUser.getUserId());
     }
+
+    @RequestMapping(method = RequestMethod.GET, path="/analytics")
+    public ModelAndView analytics(@ModelAttribute("loggedUser") User loggedUser){
+        final ModelAndView mav = new ModelAndView("writerDashboard");
+        return mav;
+    }
+
 }

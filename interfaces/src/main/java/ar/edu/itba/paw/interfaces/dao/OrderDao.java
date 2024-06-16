@@ -31,4 +31,16 @@ public interface OrderDao {
     long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
 
     boolean ownsBook(long bookId, String email);
+
+    Long getTotalOrdersForWriter(long writerId);
+
+    Long getTotalOrdersForWriterForBook(long writerId, long bookId);
+
+    Long getTotalOrdersForBook(long bookId);
+
+    Long getTotalSales(long writerId);
+
+    Long getTotalSalesForMonth(long writerId, int year, int month);
+
+    List<Book> getTop5BooksByWriter(long writerId);
 }

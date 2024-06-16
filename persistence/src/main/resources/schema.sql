@@ -99,6 +99,17 @@ ALTER TABLE reviews ADD CONSTRAINT reviews_rating_check CHECK (rating BETWEEN 0 
 ALTER TABLE orders ADD COLUMN rejected_reason VARCHAR(255);
 */
 
+/* Sprint 6 modifications:
+ALTER TABLE orders ADD COLUMN price DECIMAL(10, 2);
+
+UPDATE orders o
+SET price = (
+    SELECT b.price
+    FROM books b
+    WHERE b.book_id = o.book_id
+);
+ */
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
@@ -163,6 +174,7 @@ CREATE TABLE IF NOT EXISTS orders(
     date TIMESTAMP default now(),
     is_public BOOLEAN DEFAULT FALSE,
     rejected_reason VARCHAR(255),
+    price DECIMAL(10, 2),
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,

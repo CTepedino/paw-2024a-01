@@ -163,4 +163,60 @@ public class OrderJpaDao implements OrderDao {
             return false;
         }
     }
+
+    @Override
+    public Long getTotalOrdersForWriter(long writerId) {
+        Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.writer.userId = :writerId");
+        query.setParameter("writerId", writerId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalOrdersForWriterForBook(long writerId, long bookId) {
+        Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.writer.userId = :writerId AND o.book.bookId = :bookId");
+        query.setParameter("writerId", writerId);
+        query.setParameter("bookId", bookId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalOrdersForBook(long bookId) {
+        Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.bookId = :bookId");
+        query.setParameter("bookId", bookId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalSales(long writerId) {
+        Query query = em.createQuery("SELECT SUM(o.price) FROM Order o WHERE o.book.writer.userId = :writerId");
+        query.setParameter("writerId", writerId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalSalesForMonth(long writerId, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT SUM(o.price) FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month"
+        );
+        query.setParameter("writerId", writerId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public List<Book> getTop5BooksByWriter(long writerId) {
+        TypedQuery<Book> query = em.createQuery(
+                "SELECT o.book FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "GROUP BY o.book.bookId " +
+                        "ORDER BY COUNT(o) DESC"
+        , Book.class);
+        query.setParameter("writerId", writerId);
+        query.setMaxResults(5);  // Limit the results to top 5
+        return query.getResultList();
+    }
 }
