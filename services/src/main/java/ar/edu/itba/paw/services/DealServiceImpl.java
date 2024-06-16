@@ -2,6 +2,8 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.DealDao;
 import ar.edu.itba.paw.interfaces.service.DealService;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.deals.Deal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,18 @@ public class DealServiceImpl implements DealService {
 
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<BookAndDeal> get(List<Book> books) {
+        return books.stream()
+                .map(book -> {
+                    Optional<Deal> dealOptional = get(book.getBookId());
+                    Deal deal = dealOptional.orElse(null);
+                    return new BookAndDeal(book, deal);
+                })
+                .toList();
+    }
+
     @Transactional
     @Override
     public void update(long dealId, BigDecimal price, int duration) {
@@ -54,6 +68,7 @@ public class DealServiceImpl implements DealService {
         Optional<Deal> deal = dealDao.findById(dealId);
         deal.ifPresent(value -> dealDao.update(value, deal.get().getPrice(), LocalDate.now().minusDays(1)));
     }
+
 
 
 }

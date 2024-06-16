@@ -80,11 +80,19 @@ public interface BookService {
 
     List<Book> getRecommendations(Book book);
 
+    List<BookAndDeal> getRecommendationsWithDeals(Book book);
+
     PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
+
+    PaginatedContent<BookAndDeal> getWriterBooksWithDeals(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
 
     PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic);
 
+    PaginatedContent<BookAndDeal> getOwnedBooksWithDeals(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic);
+
     PaginatedContent<Book> getProfileBooks(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter, boolean ownsProfile);
+
+    PaginatedContent<BookAndDeal> getProfileBooksWithDeals(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile);
 
     boolean isAuthor(Book book, long userId);
     boolean isAuthor(long bookId, String email);

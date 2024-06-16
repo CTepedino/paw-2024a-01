@@ -132,13 +132,7 @@ public class BookServiceImpl implements BookService {
         }
         List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
 
-        List<BookAndDeal> booksAndDeals = books.stream()
-                .map(book -> {
-                    Optional<Deal> dealOptional = dealService.get(book.getBookId());
-                    Deal deal = dealOptional.orElse(null);
-                    return new BookAndDeal(book, deal);
-                })
-                .toList();
+        List<BookAndDeal> booksAndDeals = dealService.get(books);
 
         PaginatedContent<BookAndDeal> page = new PaginatedContent<>(booksAndDeals, pageNumber, pageSize, bookDao.getAllSize());
         if (page.getPage().isEmpty() && page.getPageCount() != 0){
@@ -172,13 +166,7 @@ public class BookServiceImpl implements BookService {
         }
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
 
-        List<BookAndDeal> booksAndDeals = books.stream()
-                .map(book -> {
-                    Optional<Deal> dealOptional = dealService.get(book.getBookId());
-                    Deal deal = dealOptional.orElse(null);
-                    return new BookAndDeal(book, deal);
-                })
-                .toList();
+        List<BookAndDeal> booksAndDeals = dealService.get(books);
 
 
         PaginatedContent<BookAndDeal> page = new PaginatedContent<>(booksAndDeals, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
@@ -198,6 +186,13 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
+    public List<BookAndDeal> getRecommendationsWithDeals(Book book){
+
+        return dealService.get(getRecommendations(book));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
         if (pageNumber < 1){
             throw new InvalidPageException();
@@ -207,6 +202,22 @@ public class BookServiceImpl implements BookService {
         PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
         if (page.getPage().isEmpty() && page.getPageCount() != 0){
             return getWriterBooks(writerId, title, orderBy, page.getPageCount(), pageSize);
+        } else {
+            return page;
+        }
+    }
+
+    @Override
+    public PaginatedContent<BookAndDeal> getWriterBooksWithDeals(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> booksNoDeals =  bookDao.getWriterBooks(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
+        List<BookAndDeal> books = dealService.get(booksNoDeals);
+
+        PaginatedContent<BookAndDeal> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getWriterBooksWithDeals(writerId, title, orderBy, page.getPageCount(), pageSize);
         } else {
             return page;
         }
@@ -223,6 +234,23 @@ public class BookServiceImpl implements BookService {
         PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
         if (page.getPage().isEmpty() && page.getPageCount() != 0){
             return getOwnedBooks(readerId, title, orderBy, page.getPageCount(), pageSize, isPublic);
+        } else {
+            return page;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<BookAndDeal> getOwnedBooksWithDeals(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> booksNoDeals = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize, isPublic);
+        List<BookAndDeal> books = dealService.get(booksNoDeals);
+
+        PaginatedContent<BookAndDeal> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getOwnedBooksWithDeals(readerId, title, orderBy, page.getPageCount(), pageSize, isPublic);
         } else {
             return page;
         }
@@ -263,6 +291,16 @@ public class BookServiceImpl implements BookService {
             return getWriterBooks(userId, title, orderBy, pageNumber, pageSize);
         } else {
             return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, !ownsProfile);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<BookAndDeal> getProfileBooksWithDeals(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
+        if (asWriter){
+            return getWriterBooksWithDeals(userId, title, orderBy, pageNumber, pageSize);
+        } else {
+            return getOwnedBooksWithDeals(userId, title, orderBy, pageNumber, pageSize, !ownsProfile);
         }
     }
 

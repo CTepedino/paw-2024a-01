@@ -47,12 +47,22 @@
 }
 
 .price-number {
-    bottom: 0;
-    right: 0;
-    margin: 50px;
-    overflow: hidden;
+    font-size: 15pt;
+}
+
+.price-number-new {
+    font-size: 15pt;
+    margin-top: 2px;
+}
+.price-number-crossed {
+    font-size: 10pt;
+    margin-bottom: 0;
 }
 
 .paused{
     color: red;
+}
+
+.strikethrough {
+    text-decoration: line-through;
 }

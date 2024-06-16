@@ -4,6 +4,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
@@ -120,7 +121,7 @@ public class BookController {
         }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        List<Book> recommendations = bs.getRecommendations(book);
+        List<BookAndDeal> recommendations = bs.getRecommendationsWithDeals(book);
         PaginatedContent<Question> myQuestions = loggedUser!=null? qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE): null;
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), page, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
