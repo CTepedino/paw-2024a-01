@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.interfaces.dao;
 
+import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -34,13 +36,16 @@ public interface OrderDao {
 
     Long getTotalOrdersForWriter(long writerId);
 
-    Long getTotalOrdersForWriterForBook(long writerId, long bookId);
 
     Long getTotalOrdersForBook(long bookId);
 
-    Long getTotalSales(long writerId);
+    BigDecimal getTotalSales(long writerId);
 
-    Long getTotalSalesForMonth(long writerId, int year, int month);
+    BigDecimal getTotalSalesForBook(long bookId);
+
+    BigDecimal getTotalSalesForMonth(long writerId, int year, int month);
 
     List<Book> getTop5BooksByWriter(long writerId);
+
+    public List<Long> getBooksByWriterOrderedBySales(long writerId);
 }

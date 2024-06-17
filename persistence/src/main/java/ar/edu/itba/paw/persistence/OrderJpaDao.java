@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
+import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
@@ -9,6 +10,7 @@ import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -172,14 +174,6 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public Long getTotalOrdersForWriterForBook(long writerId, long bookId) {
-        Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.writer.userId = :writerId AND o.book.bookId = :bookId");
-        query.setParameter("writerId", writerId);
-        query.setParameter("bookId", bookId);
-        return (Long) query.getSingleResult();
-    }
-
-    @Override
     public Long getTotalOrdersForBook(long bookId) {
         Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.bookId = :bookId");
         query.setParameter("bookId", bookId);
@@ -187,14 +181,21 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public Long getTotalSales(long writerId) {
+    public BigDecimal getTotalSales(long writerId) {
         Query query = em.createQuery("SELECT SUM(o.price) FROM Order o WHERE o.book.writer.userId = :writerId");
         query.setParameter("writerId", writerId);
-        return (Long) query.getSingleResult();
+        return (BigDecimal) query.getSingleResult();
     }
 
     @Override
-    public Long getTotalSalesForMonth(long writerId, int year, int month) {
+    public BigDecimal getTotalSalesForBook(long bookId) {
+        Query query = em.createQuery("SELECT SUM(o.price) FROM Order o WHERE o.book.bookId = :bookId");
+        query.setParameter("bookId", bookId);
+        return (BigDecimal) query.getSingleResult();
+    }
+
+    @Override
+    public BigDecimal getTotalSalesForMonth(long writerId, int year, int month) {
         Query query = em.createQuery(
                 "SELECT SUM(o.price) FROM Order o " +
                         "WHERE o.book.writer.userId = :writerId " +
@@ -204,7 +205,7 @@ public class OrderJpaDao implements OrderDao {
         query.setParameter("writerId", writerId);
         query.setParameter("year", year);
         query.setParameter("month", month);
-        return (Long) query.getSingleResult();
+        return (BigDecimal) query.getSingleResult();
     }
 
     @Override
@@ -217,6 +218,17 @@ public class OrderJpaDao implements OrderDao {
         , Book.class);
         query.setParameter("writerId", writerId);
         query.setMaxResults(5);  // Limit the results to top 5
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Long> getBooksByWriterOrderedBySales(long writerId) {
+        Query query = em.createQuery(
+                "SELECT o.book.bookId FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "GROUP BY o.book.bookId " +
+                        "ORDER BY COUNT(o) DESC");
+        query.setParameter("writerId", writerId);
         return query.getResultList();
     }
 }

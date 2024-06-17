@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
@@ -24,13 +25,15 @@ public class ProfileController {
     private final UserService us;
     private final BookService bs;
 
+    private final AnalyticsService as;
     private static final int PROFILE_PAGE_SIZE = 20;
 
 
     @Autowired
-    public ProfileController(final UserService us, final BookService bs) {
+    public ProfileController(final UserService us, final BookService bs, AnalyticsService as) {
         this.us = us;
         this.bs = bs;
+        this.as = as;
     }
 
 
@@ -126,6 +129,9 @@ public class ProfileController {
     @RequestMapping(method = RequestMethod.GET, path="/analytics")
     public ModelAndView analytics(@ModelAttribute("loggedUser") User loggedUser){
         final ModelAndView mav = new ModelAndView("writerDashboard");
+        mav.addObject("books", as.getBooksByWriterWithAnalytics(loggedUser.getUserId()));
+        mav.addObject("totalRevenue", as.getTotalSales(loggedUser.getUserId()));
+        mav.addObject("totalOrders", as.getTotalOrdersForWriter(loggedUser.getUserId()));
         return mav;
     }
 
