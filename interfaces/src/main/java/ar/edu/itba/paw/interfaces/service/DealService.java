@@ -20,4 +20,6 @@ public interface DealService {
     public void update(long bookId, BigDecimal price, int duration);
 
     void endDeal(long bookId);
+
+    String getPercentage(Book book, Deal deal);
 }

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.books.Book;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -72,4 +73,5 @@ public class Deal {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
 }

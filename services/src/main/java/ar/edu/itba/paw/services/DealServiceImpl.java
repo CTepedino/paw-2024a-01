@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -69,6 +70,17 @@ public class DealServiceImpl implements DealService {
         deal.ifPresent(value -> dealDao.update(value, deal.get().getPrice(), LocalDate.now().minusDays(1)));
     }
 
+    @Override
+    public String getPercentage(Book book, Deal deal){
+        if(book == null || deal == null ){
+            return null;
+        }
+
+        BigDecimal change = deal.getPrice().subtract(book.getPrice());
+        BigDecimal percentageChange = change.divide(book.getPrice(), RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+        return String.format("%+d%%", percentageChange.intValue());
+    }
 
 
 }

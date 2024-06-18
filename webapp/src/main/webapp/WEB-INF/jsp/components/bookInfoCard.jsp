@@ -56,7 +56,7 @@
                         </h5>
                     </c:if>
                     <c:if test="${book.deal ne null}">
-                        <h6 class="price-number-crossed strikethrough"><c:out value="${book.book.formattedPrice}"/></h6>
+                        <h6 class="price-number-crossed"><span class="strikethrough"><c:out value="${book.book.formattedPrice}"/></span><span class="percentage"><c:out value="${book.percentage}"/></span></h6>
                         <h5 class="price-number"><c:out value="${book.deal.formattedPrice}"/></h5>
                     </c:if>
                 </div>

@@ -17,4 +17,5 @@ public interface DealDao {
     void update(Deal bookId, BigDecimal price, LocalDate endDate);
 
     Optional<Deal> findById(long dealId);
+
 }

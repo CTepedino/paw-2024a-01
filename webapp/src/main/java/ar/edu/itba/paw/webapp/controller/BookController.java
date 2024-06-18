@@ -127,6 +127,7 @@ public class BookController {
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
         Optional<Deal> deal = ds.get(bookId);
+        String percentage = ds.getPercentage(book, deal.orElse(null));
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
@@ -144,6 +145,7 @@ public class BookController {
         mav.addObject("book", book);
         mav.addObject("order", order.orElse(null));
         mav.addObject("deal", deal.orElse(null));
+        mav.addObject("percentage", percentage);
         mav.addObject("questions", questions);
         mav.addObject("myQuestions", myQuestions);
         mav.addObject("recommendations", recommendations);

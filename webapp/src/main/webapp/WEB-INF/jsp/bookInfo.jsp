@@ -52,7 +52,7 @@
                             <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
                         </c:if>
                         <c:if test="${deal ne null}">
-                            <h6 class="price strikethrough"><c:out value="${book.formattedPrice}"/></h6>
+                            <h6 class="price"><span class="strikethrough"><c:out value="${book.formattedPrice}"/></span><span class="percentage"><c:out value="${percentage}"/></span></h6>
                             <h5 class="price"><c:out value="${deal.formattedPrice}"/></h5>
                         </c:if>
                     </div>

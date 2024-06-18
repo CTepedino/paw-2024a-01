@@ -76,3 +76,8 @@
 .strikethrough {
     text-decoration: line-through;
 }
+
+.percentage {
+    color:red;
+    margin-left: 10px;
+}
