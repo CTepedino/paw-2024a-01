@@ -9,7 +9,9 @@ import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
+import ar.edu.itba.paw.webapp.form.AnalyticsForm;
 import ar.edu.itba.paw.webapp.form.EditProfileForm;
+import ar.edu.itba.paw.webapp.form.OrderSearchForm;
 import ar.edu.itba.paw.webapp.form.ProfileBookSearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.Year;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ProfileController {
@@ -127,11 +133,28 @@ public class ProfileController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/analytics")
-    public ModelAndView analytics(@ModelAttribute("loggedUser") User loggedUser){
+    public ModelAndView analytics(
+            @ModelAttribute("loggedUser") User loggedUser,
+            @Valid @ModelAttribute("analyticsForm") AnalyticsForm analyticsForm,
+            final BindingResult error)
+    {
         final ModelAndView mav = new ModelAndView("writerDashboard");
-        mav.addObject("books", as.getBooksByWriterWithAnalytics(loggedUser.getUserId()));
+
+        if(error.hasErrors()){
+            if (error.hasFieldErrors("page")){
+                analyticsForm.setPage(1);
+            }
+        }
+        mav.addObject("books", as.getBooksByWriterWithAnalytics(loggedUser.getUserId(), analyticsForm.byMonth(), analyticsForm.getMonth(), analyticsForm.getYear(), analyticsForm.getPage(), 10));
         mav.addObject("totalRevenue", as.getTotalSales(loggedUser.getUserId()));
         mav.addObject("totalOrders", as.getTotalOrdersForWriter(loggedUser.getUserId()));
+        mav.addObject("totalRevenueThisMonth", as.getTotalSalesForMonth(loggedUser.getUserId(), YearMonth.now().getYear(), YearMonth.now().getMonthValue()));
+        mav.addObject("totalOrdersThisMonth", as.getTotalOrdersForWriterForMonth(loggedUser.getUserId(), YearMonth.now().getYear(), YearMonth.now().getMonthValue()));
+        mav.addObject("years", as.getYears());
+        mav.addObject("months", as.getMonths());
+        mav.addObject("showMonths", analyticsForm.byMonth());
+        mav.addObject("revenueChange", as.getSalesIncrease(loggedUser.getUserId()));
+        mav.addObject("ordersChange", as.getOrdersIncrease(loggedUser.getUserId()));
         return mav;
     }
 

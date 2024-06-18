@@ -15,6 +15,9 @@ public class AnalyticsBook {
         this.book=book;
         this.totalOrders=totalOrders;
         this.totalSales=totalSales;
+        if(this.totalSales == null){
+            this.totalSales= BigDecimal.valueOf(0);
+        }
     }
 
     public Book getBook() {
@@ -42,9 +45,6 @@ public class AnalyticsBook {
     }
 
     public String getFormattedTotalSales(){
-        if(totalSales == null){
-            totalSales= BigDecimal.valueOf(0);
-        }
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(totalSales);

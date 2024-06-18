@@ -10,14 +10,13 @@
     <link href="<c:url value="/css/dashboard.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/salesView.css"/>" rel="stylesheet"/>
 
-    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 <%@include file="components/topBar.jsp" %>
 <body>
     <div class="container dashboard">
         <h2 class="page-title"><spring:message code="profile.analytics"/></h2>
         <div class="row">
-            <div class="col s2 m5">
+            <div class="col s3 ">
                 <div class="card-panel">
                     <span class="white-text">
                         <spring:message code="profile.analytics.totalOrders"/>
@@ -26,7 +25,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col s2 m5">
+            <div class="col s3 ">
                 <div class="card-panel">
                     <span class="white-text">
                         <spring:message code="profile.analytics.totalRevenue"/>
@@ -35,7 +34,66 @@
                     </span>
                 </div>
             </div>
+            <div class="col s3 ">
+                <div class="card-panel">
+                    <span class="white-text">
+                        <spring:message code="profile.analytics.ordersThisMonth"/>
+                        <br/>
+                        <c:out value="${totalOrdersThisMonth}"/>
+                        <span class="color-yellow"><c:out value="${ordersChange}"/> </span>
+                    </span>
+                </div>
+            </div>
+            <div class="col s3 ">
+                <div class="card-panel">
+                    <span class="white-text">
+                        <spring:message code="profile.analytics.revenueThisMonth"/>
+                        <br/>
+                        <c:out value="${totalRevenueThisMonth}"/>
+                        <span class="color-yellow"><c:out value="${revenueChange}"/> </span>
+                    </span>
+                </div>
+            </div>
         </div>
+        <c:url value="/analytics" var="analyticsUrl"/>
+        <form:form modelAttribute="analyticsForm"
+                   action="${analyticsUrl}"
+                   method="get"
+                   id="books">
+            <div class="row">
+                <label path="byMonth" id="byMonth">
+                    <input type="checkbox" path="byMonth" name="byMonth" onchange="this.form.submit()" ${showMonths ? 'checked' : ''}/>
+                    <span>Show by month</span>
+                </label>
+            </div>
+            <c:if test="${showMonths}">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <form:label path="year" cssClass="active">
+                            <spring:message code="profile.analytics.select.year"/>
+                        </form:label><br>
+                        <form:select path="year" onchange="this.form.submit()">
+                            <c:forEach items="${years}" var="year">
+                                <form:option value="${year}">${year}</form:option>
+                            </c:forEach>
+                        </form:select>
+                    </div>
+                    <div class="input-field col s6">
+                        <form:label path="month" cssClass="active">
+                            <spring:message code="profile.analytics.select.month"/>
+                        </form:label><br>
+                        <form:select path="month" onchange="this.form.submit()">
+                            <c:forEach items="${months}" var="month">
+                                <form:option value="${month}"><spring:message code="month.${month}"/></form:option>
+                            </c:forEach>
+                        </form:select>
+                    </div>
+                </div>
+            </c:if>
+            <input type="submit" hidden />
+            <input name="page" id="page" style="display: none"/>
+        </form:form>
+
         <div class="row table-top">
             <div class="col s6 table-title"> <spring:message code="profile.analytics.book"/> </div>
             <div class="col s3 table-title"> <spring:message code="profile.analytics.totalOrders"/></div>
@@ -69,5 +127,18 @@
             </c:forEach>
         </ul>
     </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+    document.getElementById('byMonth').addEventListener('change', function() {
+        document.getElementById('byMonth').submit();
+    });
+
+
+</script>
+
 </body>
 </html>

@@ -209,6 +209,48 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
+    public BigDecimal getTotalSalesForMonthForBook(long bookId, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT SUM(o.price) FROM Order o " +
+                        "WHERE o.book.bookId = :bookId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month"
+        );
+        query.setParameter("bookId", bookId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+        return (BigDecimal) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalOrdersForMonthForBook(long bookId, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT COUNT(o) FROM Order o " +
+                        "WHERE o.book.bookId = :bookId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month"
+        );
+        query.setParameter("bookId", bookId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalOrdersForMonthForWriter(long writerId, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT COUNT(o) FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month"
+        );
+        query.setParameter("writerId", writerId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
     public List<Book> getTop5BooksByWriter(long writerId) {
         TypedQuery<Book> query = em.createQuery(
                 "SELECT o.book FROM Order o " +
