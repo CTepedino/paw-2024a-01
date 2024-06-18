@@ -34,6 +34,8 @@ public class ProfileController {
     private final AnalyticsService as;
     private static final int PROFILE_PAGE_SIZE = 20;
 
+    private static final int ANALYTICS_PAGE_SIZE = 5;
+
 
     @Autowired
     public ProfileController(final UserService us, final BookService bs, AnalyticsService as) {
@@ -145,7 +147,7 @@ public class ProfileController {
                 analyticsForm.setPage(1);
             }
         }
-        mav.addObject("books", as.getBooksByWriterWithAnalytics(loggedUser.getUserId(), analyticsForm.byMonth(), analyticsForm.getMonth(), analyticsForm.getYear(), analyticsForm.getPage(), 10));
+        mav.addObject("books", as.getBooksByWriterWithAnalytics(loggedUser.getUserId(), analyticsForm.byMonth(), analyticsForm.getMonth(), analyticsForm.getYear(), analyticsForm.getPage(), ANALYTICS_PAGE_SIZE));
         mav.addObject("totalRevenue", as.getTotalSales(loggedUser.getUserId()));
         mav.addObject("totalOrders", as.getTotalOrdersForWriter(loggedUser.getUserId()));
         mav.addObject("totalRevenueThisMonth", as.getTotalSalesForMonth(loggedUser.getUserId(), YearMonth.now().getYear(), YearMonth.now().getMonthValue()));
@@ -155,6 +157,8 @@ public class ProfileController {
         mav.addObject("showMonths", analyticsForm.byMonth());
         mav.addObject("revenueChange", as.getSalesIncrease(loggedUser.getUserId()));
         mav.addObject("ordersChange", as.getOrdersIncrease(loggedUser.getUserId()));
+        mav.addObject("totalRevenueThatMonth", as.getTotalSalesForMonth(loggedUser.getUserId(), analyticsForm.getYear(), analyticsForm.getMonth()));
+        mav.addObject("totalOrdersThatMonth", as.getTotalOrdersForWriterForMonth(loggedUser.getUserId(), analyticsForm.getYear(), analyticsForm.getMonth()));
         return mav;
     }
 
