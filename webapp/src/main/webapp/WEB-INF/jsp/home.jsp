@@ -57,6 +57,16 @@
         </c:forEach>
     </div>
 
+    <h5>Bestsellers</h5>
+
+        <div class="row">
+            <c:forEach var="bookBest" items="${bestSellers}">
+                <c:set var="book" value="${bookBest}" scope="request"/>
+                <%@include file="components/homeBook.jsp"%>
+            </c:forEach>
+        </div>
+
+
     <div class="row">
         <c:forEach var="book" items="${books.page}">
             <c:set var="book" value="${book}" scope="request"/>

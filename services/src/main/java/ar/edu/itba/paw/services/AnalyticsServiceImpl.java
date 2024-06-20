@@ -118,11 +118,6 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Book> getTop5BooksByWriter(long writerId){
-        return orderDao.getTop5BooksByWriter(writerId);
-    }
 
 
     @Transactional(readOnly = true)

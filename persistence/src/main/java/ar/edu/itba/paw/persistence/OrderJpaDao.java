@@ -252,16 +252,20 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public List<Book> getTop5BooksByWriter(long writerId) {
-        TypedQuery<Book> query = em.createQuery(
-                "SELECT o.book FROM Order o " +
-                        "WHERE o.book.writer.userId = :writerId " +
+    public List<Long> getTopBooks(int size) {
+        Query query = em.createQuery(
+                "SELECT o.book.bookId FROM Order o " +
                         "GROUP BY o.book.bookId " +
-                        "ORDER BY COUNT(o) DESC"
-        , Book.class);
-        query.setParameter("writerId", writerId);
-        query.setMaxResults(5);  // Limit the results to top 5
-        return query.getResultList();
+                        "ORDER BY COUNT(o) DESC");
+        query.setMaxResults(size);  // Limit the results to top 5
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) query.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+        return idList;
     }
 
     @Override

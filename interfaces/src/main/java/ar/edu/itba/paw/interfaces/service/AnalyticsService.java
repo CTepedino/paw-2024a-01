@@ -25,7 +25,6 @@ public interface AnalyticsService {
 
     String getOrdersIncrease(long writerId);
 
-    List<Book> getTop5BooksByWriter(long writerId);
 
     PaginatedContent<AnalyticsBook> getBooksByWriterWithAnalytics(long writerId, boolean byMonths, int month, int year, int pageNumber, int pageSize);
 
