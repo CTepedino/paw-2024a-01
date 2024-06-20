@@ -1,18 +1,18 @@
 package ar.edu.itba.paw.models.books;
 
 public enum BookSalesCategory {
-    BEST_SELLER(3),
-    POPULAR(1),
+    BEST_SELLER(3L),
+    POPULAR(1L),
 
-    DEFAULT(0);
+    DEFAULT(0L);
 
-    private final Integer minSales;
+    private final Long minSales;
 
-    BookSalesCategory(Integer minSales){
+    BookSalesCategory(Long minSales){
         this.minSales=minSales;
     }
 
-    public Integer getMinSales(){
+    public Long getMinSales(){
         return minSales;
     }
 

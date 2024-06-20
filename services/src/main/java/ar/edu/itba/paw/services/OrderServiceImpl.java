@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false);
         bs.removeFromWishlist(buyer.getUserId(), bookId);
+        bs.checkBookSalesCategory(book);
         try {
             orderDao.createOrUpdatePaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
         } catch (IOException e){

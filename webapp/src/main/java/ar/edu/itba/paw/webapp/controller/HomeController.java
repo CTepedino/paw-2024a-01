@@ -21,6 +21,7 @@ import java.util.List;
 public class HomeController {
 
     private static final int PAGE_SIZE = 20;
+    private static final int BEST_SELLER_SIZE = 6;
 
     private final BookService bs;
 
@@ -33,7 +34,7 @@ public class HomeController {
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
         PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
-        List<Book> bestSellers = bs.getTopBooks();
+        List<Book> bestSellers = bs.getTopBooks(BEST_SELLER_SIZE);
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", books);
