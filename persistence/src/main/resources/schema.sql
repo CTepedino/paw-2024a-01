@@ -198,6 +198,12 @@ CREATE TABLE IF NOT EXISTS email_validations(
     expiration TIMESTAMP NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS reset_codes(
+    id INT PRIMARY KEY REFERENCES users (user_id) ON DELETE CASCADE,
+    code VARCHAR(5) NOT NULL,
+    expiration TIMESTAMP NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS wishlist(
     id SERIAL PRIMARY KEY,
     user_id INT,

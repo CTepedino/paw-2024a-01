@@ -37,4 +37,10 @@ public interface UserService {
     void sendMissingDataEmails();
 
     String fillMissingWriterData(long userId, String password);
+
+    void createResetPasswordCode(String email);
+
+    void resetPassword(long userId, String password, String code);
+
+    void resendResetCode(long userId);
 }
