@@ -23,14 +23,14 @@ public class ResetCodeServiceImpl implements ResetCodeService {
     private static final int RESET_CODE_LENGTH = 5;
 
     private final UserDao userDao;
-    private final MailService mailService;
+    private final MailService ms;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ResetCodeServiceImpl.class);
 
     @Autowired
-    public ResetCodeServiceImpl(final UserDao userDao, final MailService mailService) {
+    public ResetCodeServiceImpl(final UserDao userDao, final MailService ms) {
         this.userDao = userDao;
-        this.mailService = mailService;
+        this.ms = ms;
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class ResetCodeServiceImpl implements ResetCodeService {
         LocalDateTime expiration = LocalDateTime.now().plusHours(RESET_CODE_HOURS);
         ResetCode resetCode = userDao.createResetCode(user.getUserId(), code, expiration);
 
-        //TODO: ms.sendResetCodeEmail
+        ms.sendResetPasswordEmail(user, resetCode.getCode(), resetCode.getExpiration());
         LOGGER.atDebug().setMessage("Generated password reset code for user id {}").addArgument(user.getUserId()).log();
 
         return resetCode;
@@ -95,6 +95,6 @@ public class ResetCodeServiceImpl implements ResetCodeService {
             throw new NoResetCodeException();
         }
 
-        //TODO: ms.sendResetCodeMail
+        ms.sendResetPasswordEmail(user, resetCode.getCode(), resetCode.getExpiration());
     }
 }

@@ -18,4 +18,6 @@ public interface MailService{
     void sendReceiptDeniedEmail(Order order);
 
     void sendMissingDataEmail(User user);
+
+    void sendResetPasswordEmail(User user, String code, LocalDateTime expiration);
 }
