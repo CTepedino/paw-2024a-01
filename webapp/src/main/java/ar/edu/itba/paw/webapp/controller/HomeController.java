@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -32,10 +33,12 @@ public class HomeController {
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
         PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
+        List<Book> bestSellers = bs.getTopBooks();
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", books);
         mav.addObject("popularGenres", bs.getGenresByBookCount());
+        mav.addObject("bestSellers", bestSellers);
         return mav;
     }
 

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
+import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
@@ -9,8 +10,10 @@ import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class OrderJpaDao implements OrderDao {
@@ -162,5 +165,178 @@ public class OrderJpaDao implements OrderDao {
         } catch (NoResultException e) {
             return false;
         }
+    }
+
+    @Override
+    public Long getTotalOrdersForWriter(long writerId) {
+        Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.writer.userId = :writerId");
+        query.setParameter("writerId", writerId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalOrdersForBook(long bookId) {
+        Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.bookId = :bookId");
+        query.setParameter("bookId", bookId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public BigDecimal getTotalSales(long writerId) {
+        Query query = em.createQuery("SELECT SUM(o.price) FROM Order o WHERE o.book.writer.userId = :writerId");
+        query.setParameter("writerId", writerId);
+        return (BigDecimal) query.getSingleResult();
+    }
+
+    @Override
+    public BigDecimal getTotalSalesForBook(long bookId) {
+        Query query = em.createQuery("SELECT SUM(o.price) FROM Order o WHERE o.book.bookId = :bookId");
+        query.setParameter("bookId", bookId);
+        return (BigDecimal) query.getSingleResult();
+    }
+
+    @Override
+    public BigDecimal getTotalSalesForMonth(long writerId, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT SUM(o.price) FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month"
+        );
+        query.setParameter("writerId", writerId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+        return (BigDecimal) query.getSingleResult();
+    }
+
+    @Override
+    public BigDecimal getTotalSalesForMonthForBook(long bookId, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT SUM(o.price) FROM Order o " +
+                        "WHERE o.book.bookId = :bookId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month"
+        );
+        query.setParameter("bookId", bookId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+        return (BigDecimal) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalOrdersForMonthForBook(long bookId, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT COUNT(o) FROM Order o " +
+                        "WHERE o.book.bookId = :bookId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month"
+        );
+        query.setParameter("bookId", bookId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long getTotalOrdersForMonthForWriter(long writerId, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT COUNT(o) FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month"
+        );
+        query.setParameter("writerId", writerId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public List<Long> getTopBooks(int size) {
+        Query query = em.createQuery(
+                "SELECT o.book.bookId FROM Order o " +
+                        "GROUP BY o.book.bookId " +
+                        "ORDER BY COUNT(o) DESC");
+        query.setMaxResults(size);  // Limit the results to top 5
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) query.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+        return idList;
+    }
+
+    @Override
+    public List<Long> getBooksByWriterOrderedBySales(long writerId, int offset, int limit) {
+        Query query = em.createQuery(
+                "SELECT o.book.bookId FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "GROUP BY o.book.bookId " +
+                        "ORDER BY COUNT(o) DESC, SUM(o.price) DESC");
+        query.setParameter("writerId", writerId);
+
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) query.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+        return idList;
+    }
+
+    @Override
+    public List<Long> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month) {
+        Query query = em.createQuery(
+                "SELECT o.book.bookId FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month " +
+                        "GROUP BY o.book.bookId " +
+                        "ORDER BY COUNT(o) DESC, SUM(o.price) DESC");
+        query.setParameter("writerId", writerId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) query.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+        return idList;
+    }
+
+    @Override
+    public long getBooksByWriterOrderedSize(long writerId){
+        Query query = em.createQuery(
+                "SELECT COUNT(DISTINCT o.book.bookId) " +
+                        "FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId ");
+        query.setParameter("writerId", writerId);
+
+        return (long) query.getSingleResult();
+    }
+
+    @Override
+    public long getBooksByWriterOrderedSize(long writerId, int year, int month){
+        Query query = em.createQuery(
+                "SELECT COUNT(DISTINCT o.book.bookId) " +
+                        "FROM Order o " +
+                        "WHERE o.book.writer.userId = :writerId " +
+                        "AND FUNCTION('YEAR', o.date) = :year " +
+                        "AND FUNCTION('MONTH', o.date) = :month");
+        query.setParameter("writerId", writerId);
+        query.setParameter("year", year);
+        query.setParameter("month", month);
+
+        return (long) query.getSingleResult();
     }
 }

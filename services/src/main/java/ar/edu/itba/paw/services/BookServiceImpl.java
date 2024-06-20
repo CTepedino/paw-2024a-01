@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
+import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
@@ -28,11 +30,14 @@ public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
 
+    private final OrderDao orderDao;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao){
+    public BookServiceImpl(final BookDao bookDao, final OrderDao orderDao){
         this.bookDao = bookDao;
+        this.orderDao = orderDao;
     }
 
     @Transactional
@@ -251,4 +256,12 @@ public class BookServiceImpl implements BookService {
     public void recheckWriterPausedBooks(long userId) {
         bookDao.recheckAllPaused(userId);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getTopBooks(){
+        List<Long> books = orderDao.getTopBooks(6);
+        return books.stream().map(book -> bookDao.findById(book).get()).toList();
+    }
+
 }
