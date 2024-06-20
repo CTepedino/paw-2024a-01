@@ -221,27 +221,27 @@ public class BookJpaDao implements BookDao {
         );
     }
 
-
     @Override
-    public boolean recheckPaused(long bookId) {
-        TypedQuery<Boolean> query = em.createQuery(
-            """
-                    SELECT NOT EXISTS (
-                        SELECT 1
-                        FROM Book b
-                        JOIN User u ON b.writer.userId = u.userId
-                        WHERE b.bookId = :bookId AND u.cbu IS NOT NULL AND EXISTS(
-                            SELECT 1
-                            FROM BookFile bf
-                            WHERE bf.id = b.bookId
-                        )
-                    )
-                """,
-            Boolean.class
-        );
-        query.setParameter("bookId", bookId);
-        return query.getSingleResult();
+    public void recheckAllPaused(long userId) {
+        Query query = em.createQuery("""
+            UPDATE Book b SET isPaused = CASE
+                WHEN NOT EXISTS(
+                    SELECT 1
+                    FROM BookFile bf
+                    WHERE bf.id = b.bookId
+                ) OR EXISTS(
+                    SELECT 1
+                    FROM User AS u
+                    WHERE u.userId = :userId AND u.cbu IS NULL
+                ) THEN TRUE
+                ELSE FALSE
+                END
+            WHERE b.writer.userId = :userId
+        """);
+        query.setParameter("userId",userId);
+        query.executeUpdate();
     }
+
 
     @SuppressWarnings("unchecked")
     @Override

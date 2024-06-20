@@ -81,4 +81,6 @@ public interface BookService {
     void removeFromWishlist(long userId, long bookId);
 
     PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize);
+
+    void recheckWriterPausedBooks(long userId);
 }

@@ -97,7 +97,8 @@ public interface BookDao {
 
     long getOwnedBooksSize(long readerId, String title, boolean isPublic);
 
-    boolean recheckPaused(long bookId);
+    void recheckAllPaused(long userId);
+
 
     List<BookGenre> getGenresByBookCount(int limit, int offset);
 

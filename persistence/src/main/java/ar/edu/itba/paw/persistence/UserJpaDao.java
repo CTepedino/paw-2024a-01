@@ -79,30 +79,11 @@ public class UserJpaDao implements UserDao {
         return query.getResultList().stream().findFirst();
     }
 
-    @Override
-    public void recheckAllPaused(long userId) {
-        Query query = em.createQuery("""
-            UPDATE Book b SET isPaused = CASE
-                WHEN NOT EXISTS(
-                    SELECT 1
-                    FROM BookFile bf
-                    WHERE bf.id = b.bookId
-                ) OR EXISTS(
-                    SELECT 1
-                    FROM User AS u
-                    WHERE u.userId = :userId AND u.cbu IS NULL
-                ) THEN TRUE
-                ELSE FALSE
-                END
-            WHERE b.writer.userId = :userId
-        """);
-        query.setParameter("userId",userId);
-        query.executeUpdate();
-    }
 
     @Override
     public List<User> getUsersWithPausedBooks() {
-        TypedQuery<User> query = em.createQuery("SELECT DISTINCT u FROM User u WHERE EXISTS(SELECT 1 FROM Book b WHERE b.writer.userId = u.userId)", User.class);
+        TypedQuery<User> query = em.createQuery(
+                "SELECT DISTINCT u FROM User u WHERE EXISTS(SELECT 1 FROM Book b WHERE b.writer.userId = u.userId AND NOT EXISTS(SELECT 1 FROM BookFile bf WHERE bf.fileId = b.bookId)) AND u.cbu IS NULL", User.class);
         return query.getResultList();
     }
 

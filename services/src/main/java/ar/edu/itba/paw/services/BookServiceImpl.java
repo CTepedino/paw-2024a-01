@@ -245,4 +245,10 @@ public class BookServiceImpl implements BookService {
             return page;
         }
     }
+
+    @Transactional
+    @Override
+    public void recheckWriterPausedBooks(long userId) {
+        bookDao.recheckAllPaused(userId);
+    }
 }

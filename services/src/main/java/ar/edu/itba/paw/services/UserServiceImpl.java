@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
-import ar.edu.itba.paw.interfaces.service.EmailValidationService;
-import ar.edu.itba.paw.interfaces.service.MailService;
-import ar.edu.itba.paw.interfaces.service.ResetCodeService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidCodeException;
 import ar.edu.itba.paw.models.exception.NoValidationCodeException;
@@ -44,17 +41,20 @@ public class UserServiceImpl implements UserService {
 
     private final ResetCodeService rcs;
 
+    private final BookService bs;
+
     private final PasswordEncoder passwordEncoder;
 
     private final MailService ms;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms){
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms, BookService bs){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
         this.rcs = rcs;
         this.ms = ms;
+        this.bs = bs;
     }
 
     @Transactional(readOnly = true)
@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService {
         userDao.update(user, firstName, lastName, cbu, description);
 
         if ((user.getRoles().contains(UserRoles.WRITER) && oldCbu==null ) || user.getRoles().isEmpty()){
-            userDao.recheckAllPaused(user.getUserId());
+            bs.recheckWriterPausedBooks(user.getUserId());
         }
 
 
