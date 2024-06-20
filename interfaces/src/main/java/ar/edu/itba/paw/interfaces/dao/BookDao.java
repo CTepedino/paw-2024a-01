@@ -44,6 +44,10 @@ public interface BookDao {
             boolean isPaused
     );
 
+    void toBestSeller(Book book);
+
+    void toPopular(Book book);
+
     CoverImage createCoverImage(Book book, byte[] coverImage);
     BookPreview createPreviewFile(Book book, byte[] previewFile);
 
