@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.models.files.ProfilePicture;
+import ar.edu.itba.paw.models.users.EmailValidation;
+import ar.edu.itba.paw.models.users.ResetCode;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.stereotype.Repository;
@@ -10,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -101,5 +104,43 @@ public class UserJpaDao implements UserDao {
     public List<User> getUsersWithPausedBooks() {
         TypedQuery<User> query = em.createQuery("SELECT DISTINCT u FROM User u WHERE EXISTS(SELECT 1 FROM Book b WHERE b.writer.userId = u.userId)", User.class);
         return query.getResultList();
+    }
+
+    @Override
+    public EmailValidation createEmailValidation(long id, String code, LocalDateTime expiration) {
+        EmailValidation ev = new EmailValidation(id, code, expiration);
+        em.persist(ev);
+        return ev;
+    }
+
+    @Override
+    public void deleteExpiredEmailValidations() {
+        Query query = em.createQuery("DELETE FROM EmailValidation ev WHERE ev.expiration < now()");
+    }
+
+    @Override
+    public void deleteEmailValidation(long id) {
+        Query query = em.createQuery("DELETE FROM EmailValidation ev WHERE ev.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+    @Override
+    public ResetCode createResetCode(long id, String code, LocalDateTime expiration) {
+        ResetCode rc = new ResetCode(id, code, expiration);
+        em.persist(rc);
+        return rc;
+    }
+
+    @Override
+    public void deleteExpiredResetCodes() {
+        Query query = em.createQuery("DELETE FROM ResetCode rc WHERE rc.expiration < now()");
+    }
+
+    @Override
+    public void deleteResetCode(long id) {
+        Query query = em.createQuery("DELETE FROM ResetCode rc WHERE rc.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 }

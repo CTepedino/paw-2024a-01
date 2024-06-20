@@ -6,9 +6,7 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
-import ar.edu.itba.paw.webapp.form.EditProfileForm;
-import ar.edu.itba.paw.webapp.form.SignUpForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -90,5 +88,48 @@ public class SessionController {
     }
 
 
+    @RequestMapping(method = RequestMethod.GET, path="/forgotPassword")
+    public ModelAndView forgotPassword(@ModelAttribute("sendForgotPasswordEmailForm") ForgotPasswordEmailForm form){
+        return new ModelAndView("forgotPassword");
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path="/forgotPassword")
+    public ModelAndView sendForgotPasswordMail(@Valid @ModelAttribute("sendForgotPasswordEmailForm") ForgotPasswordEmailForm form, final BindingResult errors){
+        if(errors.hasErrors()){
+            return forgotPassword(form);
+        }
+
+        us.createResetPasswordCode(form.getEmail());
+        ModelAndView mav = new ModelAndView("sentForgotPasswordMail");
+        mav.addObject("id", us.findByEmail(form.getEmail()).get().getUserId());
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/resetPassword/{id:\\d+}/{code:\\d+}")
+    public ModelAndView resetPasswordForm(@ModelAttribute("resetPasswordForm") ResetPasswordForm form, @PathVariable("id") long id, @PathVariable("code") String code){
+
+        ModelAndView mav =  new ModelAndView("resetPasswordForm");
+        mav.addObject("id",id);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path="/resetPassword/{id:\\d+}/{code:\\d+}")
+    public ModelAndView resetPassword(@Valid @ModelAttribute("resetPasswordForm") ResetPasswordForm form, final BindingResult errors, @PathVariable("id") long id, @PathVariable("code") String code){
+        if (errors.hasErrors()){
+            resetPasswordForm(form, id, code);
+        }
+
+        us.resetPassword(id, form.getPassword(), code);
+        return new ModelAndView("resetPasswordSuccess");
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path="/resendResetCode/{userId:\\d+}")
+    public ModelAndView resendResetCode(@PathVariable("userId") long userId){
+        us.resendResetCode(userId);
+        ModelAndView mav = new ModelAndView("sentForgotPasswordMail");
+        mav.addObject("id", us.findById(userId).get().getUserId());
+        return mav;
+    }
 }
 

@@ -26,7 +26,7 @@
         <appender-ref ref="root-appender"/>
     </root>
 
-    <logger name="ar.edu.itba" level="DEBUG" additivity="false">
+    <logger name="ar.edu.itba" level="INFO" additivity="false">
         <appender-ref ref="paw-appender"/>
     </logger>
 </configuration>

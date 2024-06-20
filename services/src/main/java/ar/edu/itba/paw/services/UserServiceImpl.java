@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.interfaces.service.MailService;
+import ar.edu.itba.paw.interfaces.service.ResetCodeService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidCodeException;
@@ -41,15 +42,18 @@ public class UserServiceImpl implements UserService {
 
     private final EmailValidationService evs;
 
+    private final ResetCodeService rcs;
+
     private final PasswordEncoder passwordEncoder;
 
     private final MailService ms;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, EmailValidationService evs, MailService ms){
+    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
+        this.rcs = rcs;
         this.ms = ms;
     }
 
@@ -258,5 +262,35 @@ public class UserServiceImpl implements UserService {
         userDao.giveRole(user, UserRoles.READER);
         userDao.giveRole(user, UserRoles.WRITER);
         return encodedPassword;
+    }
+
+    @Transactional
+    @Override
+    public void createResetPasswordCode(String email) {
+        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
+        rcs.create(user);
+    }
+
+
+    @Transactional
+    @Override
+    public void resetPassword(long userId, String password, String code) {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+
+        if (rcs.checkResetCode(userId, code)) {
+            userDao.updatePassword(user, passwordEncoder.encode(password));
+
+            List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+            Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        } else {
+            throw new InvalidCodeException();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void resendResetCode(long userId){
+        rcs.resend(findById(userId).orElseThrow(UserNotFoundException::new));
     }
 }
