@@ -3,6 +3,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -37,6 +39,9 @@
                 <form:input type="number" path="price" min="0" max="100000000"/>
             </div>
             <form:errors path="price" cssClass="red-text"  element="p"/>
+            <form:hidden path="bookPrice" value="${book.price}"/>
+            <form:errors path="bookPrice" cssClass="red-text"  element="p"/>
+
             <br>
 
             <div class="input-field">

@@ -236,10 +236,11 @@ public class BookController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/deal")
-    public ModelAndView addDealForm(@ModelAttribute("dealForm") DealFrom form, @PathVariable("bookId") long bookId){
+    public ModelAndView addDealForm(@ModelAttribute("dealForm") DealFrom dealForm, @PathVariable("bookId") long bookId){
 
         ModelAndView mav = new ModelAndView("createDeal");
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        dealForm.setBookPrice(book.getPrice());
         mav.addObject("book", book);
         return mav;
     }
@@ -247,7 +248,7 @@ public class BookController {
 
 
     @RequestMapping(method = RequestMethod.POST, path="/book/{bookId:\\d+}/deal")
-    public ModelAndView addDeal(@Valid @ModelAttribute final DealFrom dealForm, final BindingResult errors, @PathVariable("bookId") long bookId){
+    public ModelAndView addDeal(@Valid @ModelAttribute("dealForm") final DealFrom dealForm, final BindingResult errors, @PathVariable("bookId") long bookId){
 
         if (errors.hasErrors()){
             return addDealForm(dealForm, bookId);

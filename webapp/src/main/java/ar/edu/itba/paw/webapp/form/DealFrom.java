@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import ar.edu.itba.paw.webapp.form.validations.DealPriceValid;
+
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
+@DealPriceValid
 public class DealFrom {
 
     @NotNull
@@ -14,8 +14,19 @@ public class DealFrom {
     private BigDecimal price;
 
     @NotNull
-    @PositiveOrZero
+    @Positive
+    @Max(value = 1000000)
     private Integer duration;
+
+    private BigDecimal bookPrice;
+
+    public BigDecimal getBookPrice() {
+        return bookPrice;
+    }
+
+    public void setBookPrice(BigDecimal bookPrice) {
+        this.bookPrice = bookPrice;
+    }
 
     public BigDecimal getPrice() {
         return price;
