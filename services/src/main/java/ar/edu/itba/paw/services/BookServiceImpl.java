@@ -257,14 +257,13 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> getTopBooks(Integer size){
-        List<Long> books = orderDao.getTopBooks(size);
-        return books.stream().map(book -> bookDao.findById(book).get()).toList();
+        return bookDao.getTopBooks(size);
     }
 
     @Transactional
     @Override
     public void checkBookSalesCategory(Book book){
-        Long sales = orderDao.getTotalOrdersForBook(book.getBookId());
+        long sales = orderDao.getTotalOrdersForBook(book.getBookId());
         if(sales > BookSalesCategory.POPULAR.getMinSales() && book.getSalesCategory() != BookSalesCategory.POPULAR){
             bookDao.toPopular(book);
         }

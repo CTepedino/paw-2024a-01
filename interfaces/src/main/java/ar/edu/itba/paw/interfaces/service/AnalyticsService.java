@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface AnalyticsService {
 
-    Long getTotalOrdersForWriter(long writerId);
+    long getTotalOrdersForWriter(long writerId);
 
-    Long getTotalOrdersForBook(long bookId);
+    long getTotalOrdersForBook(long bookId);
 
     String getTotalSales(long writerId);
 
@@ -19,12 +19,11 @@ public interface AnalyticsService {
 
     String getTotalSalesForMonth(long writerId, int year, int month);
 
-    Long getTotalOrdersForWriterForMonth(long writerId, int year, int month);
+    long getTotalOrdersForWriterForMonth(long writerId, int year, int month);
 
     String getSalesIncrease(long writerId);
 
     String getOrdersIncrease(long writerId);
-
 
     PaginatedContent<AnalyticsBook> getBooksByWriterWithAnalytics(long writerId, boolean byMonths, int month, int year, int pageNumber, int pageSize);
 

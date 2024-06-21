@@ -39,15 +39,12 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public List<Question> getAll(long bookId, int offset, int limit) {
-        TypedQuery<Question> query = em.createQuery(
-                "FROM Question q WHERE q.book.bookId = :bookId ORDER BY q.date DESC",
-                Question.class
-        );
-        query.setParameter("bookId", bookId);
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.book_id = :bookId ORDER BY q.date DESC");
+        nativeQuery.setParameter("bookId", bookId);
 
-        return query.getResultList();
+        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
@@ -57,15 +54,12 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public List<Question> getAllFromUser(long userId, int offset, int limit) {
-        TypedQuery<Question> query = em.createQuery(
-                "FROM Question q WHERE q.questioner.id = :userId ORDER BY q.date DESC",
-                Question.class
-        );
-        query.setParameter("userId", userId);
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.questioner_id = :userId ORDER BY q.date DESC");
+        nativeQuery.setParameter("userId", userId);
 
-        return query.getResultList();
+        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
@@ -75,16 +69,13 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public List<Question> getAllFromUserAndBook(long userId, long bookId, int offset, int limit) {
-        TypedQuery<Question> query = em.createQuery(
-                "FROM Question q WHERE q.questioner.id = :userId AND q.book.bookId = :bookId ORDER BY q.date DESC",
-                Question.class
-        );
-        query.setParameter("userId", userId);
-        query.setParameter("bookId", bookId);
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.questioner_id = :userId AND q.book_id = :bookId ORDER BY q.date DESC");
+        nativeQuery.setParameter("userId", userId);
+        nativeQuery.setParameter("bookId", bookId);
 
-        return query.getResultList();
+        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
@@ -94,15 +85,12 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public List<Question> getAllFromWriter(long userId, int offset, int limit) {
-        TypedQuery<Question> query = em.createQuery(
-                "FROM Question q WHERE q.book.writer.id = :userId ORDER BY q.date DESC",
-                Question.class
-        );
-        query.setParameter("userId", userId);
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q JOIN books b ON q.book_id = b.book_id WHERE b.writer_id = :userId ORDER BY q.date DESC");
+        nativeQuery.setParameter("userId", userId);
 
-        return query.getResultList();
+        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
@@ -112,16 +100,13 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public List<Question> getAllFullQuestionsNotUser(long bookId, long userId, int offset, int limit) {
-        TypedQuery<Question> query = em.createQuery(
-                "FROM Question q WHERE q.book.bookId = :bookId AND q.answer IS NOT NULL AND q.questioner.id <> :userId ORDER BY q.date DESC",
-                Question.class
-        );
-        query.setParameter("bookId", bookId);
-        query.setParameter("userId", userId);
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.questioner_id <> :userId AND q.book_id = :bookId AND q.answer IS NOT NULL ORDER BY q.date DESC");
+        nativeQuery.setParameter("userId", userId);
+        nativeQuery.setParameter("bookId", bookId);
 
-        return query.getResultList();
+        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override

@@ -308,4 +308,14 @@ public class BookJpaDao implements BookDao {
     public long getWishlistSize(long userId) {
         return DaoUtils.getRowCount(em, "WishlistItem w", "w.bookId","WHERE w.userId = :userId", Map.of("userId", userId));
     }
+
+    @Override
+    public List<Book> getTopBooks(int size) {
+
+        Query nativeQuery = em.createNativeQuery("SELECT o.book_id FROM orders o GROUP BY o.book_id ORDER BY COUNT(o) DESC");
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
+    }
 }

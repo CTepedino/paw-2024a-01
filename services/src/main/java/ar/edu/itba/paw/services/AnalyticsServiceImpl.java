@@ -2,11 +2,14 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
+import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,35 +30,38 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     private final OrderDao orderDao;
     private final BookDao bookDao;
+    private final UserService us;
 
     @Autowired
-    public AnalyticsServiceImpl(final OrderDao orderDao, BookDao bookDao){
-        this.orderDao=orderDao;
+    public AnalyticsServiceImpl(final OrderDao orderDao, BookDao bookDao, UserService us){
+        this.orderDao= orderDao;
         this.bookDao = bookDao;
+        this.us = us;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Long getTotalOrdersForWriter(long writerId){
-        return orderDao.getTotalOrdersForWriter(writerId);
+    public long getTotalOrdersForWriter(long writerId){
+        return orderDao.getWriterOrdersSize(writerId, "", null);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Long getTotalOrdersForBook(long bookId){
+    public long getTotalOrdersForBook(long bookId){
         return orderDao.getTotalOrdersForBook(bookId);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Long getTotalOrdersForWriterForMonth(long writerId, int year, int month){
+    public long getTotalOrdersForWriterForMonth(long writerId, int year, int month){
         return orderDao.getTotalOrdersForMonthForWriter(writerId, year, month);
     }
 
     @Transactional(readOnly = true)
     @Override
     public String getTotalSales(long writerId){
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
+        User user = us.findById(writerId).get();
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(user.getLocale());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(orderDao.getTotalSales(writerId));
     }
@@ -70,11 +76,12 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Transactional(readOnly = true)
     @Override
     public String getTotalSalesForMonth(long writerId, int year, int month){
+        User user = us.findById(writerId).get();
         BigDecimal sales = orderDao.getTotalSalesForMonth(writerId, year, month);
         if(sales == null){
             sales=BigDecimal.valueOf(0);
         }
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(user.getLocale());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(sales);
     }
@@ -104,14 +111,14 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Transactional(readOnly = true)
     @Override
     public String getOrdersIncrease(long writerId) {
-        Long thisMonth = orderDao.getTotalOrdersForMonthForWriter(writerId, YearMonth.now().getYear(), YearMonth.now().getMonthValue());
-        Long lastMonth = orderDao.getTotalOrdersForMonthForWriter(writerId, YearMonth.now().minusMonths(1).getYear(), YearMonth.now().minusMonths(1).getMonthValue());
+        long thisMonth = orderDao.getTotalOrdersForMonthForWriter(writerId, YearMonth.now().getYear(), YearMonth.now().getMonthValue());
+        long lastMonth = orderDao.getTotalOrdersForMonthForWriter(writerId, YearMonth.now().minusMonths(1).getYear(), YearMonth.now().minusMonths(1).getMonthValue());
 
         if (lastMonth == 0) {
             return "0";
         }
 
-        Long change = thisMonth - lastMonth;
+        long change = thisMonth - lastMonth;
         double percentageChange = (double) change / lastMonth * 100;
 
         return String.format("%+d%%", (int) Math.round(percentageChange));

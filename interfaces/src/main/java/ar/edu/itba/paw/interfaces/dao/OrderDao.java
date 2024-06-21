@@ -34,10 +34,8 @@ public interface OrderDao {
 
     boolean ownsBook(long bookId, String email);
 
-    Long getTotalOrdersForWriter(long writerId);
 
-
-    Long getTotalOrdersForBook(long bookId);
+    long getTotalOrdersForBook(long bookId);
 
     BigDecimal getTotalSales(long writerId);
 
@@ -45,19 +43,15 @@ public interface OrderDao {
 
     BigDecimal getTotalSalesForMonth(long writerId, int year, int month);
 
-    List<Long> getTopBooks(int size);
+    List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit);
+    List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month);
 
-    List<Long> getBooksByWriterOrderedBySales(long writerId, int offset, int limit);
-
-    List<Long> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month);
-
-    Long getTotalOrdersForMonthForWriter(long writerId, int year, int month);
+    long getTotalOrdersForMonthForWriter(long writerId, int year, int month);
 
     BigDecimal getTotalSalesForMonthForBook(long bookId, int year, int month);
 
-    Long getTotalOrdersForMonthForBook(long bookId, int year, int month);
+    long getTotalOrdersForMonthForBook(long bookId, int year, int month);
 
     long getBooksByWriterOrderedSize(long writerId);
-
     long getBooksByWriterOrderedSize(long writerId, int year, int month);
 }
