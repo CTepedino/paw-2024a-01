@@ -52,7 +52,7 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public long getAllSize(long bookId) {
-        return DaoUtils.getRowCount(em, "questions", "WHERE book_id = :bookId", Map.of("bookId", bookId));
+        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.book.bookId = :bookId", Map.of("bookId", bookId));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public long getAllFromUserSize(long userId) {
-        return DaoUtils.getRowCount(em, "questions", "WHERE questioner_id = :userId", Map.of("userId", userId));
+        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.questioner.userId = :userId", Map.of("userId", userId));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public long getAllFromUserAndBookSize(long userId, long bookId) {
-        return DaoUtils.getRowCount(em, "questions", "WHERE questioner_id = :userId AND book_id = :bookId", Map.of("userId", userId, "bookId", bookId));
+        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.questioner.userId = :userId AND q.book.bookId = :bookId", Map.of("userId", userId, "bookId", bookId));
     }
 
     @Override
@@ -107,7 +107,7 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public long getAllFromWriterSize(long userId) {
-        return DaoUtils.getRowCount(em, "questions q LEFT JOIN books b ON q.book_id = b.book_id", "WHERE b.writer_id = :userId", Map.of("userId", userId));
+        return DaoUtils.getRowCount(em, "Question q LEFT JOIN Book b ON q.book.bookId = b.bookId", "q.questionId","WHERE b.writer.userId = :userId", Map.of("userId", userId));
     }
 
     @Override
@@ -126,7 +126,7 @@ public class QuestionJpaDao implements QuestionDao {
 
     @Override
     public long getAllFullQuestionsNotSUsersSize(long bookId, long userId) {
-        return DaoUtils.getRowCount(em, "questions", "WHERE questioner_id <> :userId AND book_id = :bookId and answer IS NOT NULL", Map.of("userId", userId, "bookId", bookId));
+        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.questioner.userId <> :userId AND q.book.bookId = :bookId and q.answer IS NOT NULL", Map.of("userId", userId, "bookId", bookId));
     }
 
 }

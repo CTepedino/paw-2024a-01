@@ -11,10 +11,6 @@ import java.util.stream.Collectors;
 
 public class DaoUtils {
 
-    static final String FIRST_CONDITION = " ";
-    static final String AND = " AND ";
-
-
     private DaoUtils(){}
 
     static String prepareSearchString(String search){
@@ -29,19 +25,19 @@ public class DaoUtils {
         }
     }
 
-    static long getRowCount(EntityManager em, String tableName, String conditions, Map<String, Object> params){
+    static long getRowCount(EntityManager em,String tableName, String countedRow, String conditions, Map<String, Object> params){
 
-        Query query = em.createNativeQuery(
-           "SELECT COUNT(*) FROM " + tableName + " " + conditions
+        Query query = em.createQuery(
+           "SELECT COUNT(DISTINCT " + countedRow + " ) FROM " + tableName + " " + conditions
         );
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
-        return ((BigInteger) query.getSingleResult()).longValue();
+        return (Long) query.getSingleResult();
     }
 
-    static long getRowCount(EntityManager em, String tableName){
-        return getRowCount(em, tableName, "", Map.of());
+    static long getRowCount(EntityManager em, String tableName, String countedRow){
+        return getRowCount(em, tableName, countedRow,"", Map.of());
     }
 
 
