@@ -133,20 +133,20 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
-        List<Long> books;
+        List<Book> books;
         List<AnalyticsBook> analyticsBooks;
         PaginatedContent<AnalyticsBook> page;
         if(!byMonths){
             books = orderDao.getBooksByWriterOrderedBySales(writerId, (pageNumber-1)*pageSize, pageSize);
             analyticsBooks = books.stream()
-                    .map(book -> new AnalyticsBook(bookDao.findById(book).get(), getTotalOrdersForBook(book), getTotalSalesForBook(book)))
+                    .map(book -> new AnalyticsBook(book, getTotalOrdersForBook(book.getBookId()), getTotalSalesForBook(book.getBookId())))
                     .toList();
             page = new PaginatedContent<>(analyticsBooks, pageNumber, pageSize, orderDao.getBooksByWriterOrderedSize(writerId));
         }
         else{
             books = orderDao.getBooksByWriterOrderedBySales(writerId, (pageNumber-1)*pageSize, pageSize, year, month);
             analyticsBooks = books.stream()
-                    .map(book -> new AnalyticsBook(bookDao.findById(book).get(), orderDao.getTotalOrdersForMonthForBook(book, year, month), orderDao.getTotalSalesForMonthForBook(book, year, month)))
+                    .map(book -> new AnalyticsBook(book, orderDao.getTotalOrdersForMonthForBook(book.getBookId(), year, month), orderDao.getTotalSalesForMonthForBook(book.getBookId(), year, month)))
                     .toList();
             page = new PaginatedContent<>(analyticsBooks, pageNumber, pageSize, orderDao.getBooksByWriterOrderedSize(writerId, year, month));
         }
