@@ -57,6 +57,12 @@
                             <script>
                                 new FixedStarRating(${avgRating});
                             </script>
+                            <c:if test="${loggedUserReview ne null}">
+                                <span>(${reviews.totalSize+1})</span>
+                            </c:if>
+                            <c:if test="${loggedUserReview eq null}">
+                                <span>(${reviews.totalSize})</span>
+                            </c:if>
                         </c:if>
                         <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
                     </div>
@@ -225,24 +231,36 @@
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
                         <div class="col s4 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                            <div class="col s4 table-title">
+                                <c:if test="${loggedUserReview ne null}">
+                                    <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize+1})</p>
+                                </c:if>
+                                <c:if test="${loggedUserReview eq null}">
+                                    <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize})</p>
+                                </c:if>
+                            </div>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'reviews'}">
                         <div class="col s4 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                            <c:if test="${loggedUserReview ne null}">
+                                <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize+1})</p>
+                            </c:if>
+                            <c:if test="${loggedUserReview eq null}">
+                                <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize})</p>
+                            </c:if>
                         </div>
                     </c:if>
                 </a>
                 <a href="${bookInfoUrl}/questions">
                     <c:if test="${tab eq 'questions'}">
                         <div class="col s4 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/> (${questions.totalSize})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'questions'}">
                         <div class="col s4 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/> (${questions.totalSize})</p>
                         </div>
                     </c:if>
                 </a>
@@ -250,12 +268,12 @@
                 <a href="${bookInfoUrl}/myQuestions">
                     <c:if test="${tab eq 'myQuestions'}">
                         <div class="col s4 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/> (${myQuestions.totalSize})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'myQuestions'}">
                         <div class="col s4 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/> (${myQuestions.totalSize})</p>
                         </div>
                     </c:if>
                 </a>
@@ -267,24 +285,24 @@
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
                         <div class="col s6 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'reviews'}">
                         <div class="col s6 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize})</p>
                         </div>
                     </c:if>
                 </a>
                 <a href="${bookInfoUrl}/questions">
                     <c:if test="${tab eq 'questions'}">
                         <div class="col s6 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/> (${questions.totalSize})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'questions'}">
                         <div class="col s6 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/> (${questions.totalSize})</p>
                         </div>
                     </c:if>
                 </a>

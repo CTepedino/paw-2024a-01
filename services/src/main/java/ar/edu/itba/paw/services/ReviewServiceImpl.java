@@ -64,7 +64,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (us.isLoggedIn()){
             reviews = reviewDao.getAllExcept(bookId, orderBy, (pageNumber-1)*pageSize, pageSize, us.getLoggedUser().get().getUserId());
-            size -=1;
+            Optional<Review> userReview = findLoggedUserReview(bookId);
+            if(userReview.isPresent()){
+                size -=1;
+            }
         } else {
             reviews = reviewDao.getAll(bookId, orderBy, (pageNumber-1)*pageSize, pageSize);
         }
