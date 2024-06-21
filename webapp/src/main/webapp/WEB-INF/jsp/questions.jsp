@@ -48,7 +48,7 @@
         </c:if>
 
         <c:if test="${(tab eq 'myQuestions' and empty myQuestions.page) or (tab eq 'questions' and empty questions.page)}">
-            <div class="container question-container">
+            <div class="container question-container centerer">
                 <h6><spring:message code="book.bookInfo.questions.noQuestions"/></h6>
             </div>
         </c:if>
