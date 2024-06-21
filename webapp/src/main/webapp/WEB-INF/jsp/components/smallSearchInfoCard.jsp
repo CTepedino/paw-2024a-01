@@ -12,6 +12,7 @@
 
 <div class="col s6">
     <a href="<c:url value="/book/${book.bookId}"/>">
+        <div class="card">
             <c:if test="${book.salesCategory eq 'BEST_SELLER'}">
                 <div class="card-badge bestseller"><spring:message code="book.bestseller"/></div>
             </c:if>
@@ -59,6 +60,7 @@
                     </h5>
                 </div>
             </div>
+        </div>
     </a>
 </div>
 

@@ -15,39 +15,39 @@ import org.springframework.web.servlet.ModelAndView;
 public class ErrorHandlingAdvice {
 
 
-    @ExceptionHandler({
-            BookNotFoundException.class,
-            ImageNotFoundException.class,
-            PdfNotFoundException.class,
-            OrderNotFoundException.class,
-            UserNotFoundException.class,
-            NoValidationCodeException.class
-    })
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView notFound(){return new ModelAndView("exception/404");}
-
-    @ExceptionHandler({
-            IllegalReviewException.class,
-            IllegalSearchQueryException.class,
-            InvalidOrderUpdateException.class,
-            InvalidPageException.class,
-            UnreadableFileException.class,
-            MaxUploadSizeExceededException.class
-    })
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ModelAndView badRequest(){return new ModelAndView("exception/400");}
-
-    @ExceptionHandler({
-            InvalidCodeException.class,
-            OrderAlreadyExistsException.class,
-            SameWriterAndBuyerException.class
-    })
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ModelAndView forbidden(){return new ModelAndView("exception/403");}
-
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ModelAndView exceptionCatchAll(){return new ModelAndView("exception/500");}
+//    @ExceptionHandler({
+//            BookNotFoundException.class,
+//            ImageNotFoundException.class,
+//            PdfNotFoundException.class,
+//            OrderNotFoundException.class,
+//            UserNotFoundException.class,
+//            NoValidationCodeException.class
+//    })
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    public ModelAndView notFound(){return new ModelAndView("exception/404");}
+//
+//    @ExceptionHandler({
+//            IllegalReviewException.class,
+//            IllegalSearchQueryException.class,
+//            InvalidOrderUpdateException.class,
+//            InvalidPageException.class,
+//            UnreadableFileException.class,
+//            MaxUploadSizeExceededException.class
+//    })
+//    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+//    public ModelAndView badRequest(){return new ModelAndView("exception/400");}
+//
+//    @ExceptionHandler({
+//            InvalidCodeException.class,
+//            OrderAlreadyExistsException.class,
+//            SameWriterAndBuyerException.class
+//    })
+//    @ResponseStatus(HttpStatus.FORBIDDEN)
+//    public ModelAndView forbidden(){return new ModelAndView("exception/403");}
+//
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ModelAndView exceptionCatchAll(){return new ModelAndView("exception/500");}
 
 
 }

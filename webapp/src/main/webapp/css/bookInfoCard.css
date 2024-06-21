@@ -66,7 +66,7 @@
     color: black;
 }
 
-.card-badge.bestseller {
+.card-badge.popular {
     width: 110px;
     position: absolute;
     top: 10px;
@@ -85,7 +85,7 @@
     text-align: center;
 }
 
-.card-badge.popular {
+.card-badge.bestseller {
     width: 110px;
     position: absolute;
     top: 10px;
