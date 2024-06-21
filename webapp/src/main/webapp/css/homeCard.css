@@ -8,6 +8,7 @@
 .small-book-card{
     overflow: hidden;
     position: relative;
+    height: 265px;
 }
 
 .card-image-home {
@@ -29,15 +30,25 @@
     white-space: nowrap;
 }
 
+.title-home{
+    font-size: 12pt;
+    margin-bottom: 5px;
+}
+
 .info-home {
     color: black;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top:5px;
+    margin: 0;
+}
+
+.author-home{
+    font-size: 10pt;
+    margin-top: 5px;
 }
 
 .content-home{
-    width: 95%;
+    width: 90%;
     height: 100%;
 
 }
@@ -45,15 +56,29 @@
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0;
+    margin-top: 5px;
+    font-size: 12pt;
 }
 
 .price-number-home {
+    overflow: hidden;
+    font-size: 12pt;
+}
+
+
+.price-number-new-home {
     bottom: 0;
     right: 0;
-    margin: 5px;
+    margin: 0;
     overflow: hidden;
-    font-size: 1em;
+    font-size: 12pt;
 }
+.price-number-crossed-home {
+    font-size: 10pt;
+    margin-bottom: 0;
+}
+
 
 .card-badge.popular{
     width: 110px;
@@ -91,4 +116,13 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.percentage {
+    color:red;
+    margin-left: 10px;
 }

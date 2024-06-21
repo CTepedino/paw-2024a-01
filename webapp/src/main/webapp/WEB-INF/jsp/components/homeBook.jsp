@@ -25,14 +25,21 @@
             <div class="card-info-home" href="<c:url value="/book/${book.bookId}"/>">
                 <div class="container content-home">
                     <div class="card-content-home" >
-                        <h6 class="card-title-home grey-text text-darken-4"><c:out value="${book.title}"/></h6>
-                        <p class="info-home">
+                        <p class="info-home title-home"><c:out value="${book.title}"/></p>
+                        <p class="info-home author-home">
                             <spring:message var="author" code="bookInfoCard.by" arguments="${book.writer.firstName},${book.writer.lastName}"/>
                             <c:out value="${author}"/>
                         </p>
-                        <p class="price-number-home">
-                            <c:out value="${book.formattedPrice}"/>
-                        </p>
+                        <c:if test="${book.deal eq null}">
+                            <h5 class="price-number-home">
+                                <c:out value="${book.formattedPrice}"/>
+                            </h5>
+                        </c:if>
+                        <c:if test="${book.deal ne null}">
+                            <h6 class="price-number-crossed-home"><span class="strikethrough"><c:out value="${book.formattedPrice}"/></span><span class="percentage"><c:out value="${book.percentage}"/></span></h6>
+                            <h5 class="price-number-new-home"><c:out value="${book.deal.formattedPrice}"/></h5>
+                        </c:if>
+
                     </div>
                 </div>
             </div>

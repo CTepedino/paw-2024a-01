@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
@@ -24,15 +25,19 @@ public class HomeController {
 
     private static final int PAGE_SIZE = 20;
     private static final int BEST_SELLER_SIZE = 6;
+    private static final int DEALS_SIZE = 6;
 
     private final BookService bs;
 
     private final ReviewService rs;
 
+    private final DealService ds;
+
     @Autowired
-    public HomeController(BookService bs, ReviewService rs){
+    public HomeController(BookService bs, ReviewService rs, DealService ds){
         this.bs = bs;
         this.rs = rs;
+        this.ds = ds;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
@@ -40,12 +45,14 @@ public class HomeController {
 
         PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
         List<Book> bestSellers = bs.getTopBooks(BEST_SELLER_SIZE);
+        List<Book> lastDeals = ds.getNewDeals(DEALS_SIZE);
         HashMap<Long, Float> ratings = rs.getBookRatings(books.getPage());
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", books);
         mav.addObject("popularGenres", bs.getGenresByBookCount());
         mav.addObject("bestSellers", bestSellers);
+        mav.addObject("lastDeals", lastDeals);
         mav.addObject("ratings", ratings);
         return mav;
     }

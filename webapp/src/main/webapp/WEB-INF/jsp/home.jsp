@@ -57,7 +57,9 @@
         </c:forEach>
     </div>
 
-    <h5>Bestsellers</h5>
+    <div class="home-margin">
+        <h5><spring:message code="home.mostSales"/></h5>
+    </div>
 
         <div class="row">
             <c:forEach var="bookBest" items="${bestSellers}">
@@ -66,6 +68,16 @@
             </c:forEach>
         </div>
 
+    <div class="home-margin">
+        <h5><spring:message code="home.lastDeals"/></h5>
+    </div>
+
+    <div class="row">
+        <c:forEach var="bookDeal" items="${lastDeals}">
+            <c:set var="book" value="${bookDeal}" scope="request"/>
+            <%@include file="components/homeBook.jsp"%>
+        </c:forEach>
+    </div>
 
     <div class="row">
         <c:forEach var="book" items="${books.page}">
