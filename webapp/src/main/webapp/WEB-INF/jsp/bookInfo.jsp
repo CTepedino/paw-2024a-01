@@ -36,6 +36,16 @@
                 </div>
                 <div class="row">
                     <div class="col s7">
+                        <c:if test="${book.salesCategory eq 'BEST_SELLER'}">
+                            <div class="sales-category bestseller">
+                                <p><spring:message code="book.bestseller"/></p>
+                            </div>
+                        </c:if>
+                        <c:if test="${book.salesCategory eq 'POPULAR'}">
+                            <div class="sales-category popular">
+                                <p><spring:message code="book.popular"/></p>
+                            </div>
+                        </c:if>
                         <a href="<c:url value="/profile/${book.writer.userId}"/>">
                             <h6>
                                 <spring:message var="author" code="book.bookInfo.author" arguments="${book.writer.firstName},${book.writer.lastName}"/>
