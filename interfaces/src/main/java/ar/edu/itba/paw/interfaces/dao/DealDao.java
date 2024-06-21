@@ -19,4 +19,6 @@ public interface DealDao {
 
     void deleteDeal(long dealId);
 
+    List<Deal> getAll();
+
 }

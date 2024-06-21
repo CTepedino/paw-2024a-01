@@ -17,4 +17,6 @@ public interface DealService {
 
     void endDeal(long bookId);
 
+    void deleteExpiredDeals();
+
 }

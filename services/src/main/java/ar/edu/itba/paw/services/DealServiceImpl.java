@@ -4,7 +4,9 @@ import ar.edu.itba.paw.interfaces.dao.DealDao;
 import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.deals.Deal;
+import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +54,18 @@ public class DealServiceImpl implements DealService {
     @Override
     public void endDeal(long dealId) {
         dealDao.deleteDeal(dealId);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Override
+    public void deleteExpiredDeals(){
+        for (Deal deal: dealDao.getAll()){
+            if(deal.getEndDate().isBefore(LocalDate.now())){
+                dealDao.deleteDeal(deal.getDealId());
+            }
+
+        }
     }
 
 }

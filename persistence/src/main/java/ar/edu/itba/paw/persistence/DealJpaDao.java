@@ -1,17 +1,12 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DealDao;
-import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.deals.Deal;
-import ar.edu.itba.paw.models.questions.Question;
-import ar.edu.itba.paw.models.reviews.Review;
-import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,4 +48,11 @@ public class DealJpaDao implements DealDao {
         deleteQuery.setParameter("dealId", dealId);
         deleteQuery.executeUpdate();
     }
+
+    @Override
+    public List<Deal> getAll(){
+        TypedQuery<Deal> query = em.createQuery("FROM Deal", Deal.class);
+        return query.getResultList();
+    }
+
 }
