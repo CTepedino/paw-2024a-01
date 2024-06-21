@@ -205,5 +205,24 @@ public class MailServiceImpl implements MailService{
         LOGGER.atDebug().setMessage("Sent Missing info email to: {}").addArgument(to).log();
     }
 
+    @Override
+    @Async
+    public void sendResetPasswordEmail(User user, String code, LocalDateTime expiration){
+        Locale currentLocale = user.getLocale();
+        String to = user.getEmail();
+        String subject = emailMessageSource.getMessage("mail.resetPasswordEmail.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("resetPasswordUrl", env.getProperty("baseUrl") + "/resetPassword/" + user.getUserId() + "/" + code);
+        data.put("expiration", expiration.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(currentLocale)));
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Reset Password email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "resetPasswordEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atWarn().setMessage("Failed to send Reset Password email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Reset Password email to: {}").addArgument(to).log();
+    }
 
 }

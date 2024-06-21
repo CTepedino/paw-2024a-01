@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
@@ -14,28 +15,38 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
 
 
 @Controller
 public class HomeController {
 
     private static final int PAGE_SIZE = 20;
+    private static final int BEST_SELLER_SIZE = 6;
 
     private final BookService bs;
 
+    private final ReviewService rs;
+
     @Autowired
-    public HomeController(BookService bs){
+    public HomeController(BookService bs, ReviewService rs){
         this.bs = bs;
+        this.rs = rs;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
         PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
+        List<Book> bestSellers = bs.getTopBooks(BEST_SELLER_SIZE);
+        HashMap<Long, Float> ratings = rs.getBookRatings(books.getPage());
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", books);
         mav.addObject("popularGenres", bs.getGenresByBookCount());
+        mav.addObject("bestSellers", bestSellers);
+        mav.addObject("ratings", ratings);
         return mav;
     }
 
@@ -64,10 +75,13 @@ public class HomeController {
                 PAGE_SIZE
         );
 
+        HashMap<Long, Float> ratings = rs.getBookRatings(books.getPage());
+
         mav.addObject("title", form.getTitle());
         mav.addObject("books", books);
         mav.addObject("genres", BookGenre.values());
         mav.addObject("orders", BookSearchOrderBy.values());
+        mav.addObject("ratings", ratings);
 
         return mav;
     }

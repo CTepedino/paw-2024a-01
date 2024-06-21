@@ -1,9 +1,10 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.dao.EmailValidationDao;
+import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.models.exception.NoValidationCodeException;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.EmailValidation;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
@@ -22,15 +23,15 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     private static final int VALIDATION_CODE_HOURS = 12;
     private static final int VALIDATION_CODE_LENGTH = 5;
 
-    private final EmailValidationDao emailValidationDao;
+    private final UserDao userDao;
 
     private final MailService ms;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(EmailValidationServiceImpl.class);
 
     @Autowired
-    public EmailValidationServiceImpl(EmailValidationDao emailValidationDao, MailService ms){
-        this.emailValidationDao = emailValidationDao;
+    public EmailValidationServiceImpl(UserDao userDao, MailService ms){
+        this.userDao = userDao;
         this.ms = ms;
     }
 
@@ -39,7 +40,7 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     public EmailValidation create(User user) {
         String code = generateRandomVerificationCode();
         LocalDateTime expiration = LocalDateTime.now().plusHours(VALIDATION_CODE_HOURS);
-        EmailValidation validation = emailValidationDao.create(user.getUserId(), code, expiration);
+        EmailValidation validation = userDao.createEmailValidation(user.getUserId(), code, expiration);
         ms.sendRegisterEmail(user, code, expiration);
         LOGGER.atDebug().setMessage("Generated Validation Code").log();
 
@@ -58,7 +59,7 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     @Transactional
     @Override
     public void deleteExpired(){
-        emailValidationDao.deleteExpired();
+        userDao.deleteExpiredEmailValidations();
     }
 
 
@@ -67,9 +68,12 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     public boolean checkValidation(long id, String code) {
         deleteExpired();
 
-        EmailValidation validation = emailValidationDao.get(id).orElseThrow(NoValidationCodeException::new);
-        if( validation.getCode().equals(code)){
-            emailValidationDao.delete(id);
+        EmailValidation validation = userDao.findById(id).orElseThrow(UserNotFoundException::new).getEmailValidation();
+        if (validation==null){
+            throw new NoValidationCodeException();
+        }
+        if(validation.getCode().equals(code)){
+            userDao.deleteEmailValidation(id);
             return true;
         }
         return false;
@@ -80,7 +84,11 @@ public class EmailValidationServiceImpl implements EmailValidationService {
     public void resend(User user){
         deleteExpired();
 
-        EmailValidation validation = emailValidationDao.get(user.getUserId()).orElseThrow(NoValidationCodeException::new);
+        EmailValidation validation = user.getEmailValidation();
+
+        if (validation == null){
+            throw new NoValidationCodeException();
+        }
 
         ms.sendRegisterEmail(user, validation.getCode(), validation.getExpiration());
     }

@@ -14,6 +14,12 @@
 <div class="col s6">
     <a href="<c:url value="/book/${book.bookId}"/>">
         <div class="card">
+            <c:if test="${book.salesCategory eq 'BEST_SELLER'}">
+                <div class="card-badge bestseller"><spring:message code="book.bestseller"/></div>
+            </c:if>
+            <c:if test="${book.salesCategory eq 'POPULAR'}">
+                <div class="card-badge popular"><spring:message code="book.popular"/></div>
+            </c:if>
             <div class="card-image waves-effect waves-block waves-light">
                 <img
                     src="<c:url value="/cover/${book.bookId}"/>"
@@ -34,6 +40,13 @@
                             <spring:message var="genre" code="book.genre.${book.genre}"/>
                             <c:out value="${genre}"/>
                         </p>
+                        <c:if test="${rating ne 0}">
+                            <br/>
+                            <i class="material-icons black-icons">star</i>
+                            <p class="info">
+                                <c:out value="${rating}"/>
+                            </p>
+                        </c:if>
                         <br/>
                         <i class="material-icons black-icons">face</i>
                         <p class="info">

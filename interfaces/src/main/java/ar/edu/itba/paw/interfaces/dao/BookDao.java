@@ -44,6 +44,10 @@ public interface BookDao {
             boolean isPaused
     );
 
+    void toBestSeller(Book book);
+
+    void toPopular(Book book);
+
     CoverImage createCoverImage(Book book, byte[] coverImage);
     BookPreview createPreviewFile(Book book, byte[] previewFile);
 
@@ -97,7 +101,8 @@ public interface BookDao {
 
     long getOwnedBooksSize(long readerId, String title, boolean isPublic);
 
-    boolean recheckPaused(long bookId);
+    void recheckAllPaused(long userId);
+
 
     List<BookGenre> getGenresByBookCount(int limit, int offset);
 

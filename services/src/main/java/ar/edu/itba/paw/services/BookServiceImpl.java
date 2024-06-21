@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
+import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.*;
 
@@ -31,12 +33,15 @@ public class BookServiceImpl implements BookService {
 
     private final DealService dealService;
 
+    private final OrderDao orderDao;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, DealService dealService){
+    public BookServiceImpl(final BookDao bookDao, DealService dealService, final OrderDao orderDao){
         this.bookDao = bookDao;
         this.dealService=dealService;
+        this.orderDao = orderDao;
     }
 
     @Transactional
@@ -256,4 +261,31 @@ public class BookServiceImpl implements BookService {
             return page;
         }
     }
+
+    @Transactional
+    @Override
+    public void recheckWriterPausedBooks(long userId) {
+        bookDao.recheckAllPaused(userId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getTopBooks(Integer size){
+        List<Long> books = orderDao.getTopBooks(size);
+        return books.stream().map(book -> bookDao.findById(book).get()).toList();
+    }
+
+    @Transactional
+    @Override
+    public void checkBookSalesCategory(Book book){
+        Long sales = orderDao.getTotalOrdersForBook(book.getBookId());
+        if(sales > BookSalesCategory.POPULAR.getMinSales() && book.getSalesCategory() != BookSalesCategory.POPULAR){
+            bookDao.toPopular(book);
+        }
+        if(sales > BookSalesCategory.BEST_SELLER.getMinSales() && book.getSalesCategory() != BookSalesCategory.BEST_SELLER){
+            bookDao.toBestSeller(book);
+        }
+    }
+
+
 }

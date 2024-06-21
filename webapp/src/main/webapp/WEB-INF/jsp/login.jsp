@@ -54,6 +54,11 @@
                     <spring:message code="session.signup"/>
                 </a>
             </p>
+            <p class="center-align">
+                <a href="<c:url value="/forgotPassword"/>">
+                    <spring:message code="session.forgotPassword"/>
+                </a>
+            </p>
         </form>
     </div>
 </div>

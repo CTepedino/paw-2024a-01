@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.ReviewDao;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,7 +67,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (us.isLoggedIn()){
             reviews = reviewDao.getAllExcept(bookId, orderBy, (pageNumber-1)*pageSize, pageSize, us.getLoggedUser().get().getUserId());
-            size -=1;
+            Optional<Review> userReview = findLoggedUserReview(bookId);
+            if(userReview.isPresent()){
+                size -=1;
+            }
         } else {
             reviews = reviewDao.getAll(bookId, orderBy, (pageNumber-1)*pageSize, pageSize);
         }
@@ -89,6 +95,14 @@ public class ReviewServiceImpl implements ReviewService {
             return reviewDao.find(bookId, us.getLoggedUser().get());
         }
         return Optional.empty();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public HashMap<Long, Float> getBookRatings(List<Book> books){
+        HashMap<Long, Float> ratings = new LinkedHashMap<>();
+        books.forEach(book -> ratings.put(book.getBookId(), getAverageRating(book.getBookId())/2f));
+        return ratings;
     }
 
 }

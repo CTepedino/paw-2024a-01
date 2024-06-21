@@ -6,6 +6,20 @@
     overflow: auto;
 }
 
+.sales-category{
+    color: white;
+    width: fit-content;
+    padding: inherit;
+}
+
+.popular{
+    background: #437c90;
+}
+
+.bestseller{
+    background: #f7c548;
+}
+
 .star-rating{
     margin-top: 40px;
 }

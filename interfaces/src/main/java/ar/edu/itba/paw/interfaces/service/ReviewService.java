@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 public interface ReviewService {
@@ -18,5 +21,7 @@ public interface ReviewService {
     int getAverageRating(long bookId);
 
     Optional<Review> findLoggedUserReview(long bookId);
+
+    HashMap<Long, Float> getBookRatings(List<Book> books);
 
 }

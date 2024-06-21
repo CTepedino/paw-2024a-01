@@ -100,8 +100,15 @@ ALTER TABLE orders ADD COLUMN rejected_reason VARCHAR(255);
 */
 
 /* Sprint 6 modifications:
-   ALTER TABLE orders ADD COLUMN price DECIMAL(10, 2);
+   ALTER TABLE books ADD COLUMN sales_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT';
+    ALTER TABLE orders ADD COLUMN price DECIMAL(10, 2);
 
+    UPDATE orders o
+    SET price = (
+        SELECT b.price
+        FROM books b
+        WHERE b.book_id = o.book_id
+    );
  */
 
 CREATE TABLE IF NOT EXISTS users(
@@ -127,6 +134,7 @@ CREATE TABLE IF NOT EXISTS books (
     published_date DATE DEFAULT now(),
     writer_id INT NOT NULL,
     is_paused BOOLEAN DEFAULT FALSE,
+    sales_category VARCHAR(40),
 
     FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
@@ -168,7 +176,7 @@ CREATE TABLE IF NOT EXISTS orders(
     date TIMESTAMP default now(),
     is_public BOOLEAN DEFAULT FALSE,
     rejected_reason VARCHAR(255),
-    price DECIMAL(10, 2) NOT NULL,
+    price DECIMAL(10, 2),
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,
@@ -199,6 +207,12 @@ CREATE TABLE IF NOT EXISTS reviews(
 );
 
 CREATE TABLE IF NOT EXISTS email_validations(
+    id INT PRIMARY KEY REFERENCES users (user_id) ON DELETE CASCADE,
+    code VARCHAR(5) NOT NULL,
+    expiration TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS reset_codes(
     id INT PRIMARY KEY REFERENCES users (user_id) ON DELETE CASCADE,
     code VARCHAR(5) NOT NULL,
     expiration TIMESTAMP NOT NULL

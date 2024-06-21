@@ -45,7 +45,7 @@
 
             <c:if test="${isWriter}">
                 <div class="input-field">
-                    <form:label path="cbu"><spring:message code="user.profile.edit.cbu"/><span class="red-text">*</span></form:label><br>
+                    <form:label path="cbu"><spring:message code="user.profile.edit.cbu"/><span class="red-text">*</span></form:label>
                     <form:input type="text" path="cbu" inputmode="numeric" maxlength="22"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>

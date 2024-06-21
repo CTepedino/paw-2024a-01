@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.interfaces.dao;
 
 import ar.edu.itba.paw.models.files.ProfilePicture;
+import ar.edu.itba.paw.models.users.EmailValidation;
+import ar.edu.itba.paw.models.users.ResetCode;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -25,7 +28,16 @@ public interface UserDao {
 
     void giveRole(User user, UserRoles role);
 
-    void recheckAllPaused(long userId);
 
     List<User> getUsersWithPausedBooks();
+
+    EmailValidation createEmailValidation(long id, String code, LocalDateTime expiration);
+    void deleteExpiredEmailValidations();
+    void deleteEmailValidation(long id);
+
+    ResetCode createResetCode(long id, String code, LocalDateTime expiration);
+    void deleteExpiredResetCodes();
+    void deleteResetCode(long id);
+
+
 }

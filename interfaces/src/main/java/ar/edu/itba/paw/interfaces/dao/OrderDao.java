@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.interfaces.dao;
 
+import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -31,4 +33,31 @@ public interface OrderDao {
     long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
 
     boolean ownsBook(long bookId, String email);
+
+    Long getTotalOrdersForWriter(long writerId);
+
+
+    Long getTotalOrdersForBook(long bookId);
+
+    BigDecimal getTotalSales(long writerId);
+
+    BigDecimal getTotalSalesForBook(long bookId);
+
+    BigDecimal getTotalSalesForMonth(long writerId, int year, int month);
+
+    List<Long> getTopBooks(int size);
+
+    List<Long> getBooksByWriterOrderedBySales(long writerId, int offset, int limit);
+
+    List<Long> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month);
+
+    Long getTotalOrdersForMonthForWriter(long writerId, int year, int month);
+
+    BigDecimal getTotalSalesForMonthForBook(long bookId, int year, int month);
+
+    Long getTotalOrdersForMonthForBook(long bookId, int year, int month);
+
+    long getBooksByWriterOrderedSize(long writerId);
+
+    long getBooksByWriterOrderedSize(long writerId, int year, int month);
 }

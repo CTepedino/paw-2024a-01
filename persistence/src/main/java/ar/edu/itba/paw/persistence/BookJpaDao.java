@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
-import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookGenre;
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
-import ar.edu.itba.paw.models.books.WishlistItem;
+import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -47,6 +44,16 @@ public class BookJpaDao implements BookDao {
         book.setPageCount(pageCount);
         book.setSuggestedAge(suggestedAge);
         book.setPaused(isPaused);
+    }
+
+    @Override
+    public void toBestSeller(Book book){
+        book.setSalesCategory(BookSalesCategory.BEST_SELLER);
+    }
+
+    @Override
+    public void toPopular(Book book){
+        book.setSalesCategory(BookSalesCategory.POPULAR);
     }
 
     @Override
@@ -221,27 +228,27 @@ public class BookJpaDao implements BookDao {
         );
     }
 
-
     @Override
-    public boolean recheckPaused(long bookId) {
-        TypedQuery<Boolean> query = em.createQuery(
-            """
-                    SELECT NOT EXISTS (
-                        SELECT 1
-                        FROM Book b
-                        JOIN User u ON b.writer.userId = u.userId
-                        WHERE b.bookId = :bookId AND u.cbu IS NOT NULL AND EXISTS(
-                            SELECT 1
-                            FROM BookFile bf
-                            WHERE bf.id = b.bookId
-                        )
-                    )
-                """,
-            Boolean.class
-        );
-        query.setParameter("bookId", bookId);
-        return query.getSingleResult();
+    public void recheckAllPaused(long userId) {
+        Query query = em.createQuery("""
+            UPDATE Book b SET isPaused = CASE
+                WHEN NOT EXISTS(
+                    SELECT 1
+                    FROM BookFile bf
+                    WHERE bf.id = b.bookId
+                ) OR EXISTS(
+                    SELECT 1
+                    FROM User AS u
+                    WHERE u.userId = :userId AND u.cbu IS NULL
+                ) THEN TRUE
+                ELSE FALSE
+                END
+            WHERE b.writer.userId = :userId
+        """);
+        query.setParameter("userId",userId);
+        query.executeUpdate();
     }
+
 
     @SuppressWarnings("unchecked")
     @Override

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
@@ -8,7 +9,9 @@ import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
+import ar.edu.itba.paw.webapp.form.AnalyticsForm;
 import ar.edu.itba.paw.webapp.form.EditProfileForm;
+import ar.edu.itba.paw.webapp.form.OrderSearchForm;
 import ar.edu.itba.paw.webapp.form.ProfileBookSearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.Year;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ProfileController {
@@ -24,13 +31,17 @@ public class ProfileController {
     private final UserService us;
     private final BookService bs;
 
+    private final AnalyticsService as;
     private static final int PROFILE_PAGE_SIZE = 20;
+
+    private static final int ANALYTICS_PAGE_SIZE = 5;
 
 
     @Autowired
-    public ProfileController(final UserService us, final BookService bs) {
+    public ProfileController(final UserService us, final BookService bs, AnalyticsService as) {
         this.us = us;
         this.bs = bs;
+        this.as = as;
     }
 
 
@@ -122,4 +133,33 @@ public class ProfileController {
 
         return new ModelAndView("redirect:/profile/"+loggedUser.getUserId());
     }
+
+    @RequestMapping(method = RequestMethod.GET, path="/analytics")
+    public ModelAndView analytics(
+            @ModelAttribute("loggedUser") User loggedUser,
+            @Valid @ModelAttribute("analyticsForm") AnalyticsForm analyticsForm,
+            final BindingResult error)
+    {
+        final ModelAndView mav = new ModelAndView("writerDashboard");
+
+        if(error.hasErrors()){
+            if (error.hasFieldErrors("page")){
+                analyticsForm.setPage(1);
+            }
+        }
+        mav.addObject("books", as.getBooksByWriterWithAnalytics(loggedUser.getUserId(), analyticsForm.byMonth(), analyticsForm.getMonth(), analyticsForm.getYear(), analyticsForm.getPage(), ANALYTICS_PAGE_SIZE));
+        mav.addObject("totalRevenue", as.getTotalSales(loggedUser.getUserId()));
+        mav.addObject("totalOrders", as.getTotalOrdersForWriter(loggedUser.getUserId()));
+        mav.addObject("totalRevenueThisMonth", as.getTotalSalesForMonth(loggedUser.getUserId(), YearMonth.now().getYear(), YearMonth.now().getMonthValue()));
+        mav.addObject("totalOrdersThisMonth", as.getTotalOrdersForWriterForMonth(loggedUser.getUserId(), YearMonth.now().getYear(), YearMonth.now().getMonthValue()));
+        mav.addObject("years", as.getYears());
+        mav.addObject("months", as.getMonths());
+        mav.addObject("showMonths", analyticsForm.byMonth());
+        mav.addObject("revenueChange", as.getSalesIncrease(loggedUser.getUserId()));
+        mav.addObject("ordersChange", as.getOrdersIncrease(loggedUser.getUserId()));
+        mav.addObject("totalRevenueThatMonth", as.getTotalSalesForMonth(loggedUser.getUserId(), analyticsForm.getYear(), analyticsForm.getMonth()));
+        mav.addObject("totalOrdersThatMonth", as.getTotalOrdersForWriterForMonth(loggedUser.getUserId(), analyticsForm.getYear(), analyticsForm.getMonth()));
+        return mav;
+    }
+
 }

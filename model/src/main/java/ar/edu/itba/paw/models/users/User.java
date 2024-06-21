@@ -54,6 +54,14 @@ public class User {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private ProfilePicture profilePicture;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private ResetCode resetCode;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private EmailValidation emailValidation;
+
 
     User(){}
 
@@ -150,10 +158,20 @@ public class User {
         this.firstName = firstName;
     }
 
+    public ResetCode getResetCode() {
+        return resetCode;
+    }
+
+    public EmailValidation getEmailValidation() {
+        return emailValidation;
+    }
+
 
     public ProfilePicture getProfilePicture() {
         return profilePicture;
     }
+
+
 }
 
 
