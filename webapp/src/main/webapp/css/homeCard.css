@@ -6,7 +6,8 @@
 }
 
 .small-book-card{
-    height: 300px;
+    overflow: hidden;
+    position: relative;
 }
 
 .card-image-home {
@@ -52,4 +53,42 @@
     margin: 5px;
     overflow: hidden;
     font-size: 1em;
+}
+
+.card-badge.bestseller {
+    width: 110px;
+    position: absolute;
+    top: 10px;
+    left: -28px;
+    background: #437C90;
+    color: white;
+    padding: 5px 20px;
+    transform: rotate(-45deg);
+    z-index: 10;
+    font-size: 11px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card-badge.popular {
+    width: 110px;
+    position: absolute;
+    top: 10px;
+    left: -28px;
+    background: #f7c548;
+    color: white;
+    padding: 5px 20px;
+    transform: rotate(-45deg);
+    z-index: 10;
+    font-size: 11px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }

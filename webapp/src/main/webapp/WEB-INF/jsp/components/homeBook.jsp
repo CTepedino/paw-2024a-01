@@ -9,6 +9,12 @@
 <div class="col s2">
     <a href="<c:url value="/book/${book.bookId}"/>">
         <div class="card-home small-book-card z-depth-2">
+            <c:if test="${book.salesCategory eq 'BEST_SELLER'}">
+                <div class="card-badge bestseller"><spring:message code="book.bestseller"/></div>
+            </c:if>
+            <c:if test="${book.salesCategory eq 'POPULAR'}">
+                <div class="card-badge popular"><spring:message code="book.popular"/></div>
+            </c:if>
             <div class="card-image-home waves-effect waves-block waves-light">
                 <img
                         src="<c:url value="/cover/${book.bookId}"/>"
