@@ -19,4 +19,6 @@ public interface DealService {
 
     void deleteExpiredDeals();
 
+    List<Book> getNewDeals(int size);
+
 }

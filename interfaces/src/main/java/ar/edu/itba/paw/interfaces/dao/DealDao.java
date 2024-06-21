@@ -21,4 +21,6 @@ public interface DealDao {
 
     List<Deal> getAll();
 
+    List<Long> getNewDeals(int size);
+
 }

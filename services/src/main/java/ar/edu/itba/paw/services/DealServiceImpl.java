@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.dao.DealDao;
 import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.models.books.Book;
@@ -21,9 +22,12 @@ public class DealServiceImpl implements DealService {
 
     private final DealDao dealDao;
 
+    private final BookDao bookDao;
+
     @Autowired
-    public DealServiceImpl(DealDao dealDao){
+    public DealServiceImpl(DealDao dealDao, BookDao bookDao){
         this.dealDao=dealDao;
+        this.bookDao = bookDao;
     }
 
     @Transactional
@@ -66,6 +70,13 @@ public class DealServiceImpl implements DealService {
             }
 
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getNewDeals(int size) {
+        List<Long> bookIds = dealDao.getNewDeals(size);
+        return bookIds.stream().map(book -> bookDao.findById(book).get()).toList();
     }
 
 }

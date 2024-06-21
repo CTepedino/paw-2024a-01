@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class DealJpaDao implements DealDao {
@@ -54,5 +56,17 @@ public class DealJpaDao implements DealDao {
         TypedQuery<Deal> query = em.createQuery("FROM Deal", Deal.class);
         return query.getResultList();
     }
+
+    @Override
+    public List<Long> getNewDeals(int size) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT d.dealId FROM Deal d " +
+                        "ORDER BY d.startDate DESC", Long.class);
+
+        query.setMaxResults(size);
+
+        return query.getResultList();
+    }
+
 
 }
