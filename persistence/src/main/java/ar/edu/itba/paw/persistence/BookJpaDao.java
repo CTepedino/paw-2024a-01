@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
-import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookGenre;
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
-import ar.edu.itba.paw.models.books.WishlistItem;
+import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -47,6 +44,16 @@ public class BookJpaDao implements BookDao {
         book.setPageCount(pageCount);
         book.setSuggestedAge(suggestedAge);
         book.setPaused(isPaused);
+    }
+
+    @Override
+    public void toBestSeller(Book book){
+        book.setSalesCategory(BookSalesCategory.BEST_SELLER);
+    }
+
+    @Override
+    public void toPopular(Book book){
+        book.setSalesCategory(BookSalesCategory.POPULAR);
     }
 
     @Override

@@ -62,6 +62,10 @@ public class Book {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private BookPreview preview;
 
+    @Column(name = "sales_category", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BookSalesCategory salesCategory;
+
     Book(){}
 
     public Book(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
@@ -186,5 +190,13 @@ public class Book {
 
     public void setPreview(BookPreview preview) {
         this.preview = preview;
+    }
+
+    public BookSalesCategory getSalesCategory() {
+        return salesCategory;
+    }
+
+    public void setSalesCategory(BookSalesCategory salesCategory) {
+        this.salesCategory = salesCategory;
     }
 }

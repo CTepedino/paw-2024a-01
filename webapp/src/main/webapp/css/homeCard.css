@@ -1,61 +1,58 @@
-.card-info{
+.card-info-home{
     width: 100%;
 }
-.card {
+.card-home {
     overflow: hidden;
 }
 
 .small-book-card{
-    height: 400px;
-
+    overflow: hidden;
+    position: relative;
 }
 
-.card-image {
+.card-image-home {
     width: 100%;
-    height: 235px;
+    height: 160px;
 }
 
-.card-image img{
+.card-image-home img{
     width: 100%;
     height: 100%;
     object-fit: scale-down;
 }
 
 
-.card-content,
+.card-content-home,
 .card-reveal {
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.info {
+.info-home {
     color: black;
-    display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-top:5px;
 }
 
-.content{
+.content-home{
     width: 95%;
     height: 100%;
 
 }
-.card-title{
+.card-title-home{
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.price-number {
+.price-number-home {
     bottom: 0;
     right: 0;
-    margin: 50px;
+    margin: 5px;
     overflow: hidden;
-}
-
-.paused{
-    color: red;
+    font-size: 1em;
 }
 
 .card-badge.bestseller {

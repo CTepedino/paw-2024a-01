@@ -82,5 +82,9 @@ public interface BookService {
 
     PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize);
 
+    List<Book> getTopBooks(Integer size);
+
     void recheckWriterPausedBooks(long userId);
+
+    void checkBookSalesCategory(Book book);
 }
