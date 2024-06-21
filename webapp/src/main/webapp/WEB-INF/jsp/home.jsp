@@ -70,6 +70,7 @@
     <div class="row">
         <c:forEach var="book" items="${books.page}">
             <c:set var="book" value="${book}" scope="request"/>
+            <c:set var="rating" value="${ratings.get(book.bookId)}" scope="request"/>
             <%@include file="components/bookInfoCard.jsp"%>
         </c:forEach>
     </div>

@@ -19,9 +19,12 @@
     object-position: left;
 }
 
-.card-title{
-    max-height: 65px;
+.card-title {
+    display: inline-block;
+    max-width: 100%;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 

@@ -37,12 +37,15 @@
     white-space: nowrap;
     font-size: 10pt;
 }
-
-.card-title{
-    max-height: 65px;
+.card-title {
+    display: inline-block;
+    max-width: 100%;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-size: 11pt;
 }
+
 
 .content{
     width: 95%;
