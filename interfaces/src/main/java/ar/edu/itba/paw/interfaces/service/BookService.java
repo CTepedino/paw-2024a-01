@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
@@ -48,7 +47,6 @@ public interface BookService {
 
     PaginatedContent<Book> getAll(int pageNumber, int pageSize);
 
-    PaginatedContent<BookAndDeal> getAllWithDeals(int pageNumber, int pageSize);
 
     PaginatedContent<Book> searchWithParams(
             String title,
@@ -64,35 +62,15 @@ public interface BookService {
             int pageSize
     );
 
-    PaginatedContent<BookAndDeal> searchWithParamsWithDeal(
-            String title,
-            BookGenre genre,
-            BigDecimal minPrice,
-            BigDecimal maxPrice,
-            Integer minPageCount,
-            Integer maxPageCount,
-            Integer minSuggestedAge,
-            Integer maxSuggestedAge,
-            BookSearchOrderBy orderBy,
-            int pageNumber,
-            int pageSize
-    );
 
     List<Book> getRecommendations(Book book);
 
-    List<BookAndDeal> getRecommendationsWithDeals(Book book);
 
     PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
 
-    PaginatedContent<BookAndDeal> getWriterBooksWithDeals(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
-
     PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic);
 
-    PaginatedContent<BookAndDeal> getOwnedBooksWithDeals(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic);
-
     PaginatedContent<Book> getProfileBooks(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter, boolean ownsProfile);
-
-    PaginatedContent<BookAndDeal> getProfileBooksWithDeals(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile);
 
     boolean isAuthor(Book book, long userId);
     boolean isAuthor(long bookId, String email);

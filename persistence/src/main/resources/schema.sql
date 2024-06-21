@@ -229,11 +229,8 @@ CREATE TABLE IF NOT EXISTS questions(
 );
 
 CREATE TABLE IF NOT EXISTS deals(
-    deal_id SERIAL PRIMARY KEY,
-    book_id INT NOT NULL,
+    id INT PRIMARY KEY REFERENCES book (book_id) ON DELETE CASCADE,
     price DECIMAL(10, 2) NOT NULL,
     start_date TIMESTAMP default now(),
-    end_date TIMESTAMP,
-
-    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
-)
+    end_date TIMESTAMP
+);

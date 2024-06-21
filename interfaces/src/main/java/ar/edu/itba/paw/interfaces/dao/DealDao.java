@@ -12,10 +12,11 @@ public interface DealDao {
 
     Deal create(long bookId, BigDecimal price, LocalDate startDate,LocalDate endDate);
 
-    List<Deal> find(long bookId);
 
     void update(Deal bookId, BigDecimal price, LocalDate endDate);
 
     Optional<Deal> findById(long dealId);
+
+    void deleteDeal(long dealId);
 
 }

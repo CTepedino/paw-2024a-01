@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
@@ -32,7 +31,7 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView home(@RequestParam(name = "page", defaultValue = "1") Integer page){
 
-        PaginatedContent<BookAndDeal> books = bs.getAllWithDeals(page, PAGE_SIZE);
+        PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", books);
@@ -51,7 +50,7 @@ public class HomeController {
 
         final ModelAndView mav = new ModelAndView("searchResults");
 
-        PaginatedContent<BookAndDeal> books = bs.searchWithParamsWithDeal(
+        PaginatedContent<Book> books = bs.searchWithParams(
                 form.getTitle(),
                 form.getGenre(),
                 form.getMinPrice(),

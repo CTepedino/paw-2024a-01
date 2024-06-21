@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
@@ -71,7 +70,7 @@ public class ProfileController {
         User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
         boolean ownsProfile = loggedUser!=null && loggedUser.getUserId()==userId;
 
-        PaginatedContent<BookAndDeal> books = bs.getProfileBooksWithDeals(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PROFILE_PAGE_SIZE, tab.equals("publications"), ownsProfile);
+        PaginatedContent<Book> books = bs.getProfileBooks(userId, form.getTitle(), form.getOrderBy(), form.getPage(), PROFILE_PAGE_SIZE, tab.equals("publications"), ownsProfile);
 
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("tab", tab);

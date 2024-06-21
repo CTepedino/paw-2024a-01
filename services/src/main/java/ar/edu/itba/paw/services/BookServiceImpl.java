@@ -3,13 +3,10 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.DealService;
-import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.*;
 
 import ar.edu.itba.paw.models.users.User;
@@ -25,7 +22,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -124,23 +120,6 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<BookAndDeal> getAllWithDeals(int pageNumber, int pageSize) {
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
-
-        List<BookAndDeal> booksAndDeals = dealService.get(books);
-
-        PaginatedContent<BookAndDeal> page = new PaginatedContent<>(booksAndDeals, pageNumber, pageSize, bookDao.getAllSize());
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getAllWithDeals(page.getPageCount(), pageSize);
-        } else {
-            return page;
-        }
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -158,24 +137,6 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<BookAndDeal> searchWithParamsWithDeal(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
-
-        List<BookAndDeal> booksAndDeals = dealService.get(books);
-
-
-        PaginatedContent<BookAndDeal> page = new PaginatedContent<>(booksAndDeals, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return searchWithParamsWithDeal(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, page.getPageCount(), pageSize);
-        } else {
-            return page;
-        }
-    }
 
 
     @Transactional(readOnly = true)
@@ -184,12 +145,6 @@ public class BookServiceImpl implements BookService {
         return bookDao.getRecommendations(book, 4);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<BookAndDeal> getRecommendationsWithDeals(Book book){
-
-        return dealService.get(getRecommendations(book));
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -207,21 +162,6 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    @Override
-    public PaginatedContent<BookAndDeal> getWriterBooksWithDeals(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> booksNoDeals =  bookDao.getWriterBooks(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
-        List<BookAndDeal> books = dealService.get(booksNoDeals);
-
-        PaginatedContent<BookAndDeal> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getWriterBooksWithDeals(writerId, title, orderBy, page.getPageCount(), pageSize);
-        } else {
-            return page;
-        }
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -239,22 +179,6 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<BookAndDeal> getOwnedBooksWithDeals(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic) {
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> booksNoDeals = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize, isPublic);
-        List<BookAndDeal> books = dealService.get(booksNoDeals);
-
-        PaginatedContent<BookAndDeal> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getOwnedBooksWithDeals(readerId, title, orderBy, page.getPageCount(), pageSize, isPublic);
-        } else {
-            return page;
-        }
-    }
 
 
     @Override
@@ -294,15 +218,6 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<BookAndDeal> getProfileBooksWithDeals(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
-        if (asWriter){
-            return getWriterBooksWithDeals(userId, title, orderBy, pageNumber, pageSize);
-        } else {
-            return getOwnedBooksWithDeals(userId, title, orderBy, pageNumber, pageSize, !ownsProfile);
-        }
-    }
 
     @Transactional(readOnly = true)
     @Override

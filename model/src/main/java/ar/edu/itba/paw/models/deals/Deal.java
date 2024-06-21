@@ -14,13 +14,8 @@ import java.util.Locale;
 public class Deal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "deals_deal_id_seq")
-    @SequenceGenerator(sequenceName = "deals_deal_id_seq", name = "deals_deal_id_seq", allocationSize = 1)
-    @Column(name = "deal_id")
-    private Long dealId;
-
-    @Column(name = "book_id", nullable = false)
-    private long bookId;
+    @Column(name = "id")
+    private long dealId;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
@@ -33,8 +28,8 @@ public class Deal {
 
     /* default */ Deal(){}
 
-    public Deal(long bookId, BigDecimal price, LocalDate startDate, LocalDate endDate){
-        this.bookId=bookId;
+    public Deal(long dealId, BigDecimal price, LocalDate startDate, LocalDate endDate){
+        this.dealId=dealId;
         this.price=price;
         this.startDate=startDate;
         this.endDate=endDate;
@@ -48,10 +43,6 @@ public class Deal {
 
     public long getDealId() {
         return dealId;
-    }
-
-    public long getBookId() {
-        return bookId;
     }
 
     public BigDecimal getPrice() {

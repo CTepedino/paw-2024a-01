@@ -4,12 +4,10 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookAndDeal;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.reviews.Review;
@@ -121,13 +119,11 @@ public class BookController {
         }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        List<BookAndDeal> recommendations = bs.getRecommendationsWithDeals(book);
+        List<Book> recommendations = bs.getRecommendations(book);
         PaginatedContent<Question> myQuestions = loggedUser!=null? qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE): null;
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), page, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
         Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
-        Optional<Deal> deal = ds.get(bookId);
-        String percentage = ds.getPercentage(book, deal.orElse(null));
         int avgRating = rs.getAverageRating(bookId);
         boolean ownsBook = os.loggedUserOwnsBook(bookId);
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
@@ -144,8 +140,6 @@ public class BookController {
 
         mav.addObject("book", book);
         mav.addObject("order", order.orElse(null));
-        mav.addObject("deal", deal.orElse(null));
-        mav.addObject("percentage", percentage);
         mav.addObject("questions", questions);
         mav.addObject("myQuestions", myQuestions);
         mav.addObject("recommendations", recommendations);

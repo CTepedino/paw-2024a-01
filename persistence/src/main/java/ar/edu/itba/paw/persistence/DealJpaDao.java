@@ -8,10 +8,7 @@ import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,13 +28,6 @@ public class DealJpaDao implements DealDao {
         return deal;
     }
 
-    @Override
-    public List<Deal> find(long bookId) {
-        TypedQuery<Deal> query = em.createQuery("FROM Deal d WHERE d.bookId = :bookId", Deal.class);
-        query.setParameter("bookId", bookId);
-
-        return query.getResultList();
-    }
 
     @Override
     public Optional<Deal> findById(long dealId) {
@@ -55,5 +45,12 @@ public class DealJpaDao implements DealDao {
     public void update(Deal deal, BigDecimal price, LocalDate endDate) {
         deal.setPrice(price);
         deal.setEndDate(endDate);
+    }
+
+    @Override
+    public void deleteDeal(long dealId){
+        Query deleteQuery = em.createQuery("DELETE FROM Deal d WHERE d.dealId = :dealId");
+        deleteQuery.setParameter("dealId", dealId);
+        deleteQuery.executeUpdate();
     }
 }

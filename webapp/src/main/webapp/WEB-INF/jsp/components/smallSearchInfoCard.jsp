@@ -11,11 +11,11 @@
 <body>
 
 <div class="col s6">
-    <a href="<c:url value="/book/${book.book.bookId}"/>">
+    <a href="<c:url value="/book/${book.bookId}"/>">
         <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
                 <img
-                        src="<c:url value="/cover/${book.book.bookId}"/>"
+                        src="<c:url value="/cover/${book.bookId}"/>"
                         class="activator book-cover"
                         alt="<spring:message code="bookInfoCard.cover"/>"
                 />
@@ -23,39 +23,39 @@
             <div class="card-info">
                 <div class="container content">
                     <div class="card-content" >
-                        <span class="card-title grey-text text-darken-4"><c:out value="${book.book.title}"/></span>
+                        <span class="card-title grey-text text-darken-4"><c:out value="${book.title}"/></span>
                         <p class="info">
-                            <spring:message var="author" code="bookInfoCard.by" arguments="${book.book.writer.firstName},${book.book.writer.lastName}"/>
+                            <spring:message var="author" code="bookInfoCard.by" arguments="${book.writer.firstName},${book.writer.lastName}"/>
                             <c:out value="${author}"/>
                         </p>
                         <br/>
                         <p class="info">
-                            <spring:message var="genre" code="book.genre.${book.book.genre}"/>
+                            <spring:message var="genre" code="book.genre.${book.genre}"/>
                             <c:out value="${genre}"/>
                         </p>
                         <br/>
                         <i class="material-icons black-icons">face</i>
                         <p class="info">
-                            +<c:out value="${book.book.suggestedAge}"/>
+                            +<c:out value="${book.suggestedAge}"/>
                         </p>
                         <br/>
                         <i class="material-icons black-icons">description</i>
                         <p class="info">
-                            <c:out value="${book.book.pageCount}"/>
+                            <c:out value="${book.pageCount}"/>
                         </p>
                         <br/>
                         <i class="material-icons black-icons">calendar_month</i>
                         <p class="info">
-                            <c:out value="${book.book.publishDate.year}"/>
+                            <c:out value="${book.publishDate.year}"/>
                         </p>
                     </div>
                     <c:if test="${book.deal eq null}">
                         <h5 class="price-number">
-                            <c:out value="${book.book.formattedPrice}"/>
+                            <c:out value="${book.formattedPrice}"/>
                         </h5>
                     </c:if>
                     <c:if test="${book.deal ne null}">
-                        <h6 class="price-number-crossed"><span class="strikethrough"><c:out value="${book.book.formattedPrice}"/></span><span class="percentage"><c:out value="${book.percentage}"/></span></h6>
+                        <h6 class="price-number-crossed"><span class="strikethrough"><c:out value="${book.formattedPrice}"/></span><span class="percentage"><c:out value="${book.percentage}"/></span></h6>
                         <h5 class="price-number"><c:out value="${book.deal.formattedPrice}"/></h5>
                     </c:if>
                 </div>
