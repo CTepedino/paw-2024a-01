@@ -1,17 +1,13 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
-import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
-import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
-import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,23 +16,16 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 @Service
 public class AnalyticsServiceImpl implements AnalyticsService {
 
     private final OrderDao orderDao;
-    private final BookDao bookDao;
-    private final UserService us;
 
     @Autowired
-    public AnalyticsServiceImpl(final OrderDao orderDao, BookDao bookDao, UserService us){
+    public AnalyticsServiceImpl(final OrderDao orderDao){
         this.orderDao= orderDao;
-        this.bookDao = bookDao;
-        this.us = us;
     }
 
     @Transactional(readOnly = true)
@@ -60,8 +49,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Transactional(readOnly = true)
     @Override
     public String getTotalSales(long writerId){
-        User user = us.findById(writerId).get();
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(user.getLocale());
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(LocaleContextHolder.getLocale());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(orderDao.getTotalSales(writerId));
     }
@@ -76,12 +64,11 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Transactional(readOnly = true)
     @Override
     public String getTotalSalesForMonth(long writerId, int year, int month){
-        User user = us.findById(writerId).get();
         BigDecimal sales = orderDao.getTotalSalesForMonth(writerId, year, month);
         if(sales == null){
             sales=BigDecimal.valueOf(0);
         }
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(user.getLocale());
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(LocaleContextHolder.getLocale());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(sales);
     }
@@ -98,7 +85,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         if(lastMonth==null){
             lastMonth=BigDecimal.valueOf(0);
         }
-        if (lastMonth.compareTo(BigDecimal.ZERO) == 0) {
+        if (lastMonth.equals(BigDecimal.ZERO)) {
             return "";
         }
 

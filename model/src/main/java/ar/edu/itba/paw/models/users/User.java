@@ -65,6 +65,17 @@ public class User {
 
     User(){}
 
+    public User(long userId, String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.isEnabled = isEnabled;
+        this.locale = locale.toLanguageTag();
+    }
+
+
     public User(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
         this.email = email;
         this.password = password;
@@ -167,11 +178,25 @@ public class User {
     }
 
 
+    public void setEmailValidation(EmailValidation emailValidation) {
+        this.emailValidation = emailValidation;
+    }
+
+    public void setResetCode(ResetCode resetCode) {
+        this.resetCode = resetCode;
+    }
+
     public ProfilePicture getProfilePicture() {
         return profilePicture;
     }
 
+    public void setRoles(Collection<UserRoles> roles) {
+        this.roles = roles;
+    }
 
+    public void setProfilePicture(ProfilePicture profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }
 
 
