@@ -17,6 +17,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -53,6 +54,7 @@ public class PublishServiceImplTest {
                 Mockito.any(BigDecimal.class),
                 Mockito.anyInt(),
                 Mockito.anyInt(),
+                Mockito.any(),
                 Mockito.any(User.class),
                 Mockito.any(MultipartFile.class),
                 Mockito.any(MultipartFile.class),
@@ -75,6 +77,7 @@ public class PublishServiceImplTest {
                 1,
                 new BigDecimal(1),
                 1,
+                LocalDate.now(),
                 COVER,
                 PREVIEW,
                 BOOK_FILE
@@ -99,6 +102,7 @@ public class PublishServiceImplTest {
                 1,
                 new BigDecimal(1),
                 1,
+                LocalDate.now(),
                 COVER,
                 PREVIEW,
                 BOOK_FILE

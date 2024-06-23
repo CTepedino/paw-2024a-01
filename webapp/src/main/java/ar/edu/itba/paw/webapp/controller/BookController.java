@@ -79,6 +79,7 @@ public class BookController {
                 newBookForm.getSuggestedAge(),
                 newBookForm.getPrice(),
                 newBookForm.getPageCount(),
+                newBookForm.getPublicationDate(),
 
                 newBookForm.getCover(),
                 newBookForm.getPreview(),

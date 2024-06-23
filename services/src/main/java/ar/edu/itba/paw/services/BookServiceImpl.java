@@ -31,22 +31,19 @@ public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
 
-    private final DealService dealService;
-
     private final OrderDao orderDao;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, DealService dealService, final OrderDao orderDao){
+    public BookServiceImpl(final BookDao bookDao, final OrderDao orderDao){
         this.bookDao = bookDao;
-        this.dealService=dealService;
         this.orderDao = orderDao;
     }
 
     @Transactional
     @Override
-    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, User writer, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishedDate, User writer, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
 
         Book book = bookDao.create(
                 title,
@@ -55,7 +52,7 @@ public class BookServiceImpl implements BookService {
                 price,
                 pageCount,
                 suggestedAge,
-                LocalDate.now(),
+                publishedDate,
                 writer,
                 false
         );

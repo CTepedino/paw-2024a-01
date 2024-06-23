@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.users.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public interface BookService {
             BigDecimal price,
             int pageCount,
             int suggestedAge,
+            LocalDate publishedDate,
 
             User writer,
 

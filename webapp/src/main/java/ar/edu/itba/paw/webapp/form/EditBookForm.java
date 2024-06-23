@@ -3,10 +3,13 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.webapp.form.validations.ImageFile;
 import ar.edu.itba.paw.webapp.form.validations.PdfFile;
+import ar.edu.itba.paw.webapp.form.validations.TodayOrBefore;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class EditBookForm {
 
@@ -119,6 +122,5 @@ public class EditBookForm {
     public void setBookFile(MultipartFile bookFile) {
         this.bookFile = bookFile;
     }
-
 
 }
