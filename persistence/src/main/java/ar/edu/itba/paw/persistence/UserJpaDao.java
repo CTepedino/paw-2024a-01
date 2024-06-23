@@ -96,7 +96,7 @@ public class UserJpaDao implements UserDao {
 
     @Override
     public void deleteExpiredEmailValidations() {
-        Query query = em.createQuery("DELETE FROM EmailValidation ev WHERE ev.expiration < now()");
+        em.createQuery("DELETE FROM EmailValidation ev WHERE ev.expiration < now()").executeUpdate();
     }
 
     @Override
@@ -115,7 +115,7 @@ public class UserJpaDao implements UserDao {
 
     @Override
     public void deleteExpiredResetCodes() {
-        Query query = em.createQuery("DELETE FROM ResetCode rc WHERE rc.expiration < now()");
+        em.createQuery("DELETE FROM ResetCode rc WHERE rc.expiration < now()").executeUpdate();
     }
 
     @Override

@@ -99,11 +99,9 @@ ALTER TABLE reviews ADD CONSTRAINT reviews_rating_check CHECK (rating BETWEEN 0 
 ALTER TABLE orders ADD COLUMN rejected_reason VARCHAR(255);
 */
 
-/* Sprint 6 modification:
-   ALTER TABLE books ADD COLUMN sales_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT';
- */
-
 /* Sprint 6 modifications:
+ALTER TABLE books ADD COLUMN sales_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT';
+
 ALTER TABLE orders ADD COLUMN price DECIMAL(10, 2);
 
 UPDATE orders o
@@ -137,7 +135,7 @@ CREATE TABLE IF NOT EXISTS books (
     published_date DATE DEFAULT now(),
     writer_id INT NOT NULL,
     is_paused BOOLEAN DEFAULT FALSE,
-    sales_category VARCHAR(40),
+    sales_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT',
 
     FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE
 );

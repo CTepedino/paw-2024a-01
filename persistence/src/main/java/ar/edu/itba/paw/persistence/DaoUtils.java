@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DaoUtils {
+class DaoUtils {
 
     private DaoUtils(){}
 

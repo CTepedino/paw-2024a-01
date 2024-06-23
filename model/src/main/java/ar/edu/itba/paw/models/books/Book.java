@@ -62,7 +62,7 @@ public class Book {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private BookPreview preview;
 
-    @Column(name = "sales_category", nullable = false)
+    @Column(name = "sales_category")
     @Enumerated(EnumType.STRING)
     private BookSalesCategory salesCategory;
 

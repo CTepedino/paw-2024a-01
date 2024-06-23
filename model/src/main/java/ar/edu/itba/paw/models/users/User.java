@@ -44,7 +44,7 @@ public class User {
     @Column
     private String description;
 
-    @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRoles.class)
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = UserRoles.class)
     @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
