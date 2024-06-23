@@ -190,7 +190,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         switch (order.getOrderStatus()){
-            case WAITING_PAYMENT, REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
+            case REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
             case WAITING_CONTACT, COMPLETED, WAITING_APPROVAL -> {
                 LOGGER.atWarn().setMessage("Failed to update order status from buyer side for orderId: {}").addArgument(orderId).log();
                 throw new InvalidOrderUpdateException();

@@ -101,10 +101,6 @@
                                 <a href="<c:url value="/profile"/>"><button class="waves-light btn"><strong><spring:message code="orders.sales.action.${order.orderStatus}.button"/></strong></button></a>
                             </c:if>
 
-                            <c:if test="${(order.orderStatus == 'WAITING_PAYMENT') || (order.orderStatus == 'REJECTED_PAYMENT')}">
-                                <p><spring:message code="orders.sales.action.${order.orderStatus}"/><i class="material-icons left">hourglass_top</i></p>
-                            </c:if>
-
                             <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
                                 <a class="waves-light btn decline-button modal-trigger" href="#decline"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></a>
                                 <div id="decline" class="modal">

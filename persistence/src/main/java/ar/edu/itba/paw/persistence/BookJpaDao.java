@@ -102,8 +102,8 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public List<Book> getAll(int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE ORDER BY published_date DESC");
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.publishDate DESC", Book.class);
+        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE ORDER BY book_id DESC");
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.bookId DESC", Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
