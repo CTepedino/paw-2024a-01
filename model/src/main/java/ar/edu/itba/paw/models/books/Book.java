@@ -65,7 +65,6 @@ public class Book {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private BookPreview preview;
 
-    @Column(name = "sales_category")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Deal deal;

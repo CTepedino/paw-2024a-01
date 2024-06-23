@@ -26,7 +26,7 @@ public class Deal {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    /* default */ Deal(){}
+    Deal(){}
 
     public Deal(long dealId, BigDecimal price, LocalDate startDate, LocalDate endDate){
         this.dealId=dealId;

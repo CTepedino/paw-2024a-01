@@ -41,7 +41,9 @@
                         <spring:message code="profile.analytics.ordersThisMonth"/>
                         <br/>
                         <c:out value="${totalOrdersThisMonth}"/>
-                        <span class="color-yellow"><c:out value="${ordersChange}"/> </span>
+                        <c:if test="${ordersChange ne '0'}">
+                            <span class="color-yellow"><c:out value="${ordersChange}"/> </span>
+                        </c:if>
                     </span>
                 </div>
             </div>
