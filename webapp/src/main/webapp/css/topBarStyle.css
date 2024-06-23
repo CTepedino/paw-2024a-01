@@ -1,6 +1,8 @@
 nav {
     background-color: #437C90 !important;
     min-height: 80px;
+    position: relative;
+    z-index: 9999;
 }
 
 .logo{
@@ -76,7 +78,7 @@ nav {
     max-height: 0px;
     overflow: hidden;
     transition: max-height 0.5s;
-    z-index: 2;
+    z-index: 9999;
 }
 
 .sub-menu-wrap.open-menu{
