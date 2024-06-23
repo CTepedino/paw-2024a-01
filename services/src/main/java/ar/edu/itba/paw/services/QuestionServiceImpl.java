@@ -84,6 +84,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Transactional
     @Override
     public PaginatedContent<Question> getAllFromUser(long userId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
@@ -104,6 +105,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Transactional
     @Override
     public PaginatedContent<Question> getAllFromUserAndBook(long userId, long bookId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
@@ -124,6 +126,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Transactional
     @Override
     public PaginatedContent<Question> getAllFromWriter(long userId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
@@ -144,6 +147,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Transactional
     @Override
     public PaginatedContent<Question> getAllFullQuestionsNotUser(long userId, long bookId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
