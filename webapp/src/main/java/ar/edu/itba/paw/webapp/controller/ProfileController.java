@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookSalesCategory;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.users.User;
@@ -152,6 +153,8 @@ public class ProfileController {
         mav.addObject("bronzeMin", WriterCategory.BRONZE.getMinSales());
         mav.addObject("silverMin", WriterCategory.SILVER.getMinSales());
         mav.addObject("goldMin", WriterCategory.GOLD.getMinSales());
+        mav.addObject("bestSellerMin", BookSalesCategory.BEST_SELLER.getMinSales());
+        mav.addObject("popularMin", BookSalesCategory.POPULAR.getMinSales());
         mav.addObject("books", as.getBooksByWriterWithAnalytics(loggedUser.getUserId(), analyticsForm.byMonth(), analyticsForm.getMonth(), analyticsForm.getYear(), analyticsForm.getPage(), ANALYTICS_PAGE_SIZE));
         mav.addObject("totalRevenue", as.getTotalSales(loggedUser.getUserId()));
         mav.addObject("totalOrders", as.getTotalOrdersForWriter(loggedUser.getUserId()));

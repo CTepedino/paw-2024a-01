@@ -165,6 +165,18 @@
                             </div>
                             <div class="col s3 purchase-info">
                                 <p><c:out value="${book.totalOrders}"/></p>
+                                <c:if test="${!showMonths}">
+                                    <c:if test="${book.book.salesCategory eq 'DEFAULT'}">
+                                        <span>+ ${popularMin - book.totalOrders} <spring:message code="profile.analytics.toPopular"/></span>
+                                    </c:if>
+                                    <c:if test="${book.book.salesCategory eq 'POPULAR'}">
+                                        <p class="sales-category popular"><spring:message code="book.popular"/></p>
+                                        <span>+ ${bestSellerMin - book.totalOrders} <spring:message code="profile.analytics.toBestSeller"/></span>
+                                    </c:if>
+                                    <c:if test="${book.book.salesCategory eq 'BEST_SELLER'}">
+                                        <p class="sales-category bestseller"><spring:message code="book.bestseller"/></p>
+                                    </c:if>
+                                </c:if>
                             </div>
                             <div class="col s3 purchase-info">
                                 <p><c:out value="${book.formattedTotalSales}"/></p>

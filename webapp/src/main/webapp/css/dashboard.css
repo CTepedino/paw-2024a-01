@@ -36,3 +36,18 @@
 .gold {
     background: #FFD700;
 }
+
+.sales-category{
+    margin: initial;
+    color: white;
+    width: fit-content;
+    padding: inherit;
+}
+
+.popular{
+    background: #437c90;
+}
+
+.bestseller{
+    background: #f7c548;
+}

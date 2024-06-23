@@ -37,14 +37,10 @@
                 <div class="row">
                     <div class="col s7">
                         <c:if test="${book.salesCategory eq 'BEST_SELLER'}">
-
-                                <p class="sales-category bestseller"><spring:message code="book.bestseller"/></p>
-
+                            <p class="sales-category bestseller"><spring:message code="book.bestseller"/></p>
                         </c:if>
                         <c:if test="${book.salesCategory eq 'POPULAR'}">
-                            <div class="sales-category popular">
-                                <p><spring:message code="book.popular"/></p>
-                            </div>
+                            <p class="sales-category popular"><spring:message code="book.popular"/></p>
                         </c:if>
                         <a href="<c:url value="/profile/${book.writer.userId}"/>">
                             <h6>
