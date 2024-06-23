@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.users;
 
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookSalesCategory;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 
 import javax.management.relation.Role;
@@ -58,6 +59,10 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private EmailValidation emailValidation;
+
+    @Column(name = "writer_category", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private WriterCategory writerCategory;
 
 
     User(){}
@@ -182,13 +187,17 @@ public class User {
         return profilePicture;
     }
 
+    public WriterCategory getWriterCategory() {
+        return writerCategory;
+    }
     public void setRoles(Collection<UserRoles> roles) {
         this.roles = roles;
     }
 
+    public void setWriterCategory(WriterCategory writerCategory) {
+        this.writerCategory = writerCategory;
+    }
     public void setProfilePicture(ProfilePicture profilePicture) {
         this.profilePicture = profilePicture;
     }
 }
-
-

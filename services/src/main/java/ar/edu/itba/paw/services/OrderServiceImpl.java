@@ -52,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false, book.getDeal()==null? book.getPrice(): book.getDeal().getPrice());
         bs.removeFromWishlist(buyer.getUserId(), bookId);
         bs.checkBookSalesCategory(book);
+        us.checkWriterCategory(book.getWriter());
         try {
             orderDao.createOrUpdatePaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
         } catch (IOException e){

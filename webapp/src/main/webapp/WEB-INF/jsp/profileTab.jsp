@@ -22,6 +22,23 @@
     <img class="profile-img" src="<c:url value="/profilePicture/${user.userId}"/>" alt="user profile picture"/>
     <h2 class="writer-name"><c:out value="${user.firstName}"/>  <c:out value="${user.lastName}"/> </h2>
     <p class="writer-info"> <c:out value="${user.email}"/> </p>
+    <c:if test="${isWriter}">
+        <c:if test="${user.writerCategory eq 'BRONZE'}">
+            <div class="sales-category bronze">
+                <p><spring:message code="bronze"/></p>
+            </div>
+        </c:if>
+        <c:if test="${user.writerCategory eq 'SILVER'}">
+            <div class="sales-category silver">
+                <p><spring:message code="silver"/></p>
+            </div>
+        </c:if>
+        <c:if test="${user.writerCategory eq 'GOLD'}">
+            <div class="sales-category gold">
+                <p><spring:message code="gold"/></p>
+            </div>
+        </c:if>
+    </c:if>
     <c:if test="${ownsProfile}">
         <c:if test="${isWriter and not empty user.cbu}">
             <p class="writer-info">

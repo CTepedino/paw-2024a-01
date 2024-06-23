@@ -43,4 +43,6 @@ public interface UserService {
     void resetPassword(long userId, String password, String code);
 
     void resendResetCode(long userId);
+
+    void checkWriterCategory(User user);
 }

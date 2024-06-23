@@ -275,10 +275,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public void checkBookSalesCategory(Book book){
         long sales = orderDao.getTotalOrdersForBook(book.getBookId());
-        if(sales > BookSalesCategory.POPULAR.getMinSales() && book.getSalesCategory() != BookSalesCategory.POPULAR){
+        if(sales >= BookSalesCategory.POPULAR.getMinSales() && book.getSalesCategory() == BookSalesCategory.DEFAULT){
             bookDao.toPopular(book);
         }
-        if(sales > BookSalesCategory.BEST_SELLER.getMinSales() && book.getSalesCategory() != BookSalesCategory.BEST_SELLER){
+        if(sales >= BookSalesCategory.BEST_SELLER.getMinSales() && book.getSalesCategory() == BookSalesCategory.POPULAR){
             bookDao.toBestSeller(book);
         }
     }
