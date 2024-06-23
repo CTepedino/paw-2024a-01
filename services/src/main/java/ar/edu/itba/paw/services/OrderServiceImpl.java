@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
     public Order create(long bookId, MultipartFile receipt) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false);
+        Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false, book.getDeal()==null? book.getPrice(): book.getDeal().getPrice());
         bs.removeFromWishlist(buyer.getUserId(), bookId);
         bs.checkBookSalesCategory(book);
         try {

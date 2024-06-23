@@ -53,12 +53,13 @@ public class Order {
 
     Order(){}
 
-    public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
+    public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, BigDecimal price) {
         this.buyer = buyer;
         this.book = book;
         this.orderStatus = orderStatus;
         this.date = date;
-        this.isPublic=isPublic;
+        this.isPublic= isPublic;
+        this.price = price;
     }
 
     public long getOrderId() {

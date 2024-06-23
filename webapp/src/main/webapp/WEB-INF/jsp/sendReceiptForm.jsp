@@ -40,7 +40,12 @@
             <br>
             <h6>
                 <spring:message code="buy.book.transfer"/>
-                <c:out value="${book.formattedPrice}"/>
+                <c:if test="${book.deal eq null}">
+                    <c:out value="${book.formattedPrice}"/>
+                </c:if>
+                <c:if test="${book.deal ne null}">
+                    <c:out value="${book.deal.formattedPrice}"/>
+                </c:if>
             </h6>
             <br>
             <h6>
@@ -54,7 +59,7 @@
                     <input type="file" accept="application/pdf, image/*" name="receipt" id="receipt">
                 </div>
                 <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" \>
+                    <input class="file-path validate" type="text" >
                 </div>
             </div>
             <form:errors path="receipt" cssClass="red-text"  element="p"/>

@@ -60,7 +60,7 @@ public class OrderJpaDaoTest{
 
     @Test
     public void testCreateOK(){
-        Order order = orderDao.create(TEST_USER, TEST_BOOK, OrderStatus.WAITING_CONTACT, LocalDateTime.now(), true);
+        Order order = orderDao.create(TEST_USER, TEST_BOOK, OrderStatus.WAITING_CONTACT, LocalDateTime.now(), true, TEST_BOOK.getPrice());
 
         assertEquals(1, TestUtils.getRowCount(em, "FROM orders WHERE order_id = " + order.getOrderId()));
     }

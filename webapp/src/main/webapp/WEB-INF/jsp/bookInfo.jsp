@@ -218,7 +218,7 @@
 
 
             <div class="divider"></div>
-            <c:if test="${not isAuthor}">
+            <c:if test="${not isAuthor and not existsOrder}">
                 <c:url value="/book/${bookId}/question" var="questionPostUrl"/>
                 <form:form
                         modelAttribute="questionForm"
@@ -251,14 +251,12 @@
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
                         <div class="col s4 table-title active">
-                            <div class="col s4 table-title">
-                                <c:if test="${loggedUserReview ne null}">
-                                    <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize+1})</p>
-                                </c:if>
-                                <c:if test="${loggedUserReview eq null}">
-                                    <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize})</p>
-                                </c:if>
-                            </div>
+                            <c:if test="${loggedUserReview ne null}">
+                                <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize+1})</p>
+                            </c:if>
+                            <c:if test="${loggedUserReview eq null}">
+                                <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviews.totalSize})</p>
+                            </c:if>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'reviews'}">

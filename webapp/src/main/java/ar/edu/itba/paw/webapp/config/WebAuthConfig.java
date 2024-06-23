@@ -60,7 +60,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers("/resetPassword/{id:\\d+}/{code:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.validResetCode(o.getVariables().get("id"), o.getVariables().get("code"))))
                 .requestMatchers( "/sendBuyInfo/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(o.getVariables().get("id"))))
                 .requestMatchers("/receipt/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessReceipt(a.get(), o.getVariables().get("id"))))
-                .requestMatchers("/book/edit/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canEditBook(o.getVariables().get("id"))))
+                .requestMatchers("/book/edit/{id:\\d+}", "/book/{id:\\d+}/deal").access((a, o) -> new AuthorizationDecision(accessHelper.canEditBook(o.getVariables().get("id"))))
                 .requestMatchers("/book/file/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canAccessBook(a.get(), o.getVariables().get("id"))))
                 .requestMatchers("/book/${id:\\d+}/review").access((a,o) -> new AuthorizationDecision(accessHelper.canReview(a.get(), o.getVariables().get("id"))))
                 .requestMatchers(HttpMethod.POST, "/advanceOrder/{id:\\d+}/**").access((a, o) -> new AuthorizationDecision(accessHelper.canAdvanceOrder(a.get(), o.getVariables().get("id"))))

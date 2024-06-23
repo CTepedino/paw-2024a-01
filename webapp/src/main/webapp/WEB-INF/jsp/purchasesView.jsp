@@ -80,7 +80,7 @@
                             <a href="<c:url value="/profile/${order.writer.userId}"/>">
                                 <p><spring:message var="author" code="bookInfoCard.by" arguments="${order.writer.firstName},${order.writer.lastName}"/><c:out value="${author}"/></p>
                             </a>
-                            <p class="price"><c:out value="${order.book.formattedPrice}"/></p>
+                            <p class="price"><c:out value="${order.formattedPrice}"/></p>
                         </div>
 
                     <div class="col s2 purchase-info">

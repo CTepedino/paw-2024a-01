@@ -39,8 +39,8 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public Order create(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
-        Order order = new Order(buyer, book, orderStatus, date, isPublic);
+    public Order create(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, BigDecimal price) {
+        Order order = new Order(buyer, book, orderStatus, date, isPublic, price);
         em.persist(order);
         return order;
     }
