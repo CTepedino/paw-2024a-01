@@ -7,6 +7,7 @@
 }
 
 .sales-category{
+    margin: initial;
     color: white;
     width: fit-content;
     padding: inherit;
@@ -132,4 +133,19 @@ button.modal-close:hover{
 
 .strikethrough {
     text-decoration: line-through;
+}
+
+.bronze {
+    background: border-box;
+    color: #CD7F32;
+}
+
+.silver {
+    background: border-box;
+    color: #C0C0C0;
+}
+
+.gold {
+    background: border-box;
+    color: #FFD700;
 }
