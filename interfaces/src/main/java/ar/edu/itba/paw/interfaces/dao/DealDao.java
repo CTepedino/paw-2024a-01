@@ -13,7 +13,6 @@ public interface DealDao {
 
     Deal create(long bookId, BigDecimal price, LocalDate startDate,LocalDate endDate);
 
-
     void update(Deal bookId, BigDecimal price, LocalDate endDate);
 
     Optional<Deal> findById(long dealId);

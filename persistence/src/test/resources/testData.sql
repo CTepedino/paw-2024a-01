@@ -25,3 +25,5 @@ INSERT INTO orders (order_id, buyer_id, book_id, status, price, is_public) VALUE
 INSERT INTO reviews (review_id, reviewer_id, book_id, rating, review) VALUES (101, 103, 102, 6, 'its a book');
 
 INSERT INTO questions (question_id, date, question, book_id, questioner_id) VALUES (101, NOW(), 'is this a question?', 101, 101);
+
+INSERT INTO deals (id, end_date, price, start_date) VALUES (101, NOW(), 5, NOW())
