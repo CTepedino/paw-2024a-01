@@ -174,22 +174,24 @@ public class OrderJpaDao implements OrderDao {
 
     @Override
     public BigDecimal getTotalSales(long writerId) {
-        Query query = em.createQuery("SELECT SUM(o.price) FROM Order o WHERE o.book.writer.userId = :writerId");
+        Query query = em.createQuery("SELECT COALESCE(SUM(o.price), 0) FROM Order o WHERE o.book.writer.userId = :writerId");
         query.setParameter("writerId", writerId);
+
         return (BigDecimal) query.getSingleResult();
     }
 
     @Override
     public BigDecimal getTotalSalesForBook(long bookId) {
-        Query query = em.createQuery("SELECT SUM(o.price) FROM Order o WHERE o.book.bookId = :bookId");
+        Query query = em.createQuery("SELECT COALESCE(SUM(o.price), 0) FROM Order o WHERE o.book.bookId = :bookId");
         query.setParameter("bookId", bookId);
+
         return (BigDecimal) query.getSingleResult();
     }
 
     @Override
     public BigDecimal getTotalSalesForMonth(long writerId, int year, int month) {
         Query query = em.createQuery(
-                "SELECT SUM(o.price) FROM Order o " +
+                "SELECT COALESCE(SUM(o.price), 0) FROM Order o " +
                         "WHERE o.book.writer.userId = :writerId " +
                         "AND FUNCTION('YEAR', o.date) = :year " +
                         "AND FUNCTION('MONTH', o.date) = :month"
@@ -197,13 +199,14 @@ public class OrderJpaDao implements OrderDao {
         query.setParameter("writerId", writerId);
         query.setParameter("year", year);
         query.setParameter("month", month);
+
         return (BigDecimal) query.getSingleResult();
     }
 
     @Override
     public BigDecimal getTotalSalesForMonthForBook(long bookId, int year, int month) {
         Query query = em.createQuery(
-                "SELECT SUM(o.price) FROM Order o " +
+                "SELECT COALESCE(SUM(o.price), 0) FROM Order o " +
                         "WHERE o.book.bookId = :bookId " +
                         "AND FUNCTION('YEAR', o.date) = :year " +
                         "AND FUNCTION('MONTH', o.date) = :month"
@@ -211,6 +214,7 @@ public class OrderJpaDao implements OrderDao {
         query.setParameter("bookId", bookId);
         query.setParameter("year", year);
         query.setParameter("month", month);
+
         return (BigDecimal) query.getSingleResult();
     }
 
