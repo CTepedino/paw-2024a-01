@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.models.PaginatedContent;
@@ -22,10 +23,12 @@ import java.util.List;
 public class AnalyticsServiceImpl implements AnalyticsService {
 
     private final OrderDao orderDao;
+    private final BookDao bookDao;
 
     @Autowired
-    public AnalyticsServiceImpl(final OrderDao orderDao){
+    public AnalyticsServiceImpl(final OrderDao orderDao, final BookDao bookDao){
         this.orderDao= orderDao;
+        this.bookDao = bookDao;
     }
 
     @Transactional(readOnly = true)
@@ -124,14 +127,14 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<AnalyticsBook> analyticsBooks;
         PaginatedContent<AnalyticsBook> page;
         if(!byMonths){
-            books = orderDao.getBooksByWriterOrderedBySales(writerId, (pageNumber-1)*pageSize, pageSize);
+            books = bookDao.getBooksByWriterOrderedBySales(writerId, (pageNumber-1)*pageSize, pageSize);
             analyticsBooks = books.stream()
                     .map(book -> new AnalyticsBook(book, getTotalOrdersForBook(book.getBookId()), getTotalSalesForBook(book.getBookId())))
                     .toList();
             page = new PaginatedContent<>(analyticsBooks, pageNumber, pageSize, orderDao.getBooksByWriterOrderedSize(writerId));
         }
         else{
-            books = orderDao.getBooksByWriterOrderedBySales(writerId, (pageNumber-1)*pageSize, pageSize, year, month);
+            books = bookDao.getBooksByWriterOrderedBySales(writerId, (pageNumber-1)*pageSize, pageSize, year, month);
             analyticsBooks = books.stream()
                     .map(book -> new AnalyticsBook(book, orderDao.getTotalOrdersForMonthForBook(book.getBookId(), year, month), orderDao.getTotalSalesForMonthForBook(book.getBookId(), year, month)))
                     .toList();

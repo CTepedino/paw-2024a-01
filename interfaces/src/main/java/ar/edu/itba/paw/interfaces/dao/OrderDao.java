@@ -43,8 +43,6 @@ public interface OrderDao {
 
     BigDecimal getTotalSalesForMonth(long writerId, int year, int month);
 
-    List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit);
-    List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month);
 
     long getTotalOrdersForMonthForWriter(long writerId, int year, int month);
 

@@ -146,6 +146,8 @@ SET writer_category =
 FROM writer_order_totals w
 WHERE u.user_id = w.user_id;
 
+DROP VIEW writer_order_totals;
+DROP VIEW book_order_totals;
 
  */
 

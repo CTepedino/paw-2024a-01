@@ -318,4 +318,58 @@ public class BookJpaDao implements BookDao {
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
     }
+
+/*    private List<Book> paginatedQuerySortedByIdList(EntityManager em, Query nativeQuery, TypedQuery<Book> query, int offset, int limit){
+
+        nativeQuery.setFirstResult(offset);
+        nativeQuery.setMaxResults(limit);
+
+        @SuppressWarnings("unchecked")
+        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+
+        if (idList.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        query.setParameter("idList", idList);
+
+        List<Book> books = query.getResultList();
+
+
+    }*/
+
+    @Override
+    public List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit) {
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT o.book_id FROM orders o JOIN books b ON o.book_id = b.book_id
+            WHERE b.writer_id = :writerId
+            GROUP BY o.book_id
+            ORDER BY COUNT(o.book_id) DESC, SUM(o.price) DESC
+        """);
+        nativeQuery.setParameter("writerId", writerId);
+
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC, SUM(o.price) DESC", Book.class);
+
+         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month) {
+
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT o.book_id FROM orders o JOIN books b ON o.book_id = b.book_id
+            WHERE b.writer_id = :writerId
+            AND DATE_PART('year', o.date) = :year
+            AND DATE_PART('month', o.date) = :month
+            GROUP BY o.book_id
+            ORDER BY COUNT(o.book_id) DESC, SUM(o.price) DESC
+        """);
+        nativeQuery.setParameter("writerId", writerId);
+        nativeQuery.setParameter("year", year);
+        nativeQuery.setParameter("month", month);
+
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC, SUM(o.price) DESC", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
 }
