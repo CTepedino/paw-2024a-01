@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DealDao;
+import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.deals.Deal;
 import org.springframework.stereotype.Repository;
 
@@ -58,14 +59,10 @@ public class DealJpaDao implements DealDao {
     }
 
     @Override
-    public List<Long> getNewDeals(int size) {
-        TypedQuery<Long> query = em.createQuery(
-                "SELECT d.dealId FROM Deal d " +
-                        "ORDER BY d.startDate DESC", Long.class);
-
-        query.setMaxResults(size);
-
-        return query.getResultList();
+    public List<Book> getNewDeals(int size) {
+        Query nativeQuery = em.createNativeQuery("SELECT id FROM deals d ORDER BY start_date DESC");
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
     }
 
 

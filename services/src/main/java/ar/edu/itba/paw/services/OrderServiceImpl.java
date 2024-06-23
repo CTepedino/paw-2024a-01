@@ -227,6 +227,7 @@ public class OrderServiceImpl implements OrderService {
     public void recommendBook(long orderId, boolean isRecommended){
         Order order = findById(orderId).orElseThrow(OrderNotFoundException::new);
         orderDao.update(order, order.getOrderStatus(), order.getDate(), isRecommended);
+        LOGGER.atDebug().setMessage("User {} {} the book {}").addArgument(order.getBuyer().getUserId()).addArgument(isRecommended? "recommended":"de-recommended").addArgument(order.getBook().getBookId()).log();
     }
 
 }

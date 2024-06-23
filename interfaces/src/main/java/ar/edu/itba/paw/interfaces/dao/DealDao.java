@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
+import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.users.User;
 
@@ -21,6 +22,6 @@ public interface DealDao {
 
     List<Deal> getAll();
 
-    List<Long> getNewDeals(int size);
+    List<Book> getNewDeals(int size);
 
 }

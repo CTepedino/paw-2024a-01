@@ -22,12 +22,9 @@ public class DealServiceImpl implements DealService {
 
     private final DealDao dealDao;
 
-    private final BookDao bookDao;
-
     @Autowired
-    public DealServiceImpl(DealDao dealDao, BookDao bookDao){
-        this.dealDao=dealDao;
-        this.bookDao = bookDao;
+    public DealServiceImpl(DealDao dealDao){
+        this.dealDao = dealDao;
     }
 
     @Transactional
@@ -75,8 +72,7 @@ public class DealServiceImpl implements DealService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> getNewDeals(int size) {
-        List<Long> bookIds = dealDao.getNewDeals(size);
-        return bookIds.stream().map(book -> bookDao.findById(book).get()).toList();
+        return dealDao.getNewDeals(size);
     }
 
 }
