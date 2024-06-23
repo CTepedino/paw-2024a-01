@@ -126,7 +126,7 @@ SET price = (
     WHERE b.book_id = o.book_id
 );
 
-ALTER TABLE users ADD COLUMN writer_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT';
+ALTER TABLE users ADD COLUMN writer_category VARCHAR(40) DEFAULT 'DEFAULT';
 
 CREATE OR REPLACE VIEW writer_order_totals AS
 SELECT u.user_id, COUNT(o.order_id) AS total_orders
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS users(
     is_enabled BOOLEAN,
     locale VARCHAR(10) DEFAULT 'en',
     description TEXT,
-    writer_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT'
+    writer_category VARCHAR(40) DEFAULT 'DEFAULT'
 );
 
 CREATE TABLE IF NOT EXISTS books (

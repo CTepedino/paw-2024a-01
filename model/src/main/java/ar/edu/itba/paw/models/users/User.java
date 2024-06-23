@@ -60,7 +60,7 @@ public class User {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private EmailValidation emailValidation;
 
-    @Column(name = "writer_category", nullable = false)
+    @Column(name = "writer_category")
     @Enumerated(EnumType.STRING)
     private WriterCategory writerCategory;
 

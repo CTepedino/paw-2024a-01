@@ -151,6 +151,7 @@ public class BookController {
         mav.addObject("reviewOrders", List.of(ReviewOrderBy.values()));
         mav.addObject("existsOrder", existsOrder);
         mav.addObject("tab", tab);
+
         if(tab.matches("reviews")){
             mav.addObject("pageNumber", reviews.getPageNumber());
             mav.addObject("pageCount", reviews.getPageCount());

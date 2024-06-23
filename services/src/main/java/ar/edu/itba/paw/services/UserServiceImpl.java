@@ -9,6 +9,7 @@ import ar.edu.itba.paw.models.exception.NoValidationCodeException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
+import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.models.users.WriterCategory;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
-    private final OrderDao oredrDao;
+    private final OrderDao orderDao;
 
     private final EmailValidationService evs;
 
@@ -52,9 +53,9 @@ public class UserServiceImpl implements UserService {
     private final MailService ms;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, OrderDao oredrDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms, BookService bs){
+    public UserServiceImpl(final UserDao userDao, OrderDao orderDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms, BookService bs){
         this.userDao = userDao;
-        this.oredrDao = oredrDao;
+        this.orderDao = orderDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
         this.rcs = rcs;
@@ -302,7 +303,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void checkWriterCategory(User user){
-        Long orders = oredrDao.getTotalOrdersForWriter(user.getUserId());
+        long orders = orderDao.getWriterOrdersSize(user.getUserId(), "", null);
         if(user.getWriterCategory() != WriterCategory.BRONZE && orders >= WriterCategory.BRONZE.getMinSales() && orders < WriterCategory.SILVER.getMinSales()){
             userDao.updateWriterCategory(user, WriterCategory.BRONZE);
         }
