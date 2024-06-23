@@ -18,3 +18,21 @@
     margin-top: 100px;
     margin-bottom: 100px;
 }
+
+.sales-category{
+    margin: initial;
+    color: white;
+    padding: 5px !important;
+}
+
+.bronze {
+    background: #CD7F32;
+}
+
+.silver {
+    background: #C0C0C0;
+}
+
+.gold {
+    background: #FFD700;
+}

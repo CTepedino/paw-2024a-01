@@ -17,6 +17,24 @@
     <div class="container dashboard">
         <h2 class="page-title"><spring:message code="profile.analytics"/></h2>
         <div class="row">
+            <div class="col">
+                <c:if test="${user.writerCategory eq 'DEFAULT'}">
+                    <span>+ ${bronzeMin - totalOrders} <spring:message code="profile.analytics.toBronze"/></span>
+                </c:if>
+                <c:if test="${user.writerCategory eq 'BRONZE'}">
+                    <span class="sales-category bronze"><spring:message code="bronze"/></span>
+                    <span>+ ${silverMin - totalOrders} <spring:message code="profile.analytics.toSilver"/></span>
+                </c:if>
+                <c:if test="${user.writerCategory eq 'SILVER'}">
+                    <span class="sales-category silver"><spring:message code="silver"/></span>
+                    <span>+ ${goldMin - totalOrders} <spring:message code="profile.analytics.toGold"/></span>
+                </c:if>
+                <c:if test="${user.writerCategory eq 'GOLD'}">
+                    <p class="sales-category gold"><spring:message code="gold"/></p>
+                </c:if>
+            </div>
+        </div>
+        <div class="row">
             <div class="col s3 ">
                 <div class="card-panel">
                     <span class="white-text">
