@@ -5,10 +5,7 @@ import ar.edu.itba.paw.models.files.ProfilePicture;
 
 import javax.management.relation.Role;
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -66,13 +63,8 @@ public class User {
     User(){}
 
     public User(long userId, String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
+        this(email, password, firstName, lastName, isEnabled, locale);
         this.userId = userId;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.isEnabled = isEnabled;
-        this.locale = locale.toLanguageTag();
     }
 
 

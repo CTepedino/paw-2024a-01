@@ -85,23 +85,13 @@ public class Book {
         this.publishDate = publishDate;
         this.writer = writer;
         this.isPaused = isPaused;
+        this.salesCategory = BookSalesCategory.DEFAULT;
     }
 
     public Book(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
+        this(title, description, genre, price, pageCount, suggestedAge, publishDate, writer, isPaused);
         this.bookId = bookId;
-        this.title = title;
-        this.description = description;
-        this.genre = genre;
-        this.price = price;
-        this.pageCount = pageCount;
-        this.suggestedAge = suggestedAge;
-        this.publishDate = publishDate;
-        this.writer = writer;
-        this.isPaused = isPaused;
     }
-
-
-
 
     public String getFormattedPrice(){
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
