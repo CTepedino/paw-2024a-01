@@ -91,3 +91,21 @@
 .tab-text{
     width: 100%;
 }
+
+.sales-category{
+    color: white;
+    margin: auto;
+    width: 150px;
+}
+
+.bronze {
+    background: #CD7F32;
+}
+
+.silver {
+    background: #C0C0C0;
+}
+
+.gold {
+    background:#FFD700;
+}
