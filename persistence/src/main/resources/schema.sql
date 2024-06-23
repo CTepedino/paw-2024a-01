@@ -111,8 +111,8 @@ GROUP BY b.book_id;
 UPDATE books b
 SET sales_category =
     CASE
-        WHEN w.total_orders >= 3 THEN 'BEST_SELLER'
-        WHEN w.total_orders >= 1 THEN 'POPULAR'
+        WHEN w.total_orders >= 10 THEN 'BEST_SELLER'
+        WHEN w.total_orders >= 5 THEN 'POPULAR'
         ELSE 'DEFAULT'
     END
 FROM book_order_totals w
