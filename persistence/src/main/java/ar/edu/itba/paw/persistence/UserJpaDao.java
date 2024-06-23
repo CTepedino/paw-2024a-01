@@ -2,10 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.models.files.ProfilePicture;
-import ar.edu.itba.paw.models.users.EmailValidation;
-import ar.edu.itba.paw.models.users.ResetCode;
-import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.users.UserRoles;
+import ar.edu.itba.paw.models.users.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -123,5 +120,10 @@ public class UserJpaDao implements UserDao {
         Query query = em.createQuery("DELETE FROM ResetCode rc WHERE rc.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
+    }
+
+    @Override
+    public void updateWriterCategory(User user, WriterCategory writerCategory){
+        user.setWriterCategory(writerCategory);
     }
 }

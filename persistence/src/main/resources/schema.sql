@@ -101,6 +101,25 @@ ALTER TABLE orders ADD COLUMN rejected_reason VARCHAR(255);
 
 /* Sprint 6 modifications:
    ALTER TABLE books ADD COLUMN sales_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT';
+
+   CREATE OR REPLACE VIEW book_order_totals AS
+    SELECT b.book_id, COUNT(o.order_id) AS total_orders
+    FROM books b
+    LEFT JOIN orders o ON b.book_id = o.book_id
+    GROUP BY b.book_id;
+
+   UPDATE books b
+    SET sales_category =
+        CASE
+            WHEN w.total_orders >= 3 THEN 'BEST_SELLER'
+            WHEN w.total_orders >= 1 THEN 'POPULAR'
+            ELSE 'DEFAULT'
+        END
+    FROM book_order_totals w
+    WHERE b.book_id = w.book_id;
+
+
+
     ALTER TABLE orders ADD COLUMN price DECIMAL(10, 2);
 
     UPDATE orders o
@@ -109,6 +128,28 @@ ALTER TABLE orders ADD COLUMN rejected_reason VARCHAR(255);
         FROM books b
         WHERE b.book_id = o.book_id
     );
+
+   ALTER TABLE users ADD COLUMN writer_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT';
+
+    CREATE OR REPLACE VIEW writer_order_totals AS
+    SELECT u.user_id, COUNT(o.order_id) AS total_orders
+    FROM users u
+    LEFT JOIN books b ON u.user_id = b.writer_id
+    LEFT JOIN orders o ON b.book_id = o.book_id
+    GROUP BY u.user_id;
+
+   UPDATE users u
+    SET writer_category =
+        CASE
+            WHEN w.total_orders >= 20 THEN 'GOLD'
+            WHEN w.total_orders >= 10 THEN 'SILVER'
+            WHEN w.total_orders >= 5 THEN 'BRONZE'
+            ELSE 'DEFAULT'
+        END
+    FROM writer_order_totals w
+    WHERE u.user_id = w.user_id;
+
+
  */
 
 CREATE TABLE IF NOT EXISTS users(
@@ -120,7 +161,8 @@ CREATE TABLE IF NOT EXISTS users(
     cbu VARCHAR(22),
     is_enabled BOOLEAN,
     locale VARCHAR(10) DEFAULT 'en',
-    description TEXT
+    description TEXT,
+    writer_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT'
 );
 
 CREATE TABLE IF NOT EXISTS books (
@@ -134,7 +176,7 @@ CREATE TABLE IF NOT EXISTS books (
     published_date DATE DEFAULT now(),
     writer_id INT NOT NULL,
     is_paused BOOLEAN DEFAULT FALSE,
-    sales_category VARCHAR(40),
+    sales_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT',
 
     FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE
 );

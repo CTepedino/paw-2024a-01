@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
@@ -10,6 +11,7 @@ import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
+import ar.edu.itba.paw.models.users.WriterCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
+    private final OrderDao oredrDao;
+
     private final EmailValidationService evs;
 
     private final ResetCodeService rcs;
@@ -48,8 +52,9 @@ public class UserServiceImpl implements UserService {
     private final MailService ms;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms, BookService bs){
+    public UserServiceImpl(final UserDao userDao, OrderDao oredrDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms, BookService bs){
         this.userDao = userDao;
+        this.oredrDao = oredrDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
         this.rcs = rcs;
@@ -292,5 +297,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resendResetCode(long userId){
         rcs.resend(findById(userId).orElseThrow(UserNotFoundException::new));
+    }
+
+    @Transactional
+    @Override
+    public void checkWriterCategory(User user){
+        Long orders = oredrDao.getTotalOrdersForWriter(user.getUserId());
+        if(user.getWriterCategory() != WriterCategory.BRONZE && orders >= WriterCategory.BRONZE.getMinSales() && orders < WriterCategory.SILVER.getMinSales()){
+            userDao.updateWriterCategory(user, WriterCategory.BRONZE);
+        }
+        if((user.getWriterCategory() != WriterCategory.SILVER) && (orders >= WriterCategory.SILVER.getMinSales()) && (orders < WriterCategory.GOLD.getMinSales())){
+            userDao.updateWriterCategory(user, WriterCategory.SILVER);
+        }
+        if(orders >= WriterCategory.GOLD.getMinSales() && user.getWriterCategory() == WriterCategory.GOLD){
+            userDao.updateWriterCategory(user, WriterCategory.GOLD);
+        }
     }
 }
