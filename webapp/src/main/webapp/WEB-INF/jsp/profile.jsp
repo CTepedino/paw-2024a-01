@@ -1,84 +1,111 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+.profile{
+    margin-top: 30px !important;
+    width: 95% !important;
+    text-align: center;
+}
 
-<html>
-<head>
-    <link href="<c:url value="/css/myBooks.css"/>" rel="stylesheet"/>
-    <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18);
+}
 
-    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
-</head>
+.writer-name {
+    margin-top: 40px;
+    font-weight: 600;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
 
+.writer-info {
+    font-size: 0.9rem;
+    margin: 16px;
+}
 
-<%@include file="profileTab.jsp" %>
+.description{
+    font-size: 0.9rem;
+    margin: 16px;
+    overflow: hidden;
+}
 
-<body>
-<c:url value="/profile/${user.userId}/${tab}" var="readBooksUrl"/>
-<div class="container myBooks">
-    <form:form
-            modelAttribute="profileBookSearchForm"
-            action="${readBooksUrl}"
-            method="get"
-            id="bookSearch"
-    >
-        <input type="submit" hidden/>
-        <div class="row">
-            <div class="input-field col s6">
-                <form:label path="title" cssClass="active">
-                    <spring:message code="book.search.title"/>
-                </form:label><br>
-                <form:input path="title"/>
-            </div>
-            <div class="input-field col s6">
-                <form:label path="orderBy" cssClass="active">
-                    <spring:message code="book.search.orderBy"/>
-                </form:label><br>
-                <form:select path="orderBy" onchange="this.form.submit()">
-                    <c:forEach items="${orders}" var="order">
-                        <form:option value="${order}"><spring:message code="book.bookSearchOrderBy.${order.messageCode}"/></form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-        </div>
+.table-top {
+    height: 80px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #437c90;
+    padding-top: 0;
+    padding-bottom: 0;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
 
-        <div class="row">
-            <c:if test="${empty books.page and books.pageNumber eq 1}">
-                <h5 class="empty-books"><spring:message code="profile.noBooks"/></h5>
-            </c:if>
-            <c:forEach var="book" items="${books.page}">
-                <c:set var="cardBook" value="${book}" scope="request"/>
-                <c:set var="ownsProfile" value="${ownsProfile}" scope="request"/>
-                <c:set var="publications" value="${tab == 'publications'}" scope="request"/>
-                <%@include file="components/smallBookCard.jsp"%>
-            </c:forEach>
-        </div>
+.table-title{
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    text-align: center;
+    height: 100%;
+}
 
-        <c:if test="${books.pageCount > 1}">
-            <input type="submit" hidden />
-            <input name="page" id="page" style="display: none"/>
-            <script src="<c:url value="/js/paginationControls.js"/>"></script>
-            <script>
-                const paginationButtons = new PaginationButtons(${books.pageCount}, Math.min(10, ${books.pageCount}), ${books.pageNumber}, false);
-                paginationButtons.render();
-                paginationButtons.onChange(e => {
-                    document.getElementById('page').value = e.target.value;
-                    document.getElementById("bookSearch").submit();
-                })
-            </script>
-        </c:if>
-    </form:form>
-</div>
-<script type="module">
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.sidenav');
-        var instances = M.Sidenav.init(elems);
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-        var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems);
-    });
-</script>
-</body>
-</html>
+.text-not-active {
+    width: 100%;
+    height: 100%;
+    color: #e0e0e0;
+}
+
+.text-active {
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-weight: bold;
+}
+
+.active {
+    border-bottom: 2px solid white;
+}
+
+.paused{
+    color: red;
+}
+
+.empty-books{
+    text-align: center;
+}
+
+.profile-tabs{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    text-align: center;
+}
+
+.profile-tab{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.tab-text{
+    width: 100%;
+}
+
+.sales-category{
+    color: white;
+    margin: auto;
+    width: 150px;
+}
+
+.bronze {
+    background: #CD7F32;
+}
+
+.silver {
+    background: #C0C0C0;
+}
+
+.gold {
+    background: #FFD700;
+}
