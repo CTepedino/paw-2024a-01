@@ -110,7 +110,7 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public long getAllSize() {
-        return DaoUtils.getRowCount(em, "books WHERE is_paused = FALSE");
+        return DaoUtils.getRowCount(em, "Book b WHERE b.isPaused = FALSE", "b.bookId");
     }
 
     @Override
@@ -139,7 +139,11 @@ public class BookJpaDao implements BookDao {
 
         prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
 
-        return DaoUtils.getRowCount(em, " books b ", nativeQueryStr.toString(), params);
+        Query query = em.createNativeQuery("SELECT COUNT(DISTINCT b.book_id ) FROM books b" + nativeQueryStr);
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        return ((BigInteger) query.getSingleResult()).longValue();
     }
 
     private void prepareSearchQueryParams(StringBuilder nativeQueryStr, Map<String, Object> params, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge){
@@ -197,7 +201,7 @@ public class BookJpaDao implements BookDao {
         params.put("writerId", writerId);
         params.put("title", DaoUtils.prepareSearchString(title));
 
-        return DaoUtils.getRowCount(em, "books", " WHERE writer_id = :writerId AND LOWER(title) LIKE LOWER(:title) ", params);
+        return DaoUtils.getRowCount(em, "Book b", "b.bookId"," WHERE b.writer.userId = :writerId AND LOWER(title) LIKE LOWER(:title) ", params);
     }
 
     @Override
@@ -222,8 +226,9 @@ public class BookJpaDao implements BookDao {
         params.put("title", DaoUtils.prepareSearchString(title));
 
         return DaoUtils.getRowCount(em,
-                "books b LEFT JOIN orders o ON b.book_id = o.book_id",
-                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer_id = :readerId" + (isPublic?" AND o.is_public = TRUE ":""),
+                "Book b LEFT JOIN Order o ON b.bookId = o.book.bookId",
+                "b.bookId",
+                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer.userId = :readerId" + (isPublic?" AND o.isPublic = TRUE ":""),
                 params
         );
     }
@@ -301,6 +306,16 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public long getWishlistSize(long userId) {
-        return DaoUtils.getRowCount(em, "wishlist", "WHERE user_id = :userId", Map.of("userId", userId));
+        return DaoUtils.getRowCount(em, "WishlistItem w", "w.bookId","WHERE w.userId = :userId", Map.of("userId", userId));
+    }
+
+    @Override
+    public List<Book> getTopBooks(int size) {
+
+        Query nativeQuery = em.createNativeQuery("SELECT o.book_id FROM orders o GROUP BY o.book_id ORDER BY COUNT(o) DESC");
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
     }
 }

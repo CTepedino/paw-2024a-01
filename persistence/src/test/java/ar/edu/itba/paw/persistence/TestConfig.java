@@ -16,6 +16,7 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -23,6 +24,7 @@ import java.util.Properties;
 
 @ComponentScan({"ar.edu.itba.paw.persistence"})
 @Configuration
+@EnableTransactionManagement
 public class TestConfig {
 
     @Value("classpath:pgsql.sql")
@@ -71,7 +73,7 @@ public class TestConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setPackagesToScan("ar.edu.ita.paw.webapp.models");
+        emf.setPackagesToScan("ar.edu.itba.paw.models");
         emf.setDataSource(dataSource());
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();

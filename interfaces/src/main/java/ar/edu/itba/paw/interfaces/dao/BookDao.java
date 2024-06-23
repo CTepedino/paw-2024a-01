@@ -115,4 +115,6 @@ public interface BookDao {
     List<Book> getWishlist(long userId, int offset, int limit);
 
     long getWishlistSize(long userId);
+
+    List<Book> getTopBooks(int size);
 }

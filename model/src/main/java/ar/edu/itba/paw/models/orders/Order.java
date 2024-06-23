@@ -48,7 +48,7 @@ public class Order {
     @Column(name = "rejected_reason")
     private String rejectedReason;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
     Order(){}

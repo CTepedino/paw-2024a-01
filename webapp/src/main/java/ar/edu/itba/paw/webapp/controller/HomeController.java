@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -46,7 +47,7 @@ public class HomeController {
         PaginatedContent<Book> books = bs.getAll(page, PAGE_SIZE);
         List<Book> bestSellers = bs.getTopBooks(BEST_SELLER_SIZE);
         List<Book> lastDeals = ds.getNewDeals(DEALS_SIZE);
-        HashMap<Long, Float> ratings = rs.getBookRatings(books.getPage());
+        Map<Long, Float> ratings = rs.getBookRatings(books.getPage());
 
         final ModelAndView mav = new ModelAndView("home");
         mav.addObject("books", books);
@@ -82,7 +83,7 @@ public class HomeController {
                 PAGE_SIZE
         );
 
-        HashMap<Long, Float> ratings = rs.getBookRatings(books.getPage());
+        Map<Long, Float> ratings = rs.getBookRatings(books.getPage());
 
         mav.addObject("title", form.getTitle());
         mav.addObject("books", books);

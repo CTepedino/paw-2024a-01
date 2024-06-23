@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -99,9 +96,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
-    public HashMap<Long, Float> getBookRatings(List<Book> books){
-        HashMap<Long, Float> ratings = new LinkedHashMap<>();
-        books.forEach(book -> ratings.put(book.getBookId(), getAverageRating(book.getBookId())/2f));
+    public Map<Long, Float> getBookRatings(List<Book> books){
+        Map<Long, Float> ratings = new HashMap<>();
+        books.forEach(book -> {
+                ratings.put(book.getBookId(), getAverageRating(book.getBookId())/2f);});
+
         return ratings;
     }
 

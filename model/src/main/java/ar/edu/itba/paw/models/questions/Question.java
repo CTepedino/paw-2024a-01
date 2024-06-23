@@ -20,12 +20,12 @@ public class Question {
     @Column(name = "question_id")
     private Long questionId;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false)
     private Book book;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "questioner_id", referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "questioner_id", referencedColumnName = "user_id", nullable = false)
     private User questioner;
 
     @Column
@@ -40,7 +40,7 @@ public class Question {
     @Column(name = "answer_date")
     private LocalDateTime answerDate;
 
-    public Question(){}
+    Question(){}
 
     public Question(Book book, User questioner, String question, String answer, LocalDateTime date, LocalDateTime answerDate){
         this.book=book;

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
-import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
@@ -13,7 +12,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class OrderJpaDao implements OrderDao {
@@ -112,8 +110,9 @@ public class OrderJpaDao implements OrderDao {
         }
 
         return DaoUtils.getRowCount(em,
-                "orders o LEFT JOIN books b ON o.book_id = b.book_id",
-                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId" + (orderStatus!=null?" AND o.status = :status":""),
+                "Order o LEFT JOIN Book b ON o.book.bookId = b.bookId",
+                "o.orderId",
+                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer.userId = :readerId" + (orderStatus!=null?" AND o.status = :status":""),
                 params
         );
     }
@@ -147,8 +146,9 @@ public class OrderJpaDao implements OrderDao {
         }
 
         return DaoUtils.getRowCount(em,
-            "orders o LEFT JOIN books b ON o.book_id = b.book_id",
-            "WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId" + (orderStatus!=null?" AND o.status = :status":""),
+            "Order o LEFT JOIN Book b ON o.book.bookId = b.bookId",
+            "o.orderId",
+            "WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer.userId = :writerId" + (orderStatus!=null?" AND o.status = :status":""),
              params
         );
     }
@@ -168,17 +168,8 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public Long getTotalOrdersForWriter(long writerId) {
-        Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.writer.userId = :writerId");
-        query.setParameter("writerId", writerId);
-        return (Long) query.getSingleResult();
-    }
-
-    @Override
-    public Long getTotalOrdersForBook(long bookId) {
-        Query query = em.createQuery("SELECT COUNT(o) FROM Order o WHERE o.book.bookId = :bookId");
-        query.setParameter("bookId", bookId);
-        return (Long) query.getSingleResult();
+    public long getTotalOrdersForBook(long bookId) {
+        return DaoUtils.getRowCount(em,"Order o", "o.orderId", "WHERE o.book.bookId = :bookId", Map.of("bookId", bookId));
     }
 
     @Override
@@ -224,119 +215,88 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public Long getTotalOrdersForMonthForBook(long bookId, int year, int month) {
-        Query query = em.createQuery(
-                "SELECT COUNT(o) FROM Order o " +
-                        "WHERE o.book.bookId = :bookId " +
-                        "AND FUNCTION('YEAR', o.date) = :year " +
-                        "AND FUNCTION('MONTH', o.date) = :month"
-        );
-        query.setParameter("bookId", bookId);
-        query.setParameter("year", year);
-        query.setParameter("month", month);
-        return (Long) query.getSingleResult();
+    public long getTotalOrdersForMonthForBook(long bookId, int year, int month) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookId", bookId);
+        params.put("year", year);
+        params.put("month", month);
+        return DaoUtils.getRowCount(
+                em,
+                "Order o",
+                "o.orderId",
+                "WHERE o.book.bookId = :bookId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month",
+                params);
     }
 
     @Override
-    public Long getTotalOrdersForMonthForWriter(long writerId, int year, int month) {
-        Query query = em.createQuery(
-                "SELECT COUNT(o) FROM Order o " +
-                        "WHERE o.book.writer.userId = :writerId " +
-                        "AND FUNCTION('YEAR', o.date) = :year " +
-                        "AND FUNCTION('MONTH', o.date) = :month"
-        );
-        query.setParameter("writerId", writerId);
-        query.setParameter("year", year);
-        query.setParameter("month", month);
-        return (Long) query.getSingleResult();
+    public long getTotalOrdersForMonthForWriter(long writerId, int year, int month) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("writerId", writerId);
+        params.put("year", year);
+        params.put("month", month);
+        return DaoUtils.getRowCount(
+                em,
+                "Order o",
+                "o.orderId",
+                "WHERE o.book.writer.userId = :writerId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month",
+                params);
+    }
+
+
+
+    @Override
+    public List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit) {
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT o.book_id FROM orders o JOIN books b ON o.book_id = b.book_id
+            WHERE b.writer_id = :writerId
+            GROUP BY o.book_id
+            ORDER BY COUNT(o.book_id) DESC, SUM(o.price) DESC
+        """);
+        nativeQuery.setParameter("writerId", writerId);
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
-    public List<Long> getTopBooks(int size) {
-        Query query = em.createQuery(
-                "SELECT o.book.bookId FROM Order o " +
-                        "GROUP BY o.book.bookId " +
-                        "ORDER BY COUNT(o) DESC");
-        query.setMaxResults(size);  // Limit the results to top 5
+    public List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month) {
 
-        @SuppressWarnings("unchecked")
-        final List<Long> idList = (List<Long>) query.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT o.book_id FROM orders o JOIN books b ON o.book_id = b.book_id
+            WHERE b.writer_id = :writerId
+            AND DATE_PART('year', o.date) = :year
+            AND DATE_PART('month', o.date) = :month
+            GROUP BY o.book_id
+            ORDER BY COUNT(o.book_id) DESC, SUM(o.price) DESC
+        """);
+        nativeQuery.setParameter("writerId", writerId);
+        nativeQuery.setParameter("year", year);
+        nativeQuery.setParameter("month", month);
 
-        if (idList.isEmpty()){
-            return Collections.emptyList();
-        }
-        return idList;
-    }
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
 
-    @Override
-    public List<Long> getBooksByWriterOrderedBySales(long writerId, int offset, int limit) {
-        Query query = em.createQuery(
-                "SELECT o.book.bookId FROM Order o " +
-                        "WHERE o.book.writer.userId = :writerId " +
-                        "GROUP BY o.book.bookId " +
-                        "ORDER BY COUNT(o) DESC, SUM(o.price) DESC");
-        query.setParameter("writerId", writerId);
-
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
-
-        @SuppressWarnings("unchecked")
-        final List<Long> idList = (List<Long>) query.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
-
-        if (idList.isEmpty()){
-            return Collections.emptyList();
-        }
-        return idList;
-    }
-
-    @Override
-    public List<Long> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month) {
-        Query query = em.createQuery(
-                "SELECT o.book.bookId FROM Order o " +
-                        "WHERE o.book.writer.userId = :writerId " +
-                        "AND FUNCTION('YEAR', o.date) = :year " +
-                        "AND FUNCTION('MONTH', o.date) = :month " +
-                        "GROUP BY o.book.bookId " +
-                        "ORDER BY COUNT(o) DESC, SUM(o.price) DESC");
-        query.setParameter("writerId", writerId);
-        query.setParameter("year", year);
-        query.setParameter("month", month);
-
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
-
-        @SuppressWarnings("unchecked")
-        final List<Long> idList = (List<Long>) query.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
-
-        if (idList.isEmpty()){
-            return Collections.emptyList();
-        }
-        return idList;
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
     public long getBooksByWriterOrderedSize(long writerId){
-        Query query = em.createQuery(
-                "SELECT COUNT(DISTINCT o.book.bookId) " +
-                        "FROM Order o " +
-                        "WHERE o.book.writer.userId = :writerId ");
-        query.setParameter("writerId", writerId);
-
-        return (long) query.getSingleResult();
+        return DaoUtils.getRowCount(em, "Order o", "o.book.bookId", "WHERE o.book.writer.userId = :writerId", Map.of("writerId", writerId));
     }
 
     @Override
     public long getBooksByWriterOrderedSize(long writerId, int year, int month){
-        Query query = em.createQuery(
-                "SELECT COUNT(DISTINCT o.book.bookId) " +
-                        "FROM Order o " +
-                        "WHERE o.book.writer.userId = :writerId " +
-                        "AND FUNCTION('YEAR', o.date) = :year " +
-                        "AND FUNCTION('MONTH', o.date) = :month");
-        query.setParameter("writerId", writerId);
-        query.setParameter("year", year);
-        query.setParameter("month", month);
+        Map<String, Object> params = new HashMap<>();
+        params.put("writerId", writerId);
+        params.put("year", year);
+        params.put("month", month);
 
-        return (long) query.getSingleResult();
+        return DaoUtils.getRowCount(
+                em,
+                "Order o",
+                "o.book.bookId",
+                "WHERE o.book.writer.userId = :writerId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month",
+                params
+        );
     }
 }

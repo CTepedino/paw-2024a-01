@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,45 +16,40 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 @Service
 public class AnalyticsServiceImpl implements AnalyticsService {
 
     private final OrderDao orderDao;
-    private final BookDao bookDao;
 
     @Autowired
-    public AnalyticsServiceImpl(final OrderDao orderDao, BookDao bookDao){
-        this.orderDao=orderDao;
-        this.bookDao = bookDao;
+    public AnalyticsServiceImpl(final OrderDao orderDao){
+        this.orderDao= orderDao;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Long getTotalOrdersForWriter(long writerId){
-        return orderDao.getTotalOrdersForWriter(writerId);
+    public long getTotalOrdersForWriter(long writerId){
+        return orderDao.getWriterOrdersSize(writerId, "", null);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Long getTotalOrdersForBook(long bookId){
+    public long getTotalOrdersForBook(long bookId){
         return orderDao.getTotalOrdersForBook(bookId);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Long getTotalOrdersForWriterForMonth(long writerId, int year, int month){
+    public long getTotalOrdersForWriterForMonth(long writerId, int year, int month){
         return orderDao.getTotalOrdersForMonthForWriter(writerId, year, month);
     }
 
     @Transactional(readOnly = true)
     @Override
     public String getTotalSales(long writerId){
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(LocaleContextHolder.getLocale());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(orderDao.getTotalSales(writerId));
     }
@@ -74,7 +68,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         if(sales == null){
             sales=BigDecimal.valueOf(0);
         }
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(LocaleContextHolder.getLocale());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(sales);
     }
@@ -91,7 +85,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         if(lastMonth==null){
             lastMonth=BigDecimal.valueOf(0);
         }
-        if (lastMonth.compareTo(BigDecimal.ZERO) == 0) {
+        if (lastMonth.equals(BigDecimal.ZERO)) {
             return "";
         }
 
@@ -104,14 +98,14 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Transactional(readOnly = true)
     @Override
     public String getOrdersIncrease(long writerId) {
-        Long thisMonth = orderDao.getTotalOrdersForMonthForWriter(writerId, YearMonth.now().getYear(), YearMonth.now().getMonthValue());
-        Long lastMonth = orderDao.getTotalOrdersForMonthForWriter(writerId, YearMonth.now().minusMonths(1).getYear(), YearMonth.now().minusMonths(1).getMonthValue());
+        long thisMonth = orderDao.getTotalOrdersForMonthForWriter(writerId, YearMonth.now().getYear(), YearMonth.now().getMonthValue());
+        long lastMonth = orderDao.getTotalOrdersForMonthForWriter(writerId, YearMonth.now().minusMonths(1).getYear(), YearMonth.now().minusMonths(1).getMonthValue());
 
         if (lastMonth == 0) {
             return "0";
         }
 
-        Long change = thisMonth - lastMonth;
+        long change = thisMonth - lastMonth;
         double percentageChange = (double) change / lastMonth * 100;
 
         return String.format("%+d%%", (int) Math.round(percentageChange));
@@ -126,20 +120,20 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
-        List<Long> books;
+        List<Book> books;
         List<AnalyticsBook> analyticsBooks;
         PaginatedContent<AnalyticsBook> page;
         if(!byMonths){
             books = orderDao.getBooksByWriterOrderedBySales(writerId, (pageNumber-1)*pageSize, pageSize);
             analyticsBooks = books.stream()
-                    .map(book -> new AnalyticsBook(bookDao.findById(book).get(), getTotalOrdersForBook(book), getTotalSalesForBook(book)))
+                    .map(book -> new AnalyticsBook(book, getTotalOrdersForBook(book.getBookId()), getTotalSalesForBook(book.getBookId())))
                     .toList();
             page = new PaginatedContent<>(analyticsBooks, pageNumber, pageSize, orderDao.getBooksByWriterOrderedSize(writerId));
         }
         else{
             books = orderDao.getBooksByWriterOrderedBySales(writerId, (pageNumber-1)*pageSize, pageSize, year, month);
             analyticsBooks = books.stream()
-                    .map(book -> new AnalyticsBook(bookDao.findById(book).get(), orderDao.getTotalOrdersForMonthForBook(book, year, month), orderDao.getTotalSalesForMonthForBook(book, year, month)))
+                    .map(book -> new AnalyticsBook(book, orderDao.getTotalOrdersForMonthForBook(book.getBookId(), year, month), orderDao.getTotalSalesForMonthForBook(book.getBookId(), year, month)))
                     .toList();
             page = new PaginatedContent<>(analyticsBooks, pageNumber, pageSize, orderDao.getBooksByWriterOrderedSize(writerId, year, month));
         }

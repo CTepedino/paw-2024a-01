@@ -55,7 +55,7 @@ public class ReviewJpaDao implements ReviewDao {
 
     @Override
     public long getAllSize(long bookId) {
-        return DaoUtils.getRowCount(em, "reviews", "WHERE book_id = :bookId", Map.of("bookId", bookId));
+        return DaoUtils.getRowCount(em, "Review r", "r.reviewId", "WHERE r.bookId = :bookId", Map.of("bookId", bookId));
     }
 
     @Override
