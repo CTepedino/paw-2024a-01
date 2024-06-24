@@ -7,13 +7,10 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.IllegalReviewException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
-import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -38,15 +34,17 @@ public class BookController {
     private final ReviewService rs;
     private final OrderService os;
     private final QuestionService qs;
+    private final DealService ds;
 
 
     @Autowired
-    public BookController(final PublishService ps, final BookService bs, final ReviewService rs, final OrderService os, final QuestionService qs){
+    public BookController(final PublishService ps, final BookService bs, final ReviewService rs, final OrderService os, final QuestionService qs, DealService ds){
         this.ps = ps;
         this.bs = bs;
         this.rs = rs;
         this.os = os;
         this.qs = qs;
+        this.ds = ds;
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/addBook")
@@ -77,6 +75,7 @@ public class BookController {
                 newBookForm.getSuggestedAge(),
                 newBookForm.getPrice(),
                 newBookForm.getPageCount(),
+                newBookForm.getPublicationDate(),
 
                 newBookForm.getCover(),
                 newBookForm.getPreview(),
@@ -88,16 +87,16 @@ public class BookController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
-    public ModelAndView defaultbookInfo(
+    public ModelAndView defaultBookInfo(
             @PathVariable("bookId") final long bookId
     ){
         return new ModelAndView("redirect:/book/" + bookId + "/reviews");
     }
 
-    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/{tab:myQuestions|questions|reviews}")
-    public ModelAndView bookInfo(
+
+    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/reviews")
+    public ModelAndView bookInfoReviews(
             @PathVariable("bookId") final long bookId,
-            @PathVariable("tab") String tab,
             @ModelAttribute("loggedUser") User loggedUser,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @ModelAttribute("reviewForm") ReviewForm form,
@@ -111,60 +110,111 @@ public class BookController {
         }
 
         if (error.hasErrors()){
-            sortForm.setOrderBy(ReviewOrderBy.DATE_DESC);
+            if (sortForm.getOrderBy()==null) {
+                sortForm.setOrderBy(ReviewOrderBy.DATE_DESC);
+            }
         }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        List<Book> recommendations = bs.getRecommendations(book);
-        PaginatedContent<Question> myQuestions = loggedUser!=null? qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE): null;
+        boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), page, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
-        Optional<Order> order = loggedUser!=null? os.find(loggedUser.getUserId(), bookId):Optional.empty();
-        int avgRating = rs.getAverageRating(bookId);
-        boolean ownsBook = os.loggedUserOwnsBook(bookId);
-        boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
-        boolean existsOrder = os.existsOrder(bookId);
-        PaginatedContent<Question> questions = null;
-        questions = isAuthor? qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE) : (loggedUser!=null? qs.getAllFullQuestionsNotUser(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE) : qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE));
-        boolean isWishlisted = loggedUser != null && bs.isWishlisted(loggedUser.getUserId(), bookId);
 
         if (loggedUserReview.isPresent()){
             form.setRating(loggedUserReview.get().getRating());
             form.setReview(loggedUserReview.get().getReview());
         }
 
-        final ModelAndView mav = new ModelAndView("bookInfo");
-
+        ModelAndView mav = new ModelAndView("bookInfo");
+        mav.addObject("tab", "reviews");
         mav.addObject("book", book);
-        mav.addObject("order", order.orElse(null));
-        mav.addObject("questions", questions);
-        mav.addObject("myQuestions", myQuestions);
-        mav.addObject("recommendations", recommendations);
+        mav.addObject("recommendations", bs.getRecommendations(book));
         mav.addObject("reviews", reviews);
         mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
-        mav.addObject("avgRating", avgRating);
-        mav.addObject("ownsBook", ownsBook);
+        mav.addObject("avgRating", rs.getAverageRating(bookId));
+        mav.addObject("reviewOrders", ReviewOrderBy.values());
+        mav.addObject("order", loggedUser != null?os.find(loggedUser.getUserId(), bookId).orElse(null):null);
+        mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
         mav.addObject("isAuthor", isAuthor);
-        mav.addObject("reviewOrders", List.of(ReviewOrderBy.values()));
-        mav.addObject("existsOrder", existsOrder);
-        mav.addObject("tab", tab);
-        if(tab.matches("reviews")){
-            mav.addObject("pageNumber", reviews.getPageNumber());
-            mav.addObject("pageCount", reviews.getPageCount());
-        }
-        if(tab.matches("myQuestions")){
-            mav.addObject("pageNumber", myQuestions.getPageNumber());
-            mav.addObject("pageCount", myQuestions.getPageCount());
-        }
-        if(tab.matches("questions")){
-            mav.addObject("pageNumber", questions.getPageNumber());
-            mav.addObject("pageCount", questions.getPageCount());
-        }
-        mav.addObject("isWishlisted", isWishlisted);
-
+        mav.addObject("existsOrder", os.existsOrder(bookId));
+        mav.addObject("isWishlisted", loggedUser != null && bs.isWishlisted(loggedUser.getUserId(), bookId));
+        mav.addObject("pageNumber", reviews.getPageNumber());
+        mav.addObject("pageCount", reviews.getPageCount());
+        mav.addObject("reviewCount", reviews.getTotalSize() + (loggedUserReview.isEmpty()?0:1));
+        mav.addObject("questionCount", qs.getQuestionCount(bookId, loggedUser, isAuthor));
+        mav.addObject("myQuestionCount", loggedUser != null?qs.getMyQuestionCount(loggedUser.getUserId(), bookId):0);
         return mav;
     }
 
+    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/questions")
+    public ModelAndView bookInfoQuestions(
+            @PathVariable("bookId") final long bookId,
+            @ModelAttribute("loggedUser") User loggedUser,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @ModelAttribute("questionForm") QuestionForm questionForm,
+            @ModelAttribute("answerForm") AnswerForm answerForm
+    ){
+        if (page < 1){
+            page = 1;
+        }
+
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
+        PaginatedContent<Question> questions = qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE, isAuthor);
+
+        ModelAndView mav = new ModelAndView("bookInfo");
+        mav.addObject("tab", "questions");
+        mav.addObject("book", book);
+        mav.addObject("recommendations", bs.getRecommendations(book));
+        mav.addObject("questions", questions);
+        mav.addObject("avgRating", rs.getAverageRating(bookId));
+        mav.addObject("order", loggedUser != null?os.find(loggedUser.getUserId(), bookId).orElse(null):null);
+        mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
+        mav.addObject("isAuthor", isAuthor);
+        mav.addObject("existsOrder", os.existsOrder(bookId));
+        mav.addObject("isWishlisted", loggedUser != null && bs.isWishlisted(loggedUser.getUserId(), bookId));
+        mav.addObject("pageNumber", questions.getPageNumber());
+        mav.addObject("pageCount", questions.getPageCount());
+        mav.addObject("reviewCount", rs.getReviewCount(bookId));
+        mav.addObject("questionCount", questions.getTotalSize());
+        mav.addObject("myQuestionCount", loggedUser != null?qs.getMyQuestionCount(loggedUser.getUserId(), bookId):0);
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/myQuestions")
+    public ModelAndView bookInfoMyQuestions(
+            @PathVariable("bookId") final long bookId,
+            @ModelAttribute("loggedUser") User loggedUser,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @ModelAttribute("questionForm") QuestionForm questionForm,
+            @ModelAttribute("answerForm") AnswerForm answerForm
+    ){
+        if (page < 1){
+            page = 1;
+        }
+
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        boolean isAuthor = bs.isAuthor(book, loggedUser.getUserId());
+        PaginatedContent<Question> myQuestions = qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE);
+
+        ModelAndView mav = new ModelAndView("bookInfo");
+        mav.addObject("tab", "myQuestions");
+        mav.addObject("book", book);
+        mav.addObject("recommendations", bs.getRecommendations(book));
+        mav.addObject("myQuestions", myQuestions);
+        mav.addObject("avgRating", rs.getAverageRating(bookId));
+        mav.addObject("order", os.find(loggedUser.getUserId(), bookId).orElse(null));
+        mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
+        mav.addObject("isAuthor", isAuthor);
+        mav.addObject("existsOrder", os.existsOrder(bookId));
+        mav.addObject("isWishlisted", bs.isWishlisted(loggedUser.getUserId(), bookId));
+        mav.addObject("pageNumber", myQuestions.getPageNumber());
+        mav.addObject("pageCount", myQuestions.getPageCount());
+        mav.addObject("reviewCount", rs.getReviewCount(bookId));
+        mav.addObject("questionCount", qs.getQuestionCount(bookId, loggedUser, isAuthor));
+        mav.addObject("myQuestionCount", myQuestions.getTotalSize());
+        return mav;
+    }
 
 
     @RequestMapping(method = RequestMethod.GET, path="/book/edit/{id:\\d+}")
@@ -231,6 +281,40 @@ public class BookController {
         bs.toggleWishlist(user.getUserId(), bookId);
         return new ModelAndView("redirect:/book/"+bookId);
     }
+
+    @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/deal")
+    public ModelAndView addDealForm(@ModelAttribute("dealForm") DealFrom dealForm, @PathVariable("bookId") long bookId){
+
+        ModelAndView mav = new ModelAndView("createDeal");
+        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        dealForm.setBookPrice(book.getPrice());
+        mav.addObject("book", book);
+        return mav;
+    }
+
+
+
+    @RequestMapping(method = RequestMethod.POST, path="/book/{bookId:\\d+}/deal")
+    public ModelAndView addDeal(@Valid @ModelAttribute("dealForm") final DealFrom dealForm, final BindingResult errors, @PathVariable("bookId") long bookId){
+
+        if (errors.hasErrors()){
+            return addDealForm(dealForm, bookId);
+        }
+
+        ds.create(bookId, dealForm.getPrice(), dealForm.getDuration());
+
+
+        return new ModelAndView("redirect:/book/"+bookId);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path="/book/{bookId:\\d+}/{dealId:\\d+}/endDeal")
+    public ModelAndView endDeal(@PathVariable("dealId") long dealId, @PathVariable("bookId") long bookId){
+
+        ds.endDeal(dealId);
+
+        return new ModelAndView("redirect:/book/"+bookId);
+    }
+
     @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/question")
     public ModelAndView createQuestion(
             @PathVariable("bookId") final long bookId,
@@ -243,6 +327,8 @@ public class BookController {
         qs.create(bookId, questionForm.getQuestion());
         return new ModelAndView("redirect:/book/"+bookId+"/myQuestions");
     }
+
+
 
     @RequestMapping(method = RequestMethod.POST, path = "/book/{bookId:\\d+}/questions/{questionId:\\d+}/answer")
     public ModelAndView answerQuestion(
@@ -263,33 +349,55 @@ public class BookController {
         return new ModelAndView("redirect:/questions/myQuestions");
     }
 
-    @RequestMapping(method = RequestMethod.GET, path="/questions/{tab:myQuestions|questions}")
+
+    @RequestMapping(method = RequestMethod.GET, path = "/questions/questions")
     public ModelAndView questions(
             @ModelAttribute("loggedUser") User user,
-            @PathVariable("tab") String tab,
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @ModelAttribute("answerForm") AnswerForm answerForm
-    ){
-        PaginatedContent<Question> myQuestions = qs.getAllFromUser(user.getUserId(), page, QUESTION_PAGE_SIZE);
-        PaginatedContent<Question> questions = qs.getAllFromWriter(user.getUserId(), page, QUESTION_PAGE_SIZE);
-        ModelAndView mav = new ModelAndView("questions");
-        mav.addObject("myQuestions", myQuestions);
+            @ModelAttribute("isWriter") boolean isWriter,
+            @ModelAttribute("answerForm") AnswerForm answerForm,
+            @Valid @ModelAttribute("filterQuestionsForm") FilterQuestionForm filterQuestionForm,
+            final BindingResult error){
+
+        final ModelAndView mav = new ModelAndView("questions");
+        if(error.hasErrors()){
+            if (error.hasFieldErrors("page")){
+                filterQuestionForm.setPage(1);
+            }
+        }
+
+        boolean showComplete = filterQuestionForm.getShowComplete() == null || filterQuestionForm.getShowComplete();
+
+        PaginatedContent<Question> questions = qs.getAllFromWriter(user.getUserId(), filterQuestionForm.getPage(), QUESTION_PAGE_SIZE, showComplete);
+
+
         mav.addObject("questions", questions);
-        mav.addObject("tab", tab);
-        mav.addObject("isAuthor", user.getRoles().contains(UserRoles.WRITER));
-        if(tab.matches("myQuestions")){
-            mav.addObject("pageNumber", myQuestions.getPageNumber());
-            mav.addObject("pageCount", myQuestions.getPageCount());
-        }
-        if(tab.matches("questions")){
-            mav.addObject("pageNumber", questions.getPageNumber());
-            mav.addObject("pageCount", questions.getPageCount());
-        }
+        mav.addObject("tab", "questions");
+        mav.addObject("isAuthor", isWriter);
+        mav.addObject("pageNumber", questions.getPageNumber());
+        mav.addObject("pageCount", questions.getPageCount());
+        mav.addObject("showComplete", showComplete);
+
         return mav;
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/questions/myQuestions")
+    public ModelAndView myQuestions(@ModelAttribute("loggedUser") User user, @ModelAttribute("isWriter") boolean isWriter, @RequestParam(value = "page", defaultValue = "1") Integer page){
+        PaginatedContent<Question> myQuestions = qs.getAllFromUser(user.getUserId(), page, QUESTION_PAGE_SIZE);
+
+        ModelAndView mav = new ModelAndView("questions");
+
+        mav.addObject("myQuestions", myQuestions);
+        mav.addObject("tab", "myQuestions");
+        mav.addObject("isAuthor", isWriter);
+        mav.addObject("pageNumber", myQuestions.getPageNumber());
+        mav.addObject("pageCount", myQuestions.getPageCount());
+
+        return mav;
+    }
+
+
     @RequestMapping(method = RequestMethod.POST, path = "/questions/questions/{questionId:\\d+}/answer")
-    public ModelAndView answerQuestion2(
+    public ModelAndView answerQuestionFromQuestionList(
             @Valid @ModelAttribute("answerForm") final AnswerForm answerForm,
             final BindingResult error,
             @PathVariable("questionId") long questionId

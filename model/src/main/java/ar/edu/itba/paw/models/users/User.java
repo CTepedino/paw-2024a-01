@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.models.users;
 
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookSalesCategory;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 
 import javax.management.relation.Role;
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -54,8 +52,26 @@ public class User {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private ProfilePicture profilePicture;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private ResetCode resetCode;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private EmailValidation emailValidation;
+
+    @Column(name = "writer_category")
+    @Enumerated(EnumType.STRING)
+    private WriterCategory writerCategory;
+
 
     User(){}
+
+    public User(long userId, String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
+        this(email, password, firstName, lastName, isEnabled, locale);
+        this.userId = userId;
+    }
+
 
     public User(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
         this.email = email;
@@ -64,6 +80,7 @@ public class User {
         this.lastName = lastName;
         this.isEnabled = isEnabled;
         this.locale = locale.toLanguageTag();
+        this.writerCategory = WriterCategory.DEFAULT;
     }
 
     public User(String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
@@ -150,10 +167,38 @@ public class User {
         this.firstName = firstName;
     }
 
+    public ResetCode getResetCode() {
+        return resetCode;
+    }
+
+    public EmailValidation getEmailValidation() {
+        return emailValidation;
+    }
+
+
+    public void setEmailValidation(EmailValidation emailValidation) {
+        this.emailValidation = emailValidation;
+    }
+
+    public void setResetCode(ResetCode resetCode) {
+        this.resetCode = resetCode;
+    }
 
     public ProfilePicture getProfilePicture() {
         return profilePicture;
     }
+
+    public WriterCategory getWriterCategory() {
+        return writerCategory;
+    }
+    public void setRoles(Collection<UserRoles> roles) {
+        this.roles = roles;
+    }
+
+    public void setWriterCategory(WriterCategory writerCategory) {
+        this.writerCategory = writerCategory;
+    }
+    public void setProfilePicture(ProfilePicture profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }
-
-

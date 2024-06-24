@@ -13,7 +13,7 @@
 <li class="collection-item">
     <div class="row questioned-book">
         <div class="col s2">
-            <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
+            <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${question.book.bookId}">
                 <img
                         class="book_cover"
                         src="<c:url value="${baseUrl}/cover/${question.book.bookId}"/>"
@@ -51,6 +51,7 @@
                                 action="${answerPostUrl}"
                                 method="post"
                                 class="answer-form"
+                                id="question-${question.questionId}"
                         >
                             <div class="row">
                                 <div class="input-field col s9 answer-input">

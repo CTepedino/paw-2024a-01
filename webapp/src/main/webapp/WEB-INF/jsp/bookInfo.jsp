@@ -36,19 +36,47 @@
                 </div>
                 <div class="row">
                     <div class="col s7">
+                        <c:if test="${book.salesCategory eq 'BEST_SELLER'}">
+                            <p class="sales-category bestseller"><spring:message code="book.bestseller"/></p>
+                        </c:if>
+                        <c:if test="${book.salesCategory eq 'POPULAR'}">
+                            <p class="sales-category popular"><spring:message code="book.popular"/></p>
+                        </c:if>
                         <a href="<c:url value="/profile/${book.writer.userId}"/>">
-                            <h6>
+                            <h6 class="author-info">
                                 <spring:message var="author" code="book.bookInfo.author" arguments="${book.writer.firstName},${book.writer.lastName}"/>
                                 <c:out value="${author}"/>
+                                <span class="writer-category">
+                                    <c:if test="${book.writer.writerCategory eq 'BRONZE'}">
+                                        <i class="material-icons bronze-info">person</i>
+                                    </c:if>
+                                    <c:if test="${book.writer.writerCategory eq 'SILVER'}">
+                                        <i class="material-icons silver-info">person</i>
+                                    </c:if>
+                                    <c:if test="${book.writer.writerCategory eq 'GOLD'}">
+                                        <i class="material-icons gold-info">person</i>
+                                    </c:if>
+                                </span>
                             </h6>
                         </a>
-                        <c:if test="${not empty reviews.page or loggedUserReview ne null}">
-                            <script src="<c:url value="/js/starRating.js"/>"></script>
-                            <script>
-                                new FixedStarRating(${avgRating});
-                            </script>
+                        <c:if test="${reviewCount ne 0}">
+                            <h6 class="author-info">
+                                <span class="writer-category">
+                                     <script src="<c:url value="/js/starRating.js"/>"></script>
+                                    <script>
+                                        new FixedStarRating(${avgRating});
+                                    </script>
+                                </span>
+                                (${reviewCount})
+                            </h6>
                         </c:if>
-                        <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
+                        <c:if test="${book.deal eq null}">
+                            <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>
+                        </c:if>
+                        <c:if test="${book.deal ne null}">
+                            <h6 class="price"><span class="strikethrough"><c:out value="${book.formattedPrice}"/></span><span class="percentage"><c:out value="${book.percentage}"/></span></h6>
+                            <h5 class="price"><c:out value="${book.deal.formattedPrice}"/></h5>
+                        </c:if>
                     </div>
                     <div class="col s5">
                         <c:if test="${(not existsOrder or not isLoggedIn) and not book.paused and not isAuthor}">
@@ -74,6 +102,20 @@
                                     <strong><spring:message code="book.editBook"/></strong>
                                 </button>
                             </a>
+
+                            <c:if test="${book.deal eq null}">
+                                <a href="<c:url value="/book/${book.bookId}/deal"/>">
+                                    <button type="submit" class="waves-effect waves-light btn action-button">
+                                        <strong><spring:message code="book.bookInfo.createDeal"/></strong>
+                                    </button>
+                                </a>
+                            </c:if>
+                            <c:if test="${book.deal ne null}">
+                                <a class="waves-effect waves-light btn modal-trigger action-button" href="#dealModal">
+                                    <strong><spring:message code="book.bookInfo.viewDeal"/></strong>
+                                </a>
+                            </c:if>
+
                         </c:if>
                         <c:if test="${ownsBook or (isAuthor and not book.paused)}">
                             <a href="<c:url value="/book/file/${book.bookId}"/>" target="_blank">
@@ -182,7 +224,7 @@
 
 
             <div class="divider"></div>
-            <c:if test="${not isAuthor}">
+            <c:if test="${isLoggedIn and not isAuthor and not existsOrder}">
                 <c:url value="/book/${bookId}/question" var="questionPostUrl"/>
                 <form:form
                         modelAttribute="questionForm"
@@ -215,24 +257,24 @@
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
                         <div class="col s4 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviewCount})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'reviews'}">
                         <div class="col s4 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviewCount})</p>
                         </div>
                     </c:if>
                 </a>
                 <a href="${bookInfoUrl}/questions">
                     <c:if test="${tab eq 'questions'}">
                         <div class="col s4 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/> (${questionCount})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'questions'}">
                         <div class="col s4 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/> (${questionCount})</p>
                         </div>
                     </c:if>
                 </a>
@@ -240,12 +282,12 @@
                 <a href="${bookInfoUrl}/myQuestions">
                     <c:if test="${tab eq 'myQuestions'}">
                         <div class="col s4 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/> (${myQuestionCount})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'myQuestions'}">
                         <div class="col s4 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.myQuestions"/> (${myQuestionCount})</p>
                         </div>
                     </c:if>
                 </a>
@@ -257,24 +299,24 @@
                 <a href="${bookInfoUrl}/reviews">
                     <c:if test="${tab eq 'reviews'}">
                         <div class="col s6 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviewCount})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'reviews'}">
                         <div class="col s6 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.reviews"/> (${reviewCount})</p>
                         </div>
                     </c:if>
                 </a>
                 <a href="${bookInfoUrl}/questions">
                     <c:if test="${tab eq 'questions'}">
                         <div class="col s6 table-title active">
-                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                            <p class="text-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/> (${questionCount})</p>
                         </div>
                     </c:if>
                     <c:if test="${tab ne 'questions'}">
                         <div class="col s6 table-title">
-                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/></p>
+                            <p class="text-not-active" style="width: 100%"><spring:message code="book.bookInfo.tab.questions"/> (${questionCount})</p>
                         </div>
                     </c:if>
                 </a>
@@ -283,12 +325,12 @@
 
         <c:if test="${tab eq 'myQuestions'}">
             <c:set var="myQuestions" value="${myQuestions}" scope="request"/>
-            <c:set var="myQuestionsPage" value="${myQuestionsPage}" scope="request"/>
             <%@include file="components/myQuestionsTab.jsp"%>
         </c:if>
 
         <c:if test="${tab eq 'questions'}">
             <c:set var="questions" value="${questions}" scope="request"/>
+            <c:set var="bookId" value="${bookId}" scope="request"/>
             <c:set var="isAuthor" value="${isAuthor}" scope="request"/>
             <c:set var="answerForm" value="${answerForm}" scope="request"/>
             <%@include file="components/questionsTab.jsp"%>
@@ -328,6 +370,25 @@
             </form>
         </div>
     </div>
+
+        <c:url value="/book/${bookId}/${book.deal.dealId}/endDeal" var="endDealUrl"/>
+        <div id="dealModal" class="modal">
+            <div class="modal-content">
+                <h4><spring:message code="book.bookInfo.deal"/></h4>
+                <p><spring:message code="book.addDeal.previousPrice"/> <c:out value="${book.formattedPrice}"/></p>
+                <p><spring:message code="book.addDeal.newPrice"/> <c:out value="${book.deal.formattedPrice}"/></p>
+                <p><spring:message code="book.bookInfo.deal.startDate"/> <c:out value="${book.deal.startDate}"/></p>
+                <p><spring:message code="book.bookInfo.deal.endDate"/> <c:out value="${book.deal.endDate}"/></p>
+            </div>
+            <div class="modal-footer">
+                <div class="footer-aligner">
+                    <button class="btn modal-close close-btn" ><strong><spring:message code="close"/></strong></button>
+                    <form id="end-deal"  action="${endDealUrl}" method="post">
+                        <button class="waves-light btn accept-button-modal" type="submit"><strong><spring:message code="book.bookInfo.endDeal"/></strong></button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 

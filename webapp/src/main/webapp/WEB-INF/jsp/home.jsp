@@ -57,12 +57,44 @@
         </c:forEach>
     </div>
 
-    <div class="row">
-        <c:forEach var="book" items="${books.page}">
-            <c:set var="book" value="${book}" scope="request"/>
-            <%@include file="components/bookInfoCard.jsp"%>
-        </c:forEach>
+
+    <c:if test="${not empty bestSellers}">
+    <div class="home-margin">
+        <h5><spring:message code="home.mostSales"/></h5>
     </div>
+        <div class="row">
+            <c:forEach var="bookBest" items="${bestSellers}">
+                <c:set var="book" value="${bookBest}" scope="request"/>
+                <%@include file="components/homeBook.jsp"%>
+            </c:forEach>
+        </div>
+    </c:if>
+
+    <c:if test="${not empty lastDeals}">
+        <div class="home-margin">
+            <h5><spring:message code="home.lastDeals"/></h5>
+        </div>
+
+        <div class="row">
+            <c:forEach var="bookDeal" items="${lastDeals}">
+                <c:set var="book" value="${bookDeal}" scope="request"/>
+                <%@include file="components/homeBook.jsp"%>
+            </c:forEach>
+        </div>
+    </c:if>
+
+    <c:if test="${not empty books.page}">
+        <div class="home-margin">
+            <h5><spring:message code="home.latestBooks"/></h5>
+        </div>
+        <div class="row">
+            <c:forEach var="book" items="${books.page}">
+                <c:set var="book" value="${book}" scope="request"/>
+                <c:set var="rating" value="${ratings.get(book.bookId)}" scope="request"/>
+                <%@include file="components/bookInfoCard.jsp"%>
+            </c:forEach>
+        </div>
+    </c:if>
 
     <c:if test="${books.pageCount > 1}">
         <script src="<c:url value="/js/paginationControls.js"/>"></script>

@@ -69,9 +69,9 @@
                         <div class="col s2">
                             <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${order.book.bookId}">
                                 <img
-                                        class="book_cover"
-                                        src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
-                                        alt="<spring:message code="bookInfoCard.cover"/>"
+                                    class="book_cover"
+                                    src="<c:url value="${baseUrl}/cover/${order.book.bookId}"/>"
+                                    alt="<spring:message code="bookInfoCard.cover"/>"
                                 />
                             </a>
                         </div>
@@ -80,7 +80,7 @@
                             <a href="<c:url value="/profile/${order.writer.userId}"/>">
                                 <p><spring:message var="author" code="bookInfoCard.by" arguments="${order.writer.firstName},${order.writer.lastName}"/><c:out value="${author}"/></p>
                             </a>
-                            <p class="price"><c:out value="${order.book.formattedPrice}"/></p>
+                            <p class="price"><c:out value="${order.formattedPrice}"/></p>
                         </div>
 
                     <div class="col s2 purchase-info">
@@ -91,7 +91,7 @@
                         <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
                             <p class="red-text rejection"><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
                             <p class="rejection"><c:out value="${order.writer.cbu}"/></p>
-                            <a class="btn modal-trigger btn-small rejection" href="#reason"><strong><spring:message code="orders.purchases.status.reason_rejected"/><strong></a>
+                            <a class="btn modal-trigger btn-small rejection" href="#reason"><strong><spring:message code="orders.purchases.status.reason_rejected"/></strong></a>
                             <div id="reason" class="modal">
                                 <div class="modal-content">
                                     <h4><spring:message code="orders.purchases.status.reason_rejected"/></h4>
@@ -107,20 +107,17 @@
                         <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
                             <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
                         </c:if>
-                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT'}">
-                            <c:out value="${order.writer.cbu}"/>
-                        </c:if>
 
                     </div>
                     <div class="col s2 purchase-info">
                         <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
 
-                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
-                            <form:form action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
-                                <form:label path="receipt" for="files" class="btn label-select">
+                        <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
+                            <form:form id="advanceOrder-${order.orderId}-sendFile"  action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
+                                <form:label path="receipt" for="files-${order.orderId}" cssClass="btn label-select">
                                     <spring:message code="orders.purchases.chooseFile"/>
                                 </form:label>
-                                <form:input type="file" id="files" path="receipt" accept="application/pdf, image/*" style="display:none;"/>
+                                <form:input type="file" id="files-${order.orderId}" path="receipt" accept="application/pdf, image/*" style="display:none;"/>
                                 <form:errors path="receipt"/>
                                 <button class="waves-light btn payment" type="submit">
                                     <strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong>
@@ -128,13 +125,25 @@
                             </form:form>
                         </c:if>
 
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                if (document.querySelector("#files-${order.orderId}") != null) {
+                                    document.querySelector("#files-${order.orderId}").onchange = function () {
+                                        const fileName = this.files[0]?.name;
+                                        const label = document.querySelector("label[for=files-${order.orderId}]");
+                                        label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
+                                    };
+                                }
+                            });
+                        </script>
+
                         <c:if test="${order.orderStatus eq 'COMPLETED'}">
                             <a href="<c:url value="/book/file/${order.book.bookId}"/>" target="_blank" style="width: 100%">
                                 <button class="waves-light btn"><strong><spring:message code="orders.purchases.action.${order.orderStatus}"/></strong></button>
                             </a>
                             <c:url value="/recommendBook/${order.orderId}/purchases" var="recommendBookUrl"/>
 
-                            <form id="recommendBookForm" action="${recommendBookUrl}" method="post" class="recommendation">
+                            <form id="recommendBookForm-${order.orderId}" action="${recommendBookUrl}" method="post" class="recommendation">
                                 <label for="recommended-${order.orderId}">
                                     <input type="checkbox" id="recommended-${order.orderId}" name="recommended" ${order.isPublic ? 'checked' : ''}/>
                                     <span><spring:message code="orders.purchases.recommendBook"/></span>
@@ -142,7 +151,7 @@
                             </form>
                             <script>
                                 document.getElementById('recommended-${order.orderId}').addEventListener('change', function() {
-                                    document.getElementById('recommendBookForm').submit();
+                                    document.getElementById('recommendBookForm-${order.orderId}').submit();
                                 });
                             </script>
                         </c:if>
@@ -189,16 +198,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.modal');
         var instances = M.Modal.init(elems, {});
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        if (document.querySelector("#files") != null) {
-            document.querySelector("#files").onchange = function () {
-                const fileName = this.files[0]?.name;
-                const label = document.querySelector("label[for=files]");
-                label.innerText = fileName ?? "<spring:message code="orders.purchases.chooseFile"/>";
-            };
-        }
     });
 </script>
 

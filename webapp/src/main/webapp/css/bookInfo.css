@@ -6,6 +6,25 @@
     overflow: auto;
 }
 
+.sales-category{
+    margin: initial;
+    color: white;
+    width: fit-content;
+    padding: inherit;
+}
+
+.popular{
+    background: #437c90;
+}
+
+.writer-category{
+    
+}
+
+.bestseller{
+    background: #f7c548;
+}
+
 .star-rating{
     margin-top: 40px;
 }
@@ -85,14 +104,14 @@
 
 @media (max-width: 600px) {
     .button-text {
-        font-size: 0.9em; /* Ajustar tamaño del texto para pantallas pequeñas */
+        font-size: 0.9em;
     }
 }
 
 .action-button {
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    overflow: hidden; /* Oculta cualquier desbordamiento de texto */
-    text-overflow: ellipsis; /* Añade "..." si el texto es demasiado largo */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .waves-effect.waves-light.btn.action-button {
@@ -100,4 +119,52 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+button.modal-close{
+    margin-right: 10px !important;
+    background-color: gray;
+}
+
+button.modal-close:hover{
+    background-color: gray;
+}
+
+.footer-aligner{
+    display: flex;
+    justify-content: end;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.bronze-info {
+    background: border-box;
+    color: #CD7F32;
+}
+
+.silver-info {
+    background: border-box;
+    color: #C0C0C0;
+}
+
+.gold-info {
+    background: border-box;
+    color: #FFD700;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+}
+
+.writer-category {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+}
+
+.material-icons {
+    margin-left: 2px;
 }

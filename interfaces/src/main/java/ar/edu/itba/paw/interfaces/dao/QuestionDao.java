@@ -25,13 +25,21 @@ public interface QuestionDao {
 
     List<Question> getAllFromUserAndBook(long userId, long bookId, int offset, int limit);
 
-    public long getAllFromUserAndBookSize(long userId, long bookId);
+    long getAllFromUserAndBookSize(long userId, long bookId);
 
     List<Question> getAllFromWriter(long userId, int offset, int limit);
 
-    public long getAllFromWriterSize(long userId);
+    long getAllFromWriterSize(long userId);
+
+    List<Question> getAllFromWriterIncomplete(long userId, int offset, int limit);
+
+    long getAllFromWriterIncompleteSize(long userId);
 
     List<Question> getAllFullQuestionsNotUser(long bookId, long userId, int offset, int limit);
 
-    public long getAllFullQuestionsNotSUsersSize(long bookId, long userId);
+    long getAllFullQuestionsNotUsersSize(long bookId, long userId);
+
+    List<Question> getAllFullQuestions(long bookId, int offset, int limit);
+    long getAllFullQuestionsSize(long bookId);
+
 }

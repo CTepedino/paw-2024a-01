@@ -45,29 +45,31 @@
 
             <c:if test="${isWriter}">
                 <div class="input-field">
-                    <form:label path="cbu"><spring:message code="user.profile.edit.cbu"/><span class="red-text">*</span></form:label><br>
+                    <form:label path="cbu"><spring:message code="user.profile.edit.cbu"/><span class="red-text">*</span></form:label>
                     <form:input type="text" path="cbu" inputmode="numeric" maxlength="22"/>
                 </div>
                 <form:errors path="cbu" cssClass="red-text" element="p"/>
+
             </c:if>
 
             <div class="input-field">
-                <form:label path="description"><spring:message code="book.addBook.description"/><span class="red-text">*</span></form:label>
+                <form:label path="description"><spring:message code="book.addBook.description"/></form:label>
                 <form:textarea path="description" maxlength="500" class="materialize-textarea"/>
             </div>
             <form:errors path="description" cssClass="red-text" element="p"/>
-            <br>
+
 
             <div class="file-field input-field">
                 <div class="btn">
                     <span><spring:message code="user.profile.edit.pfp"/></span>
-                    <input type="file" accept="image/*" name="profilePicture" id="profilePicture">
+                    <input type="file" accept="image/*" name="picture" id="picture">
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text" \>
                 </div>
             </div>
-            <form:errors path="profilePicture" cssClass="red-text"  element="p"/>
+            <form:errors path="picture" cssClass="red-text"  element="p"/>
+
 
             <div class="input-field center-align submit-btn">
                 <button class="btn waves-effect waves-light white-text" id="submitBtn" type="submit" name="action">

@@ -2,14 +2,14 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.models.files.ProfilePicture;
-import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.users.UserRoles;
+import ar.edu.itba.paw.models.users.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -76,30 +76,54 @@ public class UserJpaDao implements UserDao {
         return query.getResultList().stream().findFirst();
     }
 
+
     @Override
-    public void recheckAllPaused(long userId) {
-        Query query = em.createQuery("""
-            UPDATE Book b SET isPaused = CASE
-                WHEN NOT EXISTS(
-                    SELECT 1
-                    FROM BookFile bf
-                    WHERE bf.id = b.bookId
-                ) OR EXISTS(
-                    SELECT 1
-                    FROM User AS u
-                    WHERE u.userId = :userId AND u.cbu IS NULL
-                ) THEN TRUE
-                ELSE FALSE
-                END
-            WHERE b.writer.userId = :userId
-        """);
-        query.setParameter("userId",userId);
+    public List<User> getUsersWithPausedBooks() {
+        TypedQuery<User> query = em.createQuery(
+                "SELECT DISTINCT u FROM User u WHERE EXISTS(SELECT 1 FROM Book b WHERE b.writer.userId = u.userId AND NOT EXISTS(SELECT 1 FROM BookFile bf WHERE bf.fileId = b.bookId)) AND u.cbu IS NULL", User.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public EmailValidation createEmailValidation(long id, String code, LocalDateTime expiration) {
+        EmailValidation ev = new EmailValidation(id, code, expiration);
+        em.persist(ev);
+        return ev;
+    }
+
+    @Override
+    public void deleteExpiredEmailValidations() {
+        em.createQuery("DELETE FROM EmailValidation ev WHERE ev.expiration < now()").executeUpdate();
+    }
+
+    @Override
+    public void deleteEmailValidation(long id) {
+        Query query = em.createQuery("DELETE FROM EmailValidation ev WHERE ev.id = :id");
+        query.setParameter("id", id);
         query.executeUpdate();
     }
 
     @Override
-    public List<User> getUsersWithPausedBooks() {
-        TypedQuery<User> query = em.createQuery("SELECT DISTINCT u FROM User u WHERE EXISTS(SELECT 1 FROM Book b WHERE b.writer.userId = u.userId)", User.class);
-        return query.getResultList();
+    public ResetCode createResetCode(long id, String code, LocalDateTime expiration) {
+        ResetCode rc = new ResetCode(id, code, expiration);
+        em.persist(rc);
+        return rc;
+    }
+
+    @Override
+    public void deleteExpiredResetCodes() {
+        em.createQuery("DELETE FROM ResetCode rc WHERE rc.expiration < now()").executeUpdate();
+    }
+
+    @Override
+    public void deleteResetCode(long id) {
+        Query query = em.createQuery("DELETE FROM ResetCode rc WHERE rc.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void updateWriterCategory(User user, WriterCategory writerCategory){
+        user.setWriterCategory(writerCategory);
     }
 }

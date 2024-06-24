@@ -1,12 +1,15 @@
 package ar.edu.itba.paw.models.books;
 
+import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
+import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.users.User;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -62,6 +65,14 @@ public class Book {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private BookPreview preview;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private Deal deal;
+
+    @Column(name = "sales_category", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BookSalesCategory salesCategory;
+
     Book(){}
 
     public Book(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
@@ -74,28 +85,30 @@ public class Book {
         this.publishDate = publishDate;
         this.writer = writer;
         this.isPaused = isPaused;
+        this.salesCategory = BookSalesCategory.DEFAULT;
     }
 
     public Book(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
+        this(title, description, genre, price, pageCount, suggestedAge, publishDate, writer, isPaused);
         this.bookId = bookId;
-        this.title = title;
-        this.description = description;
-        this.genre = genre;
-        this.price = price;
-        this.pageCount = pageCount;
-        this.suggestedAge = suggestedAge;
-        this.publishDate = publishDate;
-        this.writer = writer;
-        this.isPaused = isPaused;
     }
-
-
-
 
     public String getFormattedPrice(){
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(price);
+    }
+
+
+    public String getPercentage(){
+        if(deal == null ){
+            return null;
+        }
+
+        BigDecimal change = deal.getPrice().subtract(price);
+        BigDecimal percentageChange = change.divide(price, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+        return String.format("%+d%%", percentageChange.intValue());
     }
 
     public long getBookId() {
@@ -186,5 +199,21 @@ public class Book {
 
     public void setPreview(BookPreview preview) {
         this.preview = preview;
+    }
+
+    public Deal getDeal() {
+        return deal;
+    }
+
+    public void setDeal(Deal deal) {
+        this.deal = deal;
+    }
+
+    public BookSalesCategory getSalesCategory() {
+        return salesCategory;
+    }
+
+    public void setSalesCategory(BookSalesCategory salesCategory) {
+        this.salesCategory = salesCategory;
     }
 }

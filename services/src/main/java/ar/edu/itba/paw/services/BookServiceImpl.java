@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
+import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.*;
 
@@ -28,16 +31,19 @@ public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
 
+    private final OrderDao orderDao;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao){
+    public BookServiceImpl(final BookDao bookDao, final OrderDao orderDao){
         this.bookDao = bookDao;
+        this.orderDao = orderDao;
     }
 
     @Transactional
     @Override
-    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, User writer, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishedDate, User writer, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
 
         Book book = bookDao.create(
                 title,
@@ -46,7 +52,7 @@ public class BookServiceImpl implements BookService {
                 price,
                 pageCount,
                 suggestedAge,
-                LocalDate.now(),
+                publishedDate,
                 writer,
                 false
         );
@@ -99,6 +105,7 @@ public class BookServiceImpl implements BookService {
         return bookDao.findById(id);
     }
 
+
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getAll(int pageNumber, int pageSize) {
@@ -114,6 +121,7 @@ public class BookServiceImpl implements BookService {
             return page;
         }
     }
+
 
     @Transactional(readOnly = true)
     @Override
@@ -132,11 +140,13 @@ public class BookServiceImpl implements BookService {
     }
 
 
+
     @Transactional(readOnly = true)
     @Override
     public List<Book> getRecommendations(Book book){
         return bookDao.getRecommendations(book, 4);
     }
+
 
     @Transactional(readOnly = true)
     @Override
@@ -154,6 +164,7 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+
     @Transactional(readOnly = true)
     @Override
     public PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic) {
@@ -169,6 +180,7 @@ public class BookServiceImpl implements BookService {
             return page;
         }
     }
+
 
 
     @Override
@@ -208,6 +220,7 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+
     @Transactional(readOnly = true)
     @Override
     public boolean isWishlisted(long userId, long bookId){
@@ -245,4 +258,30 @@ public class BookServiceImpl implements BookService {
             return page;
         }
     }
+
+    @Transactional
+    @Override
+    public void recheckWriterPausedBooks(long userId) {
+        bookDao.recheckAllPaused(userId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getTopBooks(Integer size){
+        return bookDao.getTopBooks(size);
+    }
+
+    @Transactional
+    @Override
+    public void checkBookSalesCategory(Book book){
+        long sales = orderDao.getTotalOrdersForBook(book.getBookId());
+        if(sales >= BookSalesCategory.POPULAR.getMinSales() && book.getSalesCategory() == BookSalesCategory.DEFAULT){
+            bookDao.toPopular(book);
+        }
+        if(sales >= BookSalesCategory.BEST_SELLER.getMinSales() && book.getSalesCategory() == BookSalesCategory.POPULAR){
+            bookDao.toBestSeller(book);
+        }
+    }
+
+
 }

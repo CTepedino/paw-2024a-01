@@ -25,7 +25,7 @@ public class Question {
     private Book book;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "questioner_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "questioner_id", referencedColumnName = "user_id", nullable = false)
     private User questioner;
 
     @Column
@@ -40,7 +40,7 @@ public class Question {
     @Column(name = "answer_date")
     private LocalDateTime answerDate;
 
-    public Question(){}
+    Question(){}
 
     public Question(Book book, User questioner, String question, String answer, LocalDateTime date, LocalDateTime answerDate){
         this.book=book;

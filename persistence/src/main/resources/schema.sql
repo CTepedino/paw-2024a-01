@@ -99,6 +99,68 @@ ALTER TABLE reviews ADD CONSTRAINT reviews_rating_check CHECK (rating BETWEEN 0 
 ALTER TABLE orders ADD COLUMN rejected_reason VARCHAR(255);
 */
 
+/* Sprint 6 modifications:
+ALTER TABLE books ADD COLUMN sales_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT';
+
+CREATE OR REPLACE VIEW book_order_totals AS
+SELECT b.book_id, COUNT(o.order_id) AS total_orders
+FROM books b
+LEFT JOIN orders o ON b.book_id = o.book_id
+GROUP BY b.book_id;
+
+UPDATE books b
+SET sales_category =
+    CASE
+        WHEN w.total_orders >= 10 THEN 'BEST_SELLER'
+        WHEN w.total_orders >= 5 THEN 'POPULAR'
+        ELSE 'DEFAULT'
+    END
+FROM book_order_totals w
+WHERE b.book_id = w.book_id;
+
+ALTER TABLE orders ADD COLUMN price DECIMAL(10, 2);
+UPDATE orders o
+SET price = (
+    SELECT b.price
+    FROM books b
+    WHERE b.book_id = o.book_id
+);
+
+ALTER TABLE users ADD COLUMN writer_category VARCHAR(40) DEFAULT 'DEFAULT';
+
+CREATE OR REPLACE VIEW writer_order_totals AS
+SELECT u.user_id, COUNT(o.order_id) AS total_orders
+FROM users u
+LEFT JOIN books b ON u.user_id = b.writer_id
+LEFT JOIN orders o ON b.book_id = o.book_id
+GROUP BY u.user_id;
+
+UPDATE users u
+SET writer_category =
+    CASE
+        WHEN w.total_orders >= 20 THEN 'GOLD'
+        WHEN w.total_orders >= 10 THEN 'SILVER'
+        WHEN w.total_orders >= 5 THEN 'BRONZE'
+        ELSE 'DEFAULT'
+    END
+FROM writer_order_totals w
+WHERE u.user_id = w.user_id;
+
+DROP VIEW writer_order_totals;
+DROP VIEW book_order_totals;
+
+INSERT INTO roles (user_id, role)
+SELECT DISTINCT b.writer_id, 'WRITER'
+FROM books b
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM roles r
+    WHERE r.user_id = b.writer_id
+    AND r.role = 'WRITER'
+);
+
+ */
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
@@ -108,7 +170,8 @@ CREATE TABLE IF NOT EXISTS users(
     cbu VARCHAR(22),
     is_enabled BOOLEAN,
     locale VARCHAR(10) DEFAULT 'en',
-    description TEXT
+    description TEXT,
+    writer_category VARCHAR(40) DEFAULT 'DEFAULT'
 );
 
 CREATE TABLE IF NOT EXISTS books (
@@ -122,6 +185,7 @@ CREATE TABLE IF NOT EXISTS books (
     published_date DATE DEFAULT now(),
     writer_id INT NOT NULL,
     is_paused BOOLEAN DEFAULT FALSE,
+    sales_category VARCHAR(40) NOT NULL DEFAULT 'DEFAULT',
 
     FOREIGN KEY (writer_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
@@ -163,11 +227,10 @@ CREATE TABLE IF NOT EXISTS orders(
     date TIMESTAMP default now(),
     is_public BOOLEAN DEFAULT FALSE,
     rejected_reason VARCHAR(255),
+    price DECIMAL(10, 2),
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,
-
-    UNIQUE(buyer_id, book_id)
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS payment_receipts(
@@ -198,6 +261,12 @@ CREATE TABLE IF NOT EXISTS email_validations(
     expiration TIMESTAMP NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS reset_codes(
+    id INT PRIMARY KEY REFERENCES users (user_id) ON DELETE CASCADE,
+    code VARCHAR(5) NOT NULL,
+    expiration TIMESTAMP NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS wishlist(
     id SERIAL PRIMARY KEY,
     user_id INT,
@@ -220,4 +289,13 @@ CREATE TABLE IF NOT EXISTS questions(
 
     FOREIGN KEY (questioner_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS deals(
+    id INT PRIMARY KEY,
+    price DECIMAL(10, 2) NOT NULL,
+    start_date TIMESTAMP default now(),
+    end_date TIMESTAMP,
+
+    FOREIGN KEY (id) REFERENCES books (book_id) ON DELETE CASCADE
 );

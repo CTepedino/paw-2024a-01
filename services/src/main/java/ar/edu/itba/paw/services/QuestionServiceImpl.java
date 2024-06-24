@@ -8,9 +8,9 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
+import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.questions.Question;
-import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,25 +58,36 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Question> getAll(long bookId, int pageNumber, int pageSize) {
-        if (pageNumber < 1){
+    public PaginatedContent<Question> getAll(long bookId, int pageNumber, int pageSize, boolean isAuthor) {
+        if (pageNumber < 1) {
             throw new InvalidPageException();
         }
 
+        List<Question> questions;
+        long size;
 
-        long size = questionDao.getAllSize(bookId);
+        if (isAuthor) {
+            questions = questionDao.getAll(bookId, (pageNumber-1)*pageSize, pageSize);
+            size = questionDao.getAllSize(bookId);
+        } else if (us.isLoggedIn()){
+            questions =  questionDao.getAllFullQuestionsNotUser(bookId, us.getLoggedUser().get().getUserId(), (pageNumber-1)*pageSize, pageSize);
+            size = questionDao.getAllFullQuestionsNotUsersSize(bookId, us.getLoggedUser().get().getUserId());
+        } else {
+            questions = questionDao.getAllFullQuestions(bookId, (pageNumber-1)*pageSize, pageSize);
+            size = questionDao.getAllFullQuestionsSize(bookId);
+        }
 
-        List<Question> questions = questionDao.getAll(bookId, (pageNumber-1)*pageSize, pageSize);
 
         PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
 
         if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getAll(bookId, page.getPageCount(), pageSize);
+            return getAll(bookId, page.getPageCount(), pageSize, isAuthor);
         } else {
             return page;
         }
     }
 
+    @Transactional
     @Override
     public PaginatedContent<Question> getAllFromUser(long userId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
@@ -97,6 +108,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Transactional
     @Override
     public PaginatedContent<Question> getAllFromUserAndBook(long userId, long bookId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
@@ -117,6 +129,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Transactional
     @Override
     public PaginatedContent<Question> getAllFromWriter(long userId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
@@ -137,6 +150,31 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Transactional
+    @Override
+    public PaginatedContent<Question> getAllFromWriter(long userId, int pageNumber, int pageSize, boolean viewComplete) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+
+        if(viewComplete){
+            return getAllFromWriter(userId, pageNumber, pageSize);
+        }
+
+        long size = questionDao.getAllFromWriterIncompleteSize(userId);
+
+        List<Question> questions = questionDao.getAllFromWriterIncomplete(userId, (pageNumber-1)*pageSize, pageSize);
+
+        PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
+
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAllFromWriter(userId, page.getPageCount(), pageSize, viewComplete);
+        } else {
+            return page;
+        }
+    }
+
+    @Transactional
     @Override
     public PaginatedContent<Question> getAllFullQuestionsNotUser(long userId, long bookId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
@@ -144,7 +182,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
 
-        long size = questionDao.getAllFullQuestionsNotSUsersSize(bookId, userId);
+        long size = questionDao.getAllFullQuestionsNotUsersSize(bookId, userId);
 
         List<Question> questions = questionDao.getAllFullQuestionsNotUser(bookId, userId, (pageNumber-1)*pageSize, pageSize);
 
@@ -155,5 +193,32 @@ public class QuestionServiceImpl implements QuestionService {
         } else {
             return page;
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long getQuestionCount(long bookId, User user, boolean includeUnanswered) {
+        if (user == null) {
+            return questionDao.getAllFullQuestionsSize(bookId);
+        } else {
+            if (includeUnanswered) {
+                return questionDao.getAllSize(bookId);
+            } else {
+                return questionDao.getAllFullQuestionsNotUsersSize(bookId, user.getUserId());
+            }
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long getMyQuestionCount(long userId, long bookId) {
+        return questionDao.getAllFromUserAndBookSize(userId, bookId);
+    }
+
+    @Override
+    public boolean canAnswer(long questionId, String email) {
+        Question q = questionDao.findById(questionId).orElseThrow(QuestionNotFoundException::new);
+
+        return q.getBook().getWriter().getEmail().equals(email);
     }
 }

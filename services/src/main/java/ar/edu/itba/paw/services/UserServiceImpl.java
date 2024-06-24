@@ -1,17 +1,18 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
-import ar.edu.itba.paw.interfaces.service.EmailValidationService;
-import ar.edu.itba.paw.interfaces.service.MailService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.exception.ImageNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidCodeException;
 import ar.edu.itba.paw.models.exception.NoValidationCodeException;
 import ar.edu.itba.paw.models.exception.UnreadableFileException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
+import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
+import ar.edu.itba.paw.models.users.WriterCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,18 +40,27 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
+    private final OrderDao orderDao;
+
     private final EmailValidationService evs;
+
+    private final ResetCodeService rcs;
+
+    private final BookService bs;
 
     private final PasswordEncoder passwordEncoder;
 
     private final MailService ms;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, PasswordEncoder passwordEncoder, EmailValidationService evs, MailService ms){
+    public UserServiceImpl(final UserDao userDao, OrderDao orderDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms, BookService bs){
         this.userDao = userDao;
+        this.orderDao = orderDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
+        this.rcs = rcs;
         this.ms = ms;
+        this.bs = bs;
     }
 
     @Transactional(readOnly = true)
@@ -198,7 +208,7 @@ public class UserServiceImpl implements UserService {
         userDao.update(user, firstName, lastName, cbu, description);
 
         if ((user.getRoles().contains(UserRoles.WRITER) && oldCbu==null ) || user.getRoles().isEmpty()){
-            userDao.recheckAllPaused(user.getUserId());
+            bs.recheckWriterPausedBooks(user.getUserId());
         }
 
 
@@ -258,5 +268,50 @@ public class UserServiceImpl implements UserService {
         userDao.giveRole(user, UserRoles.READER);
         userDao.giveRole(user, UserRoles.WRITER);
         return encodedPassword;
+    }
+
+    @Transactional
+    @Override
+    public void createResetPasswordCode(String email) {
+        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
+        rcs.create(user);
+    }
+
+
+    @Transactional
+    @Override
+    public void resetPassword(long userId, String password, String code) {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+
+        if (rcs.checkResetCode(userId, code)) {
+            userDao.updatePassword(user, passwordEncoder.encode(password));
+
+            List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+            Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        } else {
+            throw new InvalidCodeException();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void resendResetCode(long userId){
+        rcs.resend(findById(userId).orElseThrow(UserNotFoundException::new));
+    }
+
+    @Transactional
+    @Override
+    public void checkWriterCategory(User user){
+        long orders = orderDao.getWriterOrdersSize(user.getUserId(), "", null);
+        if(user.getWriterCategory() != WriterCategory.BRONZE && orders >= WriterCategory.BRONZE.getMinSales() && orders < WriterCategory.SILVER.getMinSales()){
+            userDao.updateWriterCategory(user, WriterCategory.BRONZE);
+        }
+        if((user.getWriterCategory() != WriterCategory.SILVER) && (orders >= WriterCategory.SILVER.getMinSales()) && (orders < WriterCategory.GOLD.getMinSales())){
+            userDao.updateWriterCategory(user, WriterCategory.SILVER);
+        }
+        if(user.getWriterCategory() != WriterCategory.GOLD && orders >= WriterCategory.GOLD.getMinSales()){
+            userDao.updateWriterCategory(user, WriterCategory.GOLD);
+        }
     }
 }

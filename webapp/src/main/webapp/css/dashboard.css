@@ -1,0 +1,53 @@
+.dashboard{
+    width: 95% !important;
+}
+
+.page-title {
+    color: #437C90 !important;
+}
+
+.card-panel{
+    background-color: #437c90 !important;
+}
+
+.color-yellow{
+    color: #f7c548;
+}
+
+.no-books{
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.sales-category{
+    margin: initial;
+    color: white;
+    padding: 5px !important;
+}
+
+.bronze {
+    background: #CD7F32;
+}
+
+.silver {
+    background: #C0C0C0;
+}
+
+.gold {
+    background: #FFD700;
+}
+
+.sales-category{
+    margin: initial;
+    color: white;
+    width: fit-content;
+    padding: inherit;
+}
+
+.popular{
+    background: #437c90;
+}
+
+.bestseller{
+    background: #f7c548;
+}

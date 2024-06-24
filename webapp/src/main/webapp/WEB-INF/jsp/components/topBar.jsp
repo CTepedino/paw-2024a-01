@@ -94,6 +94,14 @@
                                     </a>
                                     <hr>
                                 </c:if>
+                                <c:if test="${isWriter}">
+                                    <a href="<c:url value="/analytics"/>" class="sub-menu-link">
+                                        <i class="material-icons go-icon">analytics</i>
+                                        <p><spring:message code="profile.analytics"/></p>
+                                        <span class="go-arrow">></span>
+                                    </a>
+                                    <hr>
+                                </c:if>
                                 <a href="<c:url value="/questions"/>" class="sub-menu-link">
                                     <i class="material-icons go-icon">question_answer</i>
                                     <p><spring:message code="topBar.questions"/></p>

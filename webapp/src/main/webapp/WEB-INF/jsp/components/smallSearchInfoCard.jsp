@@ -13,6 +13,12 @@
 <div class="col s6">
     <a href="<c:url value="/book/${book.bookId}"/>">
         <div class="card">
+            <c:if test="${book.salesCategory eq 'BEST_SELLER'}">
+                <div class="card-badge bestseller"><spring:message code="book.bestseller"/></div>
+            </c:if>
+            <c:if test="${book.salesCategory eq 'POPULAR'}">
+                <div class="card-badge popular"><spring:message code="book.popular"/></div>
+            </c:if>
             <div class="card-image waves-effect waves-block waves-light">
                 <img
                         src="<c:url value="/cover/${book.bookId}"/>"
@@ -33,15 +39,38 @@
                             <spring:message var="genre" code="book.genre.${book.genre}"/>
                             <c:out value="${genre}"/>
                         </p>
+                        <c:if test="${rating ne 0}">
+                            <br/>
+                            <i class="material-icons black-icons">star</i>
+                            <p class="info">
+                                <c:out value="${rating}"/>
+                            </p>
+                        </c:if>
                         <br/>
+                        <i class="material-icons black-icons">face</i>
                         <p class="info">
-                            <spring:message var="age" code="bookInfoCard.suggestedAge" arguments="${book.suggestedAge}"/>
-                            <c:out value="${age}"/>
+                            +<c:out value="${book.suggestedAge}"/>
+                        </p>
+                        <br/>
+                        <i class="material-icons black-icons">description</i>
+                        <p class="info">
+                            <c:out value="${book.pageCount}"/>
+                        </p>
+                        <br/>
+                        <i class="material-icons black-icons">calendar_month</i>
+                        <p class="info">
+                            <c:out value="${book.publishDate.year}"/>
                         </p>
                     </div>
-                    <h5 class="price-number">
-                        <c:out value="${book.formattedPrice}"/>
-                    </h5>
+                    <c:if test="${book.deal eq null}">
+                        <h5 class="price-number">
+                            <c:out value="${book.formattedPrice}"/>
+                        </h5>
+                    </c:if>
+                    <c:if test="${book.deal ne null}">
+                        <h6 class="price-number-crossed"><span class="strikethrough"><c:out value="${book.formattedPrice}"/></span><span class="percentage"><c:out value="${book.percentage}"/></span></h6>
+                        <h5 class="price-number"><c:out value="${book.deal.formattedPrice}"/></h5>
+                    </c:if>
                 </div>
             </div>
         </div>

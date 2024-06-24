@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -37,6 +38,7 @@ public class OrderController {
 
     @ModelAttribute("statuses")
     public List<OrderStatus> statuses() {
+
         return List.of(OrderStatus.values());
     }
 

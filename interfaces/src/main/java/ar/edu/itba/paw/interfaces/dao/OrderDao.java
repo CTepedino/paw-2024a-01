@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -16,15 +17,13 @@ public interface OrderDao {
 
     Optional<Order> findById(long orderId);
 
-    Order create(User user, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
+    Order create(User user, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, BigDecimal price);
 
     void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
 
     void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, String rejectedReason);
 
-    PaymentReceipt createPaymentReceipt(Order order, byte[] paymentReceipt, String type);
-
-    void updatePaymentReceipt(Order order, byte[] paymentReceipt, String type);
+    PaymentReceipt createOrUpdatePaymentReceipt(Order order, byte[] paymentReceipt, String type);
 
     List<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus, int offset, int limit);
     long getReaderOrdersSize(long readerId, String title, OrderStatus orderStatus);
@@ -33,4 +32,23 @@ public interface OrderDao {
     long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
 
     boolean ownsBook(long bookId, String email);
+
+
+    long getTotalOrdersForBook(long bookId);
+
+    BigDecimal getTotalSales(long writerId);
+
+    BigDecimal getTotalSalesForBook(long bookId);
+
+    BigDecimal getTotalSalesForMonth(long writerId, int year, int month);
+
+
+    long getTotalOrdersForMonthForWriter(long writerId, int year, int month);
+
+    BigDecimal getTotalSalesForMonthForBook(long bookId, int year, int month);
+
+    long getTotalOrdersForMonthForBook(long bookId, int year, int month);
+
+    long getBooksByWriterOrderedSize(long writerId);
+    long getBooksByWriterOrderedSize(long writerId, int year, int month);
 }

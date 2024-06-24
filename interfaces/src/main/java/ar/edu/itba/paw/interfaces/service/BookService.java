@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.users.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public interface BookService {
             BigDecimal price,
             int pageCount,
             int suggestedAge,
+            LocalDate publishedDate,
 
             User writer,
 
@@ -47,6 +49,7 @@ public interface BookService {
 
     PaginatedContent<Book> getAll(int pageNumber, int pageSize);
 
+
     PaginatedContent<Book> searchWithParams(
             String title,
             BookGenre genre,
@@ -61,7 +64,9 @@ public interface BookService {
             int pageSize
     );
 
+
     List<Book> getRecommendations(Book book);
+
 
     PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
 
@@ -81,4 +86,10 @@ public interface BookService {
     void removeFromWishlist(long userId, long bookId);
 
     PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize);
+
+    List<Book> getTopBooks(Integer size);
+
+    void recheckWriterPausedBooks(long userId);
+
+    void checkBookSalesCategory(Book book);
 }

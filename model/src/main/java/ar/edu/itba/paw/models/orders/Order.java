@@ -5,6 +5,8 @@ import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.users.User;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -46,14 +48,18 @@ public class Order {
     @Column(name = "rejected_reason")
     private String rejectedReason;
 
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
+
     Order(){}
 
-    public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic) {
+    public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, BigDecimal price) {
         this.buyer = buyer;
         this.book = book;
         this.orderStatus = orderStatus;
         this.date = date;
-        this.isPublic=isPublic;
+        this.isPublic= isPublic;
+        this.price = price;
     }
 
     public long getOrderId() {
@@ -114,5 +120,19 @@ public class Order {
 
     public void setRejectedReason(String rejectedReason) {
         this.rejectedReason = rejectedReason;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getFormattedPrice(){
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
+        currencyFormatter.setMaximumFractionDigits(0);
+        return currencyFormatter.format(price);
     }
 }

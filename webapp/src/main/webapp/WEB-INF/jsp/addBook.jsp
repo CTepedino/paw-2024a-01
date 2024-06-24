@@ -87,6 +87,13 @@
             <form:errors path="price" cssClass="red-text"  element="p"/>
             <br>
 
+            <div>
+                <form:label path="publicationDate"><spring:message code="book.addBook.date"/><span class="red-text">*</span></form:label>
+                <form:input type="text" id="date" path="publicationDate" cssClass="datepicker"/>
+            </div>
+            <form:errors path="publicationDate" cssClass="red-text"  element="p"/>
+            <br>
+
             <div class="file-field input-field">
                 <div class="btn">
                     <span><spring:message code="book.addBook.cover"/></span>
@@ -121,13 +128,13 @@
             </div>
             <form:errors path="bookFile" cssClass="red-text"  element="p"/>
 
-
             <div class="input-field center">
                 <button class="btn waves-effect waves-light" type="submit" name="action">
                     <strong><spring:message code="book.addBook.publish"/></strong>
                 </button>
             </div>
         </form:form>
+
     </div>
 </div>
 <script>
@@ -136,6 +143,75 @@
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems);
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.datepicker');
+
+        var options = {
+            'maxDate': new Date(),
+            'format': 'dd/mm/yyyy',
+            'autoClose': true,
+            'defaultDate': new Date(),
+            'setDefaultDate': true,
+            'i18n': {
+                'done': '<spring:message code="datePicker.done"/>',
+                'cancel': '<spring:message code="datePicker.cancel"/>',
+                'clear': '<spring:message code="datePicker.clear"/>',
+                'months': [
+                    '<spring:message code="datePicker.months.jan"/>',
+                    '<spring:message code="datePicker.months.feb"/>',
+                    '<spring:message code="datePicker.months.mar"/>',
+                    '<spring:message code="datePicker.months.apr"/>',
+                    '<spring:message code="datePicker.months.may"/>',
+                    '<spring:message code="datePicker.months.jun"/>',
+                    '<spring:message code="datePicker.months.jul"/>',
+                    '<spring:message code="datePicker.months.aug"/>',
+                    '<spring:message code="datePicker.months.sep"/>',
+                    '<spring:message code="datePicker.months.oct"/>',
+                    '<spring:message code="datePicker.months.nov"/>',
+                    '<spring:message code="datePicker.months.dec"/>'
+                ],
+                'monthsShort': [
+                    '<spring:message code="datePicker.monthsShort.jan"/>',
+                    '<spring:message code="datePicker.monthsShort.feb"/>',
+                    '<spring:message code="datePicker.monthsShort.mar"/>',
+                    '<spring:message code="datePicker.monthsShort.apr"/>',
+                    '<spring:message code="datePicker.monthsShort.may"/>',
+                    '<spring:message code="datePicker.monthsShort.jun"/>',
+                    '<spring:message code="datePicker.monthsShort.jul"/>',
+                    '<spring:message code="datePicker.monthsShort.aug"/>',
+                    '<spring:message code="datePicker.monthsShort.sep"/>',
+                    '<spring:message code="datePicker.monthsShort.oct"/>',
+                    '<spring:message code="datePicker.monthsShort.nov"/>',
+                    '<spring:message code="datePicker.monthsShort.dec"/>'
+                ],
+                'weekdaysShort': [
+                    '<spring:message code="datePicker.weekDaysShort.sun"/>',
+                    '<spring:message code="datePicker.weekDaysShort.mon"/>',
+                    '<spring:message code="datePicker.weekDaysShort.tue"/>',
+                    '<spring:message code="datePicker.weekDaysShort.wed"/>',
+                    '<spring:message code="datePicker.weekDaysShort.thu"/>',
+                    '<spring:message code="datePicker.weekDaysShort.fri"/>',
+                    '<spring:message code="datePicker.weekDaysShort.sat"/>'
+                ],
+                'weekdaysAbbrev': [
+                    '<spring:message code="datePicker.weekDaysAbbrev.sun"/>',
+                    '<spring:message code="datePicker.weekDaysAbbrev.mon"/>',
+                    '<spring:message code="datePicker.weekDaysAbbrev.tue"/>',
+                    '<spring:message code="datePicker.weekDaysAbbrev.wed"/>',
+                    '<spring:message code="datePicker.weekDaysAbbrev.thu"/>',
+                    '<spring:message code="datePicker.weekDaysAbbrev.fri"/>',
+                    '<spring:message code="datePicker.weekDaysAbbrev.sat"/>'
+                ]
+            },
+
+        }
+
+        var instances = M.Datepicker.init(elems, options);
+    });
+
+
+
 </script>
 </body>
 </html>

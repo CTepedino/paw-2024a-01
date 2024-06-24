@@ -4,11 +4,15 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.webapp.form.validations.FileExists;
 import ar.edu.itba.paw.webapp.form.validations.ImageFile;
 import ar.edu.itba.paw.webapp.form.validations.PdfFile;
+import ar.edu.itba.paw.webapp.form.validations.TodayOrBefore;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class NewBookForm {
 
@@ -54,6 +58,11 @@ public class NewBookForm {
     @Size(min = 6, max = 22)
     @Pattern(regexp = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9.-]+")
     private String cbu;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "dd/MM/yyyy")
+    @TodayOrBefore
+    @NotNull
+    private LocalDate publicationDate;
 
 
     public String getTitle() {
@@ -137,4 +146,11 @@ public class NewBookForm {
         this.cbu = cbu;
     }
 
+    public LocalDate getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
+    }
 }

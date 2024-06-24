@@ -11,7 +11,7 @@
 <body>
 <div class="container question-container">
     <div class="qa-list">
-        <c:if test="${questions.page.size()==0}">
+        <c:if test="${empty questions.page}">
             <h6><spring:message code="book.bookInfo.questions.noQuestions"/></h6>
         </c:if>
 
@@ -37,6 +37,7 @@
                             action="${answerPostUrl}"
                             method="post"
                             class="answer-form"
+                            id="question-${question.questionId}"
                     >
                         <div class="row">
                             <div class="input-field col s9 answer-input">
@@ -55,16 +56,6 @@
                 </div>
             </c:if>
         </c:forEach>
-    <%--    <c:if test="${questions.pageCount gt 1}">--%>
-    <%--        <script src="<c:url value="/js/paginationControls.js"/>"></script>--%>
-    <%--        <script>--%>
-    <%--            const paginationButtonsQuestions = new PaginationButtons(${questions.pageCount}, Math.min(10,${questions.pageCount}), ${questions.pageNumber}, false);--%>
-    <%--            paginationButtonsQuestions.render();--%>
-    <%--            paginationButtonsQuestions.onChange(e => {--%>
-    <%--                window.location.href = "<c:url value="?page="/>" + e.target.value;--%>
-    <%--            });--%>
-    <%--        </script>--%>
-    <%--    </c:if>--%>
     </div>
 </div>
 

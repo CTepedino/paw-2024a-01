@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
-import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookGenre;
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
-import ar.edu.itba.paw.models.books.WishlistItem;
+import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -47,6 +44,16 @@ public class BookJpaDao implements BookDao {
         book.setPageCount(pageCount);
         book.setSuggestedAge(suggestedAge);
         book.setPaused(isPaused);
+    }
+
+    @Override
+    public void toBestSeller(Book book){
+        book.setSalesCategory(BookSalesCategory.BEST_SELLER);
+    }
+
+    @Override
+    public void toPopular(Book book){
+        book.setSalesCategory(BookSalesCategory.POPULAR);
     }
 
     @Override
@@ -95,15 +102,15 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public List<Book> getAll(int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE ORDER BY published_date DESC");
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.publishDate DESC", Book.class);
+        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE ORDER BY book_id DESC");
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.bookId DESC", Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
     public long getAllSize() {
-        return DaoUtils.getRowCount(em, "books WHERE is_paused = FALSE");
+        return DaoUtils.getRowCount(em, "Book b WHERE b.isPaused = FALSE", "b.bookId");
     }
 
     @Override
@@ -132,7 +139,11 @@ public class BookJpaDao implements BookDao {
 
         prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
 
-        return DaoUtils.getRowCount(em, " books b ", nativeQueryStr.toString(), params);
+        Query query = em.createNativeQuery("SELECT COUNT(DISTINCT b.book_id ) FROM books b" + nativeQueryStr);
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        return ((BigInteger) query.getSingleResult()).longValue();
     }
 
     private void prepareSearchQueryParams(StringBuilder nativeQueryStr, Map<String, Object> params, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge){
@@ -190,7 +201,7 @@ public class BookJpaDao implements BookDao {
         params.put("writerId", writerId);
         params.put("title", DaoUtils.prepareSearchString(title));
 
-        return DaoUtils.getRowCount(em, "books", " WHERE writer_id = :writerId AND LOWER(title) LIKE LOWER(:title) ", params);
+        return DaoUtils.getRowCount(em, "Book b", "b.bookId"," WHERE b.writer.userId = :writerId AND LOWER(b.title) LIKE LOWER(:title) ", params);
     }
 
     @Override
@@ -210,38 +221,40 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public long getOwnedBooksSize(long readerId, String title, boolean isPublic) {
+
         Map<String, Object> params = new HashMap<>();
         params.put("readerId", readerId);
         params.put("title", DaoUtils.prepareSearchString(title));
 
         return DaoUtils.getRowCount(em,
-                "books b LEFT JOIN orders o ON b.book_id = o.book_id",
-                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer_id = :readerId" + (isPublic?" AND o.is_public = TRUE ":""),
+                "Book b",
+                "b.bookId",
+                "WHERE LOWER(b.title) LIKE LOWER(:title) AND EXISTS(SELECT 1 FROM Order o WHERE o.book.bookId = b.bookId AND o.orderStatus = 'COMPLETED' AND o.buyer.userId = :readerId" + (isPublic?" AND o.isPublic = TRUE)":")"),
                 params
         );
     }
 
-
     @Override
-    public boolean recheckPaused(long bookId) {
-        TypedQuery<Boolean> query = em.createQuery(
-            """
-                    SELECT NOT EXISTS (
-                        SELECT 1
-                        FROM Book b
-                        JOIN User u ON b.writer.userId = u.userId
-                        WHERE b.bookId = :bookId AND u.cbu IS NOT NULL AND EXISTS(
-                            SELECT 1
-                            FROM BookFile bf
-                            WHERE bf.id = b.bookId
-                        )
-                    )
-                """,
-            Boolean.class
-        );
-        query.setParameter("bookId", bookId);
-        return query.getSingleResult();
+    public void recheckAllPaused(long userId) {
+        Query query = em.createQuery("""
+            UPDATE Book b SET isPaused = CASE
+                WHEN NOT EXISTS(
+                    SELECT 1
+                    FROM BookFile bf
+                    WHERE bf.id = b.bookId
+                ) OR EXISTS(
+                    SELECT 1
+                    FROM User AS u
+                    WHERE u.userId = :userId AND u.cbu IS NULL
+                ) THEN TRUE
+                ELSE FALSE
+                END
+            WHERE b.writer.userId = :userId
+        """);
+        query.setParameter("userId",userId);
+        query.executeUpdate();
     }
+
 
     @SuppressWarnings("unchecked")
     @Override
@@ -294,6 +307,51 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public long getWishlistSize(long userId) {
-        return DaoUtils.getRowCount(em, "wishlist", "WHERE user_id = :userId", Map.of("userId", userId));
+        return DaoUtils.getRowCount(em, "WishlistItem w", "w.bookId","WHERE w.userId = :userId", Map.of("userId", userId));
+    }
+
+    @Override
+    public List<Book> getTopBooks(int size) {
+
+        Query nativeQuery = em.createNativeQuery("SELECT o.book_id FROM orders o GROUP BY o.book_id ORDER BY COUNT(o) DESC");
+
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
+    }
+
+    @Override
+    public List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit) {
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT o.book_id FROM orders o JOIN books b ON o.book_id = b.book_id
+            WHERE b.writer_id = :writerId
+            GROUP BY o.book_id
+            ORDER BY COUNT(o.book_id) DESC, SUM(o.price) DESC
+        """);
+        nativeQuery.setParameter("writerId", writerId);
+
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC, SUM(o.price) DESC", Book.class);
+
+         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month) {
+
+        Query nativeQuery = em.createNativeQuery("""
+            SELECT o.book_id FROM orders o JOIN books b ON o.book_id = b.book_id
+            WHERE b.writer_id = :writerId
+            AND DATE_PART('year', o.date) = :year
+            AND DATE_PART('month', o.date) = :month
+            GROUP BY o.book_id
+            ORDER BY COUNT(o.book_id) DESC, SUM(o.price) DESC
+        """);
+        nativeQuery.setParameter("writerId", writerId);
+        nativeQuery.setParameter("year", year);
+        nativeQuery.setParameter("month", month);
+
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC, SUM(o.price) DESC", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 }
