@@ -10,7 +10,6 @@ import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.questions.Question;
-import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +67,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         if (us.isLoggedIn()){
             questions =  questionDao.getAllFullQuestionsNotUser(bookId, us.getLoggedUser().get().getUserId(), (pageNumber-1)*pageSize, pageSize);
-            size = questionDao.getAllFullQuestionsNotSUsersSize(bookId, us.getLoggedUser().get().getUserId());
+            size = questionDao.getAllFullQuestionsNotUsersSize(bookId, us.getLoggedUser().get().getUserId());
         } else {
             questions = questionDao.getAll(bookId, (pageNumber-1)*pageSize, pageSize);
             size = questionDao.getAllSize(bookId);
@@ -155,7 +154,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
 
-        long size = questionDao.getAllFullQuestionsNotSUsersSize(bookId, userId);
+        long size = questionDao.getAllFullQuestionsNotUsersSize(bookId, userId);
 
         List<Question> questions = questionDao.getAllFullQuestionsNotUser(bookId, userId, (pageNumber-1)*pageSize, pageSize);
 
@@ -170,8 +169,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional(readOnly = true)
     @Override
-    public long getQuestionCount(long bookId) {
-        return questionDao.getAllSize(bookId);
+    public long getQuestionCount(long bookId, User user) {
+        if (user == null) {
+            return questionDao.getAllSize(bookId);
+        } else {
+            return questionDao.getAllFullQuestionsNotUsersSize(bookId, user.getUserId());
+        }
     }
 
     @Transactional(readOnly = true)

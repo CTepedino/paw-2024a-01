@@ -110,7 +110,7 @@ public class QuestionJpaDao implements QuestionDao {
     }
 
     @Override
-    public long getAllFullQuestionsNotSUsersSize(long bookId, long userId) {
+    public long getAllFullQuestionsNotUsersSize(long bookId, long userId) {
         return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.questioner.userId <> :userId AND q.book.bookId = :bookId and q.answer IS NOT NULL", Map.of("userId", userId, "bookId", bookId));
     }
 

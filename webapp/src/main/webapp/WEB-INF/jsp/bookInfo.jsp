@@ -321,7 +321,6 @@
 
         <c:if test="${tab eq 'myQuestions'}">
             <c:set var="myQuestions" value="${myQuestions}" scope="request"/>
-            <c:set var="myQuestionsPage" value="${myQuestionsPage}" scope="request"/>
             <%@include file="components/myQuestionsTab.jsp"%>
         </c:if>
 

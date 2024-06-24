@@ -129,7 +129,9 @@ public class BookController {
         mav.addObject("book", book);
         mav.addObject("recommendations", bs.getRecommendations(book));
         mav.addObject("reviews", reviews);
+        mav.addObject("loggedUserReview", loggedUserReview);
         mav.addObject("avgRating", rs.getAverageRating(bookId));
+        mav.addObject("reviewOrders", ReviewOrderBy.values());
         mav.addObject("order", loggedUser != null?os.find(loggedUser.getUserId(), bookId).orElse(null):null);
         mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
         mav.addObject("isAuthor", loggedUser != null && bs.isAuthor(book, loggedUser.getUserId()));
@@ -138,7 +140,7 @@ public class BookController {
         mav.addObject("pageNumber", reviews.getPageNumber());
         mav.addObject("pageCount", reviews.getPageCount());
         mav.addObject("reviewCount", reviews.getTotalSize() + (loggedUserReview.isEmpty()?0:1));
-        mav.addObject("questionCount", qs.getQuestionCount(bookId));
+        mav.addObject("questionCount", qs.getQuestionCount(bookId, loggedUser));
         mav.addObject("myQuestionCount", loggedUser != null?qs.getMyQuestionCount(loggedUser.getUserId(), bookId):0);
         return mav;
     }
@@ -196,7 +198,7 @@ public class BookController {
         mav.addObject("tab", "myQuestions");
         mav.addObject("book", book);
         mav.addObject("recommendations", bs.getRecommendations(book));
-        mav.addObject("questions", myQuestions);
+        mav.addObject("myQuestions", myQuestions);
         mav.addObject("avgRating", rs.getAverageRating(bookId));
         mav.addObject("order", os.find(loggedUser.getUserId(), bookId).orElse(null));
         mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
@@ -206,7 +208,7 @@ public class BookController {
         mav.addObject("pageNumber", myQuestions.getPageNumber());
         mav.addObject("pageCount", myQuestions.getPageCount());
         mav.addObject("reviewCount", rs.getReviewCount(bookId));
-        mav.addObject("questionCount", qs.getQuestionCount(bookId));
+        mav.addObject("questionCount", qs.getQuestionCount(bookId, loggedUser));
         mav.addObject("myQuestionCount", myQuestions.getTotalSize());
         return mav;
     }
