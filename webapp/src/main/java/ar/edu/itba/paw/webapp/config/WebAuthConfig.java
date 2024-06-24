@@ -69,7 +69,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(HttpMethod.POST,"/wishlist/{bookId:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(o.getVariables().get("bookId"))))
                 .requestMatchers(HttpMethod.POST,"/recommendBook/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canRecommendBook(a.get(), o.getVariables().get("id"))))
                 .requestMatchers("/book/${id:\\d+}/question").access((a,o) -> new AuthorizationDecision(accessHelper.canQuestion(a.get(), o.getVariables().get("id"))))
-                .requestMatchers("/book/{bookId:\\d+}/questions/{questionId:\\d+}/answer", "/questions/questions/{questionId:\\d+}/answer").access((a,o) -> new AuthorizationDecision(accessHelper.canAnswer(a.get(), o.getVariables().get("id"))))
+                .requestMatchers("/book/{bookId:\\d+}/questions/{questionId:\\d+}/answer", "/questions/questions/{questionId:\\d+}/answer").access((a,o) -> new AuthorizationDecision(accessHelper.canAnswer(a.get(), o.getVariables().get("questionId"))))
                 .requestMatchers("/", "/cover/**", "/preview/**", "/book/{bookId:\\d+}/questions", "/book/{bookId:\\d+}/reviews", "/search/**", "/profilePicture/**", "/profile/{userId:\\d+}/**").permitAll()
                 .anyRequest().authenticated()
 

@@ -20,11 +20,11 @@ public class Question {
     @Column(name = "question_id")
     private Long questionId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false)
     private Book book;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "questioner_id", referencedColumnName = "user_id", nullable = false)
     private User questioner;
 
