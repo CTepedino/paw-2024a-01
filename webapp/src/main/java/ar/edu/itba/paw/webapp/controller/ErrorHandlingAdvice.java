@@ -14,8 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class ErrorHandlingAdvice {
 
-/*
-
     @ExceptionHandler({
             BookNotFoundException.class,
             ImageNotFoundException.class,
@@ -51,5 +49,4 @@ public class ErrorHandlingAdvice {
     public ModelAndView exceptionCatchAll(){return new ModelAndView("exception/500");}
 
 
-*/
 }

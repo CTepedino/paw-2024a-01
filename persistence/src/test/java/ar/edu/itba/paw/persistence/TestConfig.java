@@ -84,8 +84,8 @@ public class TestConfig {
         jpaProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
 
         //FIXME: sacar antes del deploy
-        jpaProperties.setProperty("hibernate.show_sql", "true");
-        jpaProperties.setProperty("format_sql", "true");
+        //jpaProperties.setProperty("hibernate.show_sql", "true");
+        //jpaProperties.setProperty("format_sql", "true");
 
         emf.setJpaProperties(jpaProperties);
 
