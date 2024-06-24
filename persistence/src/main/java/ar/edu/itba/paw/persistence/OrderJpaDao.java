@@ -106,13 +106,13 @@ public class OrderJpaDao implements OrderDao {
         params.put("title", DaoUtils.prepareSearchString(title));
         params.put("readerId", readerId);
         if (orderStatus != null){
-            params.put("status", orderStatus.toString());
+            params.put("status", orderStatus);
         }
 
         return DaoUtils.getRowCount(em,
                 "Order o LEFT JOIN Book b ON o.book.bookId = b.bookId",
                 "o.orderId",
-                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer.userId = :readerId" + (orderStatus!=null?" AND o.status = :status":""),
+                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer.userId = :readerId" + (orderStatus!=null?" AND o.orderStatus = :status":""),
                 params
         );
     }
@@ -142,13 +142,13 @@ public class OrderJpaDao implements OrderDao {
         params.put("title", DaoUtils.prepareSearchString(title));
         params.put("writerId", writerId);
         if (orderStatus != null){
-            params.put("status", orderStatus.toString());
+            params.put("status", orderStatus);
         }
 
         return DaoUtils.getRowCount(em,
             "Order o LEFT JOIN Book b ON o.book.bookId = b.bookId",
             "o.orderId",
-            "WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer.userId = :writerId" + (orderStatus!=null?" AND o.status = :status":""),
+            "WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer.userId = :writerId" + (orderStatus!=null?" AND o.orderStatus = :status":""),
              params
         );
     }

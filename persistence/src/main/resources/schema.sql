@@ -230,9 +230,7 @@ CREATE TABLE IF NOT EXISTS orders(
     price DECIMAL(10, 2),
 
     FOREIGN KEY (buyer_id) REFERENCES users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE,
-
-    UNIQUE(buyer_id, book_id)
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS payment_receipts(
