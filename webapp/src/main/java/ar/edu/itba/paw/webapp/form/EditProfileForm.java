@@ -11,7 +11,7 @@ public class EditProfileForm {
 
     @NotNull
     @ImageFile
-    private MultipartFile profilePicture;
+    private MultipartFile picture;
 
 
     @NotNull
@@ -33,9 +33,12 @@ public class EditProfileForm {
     private String description;
 
 
+    public MultipartFile getPicture() {
+        return picture;
+    }
 
-    public MultipartFile getProfilePicture() {
-        return profilePicture;
+    public void setPicture(MultipartFile picture) {
+        this.picture = picture;
     }
 
     public String getNewFirstName() {
@@ -63,9 +66,6 @@ public class EditProfileForm {
         this.newLastName = newLastName;
     }
 
-    public void setProfilePicture(MultipartFile profilePicture) {
-        this.profilePicture = profilePicture;
-    }
 
     public void setDescription(String description) {
         this.description = description;

@@ -131,7 +131,7 @@ public class ProfileController {
             return editProfileForm(form, loggedUser);
         }
 
-        us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu(), form.getProfilePicture(), form.getDescription());
+        us.updateProfile(form.getNewFirstName(),form.getNewLastName(),form.getCbu(), form.getPicture(), form.getDescription());
 
         return new ModelAndView("redirect:/profile/"+loggedUser.getUserId());
     }

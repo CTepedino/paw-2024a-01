@@ -51,6 +51,7 @@
                                 action="${answerPostUrl}"
                                 method="post"
                                 class="answer-form"
+                                id="question-${question.questionId}"
                         >
                             <div class="row">
                                 <div class="input-field col s9 answer-input">
