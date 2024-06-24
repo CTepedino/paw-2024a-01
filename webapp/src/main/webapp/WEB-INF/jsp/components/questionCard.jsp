@@ -13,7 +13,7 @@
 <li class="collection-item">
     <div class="row questioned-book">
         <div class="col s2">
-            <a class="card-image waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${question.book.bookId}">
+            <a class="card-image-q waves-effect waves-block waves-light" href="${pageContext.request.contextPath}/book/${question.book.bookId}">
                 <img
                         class="book_cover"
                         src="<c:url value="${baseUrl}/cover/${question.book.bookId}"/>"
