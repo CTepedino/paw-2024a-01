@@ -128,7 +128,7 @@ public class OrderJpaDaoTest{
         List<Order> orders = orderDao.getWriterOrders(2, "my book", OrderStatus.WAITING_APPROVAL, 0, 999);
 
         assertNotNull(orders);
-        assertEquals(TestUtils.getRowCount(em, "FROM orders o JOIN books b ON o.book_id = b.book_id WHERE b.title LIKE '%my book%' AND o.status = 'WAITING_CONTACT' AND b.writer_id = 2"), orders.size());
+        assertEquals(TestUtils.getRowCount(em, "FROM orders o JOIN books b ON o.book_id = b.book_id WHERE b.title LIKE '%my book%' AND o.status = 'WAITING_APPROVAL' AND b.writer_id = 2"), orders.size());
     }
 
     @Test

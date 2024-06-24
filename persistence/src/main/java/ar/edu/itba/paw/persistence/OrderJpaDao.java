@@ -88,7 +88,7 @@ public class OrderJpaDao implements OrderDao {
             FROM orders o
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId
-        """ + (orderStatus!=null?" AND o.status = :status":"") + ("ORDER BY o.date DESC"));
+        """ + (orderStatus!=null?" AND o.status = :status":"") + (" ORDER BY o.date DESC"));
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("readerId", readerId);
         if (orderStatus != null) {
@@ -124,7 +124,7 @@ public class OrderJpaDao implements OrderDao {
             FROM orders o
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId
-        """ + (orderStatus!=null?" AND o.status = :status":"") + ("ORDER BY o.date DESC"));
+        """ + (orderStatus!=null?" AND o.status = :status":"") + (" ORDER BY o.date DESC"));
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("writerId", writerId);
         if (orderStatus != null) {

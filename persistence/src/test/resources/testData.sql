@@ -19,7 +19,7 @@ INSERT INTO reset_codes (id, code, expiration) VALUES (101, '12345', NOW());
 INSERT INTO books (book_id, title, description, genre, page_count, price, suggested_age, writer_id, is_paused, sales_category) VALUES (103, '','','FICTION', 1,1.02,1,103,TRUE, 'DEFAULT');
 
 
-INSERT INTO orders (order_id, buyer_id, book_id, status, price, is_public) VALUES (101, 102, 103, 'WAITING_CONTACT', 10, false);
+INSERT INTO orders (order_id, buyer_id, book_id, status, price, is_public) VALUES (101, 102, 103, 'WAITING_APPROVAL', 10, false);
 INSERT INTO orders (order_id, buyer_id, book_id, status, price, is_public) VALUES (102, 103, 102, 'COMPLETED', 10, true);
 
 INSERT INTO reviews (review_id, reviewer_id, book_id, rating, review) VALUES (101, 103, 102, 6, 'its a book');
