@@ -97,10 +97,6 @@
 
                             <c:url value="/advanceOrder/${order.orderId}/sales" var="advanceOrderUrl"/>
 
-                            <c:if test="${order.orderStatus == 'WAITING_CONTACT'}">
-                                <a href="<c:url value="/profile"/>"><button class="waves-light btn"><strong><spring:message code="orders.sales.action.${order.orderStatus}.button"/></strong></button></a>
-                            </c:if>
-
                             <c:if test="${order.orderStatus == 'WAITING_APPROVAL'}">
                                 <a class="waves-light btn decline-button modal-trigger" href="#decline"><spring:message code="orders.sales.action.${order.orderStatus}.decline"/></a>
                                 <div id="decline" class="modal">
