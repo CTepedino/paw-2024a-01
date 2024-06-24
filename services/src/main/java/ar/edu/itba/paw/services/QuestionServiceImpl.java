@@ -67,7 +67,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         if (isAuthor) {
             questions = questionDao.getAll(bookId, (pageNumber-1)*pageSize, pageSize);
-            size = questions.size();
+            size = questionDao.getAllSize(bookId);
         } else if (us.isLoggedIn()){
             questions =  questionDao.getAllFullQuestionsNotUser(bookId, us.getLoggedUser().get().getUserId(), (pageNumber-1)*pageSize, pageSize);
             size = questionDao.getAllFullQuestionsNotUsersSize(bookId, us.getLoggedUser().get().getUserId());
@@ -174,7 +174,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public long getQuestionCount(long bookId, User user, boolean includeUnanswered) {
         if (user == null) {
-            return questionDao.getAllSize(bookId);
+            return questionDao.getAllFullQuestionsSize(bookId);
         } else {
             if (includeUnanswered) {
                 return questionDao.getAllSize(bookId);
