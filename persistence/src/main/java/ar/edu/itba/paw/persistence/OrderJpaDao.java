@@ -88,14 +88,14 @@ public class OrderJpaDao implements OrderDao {
             FROM orders o
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND o.buyer_id = :readerId
-        """ + (orderStatus!=null?" AND o.status = :status":""));
+        """ + (orderStatus!=null?" AND o.status = :status":"") + ("ORDER BY o.date DESC"));
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("readerId", readerId);
         if (orderStatus != null) {
             nativeQuery.setParameter("status", orderStatus.toString());
         }
 
-        TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList", Order.class);
+        TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList ORDER BY o.date DESC", Order.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
@@ -124,14 +124,14 @@ public class OrderJpaDao implements OrderDao {
             FROM orders o
             JOIN books b ON o.book_id = b.book_id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND b.writer_id = :writerId
-        """ + (orderStatus!=null?" AND o.status = :status":""));
+        """ + (orderStatus!=null?" AND o.status = :status":"") + ("ORDER BY o.date DESC"));
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
         nativeQuery.setParameter("writerId", writerId);
         if (orderStatus != null) {
             nativeQuery.setParameter("status", orderStatus.toString());
         }
 
-        TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList", Order.class);
+        TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList ORDER BY o.date DESC", Order.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
