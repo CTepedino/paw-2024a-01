@@ -13,6 +13,7 @@
     <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/questions.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/profile.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/css/bookInfo.css"/>" rel="stylesheet"/>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
