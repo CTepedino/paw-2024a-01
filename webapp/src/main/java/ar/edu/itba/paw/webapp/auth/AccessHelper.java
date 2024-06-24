@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.webapp.auth;
 
-import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.OrderService;
-import ar.edu.itba.paw.interfaces.service.ReviewService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.InvalidCodeException;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
@@ -25,12 +22,14 @@ public class AccessHelper {
     private final OrderService os;
     private final BookService bs;
     private final UserService us;
+    private final QuestionService qs;
 
     @Autowired
-    public AccessHelper(OrderService os, BookService bs, UserService us){
+    public AccessHelper(OrderService os, BookService bs, UserService us, QuestionService qs){
         this.os = os;
         this.bs = bs;
         this.us = us;
+        this.qs = qs;
     }
 
     public boolean canCreateOrder(String id){
@@ -109,8 +108,8 @@ public class AccessHelper {
         if (!us.isLoggedIn()) {
             return false;
         }
-        long bookId = Long.parseLong(id);
-        return bs.isAuthor(bookId, auth.getName());
+        long questionId = Long.parseLong(id);
+        return qs.canAnswer(questionId, auth.getName());
     }
 
 

@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
+import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.users.User;
@@ -188,5 +189,12 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public long getMyQuestionCount(long userId, long bookId) {
         return questionDao.getAllFromUserAndBookSize(userId, bookId);
+    }
+
+    @Override
+    public boolean canAnswer(long questionId, String email) {
+        Question q = questionDao.findById(questionId).orElseThrow(QuestionNotFoundException::new);
+
+        return q.getBook().getWriter().getEmail().equals(email);
     }
 }

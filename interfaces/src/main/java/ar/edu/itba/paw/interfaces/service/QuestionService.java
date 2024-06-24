@@ -22,4 +22,6 @@ public interface QuestionService {
     long getQuestionCount(long bookId, User user, boolean includeUnanswered);
 
     long getMyQuestionCount(long userId, long bookId);
+
+    boolean canAnswer(long questionId, String email);
 }
