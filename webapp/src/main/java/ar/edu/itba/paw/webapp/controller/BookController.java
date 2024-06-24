@@ -365,7 +365,9 @@ public class BookController {
             }
         }
 
-        PaginatedContent<Question> questions = qs.getAllFromWriter(user.getUserId(), filterQuestionForm.getPage(), QUESTION_PAGE_SIZE, filterQuestionForm.showComplete());
+        boolean showComplete = filterQuestionForm.getShowComplete() == null || filterQuestionForm.getShowComplete();
+
+        PaginatedContent<Question> questions = qs.getAllFromWriter(user.getUserId(), filterQuestionForm.getPage(), QUESTION_PAGE_SIZE, showComplete);
 
 
         mav.addObject("questions", questions);
@@ -373,7 +375,7 @@ public class BookController {
         mav.addObject("isAuthor", isWriter);
         mav.addObject("pageNumber", questions.getPageNumber());
         mav.addObject("pageCount", questions.getPageCount());
-        mav.addObject("showComplete", filterQuestionForm.showComplete());
+        mav.addObject("showComplete", showComplete);
 
         return mav;
     }

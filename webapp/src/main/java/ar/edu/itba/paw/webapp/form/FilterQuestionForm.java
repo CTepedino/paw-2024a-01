@@ -5,18 +5,19 @@ import javax.validation.constraints.NotNull;
 
 public class FilterQuestionForm {
 
-    private boolean showComplete = true;
+    private Boolean showComplete;
 
     @NotNull
     @Min(1)
     private Integer page = 1;
 
 
-    public boolean showComplete() {
+
+    public Boolean getShowComplete() {
         return showComplete;
     }
 
-    public void setShowComplete(boolean showComplete) {
+    public void setShowComplete(Boolean showComplete) {
         this.showComplete = showComplete;
     }
     public Integer getPage() {

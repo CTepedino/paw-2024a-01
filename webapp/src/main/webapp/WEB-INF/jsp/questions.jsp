@@ -47,11 +47,29 @@
             </div>
         </c:if>
 
+        <c:if test="${tab eq 'questions'}">
+        <c:url value="/questions/questions" var="questionsUrl"/>
+            <form:form modelAttribute="filterQuestionsForm"
+                       action="${questionsUrl}"
+                       method="get"
+                       id="filterQuestions">
+                <div class="row">
+                    <label for="s">
+                        <input type="checkbox" id="s" onclick="toggleCheckbox()" ${showComplete ? 'checked' : ''}/>
+                        <span><spring:message code="book.questions.viewComplete"/></span>
+                    </label>
+                </div>
+                <input hidden value="${!showComplete}" name="showComplete"/>
+                <input name="page" id="page" style="display: none" value="1"/>
+            </form:form>
+        </c:if>
+
         <c:if test="${(tab eq 'myQuestions' and empty myQuestions.page) or (tab eq 'questions' and empty questions.page)}">
             <div class="container question-container centerer">
                 <h6><spring:message code="book.bookInfo.questions.noQuestions"/></h6>
             </div>
         </c:if>
+
 
         <c:if test="${tab eq 'myQuestions' and not empty myQuestions.page}">
             <ul class="collection">
@@ -64,21 +82,8 @@
             </ul>
         </c:if>
 
+
         <c:if test="${tab eq 'questions' and not empty questions.page}">
-            <c:url value="/questions/questions" var="questionsUrl"/>
-            <form:form modelAttribute="filterQuestionsForm"
-                       action="${questionsUrl}"
-                       method="get"
-                       id="questions">
-                <div class="row">
-                    <label path="showComplete" id="showComplete">
-                        <input type="checkbox" path="showComplete" name="ShowComplete" onchange="this.form.submit()" ${showComplete ? 'checked' : ''}/>
-                        <span><spring:message code="book.questions.viewComplete"/></span>
-                    </label>
-                </div>
-                <input type="submit" hidden />
-                <input name="page" id="page" style="display: none"/>
-            </form:form>
             <ul class="collection">
                 <c:forEach var="question" items="${questions.page}">
                     <c:set var="question" value="${question}" scope="request"/>
@@ -100,9 +105,9 @@
             </script>
         </c:if>
         <script>
-            document.getElementById('showComplete').addEventListener('change', function() {
-                document.getElementById('showComplete').submit();
-            });
+            function toggleCheckbox() {
+                document.getElementById('filterQuestions').submit();
+            }
         </script>
     </div>
 </body>
