@@ -9,7 +9,7 @@ public interface QuestionService {
 
     void answer(long questionId, String answer);
 
-    PaginatedContent<Question> getAll(long bookId, int pageNumber, int pageSize);
+    PaginatedContent<Question> getAll(long bookId, int pageNumber, int pageSize, boolean isAuthor);
 
     PaginatedContent<Question> getAllFromUser(long userId, int pageNumber, int pageSize);
 

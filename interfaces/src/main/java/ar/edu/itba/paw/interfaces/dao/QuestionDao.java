@@ -35,5 +35,7 @@ public interface QuestionDao {
 
     long getAllFullQuestionsNotUsersSize(long bookId, long userId);
 
+    List<Question> getAllFullQuestions(long bookId, int offset, int limit);
+    long getAllFullQuestionsSize(long bookId);
 
 }

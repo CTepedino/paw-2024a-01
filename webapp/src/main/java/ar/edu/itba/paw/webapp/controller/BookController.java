@@ -158,7 +158,8 @@ public class BookController {
         }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        PaginatedContent<Question> questions = qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE);
+        boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
+        PaginatedContent<Question> questions = qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE, isAuthor);
 
         ModelAndView mav = new ModelAndView("bookInfo");
         mav.addObject("tab", "questions");
@@ -168,7 +169,7 @@ public class BookController {
         mav.addObject("avgRating", rs.getAverageRating(bookId));
         mav.addObject("order", loggedUser != null?os.find(loggedUser.getUserId(), bookId).orElse(null):null);
         mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
-        mav.addObject("isAuthor", loggedUser != null && bs.isAuthor(book, loggedUser.getUserId()));
+        mav.addObject("isAuthor", isAuthor);
         mav.addObject("existsOrder", os.existsOrder(bookId));
         mav.addObject("isWishlisted", loggedUser != null && bs.isWishlisted(loggedUser.getUserId(), bookId));
         mav.addObject("pageNumber", questions.getPageNumber());

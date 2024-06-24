@@ -57,27 +57,30 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Question> getAll(long bookId, int pageNumber, int pageSize) {
-        if (pageNumber < 1){
+    public PaginatedContent<Question> getAll(long bookId, int pageNumber, int pageSize, boolean isAuthor) {
+        if (pageNumber < 1) {
             throw new InvalidPageException();
         }
 
         List<Question> questions;
         long size;
 
-        if (us.isLoggedIn()){
+        if (isAuthor) {
+            questions = questionDao.getAll(bookId, (pageNumber-1)*pageSize, pageSize);
+            size = questions.size();
+        } else if (us.isLoggedIn()){
             questions =  questionDao.getAllFullQuestionsNotUser(bookId, us.getLoggedUser().get().getUserId(), (pageNumber-1)*pageSize, pageSize);
             size = questionDao.getAllFullQuestionsNotUsersSize(bookId, us.getLoggedUser().get().getUserId());
         } else {
-            questions = questionDao.getAll(bookId, (pageNumber-1)*pageSize, pageSize);
-            size = questionDao.getAllSize(bookId);
+            questions = questionDao.getAllFullQuestions(bookId, (pageNumber-1)*pageSize, pageSize);
+            size = questionDao.getAllFullQuestionsSize(bookId);
         }
 
 
         PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
 
         if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getAll(bookId, page.getPageCount(), pageSize);
+            return getAll(bookId, page.getPageCount(), pageSize, isAuthor);
         } else {
             return page;
         }

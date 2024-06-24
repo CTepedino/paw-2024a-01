@@ -114,4 +114,18 @@ public class QuestionJpaDao implements QuestionDao {
         return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.questioner.userId <> :userId AND q.book.bookId = :bookId and q.answer IS NOT NULL", Map.of("userId", userId, "bookId", bookId));
     }
 
+    @Override
+    public List<Question> getAllFullQuestions(long bookId, int offset, int limit) {
+        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.book_id = :bookId AND q.answer IS NOT NULL ORDER BY q.date DESC");
+        nativeQuery.setParameter("bookId", bookId);
+
+        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public long getAllFullQuestionsSize(long bookId) {
+        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.book.bookId = :bookId AND q.answer IS NOT NULL", Map.of("bookId", bookId));
+    }
 }
