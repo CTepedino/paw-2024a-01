@@ -314,7 +314,7 @@ public class BookJpaDao implements BookDao {
 
         Query nativeQuery = em.createNativeQuery("SELECT o.book_id FROM orders o GROUP BY o.book_id ORDER BY COUNT(o) DESC");
 
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC", Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
     }

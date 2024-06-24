@@ -61,7 +61,7 @@ public class DealJpaDao implements DealDao {
     @Override
     public List<Book> getNewDeals(int size) {
         Query nativeQuery = em.createNativeQuery("SELECT id FROM deals d ORDER BY start_date DESC");
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.deal.startDate DESC", Book.class);
         return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
     }
 
