@@ -116,6 +116,7 @@ public class BookController {
         }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         PaginatedContent<Review> reviews = rs.getAll(bookId,sortForm.getOrderBy(), page, REVIEW_PAGE_SIZE);
         Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
 
@@ -134,13 +135,13 @@ public class BookController {
         mav.addObject("reviewOrders", ReviewOrderBy.values());
         mav.addObject("order", loggedUser != null?os.find(loggedUser.getUserId(), bookId).orElse(null):null);
         mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
-        mav.addObject("isAuthor", loggedUser != null && bs.isAuthor(book, loggedUser.getUserId()));
+        mav.addObject("isAuthor", isAuthor);
         mav.addObject("existsOrder", os.existsOrder(bookId));
         mav.addObject("isWishlisted", loggedUser != null && bs.isWishlisted(loggedUser.getUserId(), bookId));
         mav.addObject("pageNumber", reviews.getPageNumber());
         mav.addObject("pageCount", reviews.getPageCount());
         mav.addObject("reviewCount", reviews.getTotalSize() + (loggedUserReview.isEmpty()?0:1));
-        mav.addObject("questionCount", qs.getQuestionCount(bookId, loggedUser));
+        mav.addObject("questionCount", qs.getQuestionCount(bookId, loggedUser, isAuthor));
         mav.addObject("myQuestionCount", loggedUser != null?qs.getMyQuestionCount(loggedUser.getUserId(), bookId):0);
         return mav;
     }
@@ -193,6 +194,7 @@ public class BookController {
         }
 
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        boolean isAuthor = bs.isAuthor(book, loggedUser.getUserId());
         PaginatedContent<Question> myQuestions = qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE);
 
         ModelAndView mav = new ModelAndView("bookInfo");
@@ -203,13 +205,13 @@ public class BookController {
         mav.addObject("avgRating", rs.getAverageRating(bookId));
         mav.addObject("order", os.find(loggedUser.getUserId(), bookId).orElse(null));
         mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
-        mav.addObject("isAuthor",bs.isAuthor(book, loggedUser.getUserId()));
+        mav.addObject("isAuthor", isAuthor);
         mav.addObject("existsOrder", os.existsOrder(bookId));
         mav.addObject("isWishlisted", bs.isWishlisted(loggedUser.getUserId(), bookId));
         mav.addObject("pageNumber", myQuestions.getPageNumber());
         mav.addObject("pageCount", myQuestions.getPageCount());
         mav.addObject("reviewCount", rs.getReviewCount(bookId));
-        mav.addObject("questionCount", qs.getQuestionCount(bookId, loggedUser));
+        mav.addObject("questionCount", qs.getQuestionCount(bookId, loggedUser, isAuthor));
         mav.addObject("myQuestionCount", myQuestions.getTotalSize());
         return mav;
     }

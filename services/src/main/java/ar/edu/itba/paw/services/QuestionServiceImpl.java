@@ -172,11 +172,15 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional(readOnly = true)
     @Override
-    public long getQuestionCount(long bookId, User user) {
+    public long getQuestionCount(long bookId, User user, boolean includeUnanswered) {
         if (user == null) {
             return questionDao.getAllSize(bookId);
         } else {
-            return questionDao.getAllFullQuestionsNotUsersSize(bookId, user.getUserId());
+            if (includeUnanswered) {
+                return questionDao.getAllSize(bookId);
+            } else {
+                return questionDao.getAllFullQuestionsNotUsersSize(bookId, user.getUserId());
+            }
         }
     }
 
