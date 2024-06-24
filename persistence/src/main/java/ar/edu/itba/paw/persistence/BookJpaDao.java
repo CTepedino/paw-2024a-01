@@ -201,7 +201,7 @@ public class BookJpaDao implements BookDao {
         params.put("writerId", writerId);
         params.put("title", DaoUtils.prepareSearchString(title));
 
-        return DaoUtils.getRowCount(em, "Book b", "b.bookId"," WHERE b.writer.userId = :writerId AND LOWER(title) LIKE LOWER(:title) ", params);
+        return DaoUtils.getRowCount(em, "Book b", "b.bookId"," WHERE b.writer.userId = :writerId AND LOWER(b.title) LIKE LOWER(:title) ", params);
     }
 
     @Override
@@ -221,14 +221,15 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public long getOwnedBooksSize(long readerId, String title, boolean isPublic) {
+
         Map<String, Object> params = new HashMap<>();
         params.put("readerId", readerId);
         params.put("title", DaoUtils.prepareSearchString(title));
 
         return DaoUtils.getRowCount(em,
-                "Book b LEFT JOIN Order o ON b.bookId = o.book.bookId",
+                "Book b",
                 "b.bookId",
-                "WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer.userId = :readerId" + (isPublic?" AND o.isPublic = TRUE ":""),
+                "WHERE LOWER(b.title) LIKE LOWER(:title) AND EXISTS(SELECT 1 FROM Order o WHERE o.book.bookId = b.bookId AND o.orderStatus = 'COMPLETED' AND o.buyer.userId = :readerId" + (isPublic?" AND o.isPublic = TRUE)":")"),
                 params
         );
     }
