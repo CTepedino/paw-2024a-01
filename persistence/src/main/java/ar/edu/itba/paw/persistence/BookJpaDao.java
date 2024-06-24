@@ -319,25 +319,6 @@ public class BookJpaDao implements BookDao {
         return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
     }
 
-/*    private List<Book> paginatedQuerySortedByIdList(EntityManager em, Query nativeQuery, TypedQuery<Book> query, int offset, int limit){
-
-        nativeQuery.setFirstResult(offset);
-        nativeQuery.setMaxResults(limit);
-
-        @SuppressWarnings("unchecked")
-        final List<Long> idList = (List<Long>) nativeQuery.getResultStream().map(n -> (Long)((Number)n).longValue()).collect(Collectors.toList());
-
-        if (idList.isEmpty()){
-            return Collections.emptyList();
-        }
-
-        query.setParameter("idList", idList);
-
-        List<Book> books = query.getResultList();
-
-
-    }*/
-
     @Override
     public List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit) {
         Query nativeQuery = em.createNativeQuery("""

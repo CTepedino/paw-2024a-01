@@ -149,6 +149,16 @@ WHERE u.user_id = w.user_id;
 DROP VIEW writer_order_totals;
 DROP VIEW book_order_totals;
 
+INSERT INTO roles (user_id, role)
+SELECT DISTINCT b.writer_id, 'WRITER'
+FROM books b
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM roles r
+    WHERE r.user_id = b.writer_id
+    AND r.role = 'WRITER'
+);
+
  */
 
 CREATE TABLE IF NOT EXISTS users(
