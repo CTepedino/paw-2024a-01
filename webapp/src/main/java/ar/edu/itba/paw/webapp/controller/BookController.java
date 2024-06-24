@@ -129,7 +129,7 @@ public class BookController {
         mav.addObject("book", book);
         mav.addObject("recommendations", bs.getRecommendations(book));
         mav.addObject("reviews", reviews);
-        mav.addObject("loggedUserReview", loggedUserReview);
+        mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
         mav.addObject("avgRating", rs.getAverageRating(bookId));
         mav.addObject("reviewOrders", ReviewOrderBy.values());
         mav.addObject("order", loggedUser != null?os.find(loggedUser.getUserId(), bookId).orElse(null):null);
