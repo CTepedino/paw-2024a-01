@@ -102,6 +102,7 @@ public class BookController {
             @ModelAttribute("reviewForm") ReviewForm form,
             @ModelAttribute("questionForm") QuestionForm questionForm,
             @ModelAttribute("answerForm") AnswerForm answerForm,
+            @ModelAttribute("dealForm") DealFrom dealForm,
             @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
             final BindingResult error
     ){
@@ -153,7 +154,8 @@ public class BookController {
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @ModelAttribute("reviewForm") ReviewForm form,
             @ModelAttribute("questionForm") QuestionForm questionForm,
-            @ModelAttribute("answerForm") AnswerForm answerForm
+            @ModelAttribute("answerForm") AnswerForm answerForm,
+            @ModelAttribute("dealForm") DealFrom dealForm
     ){
         if (page < 1){
             page = 1;
@@ -196,7 +198,8 @@ public class BookController {
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @ModelAttribute("reviewForm") ReviewForm form,
             @ModelAttribute("questionForm") QuestionForm questionForm,
-            @ModelAttribute("answerForm") AnswerForm answerForm
+            @ModelAttribute("answerForm") AnswerForm answerForm,
+            @ModelAttribute("dealForm") DealFrom dealForm
     ){
         if (page < 1){
             page = 1;

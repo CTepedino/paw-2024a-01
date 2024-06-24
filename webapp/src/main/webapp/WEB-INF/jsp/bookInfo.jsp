@@ -390,6 +390,48 @@
             </div>
         </div>
 
+        <div id="reviewModal" class="modal">
+            <c:url value="/book/${book.bookId}/reviews/review" var="postUrl"/>
+            <%--@elvariable id="reviewForm" type="reviewForm"--%>
+            <form:form
+                    action="${postUrl}"
+                    method="post"
+                    modelAttribute="reviewForm"
+            >
+                <div class="row">
+                    <div class="col s12">
+                        <h5 class="publish-title"><spring:message code="review.title"/></h5>
+                    </div>
+                </div>
+
+                <input type="hidden" id="rating" name="rating" value="rating">
+                <div class="input-field center-align">
+                    <div class="star-rating">
+                        <i class="material-icons small star" >star_border</i>
+                        <i class="material-icons small star" >star_border</i>
+                        <i class="material-icons small star" >star_border</i>
+                        <i class="material-icons small star" >star_border</i>
+                        <i class="material-icons small star" >star_border</i>
+                    </div>
+                </div>
+                <form:errors path="rating"/>
+                <div class="input-field">
+                    <form:label path="review"/>
+                    <form:textarea path="review" maxlength="500"/>
+                </div>
+                <form:errors path="review"/>
+
+                <div class="row">
+                    <div class="col s12">
+                        <div class="btn-centerer">
+                            <button class="btn modal-close close-btn" type="button" ><strong><spring:message code="cancel"/></strong></button>
+                            <button class="waves-light btn" type="submit"><strong><spring:message code="review.submit"/></strong></button>
+                        </div>
+                    </div>
+                </div>
+
+            </form:form>
+        </div>
 
 
     <script>
