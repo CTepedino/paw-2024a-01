@@ -151,6 +151,7 @@ public class BookController {
             @PathVariable("bookId") final long bookId,
             @ModelAttribute("loggedUser") User loggedUser,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @ModelAttribute("reviewForm") ReviewForm form,
             @ModelAttribute("questionForm") QuestionForm questionForm,
             @ModelAttribute("answerForm") AnswerForm answerForm
     ){
@@ -161,6 +162,12 @@ public class BookController {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         boolean isAuthor = loggedUser != null && bs.isAuthor(book, loggedUser.getUserId());
         PaginatedContent<Question> questions = qs.getAll(bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE, isAuthor);
+        Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
+
+        if (loggedUserReview.isPresent()){
+            form.setRating(loggedUserReview.get().getRating());
+            form.setReview(loggedUserReview.get().getReview());
+        }
 
         ModelAndView mav = new ModelAndView("bookInfo");
         mav.addObject("tab", "questions");
@@ -168,6 +175,7 @@ public class BookController {
         mav.addObject("recommendations", bs.getRecommendations(book));
         mav.addObject("questions", questions);
         mav.addObject("avgRating", rs.getAverageRating(bookId));
+        mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
         mav.addObject("order", loggedUser != null?os.find(loggedUser.getUserId(), bookId).orElse(null):null);
         mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
         mav.addObject("isAuthor", isAuthor);
@@ -186,6 +194,7 @@ public class BookController {
             @PathVariable("bookId") final long bookId,
             @ModelAttribute("loggedUser") User loggedUser,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @ModelAttribute("reviewForm") ReviewForm form,
             @ModelAttribute("questionForm") QuestionForm questionForm,
             @ModelAttribute("answerForm") AnswerForm answerForm
     ){
@@ -196,6 +205,12 @@ public class BookController {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         boolean isAuthor = bs.isAuthor(book, loggedUser.getUserId());
         PaginatedContent<Question> myQuestions = qs.getAllFromUserAndBook(loggedUser.getUserId(), bookId, page, BOOK_INFO_QUESTION_PAGE_SIZE);
+        Optional<Review> loggedUserReview = rs.findLoggedUserReview(bookId);
+
+        if (loggedUserReview.isPresent()){
+            form.setRating(loggedUserReview.get().getRating());
+            form.setReview(loggedUserReview.get().getReview());
+        }
 
         ModelAndView mav = new ModelAndView("bookInfo");
         mav.addObject("tab", "myQuestions");
@@ -203,6 +218,7 @@ public class BookController {
         mav.addObject("recommendations", bs.getRecommendations(book));
         mav.addObject("myQuestions", myQuestions);
         mav.addObject("avgRating", rs.getAverageRating(bookId));
+        mav.addObject("loggedUserReview", loggedUserReview.orElse(null));
         mav.addObject("order", os.find(loggedUser.getUserId(), bookId).orElse(null));
         mav.addObject("ownsBook", os.loggedUserOwnsBook(bookId));
         mav.addObject("isAuthor", isAuthor);
