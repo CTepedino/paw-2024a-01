@@ -152,6 +152,30 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional
     @Override
+    public PaginatedContent<Question> getAllFromWriter(long userId, int pageNumber, int pageSize, boolean viewComplete) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+
+        if(viewComplete){
+            return getAllFromWriter(userId, pageNumber, pageSize);
+        }
+
+        long size = questionDao.getAllFromWriterIncompleteSize(userId);
+
+        List<Question> questions = questionDao.getAllFromWriterIncomplete(userId, (pageNumber-1)*pageSize, pageSize);
+
+        PaginatedContent<Question> page = new PaginatedContent<>(questions, pageNumber, pageSize, size);
+
+        if (page.getPage().isEmpty() && page.getPageCount() != 0){
+            return getAllFromWriter(userId, page.getPageCount(), pageSize, viewComplete);
+        } else {
+            return page;
+        }
+    }
+
+    @Transactional
+    @Override
     public PaginatedContent<Question> getAllFullQuestionsNotUser(long userId, long bookId, int pageNumber, int pageSize) {
         if (pageNumber < 1){
             throw new InvalidPageException();

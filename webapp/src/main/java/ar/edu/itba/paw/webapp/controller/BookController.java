@@ -351,16 +351,29 @@ public class BookController {
 
 
     @RequestMapping(method = RequestMethod.GET, path = "/questions/questions")
-    public ModelAndView questions(@ModelAttribute("loggedUser") User user, @ModelAttribute("isWriter") boolean isWriter, @RequestParam(value = "page", defaultValue = "1") Integer page, @ModelAttribute("answerForm") AnswerForm answerForm){
-        PaginatedContent<Question> questions = qs.getAllFromWriter(user.getUserId(), page, QUESTION_PAGE_SIZE);
+    public ModelAndView questions(
+            @ModelAttribute("loggedUser") User user,
+            @ModelAttribute("isWriter") boolean isWriter,
+            @ModelAttribute("answerForm") AnswerForm answerForm,
+            @Valid @ModelAttribute("filterQuestionsForm") FilterQuestionForm filterQuestionForm,
+            final BindingResult error){
 
-        ModelAndView mav = new ModelAndView("questions");
+        final ModelAndView mav = new ModelAndView("questions");
+        if(error.hasErrors()){
+            if (error.hasFieldErrors("page")){
+                filterQuestionForm.setPage(1);
+            }
+        }
+
+        PaginatedContent<Question> questions = qs.getAllFromWriter(user.getUserId(), filterQuestionForm.getPage(), QUESTION_PAGE_SIZE, filterQuestionForm.showComplete());
+
 
         mav.addObject("questions", questions);
         mav.addObject("tab", "questions");
         mav.addObject("isAuthor", isWriter);
         mav.addObject("pageNumber", questions.getPageNumber());
         mav.addObject("pageCount", questions.getPageCount());
+        mav.addObject("showComplete", filterQuestionForm.showComplete());
 
         return mav;
     }

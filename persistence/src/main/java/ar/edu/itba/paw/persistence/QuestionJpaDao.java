@@ -99,6 +99,21 @@ public class QuestionJpaDao implements QuestionDao {
     }
 
     @Override
+    public List<Question> getAllFromWriterIncomplete(long userId, int offset, int limit) {
+        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q JOIN books b ON q.book_id = b.book_id WHERE b.writer_id = :userId AND q.answer IS NULL ORDER BY q.date DESC");
+        nativeQuery.setParameter("userId", userId);
+
+        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public long getAllFromWriterIncompleteSize(long userId) {
+        return DaoUtils.getRowCount(em, "Question q LEFT JOIN Book b ON q.book.bookId = b.bookId", "q.questionId","WHERE b.writer.userId = :userId  AND q.answer IS NULL", Map.of("userId", userId));
+    }
+
+    @Override
     public List<Question> getAllFullQuestionsNotUser(long bookId, long userId, int offset, int limit) {
         Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.questioner_id <> :userId AND q.book_id = :bookId AND q.answer IS NOT NULL ORDER BY q.date DESC");
         nativeQuery.setParameter("userId", userId);

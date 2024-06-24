@@ -330,6 +330,7 @@
 
         <c:if test="${tab eq 'questions'}">
             <c:set var="questions" value="${questions}" scope="request"/>
+            <c:set var="bookId" value="${bookId}" scope="request"/>
             <c:set var="isAuthor" value="${isAuthor}" scope="request"/>
             <c:set var="answerForm" value="${answerForm}" scope="request"/>
             <%@include file="components/questionsTab.jsp"%>

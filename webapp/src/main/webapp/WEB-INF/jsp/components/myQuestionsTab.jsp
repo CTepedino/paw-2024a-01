@@ -10,7 +10,7 @@
 <div class="container question-container">
     <section id="myQuestions">
         <c:if test="${myQuestions ne null}">
-            <c:if test="${myQuestions.page.size()==0}">
+            <c:if test="${empty myQuestions.page}">
                 <h6><spring:message code="book.bookInfo.questions.noQuestions"/></h6>
             </c:if>
             <c:forEach var="question" items="${myQuestions.page}">
@@ -29,16 +29,6 @@
                 </div>
                 <br/>
             </c:forEach>
-    <%--        <c:if test="${questions.pageCount gt 1}">--%>
-    <%--            <script src="<c:url value="/js/paginationControls.js"/>"></script>--%>
-    <%--            <script>--%>
-    <%--                const paginationButtonsQuestions = new PaginationButtons(${myQuestions.pageCount}, Math.min(10,${myQuestions.pageCount}), ${myQuestions.pageNumber}, false);--%>
-    <%--                paginationButtonsQuestions.render();--%>
-    <%--                paginationButtonsQuestions.onChange(e => {--%>
-    <%--                    window.location.href = "<c:url value="?page="/>" + e.target.value + "#myQuestions";--%>
-    <%--                });--%>
-    <%--            </script>--%>
-    <%--        </c:if>--%>
         </c:if>
     </section>
 </div>

@@ -31,6 +31,10 @@ public interface QuestionDao {
 
     long getAllFromWriterSize(long userId);
 
+    List<Question> getAllFromWriterIncomplete(long userId, int offset, int limit);
+
+    long getAllFromWriterIncompleteSize(long userId);
+
     List<Question> getAllFullQuestionsNotUser(long bookId, long userId, int offset, int limit);
 
     long getAllFullQuestionsNotUsersSize(long bookId, long userId);

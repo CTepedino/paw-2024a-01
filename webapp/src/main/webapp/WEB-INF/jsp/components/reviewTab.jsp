@@ -52,16 +52,6 @@
                 <c:set var="review" value="${review}" scope="request"/>
                 <%@include file="reviewCard.jsp" %>
             </c:forEach>
-            <%--<c:if test="${reviews.pageCount gt 1}">
-                <script src="<c:url value="/js/paginationControls.js"/>"></script>
-                <script>
-                    const paginationButtons = new PaginationButtons(${reviews.pageCount}, Math.min(10,${reviews.pageCount}), ${reviews.pageNumber}, false);
-                    paginationButtons.render();
-                    paginationButtons.onChange(e => {
-                        window.location.href = "<c:url value="?page="/>" + e.target.value + "#reviews";
-                    })
-                </script>
-            </c:if>--%>
         </c:if>
     </section>
 </c:if>

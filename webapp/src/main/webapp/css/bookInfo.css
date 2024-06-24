@@ -104,14 +104,14 @@
 
 @media (max-width: 600px) {
     .button-text {
-        font-size: 0.9em; /* Ajustar tamaño del texto para pantallas pequeñas */
+        font-size: 0.9em;
     }
 }
 
 .action-button {
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    overflow: hidden; /* Oculta cualquier desbordamiento de texto */
-    text-overflow: ellipsis; /* Añade "..." si el texto es demasiado largo */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .waves-effect.waves-light.btn.action-button {
@@ -162,7 +162,7 @@ button.modal-close:hover{
 .writer-category {
     display: flex;
     align-items: center;
-    margin-left: 5px; /* Ajusta el espacio entre el texto y los iconos según sea necesario */
+    margin-left: 5px;
 }
 
 .material-icons {

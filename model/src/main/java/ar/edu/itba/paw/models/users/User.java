@@ -80,6 +80,7 @@ public class User {
         this.lastName = lastName;
         this.isEnabled = isEnabled;
         this.locale = locale.toLanguageTag();
+        this.writerCategory = WriterCategory.DEFAULT;
     }
 
     public User(String email, String password, String firstName, String lastName, String cbu, boolean isEnabled, Locale locale, String description) {
