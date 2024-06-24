@@ -107,15 +107,12 @@
                         <c:if test="${order.orderStatus ne 'REJECTED_PAYMENT'}">
                             <p><spring:message code="orders.purchases.status.${order.orderStatus}"/></p>
                         </c:if>
-                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT'}">
-                            <c:out value="${order.writer.cbu}"/>
-                        </c:if>
 
                     </div>
                     <div class="col s2 purchase-info">
                         <c:url value="/advanceOrder/${order.orderId}/purchases" var="advanceOrderUrl"/>
 
-                        <c:if test="${order.orderStatus eq 'WAITING_PAYMENT' or order.orderStatus eq 'REJECTED_PAYMENT'}">
+                        <c:if test="${order.orderStatus eq 'REJECTED_PAYMENT'}">
                             <form:form id="advanceOrder-${order.orderId}-sendFile"  action="${advanceOrderUrl}" method="post" modelAttribute="updateOrderForm" enctype="multipart/form-data">
                                 <form:label path="receipt" for="files-${order.orderId}" cssClass="btn label-select">
                                     <spring:message code="orders.purchases.chooseFile"/>

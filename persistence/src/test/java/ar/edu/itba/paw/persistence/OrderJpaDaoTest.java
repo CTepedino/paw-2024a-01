@@ -60,7 +60,7 @@ public class OrderJpaDaoTest{
 
     @Test
     public void testCreateOK(){
-        Order order = orderDao.create(TEST_USER, TEST_BOOK, OrderStatus.WAITING_CONTACT, LocalDateTime.now(), true, TEST_BOOK.getPrice());
+        Order order = orderDao.create(TEST_USER, TEST_BOOK, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), true, TEST_BOOK.getPrice());
 
         assertEquals(1, TestUtils.getRowCount(em, "FROM orders WHERE order_id = " + order.getOrderId()));
     }
@@ -125,7 +125,7 @@ public class OrderJpaDaoTest{
 
     @Test
     public void testGetWriterOrdersWithParams(){
-        List<Order> orders = orderDao.getWriterOrders(2, "my book", OrderStatus.WAITING_CONTACT, 0, 999);
+        List<Order> orders = orderDao.getWriterOrders(2, "my book", OrderStatus.WAITING_APPROVAL, 0, 999);
 
         assertNotNull(orders);
         assertEquals(TestUtils.getRowCount(em, "FROM orders o JOIN books b ON o.book_id = b.book_id WHERE b.title LIKE '%my book%' AND o.status = 'WAITING_CONTACT' AND b.writer_id = 2"), orders.size());

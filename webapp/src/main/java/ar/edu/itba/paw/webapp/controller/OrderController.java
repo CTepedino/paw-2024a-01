@@ -39,13 +39,7 @@ public class OrderController {
     @ModelAttribute("statuses")
     public List<OrderStatus> statuses() {
 
-        List<OrderStatus> immutableList = List.of(OrderStatus.values());
-
-        List<OrderStatus> mutableList = new ArrayList<>(immutableList);
-
-        mutableList.remove(OrderStatus.WAITING_CONTACT);
-
-        return mutableList;
+        return List.of(OrderStatus.values());
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/purchases")
