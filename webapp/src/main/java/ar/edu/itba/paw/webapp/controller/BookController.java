@@ -87,7 +87,7 @@ public class BookController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}")
-    public ModelAndView defaultbookInfo(
+    public ModelAndView defaultBookInfo(
             @PathVariable("bookId") final long bookId
     ){
         return new ModelAndView("redirect:/book/" + bookId + "/reviews");
