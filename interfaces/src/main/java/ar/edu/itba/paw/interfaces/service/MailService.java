@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.users.User;
 
 import java.time.LocalDateTime;
@@ -20,4 +21,8 @@ public interface MailService{
     void sendMissingDataEmail(User user);
 
     void sendResetPasswordEmail(User user, String code, LocalDateTime expiration);
+
+    void sendQuestionReceivedEmail(Question question);
+
+    void sendAnswerReceivedEmail(Question question);
 }

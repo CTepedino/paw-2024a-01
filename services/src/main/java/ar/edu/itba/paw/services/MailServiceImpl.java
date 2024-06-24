@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -225,4 +226,47 @@ public class MailServiceImpl implements MailService{
         LOGGER.atDebug().setMessage("Sent Reset Password email to: {}").addArgument(to).log();
     }
 
+
+    @Override
+    @Async
+    public void sendQuestionReceivedEmail(Question question) {
+        Locale currentLocale = question.getBook().getWriter().getLocale();
+        String to = question.getBook().getWriter().getEmail();
+        String subject = emailMessageSource.getMessage("mail.questionReceived.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("question", question.getQuestion());
+        data.put("book", question.getBook().getTitle());
+        data.put("questionsUrl", env.getProperty("baseUrl") + "/questions/questions");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Question Received email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "questionReceivedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atWarn().setMessage("Failed to send Question Received email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Question Received email to: {}").addArgument(to).log();
+    }
+
+    @Override
+    @Async
+    public void sendAnswerReceivedEmail(Question question) {
+        Locale currentLocale = question.getQuestioner().getLocale();
+        String to = question.getQuestioner().getEmail();
+        String subject = emailMessageSource.getMessage("mail.answerReceived.subject", null, currentLocale);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("url", env.getProperty("baseUrl"));
+        data.put("question", question.getQuestion());
+        data.put("answer", question.getAnswer());
+        data.put("book", question.getBook().getTitle());
+        data.put("bookUrl", env.getProperty("baseUrl") + "/book/" + question.getBook().getBookId() + "/myQuestions");
+
+        try {
+            LOGGER.atDebug().setMessage("Sending Answer Received email to: {}").addArgument(to).log();
+            sendMessageUsingTemplate(to, subject, "answerReceivedEmailTemplate", data, currentLocale);
+        } catch (MessagingException e){
+            LOGGER.atWarn().setMessage("Failed to send Answer Received email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
+        }
+        LOGGER.atDebug().setMessage("Sent Answer Received email to: {}").addArgument(to).log();
+    }
 }

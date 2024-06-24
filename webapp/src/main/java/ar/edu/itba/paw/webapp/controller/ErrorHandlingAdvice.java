@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ErrorHandlingAdvice {
 
 
+/*
     @ExceptionHandler({
             BookNotFoundException.class,
             QuestionNotFoundException.class,
@@ -50,6 +51,7 @@ public class ErrorHandlingAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView exceptionCatchAll(){return new ModelAndView("exception/500");}
 
+*/
 
 
 }

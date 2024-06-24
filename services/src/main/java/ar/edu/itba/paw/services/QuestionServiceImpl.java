@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.QuestionDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.MailService;
 import ar.edu.itba.paw.interfaces.service.QuestionService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
@@ -30,13 +31,16 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final UserService us;
 
+    private final MailService ms;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
 
-    public QuestionServiceImpl(QuestionDao questionDao, BookService bs, UserService us) {
+    public QuestionServiceImpl(QuestionDao questionDao, BookService bs, UserService us, MailService ms) {
         this.questionDao = questionDao;
         this.bs = bs;
         this.us = us;
+        this.ms = ms;
     }
 
     @Transactional
@@ -44,7 +48,8 @@ public class QuestionServiceImpl implements QuestionService {
     public void create(long bookId, String question) {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         User questioner = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        questionDao.create(book, questioner, question, LocalDateTime.now());
+        Question q = questionDao.create(book, questioner, question, LocalDateTime.now());
+        ms.sendQuestionReceivedEmail(q);
         LOGGER.atDebug().setMessage("Created Question for bookId: {}").addArgument(bookId).log();
     }
 
@@ -52,8 +57,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void answer(long questionId, String answer) {
         Optional<Question> question = questionDao.findById(questionId);
-        question.ifPresent(value -> questionDao.answer(value, answer, LocalDateTime.now()));
-        LOGGER.atDebug().setMessage("Answered Question with questionId: {}").addArgument(questionId).log();
+        question.ifPresent(value -> {
+            questionDao.answer(value, answer, LocalDateTime.now());
+            ms.sendAnswerReceivedEmail(value);
+            LOGGER.atDebug().setMessage("Answered Question with questionId: {}").addArgument(questionId).log();
+        });
     }
 
     @Transactional(readOnly = true)
