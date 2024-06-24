@@ -13,7 +13,6 @@
     <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/questions.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/profile.css"/>" rel="stylesheet"/>
-    <link href="<c:url value="/css/bookInfo.css"/>" rel="stylesheet"/>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/images/cybrary.png"/>"/>
 </head>
 
@@ -44,28 +43,32 @@
                             <p class="sales-category popular"><spring:message code="book.popular"/></p>
                         </c:if>
                         <a href="<c:url value="/profile/${book.writer.userId}"/>">
-                            <h6>
+                            <h6 class="author-info">
                                 <spring:message var="author" code="book.bookInfo.author" arguments="${book.writer.firstName},${book.writer.lastName}"/>
                                 <c:out value="${author}"/>
-                                <span>
+                                <span class="writer-category">
                                     <c:if test="${book.writer.writerCategory eq 'BRONZE'}">
-                                        <i class="material-icons bronze">person</i>
+                                        <i class="material-icons bronze-info">person</i>
                                     </c:if>
                                     <c:if test="${book.writer.writerCategory eq 'SILVER'}">
-                                        <i class="material-icons silver">person</i>
+                                        <i class="material-icons silver-info">person</i>
                                     </c:if>
                                     <c:if test="${book.writer.writerCategory eq 'GOLD'}">
-                                        <i class="material-icons gold">person</i>
+                                        <i class="material-icons gold-info">person</i>
                                     </c:if>
                                 </span>
                             </h6>
                         </a>
                         <c:if test="${reviewCount ne 0}">
-                            <script src="<c:url value="/js/starRating.js"/>"></script>
-                            <script>
-                                new FixedStarRating(${avgRating});
-                            </script>
-                            <span>(${reviewCount})</span>
+                            <h6 class="author-info">
+                                <span class="writer-category">
+                                     <script src="<c:url value="/js/starRating.js"/>"></script>
+                                    <script>
+                                        new FixedStarRating(${avgRating});
+                                    </script>
+                                </span>
+                                (${reviewCount})
+                            </h6>
                         </c:if>
                         <c:if test="${book.deal eq null}">
                             <h5 class="price"><c:out value="${book.formattedPrice}"/></h5>

@@ -135,17 +135,32 @@ button.modal-close:hover{
     text-decoration: line-through;
 }
 
-.bronze {
+.bronze-info {
     background: border-box;
     color: #CD7F32;
 }
 
-.silver {
+.silver-info {
     background: border-box;
     color: #C0C0C0;
 }
 
-.gold {
+.gold-info {
     background: border-box;
     color: #FFD700;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+}
+
+.writer-category {
+    display: flex;
+    align-items: center;
+    margin-left: 5px; /* Ajusta el espacio entre el texto y los iconos según sea necesario */
+}
+
+.material-icons {
+    margin-left: 2px;
 }
