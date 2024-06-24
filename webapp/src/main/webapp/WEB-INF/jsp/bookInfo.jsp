@@ -220,7 +220,7 @@
 
 
             <div class="divider"></div>
-            <c:if test="${not isAuthor and not existsOrder}">
+            <c:if test="${isLoggedIn and not isAuthor and not existsOrder}">
                 <c:url value="/book/${bookId}/question" var="questionPostUrl"/>
                 <form:form
                         modelAttribute="questionForm"
