@@ -104,4 +104,9 @@ public class ReviewServiceImpl implements ReviewService {
         return ratings;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public long getReviewCount(long bookId) {
+        return reviewDao.getAllSize(bookId);
+    }
 }

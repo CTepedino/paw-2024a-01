@@ -19,4 +19,7 @@ public interface QuestionService {
 
     PaginatedContent<Question> getAllFullQuestionsNotUser(long userId, long bookId, int pageNumber, int pageSize);
 
+    long getQuestionCount(long bookId);
+
+    long getMyQuestionCount(long userId, long bookId);
 }

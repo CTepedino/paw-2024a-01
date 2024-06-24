@@ -25,4 +25,6 @@ public interface ReviewService {
 
     Map<Long, Float> getBookRatings(List<Book> books);
 
+    long getReviewCount(long bookId);
+
 }

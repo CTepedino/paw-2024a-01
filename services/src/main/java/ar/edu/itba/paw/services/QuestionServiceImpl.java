@@ -167,4 +167,16 @@ public class QuestionServiceImpl implements QuestionService {
             return page;
         }
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long getQuestionCount(long bookId) {
+        return questionDao.getAllSize(bookId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long getMyQuestionCount(long userId, long bookId) {
+        return questionDao.getAllFromUserAndBookSize(userId, bookId);
+    }
 }
