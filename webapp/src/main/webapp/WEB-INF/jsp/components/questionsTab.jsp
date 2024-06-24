@@ -4,7 +4,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
-    <link rel="stylesheet" href="<c:url value="/css/questions.css"/>"/>
     <link href="<c:url value="/css/paginationControls.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/starRating.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/css/bookInfo.css"/>" rel="stylesheet"/>
