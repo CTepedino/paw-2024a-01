@@ -310,7 +310,7 @@ public class UserServiceImpl implements UserService {
         if((user.getWriterCategory() != WriterCategory.SILVER) && (orders >= WriterCategory.SILVER.getMinSales()) && (orders < WriterCategory.GOLD.getMinSales())){
             userDao.updateWriterCategory(user, WriterCategory.SILVER);
         }
-        if(orders >= WriterCategory.GOLD.getMinSales() && user.getWriterCategory() == WriterCategory.GOLD){
+        if(user.getWriterCategory() != WriterCategory.GOLD && orders >= WriterCategory.GOLD.getMinSales()){
             userDao.updateWriterCategory(user, WriterCategory.GOLD);
         }
     }
