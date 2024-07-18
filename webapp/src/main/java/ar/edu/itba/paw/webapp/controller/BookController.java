@@ -338,10 +338,11 @@ public class BookController {
     public ModelAndView createQuestion(
             @PathVariable("bookId") final long bookId,
             @Valid @ModelAttribute("questionForm") final QuestionForm questionForm,
-            final BindingResult error
+            final BindingResult error,
+            @ModelAttribute("loggedUser") User user
     ){
         if (error.hasErrors()){
-            return new ModelAndView("redirect:/book/"+bookId+"/myQuestions");
+            return bookInfoQuestions(bookId, user, 1, new ReviewForm(), questionForm, new AnswerForm(), new DealFrom());
         }
         qs.create(bookId, questionForm.getQuestion());
         return new ModelAndView("redirect:/book/"+bookId+"/myQuestions");
@@ -354,10 +355,11 @@ public class BookController {
             @PathVariable("bookId") final long bookId,
             @Valid @ModelAttribute("answerForm") final AnswerForm answerForm,
             final BindingResult error,
-            @PathVariable("questionId") long questionId
+            @PathVariable("questionId") long questionId,
+            @ModelAttribute("loggedUser") User user
     ){
         if (error.hasErrors()){
-            return new ModelAndView("redirect:/book/"+bookId+"/questions");
+            return bookInfoQuestions(bookId, user, 1, new ReviewForm(), new QuestionForm(), answerForm, new DealFrom());
         }
         qs.answer(questionId, answerForm.getAnswer());
         return new ModelAndView("redirect:/book/"+bookId+"/questions");
@@ -419,10 +421,12 @@ public class BookController {
     public ModelAndView answerQuestionFromQuestionList(
             @Valid @ModelAttribute("answerForm") final AnswerForm answerForm,
             final BindingResult error,
-            @PathVariable("questionId") long questionId
+            @PathVariable("questionId") long questionId,
+            @ModelAttribute("loggedUser") User user,
+            @ModelAttribute("isWriter") boolean isWriter
     ){
         if (error.hasErrors()){
-            return new ModelAndView("redirect:/questions/questions");
+            return questions(user, isWriter, answerForm, new FilterQuestionForm(), error);
         }
         qs.answer(questionId, answerForm.getAnswer());
         return new ModelAndView("redirect:/questions/questions");

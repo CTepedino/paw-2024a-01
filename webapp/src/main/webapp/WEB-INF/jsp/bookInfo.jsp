@@ -236,8 +236,7 @@
                         <div class="input-field col s9">
                             <i class="material-icons prefix">question_answer</i>
                             <form:label path="question"><spring:message code="book.bookInfo.questions.label"/></form:label>
-                            <form:textarea path="question" type="text" class="materialize-textarea"/>
-                            <form:errors path="question" cssClass="red-text" element="p"/>
+                            <form:textarea path="question" type="text" class="materialize-textarea" maxlength="500"/>
                         </div>
                         <div class="col s3 send-button">
                             <button class="btn waves-effect waves-light" type="submit" name="action">
@@ -246,6 +245,7 @@
                             </button>
                         </div>
                     </div>
+                    <form:errors path="question" cssClass="red-text" element="p"/>
                 </form:form>
             </c:if>
 

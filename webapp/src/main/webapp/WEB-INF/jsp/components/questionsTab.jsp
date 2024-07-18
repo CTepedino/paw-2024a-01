@@ -43,7 +43,7 @@
                         <div class="row">
                             <div class="input-field col s9 answer-input">
                                 <i class="material-icons prefix">subdirectory_arrow_right</i>
-                                <form:textarea class="materialize-textarea" type="text" path="answer"/>
+                                <form:textarea class="materialize-textarea" type="text" path="answer" maxlength="500"/>
                                 <form:errors path="answer" cssClass="red-text" element="p"/>
                             </div>
                             <div class="col s3">

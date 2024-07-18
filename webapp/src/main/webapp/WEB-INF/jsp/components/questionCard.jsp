@@ -56,8 +56,7 @@
                             <div class="row">
                                 <div class="input-field col s9 answer-input">
                                     <i class="material-icons prefix">subdirectory_arrow_right</i>
-                                    <form:textarea class="materialize-textarea" type="text" path="answer"/>
-                                    <form:errors path="answer" cssClass="red-text" element="p"/>
+                                    <form:textarea class="materialize-textarea" maxlength="500" type="text" path="answer"/>
                                 </div>
                                 <div class="col s3">
                                     <button class="btn waves-effect waves-light" type="submit" name="action">
@@ -66,6 +65,7 @@
                                     </button>
                                 </div>
                             </div>
+                            <form:errors path="answer" cssClass="red-text" element="p"/>
                         </form:form>
                 </c:if>
             </div>
