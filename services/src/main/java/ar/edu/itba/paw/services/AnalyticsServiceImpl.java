@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
+import ar.edu.itba.paw.models.orders.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Transactional(readOnly = true)
     @Override
     public long getTotalOrdersForWriter(long writerId){
-        return orderDao.getWriterOrdersSize(writerId, "", null);
+        return orderDao.getWriterOrdersSize(writerId, "", OrderStatus.COMPLETED);
     }
 
     @Transactional(readOnly = true)

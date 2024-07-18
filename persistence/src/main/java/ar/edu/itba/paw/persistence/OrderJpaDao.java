@@ -169,12 +169,12 @@ public class OrderJpaDao implements OrderDao {
 
     @Override
     public long getTotalOrdersForBook(long bookId) {
-        return DaoUtils.getRowCount(em,"Order o", "o.orderId", "WHERE o.book.bookId = :bookId", Map.of("bookId", bookId));
+        return DaoUtils.getRowCount(em,"Order o", "o.orderId", "WHERE o.book.bookId = :bookId AND o.orderStatus = 'COMPLETED'", Map.of("bookId", bookId));
     }
 
     @Override
     public BigDecimal getTotalSales(long writerId) {
-        Query query = em.createQuery("SELECT COALESCE(SUM(o.price), 0) FROM Order o WHERE o.book.writer.userId = :writerId");
+        Query query = em.createQuery("SELECT COALESCE(SUM(o.price), 0) FROM Order o WHERE o.book.writer.userId = :writerId AND o.orderStatus = 'COMPLETED'");
         query.setParameter("writerId", writerId);
 
         return (BigDecimal) query.getSingleResult();
@@ -182,7 +182,7 @@ public class OrderJpaDao implements OrderDao {
 
     @Override
     public BigDecimal getTotalSalesForBook(long bookId) {
-        Query query = em.createQuery("SELECT COALESCE(SUM(o.price), 0) FROM Order o WHERE o.book.bookId = :bookId");
+        Query query = em.createQuery("SELECT COALESCE(SUM(o.price), 0) FROM Order o WHERE o.book.bookId = :bookId AND o.orderStatus = 'COMPLETED'");
         query.setParameter("bookId", bookId);
 
         return (BigDecimal) query.getSingleResult();
@@ -191,10 +191,13 @@ public class OrderJpaDao implements OrderDao {
     @Override
     public BigDecimal getTotalSalesForMonth(long writerId, int year, int month) {
         Query query = em.createQuery(
-                "SELECT COALESCE(SUM(o.price), 0) FROM Order o " +
-                        "WHERE o.book.writer.userId = :writerId " +
-                        "AND FUNCTION('YEAR', o.date) = :year " +
-                        "AND FUNCTION('MONTH', o.date) = :month"
+        """
+                SELECT COALESCE(SUM(o.price), 0) FROM Order o
+                WHERE o.book.writer.userId = :writerId
+                AND o.orderStatus = 'COMPLETED'
+                AND FUNCTION('YEAR', o.date) = :year
+                AND FUNCTION('MONTH', o.date) = :month
+           """
         );
         query.setParameter("writerId", writerId);
         query.setParameter("year", year);
@@ -206,10 +209,13 @@ public class OrderJpaDao implements OrderDao {
     @Override
     public BigDecimal getTotalSalesForMonthForBook(long bookId, int year, int month) {
         Query query = em.createQuery(
-                "SELECT COALESCE(SUM(o.price), 0) FROM Order o " +
-                        "WHERE o.book.bookId = :bookId " +
-                        "AND FUNCTION('YEAR', o.date) = :year " +
-                        "AND FUNCTION('MONTH', o.date) = :month"
+        """
+                SELECT COALESCE(SUM(o.price), 0) FROM Order o
+                WHERE o.book.bookId = :bookId
+                AND o.orderStatus = 'COMPLETED'
+                AND FUNCTION('YEAR', o.date) = :year
+                AND FUNCTION('MONTH', o.date) = :month
+          """
         );
         query.setParameter("bookId", bookId);
         query.setParameter("year", year);
@@ -228,7 +234,7 @@ public class OrderJpaDao implements OrderDao {
                 em,
                 "Order o",
                 "o.orderId",
-                "WHERE o.book.bookId = :bookId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month",
+                "WHERE o.book.bookId = :bookId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month AND o.orderStatus = 'COMPLETED'",
                 params);
     }
 
@@ -242,14 +248,14 @@ public class OrderJpaDao implements OrderDao {
                 em,
                 "Order o",
                 "o.orderId",
-                "WHERE o.book.writer.userId = :writerId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month",
+                "WHERE o.book.writer.userId = :writerId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month AND o.orderStatus = 'COMPLETED'",
                 params);
     }
 
 
     @Override
     public long getBooksByWriterOrderedSize(long writerId){
-        return DaoUtils.getRowCount(em, "Order o", "o.book.bookId", "WHERE o.book.writer.userId = :writerId", Map.of("writerId", writerId));
+        return DaoUtils.getRowCount(em, "Order o", "o.book.bookId", "WHERE o.book.writer.userId = :writerId AND o.orderStatus = 'COMPLETED'", Map.of("writerId", writerId));
     }
 
     @Override
@@ -263,7 +269,7 @@ public class OrderJpaDao implements OrderDao {
                 em,
                 "Order o",
                 "o.book.bookId",
-                "WHERE o.book.writer.userId = :writerId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month",
+                "WHERE o.book.writer.userId = :writerId AND FUNCTION('YEAR', o.date) = :year AND FUNCTION('MONTH', o.date) = :month AND o.orderStatus = 'COMPLETED'",
                 params
         );
     }
