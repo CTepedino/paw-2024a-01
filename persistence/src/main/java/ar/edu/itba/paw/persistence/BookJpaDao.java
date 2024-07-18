@@ -6,7 +6,6 @@ import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.users.User;
-import com.sun.istack.NotNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
@@ -15,7 +14,6 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository
 public class BookJpaDao implements BookDao {
@@ -118,7 +116,7 @@ public class BookJpaDao implements BookDao {
         StringBuilder nativeQueryStr = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
 
-        nativeQueryStr.append("SELECT b.book_id FROM books b ");
+        nativeQueryStr.append("SELECT b.book_id FROM books b LEFT OUTER JOIN deals d ON b.book_id = d.id");
         prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
         nativeQueryStr.append(" ORDER BY ").append(orderBy.getColumnName());
 
@@ -127,7 +125,7 @@ public class BookJpaDao implements BookDao {
             nativeQuery.setParameter(entry.getKey(), entry.getValue());
         }
 
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b LEFT JOIN b.deal d WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
@@ -139,7 +137,7 @@ public class BookJpaDao implements BookDao {
 
         prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
 
-        Query query = em.createNativeQuery("SELECT COUNT(DISTINCT b.book_id ) FROM books b" + nativeQueryStr);
+        Query query = em.createNativeQuery("SELECT COUNT(DISTINCT b.book_id ) FROM books b " + nativeQueryStr);
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
@@ -152,8 +150,8 @@ public class BookJpaDao implements BookDao {
         if (genre != null) {
             DaoUtils.addQueryCondition(nativeQueryStr, " AND b.genre = :genre ", params, "genre", genre.toString());
         }
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.price >= :minPrice ", params, "minPrice", minPrice);
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.price <= :maxPrice ", params, "maxPrice", maxPrice);
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND ((d.price IS NULL AND b.price >= :minPrice) OR d.price >=:minPrice) ", params, "minPrice", minPrice);
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND ((d.price IS NULL AND b.price <= :maxPrice) OR d.price <= :maxPrice) ", params, "maxPrice", maxPrice);
         DaoUtils.addQueryCondition(nativeQueryStr, " AND b.page_count >= :minPageCount", params, "minPageCount", minPageCount);
         DaoUtils.addQueryCondition(nativeQueryStr, " AND b.page_count <= :maxPageCount ", params, "maxPageCount", maxPageCount);
         DaoUtils.addQueryCondition(nativeQueryStr, " AND b.suggested_age >= :minSuggestedAge ", params, "minSuggestedAge", minSuggestedAge);
@@ -190,7 +188,7 @@ public class BookJpaDao implements BookDao {
         nativeQuery.setParameter("writerId", writerId);
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
 
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b WHERE b.bookId LEFT JOIN b.deal d IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
@@ -214,7 +212,7 @@ public class BookJpaDao implements BookDao {
         nativeQuery.setParameter("readerId", readerId);
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
 
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b WHERE b.bookId LEFT JOIN b.deal d IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
