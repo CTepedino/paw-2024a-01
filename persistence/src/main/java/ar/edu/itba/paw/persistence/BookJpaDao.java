@@ -180,15 +180,15 @@ public class BookJpaDao implements BookDao {
     @Override
     public List<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int offset, int limit) {
         Query nativeQuery = em.createNativeQuery("""
-            SELECT book_id
-            FROM books
-            WHERE writer_id = :writerId AND LOWER(title) LIKE LOWER(:title)
+            SELECT b.book_id
+            FROM books b LEFT OUTER JOIN deals d ON b.book_id = d.id
+            WHERE b.writer_id = :writerId AND LOWER(b.title) LIKE LOWER(:title)
             ORDER BY \s
        """ + orderBy.getColumnName());
         nativeQuery.setParameter("writerId", writerId);
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
 
-        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b WHERE b.bookId LEFT JOIN b.deal d IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b LEFT JOIN b.deal d WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
@@ -206,13 +206,15 @@ public class BookJpaDao implements BookDao {
     public List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int offset, int limit, boolean isPublic) {
         Query nativeQuery = em.createNativeQuery("""
             SELECT b.book_id
-            FROM books b JOIN orders o ON b.book_id = o.book_id
-            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer_id = :readerId
+            FROM books b
+            JOIN orders o ON b.book_id = o.book_id
+            LEFT OUTER JOIN deals d ON b.book_id = d.id
+            WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer_id = :readerId \s
         """ + (isPublic?" AND o.is_public = TRUE ":"") + " ORDER BY " + orderBy.getColumnName());
         nativeQuery.setParameter("readerId", readerId);
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
 
-        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b WHERE b.bookId LEFT JOIN b.deal d IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b LEFT JOIN b.deal d WHERE b.bookId IN :idList ORDER BY " + orderBy.getColumnName(), Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
