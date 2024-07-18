@@ -102,7 +102,7 @@ public class BookController {
             @ModelAttribute("reviewForm") ReviewForm form,
             @ModelAttribute("questionForm") QuestionForm questionForm,
             @ModelAttribute("answerForm") AnswerForm answerForm,
-            @ModelAttribute("dealForm") DealFrom dealForm,
+            @ModelAttribute("dealForm") DealForm dealForm,
             @Valid @ModelAttribute("reviewSortForm") ReviewSortForm sortForm,
             final BindingResult error
     ){
@@ -155,7 +155,7 @@ public class BookController {
             @ModelAttribute("reviewForm") ReviewForm form,
             @ModelAttribute("questionForm") QuestionForm questionForm,
             @ModelAttribute("answerForm") AnswerForm answerForm,
-            @ModelAttribute("dealForm") DealFrom dealForm
+            @ModelAttribute("dealForm") DealForm dealForm
     ){
         if (page < 1){
             page = 1;
@@ -199,7 +199,7 @@ public class BookController {
             @ModelAttribute("reviewForm") ReviewForm form,
             @ModelAttribute("questionForm") QuestionForm questionForm,
             @ModelAttribute("answerForm") AnswerForm answerForm,
-            @ModelAttribute("dealForm") DealFrom dealForm
+            @ModelAttribute("dealForm") DealForm dealForm
     ){
         if (page < 1){
             page = 1;
@@ -302,7 +302,7 @@ public class BookController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/book/{bookId:\\d+}/deal")
-    public ModelAndView addDealForm(@ModelAttribute("dealForm") DealFrom dealForm, @PathVariable("bookId") long bookId){
+    public ModelAndView addDealForm(@ModelAttribute("dealForm") DealForm dealForm, @PathVariable("bookId") long bookId){
 
         ModelAndView mav = new ModelAndView("createDeal");
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
@@ -314,7 +314,7 @@ public class BookController {
 
 
     @RequestMapping(method = RequestMethod.POST, path="/book/{bookId:\\d+}/deal")
-    public ModelAndView addDeal(@Valid @ModelAttribute("dealForm") final DealFrom dealForm, final BindingResult errors, @PathVariable("bookId") long bookId){
+    public ModelAndView addDeal(@Valid @ModelAttribute("dealForm") final DealForm dealForm, final BindingResult errors, @PathVariable("bookId") long bookId){
 
         if (errors.hasErrors()){
             return addDealForm(dealForm, bookId);
@@ -342,7 +342,7 @@ public class BookController {
             @ModelAttribute("loggedUser") User user
     ){
         if (error.hasErrors()){
-            return bookInfoQuestions(bookId, user, 1, new ReviewForm(), questionForm, new AnswerForm(), new DealFrom());
+            return bookInfoQuestions(bookId, user, 1, new ReviewForm(), questionForm, new AnswerForm(), new DealForm());
         }
         qs.create(bookId, questionForm.getQuestion());
         return new ModelAndView("redirect:/book/"+bookId+"/myQuestions");
@@ -359,7 +359,7 @@ public class BookController {
             @ModelAttribute("loggedUser") User user
     ){
         if (error.hasErrors()){
-            return bookInfoQuestions(bookId, user, 1, new ReviewForm(), new QuestionForm(), answerForm, new DealFrom());
+            return bookInfoQuestions(bookId, user, 1, new ReviewForm(), new QuestionForm(), answerForm, new DealForm());
         }
         qs.answer(questionId, answerForm.getAnswer());
         return new ModelAndView("redirect:/book/"+bookId+"/questions");

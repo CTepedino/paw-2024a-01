@@ -6,7 +6,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @DealPriceValid
-public class DealFrom {
+public class DealForm {
 
     @NotNull
     @PositiveOrZero
