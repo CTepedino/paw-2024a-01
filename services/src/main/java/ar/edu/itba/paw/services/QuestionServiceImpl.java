@@ -223,6 +223,7 @@ public class QuestionServiceImpl implements QuestionService {
         return questionDao.getAllFromUserAndBookSize(userId, bookId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean canAnswer(long questionId, String email) {
         Question q = questionDao.findById(questionId).orElseThrow(QuestionNotFoundException::new);

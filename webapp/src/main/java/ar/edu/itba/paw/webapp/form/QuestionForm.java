@@ -14,5 +14,4 @@ public class QuestionForm {
     public void setQuestion(String question){
         this.question=question;
     }
-
 }
