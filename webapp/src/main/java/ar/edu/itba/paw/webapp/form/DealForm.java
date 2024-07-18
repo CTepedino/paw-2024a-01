@@ -15,7 +15,7 @@ public class DealForm {
 
     @NotNull
     @Positive
-    @Max(value = 1000000)
+    @Max(value = 100)
     private Integer duration;
 
     private BigDecimal bookPrice;
