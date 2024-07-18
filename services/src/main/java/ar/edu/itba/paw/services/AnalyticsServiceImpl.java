@@ -9,7 +9,6 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +18,7 @@ import java.text.NumberFormat;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class AnalyticsServiceImpl implements AnalyticsService {
@@ -53,7 +53,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Transactional(readOnly = true)
     @Override
     public String getTotalSales(long writerId){
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(LocaleContextHolder.getLocale());
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(orderDao.getTotalSales(writerId));
     }
@@ -72,7 +72,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         if(sales == null){
             sales=BigDecimal.valueOf(0);
         }
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(LocaleContextHolder.getLocale());
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
         currencyFormatter.setMaximumFractionDigits(0);
         return currencyFormatter.format(sales);
     }
