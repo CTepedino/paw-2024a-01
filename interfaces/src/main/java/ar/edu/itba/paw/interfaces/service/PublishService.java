@@ -2,8 +2,6 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.users.User;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -22,8 +20,8 @@ public interface PublishService {
             int pageCount,
             LocalDate publicationDate,
 
-            MultipartFile cover,
-            MultipartFile preview,
-            MultipartFile bookFile
+            byte[] cover,
+            byte[] preview,
+            byte[] bookFile
     );
 }

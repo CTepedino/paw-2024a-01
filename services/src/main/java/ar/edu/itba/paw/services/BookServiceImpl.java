@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -43,7 +42,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishedDate, User writer, MultipartFile preview, MultipartFile cover, MultipartFile bookFile){
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishedDate, User writer, byte[] preview, byte[] cover, byte[] bookFile){
 
         Book book = bookDao.create(
                 title,
@@ -56,44 +55,35 @@ public class BookServiceImpl implements BookService {
                 writer,
                 false
         );
-        try {
-            bookDao.createPreviewFile(book, preview.getBytes());
-            bookDao.createCoverImage(book, cover.getBytes());
-            bookDao.createOrUpdateBookFile(book, bookFile.getBytes());
-        } catch (IOException e){
-            LOGGER.atWarn().setMessage("Failed to create book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
-            throw new UnreadableFileException();
-        }
+
+        bookDao.createPreviewFile(book, preview);
+        bookDao.createCoverImage(book, cover);
+        bookDao.createOrUpdateBookFile(book, bookFile);
+
         LOGGER.atDebug().setMessage("Created book: {}").addArgument(title).log();
         return book.getBookId();
     }
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, MultipartFile cover, MultipartFile preview, MultipartFile bookFile) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, byte[] cover, byte[] preview, byte[] bookFile) {
         Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
 
         boolean pause = book.isPaused();
 
-        try {
-            if (cover != null && !cover.isEmpty()) {
-                bookDao.updateCoverImage(book, cover.getBytes());
-            }
-            if (preview != null && !preview.isEmpty()) {
-                bookDao.updatePreviewFile(book, preview.getBytes());
-            }
-            if (bookFile != null && !bookFile.isEmpty()) {
-                bookDao.createOrUpdateBookFile(book, bookFile.getBytes());
-                if (pause){
-                    if (book.getWriter().getCbu()!=null){
-                        pause = false;
-                    }
+        if (cover != null/* && !cover.isEmpty()*/) {
+            bookDao.updateCoverImage(book, cover);
+        }
+        if (preview != null/* && !preview.isEmpty()*/) {
+            bookDao.updatePreviewFile(book, preview);
+        }
+        if (bookFile != null/* && !bookFile.isEmpty()*/) {
+            bookDao.createOrUpdateBookFile(book, bookFile);
+            if (pause){
+                if (book.getWriter().getCbu()!=null){
+                    pause = false;
                 }
             }
-
-        } catch (IOException e){
-            LOGGER.atWarn().setMessage("Failed to update book: {} - Error Message: {}").addArgument(title).addArgument(e.getMessage()).log();
-            throw new UnreadableFileException();
         }
         bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, pause);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();

@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,9 +27,9 @@ public class PublishServiceImplTest {
     private static final long USER_ID = 1;
     private static final long BOOK_ID = 1;
 
-    private static final MultipartFile PREVIEW = new MockMultipartFile("testPreview", new byte[100]);
-    private static final MultipartFile COVER = new MockMultipartFile("testCover", new byte[100]);
-    private static final MultipartFile BOOK_FILE = new MockMultipartFile("testBook", new byte[100]);
+    private static final byte[] PREVIEW = new byte[100];
+    private static final byte[] COVER = new byte[100];
+    private static final byte[] BOOK_FILE = new byte[100];
 
     private static final User TEST_WRITER = new User("", "", "", "", false, Locale.US);
 
@@ -56,9 +55,9 @@ public class PublishServiceImplTest {
                 Mockito.anyInt(),
                 Mockito.any(),
                 Mockito.any(User.class),
-                Mockito.any(MultipartFile.class),
-                Mockito.any(MultipartFile.class),
-                Mockito.any(MultipartFile.class)
+                Mockito.any(),
+                Mockito.any(),
+                Mockito.any()
         )).thenReturn(BOOK_ID);
         TEST_WRITER.setRoles(MOCKED_ROLES);
     }

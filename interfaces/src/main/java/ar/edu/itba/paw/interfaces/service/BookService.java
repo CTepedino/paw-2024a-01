@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.users.User;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,9 +23,9 @@ public interface BookService {
 
             User writer,
 
-            MultipartFile preview,
-            MultipartFile cover,
-            MultipartFile bookFile
+            byte[] preview,
+            byte[] cover,
+            byte[] bookFile
     );
 
     void editPublication(
@@ -39,9 +38,9 @@ public interface BookService {
             int pageCount,
             int suggestedAge,
 
-            MultipartFile preview,
-            MultipartFile cover,
-            MultipartFile bookFile
+            byte[] preview,
+            byte[] cover,
+            byte[] bookFile
     );
 
 

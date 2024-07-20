@@ -4,14 +4,13 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
 
-    Order create(long bookId, MultipartFile receipt);
+    Order create(long bookId, byte[] receipt, String receiptMimeType);
 
     boolean existsOrder(long bookId);
 
@@ -35,7 +34,7 @@ public interface OrderService {
 
     void updateOrderWriterSide(long orderId, boolean approved, String rejectedReason);
 
-    void updateOrderBuyerSide(long orderId, MultipartFile receipt);
+    void updateOrderBuyerSide(long orderId, byte[] receipt, String receiptMimeType);
 
     void recommendBook(long orderId, boolean isRecommended);
 }

@@ -107,7 +107,7 @@ public class OrderServiceImplTest {
 
         assertThrows(
                 InvalidOrderUpdateException.class,
-                () -> orderService.updateOrderBuyerSide(1, null)
+                () -> orderService.updateOrderBuyerSide(1, null, null)
         );
     }
 }

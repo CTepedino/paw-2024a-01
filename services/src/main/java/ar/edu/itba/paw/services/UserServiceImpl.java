@@ -27,8 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -200,7 +198,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture, String description) {
+    public void updateProfile(String firstName, String lastName, String cbu, byte[] profilePicture, String description) {
         User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
 
         String oldCbu = user.getCbu();
@@ -212,16 +210,11 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        if (profilePicture != null && !profilePicture.isEmpty()) {
-            try {
-                if (user.getProfilePicture()==null){
-                    userDao.createProfilePicture(user, profilePicture.getBytes());
-                } else {
-                    userDao.updateProfilePicture(user, profilePicture.getBytes());
-                }
-            } catch (IOException e){
-                LOGGER.atWarn().setMessage("Failed to update profile for user: {} - Error Message: {}").addArgument(firstName).addArgument(e.getMessage()).log();
-                throw new UnreadableFileException();
+        if (profilePicture != null/* && !profilePicture.isEmpty()*/) {
+            if (user.getProfilePicture()==null){
+                userDao.createProfilePicture(user, profilePicture);
+            } else {
+                userDao.updateProfilePicture(user, profilePicture);
             }
         }
         LOGGER.atDebug().setMessage("Updated profile for user: {}").addArgument(firstName).log();

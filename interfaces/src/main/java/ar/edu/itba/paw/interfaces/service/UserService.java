@@ -3,7 +3,6 @@ package ar.edu.itba.paw.interfaces.service;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ public interface UserService {
     boolean isCurrentUserPassword(String password);
     void changePassword(String password);
 
-    void updateProfile(String firstName, String lastName, String cbu, MultipartFile profilePicture, String description);
+    void updateProfile(String firstName, String lastName, String cbu, byte[] profilePicture, String description);
 
     Optional<User> getLoggedUser();
 

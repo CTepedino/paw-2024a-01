@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -46,19 +45,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order create(long bookId, MultipartFile receipt) {
+    public Order create(long bookId, byte[] receipt, String receiptMimeType) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), false, book.getDeal()==null? book.getPrice(): book.getDeal().getPrice());
         bs.removeFromWishlist(buyer.getUserId(), bookId);
         bs.checkBookSalesCategory(book);
         us.checkWriterCategory(book.getWriter());
-        try {
-            orderDao.createOrUpdatePaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
-        } catch (IOException e){
-            LOGGER.atWarn().setMessage("Failed to create order for bookId: {} - Error Message: {}").addArgument(bookId).addArgument(e.getMessage()).log();
-            throw new UnreadableFileException();
-        }
+
+        orderDao.createOrUpdatePaymentReceipt(order, receipt, receiptMimeType);
+
         LOGGER.atDebug().setMessage("Created order for bookId: {}").addArgument(bookId).log();
         ms.sendReceiptUploadedEmail(order);
         return order;
@@ -141,19 +137,15 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private void sendReceipt(Order order, MultipartFile receipt, OrderStatus fromStatus) {
+    private void sendReceipt(Order order, byte[] receipt, String receiptMimeType, OrderStatus fromStatus) {
         if (receipt == null){
             LOGGER.atWarn().setMessage("Failed to send upload receipt for orderId: {} - Error Message: No receipt provided").addArgument(order.getOrderId()).log();
             throw new InvalidOrderUpdateException();
         }
         orderDao.update(order, OrderStatus.WAITING_APPROVAL, order.getDate(), order.isPublic());
-        try {
-            orderDao.createOrUpdatePaymentReceipt(order, receipt.getBytes(), receipt.getContentType());
-            LOGGER.atDebug().setMessage("Uploaded receipt for orderId: {}").addArgument(order.getOrderId()).log();
-        } catch (IOException e){
-            LOGGER.atWarn().setMessage("Failed to upload receipt for orderId: {} - Error Message: {}").addArgument(order.getOrderId()).addArgument(e.getMessage()).log();
-            throw new UnreadableFileException();
-        }
+
+        orderDao.createOrUpdatePaymentReceipt(order, receipt, receiptMimeType);
+        LOGGER.atDebug().setMessage("Uploaded receipt for orderId: {}").addArgument(order.getOrderId()).log();
         if (fromStatus.equals(OrderStatus.REJECTED_PAYMENT)){
             ms.sendReceiptReuploadedEmail(order);
         } else {
@@ -187,11 +179,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public void updateOrderBuyerSide(long orderId, MultipartFile receipt){
+    public void updateOrderBuyerSide(long orderId, byte[] receipt, String receiptMimeType){
         Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         switch (order.getOrderStatus()){
-            case REJECTED_PAYMENT -> sendReceipt(order, receipt, order.getOrderStatus());
+            case REJECTED_PAYMENT -> sendReceipt(order, receipt, receiptMimeType, order.getOrderStatus());
             case COMPLETED, WAITING_APPROVAL -> {
                 LOGGER.atWarn().setMessage("Failed to update order status from buyer side for orderId: {}").addArgument(orderId).log();
                 throw new InvalidOrderUpdateException();

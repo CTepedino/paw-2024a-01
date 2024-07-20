@@ -25,15 +25,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.springframework.web.multipart.MultipartResolver;
@@ -46,9 +37,7 @@ import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-//import java.util.concurrent.TimeUnit;
 
-@EnableWebMvc
 @EnableTransactionManagement
 @EnableAsync
 @ComponentScan({"ar.edu.itba.paw.webapp.controller",
@@ -58,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @PropertySource("classpath:application.properties")
 @EnableScheduling
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig {
 
     private static final long MAX_UPLOAD_SIZE = 10L * 1024 * 1024;
 
@@ -67,16 +56,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
-
-    @Bean
-    public ViewResolver viewResolver() {
-        final InternalResourceViewResolver viewResolver = new
-                InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }
 
     @Bean
     public MessageSource messageSource(){
@@ -121,14 +100,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         dbp.addScript(schemaSql);
 
         return dbp;
-    }
-
-    @Override
-    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/images/**").addResourceLocations("/images/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
     }
 
     @Bean

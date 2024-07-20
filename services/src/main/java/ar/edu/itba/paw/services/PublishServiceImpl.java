@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -46,9 +44,9 @@ public class PublishServiceImpl implements PublishService {
             int pageCount,
             LocalDate publicationDate,
 
-            MultipartFile cover,
-            MultipartFile preview,
-            MultipartFile bookFile
+            byte[] cover,
+            byte[] preview,
+            byte[] bookFile
     ) {
 
 
