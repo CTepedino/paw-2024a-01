@@ -1,8 +1,5 @@
 package ar.edu.itba.paw.webapp.config;
 
-import org.slf4j.ILoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -14,7 +11,6 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
@@ -39,7 +35,6 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -49,7 +44,6 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 //import java.util.concurrent.TimeUnit;
@@ -57,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 @EnableWebMvc
 @EnableTransactionManagement
 @EnableAsync
-@ComponentScan({ "ar.edu.itba.paw.webapp.controller",
+@ComponentScan({"ar.edu.itba.paw.webapp.mvcControllers",
                 "ar.edu.itba.paw.webapp.form.validations",
                 "ar.edu.itba.paw.services",
                 "ar.edu.itba.paw.persistence"})

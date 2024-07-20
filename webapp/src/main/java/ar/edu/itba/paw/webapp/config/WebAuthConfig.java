@@ -55,7 +55,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .invalidSessionUrl("/")
 
             .and().authorizeHttpRequests()
-                .requestMatchers("/signup", "/login", "/validate", "/forgotPassword", "/resendResetCode/{userId:\\d+}").anonymous()
+                /*.requestMatchers("/signup", "/login", "/validate", "/forgotPassword", "/resendResetCode/{userId:\\d+}").anonymous()
                 .requestMatchers( "/sales", "questions/questions", "/analytics").hasAuthority(UserRoles.WRITER.toString())
                 .requestMatchers("/resetPassword/{id:\\d+}/{code:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.validResetCode(o.getVariables().get("id"), o.getVariables().get("code"))))
                 .requestMatchers( "/sendBuyInfo/{id:\\d+}").access((a, o) -> new AuthorizationDecision(accessHelper.canCreateOrder(o.getVariables().get("id"))))
@@ -71,7 +71,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers("/book/${id:\\d+}/question").access((a,o) -> new AuthorizationDecision(accessHelper.canQuestion(a.get(), o.getVariables().get("id"))))
                 .requestMatchers("/book/{bookId:\\d+}/questions/{questionId:\\d+}/answer", "/questions/questions/{questionId:\\d+}/answer").access((a,o) -> new AuthorizationDecision(accessHelper.canAnswer(a.get(), o.getVariables().get("questionId"))))
                 .requestMatchers("/", "/cover/**", "/preview/**", "book/{bookId:\\d+}","/book/{bookId:\\d+}/questions", "/book/{bookId:\\d+}/reviews", "/search/**", "/profilePicture/**", "/profile/{userId:\\d+}/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().authenticated()*/
+                .anyRequest().permitAll()
 
             .and().formLogin()
                 .loginPage("/login")

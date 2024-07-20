@@ -32,6 +32,8 @@
 
     <org.hibernate.version>5.6.15.Final</org.hibernate.version>
     <jpa.version>2.2</jpa.version>
+
+    <jersey.version>2.43</jersey.version>
   </properties>
 
 
@@ -58,7 +60,8 @@
         <artifactId>javax.persistence-api</artifactId>
         <version>${jpa.version}</version>
       </dependency>
-            
+
+      <!--TODO: purge dependency-->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
@@ -217,6 +220,41 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-tx</artifactId>
         <version>${org.springframework.version}</version>
+      </dependency>
+
+
+      <!--JERSEY-->
+      <dependency>
+        <groupId>org.glassfish.jersey.containers</groupId>
+        <artifactId>jersey-container-servlet-core</artifactId>
+        <version>${jersey.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.jersey.ext</groupId>
+        <artifactId>jersey-spring5</artifactId>
+        <version>${jersey.version}</version>
+      </dependency>
+      <dependency><groupId>org.glassfish.jersey.core</groupId>
+        <artifactId>jersey-server</artifactId>
+        <version>${jersey.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <!-- JERSEY JSON -->
+      <dependency>
+        <groupId>org.glassfish.jersey.media</groupId>
+        <artifactId>jersey-media-moxy</artifactId>
+        <version>${jersey.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.jersey.media</groupId>
+        <artifactId>jersey-media-jaxb</artifactId>
+        <version>${jersey.version}</version>
       </dependency>
 
     </dependencies>
