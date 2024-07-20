@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 @EnableWebMvc
 @EnableTransactionManagement
 @EnableAsync
-@ComponentScan({"ar.edu.itba.paw.webapp.mvcControllers",
+@ComponentScan({"ar.edu.itba.paw.webapp.controller",
                 "ar.edu.itba.paw.webapp.form.validations",
                 "ar.edu.itba.paw.services",
                 "ar.edu.itba.paw.persistence"})
@@ -197,8 +197,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         jpaProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL94Dialect");
 
         //FIXME: sacar antes del deploy
-        //jpaProperties.setProperty("hibernate.show_sql", "true");
-        //jpaProperties.setProperty("format_sql", "true");
+        jpaProperties.setProperty("hibernate.show_sql", "true");
+        jpaProperties.setProperty("format_sql", "true");
 
         emf.setJpaProperties(jpaProperties);
 
