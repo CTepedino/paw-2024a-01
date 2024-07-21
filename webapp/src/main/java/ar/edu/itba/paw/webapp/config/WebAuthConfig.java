@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,7 +53,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception{
             http.sessionManagement()
-                .invalidSessionUrl("/")
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
             .and().authorizeHttpRequests()
                 /*.requestMatchers("/signup", "/login", "/validate", "/forgotPassword", "/resendResetCode/{userId:\\d+}").anonymous()
@@ -74,24 +75,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()*/
                 .anyRequest().permitAll()
 
-            .and().formLogin()
-                .loginPage("/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/", false)
-
-            .and().rememberMe()
-                .rememberMeParameter("rememberMe")
-                .userDetailsService(userDetailsService)
-                .key(StreamUtils.copyToString(rememberMeKey.getInputStream(), StandardCharsets.UTF_8)) //openssl rand -base64 4000 > src/main/resources/rememberMe.key
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(15))
-
-            .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-
             .and().exceptionHandling()
                 .accessDeniedPage("/403")
+
+           // .and().cors()
 
             .and().csrf().disable();
 
@@ -100,8 +87,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    public void configure(final WebSecurity web) throws Exception {
+    public void configure(final WebSecurity web) {
         web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "/exception/**", "/pdf/**");
     }
-
 }
