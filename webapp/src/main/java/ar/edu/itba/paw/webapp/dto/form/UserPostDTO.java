@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.webapp.dto.input;
+package ar.edu.itba.paw.webapp.dto.form;
 
-import ar.edu.itba.paw.webapp.dto.input.validations.UniqueEmail;
+import ar.edu.itba.paw.webapp.dto.form.validations.UniqueEmail;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

@@ -3,21 +3,15 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
-import ar.edu.itba.paw.webapp.dto.input.UserPostDTO;
+import ar.edu.itba.paw.webapp.dto.form.UserPostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Path("/users")
 @Component

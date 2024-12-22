@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.dto.input.validations;
+package ar.edu.itba.paw.webapp.dto.form.validations;
 
 /*import ar.edu.itba.paw.webapp.form.DealForm;
 

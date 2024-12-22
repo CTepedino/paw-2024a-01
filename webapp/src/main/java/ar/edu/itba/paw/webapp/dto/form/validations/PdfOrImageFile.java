@@ -1,15 +1,16 @@
-package ar.edu.itba.paw.webapp.dto.input.validations;
+package ar.edu.itba.paw.webapp.dto.form.validations;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Constraint(validatedBy = TodayOrBeforeValidator.class)
+@Constraint(validatedBy = PdfOrImageFileValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface TodayOrBefore {
-    String message() default "The date cannot be in the future";
+public @interface PdfOrImageFile {
+
+    String message() default "Please submit an image or pdf";
 
     Class<?>[] groups() default {};
 

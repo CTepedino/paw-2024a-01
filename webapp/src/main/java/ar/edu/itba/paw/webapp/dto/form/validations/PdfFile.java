@@ -1,15 +1,17 @@
-package ar.edu.itba.paw.webapp.dto.input.validations;
+package ar.edu.itba.paw.webapp.dto.form.validations;
+
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Constraint(validatedBy = ExistingEmailValidator.class)
+@Constraint(validatedBy = PdfFileValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ExistingEmail {
-    String message() default "No account associated with this email";
+public @interface PdfFile {
+
+    String message() default "Please submit a pdf";
 
     Class<?>[] groups() default {};
 

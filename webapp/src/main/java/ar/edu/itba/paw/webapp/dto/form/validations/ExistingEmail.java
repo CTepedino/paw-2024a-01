@@ -1,16 +1,15 @@
-package ar.edu.itba.paw.webapp.dto.input.validations;
+package ar.edu.itba.paw.webapp.dto.form.validations;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Constraint(validatedBy = UniqueEmailValidator.class)
+@Constraint(validatedBy = ExistingEmailValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface UniqueEmail {
-
-    String message() default "Email already in use";
+public @interface ExistingEmail {
+    String message() default "No account associated with this email";
 
     Class<?>[] groups() default {};
 
