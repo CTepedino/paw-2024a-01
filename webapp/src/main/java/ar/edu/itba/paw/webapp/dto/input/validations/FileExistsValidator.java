@@ -1,7 +1,6 @@
-package ar.edu.itba.paw.webapp.form.validations;
+package ar.edu.itba.paw.webapp.dto.input.validations;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintValidator;

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.form.validations;
+package ar.edu.itba.paw.webapp.dto.input.validations;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,20 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class LoggedUserPasswordValidator implements ConstraintValidator<LoggedUserPassword, String> {
-
+public class ExistingEmailValidator implements ConstraintValidator<ExistingEmail, String> {
     private final UserService us;
 
     @Autowired
-    public LoggedUserPasswordValidator(UserService us){
+    public ExistingEmailValidator(UserService us){
         this.us = us;
     }
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return us.isCurrentUserPassword(s);
+        return us.findByEmail(s).isPresent();
     }
 
     @Override
-    public void initialize(LoggedUserPassword constraintAnnotation) {}
+    public void initialize(ExistingEmail constraintAnnotation) {}
 }

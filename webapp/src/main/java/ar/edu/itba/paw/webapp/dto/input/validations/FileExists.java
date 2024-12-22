@@ -1,16 +1,17 @@
-package ar.edu.itba.paw.webapp.form.validations;
+package ar.edu.itba.paw.webapp.dto.input.validations;
+
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Constraint(validatedBy = PdfOrImageFileValidator.class)
+@Constraint(validatedBy = FileExistsValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface PdfOrImageFile {
+public @interface FileExists {
 
-    String message() default "Please submit an image or pdf";
+    String message() default "Please submit a file";
 
     Class<?>[] groups() default {};
 

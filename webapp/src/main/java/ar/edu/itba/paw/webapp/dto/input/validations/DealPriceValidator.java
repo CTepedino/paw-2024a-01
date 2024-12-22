@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.webapp.form.validations;
+package ar.edu.itba.paw.webapp.dto.input.validations;
 
-import ar.edu.itba.paw.webapp.form.DealForm;
+/*import ar.edu.itba.paw.webapp.form.DealForm;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -38,3 +38,4 @@ public class DealPriceValidator implements ConstraintValidator<DealPriceValid, D
     }
 }
 
+*/

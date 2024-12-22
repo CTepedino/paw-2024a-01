@@ -1,5 +1,5 @@
-package ar.edu.itba.paw.webapp.form.validations;
-
+package ar.edu.itba.paw.webapp.dto.input.validations;
+/*TODO: fix
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
@@ -13,3 +13,4 @@ public @interface DealPriceValid {
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
+*/

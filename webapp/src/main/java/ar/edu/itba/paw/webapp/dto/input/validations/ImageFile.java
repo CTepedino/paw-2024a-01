@@ -1,16 +1,17 @@
-package ar.edu.itba.paw.webapp.form.validations;
+package ar.edu.itba.paw.webapp.dto.input.validations;
+
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Constraint(validatedBy = UniqueEmailValidator.class)
+@Constraint(validatedBy = ImageFileValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface UniqueEmail {
+public @interface ImageFile {
 
-    String message() default "Email already in use";
+    String message() default "Please submit an image";
 
     Class<?>[] groups() default {};
 

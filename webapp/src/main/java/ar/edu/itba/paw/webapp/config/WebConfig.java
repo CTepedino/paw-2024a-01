@@ -2,12 +2,10 @@ package ar.edu.itba.paw.webapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
@@ -27,16 +25,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 @EnableTransactionManagement
 @EnableAsync
@@ -49,30 +43,11 @@ import java.util.concurrent.TimeUnit;
 @EnableScheduling
 public class WebConfig {
 
-    private static final long MAX_UPLOAD_SIZE = 10L * 1024 * 1024;
-
     @Autowired
     private Environment env;
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
-
-    @Bean
-    public MessageSource messageSource(){
-        final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
-        ms.addBasenames("classpath:i18n/messages");
-        ms.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        ms.setCacheSeconds((int) TimeUnit.MINUTES.toSeconds(5));
-        return ms;
-    }
-
-    /* Descomentar para ver la pagina en español sin tener que cambiar los settings del browser
-    @Bean
-    public LocaleResolver localeResolver(){
-        SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("es"));
-        return slr;
-    }*/
 
     @Bean
     public DataSource dataSource(){
@@ -83,6 +58,7 @@ public class WebConfig {
         ds.setPassword(env.getProperty("jdbc.password"));
         return ds;
     }
+
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(DataSource ds){
@@ -144,15 +120,6 @@ public class WebConfig {
         messageSource.setBasename("mailMessages");
         return messageSource;
     }
-/*
-    @Bean
-    public MultipartResolver multipartResolver(){
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(MAX_UPLOAD_SIZE);
-        return multipartResolver;
-    }*/
-
-
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {

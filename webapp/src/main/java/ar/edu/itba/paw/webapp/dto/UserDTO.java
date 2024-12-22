@@ -28,7 +28,8 @@ public class UserDTO {
         dto.firstName = u.getFirstName();
         dto.lastName = u.getLastName();
 
-        dto.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).build();
+        dto.self = uriInfo.getBaseUriBuilder()
+                .path("users").path(String.valueOf(u.getUserId())).build();
         //dto.reported y dto.assigned...
 
 

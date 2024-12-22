@@ -1,11 +1,9 @@
-package ar.edu.itba.paw.webapp.form.validations;
+package ar.edu.itba.paw.webapp.dto.input.validations;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.lang.annotation.*;
 
 
 public class PdfOrImageFileValidator implements ConstraintValidator<PdfOrImageFile, MultipartFile> {

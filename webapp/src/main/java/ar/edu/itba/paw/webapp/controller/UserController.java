@@ -3,10 +3,14 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
+import ar.edu.itba.paw.webapp.dto.input.UserPostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -15,18 +19,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Path("users")
+@Path("/users")
 @Component
 public class UserController {
 
-    @Autowired
-    private UserService us;
+    private final UserService us;
 
     @Context
     private UriInfo uriInfo;
 
+    @Autowired
+    public UserController(final UserService us){
+        this.us = us;
+    }
 
-    @GET
+
+/*    @GET
     @Produces(value = {MediaType.APPLICATION_JSON}) //TODO: custom
     public Response listUsers(@QueryParam("page") @DefaultValue("1") final int page){
         final List<UserDTO> allUsers = Stream.of(us.findById(1).get()).map(UserDTO.mapper(uriInfo)).toList();
@@ -38,11 +46,12 @@ public class UserController {
         //Response.ok().cacheControl(...)
         //.header(...)
         //.link(URI uri, String rel)
-    }
+    }*/
 
     @POST
+    @Produces(value = MediaType.APPLICATION_JSON)
     @Consumes(value = MediaType.APPLICATION_JSON)
-    public Response createUser(final UserDTO userDto){
+    public Response createUser(@Valid final UserPostDTO userDto){
         final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
 
         final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
@@ -62,10 +71,4 @@ public class UserController {
         }
     }
 
-    @DELETE
-    @Path("/{id}")
-    public Response deleteById(@PathParam("id") final long id){
-        //us.deleteById(id);
-        return Response.noContent().build();
-    }
 }
