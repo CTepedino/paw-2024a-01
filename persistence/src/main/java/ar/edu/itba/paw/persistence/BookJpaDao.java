@@ -45,13 +45,8 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public void toBestSeller(Book book){
-        book.setSalesCategory(BookSalesCategory.BEST_SELLER);
-    }
-
-    @Override
-    public void toPopular(Book book){
-        book.setSalesCategory(BookSalesCategory.POPULAR);
+    public void updateSalesCategory(Book book, BookSalesCategory bookSalesCategory){
+        book.setSalesCategory(bookSalesCategory);
     }
 
     @Override

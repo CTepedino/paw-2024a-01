@@ -267,10 +267,10 @@ public class BookServiceImpl implements BookService {
     public void checkBookSalesCategory(Book book){
         long sales = orderDao.getTotalOrdersForBook(book.getBookId());
         if(sales >= BookSalesCategory.POPULAR.getMinSales() && book.getSalesCategory() == BookSalesCategory.DEFAULT){
-            bookDao.toPopular(book);
+            bookDao.updateSalesCategory(book, BookSalesCategory.POPULAR);
         }
         if(sales >= BookSalesCategory.BEST_SELLER.getMinSales() && book.getSalesCategory() == BookSalesCategory.POPULAR){
-            bookDao.toBestSeller(book);
+            bookDao.updateSalesCategory(book, BookSalesCategory.BEST_SELLER);
         }
     }
 

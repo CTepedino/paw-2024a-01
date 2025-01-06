@@ -4,17 +4,18 @@ import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public interface UserService {
 
     User create(String email, String password, String firstName, String lastName);
 
-    void validateEmail(long id, String code);
+    void validateEmail(long userId, String code);
 
     void resendValidation(String email);
 
-    Optional<User> findById(long id);
+    Optional<User> findById(long userId);
 
     Optional<User> findByEmail(String email);
 
@@ -23,7 +24,9 @@ public interface UserService {
     boolean isCurrentUserPassword(String password);
     void changePassword(String password);
 
-    void updateProfile(String firstName, String lastName, String cbu, byte[] profilePicture, String description);
+    void updateProfile(long userId, String firstName, String lastName, String cbu, String description);
+
+    void updateProfilePicture(long userId, byte[] profilePicture);
 
     Optional<User> getLoggedUser();
 
@@ -31,7 +34,9 @@ public interface UserService {
 
     boolean hasRole(UserRoles role);
 
-    ProfilePicture getProfilePictureOrDefault(long id);
+    Collection<UserRoles> getRoles(long userId);
+
+    ProfilePicture getProfilePicture(long userId);
 
     void sendMissingDataEmails();
 

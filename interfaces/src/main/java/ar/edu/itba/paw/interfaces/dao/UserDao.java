@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.*;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -37,6 +38,4 @@ public interface UserDao {
     void deleteResetCode(long id);
 
     void updateWriterCategory(User user, WriterCategory writerCategory);
-
-
 }

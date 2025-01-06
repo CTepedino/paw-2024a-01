@@ -11,6 +11,7 @@ import java.util.function.Function;
 
 public class UserDTO {
 
+    private Long id;
     private String email;
     private String firstName;
     private String lastName;
@@ -35,6 +36,7 @@ public class UserDTO {
 
     public static UserDTO fromUser(UriInfo uriInfo, User u){
         final UserDTO dto = new UserDTO();
+        dto.id = u.getUserId();
         dto.email = u.getEmail();
         dto.firstName = u.getFirstName();
         dto.lastName = u.getLastName();
@@ -49,6 +51,14 @@ public class UserDTO {
         dto.changePassword = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("password").build();
 
         return dto;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {

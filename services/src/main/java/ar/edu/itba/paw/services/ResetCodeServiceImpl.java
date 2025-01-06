@@ -85,7 +85,7 @@ public class ResetCodeServiceImpl implements ResetCodeService {
         userDao.deleteExpiredResetCodes();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public void resend(User user) {
 

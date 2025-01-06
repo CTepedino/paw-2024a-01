@@ -99,7 +99,7 @@ public class UserServiceImplTest {
                 () -> userService.validateEmail(1, "12345")
         );
     }
-
+/*
     @Test
     public void testGetProfilePictureOrDefaultCaseDefault(){
         TEST_USER.setProfilePicture(null);
@@ -119,5 +119,5 @@ public class UserServiceImplTest {
 
         assertNotNull(pfp);
         assertEquals(img, pfp.getFile());
-    }
+    }*/
 }

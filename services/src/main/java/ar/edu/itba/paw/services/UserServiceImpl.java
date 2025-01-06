@@ -37,18 +37,14 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserDao userDao;
-
     private final OrderDao orderDao;
 
     private final EmailValidationService evs;
-
     private final ResetCodeService rcs;
-
     private final BookService bs;
+    private final MailService ms;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final MailService ms;
 
     @Autowired
     public UserServiceImpl(final UserDao userDao, OrderDao orderDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms, BookService bs){
@@ -198,8 +194,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateProfile(String firstName, String lastName, String cbu, byte[] profilePicture, String description) {
-        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
+    public void updateProfile(long userId, String firstName, String lastName, String cbu, String description) {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
 
         String oldCbu = user.getCbu();
 
@@ -209,37 +205,33 @@ public class UserServiceImpl implements UserService {
             bs.recheckWriterPausedBooks(user.getUserId());
         }
 
-
-        if (profilePicture != null/* && !profilePicture.isEmpty()*/) {
-            if (user.getProfilePicture()==null){
-                userDao.createProfilePicture(user, profilePicture);
-            } else {
-                userDao.updateProfilePicture(user, profilePicture);
-            }
-        }
         LOGGER.atDebug().setMessage("Updated profile for user: {}").addArgument(firstName).log();
+    }
+
+    @Transactional
+    @Override
+    public void updateProfilePicture(long userId, byte[] profilePicture) {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+
+        if (user.getProfilePicture()==null){
+            userDao.createProfilePicture(user, profilePicture);
+        } else {
+            userDao.updateProfilePicture(user, profilePicture);
+        }
+
+        LOGGER.atDebug().setMessage("Updated profile picture for user: {}").addArgument(user.getFirstName()).log();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public ProfilePicture getProfilePictureOrDefault(long id) {
-        User user = userDao.findById(id).orElseThrow(UserNotFoundException::new);
-        if (user.getProfilePicture()!=null) {
-            return user.getProfilePicture();
-        }
-        return new ProfilePicture(user.getUserId(), getDefaultProfilePicture());
+    public Collection<UserRoles> getRoles(long userId){
+        return findById(userId).orElseThrow(UserNotFoundException::new).getRoles();
     }
 
-    private byte[] getDefaultProfilePicture(){
-        InputStream is = getClass().getResourceAsStream("/images/defaultUser.jpg");
-        if (is == null){
-            throw new ImageNotFoundException();
-        }
-        try{
-            return is.readAllBytes();
-        } catch (Exception e){
-            throw new UnreadableFileException();
-        }
+    @Transactional(readOnly = true)
+    @Override
+    public ProfilePicture getProfilePicture(long userId){
+        return findById(userId).orElseThrow(UserNotFoundException::new).getProfilePicture();
     }
 
     @Transactional(readOnly = true)
@@ -287,7 +279,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public void resendResetCode(long userId){
         rcs.resend(findById(userId).orElseThrow(UserNotFoundException::new));

@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.*;
 
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
-import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -44,9 +41,7 @@ public interface BookDao {
             boolean isPaused
     );
 
-    void toBestSeller(Book book);
-
-    void toPopular(Book book);
+    void updateSalesCategory(Book book, BookSalesCategory bookSalesCategory);
 
     CoverImage createCoverImage(Book book, byte[] coverImage);
     BookPreview createPreviewFile(Book book, byte[] previewFile);
