@@ -33,7 +33,7 @@ public class PaginatedContent<T> {
     }
 
     public boolean hasMorePages(){
-        return (long) pageNumber * pageSize < totalSize;
+        return !page.isEmpty() && (long) pageNumber * pageSize < totalSize;
     }
 
     public int getPageCount(){

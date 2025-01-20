@@ -121,13 +121,8 @@ public class BookServiceImpl implements BookService {
         }
         List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
 
-        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, page.getPageCount(), pageSize);
-        } else {
-            return page;
-        }
-    }
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
+    } //TODO: delete el check de page.isEmpty para todos los metodos de service que paginen resultados
 
 
 

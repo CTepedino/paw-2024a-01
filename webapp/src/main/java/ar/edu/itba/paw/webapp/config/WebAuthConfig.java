@@ -30,9 +30,6 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("classpath:rememberMe.key")
-    private Resource rememberMeKey;
-
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -46,12 +43,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
-    protected void configure(final HttpSecurity http) throws Exception{
+    protected void configure(final HttpSecurity http) throws Exception {
             http.sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
