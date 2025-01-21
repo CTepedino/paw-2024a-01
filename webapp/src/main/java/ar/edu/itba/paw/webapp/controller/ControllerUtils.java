@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.files.File;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -22,14 +23,12 @@ public class ControllerUtils {
         return responseBuilder;
     }
 
-    public static BigDecimal bigDecimalQueryParam(String param){
-        if (param == null){
-            return null;
+    public static <T extends File> Response.ResponseBuilder fileResponse(T file){
+        if (file == null){
+            return Response.noContent();
         }
-        try {
-            return new BigDecimal(param);
-        } catch (NumberFormatException e){
-            return null;
-        }
+        return Response.ok(file.getFile());
     }
+
+
 }

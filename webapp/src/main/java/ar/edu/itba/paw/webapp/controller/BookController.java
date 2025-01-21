@@ -1,22 +1,28 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.files.BookFile;
+import ar.edu.itba.paw.models.files.BookPreview;
+import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.webapp.dto.BookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.net.URI;
 import java.util.List;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.bigDecimalQueryParam;
-import static java.util.stream.Collectors.toList;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
 
 @Path("books")
 @Component
@@ -24,26 +30,17 @@ public class BookController {
 
     private static final int BOOKS_PAGE_SIZE = 20;
 
+    private final BookService bs;
+    private final DealService ds;
+
     @Autowired
-    private BookService bs;
+    public BookController(BookService bs, DealService ds){
+        this.bs = bs;
+        this.ds = ds;
+    }
 
     @Context
     private UriInfo uriInfo;
-
-/*    @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response listBooks(@QueryParam("page") @DefaultValue("1") final int page){
-        final PaginatedContent<Book> booksPage = bs.getAll(page, BOOKS_PAGE_SIZE);
-        final List<BookDTO> books = booksPage.getPage()
-                .stream().map(BookDTO.mapper(uriInfo)).toList();
-
-        return Response.ok(new GenericEntity<List<BookDTO>>(books) {})
-                .link(URI.create("books?page=" + (page-1)), "prev")
-                .link(URI.create("books?page=" + (page+1)), "next")
-                .link(URI.create("books?page=1"), "first")
-                .link(URI.create("books?page=" + booksPage.getPageNumber()), "last")
-                .build();
-    }*/
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -75,5 +72,40 @@ public class BookController {
         return ControllerUtils.paginatedResponse(
                 Response.ok(new GenericEntity<>(books){}), booksPage, uriInfo
         ).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getBook(@PathParam("id") final long id){
+        final BookDTO book = BookDTO.fromBook(uriInfo,
+                bs.findById(id).orElseThrow(BookNotFoundException::new)
+        );
+
+        return Response.ok(book).build();
+    }
+
+    @GET
+    @Path("/{id}/cover")
+    @Produces(value = {"image/jpeg"})
+    public Response getBookCover(@PathParam("id") final long id){
+        CoverImage coverImage = bs.findById(id).orElseThrow(BookNotFoundException::new).getCoverImage();
+        return fileResponse(coverImage).build();
+    }
+
+    @GET
+    @Path("/{id}/preview")
+    @Produces(value = {"application/pdf"})
+    public Response getBookPreview(@PathParam("id") final long id){
+        BookPreview preview = bs.findById(id).orElseThrow(BookNotFoundException::new).getPreview();
+        return fileResponse(preview).build();
+    }
+
+    @GET
+    @Path("/{id}/book_file")
+    @Produces(value = {"application/pdf"})
+    public Response getBookFile(@PathParam("id") final long id){
+        BookFile bookFile = bs.findById(id).orElseThrow(BookNotFoundException::new).getBookFile();
+        return fileResponse(bookFile).build();
     }
 }
