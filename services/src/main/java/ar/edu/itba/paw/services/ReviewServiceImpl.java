@@ -54,6 +54,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
+    public Optional<Review> find(long bookId, long userId) {
+        return reviewDao.find(bookId, userId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public PaginatedContent<Review> getAll(long bookId, ReviewOrderBy orderBy, int pageNumber, int pageSize) {
         if (pageNumber < 1){
             throw new InvalidPageException();

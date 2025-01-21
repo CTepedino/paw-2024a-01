@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.DealService;
+import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
@@ -10,7 +11,10 @@ import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
+import ar.edu.itba.paw.models.reviews.Review;
+import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.webapp.dto.BookDTO;
+import ar.edu.itba.paw.webapp.dto.ReviewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
@@ -21,22 +25,22 @@ import javax.ws.rs.core.*;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
 @Path("books")
 @Component
 public class BookController {
 
-    private static final int BOOKS_PAGE_SIZE = 20;
-
     private final BookService bs;
-    private final DealService ds;
+    private final ReviewService rs;
 
     @Autowired
-    public BookController(BookService bs, DealService ds){
+    public BookController(BookService bs, ReviewService rs){
         this.bs = bs;
-        this.ds = ds;
+        this.rs = rs;
     }
 
     @Context
@@ -69,7 +73,7 @@ public class BookController {
         final List<BookDTO> books = booksPage.getPage()
                 .stream().map(BookDTO.mapper(uriInfo)).toList();
 
-        return ControllerUtils.paginatedResponse(
+        return paginatedResponse(
                 Response.ok(new GenericEntity<>(books){}), booksPage, uriInfo
         ).build();
     }
@@ -107,5 +111,37 @@ public class BookController {
     public Response getBookFile(@PathParam("id") final long id){
         BookFile bookFile = bs.findById(id).orElseThrow(BookNotFoundException::new).getBookFile();
         return fileResponse(bookFile).build();
+    }
+
+    @GET
+    @Path("/{id}/reviews")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getReviews(
+            @PathParam("id") final long id,
+            @QueryParam("order_by") @DefaultValue("DATE_DESC") final ReviewOrderBy orderBy,
+            @QueryParam("page") @DefaultValue("1") final int page,
+            @QueryParam("size") @DefaultValue("20") final int size
+    ){
+        final PaginatedContent<Review> reviewPage =  rs.getAll(id, orderBy, page, size);
+        final List<ReviewDTO> reviews = reviewPage.getPage()
+                .stream().map(ReviewDTO.mapper(uriInfo)).toList();
+
+        return paginatedResponse(
+                Response.ok(new GenericEntity<>(reviews){}), reviewPage, uriInfo
+        ).build();
+    }
+
+    @GET
+    @Path("/{bookId}/reviews/{reviewerId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getReview(
+            @PathParam("bookId") final long bookId,
+            @PathParam("reviewerId") final long reviewerId
+    ){
+        Optional<Review> review = rs.find(bookId, reviewerId);
+        if (review.isEmpty()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(ReviewDTO.fromReview(uriInfo, review.get())).build();
     }
 }

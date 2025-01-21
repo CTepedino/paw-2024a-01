@@ -65,9 +65,15 @@ public class ReviewJpaDao implements ReviewDao {
 
     @Override
     public Optional<Review> find(long bookId, User reviewer) {
+        return find(bookId, reviewer.getUserId());
+
+    }
+
+    @Override
+    public Optional<Review> find(long bookId, long userId) {
         TypedQuery<Review> query = em.createQuery("FROM Review r WHERE r.bookId = :bookId AND r.reviewer.userId = :userId", Review.class);
         query.setParameter("bookId", bookId);
-        query.setParameter("userId", reviewer.getUserId());
+        query.setParameter("userId", userId);
 
         try {
             return Optional.ofNullable(query.getSingleResult());

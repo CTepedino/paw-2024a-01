@@ -5,13 +5,16 @@ import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
+import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
 
 @Entity
@@ -72,6 +75,9 @@ public class Book {
     @Column(name = "sales_category", nullable = false)
     @Enumerated(EnumType.STRING)
     private BookSalesCategory salesCategory;
+
+    @Formula("(SELECT AVG(r.rating) FROM reviews r WHERE r.book_id = book_id)")
+    private Double averageRating;
 
     Book(){}
 
@@ -215,5 +221,10 @@ public class Book {
 
     public void setSalesCategory(BookSalesCategory salesCategory) {
         this.salesCategory = salesCategory;
+    }
+
+
+    public int getAverageRating(){
+         return averageRating!=null? (int)Math.ceil(averageRating):0;
     }
 }

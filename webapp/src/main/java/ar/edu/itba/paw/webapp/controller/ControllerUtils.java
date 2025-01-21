@@ -25,7 +25,7 @@ public class ControllerUtils {
 
     public static <T extends File> Response.ResponseBuilder fileResponse(T file){
         if (file == null){
-            return Response.noContent();
+            return Response.noContent();//TODO: noContent, o 404?
         }
         return Response.ok(file.getFile());
     }

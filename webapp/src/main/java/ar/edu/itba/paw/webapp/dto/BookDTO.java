@@ -22,6 +22,7 @@ public class BookDTO {
     private LocalDate publishDate;
     private boolean isPaused;
     private BookSalesCategory salesCategory;
+    private int averageRating;
 
     private URI self;
     private URI writer;
@@ -44,6 +45,7 @@ public class BookDTO {
         dto.publishDate = b.getPublishDate();
         dto.isPaused = b.isPaused();
         dto.salesCategory = b.getSalesCategory();
+        dto.averageRating = b.getAverageRating();
 
         dto.self = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).build();
         dto.writer = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(b.getWriter().getUserId())).build();
@@ -124,6 +126,14 @@ public class BookDTO {
 
     public void setSalesCategory(BookSalesCategory salesCategory) {
         this.salesCategory = salesCategory;
+    }
+
+    public int getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(int averageRating) {
+        this.averageRating = averageRating;
     }
 
     public URI getSelf() {

@@ -16,6 +16,7 @@ public interface ReviewService {
     void createOrUpdate(long bookId, User user, int rating, String review);
 
     Optional<Review> find(long bookId, User user);
+    Optional<Review> find(long bookId, long userId);
 
     PaginatedContent<Review> getAll(long bookId, ReviewOrderBy orderBy, int pageNumber, int pageSize);
 

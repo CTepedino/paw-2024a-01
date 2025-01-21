@@ -21,6 +21,7 @@ public interface ReviewDao {
     long getAllSize(long bookId);
 
     Optional<Review> find(long bookId, User reviewer);
+    Optional<Review> find(long bookId, long userId);
 
     Optional<Review> findById(long id);
 
