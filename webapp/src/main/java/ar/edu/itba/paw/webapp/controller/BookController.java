@@ -59,7 +59,8 @@ public class BookController {
             @QueryParam("max_page_count") final Integer maxPageCount,
             @QueryParam("min_suggested_age") final Integer minSuggestedAge,
             @QueryParam("max_suggested_age") final Integer maxSuggestedAge,
-            @QueryParam("order_by") @DefaultValue("PUBLICATION_DATE_DESC") final BookSearchOrderBy orderBy
+            @QueryParam("order_by") @DefaultValue("PUBLICATION_DATE_DESC") final BookSearchOrderBy orderBy,
+            @QueryParam("recommendations_for") final Long recommendationsForId
     ){
         final PaginatedContent<Book> booksPage = bs.listBooks(
                 title,
@@ -68,7 +69,8 @@ public class BookController {
                 minPageCount, maxPageCount,
                 minSuggestedAge, maxSuggestedAge,
                 orderBy,
-                page, pageSize
+                page, pageSize,
+                recommendationsForId
         );
         final List<BookDTO> books = booksPage.getPage()
                 .stream().map(BookDTO.mapper(uriInfo)).toList();

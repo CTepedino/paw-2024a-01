@@ -7,7 +7,7 @@ public enum BookSearchOrderBy {
     PAGE_COUNT_DESC("page_count desc", "pageCount.desc"),
     PUBLICATION_DATE_ASC("published_date asc", "publicationDate.asc"),
     PUBLICATION_DATE_DESC("published_date desc", "publicationDate.desc"),
-    BEST_SELLERS(null, null);
+    BEST_SELLERS("COUNT(o.book_id) desc", null);
 
     private final String columnName;
     private final String messageCode;

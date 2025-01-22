@@ -80,7 +80,8 @@ public interface BookDao {
             Integer maxSuggestedAge
     );
 
-    List<Book> getRecommendations(Book book, int max);
+    List<Book> getRecommendations(long bookId, long writerId, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int offset, int limit);
+    long getRecommendationsSize(long bookId, long writerId, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge);
 
     List<Book> getWriterBooks(
             long writerId,

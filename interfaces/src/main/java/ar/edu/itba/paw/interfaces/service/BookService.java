@@ -46,8 +46,6 @@ public interface BookService {
 
     Optional<Book> findById(long id);
 
-    List<Book> getRecommendations(Book book);
-
     PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
 
     PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic);
@@ -84,6 +82,7 @@ public interface BookService {
         Integer maxSuggestedAge,
         BookSearchOrderBy orderBy,
         int pageNumber,
-        int pageSize
+        int pageSize,
+        Long recommendationsForId
     );
 }

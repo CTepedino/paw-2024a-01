@@ -155,22 +155,45 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public List<Book> getRecommendations(Book book, int max) {
-        Query nativeQuery = em.createNativeQuery(
-     """
-            SELECT b.book_id
-            FROM books b JOIN users u ON b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED'
-            WHERE b.is_paused = FALSE AND (b.genre = :genre OR b.writer_id = :writerId) AND b.book_id <> :bookId
-            GROUP BY b.book_id, u.user_id
-            ORDER BY COUNT(o.book_id) DESC
-        """);
-        nativeQuery.setParameter("genre", book.getGenre().toString());
-        nativeQuery.setParameter("writerId", book.getWriter().getUserId());
-        nativeQuery.setParameter("bookId", book.getBookId());
+    public List<Book> getRecommendations(long bookId, long writerId, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int offset, int limit) {
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
 
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+        if (orderBy == null){
+            orderBy = BookSearchOrderBy.BEST_SELLERS;
+        }
 
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, max);
+        nativeQueryStr.append("SELECT b.book_id FROM books b LEFT JOIN deals d ON b.book_id = d.id JOIN users u ON b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED' ");
+        prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+        nativeQueryStr.append(" AND (b.genre = :genre OR b.writer_id = :writerId) AND b.book_id <> :bookId GROUP BY b.book_id, u.user_id ");
+        nativeQueryStr.append(" ORDER BY ").append(orderBy.getColumnName());
+
+        Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
+        for(Map.Entry<String, Object> entry : params.entrySet()) {
+            nativeQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+        nativeQuery.setParameter("writerId", writerId);
+        nativeQuery.setParameter("bookId", bookId);
+
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b LEFT JOIN b.deal d WHERE b.bookId IN :idList", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public long getRecommendationsSize(long bookId, long writerId, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge) {
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+
+        nativeQueryStr.append("SELECT COUNT(b.book_id) FROM books b LEFT JOIN deals d ON b.book_id = d.id JOIN users u ON b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED' ");
+        prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+        nativeQueryStr.append(" AND (b.genre = :genre OR b.writer_id = :writerId) AND b.book_id <> :bookId GROUP BY b.book_id, u.user_id ");
+
+        Query query = em.createNativeQuery(nativeQueryStr.toString());
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        return ((BigInteger) query.getSingleResult()).longValue();
     }
 
     @Override

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,13 +95,6 @@ public class BookServiceImpl implements BookService {
     public Optional<Book> findById(long id) {
         return bookDao.findById(id);
     }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Book> getRecommendations(Book book){
-        return bookDao.getRecommendations(book, 4);
-    }
-
 
     @Transactional(readOnly = true)
     @Override
@@ -234,15 +228,24 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> listBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
+    public PaginatedContent<Book> listBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize, Long recommendationsForId) {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
         List<Book> books;
+        if (recommendationsForId != null){
+            Optional<Book> book = findById(recommendationsForId);
+            if (book.isEmpty()){
+                return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
+            } else {
+                books = bookDao.getRecommendations(book.get().getBookId(), book.get().getWriter().getUserId(), title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
+                return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getRecommendationsSize(book.get().getBookId(), book.get().getWriter().getUserId(), title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge));
+            }
+        }
         if (orderBy == BookSearchOrderBy.BEST_SELLERS){
             books = bookDao.getTopBooks((pageNumber-1)*pageSize, pageSize);
         } else {
-            books = bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, pageNumber, pageSize);
+            books = bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
         }
         return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge));
     }
