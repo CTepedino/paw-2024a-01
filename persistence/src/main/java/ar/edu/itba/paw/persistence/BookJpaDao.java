@@ -309,7 +309,7 @@ public class BookJpaDao implements BookDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<BookGenre> getGenresByBookCount(int limit, int offset) {
+    public List<BookGenre> getGenresByBookCount(int offset, int limit) {
         Query query = em.createNativeQuery("SELECT genre FROM books GROUP BY genre ORDER BY COUNT(*) DESC");
         query.setMaxResults(limit);
         query.setFirstResult(offset);

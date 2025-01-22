@@ -98,7 +98,7 @@ public interface BookDao {
 
     void recheckAllPaused(long userId);
 
-    List<BookGenre> getGenresByBookCount(int limit, int offset);
+    List<BookGenre> getGenresByBookCount(int offset, int limit);
 
     Optional<WishlistItem> findWishlistItem(long userId, long bookId);
     WishlistItem addToWishlist(long userId, long bookId);

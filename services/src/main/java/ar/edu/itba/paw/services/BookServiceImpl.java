@@ -145,18 +145,25 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<BookGenre> getGenresByBookCount() {
-        List<BookGenre> popularGenres = bookDao.getGenresByBookCount(12, 0);
-        List<BookGenre> booklessGenres = List.of(BookGenre.values());
-        int i = 0;
-        while (popularGenres.size() < 12){
-            BookGenre genre = booklessGenres.get(i);
-            if (!popularGenres.contains(genre)){
-                popularGenres.add(genre);
+    public PaginatedContent<BookGenre> getGenres(BookGenreOrderBy orderBy, int pageNumber, int pageSize) {
+        List<BookGenre> genres;
+
+        if (orderBy == BookGenreOrderBy.BOOK_COUNT){
+            genres = bookDao.getGenresByBookCount((pageNumber - 1) * pageSize, pageSize);
+            List<BookGenre> booklessGenres = List.of(BookGenre.values());
+            int i = 0;
+            while (genres.size() < pageSize) {
+                BookGenre genre = booklessGenres.get(i);
+                if (!genres.contains(genre)) {
+                    genres.add(genre);
+                }
+                i++;
             }
-            i++;
+        } else {
+            genres = List.of(BookGenre.values()).subList((pageNumber-1)*pageSize, pageNumber * pageSize);
         }
-        return popularGenres;
+
+        return new PaginatedContent<>(genres, pageNumber, pageSize, BookGenre.values().length);
     }
 
     @Transactional(readOnly = true)

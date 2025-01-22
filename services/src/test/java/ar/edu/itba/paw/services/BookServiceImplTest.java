@@ -3,6 +3,7 @@ import ar.edu.itba.paw.interfaces.dao.BookDao;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookGenreOrderBy;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import ar.edu.itba.paw.models.users.User;
 import org.junit.Test;
@@ -67,7 +68,7 @@ public class BookServiceImplTest {
         List<BookGenre> emptyList = new ArrayList<>();
         Mockito.when(bookDao.getGenresByBookCount(Mockito.anyInt(), Mockito.anyInt())).thenReturn(emptyList);
 
-        List<BookGenre> genres = bookService.getGenresByBookCount();
+        List<BookGenre> genres = bookService.getGenres(BookGenreOrderBy.BOOK_COUNT, 1, 12).getPage();
 
         assertNotNull(genres);
         assertEquals(12, genres.size());
@@ -77,7 +78,7 @@ public class BookServiceImplTest {
     public void testGetGenresByBookCountFullBookCount(){
         Mockito.when(bookDao.getGenresByBookCount(Mockito.anyInt(), Mockito.anyInt())).thenReturn(new ArrayList<>(FULL_BOOK_GENRE_LIST));
 
-        List<BookGenre> genres = bookService.getGenresByBookCount();
+        List<BookGenre> genres = bookService.getGenres(BookGenreOrderBy.BOOK_COUNT, 1, 12).getPage();
 
         assertNotNull(genres);
         assertEquals(12, genres.size());
@@ -87,7 +88,7 @@ public class BookServiceImplTest {
     public void testGetGenresByBookCountHalfFullBookCount(){
         Mockito.when(bookDao.getGenresByBookCount(Mockito.anyInt(), Mockito.anyInt())).thenReturn(new ArrayList<>(HALF_FULL_BOOK_GENRE_LIST));
 
-        List<BookGenre> genres = bookService.getGenresByBookCount();
+        List<BookGenre> genres = bookService.getGenres(BookGenreOrderBy.BOOK_COUNT, 1, 12).getPage();
 
         assertNotNull(genres);
         assertEquals(12, genres.size());
