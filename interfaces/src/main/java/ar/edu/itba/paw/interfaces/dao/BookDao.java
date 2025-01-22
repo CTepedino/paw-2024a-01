@@ -52,10 +52,6 @@ public interface BookDao {
 
     BookFile createOrUpdateBookFile(Book book, byte[] bookFile);
 
-    List<Book> getAll(int offset, int limit);
-    long getAllSize();
-
-
     List<Book> searchWithParams(
             String title,
             BookGenre genre,
@@ -83,6 +79,9 @@ public interface BookDao {
     List<Book> getRecommendations(Book book, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int offset, int limit);
     long getRecommendationsSize(Book book, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge);
 
+    List<Book> getTopBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, int offset, int limit);
+    long getTopBooksSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge);
+
     List<Book> getWriterBooks(
             long writerId,
             String title,
@@ -99,20 +98,14 @@ public interface BookDao {
 
     void recheckAllPaused(long userId);
 
-
     List<BookGenre> getGenresByBookCount(int limit, int offset);
 
     Optional<WishlistItem> findWishlistItem(long userId, long bookId);
-
     WishlistItem addToWishlist(long userId, long bookId);
-
     void removeFromWishlist(long userId, long bookId);
-
     List<Book> getWishlist(long userId, int offset, int limit);
-
     long getWishlistSize(long userId);
 
-    List<Book> getTopBooks(int offset, int limit);
 
     List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit);
     List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month);

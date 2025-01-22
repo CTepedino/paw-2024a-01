@@ -94,17 +94,22 @@ public class BookJpaDao implements BookDao {
         return book.getBookFile();
     }
 
-    @Override
-    public List<Book> getAll(int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM books WHERE is_paused = FALSE ORDER BY book_id DESC");
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.bookId DESC", Book.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    private void prepareSearchQueryParams(StringBuilder nativeQueryStr, Map<String, Object> params, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge){
+        prepareSearchQueryParams(nativeQueryStr, params, title, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+        if (genre != null) {
+            DaoUtils.addQueryCondition(nativeQueryStr, " AND b.genre = :genre ", params, "genre", genre.toString());
+        }
     }
 
-    @Override
-    public long getAllSize() {
-        return DaoUtils.getRowCount(em, "Book b WHERE b.isPaused = FALSE", "b.bookId");
+    private void prepareSearchQueryParams(StringBuilder nativeQueryStr, Map<String, Object> params, String title, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge){
+        nativeQueryStr.append(" WHERE b.is_paused = FALSE AND LOWER(title) LIKE LOWER(:title) ");
+        params.put("title", DaoUtils.prepareSearchString(title));
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND ((d.price IS NULL AND b.price >= :minPrice) OR d.price >= :minPrice ) ", params, "minPrice", minPrice);
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND ((d.price IS NULL AND b.price <= :maxPrice) OR d.price <= :maxPrice ) ", params, "maxPrice", maxPrice);
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.page_count >= :minPageCount ", params, "minPageCount", minPageCount);
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.page_count <= :maxPageCount ", params, "maxPageCount", maxPageCount);
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.suggested_age >= :minSuggestedAge ", params, "minSuggestedAge", minSuggestedAge);
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.suggested_age <= :maxSuggestedAge ", params, "maxSuggestedAge", maxSuggestedAge);
     }
 
     @Override
@@ -138,24 +143,6 @@ public class BookJpaDao implements BookDao {
             query.setParameter(entry.getKey(), entry.getValue());
         }
         return ((BigInteger) query.getSingleResult()).longValue();
-    }
-
-    private void prepareSearchQueryParams(StringBuilder nativeQueryStr, Map<String, Object> params, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge){
-        prepareSearchQueryParams(nativeQueryStr, params, title, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
-        if (genre != null) {
-            DaoUtils.addQueryCondition(nativeQueryStr, " AND b.genre = :genre ", params, "genre", genre.toString());
-        }
-    }
-
-    private void prepareSearchQueryParams(StringBuilder nativeQueryStr, Map<String, Object> params, String title, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge){
-        nativeQueryStr.append(" WHERE b.is_paused = FALSE AND LOWER(title) LIKE LOWER(:title) ");
-        params.put("title", DaoUtils.prepareSearchString(title));
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND ((d.price IS NULL AND b.price >= :minPrice) OR d.price >= :minPrice ) ", params, "minPrice", minPrice);
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND ((d.price IS NULL AND b.price <= :maxPrice) OR d.price <= :maxPrice ) ", params, "maxPrice", maxPrice);
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.page_count >= :minPageCount ", params, "minPageCount", minPageCount);
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.page_count <= :maxPageCount ", params, "maxPageCount", maxPageCount);
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.suggested_age >= :minSuggestedAge ", params, "minSuggestedAge", minSuggestedAge);
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND b.suggested_age <= :maxSuggestedAge ", params, "maxSuggestedAge", maxSuggestedAge);
     }
 
     @Override
@@ -203,6 +190,42 @@ public class BookJpaDao implements BookDao {
             query.setParameter(entry.getKey(), entry.getValue());
         }
         return ((BigInteger) query.getSingleResult()).longValue();
+    }
+
+
+    @Override
+    public List<Book> getTopBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, int offset, int limit) {
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+
+        nativeQueryStr.append("SELECT o.book_id FROM orders o LEFT JOIN books b ON o.book_id = b.book_id ");
+        prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+        nativeQueryStr.append(" GROUP BY o.book_id ");
+
+        Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
+        for(Map.Entry<String, Object> entry : params.entrySet()) {
+            nativeQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public long getTopBooksSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge) {
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+
+        nativeQueryStr.append("SELECT COUNT(DISTINCT o.book_id) FROM orders o LEFT JOIN books b ON o.book_id = b.book_id ");
+        prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+
+        Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
+        for(Map.Entry<String, Object> entry : params.entrySet()) {
+            nativeQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }
 
     @Override
@@ -338,15 +361,7 @@ public class BookJpaDao implements BookDao {
         return DaoUtils.getRowCount(em, "WishlistItem w", "w.bookId","WHERE w.userId = :userId", Map.of("userId", userId));
     }
 
-    @Override
-    public List<Book> getTopBooks(int offset, int limit) {
 
-        Query nativeQuery = em.createNativeQuery("SELECT o.book_id FROM orders o GROUP BY o.book_id ORDER BY COUNT(o) DESC");
-
-        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC", Book.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
-    }
 
     @Override
     public List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit) {

@@ -92,7 +92,7 @@ public class BookJpaDaoTest {
 
         assertEquals(1, TestUtils.getRowCount(em, "FROM books WHERE title  = 'MODIFIED BOOK MODIFIED BOOK MODIFIED BOOK'"));
     }
-
+/*
     @Test
     public void testGetAllLimitExceeds(){
         List<Book> books = bookDao.getAll(0,99999);
@@ -123,7 +123,7 @@ public class BookJpaDaoTest {
 
         assertEquals(TestUtils.getRowCount(em, "FROM books WHERE is_paused = FALSE"), size);
     }
-
+*/
 
     @Test
     public void testSearchNullParams(){
