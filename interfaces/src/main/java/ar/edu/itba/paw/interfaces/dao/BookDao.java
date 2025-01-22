@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.*;
 
 import ar.edu.itba.paw.models.files.BookFile;
@@ -76,8 +77,7 @@ public interface BookDao {
             Integer minPageCount,
             Integer maxPageCount,
             Integer minSuggestedAge,
-            Integer maxSuggestedAge,
-            BookSearchOrderBy orderBy
+            Integer maxSuggestedAge
     );
 
     List<Book> getRecommendations(Book book, int max);
@@ -111,7 +111,7 @@ public interface BookDao {
 
     long getWishlistSize(long userId);
 
-    List<Book> getTopBooks(int size);
+    List<Book> getTopBooks(int offset, int limit);
 
     List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit);
     List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month);

@@ -46,26 +46,7 @@ public interface BookService {
 
     Optional<Book> findById(long id);
 
-    PaginatedContent<Book> getAll(int pageNumber, int pageSize);
-
-
-    PaginatedContent<Book> searchWithParams(
-            String title,
-            BookGenre genre,
-            BigDecimal minPrice,
-            BigDecimal maxPrice,
-            Integer minPageCount,
-            Integer maxPageCount,
-            Integer minSuggestedAge,
-            Integer maxSuggestedAge,
-            BookSearchOrderBy orderBy,
-            int pageNumber,
-            int pageSize
-    );
-
-
     List<Book> getRecommendations(Book book);
-
 
     PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
 
@@ -86,9 +67,23 @@ public interface BookService {
 
     PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize);
 
-    List<Book> getTopBooks(Integer size);
-
     void recheckWriterPausedBooks(long userId);
 
     void checkBookSalesCategory(Book book);
+
+
+
+    PaginatedContent<Book> listBooks(
+        String title,
+        BookGenre genre,
+        BigDecimal minPrice,
+        BigDecimal maxPrice,
+        Integer minPageCount,
+        Integer maxPageCount,
+        Integer minSuggestedAge,
+        Integer maxSuggestedAge,
+        BookSearchOrderBy orderBy,
+        int pageNumber,
+        int pageSize
+    );
 }

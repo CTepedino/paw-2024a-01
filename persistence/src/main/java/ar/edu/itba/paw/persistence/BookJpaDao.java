@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
+import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
@@ -126,7 +127,7 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public long getSearchSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy) {
+    public long getSearchSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge) {
         StringBuilder nativeQueryStr = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
 
@@ -306,13 +307,13 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public List<Book> getTopBooks(int size) {
+    public List<Book> getTopBooks(int offset, int limit) {
 
         Query nativeQuery = em.createNativeQuery("SELECT o.book_id FROM orders o GROUP BY o.book_id ORDER BY COUNT(o) DESC");
 
         TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC", Book.class);
 
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
@@ -327,7 +328,7 @@ public class BookJpaDao implements BookDao {
 
         TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC, SUM(o.price) DESC", Book.class);
 
-         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override

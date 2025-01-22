@@ -61,7 +61,7 @@ public class BookController {
             @QueryParam("max_suggested_age") final Integer maxSuggestedAge,
             @QueryParam("order_by") @DefaultValue("PUBLICATION_DATE_DESC") final BookSearchOrderBy orderBy
     ){
-        final PaginatedContent<Book> booksPage = bs.searchWithParams(
+        final PaginatedContent<Book> booksPage = bs.listBooks(
                 title,
                 genre,
                 minPrice, maxPrice,

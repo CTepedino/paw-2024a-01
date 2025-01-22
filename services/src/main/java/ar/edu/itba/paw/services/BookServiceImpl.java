@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
 
     private final OrderDao orderDao;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(BookServiceImpl.class);
 
     @Autowired
     public BookServiceImpl(final BookDao bookDao, final OrderDao orderDao){
@@ -94,37 +94,6 @@ public class BookServiceImpl implements BookService {
     public Optional<Book> findById(long id) {
         return bookDao.findById(id);
     }
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<Book> getAll(int pageNumber, int pageSize) {
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> books = bookDao.getAll((pageNumber-1)*pageSize, pageSize);
-
-        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getAllSize());
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getAll(page.getPageCount(), pageSize);
-        } else {
-            return page;
-        }
-    }
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> books =  bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
-
-        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy));
-    } //TODO: delete el check de page.isEmpty para todos los metodos de service que paginen resultados
-
-
 
     @Transactional(readOnly = true)
     @Override
@@ -251,12 +220,6 @@ public class BookServiceImpl implements BookService {
         bookDao.recheckAllPaused(userId);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Book> getTopBooks(Integer size){
-        return bookDao.getTopBooks(size);
-    }
-
     @Transactional
     @Override
     public void checkBookSalesCategory(Book book){
@@ -269,5 +232,18 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Book> listBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
+        if (pageNumber < 1){
+            throw new InvalidPageException();
+        }
+        List<Book> books;
+        if (orderBy == BookSearchOrderBy.BEST_SELLERS){
+            books = bookDao.getTopBooks((pageNumber-1)*pageSize, pageSize);
+        } else {
+            books = bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, pageNumber, pageSize);
+        }
+        return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge));
+    }
 }

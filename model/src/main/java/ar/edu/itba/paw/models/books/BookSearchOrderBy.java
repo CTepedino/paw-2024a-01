@@ -6,7 +6,8 @@ public enum BookSearchOrderBy {
     PAGE_COUNT_ASC("page_count asc", "pageCount.asc"),
     PAGE_COUNT_DESC("page_count desc", "pageCount.desc"),
     PUBLICATION_DATE_ASC("published_date asc", "publicationDate.asc"),
-    PUBLICATION_DATE_DESC("published_date desc", "publicationDate.desc");
+    PUBLICATION_DATE_DESC("published_date desc", "publicationDate.desc"),
+    BEST_SELLERS(null, null);
 
     private final String columnName;
     private final String messageCode;

@@ -36,7 +36,7 @@ public class BookServiceImplTest {
     private BookServiceImpl bookService;
 
 
-    @Test
+  /*  @Test
     public void testGetAll(){
         int page = 2;
         List<Book> mockedBooks = Collections.nCopies((int)SIZE, TEST_BOOK);
@@ -52,15 +52,15 @@ public class BookServiceImplTest {
         assertEquals(LIMIT, books.getPageSize());
         assertEquals((int)Math.ceil((double)SIZE/LIMIT), books.getPageCount());
         assertEquals(SIZE, books.getTotalSize());
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testGetAllInvalidPage(){
         assertThrows(
                 InvalidPageException.class,
                 ()->bookService.getAll(0, LIMIT)
         );
-    }
+    }*/
 
     @Test
     public void testGetGenresByBookCountEmptyBookCount(){

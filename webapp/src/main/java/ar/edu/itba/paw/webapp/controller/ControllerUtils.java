@@ -19,13 +19,13 @@ public class ControllerUtils {
         if (paginatedContent.getPageNumber() > 1){
             responseBuilder.link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", paginatedContent.getPageNumber()-1).build(), "prev");
         }
-
+        responseBuilder.header("X-Total-Count", paginatedContent.getTotalSize());
         return responseBuilder;
     }
 
     public static <T extends File> Response.ResponseBuilder fileResponse(T file){
         if (file == null){
-            return Response.noContent();//TODO: noContent, o 404?
+            return Response.status(Response.Status.NOT_FOUND);//TODO: noContent, o 404?
         }
         return Response.ok(file.getFile());
     }
