@@ -238,8 +238,8 @@ public class BookServiceImpl implements BookService {
             if (book.isEmpty()){
                 return new PaginatedContent<>(Collections.emptyList(), pageNumber, pageSize, 0);
             } else {
-                books = bookDao.getRecommendations(book.get().getBookId(), book.get().getWriter().getUserId(), title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
-                return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getRecommendationsSize(book.get().getBookId(), book.get().getWriter().getUserId(), title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge));
+                books = bookDao.getRecommendations(book.get(), title,genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
+                return new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getRecommendationsSize(book.get(), title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge));
             }
         }
         if (orderBy == BookSearchOrderBy.BEST_SELLERS){
