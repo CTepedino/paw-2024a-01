@@ -29,4 +29,17 @@ public class WishlistItem {
         this.bookId = bookId;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+
+    public long getBookId() {
+        return bookId;
+    }
+
 }

@@ -347,11 +347,11 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public List<Book> getWishlist(long userId, int offset, int limit){
+    public List<WishlistItem> getWishlist(long userId, int offset, int limit){
         Query nativeQuery = em.createNativeQuery("SELECT book_id FROM wishlist WHERE user_id = :userId");
         nativeQuery.setParameter("userId", userId);
 
-        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList", Book.class);
+        TypedQuery<WishlistItem> query = em.createQuery("FROM WishlistItem w WHERE w.bookId IN :idList", WishlistItem.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }

@@ -1,10 +1,14 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
+import ar.edu.itba.paw.webapp.dto.WishlistDTO;
 import ar.edu.itba.paw.webapp.dto.form.UserPostDTO;
 import ar.edu.itba.paw.webapp.dto.form.UserPutDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +19,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
 @Path("/users")
 @Component
@@ -75,7 +82,7 @@ public class UserController { //TODO: exceptions. custom mime types
     @GET
     @Path("/{id}/roles")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getRoles(@PathParam("id") final long id){
+    public Response getRoles(@PathParam("id") final long id){ //TODO: No se si hace falta, creo que podriamos mandarlos como lista y manejar los updates desde el back
         Collection<UserRoles> roles = us.getRoles(id);
 
         return Response.ok(roles).build();
@@ -90,7 +97,6 @@ public class UserController { //TODO: exceptions. custom mime types
         return Response.ok(image.getFile()).build();
     }
 
-    
 
 
 

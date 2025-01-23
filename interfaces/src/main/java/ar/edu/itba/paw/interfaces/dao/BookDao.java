@@ -103,7 +103,7 @@ public interface BookDao {
     Optional<WishlistItem> findWishlistItem(long userId, long bookId);
     WishlistItem addToWishlist(long userId, long bookId);
     void removeFromWishlist(long userId, long bookId);
-    List<Book> getWishlist(long userId, int offset, int limit);
+    List<WishlistItem> getWishlist(long userId, int offset, int limit);
     long getWishlistSize(long userId);
 
 

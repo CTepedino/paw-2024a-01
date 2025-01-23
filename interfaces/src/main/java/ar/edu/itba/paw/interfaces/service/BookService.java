@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookGenre;
-import ar.edu.itba.paw.models.books.BookGenreOrderBy;
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.users.User;
 
@@ -58,13 +55,13 @@ public interface BookService {
 
     PaginatedContent<BookGenre> getGenres(BookGenreOrderBy orderBy, int pageNumber, int pageSize);
 
-    boolean isWishlisted(long userId, long bookId);
+    Optional<WishlistItem> findWishlistItem(long userId, long bookId);
 
     void toggleWishlist(long userId, long bookId);
 
     void removeFromWishlist(long userId, long bookId);
 
-    PaginatedContent<Book> getWishlist(long userId, int pageNumber, int pageSize);
+    PaginatedContent<WishlistItem> getWishlist(long userId, int pageNumber, int pageSize);
 
     void recheckWriterPausedBooks(long userId);
 
