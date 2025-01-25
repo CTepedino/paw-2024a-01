@@ -37,14 +37,16 @@ public class BookController {
     private final BookService bs;
     private final ReviewService rs;
 
+    @Context
+    private UriInfo uriInfo;
+
     @Autowired
     public BookController(BookService bs, ReviewService rs){
         this.bs = bs;
         this.rs = rs;
     }
 
-    @Context
-    private UriInfo uriInfo;
+
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})

@@ -7,7 +7,9 @@ import ar.edu.itba.paw.models.users.WriterCategory;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class UserDTO {
 
@@ -19,15 +21,10 @@ public class UserDTO {
     private String locale;
     private String description;
     private WriterCategory writerCategory;
+    private Collection<UserRoles> roles;
 
     private URI self;
     private URI profilePicture;
-    private URI roles;
-    private URI changePassword;
-
-    //private URI booksPublished;
-    //private URI booksOwned;
-    //etc etc
 
     public static Function<User, UserDTO> mapper(UriInfo uriInfo){
         return u -> fromUser(uriInfo, u);
@@ -44,11 +41,10 @@ public class UserDTO {
         dto.locale = u.getLocale().toLanguageTag();
         dto.description = u.getDescription();
         dto.writerCategory = u.getWriterCategory();
+        dto.roles = u.getRoles();
 
         dto.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).build();
         dto.profilePicture = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("profilePicture").build();
-        dto.roles = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("roles").build();
-        dto.changePassword = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("password").build();
 
         return dto;
     }
@@ -133,19 +129,12 @@ public class UserDTO {
         this.profilePicture = profilePicture;
     }
 
-    public URI getRoles() {
+    public Collection<UserRoles> getRoles() {
         return roles;
     }
 
-    public void setRoles(URI roles) {
+    public void setRoles(Collection<UserRoles> roles) {
         this.roles = roles;
     }
 
-    public URI getChangePassword() {
-        return changePassword;
-    }
-
-    public void setChangePassword(URI changePassword) {
-        this.changePassword = changePassword;
-    }
 }

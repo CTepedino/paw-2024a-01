@@ -24,18 +24,20 @@ import java.util.Optional;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
-@Path("/users")
+@Path("users")
 @Component
 public class UserController { //TODO: exceptions. custom mime types
 
     private final UserService us;
+    private final BookService bs;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public UserController(final UserService us){
+    public UserController(final UserService us, BookService bs){
         this.us = us;
+        this.bs = bs;
     }
 
     @POST
@@ -80,15 +82,6 @@ public class UserController { //TODO: exceptions. custom mime types
 
 
     @GET
-    @Path("/{id}/roles")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getRoles(@PathParam("id") final long id){ //TODO: No se si hace falta, creo que podriamos mandarlos como lista y manejar los updates desde el back
-        Collection<UserRoles> roles = us.getRoles(id);
-
-        return Response.ok(roles).build();
-    }
-
-    @GET
     @Path("/{id}/profilePicture")
     @Produces(value = {"image/jpeg", "image/png"})
     public Response getProfilePicture(@PathParam("id") final long id){
@@ -97,6 +90,35 @@ public class UserController { //TODO: exceptions. custom mime types
         return Response.ok(image.getFile()).build();
     }
 
+    @GET
+    @Path("{userId}/wishlist")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getWishlist(
+            @PathParam("userId") final long id,
+            @QueryParam("page") final int page,
+            @QueryParam("size") final int size
+    ){
+        PaginatedContent<WishlistItem> wishlistPage = bs.getWishlist(id, page, size);
+        List<WishlistDTO> wishlist = wishlistPage.getPage().stream().map(WishlistDTO.mapper(uriInfo)).toList();
+        return paginatedResponse(
+                Response.ok(new GenericEntity<>(wishlist){}), wishlistPage, uriInfo
+        ).build();
+    }
+
+    @GET
+    @Path("{userId}/wishlist/{bookId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getWishlistItem(
+            @PathParam("userId") final long userId,
+            @PathParam("bookId") final long bookId
+    ){
+        Optional<WishlistItem> wishlistItem = bs.findWishlistItem(userId, bookId);
+        if (wishlistItem.isEmpty()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok(wishlistItem).build();
+    }
 
 
 
