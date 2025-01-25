@@ -8,7 +8,7 @@ public enum BookSearchOrderBy {
     PUBLICATION_DATE_ASC("published_date asc", "publicationDate.asc"),
     PUBLICATION_DATE_DESC("published_date desc", "publicationDate.desc"),
     BEST_SELLERS("COUNT(o.book_id) desc", null),
-    NEW_DEALS(null, null);
+    NEW_DEALS("d.start_date desc", null);
 
     private final String columnName;
     private final String messageCode;
