@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DealDao;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.deals.Deal;
 import org.springframework.stereotype.Repository;
 
@@ -64,6 +65,5 @@ public class DealJpaDao implements DealDao {
         TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.deal.startDate DESC", Book.class);
         return DaoUtils.paginatedQuery(em, nativeQuery, query, 0, size);
     }
-
 
 }

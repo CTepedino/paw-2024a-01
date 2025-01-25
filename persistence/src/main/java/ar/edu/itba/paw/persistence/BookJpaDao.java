@@ -228,6 +228,44 @@ public class BookJpaDao implements BookDao {
         return ((BigInteger) nativeQuery.getSingleResult()).longValue();
     }
 
+
+    @Override
+    public List<Book> getBooksWithNewDeals(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, int offset, int limit) {
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+
+        nativeQueryStr.append(" SELECT d.id FROM deals d LEFT JOIN books b ON b.book_id = d.id ");
+        prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+        nativeQueryStr.append(" ORDER BY d.start_date DESC ");
+
+        Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
+        for(Map.Entry<String, Object> entry : params.entrySet()) {
+            nativeQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.deal.startDate DESC", Book.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public long getBooksWithNewDealsSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge) {
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+
+        nativeQueryStr.append("SELECT COUNT(DISTINCT d.id) FROM deals d LEFT JOIN books b ON d.id = b.book_id ");
+        prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+
+        Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
+        for(Map.Entry<String, Object> entry : params.entrySet()) {
+            nativeQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        return ((BigInteger) nativeQuery.getSingleResult()).longValue();
+    }
+
+
+
     @Override
     public List<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int offset, int limit) {
         Query nativeQuery = em.createNativeQuery("""
@@ -284,6 +322,10 @@ public class BookJpaDao implements BookDao {
                 params
         );
     }
+
+
+
+
 
     @Override
     public void recheckAllPaused(long userId) {

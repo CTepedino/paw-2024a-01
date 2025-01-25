@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.interfaces.dao;
 
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.users.User;
 

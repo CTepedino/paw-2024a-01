@@ -29,6 +29,7 @@ public class BookDTO {
     private URI cover;
     private URI preview;
     private URI bookFile;
+    private URI deal;
 
     public static Function<Book, BookDTO> mapper(UriInfo uriInfo){
         return b -> fromBook(uriInfo, b);
@@ -52,6 +53,9 @@ public class BookDTO {
         dto.cover = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("cover").build();
         dto.preview = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("preview").build();
         dto.bookFile = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("book_file").build();
+        if (b.getDeal()!=null){
+            dto.deal = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("deal").build();
+        }
 
         return dto;
     }

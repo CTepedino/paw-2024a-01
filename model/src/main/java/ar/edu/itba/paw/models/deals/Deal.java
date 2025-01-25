@@ -35,12 +35,6 @@ public class Deal {
         this.endDate=endDate;
     }
 
-    public String getFormattedPrice(){
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
-        currencyFormatter.setMaximumFractionDigits(0);
-        return currencyFormatter.format(price);
-    }
-
     public long getDealId() {
         return dealId;
     }
