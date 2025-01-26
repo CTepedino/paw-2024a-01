@@ -14,11 +14,11 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedRespons
 
 
 @Path("genres")
-public class GenresController {
+public class GenreController {
     private final BookService bs;
 
     @Autowired
-    public GenresController(BookService bs){
+    public GenreController(BookService bs){
         this.bs = bs;
     }
 

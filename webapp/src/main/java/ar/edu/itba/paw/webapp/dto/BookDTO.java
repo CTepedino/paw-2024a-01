@@ -13,6 +13,7 @@ import java.util.function.Function;
 
 public class BookDTO {
 
+    private long id;
     private String title;
     private String description;
     private BookGenre genre;
@@ -37,6 +38,8 @@ public class BookDTO {
 
     public static BookDTO fromBook(UriInfo uriInfo, Book b){
         final BookDTO dto = new BookDTO();
+
+        dto.id = b.getBookId();
         dto.title = b.getTitle();
         dto.description = b.getDescription();
         dto.genre = b.getGenre();
@@ -58,6 +61,14 @@ public class BookDTO {
         }
 
         return dto;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -178,5 +189,13 @@ public class BookDTO {
 
     public void setBookFile(URI bookFile) {
         this.bookFile = bookFile;
+    }
+
+    public URI getDeal() {
+        return deal;
+    }
+
+    public void setDeal(URI deal) {
+        this.deal = deal;
     }
 }

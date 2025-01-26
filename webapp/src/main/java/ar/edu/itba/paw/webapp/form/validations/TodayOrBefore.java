@@ -1,17 +1,15 @@
-package ar.edu.itba.paw.webapp.dto.form.validations;
-
+package ar.edu.itba.paw.webapp.form.validations;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Constraint(validatedBy = FileExistsValidator.class)
+@Constraint(validatedBy = TodayOrBeforeValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface FileExists {
-
-    String message() default "Please submit a file";
+public @interface TodayOrBefore {
+    String message() default "The date cannot be in the future";
 
     Class<?>[] groups() default {};
 

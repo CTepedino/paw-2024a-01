@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface OrderService {
 
+    PaginatedContent<Order> searchOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
+
     Order create(long bookId, byte[] receipt, String receiptMimeType);
 
     boolean existsOrder(long bookId);

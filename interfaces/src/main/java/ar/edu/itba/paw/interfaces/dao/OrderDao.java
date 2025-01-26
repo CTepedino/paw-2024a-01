@@ -13,6 +13,9 @@ import java.util.Optional;
 
 public interface OrderDao {
 
+    List<Order> getAllOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int offset, int limit);
+    long getAllOrdersSize(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus);
+
     Optional<Order> find(long buyerId, long bookId);
 
     Optional<Order> findById(long orderId);

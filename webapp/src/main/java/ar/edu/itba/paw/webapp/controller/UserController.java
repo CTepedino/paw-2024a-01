@@ -6,11 +6,10 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
 import ar.edu.itba.paw.webapp.dto.WishlistDTO;
-import ar.edu.itba.paw.webapp.dto.form.UserPostDTO;
-import ar.edu.itba.paw.webapp.dto.form.UserPutDTO;
+import ar.edu.itba.paw.webapp.form.UserPostDTO;
+import ar.edu.itba.paw.webapp.form.UserPutDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,6 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

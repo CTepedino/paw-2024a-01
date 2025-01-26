@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -18,6 +19,61 @@ public class OrderJpaDao implements OrderDao {
 
     @PersistenceContext
     private EntityManager em;
+
+    private void prepareSearchParams(StringBuilder query, Map<String, Object> params, Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus){
+        query.append("WHERE LOWER(b.title) LIKE LOWER(:title)");
+        params.put("title", DaoUtils.prepareSearchString(title));
+        if (bookId != null){
+            query.append(" AND b.book_id = :bookId ");
+            params.put("bookId", bookId);
+        }
+        if (writerId != null){
+            query.append(" AND b.writer_id = :writerId ");
+            params.put("writerId", writerId);
+        }
+        if (readerId != null){
+            query.append(" AND o.buyer_id = :readerId ");
+            params.put("readerId", readerId);
+        }
+        if (orderStatus != null){
+            query.append(" AND o.status = orderStatus ");
+            params.put("orderStatus", orderStatus.toString());
+        }
+    }
+
+    @Override
+    public List<Order> getAllOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int offset, int limit) {
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+
+        nativeQueryStr.append("SELECT o.order_id FROM orders o JOIN books b ON o.book_id = b.book_id ");
+        prepareSearchParams(nativeQueryStr, params, bookId, writerId, readerId, title, orderStatus);
+        nativeQueryStr.append(" ORDER BY o.date DESC ");
+
+        Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
+        for(Map.Entry<String, Object> entry : params.entrySet()) {
+            nativeQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        TypedQuery<Order> query = em.createQuery("FROM Order o WHERE o.orderId IN :idList ORDER BY o.date DESC", Order.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public long getAllOrdersSize(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus) {
+        StringBuilder nativeQueryStr = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+
+        nativeQueryStr.append("SELECT COUNT(DISTINCT o.order_id) FROM orders o JOIN books b ON o.book_id = b.book_id");
+        prepareSearchParams(nativeQueryStr, params, bookId, writerId, readerId, title, orderStatus);
+
+        Query query = em.createNativeQuery(nativeQueryStr.toString());
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        return ((BigInteger) query.getSingleResult()).longValue();
+    }
 
     @Override
     public Optional<Order> find(long buyerId, long bookId) {

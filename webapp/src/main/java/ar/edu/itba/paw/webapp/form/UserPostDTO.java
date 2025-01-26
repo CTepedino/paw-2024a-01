@@ -1,11 +1,10 @@
-package ar.edu.itba.paw.webapp.dto.form;
+package ar.edu.itba.paw.webapp.form;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import ar.edu.itba.paw.webapp.form.validations.UniqueEmail;
 
-public class UserPutDTO {
+import javax.validation.constraints.*;
+
+public class UserPostDTO {
 
     @NotNull
     @NotEmpty
@@ -17,12 +16,23 @@ public class UserPutDTO {
     @Size(max = 255)
     private String lastName;
 
+    @NotNull
+    @NotEmpty
+    @Size(max = 255)
+    @Email
+    @UniqueEmail
+    private String email;
+
+    @Size(min=6, max=255)
+    private String password;
+
     @Size(min = 6, max = 22)
     @Pattern(regexp = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9.-]+")
     private String cbu;
 
     @Size(max=500)
     private String description;
+
 
     public String getFirstName() {
         return firstName;
@@ -38,6 +48,22 @@ public class UserPutDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getCbu() {

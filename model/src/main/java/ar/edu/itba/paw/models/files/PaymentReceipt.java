@@ -26,4 +26,13 @@ public class PaymentReceipt extends File{
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getFileExtension(){
+        return switch (type) {
+            case "application/pdf" -> ".pdf";
+            case "image/png" -> ".png";
+            case "image/jpeg" -> ".jpg";
+            default -> "";
+        };
+    }
 }

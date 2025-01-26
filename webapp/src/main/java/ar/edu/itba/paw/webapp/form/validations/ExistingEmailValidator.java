@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.dto.form.validations;
+package ar.edu.itba.paw.webapp.form.validations;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,20 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
-
+public class ExistingEmailValidator implements ConstraintValidator<ExistingEmail, String> {
     private final UserService us;
 
     @Autowired
-    public UniqueEmailValidator(UserService us){
+    public ExistingEmailValidator(UserService us){
         this.us = us;
     }
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return us.findByEmail(s).isEmpty();
+        return us.findByEmail(s).isPresent();
     }
 
     @Override
-    public void initialize(UniqueEmail constraintAnnotation) {}
+    public void initialize(ExistingEmail constraintAnnotation) {}
 }

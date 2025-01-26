@@ -223,4 +223,10 @@ public class OrderServiceImpl implements OrderService {
         LOGGER.atDebug().setMessage("User {} {} the book {}").addArgument(order.getBuyer().getUserId()).addArgument(isRecommended? "recommended":"de-recommended").addArgument(order.getBook().getBookId()).log();
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Order> searchOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize) {
+        List<Order> orders = orderDao.getAllOrders(bookId, writerId, readerId, title, orderStatus, (pageNumber-1)*pageSize, pageSize);
+        return new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getAllOrdersSize(bookId, writerId, readerId, title, orderStatus));
+    }
 }

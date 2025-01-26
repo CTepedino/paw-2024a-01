@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.function.Function;
 
 public class ReviewDTO {
+
+    private long reviewerId;
     private int rating;
     private String review;
     private LocalDateTime date;
@@ -23,6 +25,7 @@ public class ReviewDTO {
 
     public static ReviewDTO fromReview(UriInfo uriInfo, Review r){
         final ReviewDTO dto = new ReviewDTO();
+        dto.reviewerId = r.getReviewer().getUserId();
         dto.rating = r.getRating();
         dto.review = r.getReview();
         dto.date = r.getDate();
@@ -32,6 +35,14 @@ public class ReviewDTO {
         dto.reviewer = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(r.getReviewer().getUserId())).build();
 
         return dto;
+    }
+
+    public long getReviewerId() {
+        return reviewerId;
+    }
+
+    public void setReviewerId(long reviewerId) {
+        this.reviewerId = reviewerId;
     }
 
     public int getRating() {
