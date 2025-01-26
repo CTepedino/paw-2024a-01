@@ -246,18 +246,18 @@ public class BookServiceImpl implements BookService {
                 books = Collections.emptyList();
                 size = 0;
             } else {
-                books = bookDao.getRecommendations(book.get(), title,genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber-1)*pageSize, pageSize);
-                size = bookDao.getRecommendationsSize(book.get(), title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+                books = bookDao.getRecommendations(book.get(), title,genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, writerId, ownerId, (pageNumber-1)*pageSize, pageSize);
+                size = bookDao.getRecommendationsSize(book.get(), title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId);
             }
         } else {
             switch(orderBy) {
                 case BookSearchOrderBy.NEW_DEALS -> {
-                    books = bookDao.getBooksWithNewDeals(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge,(pageNumber-1)*pageSize, pageSize);
-                    size = bookDao.getBooksWithNewDealsSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+                    books = bookDao.getBooksWithNewDeals(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId,(pageNumber-1)*pageSize, pageSize);
+                    size = bookDao.getBooksWithNewDealsSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId);
                 }
                 case BookSearchOrderBy.BEST_SELLERS -> {
-                    books = bookDao.getTopBooks(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge,(pageNumber-1)*pageSize, pageSize);
-                    size = bookDao.getTopBooksSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+                    books = bookDao.getTopBooks(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId,(pageNumber-1)*pageSize, pageSize);
+                    size = bookDao.getTopBooksSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId);
                 }
                 default -> {
                     books = bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, writerId, ownerId, (pageNumber - 1) * pageSize, pageSize);
