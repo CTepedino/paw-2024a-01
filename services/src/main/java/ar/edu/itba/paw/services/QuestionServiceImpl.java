@@ -33,7 +33,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final MailService ms;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(QuestionServiceImpl.class);
 
 
     public QuestionServiceImpl(QuestionDao questionDao, BookService bs, UserService us, MailService ms) {
@@ -229,5 +229,19 @@ public class QuestionServiceImpl implements QuestionService {
         Question q = questionDao.findById(questionId).orElseThrow(QuestionNotFoundException::new);
 
         return q.getBook().getWriter().getEmail().equals(email);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Question> searchQuestions(Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered, int pageNumber, int pageSize) {
+        List<Question> questions = questionDao.getAll(bookId, writerId, questionerId, excludeQuestioner, isAnswered, (pageNumber-1)*pageSize, pageSize);
+
+        return new PaginatedContent<>(questions, pageNumber, pageSize, questionDao.getAllSize(bookId, writerId, questionerId, excludeQuestioner, isAnswered));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Question> findById(long questionId) {
+        return questionDao.findById(questionId);
     }
 }

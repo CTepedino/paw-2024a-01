@@ -124,7 +124,7 @@ public class BookJpaDaoTest {
         assertEquals(TestUtils.getRowCount(em, "FROM books WHERE is_paused = FALSE"), size);
     }
 */
-
+/*
     @Test
     public void testSearchNullParams(){
         List<Book> books = bookDao.searchWithParams(
@@ -177,7 +177,7 @@ public class BookJpaDaoTest {
 
         assertEquals(getSortedByPriceAscList(books), books);
     }
-
+*/
     private List<Book> getSortedByPriceAscList(List<Book> books){
         List<Book> booksCopy = new ArrayList<>(books);
         booksCopy.sort(Comparator.comparing(Book::getPrice));

@@ -8,11 +8,12 @@ import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.webapp.dto.OrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import java.util.List;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
@@ -42,9 +43,10 @@ public class OrderController {
             @QueryParam("size") @DefaultValue("20") final int size
     ){
         final PaginatedContent<Order> orderPage = os.searchOrders(bookId, readerId, writerId, title, status, page, size);
+        List<OrderDTO> orders = orderPage.getPage().stream().map(OrderDTO.mapper(uriInfo)).toList();
 
         return paginatedResponse(
-                Response.ok(new GenericEntity<>(orderPage){}), orderPage, uriInfo
+                Response.ok(new GenericEntity<>(orders){}), orderPage, uriInfo
         ).build();
     }
 

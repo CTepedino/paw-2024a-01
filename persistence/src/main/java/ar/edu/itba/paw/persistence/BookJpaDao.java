@@ -241,9 +241,7 @@ public class BookJpaDao implements BookDao {
         nativeQueryStr.append(" ORDER BY d.start_date DESC ");
 
         Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
-        for(Map.Entry<String, Object> entry : params.entrySet()) {
-            nativeQuery.setParameter(entry.getKey(), entry.getValue());
-        }
+        params.forEach(nativeQuery::setParameter);
 
         TypedQuery<Book> query = em.createQuery("FROM Book b WHERE b.bookId IN :idList ORDER BY b.deal.startDate DESC", Book.class);
 
