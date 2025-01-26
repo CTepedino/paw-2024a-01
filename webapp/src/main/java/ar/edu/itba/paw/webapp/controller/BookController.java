@@ -62,6 +62,8 @@ public class BookController {
             @QueryParam("min_suggested_age") final Integer minSuggestedAge,
             @QueryParam("max_suggested_age") final Integer maxSuggestedAge,
             @QueryParam("order_by") @DefaultValue("PUBLICATION_DATE_DESC") final BookSearchOrderBy orderBy,
+            @QueryParam("writer_id") final Long writerId,
+            @QueryParam("owner_id") final Long ownerId,
             @QueryParam("recommendations_for") final Long recommendationsForId
     ){
         final PaginatedContent<Book> booksPage = bs.listBooks(
@@ -72,6 +74,7 @@ public class BookController {
                 minSuggestedAge, maxSuggestedAge,
                 orderBy,
                 page, pageSize,
+                writerId, ownerId,
                 recommendationsForId
         );
         final List<BookDTO> books = booksPage.getPage()

@@ -67,8 +67,6 @@ public interface BookService {
 
     void checkBookSalesCategory(Book book);
 
-
-
     PaginatedContent<Book> listBooks(
         String title,
         BookGenre genre,
@@ -81,6 +79,8 @@ public interface BookService {
         BookSearchOrderBy orderBy,
         int pageNumber,
         int pageSize,
+        Long writerId,
+        Long ownerId,
         Long recommendationsForId
     );
 }

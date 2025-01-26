@@ -234,7 +234,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Book> listBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize, Long recommendationsForId) {
+    public PaginatedContent<Book> listBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int pageNumber, int pageSize, Long writerId, Long ownerId, Long recommendationsForId) {
         if (pageNumber < 1){
             throw new InvalidPageException();
         }
@@ -260,8 +260,8 @@ public class BookServiceImpl implements BookService {
                     size = bookDao.getTopBooksSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
                 }
                 default -> {
-                    books = bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, (pageNumber - 1) * pageSize, pageSize);
-                    size = bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge);
+                    books = bookDao.searchWithParams(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, orderBy, writerId, ownerId, (pageNumber - 1) * pageSize, pageSize);
+                    size = bookDao.getSearchSize(title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId);
                 }
             }
         }

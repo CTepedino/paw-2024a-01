@@ -52,38 +52,17 @@ public interface BookDao {
 
     BookFile createOrUpdateBookFile(Book book, byte[] bookFile);
 
-    List<Book> searchWithParams(
-            String title,
-            BookGenre genre,
-            BigDecimal minPrice,
-            BigDecimal maxPrice,
-            Integer minPageCount,
-            Integer maxPageCount,
-            Integer minSuggestedAge,
-            Integer maxSuggestedAge,
-            BookSearchOrderBy orderBy,
-            int offset,
-            int limit
-    );
-    long getSearchSize(
-            String title,
-            BookGenre genre,
-            BigDecimal minPrice,
-            BigDecimal maxPrice,
-            Integer minPageCount,
-            Integer maxPageCount,
-            Integer minSuggestedAge,
-            Integer maxSuggestedAge
-    );
+    List<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, Long writerId, Long ownerId, int offset, int limit);
+    long getSearchSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId);
 
-    List<Book> getRecommendations(Book book, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, int offset, int limit);
-    long getRecommendationsSize(Book book, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge);
+    List<Book> getRecommendations(Book book, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, Long writerId, Long ownerId, int offset, int limit);
+    long getRecommendationsSize(Book book, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId);
 
-    List<Book> getTopBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, int offset, int limit);
-    long getTopBooksSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge);
+    List<Book> getTopBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId, int offset, int limit);
+    long getTopBooksSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId);
 
-    List<Book> getBooksWithNewDeals(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, int offset, int limit);
-    long getBooksWithNewDealsSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge);
+    List<Book> getBooksWithNewDeals(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId, int offset, int limit);
+    long getBooksWithNewDealsSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId);
 
     List<Book> getWriterBooks(
             long writerId,
