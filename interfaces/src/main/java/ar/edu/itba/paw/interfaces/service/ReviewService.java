@@ -20,12 +20,6 @@ public interface ReviewService {
 
     PaginatedContent<Review> getAll(long bookId, ReviewOrderBy orderBy, int pageNumber, int pageSize);
 
-    int getAverageRating(long bookId);
-
     Optional<Review> findLoggedUserReview(long bookId);
-
-    Map<Long, Float> getBookRatings(List<Book> books);
-
-    long getReviewCount(long bookId);
 
 }

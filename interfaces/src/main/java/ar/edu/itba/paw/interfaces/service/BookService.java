@@ -41,14 +41,24 @@ public interface BookService {
             byte[] bookFile
     );
 
+    PaginatedContent<Book> listBooks(
+            String title,
+            BookGenre genre,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            Integer minPageCount,
+            Integer maxPageCount,
+            Integer minSuggestedAge,
+            Integer maxSuggestedAge,
+            BookSearchOrderBy orderBy,
+            int pageNumber,
+            int pageSize,
+            Long writerId,
+            Long ownerId,
+            Long recommendationsForId
+    );
 
     Optional<Book> findById(long id);
-
-    PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize);
-
-    PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic);
-
-    PaginatedContent<Book> getProfileBooks(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter, boolean ownsProfile);
 
     boolean isAuthor(Book book, long userId);
     boolean isAuthor(long bookId, String email);
@@ -56,31 +66,12 @@ public interface BookService {
     PaginatedContent<BookGenre> getGenres(BookGenreOrderBy orderBy, int pageNumber, int pageSize);
 
     Optional<WishlistItem> findWishlistItem(long userId, long bookId);
-
     void toggleWishlist(long userId, long bookId);
-
     void removeFromWishlist(long userId, long bookId);
-
     PaginatedContent<WishlistItem> getWishlist(long userId, int pageNumber, int pageSize);
 
     void recheckWriterPausedBooks(long userId);
 
     void checkBookSalesCategory(Book book);
 
-    PaginatedContent<Book> listBooks(
-        String title,
-        BookGenre genre,
-        BigDecimal minPrice,
-        BigDecimal maxPrice,
-        Integer minPageCount,
-        Integer maxPageCount,
-        Integer minSuggestedAge,
-        Integer maxSuggestedAge,
-        BookSearchOrderBy orderBy,
-        int pageNumber,
-        int pageSize,
-        Long writerId,
-        Long ownerId,
-        Long recommendationsForId
-    );
 }

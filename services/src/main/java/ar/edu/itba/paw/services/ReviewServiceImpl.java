@@ -25,7 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final UserService us;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     @Autowired
     public ReviewServiceImpl(ReviewDao reviewDao, UserService us){
@@ -87,12 +87,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
-    public int getAverageRating(long bookId) {
-        return reviewDao.getAverageRating(bookId);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public Optional<Review> findLoggedUserReview(long bookId) {
         if(us.isLoggedIn()){
             return reviewDao.find(bookId, us.getLoggedUser().get());
@@ -100,19 +94,4 @@ public class ReviewServiceImpl implements ReviewService {
         return Optional.empty();
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Map<Long, Float> getBookRatings(List<Book> books){
-        Map<Long, Float> ratings = new HashMap<>();
-        books.forEach(book -> {
-                ratings.put(book.getBookId(), getAverageRating(book.getBookId())/2f);});
-
-        return ratings;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public long getReviewCount(long bookId) {
-        return reviewDao.getAllSize(bookId);
-    }
 }

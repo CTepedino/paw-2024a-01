@@ -19,13 +19,10 @@ import ar.edu.itba.paw.webapp.dto.BookDTO;
 import ar.edu.itba.paw.webapp.dto.ReviewDTO;
 import ar.edu.itba.paw.webapp.dto.WriterMonthlyAnalyticsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.List;

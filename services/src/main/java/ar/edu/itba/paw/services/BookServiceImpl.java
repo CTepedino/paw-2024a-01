@@ -96,39 +96,6 @@ public class BookServiceImpl implements BookService {
         return bookDao.findById(id);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<Book> getWriterBooks(long writerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize) {
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> books =  bookDao.getWriterBooks(writerId, title, orderBy, (pageNumber-1)*pageSize, pageSize);
-
-        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getWriterBooksSize(writerId, title));
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getWriterBooks(writerId, title, orderBy, page.getPageCount(), pageSize);
-        } else {
-            return page;
-        }
-    }
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean isPublic) {
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Book> books = bookDao.getOwnedBooks(readerId, title, orderBy, (pageNumber-1)*pageSize, pageSize, isPublic);
-
-        PaginatedContent<Book> page = new PaginatedContent<>(books, pageNumber, pageSize, bookDao.getOwnedBooksSize(readerId, title, isPublic));
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getOwnedBooks(readerId, title, orderBy, page.getPageCount(), pageSize, isPublic);
-        } else {
-            return page;
-        }
-    }
-
 
     @Transactional(readOnly = true)
     @Override
@@ -164,16 +131,6 @@ public class BookServiceImpl implements BookService {
         }
 
         return new PaginatedContent<>(genres, pageNumber, pageSize, BookGenre.values().length);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<Book> getProfileBooks(long userId, String title, BookSearchOrderBy orderBy, int pageNumber, int pageSize, boolean asWriter , boolean ownsProfile) {
-        if (asWriter){
-            return getWriterBooks(userId, title, orderBy, pageNumber, pageSize);
-        } else {
-            return getOwnedBooks(userId, title, orderBy, pageNumber, pageSize, !ownsProfile);
-        }
     }
 
     @Transactional(readOnly = true)

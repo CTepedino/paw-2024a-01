@@ -13,12 +13,10 @@ public interface DealService {
 
     Optional<Deal> get(long bookId);
 
-    public void update(long bookId, BigDecimal price, int duration);
+    void update(long bookId, BigDecimal price, int duration);
 
     void endDeal(long bookId);
 
     void deleteExpiredDeals();
-
-    List<Book> getNewDeals(int size);
 
 }

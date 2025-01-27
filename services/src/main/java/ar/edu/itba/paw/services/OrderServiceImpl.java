@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserService us;
     private final MailService ms;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     public OrderServiceImpl(final OrderDao orderDao, UserService us, MailService ms, BookService bs){
@@ -103,38 +103,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Optional<Order> findById(long orderId) {
         return orderDao.findById(orderId);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize){
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Order> orders = orderDao.getReaderOrders(readerId, title, orderStatus,(pageNumber-1)*pageSize, pageSize);
-        PaginatedContent<Order> page = new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getReaderOrdersSize(readerId, title, orderStatus));
-
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getReaderOrders(readerId, title, orderStatus, page.getPageCount(), pageSize);
-        } else {
-            return page;
-        }
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public PaginatedContent<Order> getWriterOrders(long writerId,  String title, OrderStatus orderStatus, int pageNumber, int pageSize){
-        if (pageNumber < 1){
-            throw new InvalidPageException();
-        }
-        List<Order> orders = orderDao.getWriterOrders(writerId, title, orderStatus,(pageNumber-1)*pageSize, pageSize);
-
-        PaginatedContent<Order> page = new PaginatedContent<>(orders, pageNumber, pageSize, orderDao.getWriterOrdersSize(writerId, title, orderStatus));
-        if (page.getPage().isEmpty() && page.getPageCount() != 0){
-            return getWriterOrders(writerId, title, orderStatus,page.getPageCount(), pageSize);
-        } else {
-            return page;
-        }
     }
 
     private void sendReceipt(Order order, byte[] receipt, String receiptMimeType, OrderStatus fromStatus) {

@@ -14,22 +14,6 @@ public interface QuestionService {
 
     void answer(long questionId, String answer);
 
-    PaginatedContent<Question> getAll(long bookId, int pageNumber, int pageSize, boolean isAuthor);
-
-    PaginatedContent<Question> getAllFromUser(long userId, int pageNumber, int pageSize);
-
-    PaginatedContent<Question> getAllFromUserAndBook(long userId, long bookId, int pageNumber, int pageSize);
-
-    PaginatedContent<Question> getAllFromWriter(long userId, int pageNumber, int pageSize);
-
-    PaginatedContent<Question> getAllFromWriter(long userId, int pageNumber, int pageSize, boolean viewComplete);
-
-    PaginatedContent<Question> getAllFullQuestionsNotUser(long userId, long bookId, int pageNumber, int pageSize);
-
-    long getQuestionCount(long bookId, User user, boolean includeUnanswered);
-
-    long getMyQuestionCount(long userId, long bookId);
-
     boolean canAnswer(long questionId, String email);
 
     Optional<Question> findById(long questionId);

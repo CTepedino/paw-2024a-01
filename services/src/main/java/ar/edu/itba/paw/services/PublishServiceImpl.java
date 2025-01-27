@@ -22,7 +22,7 @@ public class PublishServiceImpl implements PublishService {
     private final BookService bs;
     private final UserService us;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(PublishServiceImpl.class);
 
     @Autowired
     public PublishServiceImpl(BookService bs, UserService us) {

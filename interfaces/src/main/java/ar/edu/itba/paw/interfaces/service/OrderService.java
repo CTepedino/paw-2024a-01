@@ -23,11 +23,6 @@ public interface OrderService {
 
     PaymentReceipt getReceipt(long id);
 
-    PaginatedContent<Order> getReaderOrders(long readerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize);
-
-    PaginatedContent<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus,int pageNumber, int pageSize);
-
-
     boolean loggedUserOwnsBook(long bookId);
 
     boolean hasBookFileAccess(long bookId, String email);

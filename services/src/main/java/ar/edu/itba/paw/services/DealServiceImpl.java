@@ -22,6 +22,8 @@ public class DealServiceImpl implements DealService {
 
     private final DealDao dealDao;
 
+    //TODO: logger
+
     @Autowired
     public DealServiceImpl(DealDao dealDao){
         this.dealDao = dealDao;
@@ -67,12 +69,6 @@ public class DealServiceImpl implements DealService {
             }
 
         }
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Book> getNewDeals(int size) {
-        return dealDao.getNewDeals(size);
     }
 
 }

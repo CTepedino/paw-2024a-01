@@ -2,27 +2,20 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.ProfilePicture;
-import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserAnalytics;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
 import ar.edu.itba.paw.webapp.dto.WishlistDTO;
 import ar.edu.itba.paw.webapp.dto.WriterMonthlyAnalyticsDTO;
-import ar.edu.itba.paw.webapp.form.UserPostDTO;
-import ar.edu.itba.paw.webapp.form.UserPutDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.net.URI;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
@@ -47,14 +40,14 @@ public class UserController { //TODO: exceptions. custom mime types
         this.as = as;
     }
 
-    @POST
+/*    @POST
     @Produces(value = MediaType.APPLICATION_JSON)
     @Consumes(value = MediaType.APPLICATION_JSON)
     public Response createUser(@Valid final UserPostDTO userDto){
         final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
         final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
         return Response.created(uri).build();
-    }
+    }*/
 
     @GET
     @Path("/{id}")
@@ -69,7 +62,7 @@ public class UserController { //TODO: exceptions. custom mime types
         }
     }
 
-    @PUT
+/*    @PUT
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Consumes(value = {MediaType.APPLICATION_JSON})
@@ -85,7 +78,7 @@ public class UserController { //TODO: exceptions. custom mime types
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-    }
+    }*/
 
 
     @GET
