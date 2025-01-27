@@ -1,15 +1,31 @@
 package ar.edu.itba.paw.webapp.dto;
 
+import ar.edu.itba.paw.models.Analytics;
+import ar.edu.itba.paw.models.users.UserAnalytics;
+
+import javax.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
 import java.net.URI;
 
 public class WriterMonthlyAnalyticsDTO {
 
     private long writerId;
     private long orderCount;
-    private long salesTotal;
+    private BigDecimal salesTotal;
 
     private URI writer;
-    private URI previousMonth;
+
+    public static WriterMonthlyAnalyticsDTO fromAnalytics(UriInfo uriInfo, UserAnalytics a){
+        WriterMonthlyAnalyticsDTO dto = new WriterMonthlyAnalyticsDTO();
+
+        dto.writerId = a.getUserId();
+        dto.orderCount = a.getOrderCount();
+        dto.salesTotal = a.getTotalSales();
+
+        dto.writer = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.writerId)).build();
+
+        return dto;
+    }
 
     public long getWriterId() {
         return writerId;
@@ -27,11 +43,11 @@ public class WriterMonthlyAnalyticsDTO {
         this.orderCount = orderCount;
     }
 
-    public long getSalesTotal() {
+    public BigDecimal getSalesTotal() {
         return salesTotal;
     }
 
-    public void setSalesTotal(long salesTotal) {
+    public void setSalesTotal(BigDecimal salesTotal) {
         this.salesTotal = salesTotal;
     }
 
@@ -43,11 +59,4 @@ public class WriterMonthlyAnalyticsDTO {
         this.writer = writer;
     }
 
-    public URI getPreviousMonth() {
-        return previousMonth;
-    }
-
-    public void setPreviousMonth(URI previousMonth) {
-        this.previousMonth = previousMonth;
-    }
 }

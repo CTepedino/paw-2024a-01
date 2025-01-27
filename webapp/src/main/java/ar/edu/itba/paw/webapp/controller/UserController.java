@@ -1,23 +1,29 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.ProfilePicture;
+import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserAnalytics;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
 import ar.edu.itba.paw.webapp.dto.WishlistDTO;
+import ar.edu.itba.paw.webapp.dto.WriterMonthlyAnalyticsDTO;
 import ar.edu.itba.paw.webapp.form.UserPostDTO;
 import ar.edu.itba.paw.webapp.form.UserPutDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,14 +35,16 @@ public class UserController { //TODO: exceptions. custom mime types
 
     private final UserService us;
     private final BookService bs;
+    private final AnalyticsService as;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public UserController(final UserService us, BookService bs){
+    public UserController(final UserService us, final BookService bs, final AnalyticsService as){
         this.us = us;
         this.bs = bs;
+        this.as = as;
     }
 
     @POST
@@ -119,6 +127,24 @@ public class UserController { //TODO: exceptions. custom mime types
         return Response.ok(wishlistItem).build();
     }
 
+    @GET
+    @Path("{user_id}/monthly_analytics/{year_month: \\d{4}-\\d{2}}}") //yyyy-MM
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getMonthlyWriterAnalytics(
+            @PathParam("user_id") final long userId,
+            @PathParam("year_month") final String period
+    ){
+        //TODO -> on the service
+        YearMonth yearMonth = YearMonth.parse(period);
 
+
+        UserAnalytics analytics = new UserAnalytics(
+                userId,
+                as.getTotalOrdersForWriterForMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue()),
+                as.getTotalSalesForWriterForMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue())
+        );
+
+        return Response.ok(WriterMonthlyAnalyticsDTO.fromAnalytics(uriInfo, analytics)).build();
+    }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.YearMonth;
@@ -67,14 +68,27 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Transactional(readOnly = true)
     @Override
-    public String getTotalSalesForMonth(long writerId, int year, int month){
-        BigDecimal sales = orderDao.getTotalSalesForMonth(writerId, year, month);
+    public BigDecimal getTotalSalesForWriterForMonth(long writerId, int year, int month){
+        /*BigDecimal sales = orderDao.getTotalSalesForMonth(writerId, year, month);
         if(sales == null){
             sales=BigDecimal.valueOf(0);
         }
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("AR").build());
         currencyFormatter.setMaximumFractionDigits(0);
-        return currencyFormatter.format(sales);
+        return currencyFormatter.format(sales);*/
+        return orderDao.getTotalSalesForMonth(writerId, year, month);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long getTotalOrdersForBookForMonth(long bookId, int year, int month) {
+        return orderDao.getTotalOrdersForMonthForBook(bookId, year, month);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public BigDecimal getTotalSalesForBookForMonth(long bookId, int year, int month) {
+        return orderDao.getTotalSalesForMonthForBook(bookId, year, month);
     }
 
     @Transactional(readOnly = true)

@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.webapp.dto;
 
+import ar.edu.itba.paw.models.books.BookAnalytics;
+import ar.edu.itba.paw.models.users.UserAnalytics;
+
+import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;
 import java.net.URI;
 
@@ -10,7 +14,18 @@ public class BookMonthlyAnalyticsDTO {
     private BigDecimal salesTotal;
 
     private URI book;
-    private URI previousMonth;
+
+    public static BookMonthlyAnalyticsDTO fromAnalytics(UriInfo uriInfo, BookAnalytics a){
+        BookMonthlyAnalyticsDTO dto = new BookMonthlyAnalyticsDTO();
+
+        dto.bookId = a.getBookId();
+        dto.orderCount = a.getOrderCount();
+        dto.salesTotal = a.getTotalSales();
+
+        dto.book = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).build();
+
+        return dto;
+    }
 
     public long getBookId() {
         return bookId;
@@ -44,11 +59,4 @@ public class BookMonthlyAnalyticsDTO {
         this.book = book;
     }
 
-    public URI getPreviousMonth() {
-        return previousMonth;
-    }
-
-    public void setPreviousMonth(URI previousMonth) {
-        this.previousMonth = previousMonth;
-    }
 }

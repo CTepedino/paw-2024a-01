@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -13,8 +14,10 @@ import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
+import ar.edu.itba.paw.models.users.UserAnalytics;
 import ar.edu.itba.paw.webapp.dto.BookDTO;
 import ar.edu.itba.paw.webapp.dto.ReviewDTO;
+import ar.edu.itba.paw.webapp.dto.WriterMonthlyAnalyticsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
@@ -24,6 +27,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,14 +40,16 @@ public class BookController {
 
     private final BookService bs;
     private final ReviewService rs;
+    private final AnalyticsService as;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public BookController(BookService bs, ReviewService rs){
+    public BookController(final BookService bs, final ReviewService rs, final AnalyticsService as){
         this.bs = bs;
         this.rs = rs;
+        this.as = as;
     }
 
 
@@ -150,5 +156,24 @@ public class BookController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(ReviewDTO.fromReview(uriInfo, review.get())).build();
+    }
+
+    @GET
+    @Path("{book_id}/monthly_analytics/{year_month: \\d{4}-\\d{2}}}") //yyyy-MM
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getMonthlyBookAnalytics(
+            @PathParam("book_id") final long bookId,
+            @PathParam("year_month") final String period
+    ){
+        //TODO -> on the service
+        YearMonth yearMonth = YearMonth.parse(period);
+
+        UserAnalytics analytics = new UserAnalytics(
+                bookId,
+                as.getTotalOrdersForBookForMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue()),
+                as.getTotalSalesForBookForMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue())
+        );
+
+        return Response.ok(WriterMonthlyAnalyticsDTO.fromAnalytics(uriInfo, analytics)).build();
     }
 }

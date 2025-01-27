@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.books.AnalyticsBook;
 import ar.edu.itba.paw.models.books.Book;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 public interface AnalyticsService {
@@ -17,7 +18,7 @@ public interface AnalyticsService {
 
     BigDecimal getTotalSalesForBook(long bookId);
 
-    String getTotalSalesForMonth(long writerId, int year, int month);
+    BigDecimal getTotalSalesForWriterForMonth(long writerId, int year, int month);
 
     long getTotalOrdersForWriterForMonth(long writerId, int year, int month);
 
@@ -30,5 +31,8 @@ public interface AnalyticsService {
     List<Integer> getYears();
 
     List<Integer> getMonths();
+
+    long getTotalOrdersForBookForMonth(long bookId, int year, int month);
+    BigDecimal getTotalSalesForBookForMonth(long bookId, int year, int month);
 
 }
