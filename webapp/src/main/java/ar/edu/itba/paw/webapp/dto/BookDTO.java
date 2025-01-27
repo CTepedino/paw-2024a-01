@@ -24,6 +24,8 @@ public class BookDTO {
     private boolean isPaused;
     private BookSalesCategory salesCategory;
     private int averageRating;
+    private long orderCount;
+    private BigDecimal salesTotal;
 
     private URI self;
     private URI writer;
@@ -50,6 +52,8 @@ public class BookDTO {
         dto.isPaused = b.isPaused();
         dto.salesCategory = b.getSalesCategory();
         dto.averageRating = b.getAverageRating();
+        dto.orderCount = b.getOrderCount();
+        dto.salesTotal = b.getSalesTotal();
 
         dto.self = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).build();
         dto.writer = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(b.getWriter().getUserId())).build();
@@ -197,5 +201,21 @@ public class BookDTO {
 
     public void setDeal(URI deal) {
         this.deal = deal;
+    }
+
+    public long getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(long orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    public BigDecimal getSalesTotal() {
+        return salesTotal;
+    }
+
+    public void setSalesTotal(BigDecimal salesTotal) {
+        this.salesTotal = salesTotal;
     }
 }

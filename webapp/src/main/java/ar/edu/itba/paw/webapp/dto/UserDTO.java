@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.users.UserRoles;
 import ar.edu.itba.paw.models.users.WriterCategory;
 
 import javax.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +23,8 @@ public class UserDTO {
     private String description;
     private WriterCategory writerCategory;
     private Collection<UserRoles> roles;
+    private Long orderCount;
+    private BigDecimal salesTotal;
 
     private URI self;
     private URI profilePicture;
@@ -29,7 +32,6 @@ public class UserDTO {
     public static Function<User, UserDTO> mapper(UriInfo uriInfo){
         return u -> fromUser(uriInfo, u);
     }
-
 
     public static UserDTO fromUser(UriInfo uriInfo, User u){
         final UserDTO dto = new UserDTO();
@@ -42,6 +44,8 @@ public class UserDTO {
         dto.description = u.getDescription();
         dto.writerCategory = u.getWriterCategory();
         dto.roles = u.getRoles();
+        dto.orderCount = u.getOrderCount();
+        dto.salesTotal = u.getSalesTotal();
 
         dto.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).build();
         dto.profilePicture = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("profilePicture").build();
@@ -137,4 +141,19 @@ public class UserDTO {
         this.roles = roles;
     }
 
+    public Long getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(Long orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    public BigDecimal getSalesTotal() {
+        return salesTotal;
+    }
+
+    public void setSalesTotal(BigDecimal salesTotal) {
+        this.salesTotal = salesTotal;
+    }
 }

@@ -3,9 +3,12 @@ package ar.edu.itba.paw.models.users;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookSalesCategory;
 import ar.edu.itba.paw.models.files.ProfilePicture;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.SelectBeforeUpdate;
 
 import javax.management.relation.Role;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Entity
@@ -64,6 +67,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private WriterCategory writerCategory;
 
+    @Formula("(SELECT COUNT(DISTINCT order_id) FROM orders o JOIN books b ON o.book_id = b.book_id WHERE o.status = 'COMPLETED' AND b.writer_id = user_id)")
+    private Long orderCount;
+
+    @Formula("(SELECT SUM(o.price) FROM orders o JOIN books b ON o.book_id = b.book_id WHERE o.status = 'COMPLETED' AND b.writer_id = user_id)")
+    private BigDecimal salesTotal;
 
     User(){}
 
@@ -201,5 +209,21 @@ public class User {
     }
     public void setProfilePicture(ProfilePicture profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public Long getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(Long orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    public BigDecimal getSalesTotal() {
+        return salesTotal;
+    }
+
+    public void setSalesTotal(BigDecimal salesTotal) {
+        this.salesTotal = salesTotal;
     }
 }

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.OrderService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
@@ -83,7 +84,7 @@ public class UserController { //TODO: exceptions. custom mime types
     @Path("/{id}/profilePicture")
     @Produces(value = {"image/jpeg", "image/png"})
     public Response getProfilePicture(@PathParam("id") final long id){
-        ProfilePicture image = us.getProfilePicture(id); //TODO: si no existe, 404 o 204?
+        ProfilePicture image = us.getProfilePicture(id);
 
         return Response.ok(image.getFile()).build();
     }

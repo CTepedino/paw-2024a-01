@@ -79,6 +79,12 @@ public class Book {
     @Formula("(SELECT AVG(r.rating) FROM reviews r WHERE r.book_id = book_id)")
     private Double averageRating;
 
+    @Formula("(SELECT COALESCE(COUNT(DISTINCT order_id), 0) FROM orders o WHERE o.status = 'COMPLETED' AND o.book_id = book_id)")
+    private long orderCount;
+
+    @Formula("(SELECT COALESCE(SUM(o.price), 0) FROM orders o WHERE o.status = 'COMPLETED' AND o.book_id = book_id)")
+    private BigDecimal salesTotal;
+
     Book(){}
 
     public Book(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate, User writer, boolean isPaused) {
@@ -224,7 +230,27 @@ public class Book {
     }
 
 
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
     public int getAverageRating(){
          return averageRating!=null? (int)Math.ceil(averageRating):0;
+    }
+
+    public long getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(long orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    public BigDecimal getSalesTotal() {
+        return salesTotal;
+    }
+
+    public void setSalesTotal(BigDecimal salesTotal) {
+        this.salesTotal = salesTotal;
     }
 }
