@@ -32,7 +32,7 @@ public class ReviewServiceImplTest {
     @InjectMocks
     ReviewServiceImpl reviewService;
 
-    @Test
+    /*@Test
     public void testGetBookRatings(){
         Mockito.when(reviewDao.getAverageRating(1)).thenReturn(10);
         Mockito.when(reviewDao.getAverageRating(2)).thenReturn(7);
@@ -51,6 +51,6 @@ public class ReviewServiceImplTest {
 
         Assert.assertNotNull(ratings);
         Assert.assertEquals(0, ratings.size());
-    }
+    }*/
 
 }

@@ -1,15 +1,11 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.models.users.UserRoles;
-import ar.edu.itba.paw.webapp.auth.AccessHelper;
+import ar.edu.itba.paw.webapp.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,10 +15,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.StreamUtils;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.springframework.web.cors.CorsConfiguration.ALL;
 
 
 @EnableWebSecurity
@@ -32,15 +34,46 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
     @Autowired
-    private AccessHelper accessHelper;
+    private JwtRequestFilter jwtRequestFilter;
+    @Autowired
+    private BasicAuthFilter basicAuthFilter;
+    @Autowired
+    private  AccessHelper accessHelper;
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public JwtTokenUtil jwtTokenUtil(){
+        return new JwtTokenUtil(userDetailsService);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList(ALL));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.addAllowedHeader(ALL);
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Link", "Location", "ETag", "X-Total-Count"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new UnauthorizedRequestHandler();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -50,7 +83,14 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
             http.sessionManagement()
+
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+            .and().exceptionHandling()
+                .authenticationEntryPoint(new UnauthorizedRequestHandler())
+                .accessDeniedHandler(new ForbiddenRequestHandler())
+
+            .and().headers().cacheControl().disable()
 
             .and().authorizeHttpRequests()
                 /*.requestMatchers("/signup", "/login", "/validate", "/forgotPassword", "/resendResetCode/{userId:\\d+}").anonymous()
@@ -72,16 +112,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()*/
                 .anyRequest().permitAll()
 
-            .and().exceptionHandling()
-                .accessDeniedPage("/403")
 
-           // .and().cors()
+            .and().cors()
+            .and().csrf().disable()
 
-            .and().csrf().disable();
-
-            http.headers().frameOptions().sameOrigin();
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(basicAuthFilter, UsernamePasswordAuthenticationFilter.class);
     }
-
 
     @Override
     public void configure(final WebSecurity web) {

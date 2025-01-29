@@ -33,11 +33,6 @@ public class CybraryUserDetailsService implements UserDetailsService {
         evs.deleteExpired();
         final User user = us.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No user by the email" + username));
-        String password = user.getPassword();
-
-        if (user.getPassword() == null){
-            password = us.fillMissingWriterData(user.getUserId(),user.getEmail());
-        }
 
         if (!user.isEnabled()){
             us.resendValidation(username);
@@ -45,7 +40,7 @@ public class CybraryUserDetailsService implements UserDetailsService {
 
         List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
 
-        return new CybraryAuthUserDetails(user.getEmail(), password, user.isEnabled(), true, true, true, authorities);
+        return new CybraryAuthUserDetails(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
     }
 
 

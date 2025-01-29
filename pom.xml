@@ -34,6 +34,8 @@
     <jpa.version>2.2</jpa.version>
 
     <jersey.version>2.43</jersey.version>
+
+    <io.jsonwebtoken.version>0.11.5</io.jsonwebtoken.version>
   </properties>
 
 
@@ -260,6 +262,23 @@
         <groupId>org.glassfish.jersey.media</groupId>
         <artifactId>jersey-media-jaxb</artifactId>
         <version>${jersey.version}</version>
+      </dependency>
+
+      <!--JWT-->
+      <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-api</artifactId>
+        <version>${io.jsonwebtoken.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-impl</artifactId>
+        <version>${io.jsonwebtoken.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-jackson</artifactId>
+        <version>${io.jsonwebtoken.version}</version>
       </dependency>
 
     </dependencies>

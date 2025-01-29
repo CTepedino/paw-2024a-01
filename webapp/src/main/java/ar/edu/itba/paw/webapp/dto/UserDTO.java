@@ -44,8 +44,9 @@ public class UserDTO {
         dto.description = u.getDescription();
         dto.writerCategory = u.getWriterCategory();
         dto.roles = u.getRoles();
-        dto.orderCount = u.getOrderCount();
-        dto.salesTotal = u.getSalesTotal();
+        //TODO:
+        //dto.orderCount = u.getOrderCount();
+        //dto.salesTotal = u.getSalesTotal();
 
         dto.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).build();
         dto.profilePicture = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("profilePicture").build();

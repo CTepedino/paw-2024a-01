@@ -67,11 +67,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private WriterCategory writerCategory;
 
-    @Formula("(SELECT COUNT(DISTINCT order_id) FROM orders o JOIN books b ON o.book_id = b.book_id WHERE o.status = 'COMPLETED' AND b.writer_id = user_id)")
+    /*TODO: fix
+    @Formula("(SELECT COALESCE(COUNT(DISTINCT order_id), 0) FROM orders o JOIN books b ON o.book_id = b.book_id WHERE o.status = 'COMPLETED' AND b.writer_id = user_id)")
     private Long orderCount;
 
-    @Formula("(SELECT SUM(o.price) FROM orders o JOIN books b ON o.book_id = b.book_id WHERE o.status = 'COMPLETED' AND b.writer_id = user_id)")
-    private BigDecimal salesTotal;
+    @Formula("(SELECT COALESCE(SUM(o.price), 0) FROM orders o JOIN books b ON o.book_id = b.book_id WHERE o.status = 'COMPLETED' AND b.writer_id = user_id)")
+    private BigDecimal salesTotal;*/
 
     User(){}
 
@@ -210,7 +211,7 @@ public class User {
     public void setProfilePicture(ProfilePicture profilePicture) {
         this.profilePicture = profilePicture;
     }
-
+/*
     public Long getOrderCount() {
         return orderCount;
     }
@@ -225,5 +226,5 @@ public class User {
 
     public void setSalesTotal(BigDecimal salesTotal) {
         this.salesTotal = salesTotal;
-    }
+    }*/
 }
