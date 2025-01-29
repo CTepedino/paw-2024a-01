@@ -95,8 +95,8 @@ public class UserController { //TODO: exceptions. custom mime types
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getWishlist(
             @PathParam("userId") final long id,
-            @QueryParam("page") final int page,
-            @QueryParam("size") final int size
+            @QueryParam("page") @DefaultValue("1") final int page,
+            @QueryParam("size") @DefaultValue("20") final int size
     ){
         PaginatedContent<WishlistItem> wishlistPage = bs.getWishlist(id, page, size);
         List<WishlistDTO> wishlist = wishlistPage.getPage().stream().map(WishlistDTO.mapper(uriInfo)).toList();
@@ -117,7 +117,7 @@ public class UserController { //TODO: exceptions. custom mime types
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        return Response.ok(wishlistItem).build();
+        return Response.ok(WishlistDTO.fromWishlistItem(uriInfo, wishlistItem.get())).build();
     }
 
     @GET
