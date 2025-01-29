@@ -65,7 +65,7 @@ public class OrderJpaDao implements OrderDao {
         StringBuilder nativeQueryStr = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
 
-        nativeQueryStr.append("SELECT COUNT(DISTINCT o.order_id) FROM orders o JOIN books b ON o.book_id = b.book_id");
+        nativeQueryStr.append("SELECT COUNT(DISTINCT o.order_id) FROM orders o JOIN books b ON o.book_id = b.book_id ");
         prepareSearchParams(nativeQueryStr, params, bookId, writerId, readerId, title, orderStatus);
 
         Query query = em.createNativeQuery(nativeQueryStr.toString());

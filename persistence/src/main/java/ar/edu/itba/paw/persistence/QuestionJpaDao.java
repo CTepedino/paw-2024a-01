@@ -154,7 +154,9 @@ public class QuestionJpaDao implements QuestionDao {
             query.append(" AND q.answer IS ").append(isAnswered? "NOT NULL": "NULL");
         }
         int whereIndex = query.indexOf("AND");
-        query.replace(whereIndex, whereIndex + 3,  "WHERE");
+        if (whereIndex != -1) {
+            query.replace(whereIndex, whereIndex + 3, "WHERE");
+        }
     }
 
     @Override

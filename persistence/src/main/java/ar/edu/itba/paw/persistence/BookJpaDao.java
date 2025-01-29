@@ -111,7 +111,7 @@ public class BookJpaDao implements BookDao {
         DaoUtils.addQueryCondition(nativeQueryStr, " AND b.suggested_age >= :minSuggestedAge ", params, "minSuggestedAge", minSuggestedAge);
         DaoUtils.addQueryCondition(nativeQueryStr, " AND b.suggested_age <= :maxSuggestedAge ", params, "maxSuggestedAge", maxSuggestedAge);
         DaoUtils.addQueryCondition(nativeQueryStr, " AND b.writer_id = :writerId ", params, "writerId", writerId);
-        DaoUtils.addQueryCondition(nativeQueryStr, " AND EXISTS (SELECT 1 FROM orders o WHERE o.buyer_id = ownerId AND o.book_id = b.book_id AND o.status = 'COMPLETED') ", params, "ownerId", ownerId);
+        DaoUtils.addQueryCondition(nativeQueryStr, " AND EXISTS (SELECT 1 FROM orders o WHERE o.buyer_id = :ownerId AND o.book_id = b.book_id AND o.status = 'COMPLETED') ", params, "ownerId", ownerId);
     }
 
     @Override

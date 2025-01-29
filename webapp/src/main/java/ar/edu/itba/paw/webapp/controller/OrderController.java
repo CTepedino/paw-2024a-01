@@ -34,15 +34,15 @@ public class OrderController {
     @GET
     @Produces(value = MediaType.APPLICATION_JSON)
     public Response listOrders(
-            @QueryParam("bookId") final Long bookId,
-            @QueryParam("readerId") final Long readerId,
-            @QueryParam("writerId") final Long writerId,
+            @QueryParam("book_id") final Long bookId,
+            @QueryParam("buyer_id") final Long readerId,
+            @QueryParam("seller_id") final Long writerId,
             @QueryParam("title") final String title,
             @QueryParam("status") final OrderStatus status,
             @QueryParam("page") @DefaultValue("1") final int page,
             @QueryParam("size") @DefaultValue("20") final int size
     ){
-        final PaginatedContent<Order> orderPage = os.searchOrders(bookId, readerId, writerId, title, status, page, size);
+        final PaginatedContent<Order> orderPage = os.searchOrders(bookId, writerId, readerId, title, status, page, size);
         List<OrderDTO> orders = orderPage.getPage().stream().map(OrderDTO.mapper(uriInfo)).toList();
 
         return paginatedResponse(

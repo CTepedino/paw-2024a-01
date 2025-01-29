@@ -25,6 +25,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.math.BigDecimal;
 import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -156,14 +157,20 @@ public class BookController {
     }
 
     @GET
-    @Path("{book_id}/monthly_analytics/{year_month: \\d{4}-\\d{2}}}") //yyyy-MM
+    @Path("{book_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getMonthlyBookAnalytics(
             @PathParam("book_id") final long bookId,
             @PathParam("year_month") final String period
     ){
         //TODO -> on the service
-        YearMonth yearMonth = YearMonth.parse(period);
+
+        YearMonth yearMonth;
+        try {
+            yearMonth = YearMonth.parse(period);
+        } catch (DateTimeParseException e){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
         UserAnalytics analytics = new UserAnalytics(
                 bookId,
