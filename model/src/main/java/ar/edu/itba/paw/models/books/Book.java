@@ -79,11 +79,11 @@ public class Book {
     @Formula("(SELECT AVG(r.rating) FROM reviews r WHERE r.book_id = book_id)")
     private Double averageRating;
 
-    @Formula("(SELECT COALESCE(COUNT(DISTINCT order_id), 0) FROM orders o WHERE o.status = 'COMPLETED' AND o.book_id = book_id)")
+    @Formula("(SELECT COALESCE(COUNT(DISTINCT o.order_id), 0) FROM orders o WHERE o.status = 'COMPLETED' AND o.book_id = book_id)")
     private long orderCount;
 
     @Formula("(SELECT COALESCE(SUM(o.price), 0) FROM orders o WHERE o.status = 'COMPLETED' AND o.book_id = book_id)")
-    private BigDecimal salesTotal;
+    private double salesTotal;
 
     Book(){}
 
@@ -246,11 +246,11 @@ public class Book {
         this.orderCount = orderCount;
     }
 
-    public BigDecimal getSalesTotal() {
+    public double getSalesTotal() {
         return salesTotal;
     }
 
-    public void setSalesTotal(BigDecimal salesTotal) {
+    public void setSalesTotal(double salesTotal) {
         this.salesTotal = salesTotal;
     }
 }

@@ -23,8 +23,8 @@ public class UserDTO {
     private String description;
     private WriterCategory writerCategory;
     private Collection<UserRoles> roles;
-    private Long orderCount;
-    private BigDecimal salesTotal;
+    private long orderCount;
+    private double salesTotal;
 
     private URI self;
     private URI profilePicture;
@@ -44,9 +44,9 @@ public class UserDTO {
         dto.description = u.getDescription();
         dto.writerCategory = u.getWriterCategory();
         dto.roles = u.getRoles();
-        //TODO:
-        //dto.orderCount = u.getOrderCount();
-        //dto.salesTotal = u.getSalesTotal();
+
+        dto.orderCount = u.getOrderCount();
+        dto.salesTotal = u.getSalesTotal();
 
         dto.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).build();
         dto.profilePicture = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("profilePicture").build();
@@ -142,19 +142,19 @@ public class UserDTO {
         this.roles = roles;
     }
 
-    public Long getOrderCount() {
+    public long getOrderCount() {
         return orderCount;
     }
 
-    public void setOrderCount(Long orderCount) {
+    public void setOrderCount(long orderCount) {
         this.orderCount = orderCount;
     }
 
-    public BigDecimal getSalesTotal() {
+    public double getSalesTotal() {
         return salesTotal;
     }
 
-    public void setSalesTotal(BigDecimal salesTotal) {
+    public void setSalesTotal(double salesTotal) {
         this.salesTotal = salesTotal;
     }
 }

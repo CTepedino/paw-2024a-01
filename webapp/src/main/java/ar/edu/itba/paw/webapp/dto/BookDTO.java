@@ -25,7 +25,7 @@ public class BookDTO {
     private BookSalesCategory salesCategory;
     private int averageRating;
     private long orderCount;
-    private BigDecimal salesTotal;
+    private double salesTotal;
 
     private URI self;
     private URI writer;
@@ -211,11 +211,11 @@ public class BookDTO {
         this.orderCount = orderCount;
     }
 
-    public BigDecimal getSalesTotal() {
+    public double getSalesTotal() {
         return salesTotal;
     }
 
-    public void setSalesTotal(BigDecimal salesTotal) {
+    public void setSalesTotal(double salesTotal) {
         this.salesTotal = salesTotal;
     }
 }
