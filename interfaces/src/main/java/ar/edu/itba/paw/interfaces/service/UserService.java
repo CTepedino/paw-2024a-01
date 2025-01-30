@@ -21,7 +21,7 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    void giveWriterRole(String cbu);
+    void checkWriterRole(User user);
 
     boolean isCurrentUserPassword(String password);
     void changePassword(long userId, String password);
@@ -41,8 +41,6 @@ public interface UserService {
     ProfilePicture getProfilePicture(long userId);
     void updateProfilePicture(long userId, byte[] profilePicture);
     void deleteProfilePicture(long userId);
-
-    void sendMissingDataEmails();
 
     String fillMissingWriterData(long userId, String password);
 

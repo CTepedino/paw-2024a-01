@@ -3,11 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.exception.ImageNotFoundException;
-import ar.edu.itba.paw.models.exception.InvalidCodeException;
-import ar.edu.itba.paw.models.exception.NoValidationCodeException;
-import ar.edu.itba.paw.models.exception.UnreadableFileException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.orders.OrderStatus;
 import ar.edu.itba.paw.models.users.User;
@@ -41,20 +37,18 @@ public class UserServiceImpl implements UserService {
 
     private final EmailValidationService evs;
     private final ResetCodeService rcs;
-    private final BookService bs;
     private final MailService ms;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, OrderDao orderDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms, BookService bs){
+    public UserServiceImpl(final UserDao userDao, OrderDao orderDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms){
         this.userDao = userDao;
         this.orderDao = orderDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
         this.rcs = rcs;
         this.ms = ms;
-        this.bs = bs;
     }
 
     @Transactional(readOnly = true)
@@ -121,21 +115,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void giveWriterRole(String cbu) {
-        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
-
-        userDao.giveRole(user, UserRoles.WRITER);
-
-        userDao.update(user, user.getFirstName(), user.getLastName(), cbu, user.getDescription());
-
-        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
-
-        Collection<GrantedAuthority> updatedAuth = new HashSet<>(auth.getAuthorities());
-        updatedAuth.add(new SimpleGrantedAuthority(UserRoles.WRITER.toString()));
-
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), updatedAuth);
-
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
+    public void checkWriterRole(User user) {
+        if (user.getCbu()==null){
+            throw new InvalidWriterException();
+        }
+        if (!user.getRoles().contains(UserRoles.WRITER)) {
+            userDao.giveRole(user, UserRoles.WRITER);
+        }
 
         LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(user.getUserId()).log();
     }
@@ -190,14 +176,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfile(long userId, String firstName, String lastName, String cbu, String description) {
         User user = findById(userId).orElseThrow(UserNotFoundException::new);
-
-        String oldCbu = user.getCbu();
-
         userDao.update(user, firstName, lastName, cbu, description);
-
-        if ((user.getRoles().contains(UserRoles.WRITER) && oldCbu==null ) || user.getRoles().isEmpty()){
-            bs.recheckWriterPausedBooks(user.getUserId());
-        }
 
         LOGGER.atDebug().setMessage("Updated profile for user: {}").addArgument(firstName).log();
     }
@@ -253,15 +232,6 @@ public class UserServiceImpl implements UserService {
             return is.readAllBytes();
         } catch (IOException | OutOfMemoryError e){
             throw new UnreadableFileException();
-        }
-    }
-
-    @Transactional(readOnly = true)
-    @Scheduled(cron = "0 0 12 * * ?")
-    @Override
-    public void sendMissingDataEmails(){
-        for (User user: userDao.getUsersWithPausedBooks()){
-            ms.sendMissingDataEmail(user);
         }
     }
 

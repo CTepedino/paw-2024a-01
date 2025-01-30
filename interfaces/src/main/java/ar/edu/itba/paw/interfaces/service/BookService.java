@@ -19,11 +19,7 @@ public interface BookService {
             int suggestedAge,
             LocalDate publishedDate,
 
-            User writer,
-
-            byte[] preview,
-            byte[] cover,
-            byte[] bookFile
+            long writerId
     );
 
     void editPublication(
@@ -34,11 +30,7 @@ public interface BookService {
             BookGenre genre,
             BigDecimal price,
             int pageCount,
-            int suggestedAge,
-
-            byte[] preview,
-            byte[] cover,
-            byte[] bookFile
+            int suggestedAge
     );
 
     PaginatedContent<Book> listBooks(

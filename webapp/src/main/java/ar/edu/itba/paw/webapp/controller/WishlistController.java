@@ -60,6 +60,7 @@ public class WishlistController {
 
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {MediaType.APPLICATION_JSON})
     public Response AddWishlistItem(
             @PathParam("userId") final long userId,
             @FormDataParam("bookId") final long bookId

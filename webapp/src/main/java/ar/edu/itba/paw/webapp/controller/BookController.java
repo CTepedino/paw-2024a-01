@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookAnalytics;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
@@ -14,12 +15,15 @@ import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.UserAnalytics;
+import ar.edu.itba.paw.webapp.dto.input.BookCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.BookDTO;
+import ar.edu.itba.paw.webapp.dto.output.BookMonthlyAnalyticsDTO;
 import ar.edu.itba.paw.webapp.dto.output.ReviewDTO;
 import ar.edu.itba.paw.webapp.dto.output.WriterMonthlyAnalyticsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.math.BigDecimal;
@@ -48,8 +52,6 @@ public class BookController {
         this.rs = rs;
         this.as = as;
     }
-
-
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -86,6 +88,26 @@ public class BookController {
         return paginatedResponse(
                 Response.ok(new GenericEntity<>(books){}), booksPage, uriInfo
         ).build();
+    }
+
+    @POST
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response addBook(@Valid BookCreateDTO bookDTO){
+        long bookId = bs.create(
+                bookDTO.getTitle(),
+                bookDTO.getDescription(),
+                bookDTO.getGenre(),
+                bookDTO.getPrice(),
+                bookDTO.getPageCount(),
+                bookDTO.getSuggestedAge(),
+                bookDTO.getPublicationDate(),
+                bookDTO.getWriterId()
+        );
+
+        return Response
+                .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(bookId)).build())
+                .build();
     }
 
     @GET
@@ -162,8 +184,6 @@ public class BookController {
             @PathParam("book_id") final long bookId,
             @PathParam("year_month") final String period
     ){
-        //TODO -> on the service
-
         YearMonth yearMonth;
         try {
             yearMonth = YearMonth.parse(period);
@@ -171,12 +191,8 @@ public class BookController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        UserAnalytics analytics = new UserAnalytics(
-                bookId,
-                as.getTotalOrdersForBookForMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue()),
-                as.getTotalSalesForBookForMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue())
-        );
+        BookAnalytics analytics = as.getBookAnalytics(bookId, yearMonth);
 
-        return Response.ok(WriterMonthlyAnalyticsDTO.fromAnalytics(uriInfo, analytics)).build();
+        return Response.ok(BookMonthlyAnalyticsDTO.fromAnalytics(uriInfo, analytics)).build();
     }
 }

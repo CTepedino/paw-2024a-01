@@ -82,7 +82,7 @@ public class UserController { //TODO: exceptions. custom mime types
 
     @PUT
     @Path("/{id}/password")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {MediaType.APPLICATION_JSON})
     public Response modifyPassword(
             @PathParam("id") final long id,
             @Size(min = 6, max = 255) @FormDataParam("password") String password
@@ -120,7 +120,7 @@ public class UserController { //TODO: exceptions. custom mime types
     }
 
     @GET
-    @Path("{user_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM:
+    @Path("{user_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM: //TODO: opción para obtener las de un año entero?
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getMonthlyWriterAnalytics(
             @PathParam("user_id") final long userId,

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.dao.DealDao;
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.DealService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
@@ -13,6 +14,7 @@ import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.*;
 
 import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.users.UserRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +35,23 @@ public class BookServiceImpl implements BookService {
     private final BookDao bookDao;
     private final OrderDao orderDao;
 
+    private final UserService us;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(BookServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, final OrderDao orderDao){
+    public BookServiceImpl(final BookDao bookDao, final OrderDao orderDao, final UserService us){
         this.bookDao = bookDao;
         this.orderDao = orderDao;
+        this.us = us;
     }
 
     @Transactional
     @Override
-    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishedDate, User writer, byte[] preview, byte[] cover, byte[] bookFile){
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishedDate, long writerId){
+        User writer = us.findById(writerId).orElseThrow(UserNotFoundException::new);
 
+        us.checkWriterRole(writer);
         Book book = bookDao.create(
                 title,
                 description,
@@ -54,12 +61,8 @@ public class BookServiceImpl implements BookService {
                 suggestedAge,
                 publishedDate,
                 writer,
-                false
+                true
         );
-
-        bookDao.createPreviewFile(book, preview);
-        bookDao.createCoverImage(book, cover);
-        bookDao.createOrUpdateBookFile(book, bookFile);
 
         LOGGER.atDebug().setMessage("Created book: {}").addArgument(title).log();
         return book.getBookId();
@@ -67,25 +70,25 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, byte[] cover, byte[] preview, byte[] bookFile) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
 
         boolean pause = book.isPaused();
 
-        if (cover != null/* && !cover.isEmpty()*/) {
+/*        if (cover != null*//* && !cover.isEmpty()*//*) {
             bookDao.updateCoverImage(book, cover);
         }
-        if (preview != null/* && !preview.isEmpty()*/) {
+        if (preview != null*//* && !preview.isEmpty()*//*) {
             bookDao.updatePreviewFile(book, preview);
         }
-        if (bookFile != null/* && !bookFile.isEmpty()*/) {
+        if (bookFile != null*//* && !bookFile.isEmpty()*//*) {
             bookDao.createOrUpdateBookFile(book, bookFile);
             if (pause){
                 if (book.getWriter().getCbu()!=null){
                     pause = false;
                 }
             }
-        }
+        }*/
         bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, pause);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
