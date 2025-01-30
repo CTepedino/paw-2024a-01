@@ -90,6 +90,8 @@ public class UserController { //TODO: exceptions. custom mime types
             @Size(min = 6, max = 255) @FormDataParam("password") String password
     ){
         us.changePassword(id, password);
+
+        return Response.ok().build();
     }
 
     @GET
