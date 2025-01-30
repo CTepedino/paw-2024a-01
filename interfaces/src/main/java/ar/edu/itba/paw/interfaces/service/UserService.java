@@ -4,6 +4,8 @@ import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -26,7 +28,7 @@ public interface UserService {
 
     void updateProfile(long userId, String firstName, String lastName, String cbu, String description);
 
-    void updateProfilePicture(long userId, byte[] profilePicture);
+
 
     Optional<User> getLoggedUser();
 
@@ -37,6 +39,8 @@ public interface UserService {
     Collection<UserRoles> getRoles(long userId);
 
     ProfilePicture getProfilePicture(long userId);
+    void updateProfilePicture(long userId, byte[] profilePicture);
+    void deleteProfilePicture(long userId);
 
     void sendMissingDataEmails();
 

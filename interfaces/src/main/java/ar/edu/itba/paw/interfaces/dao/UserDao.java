@@ -17,8 +17,8 @@ public interface UserDao {
     void updatePassword(User user, String password);
 
     ProfilePicture createProfilePicture(User user, byte[] profilePicture);
-
     void updateProfilePicture(User user, byte[] profilePicture);
+    void deleteProfilePicture(User user);
 
     Optional<User> findById(long id);
 

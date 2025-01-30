@@ -60,6 +60,11 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
+    public void deleteProfilePicture(User user) {
+        em.remove(user.getProfilePicture());
+    }
+
+    @Override
     public void giveRole(User user, UserRoles role) {
         user.getRoles().add(role);
     }

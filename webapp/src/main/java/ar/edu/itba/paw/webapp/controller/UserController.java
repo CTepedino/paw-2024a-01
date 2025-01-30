@@ -10,9 +10,12 @@ import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserAnalytics;
 import ar.edu.itba.paw.webapp.dto.input.UserCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.UserEditDTO;
+import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
 import ar.edu.itba.paw.webapp.dto.output.UserDTO;
 import ar.edu.itba.paw.webapp.dto.output.WishlistDTO;
 import ar.edu.itba.paw.webapp.dto.output.WriterMonthlyAnalyticsDTO;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +48,15 @@ public class UserController { //TODO: exceptions. custom mime types
         this.as = as;
     }
 
+    @POST
+    @Produces(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response createUser(@Valid final UserCreateDTO userDto){
+        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
+        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
+        return Response.created(uri).build();
+    }
+
     @GET
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -56,15 +68,6 @@ public class UserController { //TODO: exceptions. custom mime types
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-    }
-
-    @POST
-    @Produces(value = MediaType.APPLICATION_JSON)
-    @Consumes(value = MediaType.APPLICATION_JSON)
-    public Response createUser(@Valid final UserCreateDTO userDto){
-        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
-        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
-        return Response.created(uri).build();
     }
 
     @PUT
@@ -85,15 +88,36 @@ public class UserController { //TODO: exceptions. custom mime types
         }
     }
 
-
     @GET
-    @Path("/{id}/profilePicture")
+    @Path("/{id}/profile_picture")
     @Produces(value = {"image/jpeg", "image/png"})
     public Response getProfilePicture(@PathParam("id") final long id){
         ProfilePicture image = us.getProfilePicture(id);
 
-        return Response.ok(image.getFile()).build();
+        return Response.ok(image.getFile(), "image/jpeg").build(); //TODO: downsizing y cache
     }
+
+    @PUT
+    @Path("/{id}/profile_picture")
+    @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
+    public Response setProfilePicture(
+            @PathParam("id") final long id,
+            @ImageFile @FormDataParam("image")  final FormDataBodyPart image
+    ){
+        us.updateProfilePicture(id, image.getEntityAs(byte[].class));
+        return Response
+                .ok()
+                .contentLocation(uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(id)).path("profile_picture").build())
+                .build();
+    }
+
+    @DELETE
+    @Path("/{id}/profile_picture")
+    public Response deleteProfilePicture(@PathParam("id") final long id){
+        us.deleteProfilePicture(id);
+        return Response.noContent().build();
+    }
+
 
 
     @GET

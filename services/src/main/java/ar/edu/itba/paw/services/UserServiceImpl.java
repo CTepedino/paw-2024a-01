@@ -222,16 +222,44 @@ public class UserServiceImpl implements UserService {
         LOGGER.atDebug().setMessage("Updated profile picture for user: {}").addArgument(user.getFirstName()).log();
     }
 
+    @Transactional
+    @Override
+    public void deleteProfilePicture(long userId) {
+        Optional<User> maybeUser = userDao.findById(userId);
+        if (maybeUser.isPresent()){
+            if (maybeUser.get().getProfilePicture() != null){
+                userDao.deleteProfilePicture(maybeUser.get());
+            }
+        }
+    }
+
     @Transactional(readOnly = true)
     @Override
     public Collection<UserRoles> getRoles(long userId){
         return findById(userId).orElseThrow(UserNotFoundException::new).getRoles();
     }
 
+
     @Transactional(readOnly = true)
     @Override
     public ProfilePicture getProfilePicture(long userId){
-        return findById(userId).orElseThrow(UserNotFoundException::new).getProfilePicture();
+        ProfilePicture image = findById(userId).orElseThrow(UserNotFoundException::new).getProfilePicture();
+        if (image == null){
+            return new ProfilePicture(userId, getDefaultProfilePicture());
+        }
+        return image;
+    }
+
+    private byte[] getDefaultProfilePicture(){
+        InputStream is = getClass().getResourceAsStream("/images/defaultUser.jpg");
+        if (is == null){
+            throw new ImageNotFoundException();
+        }
+        try {
+            return is.readAllBytes();
+        } catch (IOException | OutOfMemoryError e){
+            throw new UnreadableFileException();
+        }
     }
 
     @Transactional(readOnly = true)
