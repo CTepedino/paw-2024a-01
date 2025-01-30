@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.paw.models.books.BookAnalytics;
+import ar.edu.itba.paw.models.users.UserAnalytics;
+
 import java.math.BigDecimal;
+import java.time.YearMonth;
 
 public interface AnalyticsService {
 
-    BigDecimal getTotalSalesForWriterForMonth(long writerId, int year, int month);
-    long getTotalOrdersForWriterForMonth(long writerId, int year, int month);
-
-
-    long getTotalOrdersForBookForMonth(long bookId, int year, int month);
-    BigDecimal getTotalSalesForBookForMonth(long bookId, int year, int month);
-
+    UserAnalytics getUserAnalytics(long userId, YearMonth yearMonth);
+    BookAnalytics getBookAnalytics(long bookId, YearMonth yearMonth);
 }

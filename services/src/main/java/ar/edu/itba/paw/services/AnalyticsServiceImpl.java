@@ -2,11 +2,14 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
+import ar.edu.itba.paw.models.books.BookAnalytics;
+import ar.edu.itba.paw.models.users.UserAnalytics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.YearMonth;
 
 @Service
 public class AnalyticsServiceImpl implements AnalyticsService {
@@ -20,28 +23,21 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Transactional(readOnly = true)
     @Override
-    public long getTotalOrdersForWriterForMonth(long writerId, int year, int month){
-        return orderDao.getTotalOrdersForMonthForWriter(writerId, year, month);
+    public UserAnalytics getUserAnalytics(long userId, YearMonth yearMonth) {
+        return new UserAnalytics(
+                userId,
+                orderDao.getWriterTotalOrdersPerMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue()),
+                orderDao.getWriterTotalSalesPerMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue())
+        );
     }
 
     @Transactional(readOnly = true)
     @Override
-    public BigDecimal getTotalSalesForWriterForMonth(long writerId, int year, int month){
-        //TODO: la API deberia devolver el formato o solo el número?
-        return orderDao.getTotalSalesForMonth(writerId, year, month);
+    public BookAnalytics getBookAnalytics(long bookId, YearMonth yearMonth) {
+        return new BookAnalytics(
+                bookId,
+                orderDao.getBookTotalOrdersPerMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue()),
+                orderDao.getBookTotalSalesPerMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue())
+        );
     }
-
-    @Transactional(readOnly = true)
-    @Override
-    public long getTotalOrdersForBookForMonth(long bookId, int year, int month) {
-        return orderDao.getTotalOrdersForMonthForBook(bookId, year, month);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public BigDecimal getTotalSalesForBookForMonth(long bookId, int year, int month) {
-        return orderDao.getTotalSalesForMonthForBook(bookId, year, month);
-    }
-
-
 }

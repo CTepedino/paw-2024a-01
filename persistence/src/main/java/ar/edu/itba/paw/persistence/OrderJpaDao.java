@@ -245,7 +245,7 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public BigDecimal getTotalSalesForMonth(long writerId, int year, int month) {
+    public BigDecimal getWriterTotalSalesPerMonth(long writerId, int year, int month) {
         Query query = em.createQuery(
         """
                 SELECT COALESCE(SUM(o.price), 0) FROM Order o
@@ -263,7 +263,7 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public BigDecimal getTotalSalesForMonthForBook(long bookId, int year, int month) {
+    public BigDecimal getBookTotalSalesPerMonth(long bookId, int year, int month) {
         Query query = em.createQuery(
         """
                 SELECT COALESCE(SUM(o.price), 0) FROM Order o
@@ -281,7 +281,7 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public long getTotalOrdersForMonthForBook(long bookId, int year, int month) {
+    public long getBookTotalOrdersPerMonth(long bookId, int year, int month) {
         Map<String, Object> params = new HashMap<>();
         params.put("bookId", bookId);
         params.put("year", year);
@@ -295,7 +295,7 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public long getTotalOrdersForMonthForWriter(long writerId, int year, int month) {
+    public long getWriterTotalOrdersPerMonth(long writerId, int year, int month) {
         Map<String, Object> params = new HashMap<>();
         params.put("writerId", writerId);
         params.put("year", year);

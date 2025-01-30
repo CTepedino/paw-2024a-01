@@ -24,7 +24,7 @@ public interface UserService {
     void giveWriterRole(String cbu);
 
     boolean isCurrentUserPassword(String password);
-    void changePassword(String password);
+    void changePassword(long userId, String password);
 
     void updateProfile(long userId, String firstName, String lastName, String cbu, String description);
 

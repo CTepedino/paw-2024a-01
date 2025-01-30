@@ -1,50 +1,44 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
-import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserAnalytics;
+import ar.edu.itba.paw.webapp.dto.input.PasswordEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.UserCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.UserEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
 import ar.edu.itba.paw.webapp.dto.output.UserDTO;
-import ar.edu.itba.paw.webapp.dto.output.WishlistDTO;
 import ar.edu.itba.paw.webapp.dto.output.WriterMonthlyAnalyticsDTO;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Optional;
-
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
 @Path("users")
 @Component
 public class UserController { //TODO: exceptions. custom mime types
 
     private final UserService us;
-    private final BookService bs;
     private final AnalyticsService as;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public UserController(final UserService us, final BookService bs, final AnalyticsService as){
+    public UserController(final UserService us, final AnalyticsService as){
         this.us = us;
-        this.bs = bs;
         this.as = as;
     }
 
@@ -88,6 +82,16 @@ public class UserController { //TODO: exceptions. custom mime types
         }
     }
 
+    @PUT
+    @Path("/{id}/password")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response modifyPassword(
+            @PathParam("id") final long id,
+            @Size(min = 6, max = 255) @FormDataParam("password") String password
+    ){
+        us.changePassword(id, password);
+    }
+
     @GET
     @Path("/{id}/profile_picture")
     @Produces(value = {"image/jpeg", "image/png"})
@@ -118,8 +122,6 @@ public class UserController { //TODO: exceptions. custom mime types
         return Response.noContent().build();
     }
 
-
-
     @GET
     @Path("{user_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM:
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -127,7 +129,7 @@ public class UserController { //TODO: exceptions. custom mime types
             @PathParam("user_id") final long userId,
             @PathParam("year_month") final String period
     ){
-        //TODO -> on the service
+
         YearMonth yearMonth;
         try {
             yearMonth = YearMonth.parse(period);
@@ -135,44 +137,9 @@ public class UserController { //TODO: exceptions. custom mime types
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        UserAnalytics analytics = new UserAnalytics(
-                userId,
-                as.getTotalOrdersForWriterForMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue()),
-                as.getTotalSalesForWriterForMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue())
-        );
-
+        UserAnalytics analytics = as.getUserAnalytics(userId, yearMonth);
         return Response.ok(WriterMonthlyAnalyticsDTO.fromAnalytics(uriInfo, analytics)).build();
     }
 
-
-    @GET
-    @Path("{userId}/wishlist")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getWishlist(
-            @PathParam("userId") final long id,
-            @QueryParam("page") @DefaultValue("1") final int page,
-            @QueryParam("size") @DefaultValue("20") final int size
-    ){
-        PaginatedContent<WishlistItem> wishlistPage = bs.getWishlist(id, page, size);
-        List<WishlistDTO> wishlist = wishlistPage.getPage().stream().map(WishlistDTO.mapper(uriInfo)).toList();
-        return paginatedResponse(
-                Response.ok(new GenericEntity<>(wishlist){}), wishlistPage, uriInfo
-        ).build();
-    }
-
-    @GET
-    @Path("{userId}/wishlist/{bookId}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getWishlistItem(
-            @PathParam("userId") final long userId,
-            @PathParam("bookId") final long bookId
-    ){
-        Optional<WishlistItem> wishlistItem = bs.findWishlistItem(userId, bookId);
-        if (wishlistItem.isEmpty()){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.ok(WishlistDTO.fromWishlistItem(uriInfo, wishlistItem.get())).build();
-    }
 
 }

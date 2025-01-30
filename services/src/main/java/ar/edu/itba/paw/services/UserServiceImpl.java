@@ -178,16 +178,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changePassword(String password) {
+    public void changePassword(long userId, String password) {
         String encodedPassword = passwordEncoder.encode(password);
-        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
-        User user = findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
-
-
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
         userDao.updatePassword(user, encodedPassword);
-
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), encodedPassword, auth.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         LOGGER.atDebug().setMessage("Changed password for userId: {}").addArgument(user.getUserId()).log();
     }
