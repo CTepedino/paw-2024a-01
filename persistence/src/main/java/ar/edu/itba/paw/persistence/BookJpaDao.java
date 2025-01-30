@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
-import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
@@ -35,14 +34,18 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, boolean isPaused) {
+    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         book.setTitle(title);
         book.setDescription(description);
         book.setGenre(genre);
         book.setPrice(price);
         book.setPageCount(pageCount);
         book.setSuggestedAge(suggestedAge);
-        book.setPaused(isPaused);
+    }
+
+    @Override
+    public void unpause(Book book){
+        book.setPaused(false);
     }
 
     @Override
@@ -50,38 +53,39 @@ public class BookJpaDao implements BookDao {
         book.setSalesCategory(bookSalesCategory);
     }
 
-    @Override
-    public CoverImage createCoverImage(Book book, byte[] coverImage) {
+    private void createCoverImage(Book book, byte[] coverImage) {
         CoverImage cover = new CoverImage(book.getBookId(), coverImage);
         em.persist(cover);
-        return cover;
     }
 
-    @Override
-    public BookPreview createPreviewFile(Book book, byte[] previewFile) {
+    private void createPreviewFile(Book book, byte[] previewFile) {
         BookPreview preview = new BookPreview(book.getBookId(), previewFile);
         em.persist(preview);
-        return preview;
     }
 
-    private BookFile createBookFile(Book book, byte[] bookFile) {
+    private void createBookFile(Book book, byte[] bookFile) {
         BookFile file = new BookFile(book.getBookId(), bookFile);
         em.persist(file);
-        return file;
     }
 
     @Override
-    public void updateCoverImage(Book book, byte[] coverImage) {
-        book.getCoverImage().setFile(coverImage);
+    public CoverImage createOrUpdateCoverImage(Book book, byte[] coverImage) {
+        if (book.getCoverImage()==null){
+            createCoverImage(book, coverImage);
+        } else {
+            book.getCoverImage().setFile(coverImage);
+        }
+        return book.getCoverImage();
     }
 
     @Override
-    public void updatePreviewFile(Book book, byte[] previewFile) {
-        book.getPreview().setFile(previewFile);
-    }
-
-    private void updateBookFile(Book book, byte[] bookFile) {
-        book.getBookFile().setFile(bookFile);
+    public BookPreview createOrUpdatePreview(Book book, byte[] preview) {
+        if (book.getPreview()==null){
+            createPreviewFile(book, preview);
+        } else {
+            book.getPreview().setFile(preview);
+        }
+        return book.getPreview();
     }
 
     @Override
@@ -89,7 +93,7 @@ public class BookJpaDao implements BookDao {
         if (book.getBookFile()==null){
             createBookFile(book, bookFile);
         } else {
-            updateBookFile(book, bookFile);
+            book.getBookFile().setFile(bookFile);
         }
         return book.getBookFile();
     }

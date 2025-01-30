@@ -22,11 +22,11 @@ public class ControllerUtils {
         return responseBuilder;
     }
 
-    public static <T extends File> Response.ResponseBuilder fileResponse(T file){
+    public static <T extends File> Response.ResponseBuilder fileResponse(T file, String mediaType){
         if (file == null){
             return Response.status(Response.Status.NOT_FOUND);
         }
-        return Response.ok(file.getFile());
+        return Response.ok(file.getFile(), mediaType);
     }
 
 

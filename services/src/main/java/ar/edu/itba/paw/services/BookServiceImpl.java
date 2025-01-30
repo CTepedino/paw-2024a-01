@@ -73,8 +73,6 @@ public class BookServiceImpl implements BookService {
     public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        boolean pause = book.isPaused();
-
 /*        if (cover != null*//* && !cover.isEmpty()*//*) {
             bookDao.updateCoverImage(book, cover);
         }
@@ -89,7 +87,7 @@ public class BookServiceImpl implements BookService {
                 }
             }
         }*/
-        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, pause);
+        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 
@@ -222,5 +220,30 @@ public class BookServiceImpl implements BookService {
             }
         }
         return new PaginatedContent<>(books, pageNumber, pageSize, size);
+    }
+
+    @Transactional
+    @Override
+    public void setCoverImage(long bookId, byte[] coverImage) {
+        Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        bookDao.createOrUpdateCoverImage(book, coverImage);
+    }
+
+    @Transactional
+    @Override
+    public void setPreview(long bookId, byte[] preview) {
+        Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        bookDao.createOrUpdatePreview(book, preview);
+    }
+
+    @Transactional
+    @Override
+    public void setBookFile(long bookId, byte[] file) {
+        Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
+        bookDao.unpause(book);
+
+        bookDao.createOrUpdateBookFile(book, file);
     }
 }

@@ -16,10 +16,14 @@ import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.UserAnalytics;
 import ar.edu.itba.paw.webapp.dto.input.BookCreateDTO;
+import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
+import ar.edu.itba.paw.webapp.dto.input.validations.PdfFile;
 import ar.edu.itba.paw.webapp.dto.output.BookDTO;
 import ar.edu.itba.paw.webapp.dto.output.BookMonthlyAnalyticsDTO;
 import ar.edu.itba.paw.webapp.dto.output.ReviewDTO;
 import ar.edu.itba.paw.webapp.dto.output.WriterMonthlyAnalyticsDTO;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -126,7 +130,18 @@ public class BookController {
     @Produces(value = {"image/jpeg"})
     public Response getBookCover(@PathParam("id") final long id){
         CoverImage coverImage = bs.findById(id).orElseThrow(BookNotFoundException::new).getCoverImage();
-        return fileResponse(coverImage).build();
+        return fileResponse(coverImage, "image/jpeg").build();
+    }
+
+    @PUT
+    @Path("/{id}/cover")
+    @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
+    public Response setBookCover(
+            @PathParam("id") final long id,
+            @ImageFile @FormDataParam("cover") FormDataBodyPart image
+            ){
+        bs.setCoverImage(id, image.getValueAs(byte[].class));
+        return Response.ok().build();
     }
 
     @GET
@@ -134,7 +149,18 @@ public class BookController {
     @Produces(value = {"application/pdf"})
     public Response getBookPreview(@PathParam("id") final long id){
         BookPreview preview = bs.findById(id).orElseThrow(BookNotFoundException::new).getPreview();
-        return fileResponse(preview).build();
+        return fileResponse(preview, "application/pdf").build();
+    }
+
+    @PUT
+    @Path("/{id}/preview")
+    @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
+    public Response setBookPreview(
+            @PathParam("id") final long id,
+            @PdfFile @FormDataParam("cover") FormDataBodyPart pdf
+    ){
+        bs.setPreview(id, pdf.getValueAs(byte[].class));
+        return Response.ok().build();
     }
 
     @GET
@@ -142,7 +168,18 @@ public class BookController {
     @Produces(value = {"application/pdf"})
     public Response getBookFile(@PathParam("id") final long id){
         BookFile bookFile = bs.findById(id).orElseThrow(BookNotFoundException::new).getBookFile();
-        return fileResponse(bookFile).build();
+        return fileResponse(bookFile, "application/pdf").build();
+    }
+
+    @PUT
+    @Path("/{id}/book_file")
+    @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
+    public Response setBookFile(
+            @PathParam("id") final long id,
+            @PdfFile @FormDataParam("cover") FormDataBodyPart pdf
+    ){
+        bs.setBookFile(id, pdf.getValueAs(byte[].class));
+        return Response.ok().build();
     }
 
     @GET

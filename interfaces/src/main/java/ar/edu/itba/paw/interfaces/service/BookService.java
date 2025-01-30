@@ -66,4 +66,7 @@ public interface BookService {
 
     void checkBookSalesCategory(Book book);
 
+    void setCoverImage(long bookId, byte[] coverImage);
+    void setPreview(long bookId, byte[] preview);
+    void setBookFile(long bookId, byte[] file);
 }

@@ -24,6 +24,8 @@ import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
+
 @Path("users")
 @Component
 public class UserController { //TODO: exceptions. custom mime types
@@ -98,7 +100,7 @@ public class UserController { //TODO: exceptions. custom mime types
     public Response getProfilePicture(@PathParam("id") final long id){
         ProfilePicture image = us.getProfilePicture(id);
 
-        return Response.ok(image.getFile(), "image/jpeg").build(); //TODO: downsizing y cache
+        return fileResponse(image, "image/jpeg").build(); //TODO: downsizing y cache
     }
 
     @PUT

@@ -38,19 +38,17 @@ public interface BookDao {
             BookGenre genre,
             BigDecimal price,
             int pageCount,
-            int suggestedAge,
-            boolean isPaused
+            int suggestedAge
     );
+
+    void unpause(Book book);
 
     void updateSalesCategory(Book book, BookSalesCategory bookSalesCategory);
 
-    CoverImage createCoverImage(Book book, byte[] coverImage);
-    BookPreview createPreviewFile(Book book, byte[] previewFile);
-
-    void updateCoverImage(Book book, byte[] coverImage);
-    void updatePreviewFile(Book book, byte[] previewFile);
-
+    CoverImage createOrUpdateCoverImage(Book book, byte[] coverImage);
+    BookPreview createOrUpdatePreview(Book book, byte[] previewFile);
     BookFile createOrUpdateBookFile(Book book, byte[] bookFile);
+
 
     List<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, Long writerId, Long ownerId, int offset, int limit);
     long getSearchSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId);
