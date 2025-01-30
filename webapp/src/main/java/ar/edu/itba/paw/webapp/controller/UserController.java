@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserAnalytics;
-import ar.edu.itba.paw.webapp.dto.input.PasswordEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.UserCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.UserEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
@@ -16,7 +15,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
@@ -111,10 +109,7 @@ public class UserController { //TODO: exceptions. custom mime types
             @ImageFile @FormDataParam("image")  final FormDataBodyPart image
     ){
         us.updateProfilePicture(id, image.getEntityAs(byte[].class));
-        return Response
-                .ok()
-                .contentLocation(uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(id)).path("profile_picture").build())
-                .build();
+        return Response.ok().build();
     }
 
     @DELETE
