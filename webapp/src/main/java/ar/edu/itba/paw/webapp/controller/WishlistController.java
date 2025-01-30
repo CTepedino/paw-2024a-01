@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.webapp.dto.output.WishlistDTO;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -55,5 +56,29 @@ public class WishlistController {
         }
 
         return Response.ok(WishlistDTO.fromWishlistItem(uriInfo, wishlistItem.get())).build();
+    }
+
+    @POST
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response AddWishlistItem(
+            @PathParam("userId") final long userId,
+            @FormDataParam("bookId") final long bookId
+    ){
+        bs.addToWishlist(userId, bookId);
+
+        return Response
+                .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(bookId)).build())
+                .build();
+    }
+
+    @DELETE
+    @Path("{bookId}")
+    public Response RemoveWishlistItem(
+        @PathParam("userId") final long userId,
+        @PathParam("bookId") final long bookId
+    ){
+        bs.removeFromWishlist(userId, bookId);
+
+        return Response.noContent().build();
     }
 }

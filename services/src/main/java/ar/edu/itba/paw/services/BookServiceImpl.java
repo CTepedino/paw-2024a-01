@@ -141,12 +141,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void toggleWishlist(long userId, long bookId) {
-        if (findWishlistItem(userId, bookId).isPresent()){
-            bookDao.removeFromWishlist(userId, bookId);
-        } else {
-            bookDao.addToWishlist(userId, bookId);
-        }
+    public void addToWishlist(long userId, long bookId) {
+        bookDao.findById(bookId).ifPresent(__ -> bookDao.addToWishlist(userId, bookId));
     }
 
     @Transactional
