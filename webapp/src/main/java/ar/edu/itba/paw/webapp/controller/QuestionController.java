@@ -4,7 +4,7 @@ import ar.edu.itba.paw.interfaces.service.QuestionService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
 import ar.edu.itba.paw.models.questions.Question;
-import ar.edu.itba.paw.webapp.dto.QuestionDTO;
+import ar.edu.itba.paw.webapp.dto.output.QuestionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

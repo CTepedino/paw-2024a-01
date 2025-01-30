@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
@@ -15,9 +14,9 @@ import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.UserAnalytics;
-import ar.edu.itba.paw.webapp.dto.BookDTO;
-import ar.edu.itba.paw.webapp.dto.ReviewDTO;
-import ar.edu.itba.paw.webapp.dto.WriterMonthlyAnalyticsDTO;
+import ar.edu.itba.paw.webapp.dto.output.BookDTO;
+import ar.edu.itba.paw.webapp.dto.output.ReviewDTO;
+import ar.edu.itba.paw.webapp.dto.output.WriterMonthlyAnalyticsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

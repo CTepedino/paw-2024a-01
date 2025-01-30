@@ -35,7 +35,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableAsync
 @ComponentScan({"ar.edu.itba.paw.webapp.controller",
-                //TODO: "ar.edu.itba.paw.webapp.dto.form.validations",
+                "ar.edu.itba.paw.webapp.dto.input.validations",
                 "ar.edu.itba.paw.services",
                 "ar.edu.itba.paw.persistence"})
 @Configuration

@@ -1,6 +1,5 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.output;
 
-import ar.edu.itba.paw.models.Analytics;
 import ar.edu.itba.paw.models.users.UserAnalytics;
 
 import javax.ws.rs.core.UriInfo;

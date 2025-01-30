@@ -1,7 +1,6 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.output;
 
 import ar.edu.itba.paw.models.books.BookAnalytics;
-import ar.edu.itba.paw.models.users.UserAnalytics;
 
 import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;

@@ -8,19 +8,22 @@ import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserAnalytics;
-import ar.edu.itba.paw.webapp.dto.UserDTO;
-import ar.edu.itba.paw.webapp.dto.WishlistDTO;
-import ar.edu.itba.paw.webapp.dto.WriterMonthlyAnalyticsDTO;
+import ar.edu.itba.paw.webapp.dto.input.UserCreateDTO;
+import ar.edu.itba.paw.webapp.dto.input.UserEditDTO;
+import ar.edu.itba.paw.webapp.dto.output.UserDTO;
+import ar.edu.itba.paw.webapp.dto.output.WishlistDTO;
+import ar.edu.itba.paw.webapp.dto.output.WriterMonthlyAnalyticsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
-import java.util.zip.DataFormatException;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
@@ -42,15 +45,6 @@ public class UserController { //TODO: exceptions. custom mime types
         this.as = as;
     }
 
-/*    @POST
-    @Produces(value = MediaType.APPLICATION_JSON)
-    @Consumes(value = MediaType.APPLICATION_JSON)
-    public Response createUser(@Valid final UserPostDTO userDto){
-        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
-        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
-        return Response.created(uri).build();
-    }*/
-
     @GET
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -64,13 +58,22 @@ public class UserController { //TODO: exceptions. custom mime types
         }
     }
 
-/*    @PUT
+    @POST
+    @Produces(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response createUser(@Valid final UserCreateDTO userDto){
+        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
+        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
+        return Response.created(uri).build();
+    }
+
+    @PUT
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Consumes(value = {MediaType.APPLICATION_JSON})
     public Response modifyUser(
             @PathParam("id") final long id,
-            @Valid UserPutDTO userDTO
+            @Valid UserEditDTO userDTO
     ){
         final Optional<User> user = us.findById(id);
 
@@ -80,7 +83,7 @@ public class UserController { //TODO: exceptions. custom mime types
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-    }*/
+    }
 
 
     @GET
@@ -91,6 +94,32 @@ public class UserController { //TODO: exceptions. custom mime types
 
         return Response.ok(image.getFile()).build();
     }
+
+
+    @GET
+    @Path("{user_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM:
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getMonthlyWriterAnalytics(
+            @PathParam("user_id") final long userId,
+            @PathParam("year_month") final String period
+    ){
+        //TODO -> on the service
+        YearMonth yearMonth;
+        try {
+            yearMonth = YearMonth.parse(period);
+        } catch (DateTimeParseException e){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        UserAnalytics analytics = new UserAnalytics(
+                userId,
+                as.getTotalOrdersForWriterForMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue()),
+                as.getTotalSalesForWriterForMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue())
+        );
+
+        return Response.ok(WriterMonthlyAnalyticsDTO.fromAnalytics(uriInfo, analytics)).build();
+    }
+
 
     @GET
     @Path("{userId}/wishlist")
@@ -120,30 +149,6 @@ public class UserController { //TODO: exceptions. custom mime types
         }
 
         return Response.ok(WishlistDTO.fromWishlistItem(uriInfo, wishlistItem.get())).build();
-    }
-
-    @GET
-    @Path("{user_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM:
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getMonthlyWriterAnalytics(
-            @PathParam("user_id") final long userId,
-            @PathParam("year_month") final String period
-    ){
-        //TODO -> on the service
-        YearMonth yearMonth;
-        try {
-            yearMonth = YearMonth.parse(period);
-        } catch (DateTimeParseException e){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        UserAnalytics analytics = new UserAnalytics(
-                userId,
-                as.getTotalOrdersForWriterForMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue()),
-                as.getTotalSalesForWriterForMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue())
-        );
-
-        return Response.ok(WriterMonthlyAnalyticsDTO.fromAnalytics(uriInfo, analytics)).build();
     }
 
 }
