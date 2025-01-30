@@ -46,16 +46,14 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedRespons
 public class BookController {
 
     private final BookService bs;
-    private final ReviewService rs;
     private final AnalyticsService as;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public BookController(final BookService bs, final ReviewService rs, final AnalyticsService as){
+    public BookController(final BookService bs, final AnalyticsService as){
         this.bs = bs;
-        this.rs = rs;
         this.as = as;
     }
 
@@ -204,37 +202,6 @@ public class BookController {
         return Response.ok().build();
     }
 
-    @GET
-    @Path("/{id}/reviews")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getReviews(
-            @PathParam("id") final long id,
-            @QueryParam("order_by") @DefaultValue("DATE_DESC") final ReviewOrderBy orderBy,
-            @QueryParam("page") @DefaultValue("1") final int page,
-            @QueryParam("size") @DefaultValue("20") final int size
-    ){
-        final PaginatedContent<Review> reviewPage =  rs.getAll(id, orderBy, page, size);
-        final List<ReviewDTO> reviews = reviewPage.getPage()
-                .stream().map(ReviewDTO.mapper(uriInfo)).toList();
-
-        return paginatedResponse(
-                Response.ok(new GenericEntity<>(reviews){}), reviewPage, uriInfo
-        ).build();
-    }
-
-    @GET
-    @Path("/{bookId}/reviews/{reviewerId}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getReview(
-            @PathParam("bookId") final long bookId,
-            @PathParam("reviewerId") final long reviewerId
-    ){
-        Optional<Review> review = rs.find(bookId, reviewerId);
-        if (review.isEmpty()){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(ReviewDTO.fromReview(uriInfo, review.get())).build();
-    }
 
     @GET
     @Path("{book_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
