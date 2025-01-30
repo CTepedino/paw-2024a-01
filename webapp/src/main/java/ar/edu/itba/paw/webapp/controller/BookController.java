@@ -16,6 +16,7 @@ import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.UserAnalytics;
 import ar.edu.itba.paw.webapp.dto.input.BookCreateDTO;
+import ar.edu.itba.paw.webapp.dto.input.BookEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
 import ar.edu.itba.paw.webapp.dto.input.validations.PdfFile;
 import ar.edu.itba.paw.webapp.dto.output.BookDTO;
@@ -27,6 +28,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -123,6 +125,26 @@ public class BookController {
         );
 
         return Response.ok(book).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    public Response editBook(
+            @PathParam("id") final long id,
+            @Valid BookEditDTO bookDTO
+    ){
+        bs.editPublication(
+                id,
+                bookDTO.getTitle(),
+                bookDTO.getDescription(),
+                bookDTO.getGenre(),
+                bookDTO.getPrice(),
+                bookDTO.getPageCount(),
+                bookDTO.getSuggestedAge()
+        );
+
+        return Response.ok().build();
     }
 
     @GET
