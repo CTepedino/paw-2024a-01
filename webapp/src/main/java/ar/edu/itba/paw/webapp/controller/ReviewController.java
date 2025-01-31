@@ -4,10 +4,12 @@ import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
+import ar.edu.itba.paw.webapp.dto.input.ReviewSubmitDTO;
 import ar.edu.itba.paw.webapp.dto.output.ReviewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
@@ -58,5 +60,17 @@ public class ReviewController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(ReviewDTO.fromReview(uriInfo, review.get())).build();
+    }
+
+    @PUT
+    @Path("{reviewerId}")
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    public Response modifyReview(
+            @PathParam("bookId") final long bookId,
+            @PathParam("reviewerId") final long reviewerId,
+            @Valid final ReviewSubmitDTO reviewDTO
+    ){
+        rs.createOrUpdate(bookId, reviewerId, reviewDTO.getRating(), reviewDTO.getReview());
+        return Response.ok().build();
     }
 }

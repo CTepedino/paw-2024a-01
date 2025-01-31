@@ -14,9 +14,7 @@ public class QuestionDTO {
     private long questionerId;
     private long writerId;
     private String question;
-    private String answer;
     private LocalDateTime date;
-    private LocalDateTime answerDate;
 
     private URI self;
     private URI book;
@@ -35,9 +33,7 @@ public class QuestionDTO {
         dto.questionerId = q.getQuestioner().getUserId();
         dto.writerId = q.getBook().getWriter().getUserId();
         dto.question = q.getQuestion();
-        dto.answer = q.getAnswer();
         dto.date = q.getDate();
-        dto.answerDate = q.getAnswerDate();
 
         dto.self = uriInfo.getBaseUriBuilder().path("questions").path(String.valueOf(dto.id)).build();
         dto.book = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).build();
@@ -87,28 +83,12 @@ public class QuestionDTO {
         this.question = question;
     }
 
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
     public LocalDateTime getDate() {
         return date;
     }
 
     public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    public LocalDateTime getAnswerDate() {
-        return answerDate;
-    }
-
-    public void setAnswerDate(LocalDateTime answerDate) {
-        this.answerDate = answerDate;
     }
 
     public URI getSelf() {

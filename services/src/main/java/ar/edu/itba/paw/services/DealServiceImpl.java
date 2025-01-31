@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.dao.DealDao;
 import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.deals.Deal;
+import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.exception.InvalidDealException;
 import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,19 +23,29 @@ import java.util.Optional;
 public class DealServiceImpl implements DealService {
 
     private final DealDao dealDao;
+    private final BookDao bookDao;
 
     //TODO: logger
 
     @Autowired
-    public DealServiceImpl(DealDao dealDao){
+    public DealServiceImpl(final DealDao dealDao, final BookDao bookDao){
         this.dealDao = dealDao;
+        this.bookDao = bookDao;
     }
 
     @Transactional
     @Override
-    public void create(long bookId, BigDecimal price, int duration) {
-        if(get(bookId).isEmpty()) {
+    public void createOrUpdate(long bookId, BigDecimal price, int duration) {
+        Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        if (price.compareTo(book.getPrice().multiply(new BigDecimal("0.95").setScale(2, RoundingMode.HALF_UP))) >= 0){
+            throw new InvalidDealException();
+        }
+
+        if (book.getDeal() == null){
             dealDao.create(bookId, price, LocalDate.now(), LocalDate.now().plusDays(duration));
+        } else {
+            dealDao.update(book.getDeal(), price, book.getDeal().getStartDate().plusDays(duration));
         }
     }
 
@@ -44,13 +56,6 @@ public class DealServiceImpl implements DealService {
         dealDao.findById(bookId);
         return dealDao.findById(bookId);
 
-    }
-
-    @Transactional
-    @Override
-    public void update(long dealId, BigDecimal price, int duration) {
-        Optional<Deal> deal = dealDao.findById(dealId);
-        deal.ifPresent(value -> dealDao.update(value, price, value.getStartDate().plusDays(duration)));
     }
 
     @Transactional

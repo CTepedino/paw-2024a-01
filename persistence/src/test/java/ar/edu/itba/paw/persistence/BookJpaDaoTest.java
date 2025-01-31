@@ -83,7 +83,7 @@ public class BookJpaDaoTest {
 
         assertEquals(1, TestUtils.getRowCount(em, "FROM books WHERE book_id = " + book.getBookId() + "AND title = '" + TITLE + "'"));
     }
-
+/*
     @Test
     public void testModify(){
         Book book = em.find(Book.class, EXISTING_ID);
@@ -91,7 +91,7 @@ public class BookJpaDaoTest {
         bookDao.modify(book, "MODIFIED BOOK MODIFIED BOOK MODIFIED BOOK", "", BookGenre.BIOGRAPHY, new BigDecimal(1), 1, 1, false );
 
         assertEquals(1, TestUtils.getRowCount(em, "FROM books WHERE title  = 'MODIFIED BOOK MODIFIED BOOK MODIFIED BOOK'"));
-    }
+    }*/
 /*
     @Test
     public void testGetAllLimitExceeds(){

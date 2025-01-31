@@ -4,10 +4,16 @@ import ar.edu.itba.paw.interfaces.service.QuestionService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
 import ar.edu.itba.paw.models.questions.Question;
+import ar.edu.itba.paw.webapp.dto.input.QuestionCreateDTO;
+import ar.edu.itba.paw.webapp.dto.output.AnswerDTO;
 import ar.edu.itba.paw.webapp.dto.output.QuestionDTO;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -47,12 +53,48 @@ public class QuestionController {
         ).build();
     }
 
+    @POST
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response makeQuestion(
+            @Valid final QuestionCreateDTO questionDTO
+    ){
+        long questionId = qs.create(questionDTO.getBookId(), questionDTO.getQuestion());
+
+        return Response
+                .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(questionId)).build())
+                .build();
+    }
+
     @GET
     @Path("/{id}")
     @Produces(value = MediaType.APPLICATION_JSON)
-    public Response findById(@PathParam("id") final long id){
+    public Response getQuestion(@PathParam("id") final long id){
         Question question = qs.findById(id).orElseThrow(QuestionNotFoundException::new);
 
         return Response.ok(QuestionDTO.fromQuestion(uriInfo, question)).build();
+    }
+
+    @GET
+    @Path("{id}/answer")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response getAnswer(@PathParam("id") final long id){
+        Question question = qs.findById(id).orElseThrow(QuestionNotFoundException::new);
+        if (question.getAnswer() == null){
+            return Response.noContent().build();
+        }
+
+        return Response.ok(AnswerDTO.fromQuestion(uriInfo, question)).build();
+    }
+
+    @PUT
+    @Path("/{id}/answer")
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response setAnswer(
+            @PathParam("id") final long id,
+            @Size(min = 1, max = 500) @FormDataParam("answer") String answer
+    ){
+        qs.answer(id, answer);
+
+        return Response.ok().build();
     }
 }

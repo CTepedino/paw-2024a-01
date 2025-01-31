@@ -9,14 +9,11 @@ import java.util.Optional;
 
 public interface DealService {
 
-    void create(long bookId, BigDecimal price, int duration);
-
     Optional<Deal> get(long bookId);
-
-    void update(long bookId, BigDecimal price, int duration);
 
     void endDeal(long bookId);
 
     void deleteExpiredDeals();
 
+    void createOrUpdate(long bookId, BigDecimal price, int duration);
 }

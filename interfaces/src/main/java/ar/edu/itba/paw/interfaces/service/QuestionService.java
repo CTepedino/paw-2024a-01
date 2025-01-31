@@ -10,7 +10,7 @@ public interface QuestionService {
 
     PaginatedContent<Question> searchQuestions(Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered, int pageNumber, int pageSize);
 
-    void create(long bookId, String question);
+    long create(long bookId, String question);
 
     void answer(long questionId, String answer);
 

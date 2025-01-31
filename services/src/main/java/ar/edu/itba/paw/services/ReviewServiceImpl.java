@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.User;
@@ -35,7 +36,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void createOrUpdate(long bookId, User user, int rating, String review){
+    public void createOrUpdate(long bookId, long reviewerId, int rating, String review){
+        User user = us.findById(reviewerId).orElseThrow(UserNotFoundException::new);
         Optional<Review> maybeReview = reviewDao.find(bookId, user);
         if (maybeReview.isPresent()){
             reviewDao.modify(maybeReview.get(), rating, review, LocalDateTime.now());

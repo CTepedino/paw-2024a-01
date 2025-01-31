@@ -45,23 +45,23 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional
     @Override
-    public void create(long bookId, String question) {
+    public long create(long bookId, String question) {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         User questioner = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Question q = questionDao.create(book, questioner, question, LocalDateTime.now());
         ms.sendQuestionReceivedEmail(q);
         LOGGER.atDebug().setMessage("Created Question for bookId: {}").addArgument(bookId).log();
+
+        return q.getQuestionId();
     }
 
     @Transactional
     @Override
     public void answer(long questionId, String answer) {
-        Optional<Question> question = questionDao.findById(questionId);
-        question.ifPresent(value -> {
-            questionDao.answer(value, answer, LocalDateTime.now());
-            ms.sendAnswerReceivedEmail(value);
-            LOGGER.atDebug().setMessage("Answered Question with questionId: {}").addArgument(questionId).log();
-        });
+        Question question = questionDao.findById(questionId).orElseThrow(QuestionNotFoundException::new);
+        questionDao.answer(question, answer, LocalDateTime.now());
+        ms.sendAnswerReceivedEmail(question);
+        LOGGER.atDebug().setMessage("Answered Question with questionId: {}").addArgument(questionId).log();
     }
 
     @Transactional(readOnly = true)

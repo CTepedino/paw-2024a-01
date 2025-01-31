@@ -67,7 +67,7 @@ public class OrderController {
 
         return Response
                 .ok(receipt.getFile(), receipt.getType())
-                .header("content-disposition", "attachment; filename=receipt" + receipt.getFileExtension())
+                //.header("content-disposition", "attachment; filename=receipt" + receipt.getFileExtension())
                 .build();
     }
 }

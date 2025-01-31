@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface ReviewService {
 
-    void createOrUpdate(long bookId, User user, int rating, String review);
+    void createOrUpdate(long bookId, long reviewerId, int rating, String review);
 
     Optional<Review> find(long bookId, User user);
     Optional<Review> find(long bookId, long userId);

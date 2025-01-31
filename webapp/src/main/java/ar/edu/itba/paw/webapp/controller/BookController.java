@@ -2,12 +2,14 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.books.BookAnalytics;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
@@ -17,12 +19,10 @@ import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.UserAnalytics;
 import ar.edu.itba.paw.webapp.dto.input.BookCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.BookEditDTO;
+import ar.edu.itba.paw.webapp.dto.input.DealSubmitDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
 import ar.edu.itba.paw.webapp.dto.input.validations.PdfFile;
-import ar.edu.itba.paw.webapp.dto.output.BookDTO;
-import ar.edu.itba.paw.webapp.dto.output.BookMonthlyAnalyticsDTO;
-import ar.edu.itba.paw.webapp.dto.output.ReviewDTO;
-import ar.edu.itba.paw.webapp.dto.output.WriterMonthlyAnalyticsDTO;
+import ar.edu.itba.paw.webapp.dto.output.*;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,14 +47,16 @@ public class BookController {
 
     private final BookService bs;
     private final AnalyticsService as;
+    private final DealService ds;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public BookController(final BookService bs, final AnalyticsService as){
+    public BookController(final BookService bs, final AnalyticsService as, final DealService ds){
         this.bs = bs;
         this.as = as;
+        this.ds = ds;
     }
 
     @GET
@@ -202,6 +204,37 @@ public class BookController {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("{id}/deal")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getDeal(
+            @PathParam("id") final long id
+    ){
+        Optional<Deal> deal = ds.get(id);
+        if (deal.isPresent()){
+            return Response.ok(DealDTO.fromDeal(uriInfo, deal.get())).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @PUT
+    @Path("{id}/deal")
+    public Response setDeal(
+        @PathParam("id") final long id,
+        @Valid DealSubmitDTO dealDTO
+    ){
+        ds.createOrUpdate(id, dealDTO.getPrice(), dealDTO.getDuration());
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("{id}/deal")
+    public Response endDeal(
+            @PathParam("id") final long id
+    ){
+        ds.endDeal(id);
+        return Response.noContent().build();
+    }
 
     @GET
     @Path("{book_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
