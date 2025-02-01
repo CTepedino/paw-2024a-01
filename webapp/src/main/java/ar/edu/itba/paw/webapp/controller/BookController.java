@@ -75,7 +75,7 @@ public class BookController {
             @QueryParam("order_by") @DefaultValue("PUBLICATION_DATE_DESC") final BookSearchOrderBy orderBy,
             @QueryParam("writer_id") final Long writerId,
             @QueryParam("owner_id") final Long ownerId,
-            @QueryParam("recommendations_for") final Long recommendationsForId
+            @QueryParam("recommendations_for_book") final Long recommendationsForId
     ){
         final PaginatedContent<Book> booksPage = bs.listBooks(
                 title,

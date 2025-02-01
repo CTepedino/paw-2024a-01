@@ -162,7 +162,7 @@ public class BookJpaDao implements BookDao {
 
         nativeQueryStr.append("SELECT b.book_id FROM books b LEFT JOIN deals d ON b.book_id = d.id JOIN users u ON b.writer_id = u.user_id LEFT JOIN orders o ON b.book_id = o.book_id AND o.status = 'COMPLETED' ");
         prepareSearchQueryParams(nativeQueryStr, params, title, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId);
-        nativeQueryStr.append(" AND (b.genre = :genre OR b.writer_id = :writerId) AND b.book_id <> :bookId GROUP BY b.book_id, u.user_id ");
+        nativeQueryStr.append(" AND (b.genre = :genre OR b.writer_id = :writerId) AND b.book_id <> :bookId GROUP BY b.book_id, u.user_id, d.start_date ");
         nativeQueryStr.append(" ORDER BY ").append(orderBy.getColumnName());
 
         Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
@@ -204,7 +204,7 @@ public class BookJpaDao implements BookDao {
         StringBuilder nativeQueryStr = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
 
-        nativeQueryStr.append("SELECT o.book_id FROM orders o LEFT JOIN books b ON o.book_id = b.book_id ");
+        nativeQueryStr.append("SELECT o.book_id FROM orders o LEFT JOIN books b ON o.book_id = b.book_id LEFT JOIN deals d ON d.id = b.book_id ");
         prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId);
         nativeQueryStr.append(" GROUP BY o.book_id ");
 
@@ -223,7 +223,7 @@ public class BookJpaDao implements BookDao {
         StringBuilder nativeQueryStr = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
 
-        nativeQueryStr.append("SELECT COUNT(DISTINCT o.book_id) FROM orders o LEFT JOIN books b ON o.book_id = b.book_id ");
+        nativeQueryStr.append("SELECT COUNT(DISTINCT o.book_id) FROM orders o LEFT JOIN books b ON o.book_id = b.book_id LEFT JOIN deals d ON d.id = b.book_id ");
         prepareSearchQueryParams(nativeQueryStr, params, title, genre, minPrice, maxPrice, minPageCount, maxPageCount, minSuggestedAge, maxSuggestedAge, writerId, ownerId);
 
         Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
