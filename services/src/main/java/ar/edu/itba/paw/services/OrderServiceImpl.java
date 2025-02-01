@@ -49,7 +49,8 @@ public class OrderServiceImpl implements OrderService {
         if (orderDao.find(bookId, userId).isPresent()){
             return null;
         }
-        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        User buyer = us.findById(userId).get();
+        //TODO: User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_PAYMENT, LocalDateTime.now(), book.getDeal()==null? book.getPrice(): book.getDeal().getPrice());
         bs.removeFromWishlist(buyer.getUserId(), bookId);

@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.webapp.dto.input.OrderCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.OrderEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageOrPdf;
 import ar.edu.itba.paw.webapp.dto.output.OrderDTO;
@@ -58,10 +59,9 @@ public class OrderController {
     @POST
     @Consumes(value = MediaType.APPLICATION_JSON)
     public Response createOrder(
-            @FormDataParam("bookId") long bookId,
-            @FormDataParam("userId") long userId //TODO: remove userId and get it from jwt
+            @Valid OrderCreateDTO orderDTO
     ){
-        Long orderId = os.create(bookId, userId);
+        Long orderId = os.create(orderDTO.getBookId(), orderDTO.getUserId());
 
         if(orderId != null){
             return Response
@@ -97,6 +97,9 @@ public class OrderController {
     @Produces(value = {"image/jpeg", "application/pdf"})
     public Response getReceipt(@PathParam("id") final long id){
         final PaymentReceipt receipt = os.getReceipt(id);
+        if (receipt == null){
+            return Response.noContent().build();
+        }
 
         return Response
                 .ok(receipt.getFile(), receipt.getType())
@@ -106,7 +109,7 @@ public class OrderController {
 
     @PUT
     @Path("{id}/receipt")
-    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = MediaType.MULTIPART_FORM_DATA)
     public Response setReceipt(
             @PathParam("id") final long orderId,
             @ImageOrPdf @FormDataParam("receipt") FormDataBodyPart receipt
