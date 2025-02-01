@@ -180,7 +180,7 @@ public class BookController {
     @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
     public Response setBookPreview(
             @PathParam("id") final long id,
-            @PdfFile @FormDataParam("cover") FormDataBodyPart pdf
+            @PdfFile @FormDataParam("preview") FormDataBodyPart pdf
     ){
         bs.setPreview(id, pdf.getValueAs(byte[].class));
         return Response.ok().build();
@@ -199,7 +199,7 @@ public class BookController {
     @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
     public Response setBookFile(
             @PathParam("id") final long id,
-            @PdfFile @FormDataParam("cover") FormDataBodyPart pdf
+            @PdfFile @FormDataParam("book_file") FormDataBodyPart pdf
     ){
         bs.setBookFile(id, pdf.getValueAs(byte[].class));
         return Response.ok().build();
