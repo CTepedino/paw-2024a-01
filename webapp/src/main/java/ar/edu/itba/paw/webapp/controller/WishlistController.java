@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
+import ar.edu.itba.paw.webapp.dto.input.WishlistCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.WishlistDTO;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,12 +64,12 @@ public class WishlistController {
     @Consumes(value = {MediaType.APPLICATION_JSON})
     public Response AddWishlistItem(
             @PathParam("userId") final long userId,
-            @FormDataParam("bookId") final long bookId
+            WishlistCreateDTO wishlistDTO
     ){
-        bs.addToWishlist(userId, bookId);
+        bs.addToWishlist(userId, wishlistDTO.getBookId());
 
         return Response
-                .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(bookId)).build())
+                .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(wishlistDTO.getBookId())).build())
                 .build();
     }
 
