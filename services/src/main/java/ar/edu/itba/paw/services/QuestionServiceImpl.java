@@ -47,7 +47,8 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public long create(long bookId, String question) {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        User questioner = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        User questioner = us.findById(1).get();
+        //TODO: User questioner = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Question q = questionDao.create(book, questioner, question, LocalDateTime.now());
         ms.sendQuestionReceivedEmail(q);
         LOGGER.atDebug().setMessage("Created Question for bookId: {}").addArgument(bookId).log();

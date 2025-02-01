@@ -4,16 +4,14 @@ import ar.edu.itba.paw.interfaces.service.QuestionService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
 import ar.edu.itba.paw.models.questions.Question;
+import ar.edu.itba.paw.webapp.dto.input.AnswerSubmitDTO;
 import ar.edu.itba.paw.webapp.dto.input.QuestionCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.AnswerDTO;
 import ar.edu.itba.paw.webapp.dto.output.QuestionDTO;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -91,9 +89,9 @@ public class QuestionController {
     @Consumes(value = MediaType.APPLICATION_JSON)
     public Response setAnswer(
             @PathParam("id") final long id,
-            @Size(min = 1, max = 500) @FormDataParam("answer") String answer
+            @Valid AnswerSubmitDTO answerDTO
     ){
-        qs.answer(id, answer);
+        qs.answer(id, answerDTO.getAnswer());
 
         return Response.ok().build();
     }
