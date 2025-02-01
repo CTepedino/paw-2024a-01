@@ -79,7 +79,7 @@ public class RecommendationController {
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId
     ){
-        bs.removeFromWishlist(userId, bookId);
+        bs.removeRecommendation(userId, bookId);
 
         return Response.noContent().build();
     }

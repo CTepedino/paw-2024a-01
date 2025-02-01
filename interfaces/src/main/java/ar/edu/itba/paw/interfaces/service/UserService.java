@@ -7,11 +7,12 @@ import ar.edu.itba.paw.models.users.UserRoles;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 public interface UserService {
 
-    User create(String email, String password, String firstName, String lastName);
+    User create(String email, String password, String firstName, String lastName, Locale locale);
 
     void validateEmail(long userId, String code);
 

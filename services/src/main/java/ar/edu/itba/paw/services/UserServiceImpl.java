@@ -37,18 +37,16 @@ public class UserServiceImpl implements UserService {
 
     private final EmailValidationService evs;
     private final ResetCodeService rcs;
-    private final MailService ms;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, OrderDao orderDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs, MailService ms){
+    public UserServiceImpl(final UserDao userDao, OrderDao orderDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs){
         this.userDao = userDao;
         this.orderDao = orderDao;
         this.passwordEncoder = passwordEncoder;
         this.evs = evs;
         this.rcs = rcs;
-        this.ms = ms;
     }
 
     @Transactional(readOnly = true)
@@ -66,14 +64,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User create(String email, String password, String firstName, String lastName){
+    public User create(String email, String password, String firstName, String lastName, Locale locale){
         User user = userDao.create(
                 email,
                 passwordEncoder.encode(password),
                 firstName,
                 lastName,
                 false,
-                LocaleContextHolder.getLocale()
+                locale
         );
         evs.create(user);
         LOGGER.atDebug().setMessage("Created user: {}").addArgument(firstName).log();

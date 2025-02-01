@@ -394,17 +394,17 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public List<WishlistItem> getWishlist(long userId, int offset, int limit){
-        Query nativeQuery = em.createNativeQuery("SELECT book_id FROM wishlist WHERE user_id = :userId");
+        Query nativeQuery = em.createNativeQuery("SELECT id FROM wishlist WHERE user_id = :userId");
         nativeQuery.setParameter("userId", userId);
 
-        TypedQuery<WishlistItem> query = em.createQuery("FROM WishlistItem w WHERE w.bookId IN :idList", WishlistItem.class);
+        TypedQuery<WishlistItem> query = em.createQuery("FROM WishlistItem w WHERE w.id IN :idList", WishlistItem.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
     public long getWishlistSize(long userId) {
-        return DaoUtils.getRowCount(em, "WishlistItem w", "w.bookId","WHERE w.userId = :userId", Map.of("userId", userId));
+        return DaoUtils.getRowCount(em, "WishlistItem w", "w.id","WHERE w.userId = :userId", Map.of("userId", userId));
     }
 
 
@@ -474,11 +474,16 @@ public class BookJpaDao implements BookDao {
 
     @Override
     public List<Recommendation> getRecommendations(long userId, int offset, int limit) {
-        return List.of();
+        Query nativeQuery = em.createNativeQuery("SELECT id FROM recommendations WHERE user_id = :userId");
+        nativeQuery.setParameter("userId", userId);
+
+        TypedQuery<Recommendation> query = em.createQuery("FROM Recommendation r WHERE r.id IN :idList", Recommendation.class);
+
+        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }
 
     @Override
     public long getReccomendationsSize(long userId) {
-        return DaoUtils.getRowCount(em, "Recommendation r", "r.bookId","WHERE r.userId = :userId", Map.of("userId", userId));
+        return DaoUtils.getRowCount(em, "Recommendation r", "r.id","WHERE r.userId = :userId", Map.of("userId", userId));
     }
 }

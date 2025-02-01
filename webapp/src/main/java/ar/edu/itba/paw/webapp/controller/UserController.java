@@ -16,6 +16,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -31,24 +32,25 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
 public class UserController { //TODO: exceptions. custom mime types
 
     private final UserService us;
-    private final BookService bs;
     private final AnalyticsService as;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public UserController(final UserService us, final BookService bs, final AnalyticsService as){
+    public UserController(final UserService us, final AnalyticsService as){
         this.us = us;
-        this.bs = bs;
         this.as = as;
     }
 
     @POST
     @Produces(value = MediaType.APPLICATION_JSON)
     @Consumes(value = MediaType.APPLICATION_JSON)
-    public Response createUser(@Valid final UserCreateDTO userDto){ //TODO: status code on repeated email
-        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
+    public Response createUser(
+            @Valid final UserCreateDTO userDto,
+            @Context HttpHeaders headers
+    ){ //TODO: status code on repeated email
+        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName(), headers.getAcceptableLanguages().getFirst());
         final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
         return Response.created(uri).build();
     }

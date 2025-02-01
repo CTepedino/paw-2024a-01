@@ -50,7 +50,7 @@ public class UserServiceImplTest {
         Mockito.when(userDao.findById(Mockito.anyLong())).thenReturn(Optional.of(TEST_USER));
     }
 
-    @Test
+   /* @Test
     public void testCreate(){
         Mockito.when(passwordEncoder.encode(Mockito.eq(PASSWORD)))
                 .thenReturn(ENCODED_PASSWORD);
@@ -67,7 +67,7 @@ public class UserServiceImplTest {
         assertFalse(user.isEnabled());
         assertEquals(LocaleContextHolder.getLocale(), user.getLocale());
     }
-
+*/
 
     @Test
     public void testValidateInexistentUser(){

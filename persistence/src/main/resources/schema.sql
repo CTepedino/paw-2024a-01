@@ -179,7 +179,8 @@ WHERE is_public = TRUE;
 
 ALTER TABLE orders DROP COLUMN is_public;
 ALTER TABLE recommendations DROP CONSTRAINT recommendations_pkey;
-ALTER TABLE recommendations ADD COLUMN id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE recommendations ADD COLUMN id SERIAL;
+ALTER TABLE recommendations ADD CONSTRAINT recommendations_pkey PRIMARY KEY (id);
 
  */
 

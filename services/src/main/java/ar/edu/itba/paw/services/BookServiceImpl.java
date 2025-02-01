@@ -257,18 +257,20 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public Optional<Recommendation> findRecommendation(long userId, long bookId) {
-        return Optional.empty();
+        return bookDao.getRecommendation(userId, bookId);
     }
 
     @Transactional
     @Override
     public void recommend(long userId, long bookId) {
-
+        if (findRecommendation(userId, bookId).isEmpty()) {
+            bookDao.recommend(userId, bookId);
+        }//TODO: else throw
     }
 
     @Transactional
     @Override
     public void removeRecommendation(long userId, long bookId) {
-
+        bookDao.removeRecommendation(userId, bookId);
     }
 }
