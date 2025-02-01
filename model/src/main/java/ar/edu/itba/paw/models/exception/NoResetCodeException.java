@@ -2,7 +2,7 @@ package ar.edu.itba.paw.models.exception;
 
 import java.io.Serial;
 
-public class NoResetCodeException extends RuntimeException {
+public class NoResetCodeException extends NotFoundException {
 
 
     @Serial
