@@ -36,6 +36,7 @@ import java.util.Properties;
 @EnableAsync
 @ComponentScan({"ar.edu.itba.paw.webapp.controller",
                 "ar.edu.itba.paw.webapp.dto.input.validations",
+                "ar.edu.itba.paw.webapp.exception",
                 "ar.edu.itba.paw.services",
                 "ar.edu.itba.paw.persistence"})
 @Configuration
