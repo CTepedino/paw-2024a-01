@@ -1,14 +1,14 @@
 package ar.edu.itba.paw.webapp.dto.input;
 
 import ar.edu.itba.paw.models.books.BookGenre;
-import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
 import ar.edu.itba.paw.webapp.dto.input.validations.TodayOrBefore;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
+import javax.ws.rs.DefaultValue;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class BookCreateDTO {
 
@@ -17,7 +17,7 @@ public class BookCreateDTO {
     private String title;
 
     @NotNull
-    @Size(min = 1, max = 1000)
+    @Size(min = 1, max = 2500)
     private String description;
 
     @NotNull
@@ -38,7 +38,6 @@ public class BookCreateDTO {
     @Max(value = 1000000)
     private Integer pageCount;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "dd/MM/yyyy")
     @TodayOrBefore
     @NotNull
     private LocalDate publicationDate;

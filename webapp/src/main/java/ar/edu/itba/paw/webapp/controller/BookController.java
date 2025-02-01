@@ -33,6 +33,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -100,6 +101,7 @@ public class BookController {
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response addBook(@Valid BookCreateDTO bookDTO){
+
         long bookId = bs.create(
                 bookDTO.getTitle(),
                 bookDTO.getDescription(),
@@ -110,7 +112,6 @@ public class BookController {
                 bookDTO.getPublicationDate(),
                 bookDTO.getWriterId()
         );
-
         return Response
                 .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(bookId)).build())
                 .build();
