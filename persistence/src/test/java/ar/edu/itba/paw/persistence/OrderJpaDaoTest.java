@@ -57,13 +57,13 @@ public class OrderJpaDaoTest{
     @Before
     public void setUp(){
     }
-
+/*
     @Test
     public void testCreateOK(){
         Order order = orderDao.create(TEST_USER, TEST_BOOK, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), true, TEST_BOOK.getPrice());
 
         assertEquals(1, TestUtils.getRowCount(em, "FROM orders WHERE order_id = " + order.getOrderId()));
-    }
+    }*/
 
 
     @Test

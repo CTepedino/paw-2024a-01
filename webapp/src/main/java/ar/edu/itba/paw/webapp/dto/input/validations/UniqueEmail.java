@@ -1,13 +1,10 @@
 package ar.edu.itba.paw.webapp.dto.input.validations;
 
-
-import org.hibernate.validator.internal.constraintvalidators.hv.UniqueElementsValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Constraint(validatedBy = UniqueElementsValidator.class)
+@Constraint(validatedBy = UniqueEmailValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

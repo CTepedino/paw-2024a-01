@@ -50,15 +50,6 @@ public class UserController { //TODO: exceptions. custom mime types
         this.as = as;
     }
 
-    @POST
-    @Produces(value = MediaType.APPLICATION_JSON)
-    @Consumes(value = MediaType.APPLICATION_JSON)
-    public Response createUser(@Valid final UserCreateDTO userDto){
-        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
-        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
-        return Response.created(uri).build();
-    }
-
     @GET
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -70,6 +61,15 @@ public class UserController { //TODO: exceptions. custom mime types
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    @POST
+    @Produces(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response createUser(@Valid final UserCreateDTO userDto){
+        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
+        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
+        return Response.created(uri).build();
     }
 
     @PUT

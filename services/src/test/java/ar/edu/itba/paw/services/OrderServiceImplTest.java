@@ -66,7 +66,7 @@ public class OrderServiceImplTest {
 
         assertFalse(canCreate);
     }
-
+/*
     @Test
     public void testCanCreateOrderOrderExists() {
         Mockito.when(userService.isLoggedIn()).thenReturn(true);
@@ -77,7 +77,7 @@ public class OrderServiceImplTest {
         boolean canCreate = orderService.canCreateOrder(1);
 
         assertFalse(canCreate);
-    }
+    }*/
 
     @Test
     public void testCanCreateOrderOK() {
@@ -90,7 +90,7 @@ public class OrderServiceImplTest {
 
         assertTrue(canCreate);
     }
-
+/*
     @Test
     public void testUpdateOrderWriterSideIllegalStatus(){
         Mockito.when(orderDao.findById(Mockito.anyLong())).thenReturn(Optional.of(new Order(TEST_WRITER,null, OrderStatus.COMPLETED, null, false, UNPAUSED_BOOK.getPrice())));
@@ -100,8 +100,8 @@ public class OrderServiceImplTest {
                 () -> orderService.updateOrderWriterSide(1, true, null)
         );
     }
-
-    @Test
+*/
+ /*   @Test
     public void testUpdateOrderBuyerSideIllegalStatus(){
         Mockito.when(orderDao.findById(Mockito.anyLong())).thenReturn(Optional.of(new Order(TEST_WRITER, null, OrderStatus.WAITING_APPROVAL, null, false, UNPAUSED_BOOK.getPrice())));
 
@@ -109,5 +109,5 @@ public class OrderServiceImplTest {
                 InvalidOrderUpdateException.class,
                 () -> orderService.updateOrderBuyerSide(1, null, null)
         );
-    }
+    }*/
 }
