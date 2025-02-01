@@ -50,6 +50,15 @@ public class UserController { //TODO: exceptions. custom mime types
         this.as = as;
     }
 
+    @POST
+    @Produces(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response createUser(@Valid final UserCreateDTO userDto){ //TODO: status code on repeated email
+        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
+        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
+        return Response.created(uri).build();
+    }
+
     @GET
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -61,15 +70,6 @@ public class UserController { //TODO: exceptions. custom mime types
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-    }
-
-    @POST
-    @Produces(value = MediaType.APPLICATION_JSON)
-    @Consumes(value = MediaType.APPLICATION_JSON)
-    public Response createUser(@Valid final UserCreateDTO userDto){
-        final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName());
-        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
-        return Response.created(uri).build();
     }
 
     @PUT
@@ -84,7 +84,7 @@ public class UserController { //TODO: exceptions. custom mime types
 
         if (user.isPresent()){
             us.updateProfile(id, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getCbu(), userDTO.getDescription());
-            return Response.ok(UserDTO.fromUser(uriInfo, user.get())).build();
+            return Response.ok(UserDTO.fromUser(uriInfo, user.get())).build(); //TODO: return model on PUT?
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -95,7 +95,7 @@ public class UserController { //TODO: exceptions. custom mime types
     @Consumes(value = {MediaType.APPLICATION_JSON})
     public Response modifyPassword(
             @PathParam("id") final long id,
-            @Size(min = 6, max = 255) @FormDataParam("password") String password
+            @Valid String password
     ){
         us.changePassword(id, password);
 
@@ -130,7 +130,7 @@ public class UserController { //TODO: exceptions. custom mime types
     }
 
     @GET
-    @Path("{user_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM: //TODO: opción para obtener las de un año entero?
+    @Path("{user_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getMonthlyWriterAnalytics(
             @PathParam("user_id") final long userId,
