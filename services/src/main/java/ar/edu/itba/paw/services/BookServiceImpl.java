@@ -246,4 +246,29 @@ public class BookServiceImpl implements BookService {
 
         bookDao.createOrUpdateBookFile(book, file);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedContent<Recommendation> getRecommendations(long userId, int page, int size) {
+        List<Recommendation> recommendations = bookDao.getRecommendations(userId, (page-1)*size, size);
+        return new PaginatedContent<>(recommendations, page, size, bookDao.getReccomendationsSize(userId));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Recommendation> findRecommendation(long userId, long bookId) {
+        return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public void recommend(long userId, long bookId) {
+
+    }
+
+    @Transactional
+    @Override
+    public void removeRecommendation(long userId, long bookId) {
+
+    }
 }
