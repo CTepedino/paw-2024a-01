@@ -161,6 +161,28 @@ WHERE NOT EXISTS (
 
  */
 
+/*
+API REST modifications:
+
+CREATE TABLE IF NOT EXISTS recommendations(
+    user_id INT,
+    book_id INT,
+
+    PRIMARY KEY (user_id, book_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
+);
+INSERT INTO recommendations (user_id, book_id)
+SELECT buyer_id AS user_id, book_id
+FROM orders
+WHERE is_public = TRUE;
+
+ALTER TABLE orders DROP COLUMN is_public;
+ALTER TABLE recommendations DROP CONSTRAINT recommendations_pkey;
+ALTER TABLE recommendations ADD COLUMN id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY;
+
+ */
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
@@ -298,4 +320,15 @@ CREATE TABLE IF NOT EXISTS deals(
     end_date TIMESTAMP,
 
     FOREIGN KEY (id) REFERENCES books (book_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS recommendations(
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    book_id INT,
+
+    UNIQUE (user_id, book_id),
+
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE
 );

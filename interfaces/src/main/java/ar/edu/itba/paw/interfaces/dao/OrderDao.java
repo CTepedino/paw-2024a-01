@@ -20,11 +20,11 @@ public interface OrderDao {
 
     Optional<Order> findById(long orderId);
 
-    Order create(User user, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, BigDecimal price);
+    Order create(User user, Book book, OrderStatus orderStatus, LocalDateTime date, BigDecimal price);
 
-    void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic);
+    void update(Order order, OrderStatus orderStatus, LocalDateTime date);
 
-    void update(Order order, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, String rejectedReason);
+    void update(Order order, OrderStatus orderStatus, LocalDateTime date, String rejectedReason);
 
     PaymentReceipt createOrUpdatePaymentReceipt(Order order, byte[] paymentReceipt, String type);
 

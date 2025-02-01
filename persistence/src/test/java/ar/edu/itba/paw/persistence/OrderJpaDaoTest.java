@@ -102,7 +102,7 @@ public class OrderJpaDaoTest{
     public void testSetStatusExistingOrder(){
         Order order = em.find(Order.class, EXISTING_ORDER_ID);
 
-        orderDao.update(order, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), true);
+        orderDao.update(order, OrderStatus.WAITING_APPROVAL, LocalDateTime.now());
 
         assertEquals(1, TestUtils.getRowCount(em, "FROM orders WHERE order_id = " + EXISTING_ORDER_ID + " AND status = '" + OrderStatus.WAITING_APPROVAL + "'"));
     }

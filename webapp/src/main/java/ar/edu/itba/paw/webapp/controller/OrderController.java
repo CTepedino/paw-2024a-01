@@ -6,10 +6,15 @@ import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.webapp.dto.input.OrderEditDTO;
+import ar.edu.itba.paw.webapp.dto.input.validations.ImageOrPdf;
 import ar.edu.itba.paw.webapp.dto.output.OrderDTO;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -50,6 +55,23 @@ public class OrderController {
         ).build();
     }
 
+    @POST
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response createOrder(
+            @FormDataParam("bookId") long bookId,
+            @FormDataParam("userId") long userId //TODO: remove userId and get it from jwt
+    ){
+        Long orderId = os.create(bookId, userId);
+
+        if(orderId != null){
+            return Response
+                    .created(uriInfo.getAbsolutePathBuilder().path(orderId.toString()).build())
+                    .build();
+        } else {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
     @GET
     @Path("/{id}")
     @Produces(value = MediaType.APPLICATION_JSON)
@@ -57,6 +79,17 @@ public class OrderController {
         final Order order = os.findById(id).orElseThrow(OrderNotFoundException::new);
 
         return Response.ok(OrderDTO.fromOrder(uriInfo, order)).build();
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response updateOrder(
+            @PathParam("id") final long id,
+            @Valid final OrderEditDTO orderDTO
+    ){
+        os.updateOrderWriterSide(id, orderDTO.getRejectionReason());
+        return Response.ok().build();
     }
 
     @GET
@@ -69,5 +102,17 @@ public class OrderController {
                 .ok(receipt.getFile(), receipt.getType())
                 //.header("content-disposition", "attachment; filename=receipt" + receipt.getFileExtension())
                 .build();
+    }
+
+    @PUT
+    @Path("{id}/receipt")
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response setReceipt(
+            @PathParam("id") final long orderId,
+            @ImageOrPdf @FormDataParam("receipt") FormDataBodyPart receipt
+    ){
+        os.updateOrderBuyerSide(orderId, receipt.getEntityAs(byte[].class), receipt.getMediaType().toString());
+
+        return Response.ok().build();
     }
 }

@@ -38,9 +38,6 @@ public class Order {
     @Column
     private LocalDateTime date;
 
-    @Column(name = "is_public")
-    private boolean isPublic;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private PaymentReceipt paymentReceipt;
@@ -53,12 +50,11 @@ public class Order {
 
     Order(){}
 
-    public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, boolean isPublic, BigDecimal price) {
+    public Order(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, BigDecimal price) {
         this.buyer = buyer;
         this.book = book;
         this.orderStatus = orderStatus;
         this.date = date;
-        this.isPublic= isPublic;
         this.price = price;
     }
 
@@ -86,10 +82,6 @@ public class Order {
         return date;
     }
 
-    public boolean getIsPublic() {
-        return isPublic;
-    }
-
     public String getFormattedDate(Locale locale) {
         return date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale));
     }
@@ -98,20 +90,12 @@ public class Order {
         return rejectedReason;
     }
 
-    public boolean isPublic() {
-        return isPublic;
-    }
-
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
     public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
     }
 
     public PaymentReceipt getPaymentReceipt(){

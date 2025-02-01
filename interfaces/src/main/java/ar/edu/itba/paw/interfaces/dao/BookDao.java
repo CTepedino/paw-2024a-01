@@ -86,6 +86,11 @@ public interface BookDao {
     List<WishlistItem> getWishlist(long userId, int offset, int limit);
     long getWishlistSize(long userId);
 
+    Optional<Recommendation> getRecommendation(long userId, long bookId);
+    Recommendation recommend(long userId, long booKId);
+    void removeRecommendation(long userId, long bookId);
+    List<Recommendation> getRecommendations(long userId, int offset, int limit);
+    long getReccomendationsSize(long userId);
 
     List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit);
     List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month);

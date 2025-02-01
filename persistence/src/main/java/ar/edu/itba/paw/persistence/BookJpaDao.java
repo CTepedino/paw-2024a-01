@@ -119,7 +119,7 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public List<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, Long writerId, Long ownerId, int offset, int limit) {
+    public List<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, Long writerId, Long ownerId, int offset, int limit) { //TODO: ownerId -> if not logged user, show only recommendations
         StringBuilder nativeQueryStr = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
 
@@ -303,7 +303,7 @@ public class BookJpaDao implements BookDao {
             JOIN orders o ON b.book_id = o.book_id
             LEFT OUTER JOIN deals d ON b.book_id = d.id
             WHERE LOWER(b.title) LIKE LOWER(:title) AND o.status = 'COMPLETED' AND o.buyer_id = :readerId \s
-        """ + (isPublic?" AND o.is_public = TRUE ":"") + " ORDER BY " + orderBy.getColumnName());
+        """ + (isPublic?" AND b.book_id IN (SELECT r.book_id FROM recommendations r WHERE r.user_id = :readerId) ":"") + " ORDER BY " + orderBy.getColumnName());
         nativeQuery.setParameter("readerId", readerId);
         nativeQuery.setParameter("title", DaoUtils.prepareSearchString(title));
 
@@ -442,5 +442,43 @@ public class BookJpaDao implements BookDao {
         TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC, SUM(o.price) DESC", Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
+    }
+
+    @Override
+    public Optional<Recommendation> getRecommendation(long userId, long bookId) {
+        TypedQuery<Recommendation> query = em.createQuery("FROM Recommendation r WHERE r.userId = :userId AND r.bookId = :bookId", Recommendation.class);
+        query.setParameter("userId", userId);
+        query.setParameter("bookId", bookId);
+
+        try {
+            return Optional.ofNullable(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Recommendation recommend(long userId, long bookId) {
+        Recommendation recommendation = new Recommendation(userId, bookId);
+        em.persist(recommendation);
+        return recommendation;
+    }
+
+    @Override
+    public void removeRecommendation(long userId, long bookId) {
+        Query deleteQuery = em.createQuery("DELETE FROM Recommendation r WHERE r.userId = :userId AND r.bookId = :bookId");
+        deleteQuery.setParameter("userId", userId);
+        deleteQuery.setParameter("bookId", bookId);
+        deleteQuery.executeUpdate();
+    }
+
+    @Override
+    public List<Recommendation> getRecommendations(long userId, int offset, int limit) {
+        return List.of();
+    }
+
+    @Override
+    public long getReccomendationsSize(long userId) {
+        return DaoUtils.getRowCount(em, "Recommendation r", "r.bookId","WHERE r.userId = :userId", Map.of("userId", userId));
     }
 }

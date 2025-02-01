@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.orders;
 
 public enum OrderStatus {
+    WAITING_PAYMENT(false, false),
     REJECTED_PAYMENT(true, false),
     WAITING_APPROVAL(false, true),
     COMPLETED( false, false);

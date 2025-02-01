@@ -12,6 +12,8 @@ public interface OrderService {
 
     PaginatedContent<Order> searchOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
 
+    Long create(long bookId, long userId);
+
     Order create(long bookId, byte[] receipt, String receiptMimeType);
 
     boolean existsOrder(long bookId);
@@ -29,9 +31,8 @@ public interface OrderService {
 
     boolean canAdvanceOrder(long orderId, String email);
 
-    void updateOrderWriterSide(long orderId, boolean approved, String rejectedReason);
+    void updateOrderWriterSide(long orderId, String rejectedReason);
 
     void updateOrderBuyerSide(long orderId, byte[] receipt, String receiptMimeType);
 
-    void recommendBook(long orderId, boolean isRecommended);
 }
