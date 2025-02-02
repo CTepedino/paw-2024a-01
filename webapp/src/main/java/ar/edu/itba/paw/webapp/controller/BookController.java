@@ -17,6 +17,7 @@ import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.models.users.UserAnalytics;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.BookCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.BookEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.DealSubmitDTO;
@@ -61,7 +62,7 @@ public class BookController {
     }
 
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.BOOK})
     public Response getAllBooks(
             @QueryParam("page") @DefaultValue("1") final int page,
             @QueryParam("size") @DefaultValue("20") final int pageSize,
@@ -98,8 +99,7 @@ public class BookController {
     }
 
     @POST
-    @Consumes(value = {MediaType.APPLICATION_JSON})
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {VndMediaTypes.BOOK})
     public Response addBook(@Valid BookCreateDTO bookDTO){
 
         long bookId = bs.create(
@@ -119,7 +119,7 @@ public class BookController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.BOOK})
     public Response getBook(@PathParam("id") final long id){
         final BookDTO book = BookDTO.fromBook(uriInfo,
                 bs.findById(id).orElseThrow(BookNotFoundException::new)
@@ -130,7 +130,7 @@ public class BookController {
 
     @PUT
     @Path("/{id}")
-    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {VndMediaTypes.BOOK})
     public Response editBook(
             @PathParam("id") final long id,
             @Valid BookEditDTO bookDTO
@@ -207,7 +207,7 @@ public class BookController {
 
     @GET
     @Path("{id}/deal")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.DEAL})
     public Response getDeal(
             @PathParam("id") final long id
     ){
@@ -220,6 +220,7 @@ public class BookController {
 
     @PUT
     @Path("{id}/deal")
+    @Consumes(value = {VndMediaTypes.DEAL})
     public Response setDeal(
         @PathParam("id") final long id,
         @Valid DealSubmitDTO dealDTO
@@ -239,7 +240,7 @@ public class BookController {
 
     @GET
     @Path("{book_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.BOOK_ANALYTICS})
     public Response getMonthlyBookAnalytics(
             @PathParam("book_id") final long bookId,
             @PathParam("year_month") final String period

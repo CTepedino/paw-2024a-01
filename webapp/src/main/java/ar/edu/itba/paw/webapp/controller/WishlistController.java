@@ -3,9 +3,9 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.WishlistCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.WishlistDTO;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +31,7 @@ public class WishlistController {
     }
 
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.WISHLIST})
     public Response getWishlist(
             @PathParam("userId") final long id,
             @QueryParam("page") @DefaultValue("1") final int page,
@@ -46,7 +46,7 @@ public class WishlistController {
 
     @GET
     @Path("{bookId}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.WISHLIST})
     public Response getWishlistItem(
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId
@@ -60,8 +60,7 @@ public class WishlistController {
     }
 
     @POST
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {VndMediaTypes.WISHLIST})
     public Response AddWishlistItem(
             @PathParam("userId") final long userId,
             WishlistCreateDTO wishlistDTO

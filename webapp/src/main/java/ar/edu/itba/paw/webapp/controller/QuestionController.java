@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.QuestionService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
 import ar.edu.itba.paw.models.questions.Question;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.AnswerSubmitDTO;
 import ar.edu.itba.paw.webapp.dto.input.QuestionCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.AnswerDTO;
@@ -33,7 +34,7 @@ public class QuestionController {
     }
 
     @GET
-    @Produces(value = MediaType.APPLICATION_JSON)
+    @Produces(value = {VndMediaTypes.QUESTION})
     public Response listQuestions(
             @QueryParam("book_id") Long bookId,
             @QueryParam("writer_id") Long writerId,
@@ -52,7 +53,7 @@ public class QuestionController {
     }
 
     @POST
-    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = {VndMediaTypes.QUESTION})
     public Response makeQuestion(
             @Valid final QuestionCreateDTO questionDTO
     ){
@@ -65,7 +66,7 @@ public class QuestionController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = MediaType.APPLICATION_JSON)
+    @Produces(value = {VndMediaTypes.QUESTION})
     public Response getQuestion(@PathParam("id") final long id){
         Question question = qs.findById(id).orElseThrow(QuestionNotFoundException::new);
 
@@ -74,7 +75,7 @@ public class QuestionController {
 
     @GET
     @Path("{id}/answer")
-    @Produces(value = MediaType.APPLICATION_JSON)
+    @Produces(value = {VndMediaTypes.ANSWER})
     public Response getAnswer(@PathParam("id") final long id){
         Question question = qs.findById(id).orElseThrow(QuestionNotFoundException::new);
         if (question.getAnswer() == null){
@@ -86,7 +87,7 @@ public class QuestionController {
 
     @PUT
     @Path("/{id}/answer")
-    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = {VndMediaTypes.ANSWER})
     public Response setAnswer(
             @PathParam("id") final long id,
             @Valid AnswerSubmitDTO answerDTO

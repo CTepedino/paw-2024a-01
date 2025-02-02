@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.exception.OrderNotFoundException;
 import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.orders.OrderStatus;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.OrderCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.OrderEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageOrPdf;
@@ -38,7 +39,7 @@ public class OrderController {
     }
 
     @GET
-    @Produces(value = MediaType.APPLICATION_JSON)
+    @Produces(value = {VndMediaTypes.ORDER})
     public Response listOrders(
             @QueryParam("book_id") final Long bookId,
             @QueryParam("buyer_id") final Long readerId,
@@ -57,7 +58,7 @@ public class OrderController {
     }
 
     @POST
-    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = {VndMediaTypes.ORDER})
     public Response createOrder(
             @Valid OrderCreateDTO orderDTO
     ){
@@ -74,7 +75,7 @@ public class OrderController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = MediaType.APPLICATION_JSON)
+    @Produces(value = {VndMediaTypes.ORDER})
     public Response getById(@PathParam("id") final long id){
         final Order order = os.findById(id).orElseThrow(OrderNotFoundException::new);
 
@@ -83,7 +84,7 @@ public class OrderController {
 
     @PUT
     @Path("{id}")
-    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = {VndMediaTypes.ORDER})
     public Response updateOrder(
             @PathParam("id") final long id,
             @Valid final OrderEditDTO orderDTO

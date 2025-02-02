@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookGenreOrderBy;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
@@ -26,7 +27,7 @@ public class GenreController {
     private UriInfo uriInfo;
 
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.GENRE})
     public Response getAllGenres(
             @QueryParam("page") @DefaultValue("1") final int page,
             @QueryParam("size") @DefaultValue("20") final int size,

@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
-import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserAnalytics;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.UserCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.UserEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
@@ -16,7 +16,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -29,7 +28,7 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
 
 @Path("users")
 @Component
-public class UserController { //TODO: exceptions. custom mime types
+public class UserController {
 
     private final UserService us;
     private final AnalyticsService as;
@@ -44,12 +43,11 @@ public class UserController { //TODO: exceptions. custom mime types
     }
 
     @POST
-    @Produces(value = MediaType.APPLICATION_JSON)
-    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Consumes(value = VndMediaTypes.USER)
     public Response createUser(
             @Valid final UserCreateDTO userDto,
             @Context HttpHeaders headers
-    ){ //TODO: status code on repeated email
+    ){
         final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName(), headers.getAcceptableLanguages().getFirst());
         final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
         return Response.created(uri).build();
@@ -57,7 +55,7 @@ public class UserController { //TODO: exceptions. custom mime types
 
     @GET
     @Path("/{id}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.USER})
     public Response getById(@PathParam("id") final long id){
         final Optional<User> user = us.findById(id);
 
@@ -70,8 +68,7 @@ public class UserController { //TODO: exceptions. custom mime types
 
     @PUT
     @Path("/{id}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {VndMediaTypes.USER})
     public Response modifyUser(
             @PathParam("id") final long id,
             @Valid UserEditDTO userDTO
@@ -80,7 +77,7 @@ public class UserController { //TODO: exceptions. custom mime types
 
         if (user.isPresent()){
             us.updateProfile(id, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getCbu(), userDTO.getDescription());
-            return Response.ok(UserDTO.fromUser(uriInfo, user.get())).build(); //TODO: return model on PUT?
+            return Response.ok().build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -88,7 +85,7 @@ public class UserController { //TODO: exceptions. custom mime types
 
     @PUT
     @Path("/{id}/password")
-    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {VndMediaTypes.PASSWORD})
     public Response modifyPassword(
             @PathParam("id") final long id,
             @Valid String password
@@ -100,7 +97,7 @@ public class UserController { //TODO: exceptions. custom mime types
 
     @GET
     @Path("/{id}/profile_picture")
-    @Produces(value = {"image/jpeg", "image/png"})
+    @Produces(value = {"image/jpeg"})
     public Response getProfilePicture(@PathParam("id") final long id){
         ProfilePicture image = us.getProfilePicture(id);
 
@@ -127,7 +124,7 @@ public class UserController { //TODO: exceptions. custom mime types
 
     @GET
     @Path("{user_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.WRITER_ANALYTICS})
     public Response getMonthlyWriterAnalytics(
             @PathParam("user_id") final long userId,
             @PathParam("year_month") final String period

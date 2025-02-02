@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Recommendation;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.RecommendationCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.RecommendationDTO;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -31,7 +32,7 @@ public class RecommendationController {
     }
 
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.RECOMMENDATION})
     public Response getRecommendations(
             @PathParam("userId") final long userId,
             @QueryParam("page") @DefaultValue("1") final int page,
@@ -46,8 +47,7 @@ public class RecommendationController {
     }
 
     @POST
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {VndMediaTypes.RECOMMENDATION})
     public Response addRecommendation(
             @PathParam("userId") final long userId,
             RecommendationCreateDTO recommendationDTO
@@ -61,7 +61,7 @@ public class RecommendationController {
 
     @GET
     @Path("{bookId}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.RECOMMENDATION})
     public Response getRecommendation(
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId

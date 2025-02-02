@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.ReviewSubmitDTO;
 import ar.edu.itba.paw.webapp.dto.output.ReviewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class ReviewController {
     }
 
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.REVIEW})
     public Response getReviews(
             @PathParam("bookId") final long id,
             @QueryParam("order_by") @DefaultValue("DATE_DESC") final ReviewOrderBy orderBy,
@@ -50,7 +51,7 @@ public class ReviewController {
 
     @GET
     @Path("{reviewerId}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {VndMediaTypes.REVIEW})
     public Response getReview(
             @PathParam("bookId") final long bookId,
             @PathParam("reviewerId") final long reviewerId
@@ -64,7 +65,7 @@ public class ReviewController {
 
     @PUT
     @Path("{reviewerId}")
-    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {VndMediaTypes.REVIEW})
     public Response modifyReview(
             @PathParam("bookId") final long bookId,
             @PathParam("reviewerId") final long reviewerId,
