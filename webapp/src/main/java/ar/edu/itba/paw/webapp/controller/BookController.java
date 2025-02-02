@@ -145,7 +145,7 @@ public class BookController {
                 bookDTO.getSuggestedAge()
         );
 
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET
@@ -164,7 +164,7 @@ public class BookController {
             @ImageFile @FormDataParam("cover") FormDataBodyPart image
             ){
         bs.setCoverImage(id, image.getValueAs(byte[].class));
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET
@@ -183,7 +183,7 @@ public class BookController {
             @PdfFile @FormDataParam("preview") FormDataBodyPart pdf
     ){
         bs.setPreview(id, pdf.getValueAs(byte[].class));
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET
@@ -202,7 +202,7 @@ public class BookController {
             @PdfFile @FormDataParam("book_file") FormDataBodyPart pdf
     ){
         bs.setBookFile(id, pdf.getValueAs(byte[].class));
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET
@@ -226,7 +226,7 @@ public class BookController {
         @Valid DealSubmitDTO dealDTO
     ){
         ds.createOrUpdate(id, dealDTO.getPrice(), dealDTO.getDuration());
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @DELETE

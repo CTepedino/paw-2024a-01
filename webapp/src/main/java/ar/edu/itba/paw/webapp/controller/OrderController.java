@@ -90,7 +90,7 @@ public class OrderController {
             @Valid final OrderEditDTO orderDTO
     ){
         os.updateOrderWriterSide(id, orderDTO.getRejectionReason());
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET
@@ -117,6 +117,6 @@ public class OrderController {
     ){
         os.updateOrderBuyerSide(orderId, receipt.getEntityAs(byte[].class), receipt.getMediaType().toString());
 
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 }

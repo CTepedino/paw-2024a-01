@@ -72,6 +72,6 @@ public class ReviewController {
             @Valid final ReviewSubmitDTO reviewDTO
     ){
         rs.createOrUpdate(bookId, reviewerId, reviewDTO.getRating(), reviewDTO.getReview());
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 }

@@ -94,6 +94,6 @@ public class QuestionController {
     ){
         qs.answer(id, answerDTO.getAnswer());
 
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 }

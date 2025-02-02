@@ -77,7 +77,7 @@ public class UserController {
 
         if (user.isPresent()){
             us.updateProfile(id, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getCbu(), userDTO.getDescription());
-            return Response.ok().build();
+            return Response.noContent().build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -112,7 +112,7 @@ public class UserController {
             @ImageFile @FormDataParam("image")  final FormDataBodyPart image
     ){
         us.updateProfilePicture(id, image.getEntityAs(byte[].class));
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @DELETE
