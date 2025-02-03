@@ -59,18 +59,14 @@ public class OrderController {
 
     @POST
     @Consumes(value = {VndMediaTypes.ORDER})
-    public Response createOrder(//TODO
+    public Response createOrder(
             @Valid OrderCreateDTO orderDTO
     ){
-        Long orderId = os.create(orderDTO.getBookId());
+        long orderId = os.create(orderDTO.getBookId());
 
-        if(orderId != null){
-            return Response
-                    .created(uriInfo.getAbsolutePathBuilder().path(orderId.toString()).build())
-                    .build();
-        } else {
-            return Response.status(Response.Status.CONFLICT).build();
-        }
+        return Response
+                .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(orderId)).build())
+                .build();
     }
 
     @GET

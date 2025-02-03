@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Long create(long bookId) {
+    public long create(long bookId) {
         User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
         if (book.getWriter().getUserId() == buyer.getUserId()){
