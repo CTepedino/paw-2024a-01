@@ -143,7 +143,14 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void addToWishlist(long userId, long bookId) {
-        bookDao.findById(bookId).ifPresent(__ -> bookDao.addToWishlist(userId, bookId));
+        Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
+        if (book.getWriter().getUserId() == userId || orderDao.find(userId, bookId).isPresent()){
+            throw new InvalidWishlistException();
+        }
+        if (bookDao.findWishlistItem(userId, bookId).isPresent()){
+            throw new AlreadyWishlistedException();
+        }
+        bookDao.addToWishlist(userId, bookId);
     }
 
     @Transactional
@@ -263,9 +270,14 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void recommend(long userId, long bookId) {
-        if (findRecommendation(userId, bookId).isEmpty()) {
-            bookDao.recommend(userId, bookId);
-        }//TODO: else throw
+        Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
+        if (book.getWriter().getUserId() == userId || orderDao.find(userId, bookId).isEmpty()){
+            throw new InvalidRecommendationException();
+        }
+        if (findRecommendation(userId, bookId).isPresent()) {
+            throw new AlreadyRecommendedException();
+        }
+        bookDao.recommend(userId, bookId);
     }
 
     @Transactional

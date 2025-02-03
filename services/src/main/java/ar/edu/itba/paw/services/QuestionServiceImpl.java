@@ -1,16 +1,10 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.QuestionDao;
-import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.MailService;
-import ar.edu.itba.paw.interfaces.service.QuestionService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.exception.BookNotFoundException;
-import ar.edu.itba.paw.models.exception.InvalidPageException;
-import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
@@ -31,15 +25,19 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final UserService us;
 
+    private final OrderService os;
+
     private final MailService ms;
+
 
     private final static Logger LOGGER = LoggerFactory.getLogger(QuestionServiceImpl.class);
 
 
-    public QuestionServiceImpl(QuestionDao questionDao, BookService bs, UserService us, MailService ms) {
+    public QuestionServiceImpl(QuestionDao questionDao, BookService bs, UserService us, OrderService os, MailService ms) {
         this.questionDao = questionDao;
         this.bs = bs;
         this.us = us;
+        this.os = os;
         this.ms = ms;
     }
 
@@ -47,8 +45,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public long create(long bookId, String question) {
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        User questioner = us.findById(1).get();
-        //TODO: User questioner = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        User questioner = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+        if (book.getWriter().getUserId() == questioner.getUserId() || os.existsOrder(questioner.getUserId(), bookId)){
+            throw new IllegalQuestionException();
+        }
         Question q = questionDao.create(book, questioner, question, LocalDateTime.now());
         ms.sendQuestionReceivedEmail(q);
         LOGGER.atDebug().setMessage("Created Question for bookId: {}").addArgument(bookId).log();

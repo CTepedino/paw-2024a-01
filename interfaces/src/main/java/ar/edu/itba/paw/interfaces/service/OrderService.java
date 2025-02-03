@@ -12,7 +12,7 @@ public interface OrderService {
 
     PaginatedContent<Order> searchOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
 
-    Long create(long bookId, long userId);
+    Long create(long bookId);
 
     Order create(long bookId, byte[] receipt, String receiptMimeType);
 

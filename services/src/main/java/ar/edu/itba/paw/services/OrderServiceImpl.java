@@ -44,13 +44,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Long create(long bookId, long userId) {
-        if (orderDao.find(bookId, userId).isPresent()){
-            return null;
-        }
-        User buyer = us.findById(userId).get();
-        //TODO: User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
+    public Long create(long bookId) {
+        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
         Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
+        if (book.getWriter().getUserId() == buyer.getUserId()){
+            throw new IllegalOrderException();
+        }
+        if (orderDao.find(buyer.getUserId(), bookId).isPresent()){
+            throw new OrderAlreadyExistsException();
+        }
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_PAYMENT, LocalDateTime.now(), book.getDeal()==null? book.getPrice(): book.getDeal().getPrice());
         bs.removeFromWishlist(buyer.getUserId(), bookId);
         bs.checkBookSalesCategory(book);

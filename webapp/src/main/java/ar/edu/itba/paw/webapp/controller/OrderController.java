@@ -62,7 +62,7 @@ public class OrderController {
     public Response createOrder(
             @Valid OrderCreateDTO orderDTO
     ){
-        Long orderId = os.create(orderDTO.getBookId(), orderDTO.getUserId());
+        Long orderId = os.create(orderDTO.getBookId());
 
         if(orderId != null){
             return Response
