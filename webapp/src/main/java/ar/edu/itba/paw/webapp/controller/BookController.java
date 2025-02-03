@@ -118,7 +118,7 @@ public class BookController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(value = {VndMediaTypes.BOOK})
     public Response getBook(@PathParam("id") final long id){
         final BookDTO book = BookDTO.fromBook(uriInfo,
@@ -129,7 +129,7 @@ public class BookController {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Consumes(value = {VndMediaTypes.BOOK})
     public Response editBook(
             @PathParam("id") final long id,
@@ -149,7 +149,7 @@ public class BookController {
     }
 
     @GET
-    @Path("/{id}/cover")
+    @Path("/{id:\\d+}/cover")
     @Produces(value = {"image/jpeg"})
     public Response getBookCover(@PathParam("id") final long id){
         CoverImage coverImage = bs.findById(id).orElseThrow(BookNotFoundException::new).getCoverImage();
@@ -157,7 +157,7 @@ public class BookController {
     }
 
     @PUT
-    @Path("/{id}/cover")
+    @Path("/{id:\\d+}/cover")
     @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
     public Response setBookCover(
             @PathParam("id") final long id,
@@ -168,7 +168,7 @@ public class BookController {
     }
 
     @GET
-    @Path("/{id}/preview")
+    @Path("/{id:\\d+}/preview")
     @Produces(value = {"application/pdf"})
     public Response getBookPreview(@PathParam("id") final long id){
         BookPreview preview = bs.findById(id).orElseThrow(BookNotFoundException::new).getPreview();
@@ -176,7 +176,7 @@ public class BookController {
     }
 
     @PUT
-    @Path("/{id}/preview")
+    @Path("/{id:\\d+}/preview")
     @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
     public Response setBookPreview(
             @PathParam("id") final long id,
@@ -187,7 +187,7 @@ public class BookController {
     }
 
     @GET
-    @Path("/{id}/book_file")
+    @Path("/{id:\\d+}/book_file")
     @Produces(value = {"application/pdf"})
     public Response getBookFile(@PathParam("id") final long id){
         BookFile bookFile = bs.findById(id).orElseThrow(BookNotFoundException::new).getBookFile();
@@ -195,7 +195,7 @@ public class BookController {
     }
 
     @PUT
-    @Path("/{id}/book_file")
+    @Path("/{id:\\d+}/book_file")
     @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
     public Response setBookFile(
             @PathParam("id") final long id,
@@ -206,7 +206,7 @@ public class BookController {
     }
 
     @GET
-    @Path("{id}/deal")
+    @Path("{id:\\d+}/deal")
     @Produces(value = {VndMediaTypes.DEAL})
     public Response getDeal(
             @PathParam("id") final long id
@@ -219,7 +219,7 @@ public class BookController {
     }
 
     @PUT
-    @Path("{id}/deal")
+    @Path("{id:\\d+}/deal")
     @Consumes(value = {VndMediaTypes.DEAL})
     public Response setDeal(
         @PathParam("id") final long id,
@@ -230,7 +230,7 @@ public class BookController {
     }
 
     @DELETE
-    @Path("{id}/deal")
+    @Path("{id:\\d+}/deal")
     public Response endDeal(
             @PathParam("id") final long id
     ){
@@ -239,7 +239,7 @@ public class BookController {
     }
 
     @GET
-    @Path("{book_id}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
+    @Path("{book_id:\\d+}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
     @Produces(value = {VndMediaTypes.BOOK_ANALYTICS})
     public Response getMonthlyBookAnalytics(
             @PathParam("book_id") final long bookId,

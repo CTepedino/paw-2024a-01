@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
-@Path("users/{userId}/wishlist")
+@Path("users/{userId:\\d+}/wishlist")
 @Component
 public class WishlistController {
 
@@ -45,7 +45,7 @@ public class WishlistController {
     }
 
     @GET
-    @Path("{bookId}")
+    @Path("{bookId:\\d+}")
     @Produces(value = {VndMediaTypes.WISHLIST})
     public Response getWishlistItem(
             @PathParam("userId") final long userId,
@@ -73,7 +73,7 @@ public class WishlistController {
     }
 
     @DELETE
-    @Path("{bookId}")
+    @Path("{bookId:\\d+}")
     public Response RemoveWishlistItem(
         @PathParam("userId") final long userId,
         @PathParam("bookId") final long bookId

@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
-@Path("users/{userId}/recommendations")
+@Path("users/{userId:\\d+}/recommendations")
 @Component
 public class RecommendationController {
 
@@ -60,7 +60,7 @@ public class RecommendationController {
     }
 
     @GET
-    @Path("{bookId}")
+    @Path("{bookId:\\d+}")
     @Produces(value = {VndMediaTypes.RECOMMENDATION})
     public Response getRecommendation(
             @PathParam("userId") final long userId,
@@ -74,7 +74,7 @@ public class RecommendationController {
     }
 
     @DELETE
-    @Path("{bookId}")
+    @Path("{bookId:\\d+}")
     public Response removeRecommendation(
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId

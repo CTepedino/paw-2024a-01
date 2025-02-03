@@ -65,7 +65,7 @@ public class QuestionController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(value = {VndMediaTypes.QUESTION})
     public Response getQuestion(@PathParam("id") final long id){
         Question question = qs.findById(id).orElseThrow(QuestionNotFoundException::new);
@@ -74,7 +74,7 @@ public class QuestionController {
     }
 
     @GET
-    @Path("{id}/answer")
+    @Path("{id:\\d+}/answer")
     @Produces(value = {VndMediaTypes.ANSWER})
     public Response getAnswer(@PathParam("id") final long id){
         Question question = qs.findById(id).orElseThrow(QuestionNotFoundException::new);
@@ -86,7 +86,7 @@ public class QuestionController {
     }
 
     @PUT
-    @Path("/{id}/answer")
+    @Path("/{id:\\d+}/answer")
     @Consumes(value = {VndMediaTypes.ANSWER})
     public Response setAnswer(
             @PathParam("id") final long id,

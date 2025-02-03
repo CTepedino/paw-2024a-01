@@ -74,7 +74,7 @@ public class OrderController {
     }
 
     @GET
-    @Path("{id}")
+    @Path("{id:\\d+}")
     @Produces(value = {VndMediaTypes.ORDER})
     public Response getById(@PathParam("id") final long id){
         final Order order = os.findById(id).orElseThrow(OrderNotFoundException::new);
@@ -83,7 +83,7 @@ public class OrderController {
     }
 
     @PUT
-    @Path("{id}")
+    @Path("{id:\\d+}")
     @Consumes(value = {VndMediaTypes.ORDER})
     public Response updateOrder(
             @PathParam("id") final long id,
@@ -94,7 +94,7 @@ public class OrderController {
     }
 
     @GET
-    @Path("/{id}/receipt")
+    @Path("/{id:\\d+}/receipt")
     @Produces(value = {"image/jpeg", "application/pdf"})
     public Response getReceipt(@PathParam("id") final long id){
         final PaymentReceipt receipt = os.getReceipt(id);
@@ -108,7 +108,7 @@ public class OrderController {
     }
 
     @PUT
-    @Path("{id}/receipt")
+    @Path("{id:\\d+}/receipt")
     @Consumes(value = MediaType.MULTIPART_FORM_DATA)
     public Response setReceipt(
             @PathParam("id") final long orderId,

@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
-@Path("books/{bookId}/reviews")
+@Path("books/{bookId:\\d+}/reviews")
 @Component
 public class ReviewController {
 
@@ -50,7 +50,7 @@ public class ReviewController {
     }
 
     @GET
-    @Path("{reviewerId}")
+    @Path("{reviewerId:\\d+}")
     @Produces(value = {VndMediaTypes.REVIEW})
     public Response getReview(
             @PathParam("bookId") final long bookId,
@@ -64,7 +64,7 @@ public class ReviewController {
     }
 
     @PUT
-    @Path("{reviewerId}")
+    @Path("{reviewerId:\\d+}")
     @Consumes(value = {VndMediaTypes.REVIEW})
     public Response modifyReview(
             @PathParam("bookId") final long bookId,
