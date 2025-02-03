@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.PaginatedContent;
+import ar.edu.itba.paw.models.exception.ReviewNotFoundException;
 import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.reviews.ReviewOrderBy;
 import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
@@ -56,11 +57,8 @@ public class ReviewController {
             @PathParam("bookId") final long bookId,
             @PathParam("reviewerId") final long reviewerId
     ){
-        Optional<Review> review = rs.find(bookId, reviewerId);
-        if (review.isEmpty()){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(ReviewDTO.fromReview(uriInfo, review.get())).build();
+        Review review = rs.find(bookId, reviewerId).orElseThrow(ReviewNotFoundException::new);
+        return Response.ok(ReviewDTO.fromReview(uriInfo, review)).build();
     }
 
     @PUT

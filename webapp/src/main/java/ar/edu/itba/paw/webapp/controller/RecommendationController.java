@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Recommendation;
+import ar.edu.itba.paw.models.exception.RecommendationNotFoundException;
 import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.RecommendationCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.RecommendationDTO;
@@ -66,11 +67,8 @@ public class RecommendationController {
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId
     ){
-        Optional<Recommendation> recommendation = bs.findRecommendation(userId, bookId);
-        if(recommendation.isPresent()){
-            return Response.ok(RecommendationDTO.fromRecommendation(uriInfo, recommendation.get())).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        Recommendation recommendation = bs.findRecommendation(userId, bookId).orElseThrow(RecommendationNotFoundException::new);
+        return Response.ok(RecommendationDTO.fromRecommendation(uriInfo, recommendation)).build();
     }
 
     @DELETE

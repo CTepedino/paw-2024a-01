@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
+import ar.edu.itba.paw.models.exception.WishlistItemNotFoundException;
 import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.WishlistCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.WishlistDTO;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
-import java.util.Optional;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
@@ -51,12 +51,8 @@ public class WishlistController {
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId
     ){
-        Optional<WishlistItem> wishlistItem = bs.findWishlistItem(userId, bookId);
-        if (wishlistItem.isEmpty()){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.ok(WishlistDTO.fromWishlistItem(uriInfo, wishlistItem.get())).build();
+        WishlistItem wishlistItem = bs.findWishlistItem(userId, bookId).orElseThrow(WishlistItemNotFoundException::new);
+        return Response.ok(WishlistDTO.fromWishlistItem(uriInfo, wishlistItem)).build();
     }
 
     @POST

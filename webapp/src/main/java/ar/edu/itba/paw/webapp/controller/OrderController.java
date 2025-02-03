@@ -59,7 +59,7 @@ public class OrderController {
 
     @POST
     @Consumes(value = {VndMediaTypes.ORDER})
-    public Response createOrder(
+    public Response createOrder(//TODO
             @Valid OrderCreateDTO orderDTO
     ){
         Long orderId = os.create(orderDTO.getBookId());
@@ -78,7 +78,6 @@ public class OrderController {
     @Produces(value = {VndMediaTypes.ORDER})
     public Response getById(@PathParam("id") final long id){
         final Order order = os.findById(id).orElseThrow(OrderNotFoundException::new);
-
         return Response.ok(OrderDTO.fromOrder(uriInfo, order)).build();
     }
 

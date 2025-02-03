@@ -11,6 +11,7 @@ import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookSearchOrderBy;
 import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
+import ar.edu.itba.paw.models.exception.DealNotFoundException;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
@@ -109,8 +110,7 @@ public class BookController {
                 bookDTO.getPrice(),
                 bookDTO.getPageCount(),
                 bookDTO.getSuggestedAge(),
-                bookDTO.getPublicationDate(),
-                bookDTO.getWriterId()
+                bookDTO.getPublicationDate()
         );
         return Response
                 .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(bookId)).build())
@@ -211,11 +211,8 @@ public class BookController {
     public Response getDeal(
             @PathParam("id") final long id
     ){
-        Optional<Deal> deal = ds.get(id);
-        if (deal.isPresent()){
-            return Response.ok(DealDTO.fromDeal(uriInfo, deal.get())).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        Deal deal = ds.get(id).orElseThrow(DealNotFoundException::new);
+        return Response.ok(DealDTO.fromDeal(uriInfo, deal)).build();
     }
 
     @PUT

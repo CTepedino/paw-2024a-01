@@ -196,11 +196,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteProfilePicture(long userId) {
-        Optional<User> maybeUser = userDao.findById(userId);
-        if (maybeUser.isPresent()){
-            if (maybeUser.get().getProfilePicture() != null){
-                userDao.deleteProfilePicture(maybeUser.get());
-            }
+        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
+        if (user.getProfilePicture() != null){
+            userDao.deleteProfilePicture(user);
         }
     }
 

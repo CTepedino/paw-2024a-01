@@ -48,8 +48,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishedDate, long writerId){
-        User writer = us.findById(writerId).orElseThrow(UserNotFoundException::new);
+    public long create(String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishedDate){
+        User writer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
 
         us.checkWriterRole(writer);
         Book book = bookDao.create(
@@ -73,20 +73,6 @@ public class BookServiceImpl implements BookService {
     public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
 
-/*        if (cover != null*//* && !cover.isEmpty()*//*) {
-            bookDao.updateCoverImage(book, cover);
-        }
-        if (preview != null*//* && !preview.isEmpty()*//*) {
-            bookDao.updatePreviewFile(book, preview);
-        }
-        if (bookFile != null*//* && !bookFile.isEmpty()*//*) {
-            bookDao.createOrUpdateBookFile(book, bookFile);
-            if (pause){
-                if (book.getWriter().getCbu()!=null){
-                    pause = false;
-                }
-            }
-        }*/
         bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }

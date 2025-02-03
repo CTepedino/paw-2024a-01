@@ -17,9 +17,7 @@ public interface BookService {
             BigDecimal price,
             int pageCount,
             int suggestedAge,
-            LocalDate publishedDate,
-
-            long writerId
+            LocalDate publishedDate
     );
 
     void editPublication(

@@ -79,7 +79,7 @@ public class QuestionController {
     public Response getAnswer(@PathParam("id") final long id){
         Question question = qs.findById(id).orElseThrow(QuestionNotFoundException::new);
         if (question.getAnswer() == null){
-            return Response.noContent().build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         return Response.ok(AnswerDTO.fromQuestion(uriInfo, question)).build();

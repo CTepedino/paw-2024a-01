@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AnalyticsService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserAnalytics;
@@ -50,8 +51,10 @@ public class UserController {
             @Context HttpHeaders headers
     ){
         final User user = us.create(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName(), headers.getAcceptableLanguages().getFirst());
-        final URI uri = uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build();
-        return Response.created(uri).build();
+
+        return Response
+                .created(uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).build())
+                .build();
     }
 
     @GET
@@ -59,13 +62,9 @@ public class UserController {
     @Produces(value = {VndMediaTypes.USER})
     public Response getById(@PathParam("id") final long id){
 
-        final Optional<User> user = us.findById(id);
+        final User user = us.findById(id).orElseThrow(UserNotFoundException::new);
 
-        if (user.isPresent()){
-            return Response.ok(UserDTO.fromUser(uriInfo, user.get())).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return Response.ok(UserDTO.fromUser(uriInfo, user)).build();
     }
 
     @PUT
@@ -75,14 +74,9 @@ public class UserController {
             @PathParam("id") final long id,
             @Valid UserEditDTO userDTO
     ){
-        final Optional<User> user = us.findById(id);
+        us.updateProfile(id, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getCbu(), userDTO.getDescription());
 
-        if (user.isPresent()){
-            us.updateProfile(id, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getCbu(), userDTO.getDescription());
-            return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return Response.noContent().build();
     }
 
     @PUT

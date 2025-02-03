@@ -2,13 +2,10 @@ package ar.edu.itba.paw.webapp.dto.input;
 
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.webapp.dto.input.validations.TodayOrBefore;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
-import javax.ws.rs.DefaultValue;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class BookCreateDTO {
 
@@ -41,8 +38,6 @@ public class BookCreateDTO {
     @TodayOrBefore
     @NotNull
     private LocalDate publicationDate;
-
-    private long writerId;
 
     public String getTitle() {
         return title;
@@ -98,13 +93,5 @@ public class BookCreateDTO {
 
     public void setPublicationDate(LocalDate publicationDate) {
         this.publicationDate = publicationDate;
-    }
-
-    public long getWriterId() {
-        return writerId;
-    }
-
-    public void setWriterId(long writerId) {
-        this.writerId = writerId;
     }
 }
