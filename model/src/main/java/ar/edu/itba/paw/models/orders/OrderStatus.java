@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.models.orders;
 
 public enum OrderStatus {
-    WAITING_PAYMENT(false, false),
+    WAITING_PAYMENT(true, false),
     REJECTED_PAYMENT(true, false),
     WAITING_APPROVAL(false, true),
     COMPLETED( false, false);
@@ -14,11 +14,11 @@ public enum OrderStatus {
         this.writerCanAdvance = writerCanAdvance;
     }
 
-    public boolean getReaderCanAdvance() {
+    public boolean canReaderAdvance() {
         return readerCanAdvance;
     }
 
-    public boolean getWriterCanAdvance() {
+    public boolean canWriterAdvance() {
         return writerCanAdvance;
     }
 }

@@ -130,7 +130,7 @@ public class OrderJpaDaoTest{
         assertNotNull(orders);
         assertEquals(TestUtils.getRowCount(em, "FROM orders o JOIN books b ON o.book_id = b.book_id WHERE b.title LIKE '%my book%' AND o.status = 'WAITING_APPROVAL' AND b.writer_id = 2"), orders.size());
     }
-
+/*
     @Test
     public void testOwnsBook(){
         boolean owns = orderDao.ownsBook(102, "booksPaused@mail.com");
@@ -143,5 +143,5 @@ public class OrderJpaDaoTest{
         boolean owns = orderDao.ownsBook(101,"anotherMail@mail.com");
 
         assertFalse(owns);
-    }
+    }*/
 }

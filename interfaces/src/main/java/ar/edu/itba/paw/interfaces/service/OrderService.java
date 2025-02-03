@@ -25,9 +25,8 @@ public interface OrderService {
 
     PaymentReceipt getReceipt(long id);
 
-    boolean loggedUserOwnsBook(long bookId);
-
-    boolean hasBookFileAccess(long bookId, String email);
+    boolean ownsBook(long userId, long bookId);
+    boolean existsOrder(long userId, long bookId);
 
     boolean canAdvanceOrder(long orderId, String email);
 

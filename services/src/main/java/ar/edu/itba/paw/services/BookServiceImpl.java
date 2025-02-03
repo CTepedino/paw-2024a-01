@@ -106,9 +106,9 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public boolean isAuthor(long bookId, String email) {
+    public boolean isAuthor(long userId, long bookId) {
         Optional<Book> maybeBook = bookDao.findById(bookId);
-        return maybeBook.isPresent() && maybeBook.get().getWriter().getEmail().equals(email);
+        return maybeBook.filter(b -> b.getWriter().getUserId() == userId).isPresent();
     }
 
     @Transactional(readOnly = true)

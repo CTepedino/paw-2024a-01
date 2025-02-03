@@ -4,17 +4,22 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.InvalidCodeException;
 import ar.edu.itba.paw.models.exception.OrderNotFoundException;
+import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.orders.Order;
+import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Component
 public class AccessHelper {
@@ -32,123 +37,104 @@ public class AccessHelper {
         this.qs = qs;
     }
 
-    public boolean canCreateOrder(String id){
-        try {
-            long bookId = Long.parseLong(id);
-            return us.isLoggedIn() && os.canCreateOrder(bookId);
-        } catch (Exception e){
-            return false;
-        }
+    private Predicate<User> isLoggedUser(long userId){
+        return u -> u.getUserId() == userId;
+    }
+
+    private Predicate<User> isAuthor(long bookId){
+        return u -> bs.isAuthor(u.getUserId(), bookId);
+    }
+
+    private Predicate<User> isOwner(long bookId){
+        return u -> os.ownsBook(u.getUserId(), bookId);
+    }
+
+    public boolean isLoggedUser(String userIdString){
+        long userId = Long.parseLong(userIdString);
+
+        return us.getLoggedUser()
+                .filter(isLoggedUser(userId))
+                .isPresent();
+    }
+
+    public boolean isLoggedAndCanPublish(){
+        return us.getLoggedUser()
+                .filter(u -> u.getCbu() != null)
+                .isPresent();
     }
 
 
-    public boolean canAccessReceipt(Authentication auth, String id){
-        if (!us.isLoggedIn()) {
-            return false;
-        }
+    public boolean isLoggedAndWriter(String bookIdString){
+        long bookId = Long.parseLong(bookIdString);
 
-        long orderId =  Long.parseLong(id);
+        return us.getLoggedUser()
+                .filter(isAuthor(bookId))
+                .isPresent();
+    }
 
+    public boolean isLoggedUserAndOwnsBook(String userIdString, String bookIdString){
+        long userId = Long.parseLong(userIdString);
+        long bookId = Long.parseLong(bookIdString);
+
+        return us.getLoggedUser()
+                .filter(isLoggedUser(userId))
+                .filter(isOwner(bookId))
+                .isPresent();
+    }
+
+    public boolean isLoggedAndOwnsBookOrIsWriter(String bookIdString){
+        long bookId = Long.parseLong(bookIdString);
+
+        return us.getLoggedUser()
+                .filter(isAuthor(bookId)
+                        .or(isOwner(bookId)))
+                .isPresent();
+    }
+
+    public boolean isLoggedAndWriterOrBuyer(String orderIdString){
+        long orderId = Long.parseLong(orderIdString);
         Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
-        String buyerEmail = order.getBuyer().getEmail();
-        String writerEmail = order.getWriter().getEmail();
-        String userEmail = auth.getName();
-
-        return userEmail.equals(buyerEmail) || userEmail.equals(writerEmail);
+        return us.getLoggedUser()
+                .filter(u -> order.getBuyer().getUserId() == u.getUserId() || order.getWriter().getUserId() == u.getUserId())
+                .isPresent();
     }
 
-    public boolean canAccessBook(Authentication auth, String id){
-        if (!us.isLoggedIn()) {
-            return false;
-        }
+    public boolean isLoggedAndWriterAndCanAdvanceOrder(String orderIdString){
+        long orderId = Long.parseLong(orderIdString);
+        Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
-        long bookId = Long.parseLong(id);
-        return os.hasBookFileAccess(bookId, auth.getName());
+        return us.getLoggedUser()
+                .filter(u -> order.getWriter().getUserId() == u.getUserId())
+                .filter(u -> order.getOrderStatus().canWriterAdvance())
+                .isPresent();
     }
 
-    public boolean canAdvanceOrder(Authentication auth, String id){
-        if (!us.isLoggedIn()) {
-            return false;
-        }
+    public boolean isLoggedAndBuyerAndCanAdvanceOrder(String orderIdString){
+        long orderId = Long.parseLong(orderIdString);
+        Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
-        long orderId = Long.parseLong(id);
-        return os.canAdvanceOrder(orderId, auth.getName());
+        return us.getLoggedUser()
+                .filter(u -> order.getBuyer().getUserId() == u.getUserId())
+                .filter(u -> order.getOrderStatus().canReaderAdvance())
+                .isPresent();
     }
 
-    public boolean canEditBook(String id){
-        if (!us.isLoggedIn()) {
-            return false;
-        }
-        User user = us.getLoggedUser().get();
-        long bookId = Long.parseLong(id);
-        Optional<Book> maybeBook = bs.findById(bookId);
+    public boolean isLoggedAndCanAnswer(String questionIdString){
+        long questionId = Long.parseLong(questionIdString);
+        Question question = qs.findById(questionId).orElseThrow(QuestionNotFoundException::new);
 
-        return maybeBook.isPresent() &&  bs.isAuthor(bs.findById(bookId).get(), user.getUserId());
+        return us.getLoggedUser()
+                .filter(u -> question.getBook().getWriter().getUserId() == u.getUserId())
+                .isPresent();
     }
 
-    public boolean canReview(Authentication auth, String id){
-        if (!us.isLoggedIn()) {
-            return false;
+    private Long parseOrNull(String s){
+        try {
+           return Long.parseLong(s);
+        } catch (Exception e) {
+            return null;
         }
-        long bookId = Long.parseLong(id);
-        return os.hasBookFileAccess(bookId, auth.getName()) && !bs.isAuthor(bookId, auth.getName());
     }
 
-
-    public boolean canQuestion(Authentication auth, String id){
-        if (!us.isLoggedIn()) {
-            return false;
-        }
-        long bookId = Long.parseLong(id);
-        return !bs.isAuthor(bookId, auth.getName());
-    }
-
-    public boolean canAnswer(Authentication auth, String id){
-        if (!us.isLoggedIn()) {
-            return false;
-        }
-        long questionId = Long.parseLong(id);
-        return qs.canAnswer(questionId, auth.getName());
-    }
-
-
-    public boolean checkIsWriter(String id){
-        long userId = Long.parseLong(id);
-        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        return user.getRoles().contains(UserRoles.WRITER);
-    }
-
-    public boolean canRecommendBook(Authentication auth, String id){
-        if (!us.isLoggedIn()) {
-            return false;
-        }
-
-        long bookId = Long.parseLong(id);
-        return os.hasBookFileAccess(bookId, auth.getName()) && !bs.isAuthor(bookId, auth.getName());
-    }
-
-    public boolean checkIsLoggedUser(String id){
-        if (!us.isLoggedIn()) {
-            return false;
-        }
-        long userId = Long.parseLong(id);
-        return us.getLoggedUser().get().getUserId() == userId;
-    }
-
-    public boolean validResetCode(String id, String code){
-        if (us.isLoggedIn()) {
-            return false;
-        }
-        long userId = Long.parseLong(id);
-        Optional<User> maybeUser = us.findById(userId);
-        if (maybeUser.isEmpty()) {
-            return false;
-        }
-        User user = maybeUser.get();
-        if (user.getResetCode() == null || !user.getResetCode().getCode().equals(code)) {
-            return false;
-        }
-        return true;
-    }
 }

@@ -209,20 +209,6 @@ public class OrderJpaDao implements OrderDao {
     }
 
     @Override
-    public boolean ownsBook(long bookId, String email) {
-        Query query = em.createQuery("SELECT 1 FROM Order o WHERE EXISTS (SELECT 1 FROM Order o WHERE o.book.bookId = :bookId AND o.buyer.email = :email AND o.orderStatus = 'COMPLETED')");
-        query.setParameter("bookId", bookId);
-        query.setParameter("email", email);
-        query.setMaxResults(1);
-
-        try {
-            return query.getSingleResult() != null;
-        } catch (NoResultException e) {
-            return false;
-        }
-    }
-
-    @Override
     public long getTotalOrdersForBook(long bookId) {
         return DaoUtils.getRowCount(em,"Order o", "o.orderId", "WHERE o.book.bookId = :bookId AND o.orderStatus = 'COMPLETED'", Map.of("bookId", bookId));
     }

@@ -53,7 +53,7 @@ public interface BookService {
     Optional<Book> findById(long id);
 
     boolean isAuthor(Book book, long userId);
-    boolean isAuthor(long bookId, String email);
+    boolean isAuthor(long userId, long bookId);
 
     PaginatedContent<BookGenre> getGenres(BookGenreOrderBy orderBy, int pageNumber, int pageSize);
 

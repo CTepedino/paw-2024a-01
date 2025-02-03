@@ -34,9 +34,6 @@ public interface OrderDao {
     List<Order> getWriterOrders(long writerId, String title, OrderStatus orderStatus, int offset, int limit);
     long getWriterOrdersSize(long writerId, String title, OrderStatus orderStatus);
 
-    boolean ownsBook(long bookId, String email);
-
-
     long getTotalOrdersForBook(long bookId);
 
     BigDecimal getTotalSales(long writerId);

@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import ar.edu.itba.paw.models.users.UserAnalytics;
 import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
+import ar.edu.itba.paw.webapp.dto.input.PasswordEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.UserCreateDTO;
 import ar.edu.itba.paw.webapp.dto.input.UserEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
@@ -57,6 +58,7 @@ public class UserController {
     @Path("/{id}")
     @Produces(value = {VndMediaTypes.USER})
     public Response getById(@PathParam("id") final long id){
+
         final Optional<User> user = us.findById(id);
 
         if (user.isPresent()){
@@ -88,9 +90,9 @@ public class UserController {
     @Consumes(value = {VndMediaTypes.PASSWORD})
     public Response modifyPassword(
             @PathParam("id") final long id,
-            @Valid String password
+            @Valid PasswordEditDTO passwordEditDTO
     ){
-        us.changePassword(id, password);
+        us.changePassword(id, passwordEditDTO.getPassword());
 
         return Response.ok().build();
     }

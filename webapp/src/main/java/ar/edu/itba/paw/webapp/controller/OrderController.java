@@ -74,7 +74,7 @@ public class OrderController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("{id}")
     @Produces(value = {VndMediaTypes.ORDER})
     public Response getById(@PathParam("id") final long id){
         final Order order = os.findById(id).orElseThrow(OrderNotFoundException::new);
@@ -104,7 +104,6 @@ public class OrderController {
 
         return Response
                 .ok(receipt.getFile(), receipt.getType())
-                //.header("content-disposition", "attachment; filename=receipt" + receipt.getFileExtension())
                 .build();
     }
 

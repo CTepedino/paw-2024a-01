@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -177,26 +176,27 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public boolean loggedUserOwnsBook(long bookId){
-        if (us.isLoggedIn()){
-            return orderDao.ownsBook(bookId, us.getLoggedUser().get().getEmail());
-        }
-        return false;
+    public boolean ownsBook(long userId, long bookId){
+        return orderDao.find(userId, bookId)
+                .filter(o -> o.getOrderStatus() == OrderStatus.COMPLETED)
+                .isPresent();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public boolean hasBookFileAccess(long bookId, String email) {
-        return orderDao.ownsBook(bookId, email) || bs.findById(bookId).orElseThrow(BookNotFoundException::new).getWriter().getEmail().equals(email);
+    public boolean existsOrder(long userId, long bookId){
+        return orderDao.find(userId, bookId)
+                .isPresent();
     }
+
 
     @Transactional(readOnly = true)
     @Override
     public boolean canAdvanceOrder(long orderId, String email) {
         Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
         return !order.getBook().isPaused() &&
-            (order.getWriter().getEmail().equals(email) && order.getOrderStatus().getWriterCanAdvance()) ||
-            (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().getReaderCanAdvance());
+            (order.getWriter().getEmail().equals(email) && order.getOrderStatus().canWriterAdvance()) ||
+            (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().canReaderAdvance());
     }
 
     @Transactional(readOnly = true)
