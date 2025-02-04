@@ -2,11 +2,7 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.users.UserRoles;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 

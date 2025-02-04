@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.users.User;

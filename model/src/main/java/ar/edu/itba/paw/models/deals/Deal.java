@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.models.deals;
 
-import ar.edu.itba.paw.models.books.Book;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.Locale;
 
 @Entity
 @Table(name="deals")

@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.models.books;
 
 
-import ar.edu.itba.paw.models.users.User;
-
 import javax.persistence.*;
 
 @Entity

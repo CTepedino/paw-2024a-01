@@ -1,13 +1,13 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.users.User;
+import ar.edu.itba.paw.models.books.Book;
+import ar.edu.itba.paw.models.books.BookGenre;
+import ar.edu.itba.paw.models.books.BookSearchQueryDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.List;
 
 public interface BookService {
     long create(

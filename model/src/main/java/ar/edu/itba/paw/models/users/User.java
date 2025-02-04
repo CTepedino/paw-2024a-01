@@ -1,15 +1,11 @@
 package ar.edu.itba.paw.models.users;
 
-import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookSalesCategory;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.SelectBeforeUpdate;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Locale;
 
 @Entity
 @Table(name = "users")

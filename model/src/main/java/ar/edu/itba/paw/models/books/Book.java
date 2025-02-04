@@ -4,8 +4,6 @@ import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.files.BookFile;
 import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
-import ar.edu.itba.paw.models.files.PaymentReceipt;
-import ar.edu.itba.paw.models.reviews.Review;
 import ar.edu.itba.paw.models.users.User;
 import org.hibernate.annotations.Formula;
 
@@ -14,7 +12,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Locale;
 
 @Entity

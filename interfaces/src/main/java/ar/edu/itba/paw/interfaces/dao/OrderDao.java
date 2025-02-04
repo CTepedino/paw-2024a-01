@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface OrderDao { //TODO: cleanup
+public interface OrderDao {
 
     Order create(User user, Book book, OrderStatus orderStatus, LocalDateTime date, BigDecimal price);
 
