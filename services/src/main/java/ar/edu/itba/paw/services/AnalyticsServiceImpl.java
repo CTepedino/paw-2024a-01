@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.YearMonth;
 
 @Service
@@ -33,7 +32,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return new UserAnalytics(
                 userId,
                 orderDao.getWriterTotalOrdersPerMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue()),
-                orderDao.getWriterTotalSalesPerMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue())
+                orderDao.getWriterTotalSalesPerMonth(userId, yearMonth.getYear(), yearMonth.getMonthValue()),
+                yearMonth
         );
     }
 
@@ -45,7 +45,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return new BookAnalytics(
                 bookId,
                 orderDao.getBookTotalOrdersPerMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue()),
-                orderDao.getBookTotalSalesPerMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue())
+                orderDao.getBookTotalSalesPerMonth(bookId, yearMonth.getYear(), yearMonth.getMonthValue()),
+                yearMonth
         );
     }
 }

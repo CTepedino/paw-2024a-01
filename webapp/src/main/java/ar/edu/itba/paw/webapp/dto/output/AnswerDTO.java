@@ -17,6 +17,9 @@ public class AnswerDTO {
 
     private URI self;
     private URI question;
+    private URI questioner;
+    private URI writer;
+    private URI book;
 
     public static AnswerDTO fromQuestion(UriInfo uriInfo, Question q){
         AnswerDTO dto = new AnswerDTO();
@@ -30,8 +33,18 @@ public class AnswerDTO {
 
         dto.self = uriInfo.getBaseUriBuilder().path("questions").path(String.valueOf(dto.id)).path("answer").build();
         dto.question = uriInfo.getBaseUriBuilder().path("questions").path(String.valueOf(dto.id)).build();
-
+        dto.questioner = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.questionerId)).build();
+        dto.writer = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.writerId)).build();
+        dto.book = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).build();
         return dto;
+    }
+
+    public URI getBook() {
+        return book;
+    }
+
+    public void setBook(URI book) {
+        this.book = book;
     }
 
     public long getId() {
@@ -80,5 +93,37 @@ public class AnswerDTO {
 
     public void setAnswerDate(LocalDateTime answerDate) {
         this.answerDate = answerDate;
+    }
+
+    public URI getSelf() {
+        return self;
+    }
+
+    public void setSelf(URI self) {
+        this.self = self;
+    }
+
+    public URI getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(URI question) {
+        this.question = question;
+    }
+
+    public URI getQuestioner() {
+        return questioner;
+    }
+
+    public void setQuestioner(URI questioner) {
+        this.questioner = questioner;
+    }
+
+    public URI getWriter() {
+        return writer;
+    }
+
+    public void setWriter(URI writer) {
+        this.writer = writer;
     }
 }

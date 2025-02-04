@@ -45,8 +45,10 @@ public class OrderDTO {
         dto.self = uriInfo.getBaseUriBuilder().path("orders").path(String.valueOf(dto.orderId)).build();
         dto.book = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).build();
         dto.buyer = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.buyerId)).build();
-        dto.seller = uriInfo.getBaseUriBuilder().path("seller").path(String.valueOf(dto.sellerId)).build();
-        dto.receipt = uriInfo.getBaseUriBuilder().path("orders").path(String.valueOf(dto.orderId)).path("receipt").build();
+        dto.seller = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.sellerId)).build();
+        if (o.getPaymentReceipt() != null) {
+            dto.receipt = uriInfo.getBaseUriBuilder().path("orders").path(String.valueOf(dto.orderId)).path("receipt").build();
+        }
 
         return dto;
     }

@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.users.WriterCategory;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.time.YearMonth;
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -25,6 +26,17 @@ public class UserDTO {
 
     private URI self;
     private URI profilePicture;
+    private URI password;
+    private URI ownedBooks;
+    private URI publishedBooks;
+    private URI currentMonthlyAnalytics;
+    private URI wishlist;
+    private URI recommendations;
+    private URI askedQuestions;
+    private URI receivedQuestions;
+    private URI pendingQuestions;
+    private URI startedOrders;
+    private URI receivedOrders;
 
     public static Function<User, UserDTO> mapper(UriInfo uriInfo){
         return u -> fromUser(uriInfo, u);
@@ -46,7 +58,20 @@ public class UserDTO {
         dto.salesTotal = u.getSalesTotal();
 
         dto.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).build();
-        dto.profilePicture = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("profilePicture").build();
+        dto.profilePicture = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("profile_picture").build();
+        dto.password = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("password").build();
+        dto.ownedBooks = uriInfo.getBaseUriBuilder().path("books").queryParam("owner_id", u.getUserId()).build();
+        dto.wishlist = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("wishlist").build();
+        dto.recommendations = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("recommendations").build();
+        dto.askedQuestions = uriInfo.getBaseUriBuilder().path("questions").queryParam("questioner_id", u.getUserId()).build();
+        dto.startedOrders = uriInfo.getBaseUriBuilder().path("orders").queryParam("buyer_id", u.getUserId()).build();
+        if (u.getRoles().contains(UserRoles.WRITER)){
+            dto.publishedBooks = uriInfo.getBaseUriBuilder().path("books").queryParam("writer_id", u.getUserId()).build();
+            dto.currentMonthlyAnalytics = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("monthly_analytics").path(YearMonth.now().toString()).build();
+            dto.receivedQuestions = uriInfo.getBaseUriBuilder().path("questions").queryParam("writer_id", u.getUserId()).build();
+            dto.pendingQuestions = uriInfo.getBaseUriBuilder().path("questions").queryParam("writer_id", u.getUserId()).queryParam("is_answered", false).build();
+            dto.receivedOrders = uriInfo.getBaseUriBuilder().path("orders").queryParam("seller_id", u.getUserId()).build();
+        }
 
         return dto;
     }
@@ -153,5 +178,93 @@ public class UserDTO {
 
     public void setSalesTotal(double salesTotal) {
         this.salesTotal = salesTotal;
+    }
+
+    public URI getPassword() {
+        return password;
+    }
+
+    public void setPassword(URI password) {
+        this.password = password;
+    }
+
+    public URI getOwnedBooks() {
+        return ownedBooks;
+    }
+
+    public void setOwnedBooks(URI ownedBooks) {
+        this.ownedBooks = ownedBooks;
+    }
+
+    public URI getPublishedBooks() {
+        return publishedBooks;
+    }
+
+    public void setPublishedBooks(URI publishedBooks) {
+        this.publishedBooks = publishedBooks;
+    }
+
+    public URI getCurrentMonthlyAnalytics() {
+        return currentMonthlyAnalytics;
+    }
+
+    public void setCurrentMonthlyAnalytics(URI currentMonthlyAnalytics) {
+        this.currentMonthlyAnalytics = currentMonthlyAnalytics;
+    }
+
+    public URI getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(URI wishlist) {
+        this.wishlist = wishlist;
+    }
+
+    public URI getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(URI recommendations) {
+        this.recommendations = recommendations;
+    }
+
+    public URI getAskedQuestions() {
+        return askedQuestions;
+    }
+
+    public void setAskedQuestions(URI askedQuestions) {
+        this.askedQuestions = askedQuestions;
+    }
+
+    public URI getReceivedQuestions() {
+        return receivedQuestions;
+    }
+
+    public void setReceivedQuestions(URI receivedQuestions) {
+        this.receivedQuestions = receivedQuestions;
+    }
+
+    public URI getPendingQuestions() {
+        return pendingQuestions;
+    }
+
+    public void setPendingQuestions(URI pendingQuestions) {
+        this.pendingQuestions = pendingQuestions;
+    }
+
+    public URI getStartedOrders() {
+        return startedOrders;
+    }
+
+    public void setStartedOrders(URI startedOrders) {
+        this.startedOrders = startedOrders;
+    }
+
+    public URI getReceivedOrders() {
+        return receivedOrders;
+    }
+
+    public void setReceivedOrders(URI receivedOrders) {
+        this.receivedOrders = receivedOrders;
     }
 }

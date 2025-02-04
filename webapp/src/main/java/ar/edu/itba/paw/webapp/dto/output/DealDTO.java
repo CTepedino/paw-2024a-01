@@ -14,6 +14,7 @@ public class DealDTO {
     private LocalDate start;
     private LocalDate end;
 
+    private URI self;
     private URI book;
 
     public static DealDTO fromDeal(UriInfo uriInfo, Deal d){
@@ -24,6 +25,7 @@ public class DealDTO {
         dto.start = d.getStartDate();
         dto.end = d.getEndDate();
 
+        dto.self = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.id)).path("deal").build();
         dto.book = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.id)).build();
 
         return dto;
@@ -67,5 +69,13 @@ public class DealDTO {
 
     public void setBook(URI book) {
         this.book = book;
+    }
+
+    public URI getSelf() {
+        return self;
+    }
+
+    public void setSelf(URI self) {
+        this.self = self;
     }
 }

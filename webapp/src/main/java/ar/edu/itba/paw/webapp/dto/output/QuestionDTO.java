@@ -20,6 +20,7 @@ public class QuestionDTO {
     private URI book;
     private URI questioner;
     private URI writer;
+    private URI answer;
 
     public static Function<Question, QuestionDTO> mapper(UriInfo uriInfo){
         return q -> fromQuestion(uriInfo, q);
@@ -39,7 +40,9 @@ public class QuestionDTO {
         dto.book = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).build();
         dto.questioner = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.questionerId)).build();
         dto.writer = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.writerId)).build();
-
+        if (q.getAnswer() != null){
+            dto.answer = uriInfo.getBaseUriBuilder().path("questions").path(String.valueOf(dto.id)).path("answer").build();
+        }
         return dto;
     }
 
@@ -121,5 +124,13 @@ public class QuestionDTO {
 
     public void setWriter(URI writer) {
         this.writer = writer;
+    }
+
+    public URI getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(URI answer) {
+        this.answer = answer;
     }
 }

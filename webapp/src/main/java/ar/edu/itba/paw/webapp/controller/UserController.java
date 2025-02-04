@@ -21,10 +21,8 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.net.URI;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
-import java.util.Optional;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
 

@@ -33,6 +33,8 @@ public class BookDTO {
     private URI preview;
     private URI bookFile;
     private URI deal;
+    private URI reviews;
+    private URI questions;
 
     public static Function<Book, BookDTO> mapper(UriInfo uriInfo){
         return b -> fromBook(uriInfo, b);
@@ -57,14 +59,38 @@ public class BookDTO {
 
         dto.self = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).build();
         dto.writer = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(b.getWriter().getUserId())).build();
-        dto.cover = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("cover").build();
-        dto.preview = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("preview").build();
-        dto.bookFile = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("book_file").build();
+        if (b.getCoverImage() != null) {
+            dto.cover = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("cover").build();
+        }
+        if (b.getPreview() != null){
+            dto.preview = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("preview").build();
+        }
+        if (b.getBookFile() != null){
+            dto.bookFile = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("book_file").build();
+        }
         if (b.getDeal()!=null){
             dto.deal = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("deal").build();
         }
+        dto.reviews = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("reviews").build();
+        dto.questions = uriInfo.getBaseUriBuilder().path("questions").queryParam("book_id", dto.id).build();
 
         return dto;
+    }
+
+    public URI getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(URI reviews) {
+        this.reviews = reviews;
+    }
+
+    public URI getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(URI questions) {
+        this.questions = questions;
     }
 
     public long getId() {

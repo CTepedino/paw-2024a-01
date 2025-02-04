@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
 import ar.edu.itba.paw.models.books.Recommendation;
-import ar.edu.itba.paw.models.books.WishlistItem;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
