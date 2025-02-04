@@ -30,8 +30,6 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private final UserDao userDao;
     private final OrderDao orderDao;
 
@@ -39,6 +37,8 @@ public class UserServiceImpl implements UserService {
     private final ResetCodeService rcs;
 
     private final PasswordEncoder passwordEncoder;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     public UserServiceImpl(final UserDao userDao, OrderDao orderDao, PasswordEncoder passwordEncoder, EmailValidationService evs, ResetCodeService rcs){
@@ -184,6 +184,8 @@ public class UserServiceImpl implements UserService {
         if (user.getProfilePicture() != null){
             userDao.deleteProfilePicture(user);
         }
+
+        LOGGER.atDebug().setMessage("Deleted profile picture for user: {}").addArgument(user.getFirstName()).log();
     }
 
     @Transactional(readOnly = true)

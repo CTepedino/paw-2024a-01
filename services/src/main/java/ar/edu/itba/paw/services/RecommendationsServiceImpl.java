@@ -59,11 +59,15 @@ public class RecommendationsServiceImpl implements RecommendationsService {
             throw new AlreadyRecommendedException();
         }
         recommendationsDao.recommend(userId, bookId);
+
+        LOGGER.atDebug().setMessage("Added book {} to recommendations of user {}").addArgument(bookId).addArgument(userId).log();
     }
 
     @Transactional
     @Override
     public void removeRecommendation(long userId, long bookId) {
         recommendationsDao.removeRecommendation(userId, bookId);
+
+        LOGGER.atDebug().setMessage("Removed book {} from recommendations of user {}").addArgument(bookId).addArgument(userId).log();
     }
 }

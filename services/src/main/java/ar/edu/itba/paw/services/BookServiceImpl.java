@@ -81,6 +81,7 @@ public class BookServiceImpl implements BookService {
         Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
 
         bookDao.createOrUpdateCoverImage(book, coverImage);
+        LOGGER.atDebug().setMessage("Cover image for Book {} edited correctly").addArgument(bookId).log();
     }
 
     @Transactional
@@ -89,6 +90,7 @@ public class BookServiceImpl implements BookService {
         Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
 
         bookDao.createOrUpdatePreview(book, preview);
+        LOGGER.atDebug().setMessage("Preview file for Book {} edited correctly").addArgument(bookId).log();
     }
 
     @Transactional
@@ -98,6 +100,7 @@ public class BookServiceImpl implements BookService {
         bookDao.unpause(book);
 
         bookDao.createOrUpdateBookFile(book, file);
+        LOGGER.atDebug().setMessage("Book file for Book {} edited correctly").addArgument(bookId).log();
     }
 
     @Transactional(readOnly = true)

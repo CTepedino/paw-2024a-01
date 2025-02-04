@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookGenreOrderBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService {
 
     private final BookDao bookDao;
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(GenreServiceImpl.class);
 
     @Autowired
     public GenreServiceImpl(final BookDao bookDao){
@@ -40,6 +44,8 @@ public class GenreServiceImpl implements GenreService {
         } else {
             genres = List.of(BookGenre.values()).subList((pageNumber-1)*pageSize, pageNumber * pageSize);
         }
+
+        LOGGER.atDebug().setMessage("Retrieved book genre list").log();
 
         return new PaginatedContent<>(genres, pageNumber, pageSize, BookGenre.values().length);
     }

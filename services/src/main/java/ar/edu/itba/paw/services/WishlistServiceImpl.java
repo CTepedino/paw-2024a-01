@@ -53,12 +53,15 @@ public class WishlistServiceImpl implements WishlistService {
             throw new AlreadyWishlistedException();
         }
         wishlistDao.addToWishlist(userId, bookId);
+
+        LOGGER.atDebug().setMessage("Added book {} to wishlist of user {}").addArgument(bookId).addArgument(userId).log();
     }
 
     @Transactional
     @Override
     public void removeFromWishlist(long userId, long bookId) {
         wishlistDao.removeFromWishlist(userId, bookId);
+        LOGGER.atDebug().setMessage("Removed book {} from wishlist of user {}").addArgument(bookId).addArgument(userId).log();
     }
 
     @Transactional

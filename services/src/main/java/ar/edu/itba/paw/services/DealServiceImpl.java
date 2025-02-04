@@ -8,6 +8,8 @@ import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidDealException;
 import ar.edu.itba.paw.models.users.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,7 @@ public class DealServiceImpl implements DealService {
     private final DealDao dealDao;
     private final BookDao bookDao;
 
-    //TODO: logger
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(DealServiceImpl.class);
     @Autowired
     public DealServiceImpl(final DealDao dealDao, final BookDao bookDao){
         this.dealDao = dealDao;
@@ -44,9 +45,12 @@ public class DealServiceImpl implements DealService {
 
         if (book.getDeal() == null){
             dealDao.create(bookId, price, LocalDate.now(), LocalDate.now().plusDays(duration));
+            LOGGER.atDebug().setMessage("Started deal for book {}").addArgument(bookId).log();
         } else {
             dealDao.update(book.getDeal(), price, book.getDeal().getStartDate().plusDays(duration));
+            LOGGER.atDebug().setMessage("Updated deal for book {}").addArgument(bookId).log();
         }
+
     }
 
 
@@ -62,6 +66,7 @@ public class DealServiceImpl implements DealService {
     @Override
     public void endDeal(long dealId) {
         dealDao.deleteDeal(dealId);
+        LOGGER.atDebug().setMessage("Ended deal for book {}").addArgument(dealId).log();
     }
 
     @Transactional
