@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.WishlistService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.WishlistItem;
 import ar.edu.itba.paw.models.exception.WishlistItemNotFoundException;
@@ -20,14 +21,14 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedRespons
 @Component
 public class WishlistController {
 
-    private final BookService bs;
+    private final WishlistService ws;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public WishlistController(final BookService bs){
-        this.bs = bs;
+    public WishlistController(final WishlistService ws){
+        this.ws = ws;
     }
 
     @GET
@@ -37,7 +38,7 @@ public class WishlistController {
             @QueryParam("page") @DefaultValue("1") final int page,
             @QueryParam("size") @DefaultValue("20") final int size
     ){
-        PaginatedContent<WishlistItem> wishlistPage = bs.getWishlist(id, page, size);
+        PaginatedContent<WishlistItem> wishlistPage = ws.getWishlist(id, page, size);
         List<WishlistDTO> wishlist = wishlistPage.getPage().stream().map(WishlistDTO.mapper(uriInfo)).toList();
         return paginatedResponse(
                 Response.ok(new GenericEntity<>(wishlist){}), wishlistPage, uriInfo
@@ -51,7 +52,7 @@ public class WishlistController {
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId
     ){
-        WishlistItem wishlistItem = bs.findWishlistItem(userId, bookId).orElseThrow(WishlistItemNotFoundException::new);
+        WishlistItem wishlistItem = ws.findWishlistItem(userId, bookId).orElseThrow(WishlistItemNotFoundException::new);
         return Response.ok(WishlistDTO.fromWishlistItem(uriInfo, wishlistItem)).build();
     }
 
@@ -61,7 +62,7 @@ public class WishlistController {
             @PathParam("userId") final long userId,
             WishlistCreateDTO wishlistDTO
     ){
-        bs.addToWishlist(userId, wishlistDTO.getBookId());
+        ws.addToWishlist(userId, wishlistDTO.getBookId());
 
         return Response
                 .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(wishlistDTO.getBookId())).build())
@@ -74,7 +75,7 @@ public class WishlistController {
         @PathParam("userId") final long userId,
         @PathParam("bookId") final long bookId
     ){
-        bs.removeFromWishlist(userId, bookId);
+        ws.removeFromWishlist(userId, bookId);
 
         return Response.noContent().build();
     }

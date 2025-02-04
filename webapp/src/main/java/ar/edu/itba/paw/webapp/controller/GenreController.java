@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.BookGenre;
 import ar.edu.itba.paw.models.books.BookGenreOrderBy;
@@ -16,11 +17,11 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedRespons
 
 @Path("genres")
 public class GenreController {
-    private final BookService bs;
+    private final GenreService gs;
 
     @Autowired
-    public GenreController(BookService bs){
-        this.bs = bs;
+    public GenreController(GenreService gs){
+        this.gs = gs;
     }
 
     @Context
@@ -33,7 +34,7 @@ public class GenreController {
             @QueryParam("size") @DefaultValue("20") final int size,
             @QueryParam("order_by") final BookGenreOrderBy orderBy
     ){
-        final PaginatedContent<BookGenre> genrePage = bs.getGenres(orderBy, page, size);
+        final PaginatedContent<BookGenre> genrePage = gs.getGenres(orderBy, page, size);
         final List<String> genres = genrePage.getPage()
                 .stream().map(BookGenre::toString).toList();
 

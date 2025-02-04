@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
-import ar.edu.itba.paw.interfaces.service.BookService;
-import ar.edu.itba.paw.interfaces.service.MailService;
-import ar.edu.itba.paw.interfaces.service.OrderService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.*;
@@ -30,16 +27,18 @@ public class OrderServiceImpl implements OrderService {
 
     private final BookService bs;
     private final UserService us;
+    private final WishlistService ws;
     private final MailService ms;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
-    public OrderServiceImpl(final OrderDao orderDao, UserService us, MailService ms, BookService bs){
+    public OrderServiceImpl(final OrderDao orderDao, UserService us, MailService ms, BookService bs, WishlistService ws){
         this.orderDao = orderDao;
         this.us = us;
         this.ms = ms;
         this.bs = bs;
+        this.ws = ws;
     }
 
     @Transactional
@@ -54,55 +53,12 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderAlreadyExistsException();
         }
         Order order = orderDao.create(buyer, book, OrderStatus.WAITING_PAYMENT, LocalDateTime.now(), book.getDeal()==null? book.getPrice(): book.getDeal().getPrice());
-        bs.removeFromWishlist(buyer.getUserId(), bookId);
+        ws.removeFromWishlist(buyer.getUserId(), bookId);
         bs.checkBookSalesCategory(book);
         LOGGER.atDebug().setMessage("Created order for bookId: {}").addArgument(bookId).log();
         return order.getOrderId();
     }
 
-    @Transactional
-    @Override
-    public Order create(long bookId, byte[] receipt, String receiptMimeType) {
-        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-        Order order = orderDao.create(buyer, book, OrderStatus.WAITING_APPROVAL, LocalDateTime.now(), book.getDeal()==null? book.getPrice(): book.getDeal().getPrice());
-        bs.removeFromWishlist(buyer.getUserId(), bookId);
-        bs.checkBookSalesCategory(book);
-        us.checkWriterCategory(book.getWriter());
-
-        orderDao.createOrUpdatePaymentReceipt(order, receipt, receiptMimeType);
-
-        LOGGER.atDebug().setMessage("Created order for bookId: {}").addArgument(bookId).log();
-        ms.sendReceiptUploadedEmail(order);
-        return order;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public boolean canCreateOrder(long bookId) {
-        if (!us.isLoggedIn()){
-            return false;
-        }
-
-        User buyer = us.getLoggedUser().get();
-        Book book = bs.findById(bookId).orElseThrow(BookNotFoundException::new);
-
-        if (book.getWriter().getUserId() == buyer.getUserId() || book.isPaused()){
-            return false;
-        }
-        return orderDao.find(buyer.getUserId(), bookId).isEmpty();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public boolean existsOrder(long bookId) {
-        if (!us.isLoggedIn()){
-            return false;
-        }
-
-        User buyer = us.getLoggedUser().orElseThrow(UserNotFoundException::new);
-        return orderDao.find(buyer.getUserId(), bookId).isPresent();
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -191,15 +147,6 @@ public class OrderServiceImpl implements OrderService {
                 .isPresent();
     }
 
-
-    @Transactional(readOnly = true)
-    @Override
-    public boolean canAdvanceOrder(long orderId, String email) {
-        Order order = orderDao.findById(orderId).orElseThrow(OrderNotFoundException::new);
-        return !order.getBook().isPaused() &&
-            (order.getWriter().getEmail().equals(email) && order.getOrderStatus().canWriterAdvance()) ||
-            (order.getBuyer().getEmail().equals(email) && order.getOrderStatus().canReaderAdvance());
-    }
 
     @Transactional(readOnly = true)
     @Override

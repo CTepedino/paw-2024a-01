@@ -189,25 +189,6 @@ public class MailServiceImpl implements MailService{
 
     @Override
     @Async
-    public void sendMissingDataEmail(User user){
-        Locale currentLocale = user.getLocale();
-        String to = user.getEmail();
-        String subject = emailMessageSource.getMessage("mail.missingInfo.subject", null, currentLocale);
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("url", env.getProperty("baseUrl"));
-        data.put("purchasesUrl", env.getProperty("baseUrl") + "/profile");
-
-        try {
-            LOGGER.atDebug().setMessage("Sending Missing info email to: {}").addArgument(to).log();
-            sendMessageUsingTemplate(to, subject, "missingInfoEmailTemplate", data, currentLocale);
-        } catch (MessagingException e){
-            LOGGER.atWarn().setMessage("Failed to send Missing info email to: {} - Error Message: {}").addArgument(to).addArgument(e.getMessage()).log();
-        }
-        LOGGER.atDebug().setMessage("Sent Missing info email to: {}").addArgument(to).log();
-    }
-
-    @Override
-    @Async
     public void sendResetPasswordEmail(User user, String code, LocalDateTime expiration){
         Locale currentLocale = user.getLocale();
         String to = user.getEmail();

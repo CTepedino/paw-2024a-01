@@ -63,11 +63,6 @@ public class ReviewJpaDao implements ReviewDao {
         return Optional.ofNullable(em.find(Review.class, id));
     }
 
-    @Override
-    public Optional<Review> find(long bookId, User reviewer) {
-        return find(bookId, reviewer.getUserId());
-
-    }
 
     @Override
     public Optional<Review> find(long bookId, long userId) {
@@ -82,12 +77,4 @@ public class ReviewJpaDao implements ReviewDao {
         }
     }
 
-    @Override
-    public int getAverageRating(long bookId) {
-        TypedQuery<Double> query = em.createQuery("SELECT AVG(r.rating) FROM Review r WHERE r.bookId = :bookId", Double.class);
-        query.setParameter("bookId", bookId);
-
-        Double review = query.getSingleResult();
-        return (int) (review!=null?Math.ceil(review):0);
-    }
 }

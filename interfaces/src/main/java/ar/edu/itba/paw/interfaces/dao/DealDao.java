@@ -23,6 +23,4 @@ public interface DealDao {
 
     List<Deal> getAll();
 
-    List<Book> getNewDeals(int size);
-
 }

@@ -10,7 +10,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -48,10 +47,9 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
-    public ProfilePicture createProfilePicture(User user, byte[] profilePicture){
+    public void createProfilePicture(User user, byte[] profilePicture){
         ProfilePicture pfp = new ProfilePicture(user.getUserId(), profilePicture);
         em.persist(pfp);
-        return pfp;
     }
 
     @Override
@@ -80,14 +78,6 @@ public class UserJpaDao implements UserDao {
         query.setParameter("email", email);
 
         return query.getResultList().stream().findFirst();
-    }
-
-
-    @Override
-    public List<User> getUsersWithPausedBooks() {
-        TypedQuery<User> query = em.createQuery(
-                "SELECT DISTINCT u FROM User u WHERE EXISTS(SELECT 1 FROM Book b WHERE b.writer.userId = u.userId AND NOT EXISTS(SELECT 1 FROM BookFile bf WHERE bf.fileId = b.bookId)) AND u.cbu IS NULL", User.class);
-        return query.getResultList();
     }
 
     @Override

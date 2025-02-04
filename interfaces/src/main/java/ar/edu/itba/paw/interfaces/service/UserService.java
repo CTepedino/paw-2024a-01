@@ -29,21 +29,12 @@ public interface UserService {
 
     void updateProfile(long userId, String firstName, String lastName, String cbu, String description);
 
-
-
     Optional<User> getLoggedUser();
 
-    boolean isLoggedIn();
-
-    boolean hasRole(UserRoles role);
-
-    Collection<UserRoles> getRoles(long userId);
 
     ProfilePicture getProfilePicture(long userId);
     void updateProfilePicture(long userId, byte[] profilePicture);
     void deleteProfilePicture(long userId);
-
-    String fillMissingWriterData(long userId, String password);
 
     void createResetPasswordCode(String email);
 

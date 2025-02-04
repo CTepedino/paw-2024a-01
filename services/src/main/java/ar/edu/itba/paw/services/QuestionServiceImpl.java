@@ -67,14 +67,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional(readOnly = true)
     @Override
-    public boolean canAnswer(long questionId, String email) {
-        Question q = questionDao.findById(questionId).orElseThrow(QuestionNotFoundException::new);
-
-        return q.getBook().getWriter().getEmail().equals(email);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public PaginatedContent<Question> searchQuestions(Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered, int pageNumber, int pageSize) {
         List<Question> questions = questionDao.getAll(bookId, writerId, questionerId, excludeQuestioner, isAnswered, (pageNumber-1)*pageSize, pageSize);
 

@@ -1,20 +1,18 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.RecommendationsService;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Recommendation;
 import ar.edu.itba.paw.models.exception.RecommendationNotFoundException;
 import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.RecommendationCreateDTO;
 import ar.edu.itba.paw.webapp.dto.output.RecommendationDTO;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
-import java.util.Optional;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
@@ -22,14 +20,14 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedRespons
 @Component
 public class RecommendationController {
 
-    private final BookService bs;
+    private final RecommendationsService rs;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public RecommendationController(final BookService bs){
-        this.bs = bs;
+    public RecommendationController(final RecommendationsService rs){
+        this.rs = rs;
     }
 
     @GET
@@ -40,7 +38,7 @@ public class RecommendationController {
             @QueryParam("size") @DefaultValue("20") final int size
 
     ){
-        PaginatedContent<Recommendation> recommendationPage = bs.getRecommendations(userId, page, size);
+        PaginatedContent<Recommendation> recommendationPage = rs.getRecommendations(userId, page, size);
         List<RecommendationDTO> recommendations = recommendationPage.getPage().stream().map(RecommendationDTO.mapper(uriInfo)).toList();
         return paginatedResponse(
                 Response.ok(new GenericEntity<>(recommendations){}), recommendationPage, uriInfo
@@ -53,7 +51,7 @@ public class RecommendationController {
             @PathParam("userId") final long userId,
             RecommendationCreateDTO recommendationDTO
     ){
-        bs.recommend(userId, recommendationDTO.getBookId());
+        rs.recommend(userId, recommendationDTO.getBookId());
 
         return Response
                 .created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(recommendationDTO.getBookId())).build())
@@ -67,7 +65,7 @@ public class RecommendationController {
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId
     ){
-        Recommendation recommendation = bs.findRecommendation(userId, bookId).orElseThrow(RecommendationNotFoundException::new);
+        Recommendation recommendation = rs.findRecommendation(userId, bookId).orElseThrow(RecommendationNotFoundException::new);
         return Response.ok(RecommendationDTO.fromRecommendation(uriInfo, recommendation)).build();
     }
 
@@ -77,7 +75,7 @@ public class RecommendationController {
             @PathParam("userId") final long userId,
             @PathParam("bookId") final long bookId
     ){
-        bs.removeRecommendation(userId, bookId);
+        rs.removeRecommendation(userId, bookId);
 
         return Response.noContent().build();
     }

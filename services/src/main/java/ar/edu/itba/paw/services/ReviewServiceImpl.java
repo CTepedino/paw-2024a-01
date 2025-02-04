@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.dao.ReviewDao;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.exception.InvalidPageException;
 import ar.edu.itba.paw.models.exception.UserNotFoundException;
 import ar.edu.itba.paw.models.reviews.Review;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -38,7 +38,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void createOrUpdate(long bookId, long reviewerId, int rating, String review){
         User user = us.findById(reviewerId).orElseThrow(UserNotFoundException::new);
-        Optional<Review> maybeReview = reviewDao.find(bookId, user);
+        Optional<Review> maybeReview = reviewDao.find(bookId, reviewerId);
         if (maybeReview.isPresent()){
             reviewDao.modify(maybeReview.get(), rating, review, LocalDateTime.now());
             LOGGER.atDebug().setMessage("Modified Review for bookId: {}").addArgument(bookId).log();
@@ -46,12 +46,6 @@ public class ReviewServiceImpl implements ReviewService {
             reviewDao.create(bookId, user, rating, review, LocalDateTime.now());
             LOGGER.atDebug().setMessage("Created Review for bookId: {}").addArgument(bookId).log();
         }
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Optional<Review> find(long bookId, User user) {
-        return reviewDao.find(bookId, user);
     }
 
     @Transactional(readOnly = true)
@@ -70,9 +64,11 @@ public class ReviewServiceImpl implements ReviewService {
         List<Review> reviews;
         long size = reviewDao.getAllSize(bookId);
 
-        if (us.isLoggedIn()){
-            reviews = reviewDao.getAllExcept(bookId, orderBy, (pageNumber-1)*pageSize, pageSize, us.getLoggedUser().get().getUserId());
-            Optional<Review> userReview = findLoggedUserReview(bookId);
+        Optional<User> loggedUser = us.getLoggedUser();
+
+        if (loggedUser.isPresent()){
+            reviews = reviewDao.getAllExcept(bookId, orderBy, (pageNumber-1)*pageSize, pageSize, loggedUser.get().getUserId());
+            Optional<Review> userReview = find(bookId, loggedUser.get().getUserId());
             if(userReview.isPresent()){
                 size -=1;
             }
@@ -85,15 +81,6 @@ public class ReviewServiceImpl implements ReviewService {
         } else {
             return page;
         }
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Optional<Review> findLoggedUserReview(long bookId) {
-        if(us.isLoggedIn()){
-            return reviewDao.find(bookId, us.getLoggedUser().get());
-        }
-        return Optional.empty();
     }
 
 }

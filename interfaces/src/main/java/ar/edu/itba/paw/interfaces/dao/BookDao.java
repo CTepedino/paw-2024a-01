@@ -1,12 +1,7 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.*;
 
-import ar.edu.itba.paw.models.files.BookFile;
-import ar.edu.itba.paw.models.files.BookPreview;
-import ar.edu.itba.paw.models.files.CoverImage;
-import ar.edu.itba.paw.models.files.PaymentReceipt;
 import ar.edu.itba.paw.models.users.User;
 
 import java.math.BigDecimal;
@@ -45,53 +40,23 @@ public interface BookDao {
 
     void updateSalesCategory(Book book, BookSalesCategory bookSalesCategory);
 
-    CoverImage createOrUpdateCoverImage(Book book, byte[] coverImage);
-    BookPreview createOrUpdatePreview(Book book, byte[] previewFile);
-    BookFile createOrUpdateBookFile(Book book, byte[] bookFile);
+    void createOrUpdateCoverImage(Book book, byte[] coverImage);
+    void createOrUpdatePreview(Book book, byte[] previewFile);
+    void createOrUpdateBookFile(Book book, byte[] bookFile);
 
+    List<Book> searchWithParams(BookSearchQueryDTO queryDTO);
+    long getSearchSize(BookSearchQueryDTO queryDTO);
 
-    List<Book> searchWithParams(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, Long writerId, Long ownerId, boolean showOnlyRecommended, int offset, int limit);
-    long getSearchSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId, boolean showOnlyRecommended);
+    List<Book> getRecommendationsForBook(BookSearchQueryDTO queryDTO);
+    long getRecommendationsForBookSize(BookSearchQueryDTO queryDTO);
 
-    List<Book> getRecommendations(Book book, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, BookSearchOrderBy orderBy, Long writerId, Long ownerId, boolean showOnlyRecommended, int offset, int limit);
-    long getRecommendationsSize(Book book, String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId, boolean showOnlyRecommended);
+    List<Book> getTopBooks(BookSearchQueryDTO queryDTO);
+    long getTopBooksSize(BookSearchQueryDTO queryDTO);
 
-    List<Book> getTopBooks(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId, boolean showOnlyRecommended, int offset, int limit);
-    long getTopBooksSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId, boolean showOnlyRecommended);
-
-    List<Book> getBooksWithNewDeals(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId, boolean showOnlyRecommended, int offset, int limit);
-    long getBooksWithNewDealsSize(String title, BookGenre genre, BigDecimal minPrice, BigDecimal maxPrice, Integer minPageCount, Integer maxPageCount, Integer minSuggestedAge, Integer maxSuggestedAge, Long writerId, Long ownerId, boolean showOnlyRecommended);
-
-    List<Book> getWriterBooks(
-            long writerId,
-            String title,
-            BookSearchOrderBy orderBy,
-            int offset,
-            int limit
-    );
-
-    long getWriterBooksSize(long writerId, String title);
-
-    List<Book> getOwnedBooks(long readerId, String title, BookSearchOrderBy orderBy, int offset, int limit, boolean isPublic);
-
-    long getOwnedBooksSize(long readerId, String title, boolean isPublic);
-
-    void recheckAllPaused(long userId);
+    List<Book> getBooksWithNewDeals(BookSearchQueryDTO queryDTO);
+    long getBooksWithNewDealsSize(BookSearchQueryDTO queryDTO);
 
     List<BookGenre> getGenresByBookCount(int offset, int limit);
 
-    Optional<WishlistItem> findWishlistItem(long userId, long bookId);
-    WishlistItem addToWishlist(long userId, long bookId);
-    void removeFromWishlist(long userId, long bookId);
-    List<WishlistItem> getWishlist(long userId, int offset, int limit);
-    long getWishlistSize(long userId);
 
-    Optional<Recommendation> getRecommendation(long userId, long bookId);
-    Recommendation recommend(long userId, long booKId);
-    void removeRecommendation(long userId, long bookId);
-    List<Recommendation> getRecommendations(long userId, int offset, int limit);
-    long getReccomendationsSize(long userId);
-
-    List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit);
-    List<Book> getBooksByWriterOrderedBySales(long writerId, int offset, int limit, int year, int month);
 }

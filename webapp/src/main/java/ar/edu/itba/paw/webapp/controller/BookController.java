@@ -5,10 +5,7 @@ import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.DealService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.models.PaginatedContent;
-import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.books.BookAnalytics;
-import ar.edu.itba.paw.models.books.BookGenre;
-import ar.edu.itba.paw.models.books.BookSearchOrderBy;
+import ar.edu.itba.paw.models.books.*;
 import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.DealNotFoundException;
@@ -80,17 +77,17 @@ public class BookController {
             @QueryParam("owner_id") final Long ownerId,
             @QueryParam("recommendations_for_book") final Long recommendationsForId
     ){
-        final PaginatedContent<Book> booksPage = bs.listBooks(
+        final PaginatedContent<Book> booksPage = bs.listBooks(new BookSearchQueryDTO(
                 title,
                 genre,
                 minPrice, maxPrice,
                 minPageCount, maxPageCount,
                 minSuggestedAge, maxSuggestedAge,
-                orderBy,
-                page, pageSize,
                 writerId, ownerId,
-                recommendationsForId
-        );
+                recommendationsForId,
+                orderBy,
+                page, pageSize
+        ));
         final List<BookDTO> books = booksPage.getPage()
                 .stream().map(BookDTO.mapper(uriInfo)).toList();
 

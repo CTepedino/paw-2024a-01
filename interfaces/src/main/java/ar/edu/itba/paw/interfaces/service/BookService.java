@@ -31,46 +31,15 @@ public interface BookService {
             int suggestedAge
     );
 
-    PaginatedContent<Book> listBooks(
-            String title,
-            BookGenre genre,
-            BigDecimal minPrice,
-            BigDecimal maxPrice,
-            Integer minPageCount,
-            Integer maxPageCount,
-            Integer minSuggestedAge,
-            Integer maxSuggestedAge,
-            BookSearchOrderBy orderBy,
-            int pageNumber,
-            int pageSize,
-            Long writerId,
-            Long ownerId,
-            Long recommendationsForId
-    );
-
-    Optional<Book> findById(long id);
-
-    boolean isAuthor(Book book, long userId);
-    boolean isAuthor(long userId, long bookId);
-
-    PaginatedContent<BookGenre> getGenres(BookGenreOrderBy orderBy, int pageNumber, int pageSize);
-
-    Optional<WishlistItem> findWishlistItem(long userId, long bookId);
-    void addToWishlist(long userId, long bookId);
-    void removeFromWishlist(long userId, long bookId);
-    PaginatedContent<WishlistItem> getWishlist(long userId, int pageNumber, int pageSize);
-
-    void recheckWriterPausedBooks(long userId);
-
-    void checkBookSalesCategory(Book book);
-
     void setCoverImage(long bookId, byte[] coverImage);
     void setPreview(long bookId, byte[] preview);
     void setBookFile(long bookId, byte[] file);
 
+    PaginatedContent<Book> listBooks(BookSearchQueryDTO queryDTO);
 
-    PaginatedContent<Recommendation> getRecommendations(long userId, int page, int size);
-    Optional<Recommendation> findRecommendation(long userId, long bookId);
-    void recommend(long userId, long bookId);
-    void removeRecommendation(long userId, long bookId);
+    Optional<Book> findById(long id);
+    boolean isAuthor(long userId, long bookId);
+
+    void checkBookSalesCategory(Book book);
+
 }

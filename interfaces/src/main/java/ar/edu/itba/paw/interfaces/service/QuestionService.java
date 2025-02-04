@@ -14,7 +14,5 @@ public interface QuestionService {
 
     void answer(long questionId, String answer);
 
-    boolean canAnswer(long questionId, String email);
-
     Optional<Question> findById(long questionId);
 }

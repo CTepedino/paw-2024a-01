@@ -14,18 +14,10 @@ public interface ReviewDao {
 
     void modify(Review review, int rating, String reviewText, LocalDateTime date);
 
-
     List<Review> getAll(long bookId, ReviewOrderBy orderBy, int offset, int limit);
     List<Review> getAllExcept(long bookId, ReviewOrderBy orderBy, int offset, int limit, long reviewerId);
-
     long getAllSize(long bookId);
 
-    Optional<Review> find(long bookId, User reviewer);
     Optional<Review> find(long bookId, long userId);
-
     Optional<Review> findById(long id);
-
-    int getAverageRating(long bookId);
-
-
 }

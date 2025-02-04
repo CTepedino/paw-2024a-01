@@ -40,126 +40,6 @@ public class QuestionJpaDao implements QuestionDao {
     }
 
     @Override
-    public List<Question> getAll(long bookId, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.book_id = :bookId ORDER BY q.date DESC");
-        nativeQuery.setParameter("bookId", bookId);
-
-        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
-    }
-
-    @Override
-    public long getAllSize(long bookId) {
-        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.book.bookId = :bookId", Map.of("bookId", bookId));
-    }
-
-    @Override
-    public List<Question> getAllFromUser(long userId, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.questioner_id = :userId ORDER BY q.date DESC");
-        nativeQuery.setParameter("userId", userId);
-
-        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
-    }
-
-    @Override
-    public long getAllFromUserSize(long userId) {
-        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.questioner.userId = :userId", Map.of("userId", userId));
-    }
-
-    @Override
-    public List<Question> getAllFromUserAndBook(long userId, long bookId, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.questioner_id = :userId AND q.book_id = :bookId ORDER BY q.date DESC");
-        nativeQuery.setParameter("userId", userId);
-        nativeQuery.setParameter("bookId", bookId);
-
-        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
-    }
-
-    @Override
-    public long getAllFromUserAndBookSize(long userId, long bookId) {
-        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.questioner.userId = :userId AND q.book.bookId = :bookId", Map.of("userId", userId, "bookId", bookId));
-    }
-
-    @Override
-    public List<Question> getAllFromWriter(long userId, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q JOIN books b ON q.book_id = b.book_id WHERE b.writer_id = :userId ORDER BY q.date DESC");
-        nativeQuery.setParameter("userId", userId);
-
-        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
-    }
-
-    @Override
-    public long getAllFromWriterSize(long userId) {
-        return DaoUtils.getRowCount(em, "Question q LEFT JOIN Book b ON q.book.bookId = b.bookId", "q.questionId","WHERE b.writer.userId = :userId", Map.of("userId", userId));
-    }
-
-    @Override
-    public List<Question> getAllFromWriterIncomplete(long userId, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q JOIN books b ON q.book_id = b.book_id WHERE b.writer_id = :userId AND q.answer IS NULL ORDER BY q.date DESC");
-        nativeQuery.setParameter("userId", userId);
-
-        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
-    }
-
-    @Override
-    public long getAllFromWriterIncompleteSize(long userId) {
-        return DaoUtils.getRowCount(em, "Question q LEFT JOIN Book b ON q.book.bookId = b.bookId", "q.questionId","WHERE b.writer.userId = :userId  AND q.answer IS NULL", Map.of("userId", userId));
-    }
-
-    @Override
-    public List<Question> getAllFullQuestionsNotUser(long bookId, long userId, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.questioner_id <> :userId AND q.book_id = :bookId AND q.answer IS NOT NULL ORDER BY q.date DESC");
-        nativeQuery.setParameter("userId", userId);
-        nativeQuery.setParameter("bookId", bookId);
-
-        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
-    }
-
-    @Override
-    public long getAllFullQuestionsNotUsersSize(long bookId, long userId) {
-        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.questioner.userId <> :userId AND q.book.bookId = :bookId and q.answer IS NOT NULL", Map.of("userId", userId, "bookId", bookId));
-    }
-
-    @Override
-    public List<Question> getAllFullQuestions(long bookId, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT q.question_id FROM questions q WHERE q.book_id = :bookId AND q.answer IS NOT NULL ORDER BY q.date DESC");
-        nativeQuery.setParameter("bookId", bookId);
-
-        TypedQuery<Question> query = em.createQuery("FROM Question q WHERE q.questionId IN :idList ORDER BY q.date DESC", Question.class);
-
-        return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
-    }
-
-    @Override
-    public long getAllFullQuestionsSize(long bookId) {
-        return DaoUtils.getRowCount(em, "Question q", "q.questionId", "WHERE q.book.bookId = :bookId AND q.answer IS NOT NULL", Map.of("bookId", bookId));
-    }
-
-    private void prepareSearchParams(StringBuilder query, Map<String, Object> params, Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered){
-        DaoUtils.addQueryCondition(query, " AND b.book_id = :bookId ", params, "bookId", bookId);
-        DaoUtils.addQueryCondition(query, " AND b.writer_id = :writerId", params, "writerId", writerId);
-        DaoUtils.addQueryCondition(query, " AND q.questioner_id " + (excludeQuestioner? "<>":"=") + " :questionerId ", params, "questionerId", questionerId);
-        if (isAnswered != null){
-            query.append(" AND q.answer IS ").append(isAnswered? "NOT NULL": "NULL");
-        }
-        int whereIndex = query.indexOf("AND");
-        if (whereIndex != -1) {
-            query.replace(whereIndex, whereIndex + 3, "WHERE");
-        }
-    }
-
-    @Override
     public List<Question> getAll(Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered, int offset, int limit) {
         StringBuilder nativeQueryStr = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
@@ -187,5 +67,19 @@ public class QuestionJpaDao implements QuestionDao {
         params.forEach(nativeQuery::setParameter);
 
         return ((BigInteger) nativeQuery.getSingleResult()).longValue();
+    }
+
+
+    private void prepareSearchParams(StringBuilder query, Map<String, Object> params, Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered){
+        DaoUtils.addQueryCondition(query, " AND b.book_id = :bookId ", params, "bookId", bookId);
+        DaoUtils.addQueryCondition(query, " AND b.writer_id = :writerId", params, "writerId", writerId);
+        DaoUtils.addQueryCondition(query, " AND q.questioner_id " + (excludeQuestioner? "<>":"=") + " :questionerId ", params, "questionerId", questionerId);
+        if (isAnswered != null){
+            query.append(" AND q.answer IS ").append(isAnswered? "NOT NULL": "NULL");
+        }
+        int whereIndex = query.indexOf("AND");
+        if (whereIndex != -1) {
+            query.replace(whereIndex, whereIndex + 3, "WHERE");
+        }
     }
 }

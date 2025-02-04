@@ -117,6 +117,7 @@ public class UserServiceImpl implements UserService {
         if (user.getCbu()==null){
             throw new InvalidWriterException();
         }
+
         if (!user.getRoles().contains(UserRoles.WRITER)) {
             userDao.giveRole(user, UserRoles.WRITER);
         }
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Optional<User> getLoggedUser(){
-        if (!isLoggedIn()){
+        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null){
             return Optional.empty();
         }
 
@@ -135,23 +136,6 @@ public class UserServiceImpl implements UserService {
         return findByEmail(auth.getName());
     }
 
-    @Override
-    public boolean isLoggedIn() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-    }
-
-    @Override
-    public boolean hasRole(UserRoles role) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (!isLoggedIn()){
-            return false;
-        }
-
-        return authentication.getAuthorities().stream()
-                .anyMatch(r -> r.getAuthority().equals(role.toString()));
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -204,13 +188,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public Collection<UserRoles> getRoles(long userId){
-        return findById(userId).orElseThrow(UserNotFoundException::new).getRoles();
-    }
-
-
-    @Transactional(readOnly = true)
-    @Override
     public ProfilePicture getProfilePicture(long userId){
         ProfilePicture image = findById(userId).orElseThrow(UserNotFoundException::new).getProfilePicture();
         if (image == null){
@@ -229,18 +206,6 @@ public class UserServiceImpl implements UserService {
         } catch (IOException | OutOfMemoryError e){
             throw new UnreadableFileException();
         }
-    }
-
-    @Transactional
-    @Override
-    public String fillMissingWriterData(long userId, String password) {
-        User user = findById(userId).orElseThrow(UserNotFoundException::new);
-        String encodedPassword = passwordEncoder.encode(password);
-
-        userDao.updatePassword(user, encodedPassword);
-        userDao.giveRole(user, UserRoles.READER);
-        userDao.giveRole(user, UserRoles.WRITER);
-        return encodedPassword;
     }
 
     @Transactional
@@ -276,7 +241,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void checkWriterCategory(User user){
-        long orders = orderDao.getWriterOrdersSize(user.getUserId(), "", null);
+        long orders = orderDao.getAllOrdersSize(null, user.getUserId(), null, "", OrderStatus.COMPLETED);
+
         if(user.getWriterCategory() != WriterCategory.BRONZE && orders >= WriterCategory.BRONZE.getMinSales() && orders < WriterCategory.SILVER.getMinSales()){
             userDao.updateWriterCategory(user, WriterCategory.BRONZE);
         }

@@ -14,12 +14,6 @@ public interface OrderService {
 
     long create(long bookId);
 
-    Order create(long bookId, byte[] receipt, String receiptMimeType);
-
-    boolean existsOrder(long bookId);
-
-    boolean canCreateOrder(long bookId);
-
     Optional<Order> find(long buyerId, long bookId);
     Optional<Order> findById(long orderId);
 
@@ -27,8 +21,6 @@ public interface OrderService {
 
     boolean ownsBook(long userId, long bookId);
     boolean existsOrder(long userId, long bookId);
-
-    boolean canAdvanceOrder(long orderId, String email);
 
     void updateOrderWriterSide(long orderId, String rejectedReason);
 
