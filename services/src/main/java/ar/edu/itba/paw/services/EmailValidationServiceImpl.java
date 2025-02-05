@@ -95,6 +95,6 @@ public class EmailValidationServiceImpl implements EmailValidationService {
 
     @Override
     public boolean isEmailValidationCode(String code) {
-        return code.length() <= VALIDATION_CODE_LENGTH;
+        return code.length() == VALIDATION_CODE_LENGTH;
     }
 }

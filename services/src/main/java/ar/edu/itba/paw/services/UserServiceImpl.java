@@ -138,13 +138,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Transactional(readOnly = true)
-    @Override
-    public boolean isCurrentUserPassword(String password) {
-        User user = getLoggedUser().orElseThrow(UserNotFoundException::new);
-        return passwordEncoder.matches(password, user.getPassword());
-    }
-
     @Transactional
     @Override
     public void changePassword(long userId, String password) {
@@ -211,22 +204,25 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Transactional
     @Override
-    public void createResetPasswordCode(String email) {
+    public void sendResetCode(String email) {
         User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
-        rcs.create(user);
+        if (user.getResetCode() == null){
+            rcs.create(user);
+        } else {
+            rcs.resend(user);
+        }
     }
 
 
     @Transactional
     @Override
-    public void resetPassword(long userId, String password, String code) {
-        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+    public void validateResetPasswordCode(String email, String code) {
+        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
 
-        if (rcs.checkResetCode(userId, code)) {
-            userDao.updatePassword(user, passwordEncoder.encode(password));
-
+        if (rcs.checkResetCode(user.getUserId(), code)) {
             List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
             Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
             SecurityContextHolder.getContext().setAuthentication(auth);
@@ -235,10 +231,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public void resendResetCode(long userId){
-        rcs.resend(findById(userId).orElseThrow(UserNotFoundException::new));
+    public boolean isEmailValidationCode(String code) {
+        return evs.isEmailValidationCode(code);
+    }
+
+    @Override
+    public boolean isResetPasswordCode(String code){
+        return rcs.isResetPasswordCode(code);
     }
 
     @Transactional
@@ -257,8 +257,5 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public boolean isEmailValidationCode(String code) {
-        return evs.isEmailValidationCode(code);
-    }
+
 }

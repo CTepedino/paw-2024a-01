@@ -97,6 +97,8 @@ public class OrderServiceImpl implements OrderService {
     private void acceptOrReject(Order order, String rejectedReason){
         if (rejectedReason == null) {
             orderDao.update(order, OrderStatus.COMPLETED, order.getDate());
+            us.checkWriterCategory(order.getWriter());
+            bs.checkBookSalesCategory(order.getBook());
             ms.sendReceiptApprovedEmail(order);
         } else {
             orderDao.update(order, OrderStatus.REJECTED_PAYMENT, order.getDate(), rejectedReason);

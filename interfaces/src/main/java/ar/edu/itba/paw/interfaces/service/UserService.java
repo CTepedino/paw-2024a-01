@@ -15,10 +15,9 @@ public interface UserService {
     Optional<User> findByEmail(String email);
 
     void checkWriterRole(User user);
+    void checkWriterCategory(User user);
 
-    boolean isCurrentUserPassword(String password);
     void changePassword(long userId, String password);
-
     void updateProfile(long userId, String firstName, String lastName, String cbu, String description);
 
     Optional<User> getLoggedUser();
@@ -28,11 +27,9 @@ public interface UserService {
     void updateProfilePicture(long userId, byte[] profilePicture);
     void deleteProfilePicture(long userId);
 
-    void createResetPasswordCode(String email);
-    void resetPassword(long userId, String password, String code);
-    void resendResetCode(long userId);
-    void checkWriterCategory(User user);
-
+    void sendResetCode(String email);
+    void validateResetPasswordCode(String email, String code);
+    boolean isResetPasswordCode(String code);
 
     void validateEmail(String email, String code);
     void resendValidation(String email);

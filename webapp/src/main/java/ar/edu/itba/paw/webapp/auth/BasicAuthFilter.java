@@ -50,7 +50,6 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                 }
 
                 String token = new String(decoded, StandardCharsets.UTF_8);
-
                 int separator = token.indexOf(":");
                 if (separator == -1) {
                     throw new BadCredentialsException("Invalid basic authentication token");
@@ -58,14 +57,23 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                 String email = token.substring(0, separator);
                 String credentials = token.substring(separator + 1);
                 Authentication authentication;
-                if (userService.isEmailValidationCode(credentials)){
+
+                if (userService.isResetPasswordCode(credentials)){
+                    try {
+                        userService.validateResetPasswordCode(email, credentials);
+                    } catch (Exception e) {
+                        throw new BadCredentialsException("Bad credentials");
+                    }
+
+                    authentication = new ResetPasswordCodeAuthenticationToken(email, credentials);
+                } else if (userService.isEmailValidationCode(credentials)){
                     try {
                         userService.validateEmail(email, credentials);
                     } catch (Exception e) {
                         throw new BadCredentialsException("Bad credentials");
                     }
 
-                    authentication = new UsernamePasswordAuthenticationToken(email, credentials);
+                    authentication = new EmailValidationAuthenticationToken(email, credentials);
                 } else {
 
                     authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, credentials));

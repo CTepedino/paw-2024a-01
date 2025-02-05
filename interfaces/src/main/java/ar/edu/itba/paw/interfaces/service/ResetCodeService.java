@@ -12,4 +12,6 @@ public interface ResetCodeService {
     void deleteExpired();
 
     void resend(User user);
+
+    boolean isResetPasswordCode(String code);
 }

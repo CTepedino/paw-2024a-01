@@ -20,7 +20,7 @@ import java.util.Random;
 public class ResetCodeServiceImpl implements ResetCodeService {
 
     private static final int RESET_CODE_HOURS = 12;
-    private static final int RESET_CODE_LENGTH = 5;
+    private static final int RESET_CODE_LENGTH = 4;
 
     private final UserDao userDao;
     private final MailService ms;
@@ -96,5 +96,10 @@ public class ResetCodeServiceImpl implements ResetCodeService {
         }
 
         ms.sendResetPasswordEmail(user, resetCode.getCode(), resetCode.getExpiration());
+    }
+
+    @Override
+    public boolean isResetPasswordCode(String code) {
+        return code.length() == RESET_CODE_LENGTH;
     }
 }
