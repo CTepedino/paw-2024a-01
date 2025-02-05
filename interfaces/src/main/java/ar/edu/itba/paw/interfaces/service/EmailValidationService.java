@@ -12,4 +12,6 @@ public interface EmailValidationService {
     void deleteExpired();
 
     void resend(User user);
+
+    boolean isEmailValidationCode(String code);
 }

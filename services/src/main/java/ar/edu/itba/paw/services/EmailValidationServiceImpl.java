@@ -92,4 +92,9 @@ public class EmailValidationServiceImpl implements EmailValidationService {
 
         ms.sendRegisterEmail(user, validation.getCode(), validation.getExpiration());
     }
+
+    @Override
+    public boolean isEmailValidationCode(String code) {
+        return code.length() <= VALIDATION_CODE_LENGTH;
+    }
 }

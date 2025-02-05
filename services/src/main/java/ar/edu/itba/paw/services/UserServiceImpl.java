@@ -2,7 +2,9 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
-import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.interfaces.service.EmailValidationService;
+import ar.edu.itba.paw.interfaces.service.ResetCodeService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.exception.*;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.orders.OrderStatus;
@@ -12,20 +14,19 @@ import ar.edu.itba.paw.models.users.WriterCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -81,11 +82,11 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void validateEmail(long id, String code) {
-        Optional<User> maybeUser = userDao.findById(id);
+    public void validateEmail(String email, String code) {
+        Optional<User> maybeUser = userDao.findByEmail(email);
         if (maybeUser.isPresent() && !maybeUser.get().isEnabled()){
             User user = maybeUser.get();
-            if (evs.checkValidation(id, code)){
+            if (evs.checkValidation(user.getUserId(), code)){
 
                 userDao.updateIsEnabled(user,true);
                 userDao.giveRole(user, UserRoles.READER);
@@ -94,14 +95,14 @@ public class UserServiceImpl implements UserService {
                 Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
-                LOGGER.atWarn().setMessage("Failed to Validate email for userId: {} - Invalid Code").addArgument(id).log();
+                LOGGER.atWarn().setMessage("Failed to Validate email for user: {} - Invalid Code").addArgument(email).log();
                 throw new InvalidCodeException();
             }
         } else {
-            LOGGER.atWarn().setMessage("Failed to Validated email for userId: {} - No validation code").addArgument(id).log();
+            LOGGER.atWarn().setMessage("Failed to Validated email for user: {} - No validation code").addArgument(email).log();
             throw new NoValidationCodeException();
         }
-        LOGGER.atDebug().setMessage("Validated email for userId: {}").addArgument(id).log();
+        LOGGER.atDebug().setMessage("Validated email for user: {}").addArgument(email).log();
     }
 
     @Transactional
@@ -254,5 +255,10 @@ public class UserServiceImpl implements UserService {
         if(user.getWriterCategory() != WriterCategory.GOLD && orders >= WriterCategory.GOLD.getMinSales()){
             userDao.updateWriterCategory(user, WriterCategory.GOLD);
         }
+    }
+
+    @Override
+    public boolean isEmailValidationCode(String code) {
+        return evs.isEmailValidationCode(code);
     }
 }

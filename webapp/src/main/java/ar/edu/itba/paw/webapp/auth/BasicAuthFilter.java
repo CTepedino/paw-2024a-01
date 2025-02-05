@@ -55,11 +55,21 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                 if (separator == -1) {
                     throw new BadCredentialsException("Invalid basic authentication token");
                 }
-
                 String email = token.substring(0, separator);
-                final Authentication authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(email, token.substring(separator + 1))
-                );
+                String credentials = token.substring(separator + 1);
+                Authentication authentication;
+                if (userService.isEmailValidationCode(credentials)){
+                    try {
+                        userService.validateEmail(email, credentials);
+                    } catch (Exception e) {
+                        throw new BadCredentialsException("Bad credentials");
+                    }
+
+                    authentication = new UsernamePasswordAuthenticationToken(email, credentials);
+                } else {
+
+                    authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, credentials));
+                }
 
                 userService.findByEmail(email).ifPresent(u -> response.setHeader("Authorization", jwtTokenUtil.generateToken(u)));
                 SecurityContextHolder.getContext().setAuthentication(authentication);

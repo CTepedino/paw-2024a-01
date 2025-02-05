@@ -137,10 +137,12 @@ public class BookServiceImpl implements BookService {
             throw new InvalidPageException();
         }
 
-        queryDTO.setRecommendedByUserOnly(
-                us.getLoggedUser()
-                        .filter(u -> u.getUserId() == queryDTO.getOwnerId())
-                        .isEmpty());
+        if (queryDTO.getOwnerId() != null) {
+            queryDTO.setRecommendedByUserOnly(
+                    us.getLoggedUser()
+                            .filter(u -> u.getUserId() == queryDTO.getOwnerId())
+                            .isEmpty());
+        }
 
         if (queryDTO.getRecommendationsForId() != null){
             return getRecommendationsForBook(queryDTO);

@@ -10,10 +10,6 @@ public interface UserService {
 
     User create(String email, String password, String firstName, String lastName, Locale locale);
 
-    void validateEmail(long userId, String code);
-
-    void resendValidation(String email);
-
     Optional<User> findById(long userId);
 
     Optional<User> findByEmail(String email);
@@ -33,10 +29,12 @@ public interface UserService {
     void deleteProfilePicture(long userId);
 
     void createResetPasswordCode(String email);
-
     void resetPassword(long userId, String password, String code);
-
     void resendResetCode(long userId);
-
     void checkWriterCategory(User user);
+
+
+    void validateEmail(String email, String code);
+    void resendValidation(String email);
+    boolean isEmailValidationCode(String code);
 }
