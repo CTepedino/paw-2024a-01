@@ -92,7 +92,7 @@ public class OrderJpaDao implements OrderDao {
         DaoUtils.addQueryCondition(query, " AND b.writer_id = :writerId ", params, "writerId", writerId);
         DaoUtils.addQueryCondition(query, " AND o.buyer_id = :readerId ", params, "readerId", readerId);
         if (orderStatus != null) {
-            DaoUtils.addQueryCondition(query, " AND o.status = orderStatus ", params, "orderStatus", orderStatus.toString());
+            DaoUtils.addQueryCondition(query, " AND o.status = :orderStatus ", params, "orderStatus", orderStatus.toString());
         }
     }
 
