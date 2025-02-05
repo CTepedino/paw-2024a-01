@@ -22,6 +22,7 @@ public class ResetCodeController {
     private UriInfo uriInfo;
 
     @GET
+    @Path("{email}")
     public Response getResetPasswordCode(@PathParam("email") final String email){
         userService.sendResetCode(email);
         return Response.ok().build();
