@@ -11,17 +11,14 @@ public interface UserService {
     User create(String email, String password, String firstName, String lastName, Locale locale);
 
     Optional<User> findById(long userId);
-
     Optional<User> findByEmail(String email);
-
-    void checkWriterRole(User user);
-    void checkWriterCategory(User user);
 
     void changePassword(long userId, String password);
     void updateProfile(long userId, String firstName, String lastName, String cbu, String description);
-
     Optional<User> getLoggedUser();
 
+    void checkWriterRole(User user);
+    void checkWriterCategory(User user);
 
     ProfilePicture getProfilePicture(long userId);
     void updateProfilePicture(long userId, byte[] profilePicture);

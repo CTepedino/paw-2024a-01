@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.QuestionDao;
-import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.users.User;
@@ -13,7 +12,10 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class QuestionJpaDao implements QuestionDao {
@@ -26,11 +28,6 @@ public class QuestionJpaDao implements QuestionDao {
         Question question = new Question(book, questioner, questionText, null, date, null);
         em.persist(question);
         return question;
-    }
-
-    @Override
-    public Optional<Question> findById(long id) {
-        return Optional.ofNullable(em.find(Question.class, id));
     }
 
     @Override
@@ -82,4 +79,11 @@ public class QuestionJpaDao implements QuestionDao {
             query.replace(whereIndex, whereIndex + 3, "WHERE");
         }
     }
+
+    @Override
+    public Optional<Question> findById(long id) {
+        return Optional.ofNullable(em.find(Question.class, id));
+    }
+
+
 }

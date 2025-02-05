@@ -74,6 +74,17 @@ public class BookServiceImpl implements BookService {
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 
+    @Transactional
+    @Override
+    public void checkBookSalesCategory(Book book){
+        long sales = orderDao.getAllOrdersSize(book.getBookId(), null, null, "", OrderStatus.COMPLETED);
+        if(sales >= BookSalesCategory.POPULAR.getMinSales() && book.getSalesCategory() == BookSalesCategory.DEFAULT){
+            bookDao.updateSalesCategory(book, BookSalesCategory.POPULAR);
+        }
+        if(sales >= BookSalesCategory.BEST_SELLER.getMinSales() && book.getSalesCategory() == BookSalesCategory.POPULAR){
+            bookDao.updateSalesCategory(book, BookSalesCategory.BEST_SELLER);
+        }
+    }
 
     @Transactional
     @Override
@@ -109,25 +120,11 @@ public class BookServiceImpl implements BookService {
         return bookDao.findById(id);
     }
 
-
     @Transactional(readOnly = true)
     @Override
     public boolean isAuthor(long userId, long bookId) {
         Optional<Book> maybeBook = bookDao.findById(bookId);
         return maybeBook.filter(b -> b.getWriter().getUserId() == userId).isPresent();
-    }
-
-
-    @Transactional
-    @Override
-    public void checkBookSalesCategory(Book book){
-        long sales = orderDao.getAllOrdersSize(book.getBookId(), null, null, "", OrderStatus.COMPLETED);
-        if(sales >= BookSalesCategory.POPULAR.getMinSales() && book.getSalesCategory() == BookSalesCategory.DEFAULT){
-            bookDao.updateSalesCategory(book, BookSalesCategory.POPULAR);
-        }
-        if(sales >= BookSalesCategory.BEST_SELLER.getMinSales() && book.getSalesCategory() == BookSalesCategory.POPULAR){
-            bookDao.updateSalesCategory(book, BookSalesCategory.BEST_SELLER);
-        }
     }
 
     @Transactional(readOnly = true)
@@ -146,6 +143,9 @@ public class BookServiceImpl implements BookService {
 
         if (queryDTO.getRecommendationsForId() != null){
             return getRecommendationsForBook(queryDTO);
+        }
+        if (queryDTO.getOrderBy()==null){
+            queryDTO.setOrderBy(BookSearchOrderBy.PUBLICATION_DATE_DESC);
         }
         return switch(queryDTO.getOrderBy()) {
             case BookSearchOrderBy.NEW_DEALS -> getNewDeals(queryDTO);

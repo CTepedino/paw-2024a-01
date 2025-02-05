@@ -67,15 +67,15 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaginatedContent<Question> searchQuestions(Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered, int pageNumber, int pageSize) {
-        List<Question> questions = questionDao.getAll(bookId, writerId, questionerId, excludeQuestioner, isAnswered, (pageNumber-1)*pageSize, pageSize);
-
-        return new PaginatedContent<>(questions, pageNumber, pageSize, questionDao.getAllSize(bookId, writerId, questionerId, excludeQuestioner, isAnswered));
+    public Optional<Question> findById(long questionId) {
+        return questionDao.findById(questionId);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Question> findById(long questionId) {
-        return questionDao.findById(questionId);
+    public PaginatedContent<Question> searchQuestions(Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered, int pageNumber, int pageSize) {
+        List<Question> questions = questionDao.getAll(bookId, writerId, questionerId, excludeQuestioner, isAnswered, (pageNumber-1)*pageSize, pageSize);
+
+        return new PaginatedContent<>(questions, pageNumber, pageSize, questionDao.getAllSize(bookId, writerId, questionerId, excludeQuestioner, isAnswered));
     }
 }

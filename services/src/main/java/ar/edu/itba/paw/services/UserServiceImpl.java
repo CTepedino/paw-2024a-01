@@ -50,19 +50,6 @@ public class UserServiceImpl implements UserService {
         this.rcs = rcs;
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Optional<User> findById(long id){
-        return userDao.findById(id);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Optional<User> findByEmail(String email) {
-        LOGGER.atDebug().setMessage("Searching user by email {}").addArgument(email).log();
-        return userDao.findByEmail(email);
-    }
-
     @Transactional
     @Override
     public User create(String email, String password, String firstName, String lastName, Locale locale){
@@ -79,6 +66,155 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<User> findById(long id){
+        return userDao.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<User> findByEmail(String email) {
+        LOGGER.atDebug().setMessage("Searching user by email {}").addArgument(email).log();
+        return userDao.findByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<User> getLoggedUser(){
+        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null){
+            return Optional.empty();
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return findByEmail(auth.getName());
+    }
+
+    @Transactional
+    @Override
+    public void changePassword(long userId, String password) {
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        userDao.updatePassword(user, encodedPassword);
+
+        LOGGER.atDebug().setMessage("Changed password for userId: {}").addArgument(user.getUserId()).log();
+    }
+
+    @Transactional
+    @Override
+    public void updateProfile(long userId, String firstName, String lastName, String cbu, String description) {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        userDao.update(user, firstName, lastName, cbu, description);
+
+        LOGGER.atDebug().setMessage("Updated profile for user: {}").addArgument(firstName).log();
+    }
+
+    @Transactional
+    @Override
+    public void checkWriterRole(User user) {
+        if (user.getCbu()==null){
+            throw new InvalidWriterException();
+        }
+
+        if (!user.getRoles().contains(UserRoles.WRITER)) {
+            userDao.giveRole(user, UserRoles.WRITER);
+        }
+
+        LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(user.getUserId()).log();
+    }
+
+    @Transactional
+    @Override
+    public void checkWriterCategory(User user){
+        long orders = orderDao.getAllOrdersSize(null, user.getUserId(), null, "", OrderStatus.COMPLETED);
+
+        if(user.getWriterCategory() != WriterCategory.BRONZE && orders >= WriterCategory.BRONZE.getMinSales() && orders < WriterCategory.SILVER.getMinSales()){
+            userDao.updateWriterCategory(user, WriterCategory.BRONZE);
+        }
+        if((user.getWriterCategory() != WriterCategory.SILVER) && (orders >= WriterCategory.SILVER.getMinSales()) && (orders < WriterCategory.GOLD.getMinSales())){
+            userDao.updateWriterCategory(user, WriterCategory.SILVER);
+        }
+        if(user.getWriterCategory() != WriterCategory.GOLD && orders >= WriterCategory.GOLD.getMinSales()){
+            userDao.updateWriterCategory(user, WriterCategory.GOLD);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ProfilePicture getProfilePicture(long userId){
+        ProfilePicture image = findById(userId).orElseThrow(UserNotFoundException::new).getProfilePicture();
+        if (image == null){
+            return new ProfilePicture(userId, getDefaultProfilePicture());
+        }
+        return image;
+    }
+
+    private byte[] getDefaultProfilePicture(){
+        InputStream is = getClass().getResourceAsStream("/images/defaultUser.jpg");
+        if (is == null){
+            throw new ImageNotFoundException();
+        }
+        try {
+            return is.readAllBytes();
+        } catch (IOException | OutOfMemoryError e){
+            throw new UnreadableFileException();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void updateProfilePicture(long userId, byte[] profilePicture) {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+
+        if (user.getProfilePicture()==null){
+            userDao.createProfilePicture(user, profilePicture);
+        } else {
+            userDao.updateProfilePicture(user, profilePicture);
+        }
+
+        LOGGER.atDebug().setMessage("Updated profile picture for user: {}").addArgument(user.getFirstName()).log();
+    }
+
+    @Transactional
+    @Override
+    public void deleteProfilePicture(long userId) {
+        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
+        if (user.getProfilePicture() != null){
+            userDao.deleteProfilePicture(user);
+        }
+
+        LOGGER.atDebug().setMessage("Deleted profile picture for user: {}").addArgument(user.getFirstName()).log();
+    }
+
+    @Transactional
+    @Override
+    public void sendResetCode(String email) {
+        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
+        if (user.getResetCode() == null){
+            rcs.create(user);
+        } else {
+            rcs.resend(user);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void validateResetPasswordCode(String email, String code) {
+        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+        if (rcs.checkResetCode(user.getUserId(), code)) {
+            List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
+            Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        } else {
+            throw new InvalidCodeException();
+        }
+    }
+
+    @Override
+    public boolean isResetPasswordCode(String code){
+        return rcs.isResetPasswordCode(code);
+    }
 
     @Transactional
     @Override
@@ -112,150 +248,12 @@ public class UserServiceImpl implements UserService {
         evs.resend(user);
     }
 
-    @Transactional
-    @Override
-    public void checkWriterRole(User user) {
-        if (user.getCbu()==null){
-            throw new InvalidWriterException();
-        }
-
-        if (!user.getRoles().contains(UserRoles.WRITER)) {
-            userDao.giveRole(user, UserRoles.WRITER);
-        }
-
-        LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(user.getUserId()).log();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Optional<User> getLoggedUser(){
-        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null){
-            return Optional.empty();
-        }
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return findByEmail(auth.getName());
-    }
-
-
-    @Transactional
-    @Override
-    public void changePassword(long userId, String password) {
-        String encodedPassword = passwordEncoder.encode(password);
-        User user = findById(userId).orElseThrow(UserNotFoundException::new);
-        userDao.updatePassword(user, encodedPassword);
-
-        LOGGER.atDebug().setMessage("Changed password for userId: {}").addArgument(user.getUserId()).log();
-    }
-
-    @Transactional
-    @Override
-    public void updateProfile(long userId, String firstName, String lastName, String cbu, String description) {
-        User user = findById(userId).orElseThrow(UserNotFoundException::new);
-        userDao.update(user, firstName, lastName, cbu, description);
-
-        LOGGER.atDebug().setMessage("Updated profile for user: {}").addArgument(firstName).log();
-    }
-
-    @Transactional
-    @Override
-    public void updateProfilePicture(long userId, byte[] profilePicture) {
-        User user = findById(userId).orElseThrow(UserNotFoundException::new);
-
-        if (user.getProfilePicture()==null){
-            userDao.createProfilePicture(user, profilePicture);
-        } else {
-            userDao.updateProfilePicture(user, profilePicture);
-        }
-
-        LOGGER.atDebug().setMessage("Updated profile picture for user: {}").addArgument(user.getFirstName()).log();
-    }
-
-    @Transactional
-    @Override
-    public void deleteProfilePicture(long userId) {
-        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
-        if (user.getProfilePicture() != null){
-            userDao.deleteProfilePicture(user);
-        }
-
-        LOGGER.atDebug().setMessage("Deleted profile picture for user: {}").addArgument(user.getFirstName()).log();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public ProfilePicture getProfilePicture(long userId){
-        ProfilePicture image = findById(userId).orElseThrow(UserNotFoundException::new).getProfilePicture();
-        if (image == null){
-            return new ProfilePicture(userId, getDefaultProfilePicture());
-        }
-        return image;
-    }
-
-    private byte[] getDefaultProfilePicture(){
-        InputStream is = getClass().getResourceAsStream("/images/defaultUser.jpg");
-        if (is == null){
-            throw new ImageNotFoundException();
-        }
-        try {
-            return is.readAllBytes();
-        } catch (IOException | OutOfMemoryError e){
-            throw new UnreadableFileException();
-        }
-    }
-
-
-    @Transactional
-    @Override
-    public void sendResetCode(String email) {
-        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
-        if (user.getResetCode() == null){
-            rcs.create(user);
-        } else {
-            rcs.resend(user);
-        }
-    }
-
-
-    @Transactional
-    @Override
-    public void validateResetPasswordCode(String email, String code) {
-        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
-
-        if (rcs.checkResetCode(user.getUserId(), code)) {
-            List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
-            Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        } else {
-            throw new InvalidCodeException();
-        }
-    }
-
     @Override
     public boolean isEmailValidationCode(String code) {
         return evs.isEmailValidationCode(code);
     }
 
-    @Override
-    public boolean isResetPasswordCode(String code){
-        return rcs.isResetPasswordCode(code);
-    }
 
-    @Transactional
-    @Override
-    public void checkWriterCategory(User user){
-        long orders = orderDao.getAllOrdersSize(null, user.getUserId(), null, "", OrderStatus.COMPLETED);
-
-        if(user.getWriterCategory() != WriterCategory.BRONZE && orders >= WriterCategory.BRONZE.getMinSales() && orders < WriterCategory.SILVER.getMinSales()){
-            userDao.updateWriterCategory(user, WriterCategory.BRONZE);
-        }
-        if((user.getWriterCategory() != WriterCategory.SILVER) && (orders >= WriterCategory.SILVER.getMinSales()) && (orders < WriterCategory.GOLD.getMinSales())){
-            userDao.updateWriterCategory(user, WriterCategory.SILVER);
-        }
-        if(user.getWriterCategory() != WriterCategory.GOLD && orders >= WriterCategory.GOLD.getMinSales()){
-            userDao.updateWriterCategory(user, WriterCategory.GOLD);
-        }
-    }
 
 
 }

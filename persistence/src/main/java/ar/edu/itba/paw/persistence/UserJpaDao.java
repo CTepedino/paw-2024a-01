@@ -46,6 +46,16 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
+    public void giveRole(User user, UserRoles role) {
+        user.getRoles().add(role);
+    }
+
+    @Override
+    public void updateWriterCategory(User user, WriterCategory writerCategory){
+        user.setWriterCategory(writerCategory);
+    }
+
+    @Override
     public void createProfilePicture(User user, byte[] profilePicture){
         ProfilePicture pfp = new ProfilePicture(user.getUserId(), profilePicture);
         em.persist(pfp);
@@ -61,10 +71,6 @@ public class UserJpaDao implements UserDao {
         em.remove(user.getProfilePicture());
     }
 
-    @Override
-    public void giveRole(User user, UserRoles role) {
-        user.getRoles().add(role);
-    }
 
     @Override
     public Optional<User> findById(long id) {
@@ -117,8 +123,5 @@ public class UserJpaDao implements UserDao {
         query.executeUpdate();
     }
 
-    @Override
-    public void updateWriterCategory(User user, WriterCategory writerCategory){
-        user.setWriterCategory(writerCategory);
-    }
+
 }

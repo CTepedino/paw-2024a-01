@@ -9,20 +9,20 @@ import java.util.Optional;
 
 public interface OrderService {
 
-    PaginatedContent<Order> searchOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
 
     long create(long bookId);
+
+    void updateOrderWriterSide(long orderId, String rejectedReason);
+    void updateOrderBuyerSide(long orderId, byte[] receipt, String receiptMimeType);
 
     Optional<Order> find(long buyerId, long bookId);
     Optional<Order> findById(long orderId);
 
     PaymentReceipt getReceipt(long id);
 
+    PaginatedContent<Order> searchOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int pageNumber, int pageSize);
+
     boolean ownsBook(long userId, long bookId);
     boolean existsOrder(long userId, long bookId);
-
-    void updateOrderWriterSide(long orderId, String rejectedReason);
-
-    void updateOrderBuyerSide(long orderId, byte[] receipt, String receiptMimeType);
 
 }

@@ -16,8 +16,6 @@ public class WishlistJpaDao implements WishlistDao {
     @PersistenceContext
     private EntityManager em;
 
-
-
     @Override
     public Optional<WishlistItem> findWishlistItem(long userId, long bookId) {
         TypedQuery<WishlistItem> query = em.createQuery("FROM WishlistItem w WHERE w.userId = :userId AND w.bookId = :bookId", WishlistItem.class);

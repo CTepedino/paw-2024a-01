@@ -31,15 +31,17 @@ public interface BookService {
             int suggestedAge
     );
 
+    void checkBookSalesCategory(Book book);
+
     void setCoverImage(long bookId, byte[] coverImage);
     void setPreview(long bookId, byte[] preview);
     void setBookFile(long bookId, byte[] file);
 
-    PaginatedContent<Book> listBooks(BookSearchQueryDTO queryDTO);
 
     Optional<Book> findById(long id);
     boolean isAuthor(long userId, long bookId);
 
-    void checkBookSalesCategory(Book book);
+
+    PaginatedContent<Book> listBooks(BookSearchQueryDTO queryDTO);
 
 }

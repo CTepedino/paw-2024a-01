@@ -59,12 +59,6 @@ public class ReviewJpaDao implements ReviewDao {
     }
 
     @Override
-    public Optional<Review> findById(long id) {
-        return Optional.ofNullable(em.find(Review.class, id));
-    }
-
-
-    @Override
     public Optional<Review> find(long bookId, long userId) {
         TypedQuery<Review> query = em.createQuery("FROM Review r WHERE r.bookId = :bookId AND r.reviewer.userId = :userId", Review.class);
         query.setParameter("bookId", bookId);
@@ -75,6 +69,11 @@ public class ReviewJpaDao implements ReviewDao {
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Optional<Review> findById(long id) {
+        return Optional.ofNullable(em.find(Review.class, id));
     }
 
 }

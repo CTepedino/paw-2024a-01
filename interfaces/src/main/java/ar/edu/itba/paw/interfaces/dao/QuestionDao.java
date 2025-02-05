@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface QuestionDao {
 
+    Question create(Book book, User questioner, String questionText, LocalDateTime date);
+
+    void answer(Question question, String answer, LocalDateTime answerDate);
+
     List<Question> getAll(Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered, int offset, int limit);
     long getAllSize(Long bookId, Long writerId, Long questionerId, boolean excludeQuestioner, Boolean isAnswered);
 
-    Question create(Book book, User questioner, String questionText, LocalDateTime date);
-
     Optional<Question> findById(long id);
-
-    void answer(Question question, String answer, LocalDateTime answerDate);
 
 }

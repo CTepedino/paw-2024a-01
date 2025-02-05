@@ -20,6 +20,36 @@ public class OrderJpaDao implements OrderDao {
     @PersistenceContext
     private EntityManager em;
 
+    @Override
+    public Order create(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, BigDecimal price) {
+        Order order = new Order(buyer, book, orderStatus, date, price);
+        em.persist(order);
+        return order;
+    }
+
+    @Override
+    public void update(Order order, OrderStatus orderStatus, LocalDateTime date) {
+        order.setOrderStatus(orderStatus);
+        order.setDate(date);
+    }
+
+    @Override
+    public void update(Order order, OrderStatus orderStatus, LocalDateTime date, String rejectedReason){
+        update(order, orderStatus, date);
+        order.setRejectedReason(rejectedReason);
+    }
+
+    @Override
+    public void createOrUpdatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
+        if (order.getPaymentReceipt() == null) {
+            PaymentReceipt receipt = new PaymentReceipt(order.getOrderId(), paymentReceipt, type);
+            em.persist(receipt);
+        } else {
+            order.getPaymentReceipt().setFile(paymentReceipt);
+            order.getPaymentReceipt().setType(type);
+        }
+    }
+
 
     @Override
     public List<Order> getAllOrders(Long bookId, Long writerId, Long readerId, String title, OrderStatus orderStatus, int offset, int limit) {
@@ -86,37 +116,6 @@ public class OrderJpaDao implements OrderDao {
         return Optional.ofNullable(em.find(Order.class, orderId));
     }
 
-    @Override
-    public Order create(User buyer, Book book, OrderStatus orderStatus, LocalDateTime date, BigDecimal price) {
-        Order order = new Order(buyer, book, orderStatus, date, price);
-        em.persist(order);
-        return order;
-    }
-
-    @Override
-    public void update(Order order, OrderStatus orderStatus, LocalDateTime date) {
-        order.setOrderStatus(orderStatus);
-        order.setDate(date);
-    }
-
-    @Override
-    public void update(Order order, OrderStatus orderStatus, LocalDateTime date, String rejectedReason){
-        update(order, orderStatus, date);
-        order.setRejectedReason(rejectedReason);
-    }
-
-
-
-    @Override
-    public void createOrUpdatePaymentReceipt(Order order, byte[] paymentReceipt, String type) {
-        if (order.getPaymentReceipt() == null) {
-            PaymentReceipt receipt = new PaymentReceipt(order.getOrderId(), paymentReceipt, type);
-            em.persist(receipt);
-        } else {
-            order.getPaymentReceipt().setFile(paymentReceipt);
-            order.getPaymentReceipt().setType(type);
-        }
-    }
 
 
     @Override
