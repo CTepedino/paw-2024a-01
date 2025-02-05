@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.models.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,10 +21,12 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
+    private final UserService us;
 
     @Autowired
-    public JwtRequestFilter(final JwtTokenUtil jwtTokenUtil){
+    public JwtRequestFilter(final JwtTokenUtil jwtTokenUtil, final UserService us){
         this.jwtTokenUtil = jwtTokenUtil;
+        this.us = us;
     }
 
     @Override
@@ -42,6 +47,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
                 response.setHeader("Authorization", authorizationHeader);
+            } else {
+                userDetails = jwtTokenUtil.parseRefreshToken(jwtToken);
+                if (userDetails != null && userDetails.isEnabled() && userDetails.isAccountNonLocked() && SecurityContextHolder.getContext().getAuthentication() == null){
+                    final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                            userDetails.getUsername(),
+                            userDetails.getPassword(),
+                            userDetails.getAuthorities()
+                    );
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                    User user = us.findByEmail(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
+                    response.setHeader("Authorization", jwtTokenUtil.generateToken(user));
+                    response.setHeader("X-Refresh-Token", jwtTokenUtil.generateRefreshToken(user));
+                }
             }
         }
         chain.doFilter(request, response);

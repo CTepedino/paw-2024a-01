@@ -79,7 +79,10 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                     authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, credentials));
                 }
 
-                userService.findByEmail(email).ifPresent(u -> response.setHeader("Authorization", jwtTokenUtil.generateToken(u)));
+                userService.findByEmail(email).ifPresent(u -> {
+                    response.setHeader("Authorization", jwtTokenUtil.generateToken(u));
+                    response.setHeader("X-Refresh-Token", jwtTokenUtil.generateRefreshToken(u));
+                });
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (AuthenticationException e){
