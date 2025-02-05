@@ -59,9 +59,7 @@ public class UserController {
     @Path("/{id:\\d+}")
     @Produces(value = {VndMediaTypes.USER})
     public Response getById(@PathParam("id") final long id){
-
         final User user = us.findById(id).orElseThrow(UserNotFoundException::new);
-
         return Response.ok(UserDTO.fromUser(uriInfo, user)).build();
     }
 
@@ -92,10 +90,13 @@ public class UserController {
     @GET
     @Path("/{id:\\d+}/profile_picture")
     @Produces(value = {"image/jpeg"})
-    public Response getProfilePicture(@PathParam("id") final long id){
+    public Response getProfilePicture(
+            @PathParam("id") final long id,
+            @Context Request request
+    ){
         ProfilePicture image = us.getProfilePicture(id);
 
-        return fileResponse(image, "image/jpeg").build(); //TODO: downsizing y cache
+        return fileResponse(image, "image/jpeg", request).build();
     }
 
     @PUT

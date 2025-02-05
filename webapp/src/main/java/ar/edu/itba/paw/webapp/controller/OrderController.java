@@ -22,6 +22,7 @@ import javax.ws.rs.core.*;
 
 import java.util.List;
 
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
 
 @Path("orders")
@@ -91,15 +92,13 @@ public class OrderController {
     @GET
     @Path("/{id:\\d+}/receipt")
     @Produces(value = {"image/jpeg", "application/pdf"})
-    public Response getReceipt(@PathParam("id") final long id){
+    public Response getReceipt(
+            @PathParam("id") final long id,
+            @Context Request request
+    ){
         final PaymentReceipt receipt = os.getReceipt(id);
-        if (receipt == null){
-            return Response.noContent().build();
-        }
 
-        return Response
-                .ok(receipt.getFile(), receipt.getType())
-                .build();
+        return fileResponse(receipt, receipt.getType(), request).build();
     }
 
     @PUT

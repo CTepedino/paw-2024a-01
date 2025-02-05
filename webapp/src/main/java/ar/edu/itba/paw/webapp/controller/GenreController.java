@@ -15,6 +15,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.setUnconditionalCache;
 
 
 @Path("genres")
@@ -40,8 +41,8 @@ public class GenreController {
         final List<String> genres = genrePage.getPage()
                 .stream().map(BookGenre::toString).toList();
 
-        return paginatedResponse(
-                Response.ok(new GenericEntity<>(genres){}), genrePage, uriInfo
+        return paginatedResponse(setUnconditionalCache(
+                Response.ok(new GenericEntity<>(genres){})), genrePage, uriInfo
         ).build();
     }
 }

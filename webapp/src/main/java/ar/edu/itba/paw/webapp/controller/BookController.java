@@ -141,9 +141,12 @@ public class BookController {
     @GET
     @Path("/{id:\\d+}/cover")
     @Produces(value = {"image/jpeg"})
-    public Response getBookCover(@PathParam("id") final long id){
+    public Response getBookCover(
+            @PathParam("id") final long id,
+            @Context Request request
+    ){
         CoverImage coverImage = bs.findById(id).orElseThrow(BookNotFoundException::new).getCoverImage();
-        return fileResponse(coverImage, "image/jpeg").build();
+        return fileResponse(coverImage, "image/jpeg", request).build();
     }
 
     @PUT
@@ -160,9 +163,12 @@ public class BookController {
     @GET
     @Path("/{id:\\d+}/preview")
     @Produces(value = {"application/pdf"})
-    public Response getBookPreview(@PathParam("id") final long id){
+    public Response getBookPreview(
+            @PathParam("id") final long id,
+            @Context Request request
+    ){
         BookPreview preview = bs.findById(id).orElseThrow(BookNotFoundException::new).getPreview();
-        return fileResponse(preview, "application/pdf").build();
+        return fileResponse(preview, "application/pdf", request).build();
     }
 
     @PUT
@@ -179,9 +185,12 @@ public class BookController {
     @GET
     @Path("/{id:\\d+}/book_file")
     @Produces(value = {"application/pdf"})
-    public Response getBookFile(@PathParam("id") final long id){
+    public Response getBookFile(
+            @PathParam("id") final long id,
+            @Context Request request
+    ){
         BookFile bookFile = bs.findById(id).orElseThrow(BookNotFoundException::new).getBookFile();
-        return fileResponse(bookFile, "application/pdf").build();
+        return fileResponse(bookFile, "application/pdf", request).build();
     }
 
     @PUT
