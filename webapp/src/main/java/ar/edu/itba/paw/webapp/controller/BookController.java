@@ -31,8 +31,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.paginatedResponse;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
 @Path("books")
 @Component
@@ -143,10 +142,12 @@ public class BookController {
     @Produces(value = {"image/jpeg"})
     public Response getBookCover(
             @PathParam("id") final long id,
+            @QueryParam("width") Integer width,
+            @QueryParam("height") Integer height,
             @Context Request request
     ){
         CoverImage coverImage = bs.findById(id).orElseThrow(BookNotFoundException::new).getCoverImage();
-        return fileResponse(coverImage, "image/jpeg", request).build();
+        return imageResponse(coverImage, "image/jpeg", request, width, height).build();
     }
 
     @PUT

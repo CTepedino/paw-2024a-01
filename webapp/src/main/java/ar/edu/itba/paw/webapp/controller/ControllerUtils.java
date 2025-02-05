@@ -3,7 +3,12 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.PaginatedContent;
 import ar.edu.itba.paw.models.files.File;
 
+import javax.imageio.ImageIO;
 import javax.ws.rs.core.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -47,6 +52,24 @@ public class ControllerUtils {
 
     }
 
+    public static <T extends File> Response.ResponseBuilder imageResponse(T file, String mediaType, Request request, Integer width, Integer height){
+        if (file == null){
+            return Response.status(Response.Status.NOT_FOUND);
+        }
+        byte[] downsized = downsizeImage(file.getFile(), width, height);
+        try {
+            EntityTag entityTag = new EntityTag(generateETag(downsized));
+            Response.ResponseBuilder response = request.evaluatePreconditions(entityTag);
+            if (response == null){
+                return Response.ok(downsized, mediaType).tag(entityTag);
+            }
+            return response;
+
+        } catch (IOException e){
+            return Response.ok(downsized, mediaType);
+        }
+    }
+
     private static String generateETag(byte[] data) throws IOException {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -61,11 +84,37 @@ public class ControllerUtils {
         }
     }
 
+    private static byte[] downsizeImage(byte[] file, Integer width, Integer height){
+        ByteArrayInputStream in = new ByteArrayInputStream(file);
+        try {
+            BufferedImage img = ImageIO.read(in);
+            if (height == null || height > img.getHeight()){
+                height = img.getHeight();
+            }
+            if (width == null || width > img.getWidth()){
+                width = img.getWidth();
+            }
+            Image scaledImage = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            BufferedImage imageBuff = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            imageBuff.getGraphics().drawImage(scaledImage, 0, 0, new Color(0,0,0), null);
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            ImageIO.write(imageBuff, "jpg", buffer);
+
+            return buffer.toByteArray();
+
+        } catch (IOException e){
+            return file;
+        }
+    }
 
     public static Response.ResponseBuilder setUnconditionalCache(Response.ResponseBuilder response){
         CacheControl cacheControl = new CacheControl();
         cacheControl.setMaxAge(MAX_AGE);
         return response.cacheControl(cacheControl);
     }
+
+
 
 }

@@ -24,7 +24,7 @@ import javax.ws.rs.core.*;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.fileResponse;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.imageResponse;
 
 @Path("users")
 @Component
@@ -92,11 +92,13 @@ public class UserController {
     @Produces(value = {"image/jpeg"})
     public Response getProfilePicture(
             @PathParam("id") final long id,
+            @QueryParam("width") Integer width,
+            @QueryParam("height") Integer height,
             @Context Request request
     ){
         ProfilePicture image = us.getProfilePicture(id);
 
-        return fileResponse(image, "image/jpeg", request).build();
+        return imageResponse(image, "image/jpeg", request, width, height).build();
     }
 
     @PUT
