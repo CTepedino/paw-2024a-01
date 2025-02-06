@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {ApiService} from "../services/api.service";
+import {ApiService} from "../services/api/api.service";
 import {AsyncPipe, JsonPipe} from "@angular/common";
 import {Observable} from "rxjs";
 
@@ -14,7 +14,7 @@ export class AppComponent {
   data$: Observable<any>;
 
   constructor(private apiService: ApiService) {
-    this.data$ = this.apiService.getData();
+    this.data$ = this.apiService.get("books", {"title":"dune"});
   }
 
 
