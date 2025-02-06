@@ -14,7 +14,7 @@ export class AppComponent {
   data$: Observable<any>;
 
   constructor(private apiService: ApiService) {
-    this.data$ = this.apiService.get("books", {"title":"dune"});
+    this.data$ = this.apiService.get("books", {title: "dune"});
   }
 
 

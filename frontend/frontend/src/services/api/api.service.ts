@@ -14,6 +14,12 @@ export class ApiService {
   get(path: string, params?: Record<string, string>): Observable<any> {
     let httpParams = new HttpParams();
 
+    if (params){
+      Object.keys(params).forEach(key => {
+        httpParams = httpParams.set(key, params[key]);
+      });
+    }
+
     return this.http.get<any>(
         `${this.baseUrl}/${path}`,
         {params: httpParams}
