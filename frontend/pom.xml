@@ -49,7 +49,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run buildProduction</arguments>
+                            <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>
