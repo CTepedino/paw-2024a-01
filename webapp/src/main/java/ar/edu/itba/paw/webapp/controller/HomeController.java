@@ -1,19 +1,19 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.webapp.dto.output.IndexDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+@Path("/")
 @Component
-@Path("reset_password_codes")
-public class ResetCodeController {
+public class HomeController {
 
     @Autowired
     private UserService userService;
@@ -22,10 +22,7 @@ public class ResetCodeController {
     private UriInfo uriInfo;
 
     @GET
-    @Path("{email}")
-    public Response getResetPasswordCode(@PathParam("email") final String email){
-        userService.sendResetCode(email);
-        return Response.ok().build();
+    public Response index(){
+        return Response.ok(IndexDTO.create(uriInfo, userService.getLoggedUser())).build();
     }
-
 }
