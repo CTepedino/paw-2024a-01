@@ -184,7 +184,7 @@ public class BookController {
     }
 
     @GET
-    @Path("/{id:\\d+}/book_file")
+    @Path("/{id:\\d+}/book-file")
     @Produces(value = {"application/pdf"})
     public Response getBookFile(
             @PathParam("id") final long id,
@@ -195,7 +195,7 @@ public class BookController {
     }
 
     @PUT
-    @Path("/{id:\\d+}/book_file")
+    @Path("/{id:\\d+}/book-file")
     @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
     public Response setBookFile(
             @PathParam("id") final long id,
@@ -236,7 +236,7 @@ public class BookController {
     }
 
     @GET
-    @Path("{book_id:\\d+}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
+    @Path("{book_id:\\d+}/monthly-analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
     @Produces(value = {VndMediaTypes.BOOK_ANALYTICS})
     public Response getMonthlyBookAnalytics(
             @PathParam("book_id") final long bookId,

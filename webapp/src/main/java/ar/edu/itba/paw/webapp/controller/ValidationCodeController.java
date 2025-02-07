@@ -12,7 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-@Path("validation_codes")
+@Path("validation-codes")
 @Component
 public class ValidationCodeController {
 

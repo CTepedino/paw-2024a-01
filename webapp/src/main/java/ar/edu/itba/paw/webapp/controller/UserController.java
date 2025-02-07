@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @GET
-    @Path("/{id:\\d+}/profile_picture")
+    @Path("/{id:\\d+}/profile-picture")
     @Produces(value = {"image/jpeg"})
     public Response getProfilePicture(
             @PathParam("id") final long id,
@@ -102,7 +102,7 @@ public class UserController {
     }
 
     @PUT
-    @Path("/{id:\\d+}/profile_picture")
+    @Path("/{id:\\d+}/profile-picture")
     @Consumes(value = {MediaType.MULTIPART_FORM_DATA})
     public Response setProfilePicture(
             @PathParam("id") final long id,
@@ -113,14 +113,14 @@ public class UserController {
     }
 
     @DELETE
-    @Path("/{id:\\d+}/profile_picture")
+    @Path("/{id:\\d+}/profile-picture")
     public Response deleteProfilePicture(@PathParam("id") final long id){
         us.deleteProfilePicture(id);
         return Response.noContent().build();
     }
 
     @GET
-    @Path("{user_id:\\d+}/monthly_analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
+    @Path("{user_id:\\d+}/monthly-analytics/{year_month:\\d{4}-\\d{2}}") //yyyy-MM
     @Produces(value = {VndMediaTypes.WRITER_ANALYTICS})
     public Response getMonthlyWriterAnalytics(
             @PathParam("user_id") final long userId,

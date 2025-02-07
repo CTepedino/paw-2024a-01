@@ -195,7 +195,7 @@ public class MailServiceImpl implements MailService{
         String subject = emailMessageSource.getMessage("mail.resetPasswordEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
         data.put("url", env.getProperty("baseUrl"));
-        data.put("resetPasswordUrl", env.getProperty("baseUrl") + "/resetPassword/" + user.getUserId() + "/" + code);
+        data.put("resetPasswordUrl", env.getProperty("baseUrl") + "/reset-password/" + user.getUserId() + "/" + code);
         data.put("expiration", expiration.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(currentLocale)));
 
         try {
@@ -240,7 +240,7 @@ public class MailServiceImpl implements MailService{
         data.put("question", question.getQuestion());
         data.put("answer", question.getAnswer());
         data.put("book", question.getBook().getTitle());
-        data.put("bookUrl", env.getProperty("baseUrl") + "/book/" + question.getBook().getBookId() + "/myQuestions");
+        data.put("bookUrl", env.getProperty("baseUrl") + "/book/" + question.getBook().getBookId() + "/my-questions");
 
         try {
             LOGGER.atDebug().setMessage("Sending Answer Received email to: {}").addArgument(to).log();

@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-@Path("reset_password_codes")
+@Path("reset-password-codes")
 public class ResetCodeController {
 
     @Autowired
