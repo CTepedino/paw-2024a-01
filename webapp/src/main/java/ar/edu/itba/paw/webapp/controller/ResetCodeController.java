@@ -1,12 +1,13 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.webapp.dto.input.EmailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.GET;
+import javax.validation.Valid;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -21,10 +22,9 @@ public class ResetCodeController {
     @Context
     private UriInfo uriInfo;
 
-    @GET
-    @Path("{email}")
-    public Response getResetPasswordCode(@PathParam("email") final String email){
-        userService.sendResetCode(email);
+    @POST
+    public Response sendResetPasswordCodeEmail(@Valid final EmailDTO emailDTO){
+        userService.sendResetCode(emailDTO.getEmail());
         return Response.ok().build();
     }
 

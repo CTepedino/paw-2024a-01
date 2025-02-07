@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {ApiService} from "../services/api/api.service";
+import {ApiService} from "./services/api/api.service";
 import {AsyncPipe, JsonPipe} from "@angular/common";
 import {Observable} from "rxjs";
-import {ApiAuthService} from "../services/api/api-auth.service";
-import {Book} from "../model/book/book";
+import {ApiAuthService} from "./services/api/api-auth.service";
+import {Book} from "./model/book/book";
 
 @Component({
   selector: 'app-root',
