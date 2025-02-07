@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import {ApiService} from "../services/api/api.service";
 import {AsyncPipe, JsonPipe} from "@angular/common";
 import {Observable} from "rxjs";
+import {ApiAuthService} from "../services/api/api-auth.service";
+import {Book} from "../model/book/book";
 
 @Component({
   selector: 'app-root',
@@ -11,11 +13,15 @@ import {Observable} from "rxjs";
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  data$: Observable<any>;
+  data$: Observable<Book>;
 
-  constructor(private apiService: ApiService) {
-    this.data$ = this.apiService.get("books", {title: "dune"});
+
+  constructor(private apiService: ApiService, private authService: ApiAuthService) {
+    this.data$ = this.apiService.get("/books/105");
+
+    // this.authService.login("apitest@mail.com", "123456");
   }
+
 
 
 }

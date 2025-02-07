@@ -14,7 +14,6 @@ export class ApiAuthService {
 
   login(username: string, password: string){
     const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(`${username}:${password}`)});
-
     return this.http.get<any>(this.apiUrl, {headers, observe: 'response'}).pipe(
         tap(response => {
             const jwt = response.headers.get('Authorization');

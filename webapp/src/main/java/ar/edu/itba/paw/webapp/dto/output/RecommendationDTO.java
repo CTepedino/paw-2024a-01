@@ -7,7 +7,7 @@ import java.net.URI;
 import java.util.function.Function;
 
 public class RecommendationDTO {
-    private Long bookId;
+    private long bookId;
 
     private URI self;
     private URI book;
@@ -28,11 +28,11 @@ public class RecommendationDTO {
         return dto;
     }
 
-    public Long getBookId() {
+    public long getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(long bookId) {
         this.bookId = bookId;
     }
 

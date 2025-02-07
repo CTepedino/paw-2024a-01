@@ -8,7 +8,7 @@ import java.net.URI;
 import java.util.function.Function;
 
 public class WishlistDTO {
-    private Long bookId;
+    private long bookId;
 
     private URI self;
     private URI book;
@@ -29,11 +29,11 @@ public class WishlistDTO {
         return dto;
     }
 
-    public Long getBookId() {
+    public long getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(long bookId) {
         this.bookId = bookId;
     }
 

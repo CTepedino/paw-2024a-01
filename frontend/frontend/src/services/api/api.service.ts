@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import { Observable } from "rxjs";
 import {environment} from "../../enviroment/enviroment";
+import {Book} from "../../model/book/book";
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,9 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  get(path: string, params?: Record<string, string>): Observable<any> {
+  get(path: string, params?: Record<string, string>): Observable<Book> {
     let httpParams = new HttpParams();
+    let httpHeaders = new HttpHeaders({Authorization: 'Basic ' + btoa("apitest@mail.com:123456")});
 
     if (params){
       Object.keys(params).forEach(key => {
@@ -20,9 +22,10 @@ export class ApiService {
       });
     }
 
-    return this.http.get<any>(
-        `${this.baseUrl}/${path}`,
-        {params: httpParams}
+
+    return this.http.get<Book>(
+        `${this.baseUrl}${path}`,
+        {params: httpParams, headers: httpHeaders}
     );
   }
 
