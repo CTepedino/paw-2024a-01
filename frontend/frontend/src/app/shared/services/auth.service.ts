@@ -7,20 +7,20 @@ import {Index} from "../model";
 @Injectable({
   providedIn: 'root'
 })
-export class ApiAuthService {
+export class AuthService {
 
   private baseUrl = environment.apiURL;
 
   constructor(private http: HttpClient) { }
 
-    login(email: string, password: string): Observable<Index> {
+    login(email: string, password: string, rememberMe: boolean = false): Observable<Index> {
     const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(`${email}:${password}`)});
     return this.http.get<Index>(this.baseUrl, {headers, observe: 'response'}).pipe(
         tap(response => {
             const jwt = response.headers.get('Authorization');
             const refreshToken = response.headers.get('X-Refresh-Token');
             if (jwt && refreshToken){
-                this.storeTokens(jwt, refreshToken);
+                this.storeTokens(jwt, refreshToken, rememberMe);
             }
         }),
         map(response => response.body!)
@@ -28,7 +28,9 @@ export class ApiAuthService {
     }
 
     logout(){
+        sessionStorage.removeItem('jwt');
         localStorage.removeItem('jwt');
+        sessionStorage.removeItem('refreshToken');
         localStorage.removeItem('refreshToken');
     }
 
@@ -44,7 +46,7 @@ export class ApiAuthService {
             const jwt = response.headers.get('Authorization');
             const newRefreshToken = response.headers.get('X-Refresh-Token');
             if (jwt && newRefreshToken){
-                this.storeTokens(jwt, newRefreshToken);
+                this.refreshTokens(jwt, newRefreshToken);
             }
         }),
         map(() => void 0)
@@ -52,11 +54,11 @@ export class ApiAuthService {
     }
 
     validateEmail(email: string, emailCode: string): Observable<Index> {
-      return this.login(email, emailCode);
+      return this.login(email, emailCode, false);
     }
 
     submitResetPasswordCode(email: string, resetCode: string): Observable<Index> {
-      return this.login(email, resetCode)
+      return this.login(email, resetCode, false)
     }
 
     sendResetPasswordCodeEmail(email: string): Observable<void> {
@@ -76,18 +78,25 @@ export class ApiAuthService {
     }
 
     getJwtToken(): string | null {
-    return localStorage.getItem('jwt');
+    return sessionStorage.getItem('jwt') || localStorage.getItem('jwt');
     }
 
     getRefreshToken(): string | null {
-    return localStorage.getItem('refreshToken');
+    return sessionStorage.getItem('refreshToken') || localStorage.getItem('refreshToken');
     }
 
-    storeTokens(jwt: string, refreshToken: string){
-      localStorage.setItem('jwt', jwt);
-      localStorage.setItem('refreshToken', refreshToken);
+    storeTokens(jwt: string, refreshToken: string, rememberMe: boolean){
+      if (rememberMe) {
+          localStorage.setItem('jwt', jwt);
+          localStorage.setItem('refreshToken', refreshToken);
+      } else {
+          sessionStorage.setItem('jwt', jwt);
+          sessionStorage.setItem('refreshToken', refreshToken);
+      }
     }
 
-
+    private refreshTokens(jwt: string, refreshToken: string){
+      this.storeTokens(jwt, refreshToken, sessionStorage.getItem('jwt') === null)
+    }
 
 }

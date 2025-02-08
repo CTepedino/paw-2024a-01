@@ -1,11 +1,11 @@
 import {HttpErrorResponse, HttpInterceptorFn, HttpResponse} from '@angular/common/http';
 import {inject} from "@angular/core";
-import {ApiAuthService} from "../services/api-auth.service";
+import {AuthService} from "../services/auth.service";
 import {catchError, switchMap, tap, throwError} from "rxjs";
 
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(ApiAuthService)
+  const authService = inject(AuthService)
   let modifiedReq = req;
 
   const jwtToken = authService.getJwtToken();

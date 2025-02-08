@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {AsyncPipe, JsonPipe} from "@angular/common";
 import {Observable} from "rxjs";
-import {ApiAuthService} from "./shared/services/api-auth.service";
+import {AuthService} from "./shared/services/auth.service";
 import {Book} from "./shared/model/book/book";
 import {Index} from "./shared/model";
 
@@ -15,12 +15,10 @@ import {Index} from "./shared/model";
 export class AppComponent {
   index$: Observable<Index>;
 
-  constructor(private authService: ApiAuthService) {
+  constructor(private authService: AuthService) {
     this.index$ = this.authService.login("apitest@mail.com", "123456");
 
-    this.authService.sendResetPasswordCodeEmail("apitest@mail.com").subscribe();
+   // this.authService.sendResetPasswordCodeEmail("apitest@mail.com").subscribe();
   }
-
-
 
 }
