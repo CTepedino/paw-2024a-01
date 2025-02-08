@@ -12,7 +12,7 @@ export class ApiAuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string){
+  login(username: string, password: string): Observable<void> {
     const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(`${username}:${password}`)});
     return this.http.get<any>(this.apiUrl, {headers, observe: 'response'}).pipe(
         tap(response => {

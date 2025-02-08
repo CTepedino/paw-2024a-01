@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import { Observable } from "rxjs";
 import {environment} from "../../../enviroment/enviroment";
-import {Book} from "../../model/book/book";
+import {Book} from "../model/book/book";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,6 @@ export class ApiService {
         httpParams = httpParams.set(key, params[key]);
       });
     }
-
 
     return this.http.get<Book>(
         `${this.baseUrl}${path}`,

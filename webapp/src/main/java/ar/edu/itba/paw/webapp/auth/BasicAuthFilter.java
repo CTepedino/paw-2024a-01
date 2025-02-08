@@ -76,7 +76,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                     authentication = new EmailValidationAuthenticationToken(email, credentials);
                 } else {
 
-                    authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, credentials));
+                    authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, credentials, null));
                 }
 
                 userService.findByEmail(email).ifPresent(u -> {

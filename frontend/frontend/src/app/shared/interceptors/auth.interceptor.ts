@@ -1,6 +1,6 @@
 import {HttpErrorResponse, HttpInterceptorFn, HttpResponse} from '@angular/common/http';
 import {inject} from "@angular/core";
-import {ApiAuthService} from "../services/api/api-auth.service";
+import {ApiAuthService} from "../services/api-auth.service";
 import {catchError, switchMap, tap, throwError} from "rxjs";
 
 
@@ -20,7 +20,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(modifiedReq).pipe(
       tap(event => {
         if (event instanceof HttpResponse) {
-          // Extract new tokens if present in the response headers
           const newJwt = event.headers.get('Authorization');
           const newRefreshToken = event.headers.get('X-Refresh-Token');
 
