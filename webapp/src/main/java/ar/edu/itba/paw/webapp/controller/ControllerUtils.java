@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 public class ControllerUtils {
@@ -42,7 +43,9 @@ public class ControllerUtils {
             EntityTag entityTag = new EntityTag(generateETag(file.getFile()));
             Response.ResponseBuilder response = request.evaluatePreconditions(entityTag);
             if (response == null){
-                return Response.ok(file.getFile(), mediaType).tag(entityTag);
+                return Response.ok(file.getFile(), mediaType)
+                        .tag(entityTag)
+                        .cacheControl(CacheControl.valueOf("private, no-cache"));
             }
             return response;
 
@@ -61,24 +64,22 @@ public class ControllerUtils {
             EntityTag entityTag = new EntityTag(generateETag(downsized));
             Response.ResponseBuilder response = request.evaluatePreconditions(entityTag);
             if (response == null){
-                return Response.ok(downsized, mediaType).tag(entityTag);
+                return Response.ok(downsized, mediaType)
+                        .tag(entityTag)
+                        .cacheControl(CacheControl.valueOf("private, no-cache"));
             }
             return response;
 
         } catch (IOException e){
-            return Response.ok(downsized, mediaType);
+            return Response.serverError();
         }
     }
 
     private static String generateETag(byte[] data) throws IOException {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] digest = md.digest(data);
-            StringBuilder sb = new StringBuilder();
-            for (byte b : digest) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
+            return Base64.getEncoder().encodeToString(digest);
         } catch (NoSuchAlgorithmException e) {
             throw new IOException();
         }
@@ -88,6 +89,7 @@ public class ControllerUtils {
         ByteArrayInputStream in = new ByteArrayInputStream(file);
         try {
             BufferedImage img = ImageIO.read(in);
+
             if (height == null || height > img.getHeight()){
                 height = img.getHeight();
             }

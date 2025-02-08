@@ -1,7 +1,14 @@
 <h1>API Call</h1>
 
-{{index$ | async | json }}
+<!--{{index$ | async | json }}-->
 
-<!--
 {{data$ | async | json}}
--->
+
+<ul>
+	@for (book of (data$| async); track book.title){
+		<li>{{book.title}}</li>
+		@if(book.cover){
+			<img [src]="book.cover"/>
+		}
+	}
+</ul>
