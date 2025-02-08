@@ -24,7 +24,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           const newRefreshToken = event.headers.get('X-Refresh-Token');
 
           if (newJwt && newRefreshToken) {
-            authService.storeTokens(newJwt, newRefreshToken);
+            authService.updateTokens(newJwt, newRefreshToken);
           }
         }
       }),

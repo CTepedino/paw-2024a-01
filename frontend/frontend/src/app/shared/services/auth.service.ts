@@ -20,7 +20,7 @@ export class AuthService {
             const jwt = response.headers.get('Authorization');
             const refreshToken = response.headers.get('X-Refresh-Token');
             if (jwt && refreshToken){
-                this.storeTokens(jwt, refreshToken, rememberMe);
+                this.storeTokens(jwt, refreshToken, false);
             }
         }),
         map(response => response.body!)
@@ -46,7 +46,7 @@ export class AuthService {
             const jwt = response.headers.get('Authorization');
             const newRefreshToken = response.headers.get('X-Refresh-Token');
             if (jwt && newRefreshToken){
-                this.refreshTokens(jwt, newRefreshToken);
+                this.updateTokens(jwt, newRefreshToken);
             }
         }),
         map(() => void 0)
@@ -86,7 +86,7 @@ export class AuthService {
     }
 
     storeTokens(jwt: string, refreshToken: string, rememberMe: boolean){
-      if (rememberMe) {
+     if (rememberMe) {
           localStorage.setItem('jwt', jwt);
           localStorage.setItem('refreshToken', refreshToken);
       } else {
@@ -95,8 +95,8 @@ export class AuthService {
       }
     }
 
-    private refreshTokens(jwt: string, refreshToken: string){
-      this.storeTokens(jwt, refreshToken, sessionStorage.getItem('jwt') === null)
+    updateTokens(jwt: string, refreshToken: string){
+      this.storeTokens(jwt, refreshToken, localStorage.getItem('jwt') !== null)
     }
 
 }
