@@ -9,6 +9,7 @@ public interface ResetCodeService {
 
     boolean checkResetCode(long id, String code);
 
+    void deleteCode(long id);
     void deleteExpired();
 
     void resend(User user);

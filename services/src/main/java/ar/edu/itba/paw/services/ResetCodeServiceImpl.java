@@ -73,10 +73,16 @@ public class ResetCodeServiceImpl implements ResetCodeService {
         }
 
         if(resetCode.getCode().equals(code)){
-            userDao.deleteResetCode(id);
+            //userDao.deleteResetCode(id);
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    @Override
+    public void deleteCode(long id){
+        userDao.deleteResetCode(id);
     }
 
     @Transactional

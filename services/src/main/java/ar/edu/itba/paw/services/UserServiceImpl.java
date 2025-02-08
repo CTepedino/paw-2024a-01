@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(password);
         User user = findById(userId).orElseThrow(UserNotFoundException::new);
         userDao.updatePassword(user, encodedPassword);
+        rcs.deleteCode(userId);
 
         LOGGER.atDebug().setMessage("Changed password for userId: {}").addArgument(user.getUserId()).log();
     }
