@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import {AppComponent} from "./app.component";
+import {HomeComponent} from "./pages/home/home.component"
 import {numericIDGuard} from "./shared/guards/numeric-id.guard";
 
 export const routes: Routes = [
-	{path: "", component: AppComponent, pathMatch: "full"},
+	{path: "", component: HomeComponent, pathMatch: "full"},
 	{path: "search", component: AppComponent},
 	{path: "signup", component: AppComponent},
 	{path: "validate", component: AppComponent},

@@ -1,14 +1,7 @@
-<h1>API Call</h1>
+<!--<header *ngIf="showNavbar">
+    <nav> &lt;!&ndash; Navbar de la app &ndash;&gt; </nav>
+</header>-->
 
-<!--{{index$ | async | json }}-->
-
-{{data$ | async | json}}
-
-<ul>
-	@for (book of (data$| async); track book.title){
-		<li>{{book.title}}</li>
-		@if(book.cover){
-			<img [src]="book.cover"/>
-		}
-	}
-</ul>
+<main>
+    <router-outlet></router-outlet>
+</main>
