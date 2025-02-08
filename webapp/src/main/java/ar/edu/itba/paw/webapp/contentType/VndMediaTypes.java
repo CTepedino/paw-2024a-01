@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.contentType;
 public class VndMediaTypes {
     private VndMediaTypes(){}
 
+    public static final String INDEX = "application/vnd.index.v1+json";
     public static final String USER = "application/vnd.users.v1+json";
     public static final String PASSWORD = "application/vnd.users.password.v1+json";
     public static final String WRITER_ANALYTICS = "application/vnd.users.analytics.v1+json";
@@ -16,5 +17,7 @@ public class VndMediaTypes {
     public static final String ANSWER= "application/vnd.questions.answers.v1+json";
     public static final String ORDER= "application/vnd.orders.v1+json";
     public static final String GENRE= "application/vnd.genres.v1+json";
+    public static final String RESET_PASSWORD_CODE = "application/vnd.reset-code.v1+json";
+    public static final String EMAIL_VALIDATION_CODE = "application/vnd.validation-code.v1+json";
 
 }

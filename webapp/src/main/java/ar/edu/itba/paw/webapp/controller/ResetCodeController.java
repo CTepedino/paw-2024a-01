@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.EmailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
@@ -23,6 +25,7 @@ public class ResetCodeController {
     private UriInfo uriInfo;
 
     @POST
+    @Consumes(value = {VndMediaTypes.RESET_PASSWORD_CODE})
     public Response sendResetPasswordCodeEmail(@Valid final EmailDTO emailDTO){
         userService.sendResetCode(emailDTO.getEmail());
         return Response.ok().build();

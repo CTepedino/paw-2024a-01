@@ -5,6 +5,7 @@ import {AsyncPipe, JsonPipe} from "@angular/common";
 import {Observable} from "rxjs";
 import {ApiAuthService} from "./shared/services/api-auth.service";
 import {Book} from "./shared/model/book/book";
+import {Index} from "./shared/model";
 
 @Component({
   selector: 'app-root',
@@ -14,12 +15,12 @@ import {Book} from "./shared/model/book/book";
 })
 export class AppComponent {
   data$: Observable<Book>;
-
+  index$: Observable<Index>;
 
   constructor(private apiService: ApiService, private authService: ApiAuthService) {
     this.data$ = this.apiService.get("/books/105");
 
-    this.authService.login("apitest@mail.com", "123456").subscribe();
+    this.index$ = this.authService.login("apitest@mail.com", "123456");
   }
 
 

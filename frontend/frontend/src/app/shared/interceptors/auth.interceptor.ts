@@ -12,7 +12,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (jwtToken){
     modifiedReq = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${jwtToken}`
+        Authorization: jwtToken
       }
     });
   }
@@ -39,7 +39,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
                 const retryReq = req.clone({
                   setHeaders: {
-                    Authorization: `Bearer ${newToken}`
+                    Authorization: newToken
                   }
                 });
 

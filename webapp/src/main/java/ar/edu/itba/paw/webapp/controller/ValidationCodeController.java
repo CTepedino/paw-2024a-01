@@ -1,18 +1,20 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.EmailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-@Path("validation-codes")
+@Path("email-validation-codes")
 @Component
 public class ValidationCodeController {
 
@@ -23,6 +25,7 @@ public class ValidationCodeController {
     private UriInfo uriInfo;
 
     @POST
+    @Consumes(value = {VndMediaTypes.EMAIL_VALIDATION_CODE})
     public Response resendEmailValidationCode(@Valid final EmailDTO emailDTO){
         us.resendValidation(emailDTO.getEmail());
         return Response.noContent().build();

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../../enviroment/enviroment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
+import {Index} from "../model";
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +13,17 @@ export class ApiAuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string): Observable<void> {
+  login(username: string, password: string): Observable<Index> {
     const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(`${username}:${password}`)});
-    return this.http.get<any>(this.apiUrl, {headers, observe: 'response'}).pipe(
+    return this.http.get<Index>(this.apiUrl, {headers, observe: 'response'}).pipe(
         tap(response => {
             const jwt = response.headers.get('Authorization');
             const refreshToken = response.headers.get('X-Refresh-Token');
-            const userUrl = response.body?.loggedUser;
             if (jwt && refreshToken){
-                this.storeSessionInfo(jwt, refreshToken, userUrl);
+                this.storeTokens(jwt, refreshToken);
             }
         }),
-        map(()=> void 0)
+        map(response => response.body!)
     );
   }
 
@@ -32,15 +32,14 @@ export class ApiAuthService {
     if (!refreshToken){
       throw new Error('No refresh token available');
     }
-    const headers = new HttpHeaders({Authorization: `Bearer ${refreshToken}`});
+    const headers = new HttpHeaders({Authorization: refreshToken});
 
-    return this.http.get<any>(this.apiUrl, {headers, observe: "response"}).pipe(
+    return this.http.get<void>(this.apiUrl, {headers, observe: "response"}).pipe(
         tap(response => {
             const jwt = response.headers.get('Authorization');
             const newRefreshToken = response.headers.get('X-Refresh-Token');
-            const userUrl = response.body?.loggedUser;
             if (jwt && refreshToken){
-                this.storeSessionInfo(jwt, refreshToken, userUrl);
+                this.storeTokens(jwt, refreshToken);
             }
         }),
         map(() => void 0)
@@ -64,12 +63,6 @@ export class ApiAuthService {
 
   getUserUrl(): string | null {
       return localStorage.getItem('userUrl');
-  }
-
-  private storeSessionInfo(jwt: string, refreshToken: string, userUrl: string){
-      localStorage.setItem('jwt', jwt);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('userUrl', userUrl); //TODO: store userUrl somewhere else
   }
 
   storeTokens(jwt: string, refreshToken: string){
