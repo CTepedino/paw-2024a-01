@@ -6,7 +6,7 @@ import {AuthService} from "./shared/services/auth.service";
 import {Book} from "./shared/model/book/book";
 import {Index} from "./shared/model";
 import {BookService} from "./shared/services/book.service";
-import {SearchQuery} from "./shared/model/book/searchQuery";
+import {BookSearchQuery} from "./shared/model/book/bookSearchQuery";
 
 @Component({
   selector: 'app-root',
@@ -20,7 +20,7 @@ export class AppComponent {
 
   constructor(private authService: AuthService, private bookService: BookService) {
     //this.index$ = this.authService.login("apitest@mail.com", "123456");
-    this.data$ = this.bookService.listBooks({title: "du"} as SearchQuery);
+    this.data$ = this.bookService.listBooks({title: "du"} as BookSearchQuery);
    // this.authService.sendResetPasswordCodeEmail("apitest@mail.com").subscribe();
   }
 

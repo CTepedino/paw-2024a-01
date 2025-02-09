@@ -78,7 +78,7 @@ public class OrderController {
         return Response.ok(OrderDTO.fromOrder(uriInfo, order)).build();
     }
 
-    @PUT
+    @PATCH
     @Path("{id:\\d+}")
     @Consumes(value = {VndMediaTypes.ORDER})
     public Response updateOrder(
