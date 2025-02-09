@@ -38,10 +38,10 @@ export class OrderService {
     return this.http.get<Order>(orderUrl);
   }
 
-  putOrder(orderUrl: string, order: Order){
-    return this.http.put(
+  patchOrder(orderUrl: string, rejectionReason: string | null){
+    return this.http.patch(
         orderUrl,
-        order,
+        {rejectionReason: rejectionReason},
         {headers: {"Content-Type": "application/vnd.orders.v1+json"}}
     );
   }
