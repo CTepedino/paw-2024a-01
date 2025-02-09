@@ -3,6 +3,7 @@ import {environment} from "../../../enviroment/enviroment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
 import {Index} from "../model";
+import {MediaTypes} from "../const/mediaTypes";
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +66,7 @@ export class AuthService {
       return this.http.post(
           `${this.baseUrl}/reset-password-codes`,
           {email: email},
-          {headers: {"Content-Type": "application/vnd.reset-code.v1+json"}}
+          {headers: {"Content-Type": MediaTypes.RESET_CODE}}
       ).pipe(map(() => void 0))
     }
 
@@ -73,7 +74,7 @@ export class AuthService {
         return this.http.post(
             `${this.baseUrl}/email-validation-codes`,
             {email: email},
-            {headers: {"Content-Type": "application/vnd.validation-code.v1+json"}}
+            {headers: {"Content-Type": MediaTypes.EMAIL_VALIDATION}}
         ).pipe(map(() => void 0))
     }
 

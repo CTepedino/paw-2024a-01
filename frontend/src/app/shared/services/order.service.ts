@@ -4,6 +4,7 @@ import {OrderSearchQuery} from "../model/order/orderSearchQuery";
 import {Order} from "../model/order/order";
 import {Observable} from "rxjs";
 import {environment} from "../../../enviroment/enviroment";
+import {MediaTypes} from "../const/mediaTypes";
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class OrderService {
     this.http.post(
         this.apiURL,
         order,
-        {headers: {"Content-Type": "application/vnd.orders.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.ORDER}}
     );
   }
 
@@ -42,7 +43,7 @@ export class OrderService {
     return this.http.patch(
         orderUrl,
         {rejectionReason: rejectionReason},
-        {headers: {"Content-Type": "application/vnd.orders.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.ORDER}}
     );
   }
 
