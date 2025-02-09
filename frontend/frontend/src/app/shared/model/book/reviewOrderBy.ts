@@ -1,0 +1,5 @@
+export enum ReviewOrderBy {
+	RATING_ASC = "RATING_ASC",
+	RATING_DESC = "RATING_DESC",
+	DATE_DESC = "DATE_DESC"
+}

@@ -80,7 +80,7 @@ public class OrderController {
 
     @PUT
     @Path("{id:\\d+}")
-    @Consumes(value = {VndMediaTypes.ORDER})
+    @Consumes(value = {VndMediaTypes.ORDER}) //TODO: patch?
     public Response updateOrder(
             @PathParam("id") final long id,
             @Valid final OrderEditDTO orderDTO
