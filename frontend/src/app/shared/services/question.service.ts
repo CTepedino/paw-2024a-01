@@ -5,6 +5,7 @@ import {QuestionSearchQuery} from "../model/question/questionSearchQuery";
 import {Observable} from "rxjs";
 import {Question} from "../model/question/question";
 import {Answer} from "../model/question/answer";
+import {MediaTypes} from "../const/mediaTypes";
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class QuestionService {
     this.http.post(
         this.apiUrl,
         question,
-        {headers: {"Content-Type": "application/vnd.questions.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.QUESTION}}
     );
   }
 
@@ -47,7 +48,7 @@ export class QuestionService {
     this.http.put<Answer>(
         `${questionUrl}/answer`,
         answer,
-        {headers: {"Content-Type": "application/vnd.questions.answers.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.ANSWER}}
     );
   }
 }

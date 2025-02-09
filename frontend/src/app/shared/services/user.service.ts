@@ -6,6 +6,7 @@ import {Observable} from "rxjs";
 import {WriterMonthlyAnalytics} from "../model/user/writerMonthlyAnalytics";
 import {Wishlist} from "../model/user/wishlist";
 import {Recommendation} from "../model/user/recommendation";
+import {MediaTypes} from "../const/mediaTypes";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class UserService {
     this.http.post(
         this.apiURL,
         user,
-        {headers: {"Content-Type": "application/vnd.users.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.USER}}
     );
   }
 
@@ -31,7 +32,7 @@ export class UserService {
     this.http.put(
         this.apiURL,
         user,
-        {headers: {"Content-Type": "application/vnd.users.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.USER}}
     );
   }
 
@@ -39,7 +40,7 @@ export class UserService {
     this.http.put(
         `${this.apiURL}/password`,
         {password: password},
-        {headers: {"Content-Type": "application/vnd.users.password.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.PASSWORD}}
     );
   }
 
@@ -76,7 +77,7 @@ export class UserService {
     this.http.post(
         `${userUrl}/wishlist`,
         {bookId: bookId},
-        {headers: {"Content-Type": "application/vnd.users.wishlists.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.WISHLIST}}
     );
   }
 
@@ -99,7 +100,7 @@ export class UserService {
     this.http.post(
         `${userUrl}/recommendations`,
         {bookId: bookId},
-        {headers: {"Content-Type": "application/vnd.users.recommendations.v1+json"}}
+        {headers: {"Content-Type": MediaTypes.RECOMMENDATION}}
     );
   }
 

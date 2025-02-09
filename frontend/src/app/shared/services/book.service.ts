@@ -8,6 +8,7 @@ import {BookMonthlyAnalytics} from "../model/book/bookMonthlyAnalytics";
 import {Deal} from "../model/book/deal";
 import {ReviewSearchQuery} from "../model/book/reviewSearchQuery";
 import {Review} from "../model/book/review";
+import {MediaTypes} from "../const/mediaTypes";
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class BookService {
       this.http.post(
           this.apiURL,
           book,
-          {headers: {"Content-Type": "application/vnd.books.v1+json"}}
+          {headers: {"Content-Type": MediaTypes.BOOK}}
       );
   }
 
@@ -45,7 +46,7 @@ export class BookService {
       this.http.put(
           bookUrl,
           book,
-          {headers: {"Content-Type": "application/vnd.books.v1+json"}}
+          {headers: {"Content-Type": MediaTypes.BOOK}}
       );
   }
 
@@ -75,7 +76,7 @@ export class BookService {
       this.http.put(
           `${bookUrl}/deal`,
           deal,
-          {headers: {"Content-Type": "application/vnd.books.deals.v1+json"}}
+          {headers: {"Content-Type": MediaTypes.DEAL}}
       );
   }
 
@@ -111,7 +112,7 @@ export class BookService {
       return this.http.put(
           `${bookUrl}/reviews/${userId}`,
           review,
-          {headers: {"Content-Type": "application/vnd.books.reviews.v1+json"}}
+          {headers: {"Content-Type": MediaTypes.REVIEW}}
       );
   }
 }
