@@ -87,7 +87,7 @@ public class BookJpaDaoTest {
     public void testModify(){
         Book book = em.find(Book.class, EXISTING_ID);
 
-        bookDao.modify(book, "MODIFIED BOOK MODIFIED BOOK MODIFIED BOOK", "", BookGenre.BIOGRAPHY, new BigDecimal(1), 1, 1);
+        bookDao.modify(book, "MODIFIED BOOK MODIFIED BOOK MODIFIED BOOK", "", BookGenre.BIOGRAPHY, new BigDecimal(1), 1, 1, LocalDate.now());
 
         assertEquals(1, getRowCount(em, "FROM books WHERE title  = 'MODIFIED BOOK MODIFIED BOOK MODIFIED BOOK'"));
     }

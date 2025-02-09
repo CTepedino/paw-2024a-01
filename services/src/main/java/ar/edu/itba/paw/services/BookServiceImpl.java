@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.dao.BookDao;
+import ar.edu.itba.paw.interfaces.dao.DealDao;
 import ar.edu.itba.paw.interfaces.dao.OrderDao;
 import ar.edu.itba.paw.interfaces.service.BookService;
 import ar.edu.itba.paw.interfaces.service.UserService;
@@ -31,15 +32,17 @@ public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
     private final OrderDao orderDao;
+    private final DealDao dealDao;
 
     private final UserService us;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(BookServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookDao bookDao, final OrderDao orderDao, final UserService us){
+    public BookServiceImpl(final BookDao bookDao, final OrderDao orderDao, final DealDao dealDao, final UserService us){
         this.bookDao = bookDao;
         this.orderDao = orderDao;
+        this.dealDao = dealDao;
         this.us = us;
     }
 
@@ -67,10 +70,14 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate) {
         Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
 
-        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge);
+        if (book.getDeal() != null && book.getDeal().getPrice().compareTo(price) >= 0){
+            dealDao.deleteDeal(bookId);
+        }
+
+        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, publishDate);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 

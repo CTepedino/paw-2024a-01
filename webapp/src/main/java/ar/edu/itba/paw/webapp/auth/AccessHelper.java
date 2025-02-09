@@ -1,24 +1,16 @@
 package ar.edu.itba.paw.webapp.auth;
 
-import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.books.Book;
-import ar.edu.itba.paw.models.exception.InvalidCodeException;
-import ar.edu.itba.paw.models.exception.OrderNotFoundException;
-import ar.edu.itba.paw.models.exception.QuestionNotFoundException;
-import ar.edu.itba.paw.models.exception.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.service.BookService;
+import ar.edu.itba.paw.interfaces.service.OrderService;
+import ar.edu.itba.paw.interfaces.service.QuestionService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.orders.Order;
 import ar.edu.itba.paw.models.questions.Question;
 import ar.edu.itba.paw.models.users.User;
-import ar.edu.itba.paw.models.users.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 @Component
@@ -93,48 +85,56 @@ public class AccessHelper {
 
     public boolean isLoggedAndWriterOrBuyer(String orderIdString){
         long orderId = Long.parseLong(orderIdString);
-        Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        Optional<Order> order = os.findById(orderId);
 
-        return us.getLoggedUser()
-                .filter(u -> order.getBuyer().getUserId() == u.getUserId() || order.getWriter().getUserId() == u.getUserId())
+        return order
+                .filter(o ->
+                    us.getLoggedUser()
+                        .filter(u -> o.getBuyer().getUserId() == u.getUserId() || o.getWriter().getUserId() == u.getUserId())
+                        .isPresent())
                 .isPresent();
+
     }
 
     public boolean isLoggedAndWriterAndCanAdvanceOrder(String orderIdString){
         long orderId = Long.parseLong(orderIdString);
-        Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        Optional<Order> order = os.findById(orderId);
 
-        return us.getLoggedUser()
-                .filter(u -> order.getWriter().getUserId() == u.getUserId())
-                .filter(u -> order.getOrderStatus().canWriterAdvance())
+        return order
+                .filter(o ->
+                        us.getLoggedUser()
+                            .filter(u -> o.getWriter().getUserId() == u.getUserId())
+                            .filter(u -> o.getOrderStatus().canWriterAdvance())
+                        .isPresent())
                 .isPresent();
+
     }
 
     public boolean isLoggedAndBuyerAndCanAdvanceOrder(String orderIdString){
         long orderId = Long.parseLong(orderIdString);
-        Order order = os.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        Optional<Order> order = os.findById(orderId);
 
-        return us.getLoggedUser()
-                .filter(u -> order.getBuyer().getUserId() == u.getUserId())
-                .filter(u -> order.getOrderStatus().canReaderAdvance())
+        return order
+                .filter(o ->
+                        us.getLoggedUser()
+                            .filter(u -> o.getBuyer().getUserId() == u.getUserId())
+                            .filter(u -> o.getOrderStatus().canReaderAdvance())
+                        .isPresent())
                 .isPresent();
+
     }
 
     public boolean isLoggedAndCanAnswer(String questionIdString){
         long questionId = Long.parseLong(questionIdString);
-        Question question = qs.findById(questionId).orElseThrow(QuestionNotFoundException::new);
+        Optional<Question> question = qs.findById(questionId);
 
-        return us.getLoggedUser()
-                .filter(u -> question.getBook().getWriter().getUserId() == u.getUserId())
+        return question
+                .filter(q ->
+                    us.getLoggedUser()
+                        .filter(u -> q.getBook().getWriter().getUserId() == u.getUserId())
+                        .isPresent())
                 .isPresent();
-    }
 
-    private Long parseOrNull(String s){
-        try {
-           return Long.parseLong(s);
-        } catch (Exception e) {
-            return null;
-        }
     }
 
 }

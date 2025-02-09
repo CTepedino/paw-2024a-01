@@ -13,11 +13,12 @@ import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.BookCreateDTO;
-import ar.edu.itba.paw.webapp.dto.input.BookEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.DealSubmitDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
 import ar.edu.itba.paw.webapp.dto.input.validations.PdfFile;
-import ar.edu.itba.paw.webapp.dto.output.*;
+import ar.edu.itba.paw.webapp.dto.output.BookDTO;
+import ar.edu.itba.paw.webapp.dto.output.BookMonthlyAnalyticsDTO;
+import ar.edu.itba.paw.webapp.dto.output.DealDTO;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,7 +123,7 @@ public class BookController {
     @Consumes(value = {VndMediaTypes.BOOK})
     public Response editBook(
             @PathParam("id") final long id,
-            @Valid BookEditDTO bookDTO
+            @Valid BookCreateDTO bookDTO
     ){
         bs.editPublication(
                 id,
@@ -131,7 +132,8 @@ public class BookController {
                 bookDTO.getGenre(),
                 bookDTO.getPrice(),
                 bookDTO.getPageCount(),
-                bookDTO.getSuggestedAge()
+                bookDTO.getSuggestedAge(),
+                bookDTO.getPublicationDate()
         );
 
         return Response.noContent().build();

@@ -182,6 +182,10 @@ public class Book {
         this.suggestedAge = suggestedAge;
     }
 
+    public void setPublishDate(LocalDate publishDate) {
+        this.publishDate = publishDate;
+    }
+
     public void setPaused(boolean paused) {
         isPaused = paused;
     }

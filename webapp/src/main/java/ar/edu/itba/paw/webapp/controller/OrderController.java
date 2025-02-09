@@ -78,9 +78,9 @@ public class OrderController {
         return Response.ok(OrderDTO.fromOrder(uriInfo, order)).build();
     }
 
-    @PUT
+    @PATCH
     @Path("{id:\\d+}")
-    @Consumes(value = {VndMediaTypes.ORDER}) //TODO: patch?
+    @Consumes(value = {VndMediaTypes.ORDER})
     public Response updateOrder(
             @PathParam("id") final long id,
             @Valid final OrderEditDTO orderDTO

@@ -185,7 +185,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 ).access(authFilter((a, o) ->
                         accessHelper.isLoggedAndWriterOrBuyer(o.getVariables().get("id"))))
 
-                .requestMatchers(HttpMethod.PUT,
+                .requestMatchers(HttpMethod.PATCH,
                         "/api/orders/{id:\\d+}"
                 ).access(authFilter((a, o) ->
                         accessHelper.isLoggedAndWriterAndCanAdvanceOrder(o.getVariables().get("id"))))
