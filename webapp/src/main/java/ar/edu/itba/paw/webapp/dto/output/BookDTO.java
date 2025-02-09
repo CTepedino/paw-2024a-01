@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 
 public class BookDTO {
-//TODO: loggedUserReview, loggedUserQuestion?
+
     private long id;
     private String title;
     private String description;

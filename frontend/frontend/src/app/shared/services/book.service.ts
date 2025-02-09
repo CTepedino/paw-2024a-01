@@ -103,13 +103,13 @@ export class BookService {
       return this.http.get<Review[]>(bookUrl, {params: params});
   }
 
-  getReview(reviewUrl: string): Observable<Review> {
-      return this.http.get<Review>(reviewUrl);
+  getReview(bookUrl: string, userId: number): Observable<Review> {
+      return this.http.get<Review>(`${bookUrl}/reviews/${userId}`);
   }
 
-  putReview(reviewUrl: string, review: Review){
+  putReview(bookUrl: string, userId: number, review: Review){
       return this.http.put(
-          reviewUrl,
+          `${bookUrl}/reviews/${userId}`,
           review,
           {headers: {"Content-Type": "application/vnd.books.reviews.v1+json"}}
       );

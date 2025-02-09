@@ -68,8 +68,8 @@ export class UserService {
     return this.http.get<Wishlist[]>(`${userUrl}/wishlist`, {params: params});
   }
 
-  getWishlistItem(wishlistUrl: string): Observable<Wishlist>{
-    return this.http.get<Wishlist>(wishlistUrl);
+  getWishlistItem(userUrl: string, bookId: number): Observable<Wishlist>{
+    return this.http.get<Wishlist>(`${userUrl}/wishlist/${bookId}`);
   }
 
   postWishlistItem(userUrl: string, bookId: number){
@@ -80,8 +80,8 @@ export class UserService {
     );
   }
 
-  deleteWishlistItem(wishlistUrl: string){
-    this.http.delete(wishlistUrl);
+  deleteWishlistItem(userUrl: string, bookId: number){
+    this.http.delete(`${userUrl}/wishlist/${bookId}`);
   }
 
   getRecommendations(userUrl: string, page: number = 1, size: number = 20): Observable<Recommendation[]> {
@@ -91,8 +91,8 @@ export class UserService {
     return this.http.get<Wishlist[]>(`${userUrl}/recommendations`, {params: params});
   }
 
-  getRecommendation(recommendationUrl: string): Observable<Recommendation>{
-    return this.http.get<Recommendation>(recommendationUrl);
+  getRecommendation(userUrl: string, bookId: number): Observable<Recommendation>{
+    return this.http.get<Recommendation>(`${userUrl}/recommendations/${bookId}`);
   }
 
   postRecommendation(userUrl: string, bookId: number){
@@ -103,8 +103,8 @@ export class UserService {
     );
   }
 
-  deleteRecommendation(recommendationUrl: string){
-    this.http.delete(recommendationUrl);
+  deleteRecommendation(userUrl: string, bookId: number){
+    this.http.delete(`${userUrl}/recommendations/${bookId}`);
   }
 }
 
