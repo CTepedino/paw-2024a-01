@@ -4,13 +4,13 @@ import {AsyncPipe, JsonPipe, NgOptimizedImage} from "@angular/common";
 import {Observable} from "rxjs";
 import {AuthService} from "./shared/services/auth.service";
 import {Book} from "./shared/model/book/book";
-import {Index} from "./shared/model";
 import {BookService} from "./shared/services/book.service";
 import {BookSearchQuery} from "./shared/model/book/bookSearchQuery";
+import {NavbarComponent} from "./shared/components/navbar/navbar.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, JsonPipe, AsyncPipe, NgOptimizedImage],
+	imports: [RouterOutlet, JsonPipe, AsyncPipe, NgOptimizedImage, NavbarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

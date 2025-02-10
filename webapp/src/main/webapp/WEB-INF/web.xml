@@ -63,7 +63,6 @@
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
-
   <servlet>
     <servlet-name>jersey-servlet</servlet-name>
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -105,4 +104,13 @@
     <url-pattern>/static/*</url-pattern>
   </filter-mapping>
 
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/static/*</url-pattern>
+  </servlet-mapping>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/index.html</location>
+  </error-page>
 </web-app>

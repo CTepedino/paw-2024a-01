@@ -1,0 +1,213 @@
+@use '@angular/material' as mat;
+
+//TODO: use color from theme
+.mat-toolbar {
+  background-color: #437C90;
+  min-height: 80px;
+  position: relative;
+
+  height: 5%;
+}
+
+.navbar-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.left-section {
+  text-align: left;
+}
+
+.center-section {
+  text-align: center;
+  justify-self: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-section {
+  display: flex;
+  height: 100%;
+  text-align: right;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 150px;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.btn {
+  font-weight: bold;
+  background-color: rgb(38, 166, 154);
+  color: white;
+  border-radius: 2px;
+  padding: 0 16px;
+  margin-top: 13px;
+  margin-left: 15px;
+  margin-right: 15px;
+  height: 36px;
+
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: .5px;
+}
+
+.search {
+  border-radius: 2px;
+  margin-top: 30px;
+  border: none;
+  padding: 5px;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none;
+}
+
+::ng-deep .mdc-line-ripple {
+  display: none
+}
+
+
+
+.logged-user-name {
+  font-size: 1.5rem;
+  margin-right: 7px;
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  min-height: 65px;
+  color: white;
+  margin-right: 10px;
+}
+
+.user-picture {
+  border-radius: 50%;
+}
+
+::ng-deep {
+  .mat-mdc-menu-panel {
+    background-color: #437C90;
+  }
+
+  html {
+    --mat-menu-container-color: #437C90; // this is my test
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white !important;
+  height: 50px;
+  width: 300px;
+}
+
+::ng-deep {
+  .mat-mdc-menu-panel {
+    max-width: unset !important;
+  }
+  .mat-mdc-menu-item-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.menu-divider {
+  border: 0;
+  height: 1px;
+  background: #ccc;
+  margin: 15px 10px 10px 10px;
+}
+
+
+.menu-icon {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background-color: #f7c446;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px !important;
+  margin-right: 10px;
+  font-size: 25px !important;
+  color: white !important;
+}
+
+.go-arrow {
+  color: white !important;
+  font-size: 22px;
+  transition: transform 0.5s;
+  margin-top: 10px;
+}
+
+/*
+
+
+.name-text {
+  margin-right: 10px;
+  overflow: hidden;
+  max-height: 70px;
+  text-align: right;
+}
+
+.user-picture {
+  width: 40px;
+  border-radius: 50%;
+  height: 40px;
+  object-fit: cover;
+}
+
+.account-icon {
+  margin-left: 10px;
+  float: right;
+}
+
+.sub-menu-wrap {
+  position: absolute;
+  top: 100%;
+  min-width: 300px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s;
+  z-index: 9999;
+}
+
+.sub-menu-wrap.open-menu {
+  overflow: hidden;
+  max-height: 900px;
+  z-index: 2;
+}
+
+.sub-menu {
+  background: #437C90;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.sub-menu hr {
+  border: 0;
+  height: 1px;
+  width: 100%;
+  background: #ccc;
+  margin: 15px 0 10px;
+}
+.go-arrow {
+  transition: transform 0.5s;
+  display: inline-block;
+  width: 60px;
+  height: 50px !important;
+  background-color: #f7c446;
+  text-align: center;
+  line-height: 50px !important;
+  margin-right: 10px;
+  font-size: 25px;
+}*/

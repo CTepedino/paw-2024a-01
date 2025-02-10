@@ -207,6 +207,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final WebSecurity web) {
-        web.ignoring().requestMatchers("/static/**");
+        web.ignoring().requestMatchers("/static/**", "/assets/**");
     }
 }
