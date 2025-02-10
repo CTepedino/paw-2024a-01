@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {TutorialCardsComponent} from "./components/tutorial-cards/tutorial-cards.component";
-import {GenreButtonComponent} from "./components/genre-button/genre-button.component";
 import {BookGenre} from "../../shared/model/book/bookGenre";
 import {GenreListComponent} from "./components/genre-list/genre-list.component";
 import {BookCardComponent} from "../../shared/components/book-card/book-card.component";
-import {MatRow} from "@angular/material/table";
+import {SalesCategory} from "../../shared/model/book/salesCategory";
 
 @Component({
   selector: 'app-home',
-	imports: [MatGridListModule, TutorialCardsComponent, GenreButtonComponent, GenreListComponent, BookCardComponent, MatRow],
+	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -27,7 +26,8 @@ export class HomeComponent {
 		pageCount: 102,
 		publishDate: '2023-05-05',
 		price: 40000,
-		genre: BookGenre.FICTION
+		genre: BookGenre.FICTION,
+		salesCategory: SalesCategory.BEST_SELLER
 	}
 	user = {
 		firstName: 'juan',
