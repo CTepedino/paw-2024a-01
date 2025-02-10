@@ -5,10 +5,11 @@ import {GenreButtonComponent} from "./components/genre-button/genre-button.compo
 import {BookGenre} from "../../shared/model/book/bookGenre";
 import {GenreListComponent} from "./components/genre-list/genre-list.component";
 import {BookCardComponent} from "../../shared/components/book-card/book-card.component";
+import {MatRow} from "@angular/material/table";
 
 @Component({
   selector: 'app-home',
-	imports: [MatGridListModule, TutorialCardsComponent, GenreButtonComponent, GenreListComponent, BookCardComponent],
+	imports: [MatGridListModule, TutorialCardsComponent, GenreButtonComponent, GenreListComponent, BookCardComponent, MatRow],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -35,4 +36,8 @@ export class HomeComponent {
 	deal = {
 
 	}
+
+	bookWithInfo = {book: this.book, writer: this.user}
+
+	books = Array(10).fill(this.bookWithInfo);
 }

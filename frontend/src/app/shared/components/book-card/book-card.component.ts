@@ -7,26 +7,27 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardImage} from "@angular/mat
 import {RouterLink} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {DatePipe, DecimalPipe} from "@angular/common";
+import {MatRipple} from "@angular/material/core";
+import {BookWithInfo} from "../../model/book/bookWithInfo";
 
 @Component({
   selector: 'app-book-card',
-  imports: [
-    MatCard,
-    RouterLink,
-    MatCardImage,
-    MatCardContent,
-    MatIcon,
-    DatePipe,
-    DecimalPipe,
-    MatCardHeader
-  ],
+	imports: [
+		MatCard,
+		RouterLink,
+		MatCardImage,
+		MatCardContent,
+		MatIcon,
+		DatePipe,
+		DecimalPipe,
+		MatCardHeader,
+		MatRipple
+	],
   templateUrl: './book-card.component.html',
   styleUrl: './book-card.component.scss'
 })
 export class BookCardComponent {
-  book = input.required<Book>();
-  writer = input.required<User>();
-  deal = input<Deal | null>(null);
+	book = input.required<BookWithInfo>();
 
-  protected readonly SalesCategory = SalesCategory;
+    protected readonly SalesCategory = SalesCategory;
 }

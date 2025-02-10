@@ -2,8 +2,18 @@
 
 <app-genre-list [genres]="genres"/>
 
-<app-book-card
-	[book]="book"
-	[writer]="user"
-	[deal]="deal"
-/>
+
+<h5 class="home-margin">Latest books</h5>
+<mat-grid-list cols="2" rowHeight="260px" gutterSize="10px" class="book-grid">
+	@for (book of books; track book.book.id) {
+		<mat-grid-tile>
+			<app-book-card
+				class="grid-book-card"
+				[book]="book"
+			/>
+		</mat-grid-tile>
+	}
+
+
+</mat-grid-list>
+

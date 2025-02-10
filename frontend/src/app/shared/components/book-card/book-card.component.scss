@@ -1,15 +1,19 @@
 .book-card {
   display: flex;
   height: 250px;
+  width: 100%;
   margin-top: 10px;
   margin-left: 10px;
   overflow: hidden;
+  flex-grow: 1;
+  cursor: pointer;
 }
+
 
 
 .book-content {
   width: 100%;
-  padding-top: 24px;
+  padding-top: 10px;
   padding-bottom: 24px;
   padding-left: 50px;
   max-height: 250px;
