@@ -78,7 +78,6 @@
 
 .logged-user-name {
   font-size: 1.5rem;
-  margin-right: 7px;
   display: flex;
   align-items: center;
   margin-top: 5px;
@@ -97,7 +96,7 @@
   }
 
   html {
-    --mat-menu-container-color: #437C90; // this is my test
+    --mat-menu-container-color: #437C90;
   }
 }
 
@@ -131,8 +130,8 @@
 
 .menu-icon {
   display: inline-block;
-  width: 50px;
-  height: 50px;
+  width: 50px !important;
+  height: 50px !important;
   background-color: #f7c446;
   border-radius: 50%;
   text-align: center;
@@ -149,65 +148,3 @@
   margin-top: 10px;
 }
 
-/*
-
-
-.name-text {
-  margin-right: 10px;
-  overflow: hidden;
-  max-height: 70px;
-  text-align: right;
-}
-
-.user-picture {
-  width: 40px;
-  border-radius: 50%;
-  height: 40px;
-  object-fit: cover;
-}
-
-.account-icon {
-  margin-left: 10px;
-  float: right;
-}
-
-.sub-menu-wrap {
-  position: absolute;
-  top: 100%;
-  min-width: 300px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s;
-  z-index: 9999;
-}
-
-.sub-menu-wrap.open-menu {
-  overflow: hidden;
-  max-height: 900px;
-  z-index: 2;
-}
-
-.sub-menu {
-  background: #437C90;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.sub-menu hr {
-  border: 0;
-  height: 1px;
-  width: 100%;
-  background: #ccc;
-  margin: 15px 0 10px;
-}
-.go-arrow {
-  transition: transform 0.5s;
-  display: inline-block;
-  width: 60px;
-  height: 50px !important;
-  background-color: #f7c446;
-  text-align: center;
-  line-height: 50px !important;
-  margin-right: 10px;
-  font-size: 25px;
-}*/
