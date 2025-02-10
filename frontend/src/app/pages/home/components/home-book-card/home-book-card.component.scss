@@ -1,0 +1,106 @@
+.book-card {
+  height: 265px;
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  margin: 20px;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.book-image {
+  max-height: 160px;
+  max-width: 250px;
+  border-radius: 2px 2px 0 0;
+}
+
+.mat-mdc-card-header {
+  padding: 0;
+}
+
+.mat-mdc-card-content {
+  width: 100%;
+  padding: 10px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+
+.card-badge {
+  width: 110px;
+  position: absolute;
+  top: 15px;
+  left: -40px;
+  color: white;
+  padding: 5px 20px;
+  transform: rotate(-45deg);
+  z-index: 10;
+  font-size: 11px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: start;
+}
+
+.popular {
+  background: #437C90;
+}
+
+.bestseller {
+  background: #F7C548;
+}
+
+.price {
+  color: #0288d1;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.book-title {
+  width: 100%;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-size: 1.15rem;
+  text-overflow: ellipsis;
+  text-align: start;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.crossed {
+  text-decoration: line-through;
+}
+
+.deal {
+  font-size: 0.8rem;
+  font-weight: normal;
+  margin-bottom: 0;
+  margin-top: 5px;
+}
+
+.discount{
+  color: red;
+  margin-left: 5px;
+}
+
+.deal-price {
+  margin-top: 5px;
+}
+
+.writer {
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.no-deal {
+  margin-top: 15px;
+}

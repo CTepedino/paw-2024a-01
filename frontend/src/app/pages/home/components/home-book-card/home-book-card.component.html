@@ -1,0 +1,29 @@
+<mat-card matRipple class="book-card" routerLink="/book/{{book().book.id}}">
+	<mat-card-header>
+		@switch (book().book.salesCategory){
+			@case (SalesCategory.BEST_SELLER){
+				<div class="card-badge bestseller">Best Seller</div>
+			}
+			@case (SalesCategory.POPULAR){
+				<div class="card-badge popular">Popular</div>
+			}
+		}
+		<img matCardImage class="book-image" [src]="book().book.cover" alt="Book cover"/>
+	</mat-card-header>
+	<mat-card-content class="content">
+		<h2 class="book-title">{{book().book.title}}</h2>
+		<p class="writer">By {{book().writer.firstName}} {{book().writer.lastName}}</p>
+		<div class="price">
+			@if(book().deal){
+				<p class="deal">
+					<span class="crossed">${{book().book.price | number}}</span>
+					<span class="discount"> -{{percentage() | number}}%</span>
+				</p>
+				<p class="deal-price">${{book().deal?.price | number}}</p>
+			} @else {
+				<p class="no-deal">${{book().book.price | number}}</p>
+			}
+		</div>
+	</mat-card-content>
+</mat-card>
+

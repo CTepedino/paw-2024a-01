@@ -3,17 +3,32 @@
 <app-genre-list [genres]="genres"/>
 
 
-<h5 class="home-margin">Latest books</h5>
-<mat-grid-list cols="2" rowHeight="260px" gutterSize="10px" class="book-grid">
-	@for (book of books; track book.book.id) {
+<h5 class="home-margin">Best sellers</h5>
+<mat-grid-list cols="6" rowHeight="270px" gutterSize="5px" class="book-grid">
+	@for(book of bestSellers;track book.book.id){
 		<mat-grid-tile>
-			<app-book-card
-				class="grid-book-card"
-				[book]="book"
-			/>
+			<app-home-book-card [book]="book" class="grid-book-card"></app-home-book-card>
 		</mat-grid-tile>
 	}
+</mat-grid-list>
 
 
+<h5 class="home-margin">New deals</h5>
+<mat-grid-list cols="6" rowHeight="270px" gutterSize="5px" class="book-grid">
+	@for (book of newDeals; track book.book.id){
+		<mat-grid-tile>
+			<app-home-book-card [book]="book" class="grid-book-card"></app-home-book-card>
+		</mat-grid-tile>
+	}
+</mat-grid-list>
+
+
+<h5 class="home-margin">Latest books</h5>
+<mat-grid-list cols="2" rowHeight="260px" gutterSize="5px" class="book-grid">
+	@for (book of books; track book.book.id) {
+		<mat-grid-tile>
+			<app-book-card class="grid-book-card" [book]="book"/>
+		</mat-grid-tile>
+	}
 </mat-grid-list>
 

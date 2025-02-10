@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NavbarButtonComponent } from './navbar-button.component';
+import { HomeBookCardComponent } from './home-book-card.component';
 
-describe('NavbarButtonComponent', () => {
-  let component: NavbarButtonComponent;
-  let fixture: ComponentFixture<NavbarButtonComponent>;
+describe('HomeBookCardComponent', () => {
+  let component: HomeBookCardComponent;
+  let fixture: ComponentFixture<HomeBookCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavbarButtonComponent]
+      imports: [HomeBookCardComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NavbarButtonComponent);
+    fixture = TestBed.createComponent(HomeBookCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

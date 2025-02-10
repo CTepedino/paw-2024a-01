@@ -9,7 +9,7 @@
 			}
 		}
 
-		<img mat-card-image src="assets/book-cover.jpg" alt="Book cover" class="book-image">
+		<img mat-card-image [src]="book().book.cover" alt="Book cover" class="book-image">
 		<mat-card-content class="book-content">
 			<h2 class="book-title">{{book().book.title}}</h2>
 			<p>By {{book().writer.firstName}} {{book().writer.lastName}}</p>
