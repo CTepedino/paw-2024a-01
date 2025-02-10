@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {numericIDGuard} from "./shared/guards/numeric-id.guard";
 import { HomeComponent } from './pages/home/home.component';
 import {BookDetailsComponent} from "./pages/book-details/book-details.component";
+import { SalesComponent } from './pages/sales/sales.component';
 
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
@@ -32,7 +33,7 @@ export const routes: Routes = [
 	{path: "editProfile", component: HomeComponent},
 	{path: "analytics", component: HomeComponent},
 	{path: "purchases", component: HomeComponent},
-	{path: "sales", component: HomeComponent},
+	{path: "sales", component: SalesComponent},
 	{path: "404", component: HomeComponent},
 	{path: "**", redirectTo: "404"}
 ];
