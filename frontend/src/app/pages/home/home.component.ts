@@ -34,10 +34,10 @@ export class HomeComponent {
 		lastName: 'perez'
 	}
 	deal = {
-
+		price: 15000
 	}
 
-	bookWithInfo = {book: this.book, writer: this.user}
+	bookWithInfo = {book: this.book, writer: this.user, deal: this.deal}
 
 	books = Array(10).fill(this.bookWithInfo);
 }

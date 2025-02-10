@@ -12,7 +12,17 @@
 				<span><mat-icon>description</mat-icon>{{book().book.pageCount}}</span>
 				<span><mat-icon>calendar_today</mat-icon>{{book().book.publishDate | date: 'yyyy'}}</span>
 			</div>
-			<p class="price">${{book().book.price | number}}</p>
+			<p class="price">
+				@if(book().deal){
+					<p class="deal">
+						<span class="crossed">${{book().book.price | number}}</span>
+						<span class="discount"> -{{percentage() | number}}%</span>
+					</p>
+					<p class="deal-price">${{book().deal?.price | number}}</p>
+				} @else {
+					${{book().book.price | number}}
+				}
+			</p>
 		</mat-card-content>
 	</mat-card-header>
 </mat-card>

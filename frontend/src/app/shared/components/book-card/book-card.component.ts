@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, computed, input} from '@angular/core';
 import {Book} from "../../model/book/book";
 import {SalesCategory} from "../../model/book/salesCategory";
 import {User} from "../../model/user/user";
@@ -30,4 +30,13 @@ export class BookCardComponent {
 	book = input.required<BookWithInfo>();
 
     protected readonly SalesCategory = SalesCategory;
+
+	percentage = computed<number>(() => {
+		if (this.book().deal == null){
+			return 0;
+		}
+		const price = this.book().book.price || 0;
+		const dealPrice = this.book().deal?.price || 0;
+		return ((price-dealPrice)/price)*100;
+	} )
 }
