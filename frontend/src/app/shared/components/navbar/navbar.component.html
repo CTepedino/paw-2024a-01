@@ -20,7 +20,7 @@
 					<app-navbar-menu [user]="user">
 						<app-navbar-menu-item link="/profile/{{user.id}}" icon="person">Profile</app-navbar-menu-item>
 						<app-navbar-menu-item link="purchases" icon="shopping_basket">Purchases</app-navbar-menu-item>
-						@if (user.roles?.includes(UserRoles.WRITER)){
+						@if (user.roles.includes(UserRoles.WRITER)){
 							<app-navbar-menu-item link="sales" icon="shopping_basket">Sales</app-navbar-menu-item>
 							<app-navbar-menu-item link="analytics" icon="analytics">Analytics</app-navbar-menu-item>
 						}

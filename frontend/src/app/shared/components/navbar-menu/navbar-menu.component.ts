@@ -1,6 +1,5 @@
 import {Component, input} from '@angular/core';
 import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
-import {NavbarMenuItemComponent} from "../navbar-menu-item/navbar-menu-item.component";
 import {MatButton} from "@angular/material/button";
 import {MatCardAvatar} from "@angular/material/card";
 import {NgOptimizedImage} from "@angular/common";
@@ -10,7 +9,6 @@ import {User} from "../../model/user/user";
   selector: 'app-navbar-menu',
   imports: [
     MatMenu,
-    NavbarMenuItemComponent,
     MatMenuTrigger,
     MatButton,
     MatCardAvatar,
@@ -20,5 +18,5 @@ import {User} from "../../model/user/user";
   styleUrl: './navbar-menu.component.scss'
 })
 export class NavbarMenuComponent {
-  user = input.required<User>()
+  user = input.required<Partial<User>>()
 }
