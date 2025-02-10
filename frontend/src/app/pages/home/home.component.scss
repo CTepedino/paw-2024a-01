@@ -1,0 +1,21 @@
+.hide-on-small {
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+
+.mat-grid-list{
+  margin: auto 200px;
+}
+
+.mat-grid-tile {
+  background-color: #EEEBD3 !important;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.explore_back {
+  height: 100%;
+  width: 100%;
+  padding-top: 30px;
+}
