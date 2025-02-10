@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {numericIDGuard} from "./shared/guards/numeric-id.guard";
 import { HomeComponent } from './pages/home/home.component';
+import {BookDetailsComponent} from "./pages/book-details/book-details.component";
 
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
@@ -12,7 +13,7 @@ export const routes: Routes = [
 	{path: "forgot-password", component: HomeComponent},
 	{path: "reset-password/:id/:code", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "add-book", component: HomeComponent},
-	{path: "book/:id", component: HomeComponent, canActivate: [numericIDGuard]},
+	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard]},
 	{path: "book/:id/reviews", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "book/:id/questions", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "book/:id/my-questions", component: HomeComponent, canActivate: [numericIDGuard]},
@@ -32,5 +33,6 @@ export const routes: Routes = [
 	{path: "analytics", component: HomeComponent},
 	{path: "purchases", component: HomeComponent},
 	{path: "sales", component: HomeComponent},
-	//{path: "**", component: HomeComponent}
+	{path: "404", component: HomeComponent},
+	{path: "**", redirectTo: "404"}
 ];

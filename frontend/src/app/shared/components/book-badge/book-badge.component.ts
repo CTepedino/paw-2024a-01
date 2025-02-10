@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, input} from '@angular/core';
+import {SalesCategory} from "../../model/book/salesCategory";
 
 @Component({
   selector: 'app-book-badge',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './book-badge.component.scss'
 })
 export class BookBadgeComponent {
-
+  category = input<SalesCategory>();
+  protected readonly SalesCategory = SalesCategory;
 }

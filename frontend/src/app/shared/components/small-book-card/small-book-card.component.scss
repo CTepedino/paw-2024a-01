@@ -30,32 +30,6 @@
   justify-content: start;
 }
 
-.card-badge {
-  width: 110px;
-  position: absolute;
-  top: 15px;
-  left: -40px;
-  color: white;
-  padding: 5px 20px;
-  transform: rotate(-45deg);
-  z-index: 10;
-  font-size: 11px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: start;
-}
-
-.popular {
-  background: #437C90;
-}
-
-.bestseller {
-  background: #F7C548;
-}
-
 .price {
   color: #0288d1;
   position: absolute;

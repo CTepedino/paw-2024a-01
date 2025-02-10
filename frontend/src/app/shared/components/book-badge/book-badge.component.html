@@ -1,1 +1,8 @@
-<p>book-badge works!</p>
+@switch (category()){
+	@case (SalesCategory.BEST_SELLER){
+		<div class="card-badge bestseller">Best Seller</div>
+	}
+	@case (SalesCategory.POPULAR){
+		<div class="card-badge popular">Popular</div>
+	}
+}

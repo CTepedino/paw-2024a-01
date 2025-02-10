@@ -5,6 +5,7 @@ import {MatRipple} from "@angular/material/core";
 import {RouterLink} from "@angular/router";
 import {BookWithInfo} from "../../model/book/bookWithInfo";
 import {SalesCategory} from "../../model/book/salesCategory";
+import {BookBadgeComponent} from "../book-badge/book-badge.component";
 
 @Component({
   selector: 'app-small-book-card',
@@ -16,7 +17,8 @@ import {SalesCategory} from "../../model/book/salesCategory";
 		MatCardImage,
 		MatRipple,
 		RouterLink,
-		DatePipe
+		DatePipe,
+		BookBadgeComponent
 	],
   templateUrl: './small-book-card.component.html',
   styleUrl: './small-book-card.component.scss'

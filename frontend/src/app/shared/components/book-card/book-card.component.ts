@@ -10,6 +10,7 @@ import {DatePipe, DecimalPipe} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {BookWithInfo} from "../../model/book/bookWithInfo";
 import {MatBadge} from "@angular/material/badge";
+import {BookBadgeComponent} from "../book-badge/book-badge.component";
 
 @Component({
   selector: 'app-book-card',
@@ -23,7 +24,8 @@ import {MatBadge} from "@angular/material/badge";
 		DecimalPipe,
 		MatCardHeader,
 		MatRipple,
-		MatBadge
+		MatBadge,
+		BookBadgeComponent
 	],
   templateUrl: './book-card.component.html',
   styleUrl: './book-card.component.scss'

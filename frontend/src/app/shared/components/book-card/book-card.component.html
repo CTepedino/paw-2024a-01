@@ -1,14 +1,6 @@
 <mat-card matRipple class="book-card" routerLink="/book/{{book().book.id}}">
 	<mat-card-header>
-		@switch (book().book.salesCategory){
-			@case (SalesCategory.BEST_SELLER){
-				<div class="card-badge bestseller">Best Seller</div>
-			}
-			@case (SalesCategory.POPULAR){
-				<div class="card-badge popular">Popular</div>
-			}
-		}
-
+		<app-book-badge [category]="book().book.salesCategory"/>
 		<img mat-card-image [src]="book().book.cover" alt="Book cover" class="book-image">
 		<mat-card-content class="book-content">
 			<h2 class="book-title">{{book().book.title}}</h2>
