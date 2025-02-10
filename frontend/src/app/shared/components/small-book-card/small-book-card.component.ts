@@ -1,13 +1,13 @@
-import {Component, computed, input} from '@angular/core';
+import {booleanAttribute, Component, computed, input} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardImage} from "@angular/material/card";
-import {DecimalPipe} from "@angular/common";
+import {DatePipe, DecimalPipe} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {RouterLink} from "@angular/router";
-import {BookWithInfo} from "../../../../shared/model/book/bookWithInfo";
-import {SalesCategory} from "../../../../shared/model/book/salesCategory";
+import {BookWithInfo} from "../../model/book/bookWithInfo";
+import {SalesCategory} from "../../model/book/salesCategory";
 
 @Component({
-  selector: 'app-home-book-card',
+  selector: 'app-small-book-card',
 	imports: [
 		MatCard,
 		DecimalPipe,
@@ -15,13 +15,15 @@ import {SalesCategory} from "../../../../shared/model/book/salesCategory";
 		MatCardHeader,
 		MatCardImage,
 		MatRipple,
-		RouterLink
+		RouterLink,
+		DatePipe
 	],
-  templateUrl: './home-book-card.component.html',
-  styleUrl: './home-book-card.component.scss'
+  templateUrl: './small-book-card.component.html',
+  styleUrl: './small-book-card.component.scss'
 })
-export class HomeBookCardComponent {
+export class SmallBookCardComponent {
 	book = input.required<BookWithInfo>();
+	showDate = input(false, {transform: booleanAttribute});
 
 	protected readonly SalesCategory = SalesCategory;
 

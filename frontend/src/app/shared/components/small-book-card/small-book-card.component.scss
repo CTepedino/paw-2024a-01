@@ -1,5 +1,5 @@
 .book-card {
-  height: 265px;
+  height: 285px;
   max-width: 300px;
   display: flex;
   align-items: center;
@@ -58,15 +58,17 @@
 
 .price {
   color: #0288d1;
-  padding-left: 25px;
-  padding-right: 25px;
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  text-align: right;
 }
 
 .book-title {
   width: 100%;
   margin-bottom: 0;
   margin-top: 0;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   text-overflow: ellipsis;
   text-align: start;
   padding-left: 25px;
@@ -99,8 +101,18 @@
   font-size: 0.9rem;
   padding-left: 25px;
   padding-right: 25px;
+  text-overflow: ellipsis;
 }
 
 .no-deal {
   margin-top: 15px;
+  font-size: 1.15rem;
+}
+
+.extra-info {
+  font-size: 0.8rem;
+  margin-top: 5px;
+  margin-bottom: 0;
+  padding-left: 25px;
+  padding-right: 25px;
 }

@@ -4,20 +4,20 @@
 
 
 <h5 class="home-margin">Best sellers</h5>
-<mat-grid-list cols="6" rowHeight="270px" gutterSize="5px" class="book-grid">
+<mat-grid-list cols="6" rowHeight="290px" gutterSize="5px" class="book-grid">
 	@for(book of bestSellers;track book.book.id){
 		<mat-grid-tile>
-			<app-home-book-card [book]="book" class="grid-book-card"></app-home-book-card>
+			<app-small-book-card [book]="book" class="grid-book-card"></app-small-book-card>
 		</mat-grid-tile>
 	}
 </mat-grid-list>
 
 
 <h5 class="home-margin">New deals</h5>
-<mat-grid-list cols="6" rowHeight="270px" gutterSize="5px" class="book-grid">
+<mat-grid-list cols="6" rowHeight="290px" gutterSize="5px" class="book-grid">
 	@for (book of newDeals; track book.book.id){
 		<mat-grid-tile>
-			<app-home-book-card [book]="book" class="grid-book-card"></app-home-book-card>
+			<app-small-book-card [book]="book" class="grid-book-card"></app-small-book-card>
 		</mat-grid-tile>
 	}
 </mat-grid-list>
