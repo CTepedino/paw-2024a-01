@@ -5,11 +5,11 @@ import {BookGenre} from "../../shared/model/book/bookGenre";
 import {GenreListComponent} from "./components/genre-list/genre-list.component";
 import {BookCardComponent} from "../../shared/components/book-card/book-card.component";
 import {SalesCategory} from "../../shared/model/book/salesCategory";
-import {HomeBookCardComponent} from "./components/home-book-card/home-book-card.component";
+import {SmallBookCardComponent} from "../../shared/components/small-book-card/small-book-card.component";
 
 @Component({
   selector: 'app-home',
-	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent, HomeBookCardComponent],
+	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent, SmallBookCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
