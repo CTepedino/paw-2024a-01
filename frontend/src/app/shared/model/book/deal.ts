@@ -1,9 +1,9 @@
 export interface Deal {
-	id: number;
-	price: number;
-	start: string;
-	end: string;
+	id?: number;
+	price?: number;
+	start?: string;
+	end?: string;
 
-	self: string;
-	book: string;
+	self?: string;
+	book?: string;
 }

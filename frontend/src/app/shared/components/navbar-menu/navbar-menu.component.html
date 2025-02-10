@@ -1,0 +1,9 @@
+<button mat-button [matMenuTriggerFor]="menu">
+	<div class="logged-user-name">
+		<span class="name-text">{{user().firstName}} {{user().lastName}}</span>
+		<img mat-card-avatar [ngSrc]="user().profilePicture" alt="user profile picture" class="user-picture" height="50" width="50"/>
+	</div>
+</button>
+<mat-menu #menu="matMenu" class="menu-list">
+	<ng-content/>
+</mat-menu>

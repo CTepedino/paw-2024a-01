@@ -1,0 +1,8 @@
+<a mat-menu-item [routerLink]="link()" class="menu-item">
+	<mat-icon class="menu-icon">{{ icon() }}</mat-icon>
+	<p class="center-section"><ng-content/></p>
+	<span><mat-icon class="go-arrow">chevron_right</mat-icon></span>
+</a>
+@if(!last()){
+	<hr class="menu-divider"/>
+}

@@ -1,7 +1,7 @@
 export interface Wishlist {
-	bookId: number;
+	bookId?: number;
 
-	self: string;
-	book: string;
-	user: string;
+	self?: string;
+	book?: string;
+	user?: string;
 }

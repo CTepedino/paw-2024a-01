@@ -1,0 +1,47 @@
+::ng-deep {
+  .mat-mdc-menu-panel {
+    max-width: unset !important;
+  }
+  .mat-mdc-menu-item-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white !important;
+  height: 50px;
+  width: 300px;
+}
+
+.menu-divider {
+  border: 0;
+  height: 1px;
+  color: white !important;
+  margin: 15px 10px 10px 10px;
+}
+
+.menu-icon {
+  display: inline-block;
+  width: 50px !important;
+  height: 50px !important;
+  background-color: #f7c446;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px !important;
+  margin-right: 10px;
+  font-size: 25px !important;
+  color: white !important;
+}
+
+.go-arrow {
+  color: white !important;
+  font-size: 22px;
+  transition: transform 0.5s;
+  margin-top: 10px;
+}
+

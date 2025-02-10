@@ -8,14 +8,6 @@
 		
 		<div class="center-section">
 			@if (showSearchBar){
-				<!--<form id="searchForm" class="hide-on-small-only">
-					<div class="search">
-						<a routerLink="#" id="submitSearch">
-							<mat-icon fontIcon="search" class="search-icon black-text"></mat-icon>
-						</a>
-						<input class="search-input browser-default" name="title" id="title" required autocomplete="off">
-					</div>
-				</form>-->
 				<mat-form-field class="search">
 					<mat-icon matPrefix>search</mat-icon>
 					<input matInput required autocomplete="off">
@@ -25,64 +17,24 @@
 		<div class="right-section">
 			@if (showRightBar){
 				@if (isLoggedIn){
-					<button mat-button [matMenuTriggerFor]="menu">
-						<div class="logged-user-name">
-							<span class="name-text">{{user.firstName}} {{user.lastName}}</span>
-							<img mat-card-avatar [ngSrc]="user.profilePicture" alt="user profile picture" class="user-picture" height="50" width="50"/>
-						</div>
-					</button>
-					<mat-menu #menu="matMenu" class="menu-list">
-						<a mat-menu-item routerLink="/profile/{{user.userId}}" class="menu-item">
-							<mat-icon class="menu-icon">person</mat-icon>
-							<p>Profile</p>
-							<span><mat-icon class="go-arrow">chevron_right</mat-icon></span>
-						</a>
-						<hr class="menu-divider"/>
-						<a mat-menu-item routerLink="purchases" class="menu-item">
-							<mat-icon class="menu-icon">shopping_basket</mat-icon>
-							<p class="center-section">Purchases</p>
-							<span><mat-icon class="go-arrow">chevron_right</mat-icon></span>
-						</a>
-						<hr class="menu-divider"/>
-						@if (user.roles.includes('WRITER')){
-							<a mat-menu-item routerLink="sales" class="menu-item">
-								<mat-icon class="menu-icon">insert_chart</mat-icon>
-								<p>Sales</p>
-								<span><mat-icon class="go-arrow">chevron_right</mat-icon></span>
-							</a>
-							<hr class="menu-divider"/>
-							<a mat-menu-item routerLink="analytics" class="menu-item">
-								<mat-icon class="menu-icon">analytics</mat-icon>
-								<p>Analytics</p>
-								<span><mat-icon class="go-arrow">chevron_right</mat-icon></span>
-							</a>
-							<hr class="menu-divider"/>
+					<app-navbar-menu [user]="user">
+						<app-navbar-menu-item link="/profile/{{user.id}}" icon="person">Profile</app-navbar-menu-item>
+						<app-navbar-menu-item link="purchases" icon="shopping_basket">Purchases</app-navbar-menu-item>
+						@if (user.roles?.includes(UserRoles.WRITER)){
+							<app-navbar-menu-item link="sales" icon="shopping_basket">Sales</app-navbar-menu-item>
+							<app-navbar-menu-item link="analytics" icon="analytics">Analytics</app-navbar-menu-item>
 						}
-						<a mat-menu-item routerLink="questions" class="menu-item">
-							<mat-icon class="menu-icon">question_answer</mat-icon>
-							<p>Questions</p>
-							<span><mat-icon class="go-arrow">chevron_right</mat-icon></span>
-						</a>
-						<hr class="menu-divider"/>
-						<a mat-menu-item routerLink="add-book" class="menu-item">
-							<mat-icon class="menu-icon">book</mat-icon>
-							<p>Publish</p>
-							<span><mat-icon class="go-arrow">chevron_right</mat-icon></span>
-						</a>
-						<hr class="menu-divider"/>
-						<a mat-menu-item routerLink="logout" class="menu-item">
-							<mat-icon class="menu-icon">exit_to_app</mat-icon>
-							<p>Sign out</p>
-							<span><mat-icon class="go-arrow">chevron_right</mat-icon></span>
-						</a>
-					</mat-menu>
+						<app-navbar-menu-item link="questions" icon="question_answer">Questions</app-navbar-menu-item>
+						<app-navbar-menu-item link="add-book" icon="book">Publish</app-navbar-menu-item>
+						<app-navbar-menu-item link="logout" icon="exit_to_app" last>Sign out</app-navbar-menu-item>
+					</app-navbar-menu>
 				} @else {
-					<a mat-fab extended routerLink="/login" class="btn">
-						LOG IN
-					</a>
-					<a mat-fab extended routerLink="/signup" class="btn">
-						SIGN UP
-					</a>
+					<app-navbar-button link="/login">
+						Log In
+					</app-navbar-button>
+					<app-navbar-button link="/signup">
+						Sign Up
+					</app-navbar-button>
 				}
 			}
 		</div>

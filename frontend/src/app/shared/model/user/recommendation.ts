@@ -1,7 +1,7 @@
 export interface Recommendation {
-	bookId: number;
+	bookId?: number;
 
-	self: string;
-	book: string;
-	user: string;
+	self?: string;
+	book?: string;
+	user?: string;
 }

@@ -1,0 +1,36 @@
+
+.logged-user-name {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  min-height: 65px;
+  color: white;
+  margin-right: 10px;
+}
+
+.user-picture {
+  border-radius: 50%;
+}
+
+::ng-deep {
+  .mat-mdc-menu-panel {
+    background-color: #437C90;
+  }
+
+  html {
+    --mat-menu-container-color: #437C90;
+  }
+}
+
+
+::ng-deep {
+  .mat-mdc-menu-panel {
+    max-width: unset !important;
+  }
+  .mat-mdc-menu-item-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
