@@ -9,7 +9,7 @@ export interface Book {
 	price?: number;
 	pageCount?: number;
 	suggestedAge?: number;
-	publishDate?: number;
+	publishDate?: string;
 	isPaused?: number;
 	salesCategory?: SalesCategory;
 	averageRating?: number;

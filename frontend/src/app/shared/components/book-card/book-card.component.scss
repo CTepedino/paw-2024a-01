@@ -1,0 +1,70 @@
+.book-card {
+  display: flex;
+  height: 250px;
+  margin-top: 10px;
+  margin-left: 10px;
+  overflow: hidden;
+}
+
+
+.book-content {
+  width: 100%;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  padding-left: 50px;
+  max-height: 250px;
+}
+
+
+.book-image {
+  max-height: 250px;
+  max-width: 250px;
+  margin-right: 20px;
+  border-radius: 2px 2px 0 0;
+}
+
+.book-info {
+  flex-grow: 1;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: start;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.mat-mdc-card-header {
+  padding: 0;
+}
+
+.mat-card-content {
+  width: 100%;
+}
+
+.price {
+  color: #0288d1;
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: absolute;
+  bottom: 20px;
+  right: 50px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.book-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 2rem;
+}
+
+.book-genre {
+  margin-bottom: 5px;
+}
