@@ -1,0 +1,9 @@
+@if (cols > 0){
+	<mat-grid-list [cols]="cols" rowHeight="50px" gutterSize="5px">
+		@for (genre of genres(); track genre){
+			<mat-grid-tile>
+				<app-genre-button [genre]="genre" link="/"></app-genre-button>
+			</mat-grid-tile>
+		}
+	</mat-grid-list>
+}

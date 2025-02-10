@@ -18,5 +18,6 @@ import {MatFabAnchor} from "@angular/material/button";
 export class GenreButtonComponent {
   link = input.required<string>()
   genre = input.required<BookGenre>()
+
   protected readonly GenreIcon = GenreIcon;
 }
