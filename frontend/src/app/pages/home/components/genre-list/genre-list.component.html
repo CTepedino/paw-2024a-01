@@ -1,6 +1,5 @@
-
 <mat-grid-list cols="6" rowHeight="50px" gutterSize="10px" class="genre-grid">
-	@for (genre of genres(); track genre){
+	@for (genre of (genres() | async); track genre){
 		<mat-grid-tile>
 			<app-genre-button [genre]="genre" link="/" class="grid-button"></app-genre-button>
 		</mat-grid-tile>

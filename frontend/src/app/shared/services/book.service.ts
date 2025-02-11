@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
 import {BookSearchQuery} from "../model/book/bookSearchQuery";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {Book} from "../model/book/book";
 import {BookMonthlyAnalytics} from "../model/book/bookMonthlyAnalytics";
 import {Deal} from "../model/book/deal";
 import {MediaTypes} from "../const/mediaTypes";
 import {ReviewSearchQuery} from "../model/review/reviewSearchQuery";
 import {Review} from "../model/review/review";
+import {PaginatedContent, setPagination} from "../model/paginatedContent";
 
 @Injectable({
   providedIn: 'root'
@@ -18,16 +19,22 @@ export class BookService {
 
   constructor(private http: HttpClient) {}
 
-  listBooks(query: BookSearchQuery): Observable<Book[]> {
-     let params = new HttpParams();
+  listBooks(query: BookSearchQuery = {}): Observable<PaginatedContent<Book>> {
+    if (!query.size){
+        query.size = 10;
+    }
 
-     Object.entries(query).forEach(([name, value]) => {
-       if (value !== null && value !== undefined){
-         params = params.append(name, value.toString());
-       }
+    let params = new HttpParams();
+
+    Object.entries(query).forEach(([name, value]) => {
+    if (value !== null && value !== undefined){
+     params = params.append(name, value.toString());
+    }
     })
 
-     return this.http.get<Book[]>(this.apiURL, {params: params});
+    return this.http.get<Book[]>(this.apiURL, {params: params, observe: 'response'}).pipe(
+     map((response) => setPagination(response, 10))
+    );
   }
 
   postBook(book: Book) {

@@ -1,24 +1,21 @@
-import {Component, EventEmitter, input, output, ViewChild} from '@angular/core';
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {BubblePaginationDirective} from "../../directives/bubble-pagination.directive";
+import {Component, input, output} from '@angular/core';
+import {NgxPaginationModule} from "ngx-pagination";
+
 
 @Component({
   selector: 'app-paginator',
   imports: [
-    MatPaginator,
-    BubblePaginationDirective
+    NgxPaginationModule
+
   ],
   templateUrl: './paginator.component.html',
   styleUrl: './paginator.component.scss'
 })
 export class PaginatorComponent {
-  page = input<number>(1);
-  size = input<number>(10);
-  total = input.required<number>();
-
+  id = input.required<string>();
   pageChange = output<number>();
 
-  handlePageEvent(e: PageEvent) {
-    this.pageChange.emit(e.pageIndex + 1);
+  handlePageEvent(e: number) {
+    this.pageChange.emit(e);
   }
 }
