@@ -17,7 +17,7 @@ import {PageEvent} from "@angular/material/paginator";
 })
 export class HomeComponent {
 
-	genres: BookGenre[] = Array(18).fill(BookGenre.SCIENCE_FICTION);
+	genres: BookGenre[] = Array(12).fill(BookGenre.SCIENCE_FICTION);
 
 	protected readonly BookGenre = BookGenre;
 

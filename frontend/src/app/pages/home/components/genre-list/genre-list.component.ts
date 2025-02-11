@@ -18,22 +18,4 @@ export class GenreListComponent {
 
 	protected readonly BookGenre = BookGenre;
 
-	cols = this.updateColumns(window.innerWidth);
-
-	@HostListener('window:resize', ['$event'])
-	onResize(event: any) {
-		this.cols = this.updateColumns(window.innerWidth);
-	}
-
-	updateColumns(width: number): number {
-		if (width > 1500) {
-			return 9;
-		} else if (width > 1000) {
-			return 6;
-		} else if (width > 700) {
-			return 4;
-		} else {
-			return 0;
-		}
-	}
 }
