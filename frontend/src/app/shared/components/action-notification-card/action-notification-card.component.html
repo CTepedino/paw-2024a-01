@@ -1,0 +1,12 @@
+<app-notification-card class="notification-card">
+	<card-title><ng-content select="card-title"/></card-title>
+	<card-text class="notice-content">
+		<p>
+			<ng-content select="card-text"/>
+		</p>
+		<app-nav-button [link]="link()" class="notice-action">
+			<ng-content select="card-action"/>
+		</app-nav-button>
+	</card-text>
+</app-notification-card>
+

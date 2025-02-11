@@ -1,0 +1,9 @@
+@for(i of starCount; track $index){
+	@if($index < fullStars()){
+		<mat-icon>star</mat-icon>
+	} @else if ($index == fullStars() && halfStar()){
+		<mat-icon>star_half</mat-icon>
+	} @else {
+		<mat-icon>star_border</mat-icon>
+	}
+}

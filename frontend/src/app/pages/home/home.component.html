@@ -5,7 +5,7 @@
 
 <h5 class="home-margin">Best sellers</h5>
 <mat-grid-list cols="6" rowHeight="290px" gutterSize="5px" class="book-grid">
-	@for(book of bestSellers;track book.book.id){
+	@for(book of bestSellers;track book.id){
 		<mat-grid-tile>
 			<app-small-book-card [book]="book" class="grid-book-card"></app-small-book-card>
 		</mat-grid-tile>
@@ -15,7 +15,7 @@
 
 <h5 class="home-margin">New deals</h5>
 <mat-grid-list cols="6" rowHeight="290px" gutterSize="5px" class="book-grid">
-	@for (book of newDeals; track book.book.id){
+	@for (book of newDeals; track book.id){
 		<mat-grid-tile>
 			<app-small-book-card [book]="book" class="grid-book-card"></app-small-book-card>
 		</mat-grid-tile>
@@ -25,7 +25,7 @@
 
 <h5 class="home-margin">Latest books</h5>
 <mat-grid-list cols="2" rowHeight="260px" gutterSize="5px" class="book-grid">
-	@for (book of books; track book.book.id) {
+	@for (book of books; track book.id) {
 		<mat-grid-tile>
 			<app-book-card class="grid-book-card" [book]="book"/>
 		</mat-grid-tile>

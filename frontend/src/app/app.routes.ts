@@ -3,6 +3,8 @@ import {numericIDGuard} from "./shared/guards/numeric-id.guard";
 import { HomeComponent } from './pages/home/home.component';
 import {BookDetailsComponent} from "./pages/book-details/book-details.component";
 import { SalesComponent } from './pages/sales/sales.component';
+import {NotFoundPageComponent} from "./pages/errors/not-found-page/not-found-page.component";
+
 
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
@@ -34,6 +36,6 @@ export const routes: Routes = [
 	{path: "analytics", component: HomeComponent},
 	{path: "purchases", component: HomeComponent},
 	{path: "sales", component: SalesComponent},
-	{path: "404", component: HomeComponent},
+	{path: "404", component: NotFoundPageComponent},
 	{path: "**", redirectTo: "404"}
 ];

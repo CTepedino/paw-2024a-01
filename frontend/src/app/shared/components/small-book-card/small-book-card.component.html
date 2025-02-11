@@ -1,28 +1,28 @@
-<mat-card matRipple class="book-card" routerLink="/book/{{book().book.id}}">
+<mat-card matRipple class="book-card" routerLink="/book/{{book().id}}">
 	<mat-card-header>
-		<app-book-badge [category]="book().book.salesCategory"/>
-		<img matCardImage class="book-image" [src]="book().book.cover" alt="Book cover"/>
+		<app-book-badge [category]="book().salesCategory"/>
+		<img matCardImage class="book-image" [src]="book().cover" alt="Book cover"/>
 	</mat-card-header>
 	<mat-card-content class="content">
-		<h2 class="book-title">{{book().book.title}}</h2>
+		<h2 class="book-title">{{book().title}}</h2>
 		<p class="writer">
-			By {{book().writer.firstName}} {{book().writer.lastName}}
+			By {{book().writerInfo.firstName}} {{book().writerInfo.lastName}}
 
 		</p>
 		@if (showDate()) {
-			<p class="extra-info">{{book().book.publishDate}}</p>
+			<p class="extra-info">{{book().publishDate}}</p>
 		} @else {
-			<p class="extra-info">{{book().book.genre}}</p>
+			<p class="extra-info">{{book().genre}}</p>
 		}
 		<div class="price">
 			@if(book().deal){
 				<p class="deal">
-					<span class="crossed">${{book().book.price | number}}</span>
+					<span class="crossed">${{book().price | number}}</span>
 					<span class="discount"> -{{percentage() | number}}%</span>
 				</p>
-				<p class="deal-price">${{book().deal?.price | number}}</p>
+				<p class="deal-price">${{book().dealInfo?.price | number}}</p>
 			} @else {
-				<p class="no-deal">${{book().book.price | number}}</p>
+				<p class="no-deal">${{book().price | number}}</p>
 			}
 		</div>
 	</mat-card-content>

@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {AsyncPipe, JsonPipe, NgOptimizedImage} from "@angular/common";
+import {Component} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 import {Observable} from "rxjs";
 import {AuthService} from "./shared/services/auth.service";
 import {Book} from "./shared/model/book/book";
@@ -10,7 +9,7 @@ import {NavbarComponent} from "./shared/components/navbar/navbar.component";
 
 @Component({
   selector: 'app-root',
-	imports: [RouterOutlet, JsonPipe, AsyncPipe, NgOptimizedImage, NavbarComponent],
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

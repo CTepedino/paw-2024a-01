@@ -37,7 +37,7 @@ export class NavbarComponent {
     id: 1,
     firstName: "John",
     lastName: "Doe",
-    profilePicture: "assets/cybrary.png",
+    profilePicture: "assets/user.jpeg",
     roles: [UserRoles.READER, UserRoles.WRITER]
   };
   protected readonly UserRoles = UserRoles;
