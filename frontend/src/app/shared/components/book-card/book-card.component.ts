@@ -1,15 +1,11 @@
 import {Component, computed, input} from '@angular/core';
-import {Book} from "../../model/book/book";
 import {SalesCategory} from "../../model/book/salesCategory";
-import {User} from "../../model/user/user";
-import {Deal} from "../../model/book/deal";
 import {MatCard, MatCardContent, MatCardHeader, MatCardImage} from "@angular/material/card";
 import {RouterLink} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {DatePipe, DecimalPipe} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {BookWithInfo} from "../../model/book/bookWithInfo";
-import {MatBadge} from "@angular/material/badge";
 import {BookBadgeComponent} from "../book-badge/book-badge.component";
 
 @Component({
@@ -24,7 +20,6 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 		DecimalPipe,
 		MatCardHeader,
 		MatRipple,
-		MatBadge,
 		BookBadgeComponent
 	],
   templateUrl: './book-card.component.html',
