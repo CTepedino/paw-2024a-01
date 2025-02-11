@@ -1,0 +1,13 @@
+<div class="center">
+	<mat-paginator
+		appBubblePagination
+		
+		[pageIndex]="page()"
+		[pageSize]="size()"
+		
+		[appCustomLength]="total()"
+		[length]="total()"
+		
+		(page)="handlePageEvent($event)"
+	></mat-paginator>
+</div>

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {TutorialCardsComponent} from "./components/tutorial-cards/tutorial-cards.component";
 import {BookGenre} from "../../shared/model/book/bookGenre";
@@ -6,10 +6,12 @@ import {GenreListComponent} from "./components/genre-list/genre-list.component";
 import {BookCardComponent} from "../../shared/components/book-card/book-card.component";
 import {SalesCategory} from "../../shared/model/book/salesCategory";
 import {SmallBookCardComponent} from "../../shared/components/small-book-card/small-book-card.component";
+import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-home',
-	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent, SmallBookCardComponent],
+	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent, SmallBookCardComponent, PaginatorComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -45,4 +47,10 @@ export class HomeComponent {
 	books = Array(10).fill(this.bookWithInfo);
 	bestSellers = this.books.slice(0, 6);
 	newDeals = this.books.slice(0, 3);
+
+	page = signal<number>(1);
+
+	onPageChange(e : number){
+		this.page.set(e);
+	}
 }
