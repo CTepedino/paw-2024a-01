@@ -1,3 +1,18 @@
 <div class="container sales">
     <h1 i18n class="page-title">My Sales</h1>
+
+    <mat-grid-list cols="2">
+        <mat-form-field>
+            <mat-label i18n>Title</mat-label>
+            <input matInput>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label i18n>Select order status</mat-label>
+            <mat-select [(ngModel)]="selectedStatus">
+                @for (status of statusValues; track status){
+                    <mat-option [value]="status">{{ status }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </mat-grid-list>
 </div>
