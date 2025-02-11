@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
 
-//TODO: use color from theme
 .mat-toolbar {
   background-color: #437C90;
   min-height: 80px;
@@ -40,7 +39,8 @@
   height: 48px;
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 20px;
+
 }
 
 
@@ -59,6 +59,8 @@
 ::ng-deep .mdc-line-ripple {
   display: none
 }
+
+
 
 
 
