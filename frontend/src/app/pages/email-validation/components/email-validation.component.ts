@@ -1,17 +1,18 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
   ActionNotificationCardComponent
 } from "../../../shared/components/action-notification-card/action-notification-card.component";
 
+
 @Component({
-  selector: 'app-not-found-page',
+  selector: 'app-email-validation',
   imports: [
     ActionNotificationCardComponent
   ],
-  templateUrl: './not-found-page.component.html',
-  styleUrl: './not-found-page.component.scss',
+  templateUrl: './email-validation.component.html',
+  styleUrl: './email-validation.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class NotFoundPageComponent {
+export class EmailValidationComponent {
 
 }

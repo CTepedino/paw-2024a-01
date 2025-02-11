@@ -3,9 +3,9 @@ import {ReviewCardComponent} from "./components/review-card/review-card.componen
 
 @Component({
   selector: 'app-book-details',
-  imports: [
-    ReviewCardComponent
-  ],
+	imports: [
+		ReviewCardComponent
+	],
   templateUrl: './book-details.component.html',
   styleUrl: './book-details.component.scss',
 })
