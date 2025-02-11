@@ -32,3 +32,11 @@
 	}
 </mat-grid-list>
 
+{{page()}}
+
+<app-paginator
+	(pageChange)="onPageChange($event)"
+	[total]="100"
+	[size]="10"
+	[page]="0"
+></app-paginator>
