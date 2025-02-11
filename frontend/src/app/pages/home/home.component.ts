@@ -19,7 +19,15 @@ export class HomeComponent {
 
 	protected readonly BookGenre = BookGenre;
 
-	book = {
+	user = {
+		firstName: 'juan',
+		lastName: 'perez'
+	}
+	deal = {
+		price: 15000
+	}
+
+	bookWithInfo = {
 		id: 1,
 		title: "my book",
 		averageRating: 2,
@@ -29,17 +37,10 @@ export class HomeComponent {
 		price: 40000,
 		genre: BookGenre.FICTION,
 		salesCategory: SalesCategory.BEST_SELLER,
-		cover: "assets/book-cover.jpg"
+		cover: "assets/book-cover.jpg",
+		writerInfo: this.user,
+		dealInfo: this.deal
 	}
-	user = {
-		firstName: 'juan',
-		lastName: 'perez'
-	}
-	deal = {
-		price: 15000
-	}
-
-	bookWithInfo = {book: this.book, writer: this.user, deal: this.deal}
 
 	books = Array(10).fill(this.bookWithInfo);
 	bestSellers = this.books.slice(0, 6);
