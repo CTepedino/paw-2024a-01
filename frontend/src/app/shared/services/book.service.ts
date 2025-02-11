@@ -6,9 +6,9 @@ import {Observable} from "rxjs";
 import {Book} from "../model/book/book";
 import {BookMonthlyAnalytics} from "../model/book/bookMonthlyAnalytics";
 import {Deal} from "../model/book/deal";
-import {ReviewSearchQuery} from "../model/book/reviewSearchQuery";
-import {Review} from "../model/book/review";
 import {MediaTypes} from "../const/mediaTypes";
+import {ReviewSearchQuery} from "../model/review/reviewSearchQuery";
+import {Review} from "../model/review/review";
 
 @Injectable({
   providedIn: 'root'

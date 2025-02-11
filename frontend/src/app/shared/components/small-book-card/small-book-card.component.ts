@@ -1,6 +1,6 @@
 import {booleanAttribute, Component, computed, input} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardImage} from "@angular/material/card";
-import {DatePipe, DecimalPipe} from "@angular/common";
+import {DecimalPipe} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {RouterLink} from "@angular/router";
 import {BookWithInfo} from "../../model/book/bookWithInfo";
@@ -17,7 +17,6 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 		MatCardImage,
 		MatRipple,
 		RouterLink,
-		DatePipe,
 		BookBadgeComponent
 	],
   templateUrl: './small-book-card.component.html',
@@ -33,8 +32,8 @@ export class SmallBookCardComponent {
 		if (this.book().deal == null){
 			return 0;
 		}
-		const price = this.book().book.price || 0;
-		const dealPrice = this.book().deal?.price || 0;
+		const price = this.book().price || 0;
+		const dealPrice = this.book().dealInfo?.price || 0;
 		return ((price-dealPrice)/price)*100;
 	});
 }

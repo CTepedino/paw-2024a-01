@@ -1,26 +1,26 @@
-<mat-card matRipple class="book-card" routerLink="/book/{{book().book.id}}">
+<mat-card matRipple class="book-card" routerLink="/book/{{book().id}}">
 	<mat-card-header>
-		<app-book-badge [category]="book().book.salesCategory"/>
-		<img mat-card-image [src]="book().book.cover" alt="Book cover" class="book-image">
+		<app-book-badge [category]="book().salesCategory"/>
+		<img mat-card-image [src]="book().cover" alt="Book cover" class="book-image">
 		<mat-card-content class="book-content">
-			<h2 class="book-title">{{book().book.title}}</h2>
-			<p>By {{book().writer.firstName}} {{book().writer.lastName}}</p>
-			<p class="book-genre">{{book().book.genre}}</p>
+			<h2 class="book-title">{{book().title}}</h2>
+			<p>By {{book().writerInfo.firstName}} {{book().writerInfo.lastName}}</p>
+			<p class="book-genre">{{book().genre}}</p>
 			<div class="book-details">
-				<span><mat-icon>star</mat-icon>{{book().book.averageRating | number: '1.1-2'}}</span>
-				<span><mat-icon>face</mat-icon>+{{book().book.suggestedAge}}</span>
-				<span><mat-icon>description</mat-icon>{{book().book.pageCount}}</span>
-				<span><mat-icon>calendar_today</mat-icon>{{book().book.publishDate | date: 'yyyy'}}</span>
+				<span><mat-icon>star</mat-icon>{{book().averageRating | number: '1.1-2'}}</span>
+				<span><mat-icon>face</mat-icon>+{{book().suggestedAge}}</span>
+				<span><mat-icon>description</mat-icon>{{book().pageCount}}</span>
+				<span><mat-icon>calendar_today</mat-icon>{{book().publishDate | date: 'yyyy'}}</span>
 			</div>
 			<p class="price">
-				@if(book().deal){
+				@if(book().dealInfo){
 					<p class="deal">
-						<span class="crossed">${{book().book.price | number}}</span>
+						<span class="crossed">${{book().price | number}}</span>
 						<span class="discount"> -{{percentage() | number}}%</span>
 					</p>
-					<p class="deal-price">${{book().deal?.price | number}}</p>
+					<p class="deal-price">${{book().dealInfo?.price | number}}</p>
 				} @else {
-					${{book().book.price | number}}
+					${{book().price | number}}
 				}
 			</p>
 		</mat-card-content>

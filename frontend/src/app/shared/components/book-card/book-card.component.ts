@@ -36,11 +36,11 @@ export class BookCardComponent {
     protected readonly SalesCategory = SalesCategory;
 
 	percentage = computed<number>(() => {
-		if (this.book().deal == null){
+		if (this.book().dealInfo == null){
 			return 0;
 		}
-		const price = this.book().book.price || 0;
-		const dealPrice = this.book().deal?.price || 0;
+		const price = this.book().price || 0;
+		const dealPrice = this.book().dealInfo?.price || 0;
 		return ((price-dealPrice)/price)*100;
 	} )
 }
