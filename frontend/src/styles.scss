@@ -46,7 +46,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .g-bubble__active {
-  background-color: #6193a1;
+  background-color: #437C90;
   color: white;
 }
 
@@ -56,5 +56,22 @@ mat-paginator {
 
 .mat-mdc-paginator-range-actions {
   margin-right: 12px !important;
+}
+
+:root {
+  @include mat.tabs-overrides((
+          container-height: 80px,
+          active-indicator-height: 2px,
+          active-indicator-color: white,
+          divider-height: 2px,
+          divider-color: #437C90,
+          active-focus-indicator-color: white,
+          inactive-label-text-color: white,
+          active-label-text-color: white,
+          active-focus-label-text-color: white,
+          inactive-focus-label-text-color: white,
+          active-hover-label-text-color: white,
+          inactive-hover-label-text-color: white,
+  ));
 }
 
