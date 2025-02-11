@@ -1,0 +1,25 @@
+.notice-card {
+  max-width: 400px;
+  min-height: 300px;
+  margin: 40px auto;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mat-mdc-card-content {
+  height: 100%;
+}
+
+.notice-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.notice-action {
+  padding-bottom: 20px;
+}

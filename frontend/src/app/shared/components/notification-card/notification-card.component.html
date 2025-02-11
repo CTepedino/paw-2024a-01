@@ -1,0 +1,15 @@
+<mat-card class="notice-card">
+	<mat-card-header class="notice-title">
+		<h2>
+			<ng-content select="card-title"/>
+		</h2>
+	</mat-card-header>
+	<mat-card-content class="notice-content">
+		<p>
+			<ng-content select="card-text"/>
+		</p>
+		<app-nav-button [link]="link()" class="notice-action">
+			<ng-content select="card-action"/>
+		</app-nav-button>
+	</mat-card-content>
+</mat-card>
