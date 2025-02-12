@@ -195,7 +195,7 @@ public class MailServiceImpl implements MailService{
         String subject = emailMessageSource.getMessage("mail.resetPasswordEmail.subject", null, currentLocale);
         HashMap<String, Object> data = new HashMap<>();
         data.put("url", env.getProperty("baseUrl"));
-        data.put("resetPasswordUrl", env.getProperty("baseUrl") + "/reset-password/" + user.getUserId() + "/" + code);
+        data.put("resetPasswordUrl", env.getProperty("baseUrl") + "/reset-password?id=" + user.getUserId() + "&code=" + code);
         data.put("expiration", expiration.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(currentLocale)));
 
         try {
