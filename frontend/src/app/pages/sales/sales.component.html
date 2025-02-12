@@ -34,6 +34,11 @@
             <mat-grid-tile i18n class="table-title center-left">Status</mat-grid-tile>
             <mat-grid-tile i18n class="table-title center-left">Actions</mat-grid-tile>
         </mat-grid-list>
+
+
+        @for (order of orders; track order){
+            <app-sales-order-card></app-sales-order-card>
+        }
     }
 
 </div>
