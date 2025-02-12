@@ -5,10 +5,11 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {FormsModule} from "@angular/forms";
 import {OrderStatus} from "../../shared/model/order/orderStatus";
+import {SalesOrderCardComponent} from "./components/sales-order-card/sales-order-card.component";
 
 @Component({
   selector: 'app-sales',
-  imports: [MatGridListModule, MatFormFieldModule, MatLabel, MatInputModule, MatSelectModule, FormsModule],
+  imports: [MatGridListModule, MatFormFieldModule, MatLabel, MatInputModule, MatSelectModule, FormsModule, SalesOrderCardComponent],
   templateUrl: './sales.component.html',
   styleUrl: './sales.component.scss',
 })
