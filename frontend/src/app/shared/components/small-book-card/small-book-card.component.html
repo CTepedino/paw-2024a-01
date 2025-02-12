@@ -1,7 +1,7 @@
 <mat-card matRipple class="book-card" routerLink="/book/{{book().id}}">
 	<mat-card-header>
 		<app-book-badge [category]="book().salesCategory"/>
-		<img matCardImage class="book-image" [src]="book().cover" alt="Book cover"/>
+		<img matCardImage class="book-image" src="{{book().cover}}?width=250&height=160" alt="Book cover"/>
 	</mat-card-header>
 	<mat-card-content class="content">
 		<h2 class="book-title">{{book().title}}</h2>
