@@ -19,8 +19,12 @@ export class AuthService {
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasValidToken());
     isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
+    private loggedUserUrl: string | null | undefined;
 
     getLoggedUser(): Observable<User | null> {
+        if (this.loggedUserUrl){
+            return this.http.get<User>(this.loggedUserUrl);
+        }
         if (this.hasValidToken()){
             return this.http.get<Index>(this.baseUrl).pipe(
                 switchMap((index) => this.http.get<User>(index.loggedUser!))
@@ -35,6 +39,7 @@ export class AuthService {
         tap(response => {
             const jwt = response.headers.get('Authorization');
             const refreshToken = response.headers.get('X-Refresh-Token');
+            this.loggedUserUrl = response.body?.loggedUser;
             if (jwt && refreshToken){
                 this.storeTokens(jwt, refreshToken, false);
                 this.isLoggedInSubject.next(true);
@@ -49,6 +54,7 @@ export class AuthService {
         localStorage.removeItem('jwt');
         sessionStorage.removeItem('refreshToken');
         localStorage.removeItem('refreshToken');
+        this.loggedUserUrl = null;
         this.isLoggedInSubject.next(false);
     }
 

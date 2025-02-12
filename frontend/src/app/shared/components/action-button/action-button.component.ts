@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {booleanAttribute, Component, input} from '@angular/core';
 import {MatFabButton} from "@angular/material/button";
 
 @Component({
@@ -10,5 +10,6 @@ import {MatFabButton} from "@angular/material/button";
   styleUrl: './action-button.component.scss'
 })
 export class ActionButtonComponent {
-
+	submit = input(false, {transform: booleanAttribute});
+	disabled = input(false, {transform: booleanAttribute});
 }
