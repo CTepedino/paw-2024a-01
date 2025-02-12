@@ -36,7 +36,7 @@ export class LoginComponent {
   authService = inject(AuthService);
   router = inject(Router);
 
-  redirect = input<string>('/')
+  redirect = input<string>()
 
   loginFailed = signal(false);
 
@@ -54,25 +54,22 @@ export class LoginComponent {
   });
 
   doLogin(){
-    const email = this.loginForm.get('email')?.value;
-    const password = this.loginForm.get('password')?.value;
-    const rememberMe = this.loginForm.get('rememberMe')?.value;
+    if (this.loginForm.valid) {
+      const email = this.loginForm.get('email')?.value;
+      const password = this.loginForm.get('password')?.value;
+      const rememberMe = this.loginForm.get('rememberMe')?.value;
 
-    this.authService.login(email ?? '', password ?? '', rememberMe ?? false).pipe(
-        map( index => {
-          if (index.loggedUser) {
-            this.router.navigate([this.redirect()]);
-          } else {
+      this.authService.login(email ?? '', password ?? '', rememberMe ?? false).pipe(
+          map(index => {
+            this.router.navigate([this.redirect() || '/']);
+          }),
+          catchError(() => {
             this.loginFailed.set(true);
-          }
-        }),
-        catchError(() => {
-          this.loginFailed.set(true);
-          this.loginForm.reset();
-          return throwError(() => new Error("login failed"))
-        })
-    ).subscribe();
-
+            this.loginForm.reset();
+            return throwError(() => new Error("login failed"))
+          })
+      ).subscribe();
+    }
   }
 
 }

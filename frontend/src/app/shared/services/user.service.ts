@@ -40,9 +40,9 @@ export class UserService {
     );
   }
 
-  putPassword(userUrl: string, password: string){
-    this.http.put(
-        `${this.apiURL}/password`,
+  putPassword(userUrl: string, password: string): Observable<void>{
+    return this.http.put<void>(
+        `${userUrl}/password`,
         {password: password},
         {headers: {"Content-Type": MediaTypes.PASSWORD}}
     );
