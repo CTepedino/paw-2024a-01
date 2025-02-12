@@ -1,7 +1,7 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {
   ActionNotificationCardComponent
-} from "../../../shared/components/action-notification-card/action-notification-card.component";
+} from "../../shared/components/action-notification-card/action-notification-card.component";
 
 
 @Component({
