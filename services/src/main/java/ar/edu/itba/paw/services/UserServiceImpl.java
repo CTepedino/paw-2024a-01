@@ -200,8 +200,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void validateResetPasswordCode(String email, String code) {
-        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
+    public void validateResetPasswordCode(String idString, String code) {
+        long id;
+        try {
+            id = Long.parseLong(idString);
+        } catch (Exception e){
+            throw new InvalidCodeException();
+        }
+
+        User user = findById(id).orElseThrow(UserNotFoundException::new);
 
         if (rcs.checkResetCode(user.getUserId(), code)) {
             List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(p -> new SimpleGrantedAuthority(p.toString())).toList();
@@ -219,8 +226,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void validateEmail(String email, String code) {
-        Optional<User> maybeUser = userDao.findByEmail(email);
+    public void validateEmail(String idString, String code) {
+        long id;
+        try {
+            id = Long.parseLong(idString);
+        } catch (Exception e){
+            throw new InvalidCodeException();
+        }
+
+        Optional<User> maybeUser = userDao.findById(id);
         if (maybeUser.isPresent() && !maybeUser.get().isEnabled()){
             User user = maybeUser.get();
             if (evs.checkValidation(user.getUserId(), code)){
@@ -232,14 +246,14 @@ public class UserServiceImpl implements UserService {
                 Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
-                LOGGER.atWarn().setMessage("Failed to Validate email for user: {} - Invalid Code").addArgument(email).log();
+                LOGGER.atWarn().setMessage("Failed to Validate email for user: {} - Invalid Code").addArgument(id).log();
                 throw new InvalidCodeException();
             }
         } else {
-            LOGGER.atWarn().setMessage("Failed to Validated email for user: {} - No validation code").addArgument(email).log();
+            LOGGER.atWarn().setMessage("Failed to Validated email for user: {} - No validation code").addArgument(id).log();
             throw new NoValidationCodeException();
         }
-        LOGGER.atDebug().setMessage("Validated email for user: {}").addArgument(email).log();
+        LOGGER.atDebug().setMessage("Validated email for user: {}").addArgument(id).log();
     }
 
     @Transactional

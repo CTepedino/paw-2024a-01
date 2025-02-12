@@ -13,6 +13,8 @@ import {idIsWriterGuard} from "./shared/guards/id-is-writer.guard";
 import {userIdGuard} from "./shared/guards/user-id.guard";
 import {isNotBookWriterGuard} from "./shared/guards/is-not-book-writer.guard";
 import {bookWriterGuard} from "./shared/guards/book-writer.guard";
+import {canValidateEmailGuard} from "./shared/guards/can-validate-email.guard";
+import {validateResetCodeGuard} from "./shared/guards/validate-reset-code.guard";
 
 
 export const routes: Routes = [
@@ -21,8 +23,8 @@ export const routes: Routes = [
 	{path: "signup", component: HomeComponent, canActivate: [notLoggedGuard]},
 	{path: "login", component: LoginComponent, canActivate: [notLoggedGuard]},
 	{path: "forgot-password", component: ForgotPasswordComponent, canActivate: [notLoggedGuard]},
-	{path: "validate", component: HomeComponent, canActivate: [notLoggedGuard]},
-	{path: "reset-password", component: HomeComponent, canActivate: [notLoggedGuard]},
+	{path: "validate", component: HomeComponent, canActivate: [canValidateEmailGuard]},
+	{path: "reset-password", component: HomeComponent, canActivate: [validateResetCodeGuard]},
 
 	{path: "search", component: HomeComponent},
 

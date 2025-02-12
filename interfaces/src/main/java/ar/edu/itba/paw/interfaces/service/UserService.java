@@ -25,10 +25,10 @@ public interface UserService {
     void deleteProfilePicture(long userId);
 
     void sendResetCode(String email);
-    void validateResetPasswordCode(String email, String code);
+    void validateResetPasswordCode(String id, String code);
     boolean isResetPasswordCode(String code);
 
-    void validateEmail(String email, String code);
+    void validateEmail(String id, String code);
     void resendValidation(String email);
     boolean isEmailValidationCode(String code);
 }
