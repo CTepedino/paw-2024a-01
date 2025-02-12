@@ -3,7 +3,7 @@ import {SalesCategory} from "../../model/book/salesCategory";
 import {MatCard, MatCardContent, MatCardHeader, MatCardImage} from "@angular/material/card";
 import {RouterLink} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
-import {DatePipe, DecimalPipe} from "@angular/common";
+import {DatePipe, DecimalPipe, NgOptimizedImage} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {BookWithInfo} from "../../model/book/bookWithInfo";
 import {BookBadgeComponent} from "../book-badge/book-badge.component";
@@ -20,7 +20,8 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 		DecimalPipe,
 		MatCardHeader,
 		MatRipple,
-		BookBadgeComponent
+		BookBadgeComponent,
+		NgOptimizedImage
 	],
   templateUrl: './book-card.component.html',
   styleUrl: './book-card.component.scss'

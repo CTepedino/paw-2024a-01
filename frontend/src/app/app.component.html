@@ -1,2 +1,7 @@
-<app-navbar></app-navbar>
+<app-navbar
+	[showSearchBar]="showSearchBar"
+	[isLoggedIn]="isLoggedIn"
+	(logout)="logout()"
+	[loggedUser]="user | async"
+></app-navbar>
 <router-outlet></router-outlet>

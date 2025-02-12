@@ -27,12 +27,12 @@ public class BookMonthlyAnalyticsDTO {
         dto.salesTotal = a.getTotalSales();
         dto.month = a.getPeriod();
 
-        dto.self = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).path("monthly_analytics").path(dto.month.toString()).build();
+        dto.self = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).path("monthly-analytics").path(dto.month.toString()).build();
         dto.book = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).build();
-        dto.prevMonth = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).path("monthly_analytics")
+        dto.prevMonth = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).path("monthly-analytics")
                 .path(dto.month.minusMonths(1).toString()).build();
         if (!a.getPeriod().equals(YearMonth.now())){
-            dto.nextMonth = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).path("monthly_analytics")
+            dto.nextMonth = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(dto.bookId)).path("monthly-analytics")
                     .path(dto.month.plusMonths(1).toString()).build();
         }
         return dto;

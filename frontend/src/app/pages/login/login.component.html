@@ -1,0 +1,40 @@
+<app-notification-card>
+	<card-title>Log in to Cybrary</card-title>
+	<card-text>
+		<form class="form" [formGroup]="loginForm" (ngSubmit)="doLogin()">
+			
+			@if (loginFailed()){
+				<p class="red-text">There was an error with your login attempt. Please verify your email and password and try again</p>
+			}
+			
+			<mat-form-field appearance="outline" class="input">
+				<mat-label>Email</mat-label>
+				<input matInput required email formControlName="email">
+			</mat-form-field>
+			
+			<mat-form-field appearance="outline" class="password-input">
+				<mat-label>Password</mat-label>
+				<input matInput [type]="hide() ? 'password' : 'text'" required formControlName="password"/>
+				<button
+					mat-icon-button
+					matSuffix
+					(click)="toggleHide($event)"
+				>
+					<mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+				</button>
+			</mat-form-field>
+			
+			<mat-checkbox class="remember-me" formControlName="rememberMe">Remember me</mat-checkbox>
+			
+			<app-action-button class="login-btn" submit [disabled]="!loginForm.valid">
+				Log in
+			</app-action-button>
+			
+			<div class="help-message">
+				<p>Don't have an account? <a routerLink="/signup">Register</a></p>
+				
+				<p><a routerLink="/forgot-password">Forgot your password?</a></p>
+			</div>
+		</form>
+	</card-text>
+</app-notification-card>

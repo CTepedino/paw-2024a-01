@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../../enviroment/enviroment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {map, Observable, tap} from "rxjs";
+import {BehaviorSubject, map, Observable, of, switchMap, tap} from "rxjs";
 import {Index} from "../model";
 import {MediaTypes} from "../const/mediaTypes";
+import {User} from "../model/user/user";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,24 @@ export class AuthService {
 
   private baseUrl = environment.apiURL;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private userService: UserService) { }
+
+    private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasValidToken());
+    isLoggedIn$ = this.isLoggedInSubject.asObservable();
+
+    private loggedUserUrl: string | null | undefined;
+
+    getLoggedUser(): Observable<User | null> {
+        if (this.loggedUserUrl){
+            return this.http.get<User>(this.loggedUserUrl);
+        }
+        if (this.hasValidToken()){
+            return this.http.get<Index>(this.baseUrl).pipe(
+                switchMap((index) => this.http.get<User>(index.loggedUser!))
+            );
+        }
+        return of(null);
+    }
 
     login(email: string, password: string, rememberMe: boolean = false): Observable<Index> {
     const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(`${email}:${password}`)});
@@ -20,8 +39,10 @@ export class AuthService {
         tap(response => {
             const jwt = response.headers.get('Authorization');
             const refreshToken = response.headers.get('X-Refresh-Token');
+            this.loggedUserUrl = response.body?.loggedUser;
             if (jwt && refreshToken){
                 this.storeTokens(jwt, refreshToken, false);
+                this.isLoggedInSubject.next(true);
             }
         }),
         map(response => response.body!)
@@ -33,6 +54,8 @@ export class AuthService {
         localStorage.removeItem('jwt');
         sessionStorage.removeItem('refreshToken');
         localStorage.removeItem('refreshToken');
+        this.loggedUserUrl = null;
+        this.isLoggedInSubject.next(false);
     }
 
     refreshToken(): Observable<void> {
@@ -67,7 +90,9 @@ export class AuthService {
           `${this.baseUrl}/reset-password-codes`,
           {email: email},
           {headers: {"Content-Type": MediaTypes.RESET_CODE}}
-      ).pipe(map(() => void 0))
+      ).pipe(
+          map(() => void 0)
+      )
     }
 
     resendVerificationCodeEmail(email: string): Observable<void> {
@@ -100,4 +125,7 @@ export class AuthService {
       this.storeTokens(jwt, refreshToken, localStorage.getItem('jwt') !== null)
     }
 
+    private hasValidToken(): boolean {
+        return !!this.getJwtToken();
+    }
 }

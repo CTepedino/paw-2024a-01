@@ -186,16 +186,16 @@ public class BookJpaDao implements BookDao {
         StringBuilder nativeQueryStr = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
 
-        nativeQueryStr.append("SELECT o.book_id FROM orders o LEFT JOIN books b ON o.book_id = b.book_id LEFT JOIN deals d ON d.id = b.book_id ");
+        nativeQueryStr.append("SELECT b.book_id FROM books b INNER JOIN orders o ON o.book_id = b.book_id");
         prepareSearchQueryParams(nativeQueryStr, params, queryDTO);
-        nativeQueryStr.append(" GROUP BY o.book_id ");
+        nativeQueryStr.append(" GROUP BY b.book_id ORDER BY COUNT(*) DESC");
 
         Query nativeQuery = em.createNativeQuery(nativeQueryStr.toString());
         for(Map.Entry<String, Object> entry : params.entrySet()) {
             nativeQuery.setParameter(entry.getKey(), entry.getValue());
         }
 
-        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY COUNT(o.book.bookId) DESC", Book.class);
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b JOIN Order o ON o.book.bookId = b.bookId WHERE b.bookId IN :idList GROUP BY b, o.book.bookId ORDER BY b.orderCount DESC", Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, queryDTO.getOffset(), queryDTO.getLimit());
     }

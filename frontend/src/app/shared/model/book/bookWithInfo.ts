@@ -4,5 +4,5 @@ import {Deal} from "./deal";
 
 export interface BookWithInfo extends Book{
 	writerInfo: Partial<User>
-	dealInfo?: Partial<Deal>
+	dealInfo?: Partial<Deal> | null
 }
