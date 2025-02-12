@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void sendResetCode(String email) {
-        User user = findByEmail(email).orElseThrow(UserNotFoundException::new);
+        User user = findByEmail(email).orElseThrow(BadRequestException::new);
         if (user.getResetCode() == null){
             rcs.create(user);
         } else {
@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void resendValidation(String email) {
-        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        User user = userDao.findByEmail(email).orElseThrow(BadRequestException::new);
         evs.resend(user);
     }
 

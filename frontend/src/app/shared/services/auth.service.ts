@@ -90,7 +90,9 @@ export class AuthService {
           `${this.baseUrl}/reset-password-codes`,
           {email: email},
           {headers: {"Content-Type": MediaTypes.RESET_CODE}}
-      ).pipe(map(() => void 0))
+      ).pipe(
+          map(() => void 0)
+      )
     }
 
     resendVerificationCodeEmail(email: string): Observable<void> {

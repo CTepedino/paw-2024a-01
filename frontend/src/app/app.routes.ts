@@ -5,6 +5,7 @@ import {BookDetailsComponent} from "./pages/book-details/book-details.component"
 import { SalesComponent } from './pages/sales/sales.component';
 import {NotFoundPageComponent} from "./pages/errors/not-found-page/not-found-page.component";
 import {LoginComponent} from "./pages/login/login.component";
+import {ForgotPasswordComponent} from "./pages/forgot-password/forgot-password.component";
 
 
 export const routes: Routes = [
@@ -13,8 +14,7 @@ export const routes: Routes = [
 	{path: "signup", component: HomeComponent},
 	{path: "validate", component: HomeComponent},
 	{path: "login", component: LoginComponent},
-	{path: "change-password", component: HomeComponent},
-	{path: "forgot-password", component: HomeComponent},
+	{path: "forgot-password", component: ForgotPasswordComponent},
 	{path: "reset-password/:id/:code", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "add-book", component: HomeComponent},
 	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard]},
@@ -33,6 +33,7 @@ export const routes: Routes = [
 	{path: "profile/:id/bought-books", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "profile/:id/recommendations", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "profile/:id/wishlist", component: HomeComponent, canActivate: [numericIDGuard]},
+	{path: "change-password", component: HomeComponent},
 	{path: "edit-profile", component: HomeComponent},
 	{path: "analytics", component: HomeComponent},
 	{path: "purchases", component: HomeComponent},

@@ -4,12 +4,11 @@ import {MatInput} from "@angular/material/input";
 
 import {NotificationCardComponent} from "../../shared/components/notification-card/notification-card.component";
 import {MatCheckbox} from "@angular/material/checkbox";
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../shared/services/auth.service";
-import {catchError, map, tap, throwError} from "rxjs";
-import {F} from "@angular/cdk/keycodes";
+import {catchError, map, throwError} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
 
@@ -26,7 +25,7 @@ import {MatIconButton} from "@angular/material/button";
     RouterLink,
     MatIcon,
     MatIconButton,
-    MatSuffix
+    MatSuffix,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
