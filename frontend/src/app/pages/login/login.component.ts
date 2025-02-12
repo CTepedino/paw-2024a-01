@@ -1,4 +1,4 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, input, signal} from '@angular/core';
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 
@@ -36,6 +36,8 @@ export class LoginComponent {
   authService = inject(AuthService);
   router = inject(Router);
 
+  redirect = input<string>('/')
+
   loginFailed = signal(false);
 
   hide = signal(true);
@@ -59,7 +61,7 @@ export class LoginComponent {
     this.authService.login(email ?? '', password ?? '', rememberMe ?? false).pipe(
         map( index => {
           if (index.loggedUser) {
-            this.router.navigate(['/']);
+            this.router.navigate([this.redirect()]);
           } else {
             this.loginFailed.set(true);
           }

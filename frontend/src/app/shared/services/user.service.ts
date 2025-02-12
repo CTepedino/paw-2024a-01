@@ -28,6 +28,10 @@ export class UserService {
     return this.http.get<User>(userUrl);
   }
 
+  getUserById(id: number): Observable<User>{
+    return this.http.get<User>(`${this.apiURL}/${id}`);
+  }
+
   putUser(userUrl: string, user: User){
     this.http.put(
         this.apiURL,
