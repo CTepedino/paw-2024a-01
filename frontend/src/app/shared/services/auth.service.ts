@@ -65,7 +65,6 @@ export class AuthService {
             const newRefreshToken = response.headers.get('X-Refresh-Token');
             if (jwt && newRefreshToken){
                 this.updateTokens(jwt, newRefreshToken);
-                this.isLoggedInSubject.next(true);
             }
         }),
         map(() => void 0)

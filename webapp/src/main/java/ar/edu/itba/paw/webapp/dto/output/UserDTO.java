@@ -58,7 +58,7 @@ public class UserDTO {
         dto.salesTotal = u.getSalesTotal();
 
         dto.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).build();
-        dto.profilePicture = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("profile_picture").build();
+        dto.profilePicture = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("profile-picture").build();
         dto.password = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("password").build();
         dto.ownedBooks = uriInfo.getBaseUriBuilder().path("books").queryParam("owner_id", u.getUserId()).build();
         dto.wishlist = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("wishlist").build();
@@ -67,7 +67,7 @@ public class UserDTO {
         dto.startedOrders = uriInfo.getBaseUriBuilder().path("orders").queryParam("buyer_id", u.getUserId()).build();
         if (u.getRoles().contains(UserRoles.WRITER)){
             dto.publishedBooks = uriInfo.getBaseUriBuilder().path("books").queryParam("writer_id", u.getUserId()).build();
-            dto.currentMonthlyAnalytics = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("monthly_analytics").path(YearMonth.now().toString()).build();
+            dto.currentMonthlyAnalytics = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).path("monthly-analytics").path(YearMonth.now().toString()).build();
             dto.receivedQuestions = uriInfo.getBaseUriBuilder().path("questions").queryParam("writer_id", u.getUserId()).build();
             dto.pendingQuestions = uriInfo.getBaseUriBuilder().path("questions").queryParam("writer_id", u.getUserId()).queryParam("is_answered", false).build();
             dto.receivedOrders = uriInfo.getBaseUriBuilder().path("orders").queryParam("seller_id", u.getUserId()).build();

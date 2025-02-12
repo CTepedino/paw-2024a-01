@@ -66,7 +66,7 @@ public class BookDTO {
             dto.preview = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("preview").build();
         }
         if (b.getBookFile() != null){
-            dto.bookFile = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("book_file").build();
+            dto.bookFile = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("book-file").build();
         }
         if (b.getDeal()!=null){
             dto.deal = uriInfo.getBaseUriBuilder().path("books").path(String.valueOf(b.getBookId())).path("deal").build();

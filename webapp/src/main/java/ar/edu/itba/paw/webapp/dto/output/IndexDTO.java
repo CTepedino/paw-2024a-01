@@ -27,8 +27,8 @@ public class IndexDTO {
         dto.books = uriInfo.getBaseUriBuilder().path("books").build();
         dto.orders = uriInfo.getBaseUriBuilder().path("orders").build();
         dto.questions = uriInfo.getBaseUriBuilder().path("questions").build();
-        dto.resetCodes = uriInfo.getBaseUriBuilder().path("reset_password_codes").build();
-        dto.validationCodes = uriInfo.getBaseUriBuilder().path("validation_codes").build();
+        dto.resetCodes = uriInfo.getBaseUriBuilder().path("reset-password-codes").build();
+        dto.validationCodes = uriInfo.getBaseUriBuilder().path("validation-codes").build();
         user.ifPresent(u -> dto.loggedUser = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(u.getUserId())).build());
 
         return dto;

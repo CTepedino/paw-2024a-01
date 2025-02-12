@@ -4,14 +4,14 @@
 		<div class="form">
 			<mat-form-field appearance="outline" class="input">
 				<mat-label>Email</mat-label>
-				<input matInput required>
+				<input matInput required email [formControl]="email">
 			</mat-form-field>
 			
-			<app-password-input/>
+			<app-password-input [control]="password"/>
 			
-			<mat-checkbox class="remember-me" [(ngModel)]="rememberMe">Remember me</mat-checkbox>
+			<mat-checkbox class="remember-me" [formControl]="rememberMe">Remember me</mat-checkbox>
 			
-			<app-action-button class="login-btn">
+			<app-action-button class="login-btn" (click)="doLogin()">
 				Log in
 			</app-action-button>
 			

@@ -18,5 +18,14 @@ import {User} from "../../model/user/user";
   styleUrl: './navbar-menu.component.scss'
 })
 export class NavbarMenuComponent {
-  user = input.required<Partial<User> | null>()
+  user = input.required<Partial<User> | null>();
+
+  getPfp(){
+    if (this.user == null){
+      return 'assets/user.jpeg';
+    }
+    return `${this.user()?.profilePicture}?height=50&width=50`;
+  }
+
+
 }
