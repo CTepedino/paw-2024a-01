@@ -10,12 +10,15 @@ import {ForgotPasswordComponent} from "./pages/forgot-password/forgot-password.c
 
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
-	{path: "search", component: HomeComponent},
+
 	{path: "signup", component: HomeComponent},
-	{path: "validate", component: HomeComponent},
 	{path: "login", component: LoginComponent},
 	{path: "forgot-password", component: ForgotPasswordComponent},
-	{path: "reset-password/:id/:code", component: HomeComponent, canActivate: [numericIDGuard]},
+	{path: "validate", component: HomeComponent},
+	{path: "reset-password", component: HomeComponent},
+
+	{path: "search", component: HomeComponent},
+
 	{path: "add-book", component: HomeComponent},
 	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard]},
 	{path: "book/:id/reviews", component: BookDetailsComponent, canActivate: [numericIDGuard]},
@@ -24,9 +27,11 @@ export const routes: Routes = [
 	{path: "book/:id/edit", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "book/:id/deal", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "book/:id/buy", component: HomeComponent, canActivate: [numericIDGuard]},
+
 	{path: "questions", component: HomeComponent},
 	{path: "questions/my-questions", component: HomeComponent},
 	{path: "questions/questions", component: HomeComponent},
+
 	{path: "profile", component: HomeComponent},
 	{path: "profile/:id", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "profile/:id/publications", component: HomeComponent, canActivate: [numericIDGuard]},
@@ -35,9 +40,13 @@ export const routes: Routes = [
 	{path: "profile/:id/wishlist", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "change-password", component: HomeComponent},
 	{path: "edit-profile", component: HomeComponent},
+
 	{path: "analytics", component: HomeComponent},
+
 	{path: "purchases", component: HomeComponent},
+
 	{path: "sales", component: SalesComponent},
+
 	{path: "404", component: NotFoundPageComponent},
 	{path: "**", redirectTo: "404"}
 ];
