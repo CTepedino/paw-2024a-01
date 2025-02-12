@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, input, output} from '@angular/core';
 import {MatToolbar, MatToolbarRow} from "@angular/material/toolbar";
 import {NgOptimizedImage} from "@angular/common";
 import {RouterLink} from "@angular/router";
@@ -9,6 +9,7 @@ import {NavbarMenuItemComponent} from "../navbar-menu-item/navbar-menu-item.comp
 import {NavbarMenuComponent} from "../navbar-menu/navbar-menu.component";
 import {UserRoles} from "../../model/user/userRoles";
 import {NavButtonComponent} from "../nav-button/nav-button.component";
+import {User} from "../../model/user/user";
 
 @Component({
   selector: 'app-navbar',
@@ -29,16 +30,14 @@ import {NavButtonComponent} from "../nav-button/nav-button.component";
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  showSearchBar = true;
-  showRightBar = true;
-  isLoggedIn = true;
+  showSearchBar = input(true);
+  showRightBar = input(true);
 
-  user = {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    profilePicture: "assets/user.jpeg",
-    roles: [UserRoles.READER, UserRoles.WRITER]
-  };
+  isLoggedIn = input(false);
+  loggedUser = input<User | null>(null);
+
+  logout = output<void>()
+
+
   protected readonly UserRoles = UserRoles;
 }
