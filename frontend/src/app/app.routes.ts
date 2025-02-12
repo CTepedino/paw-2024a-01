@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import {BookDetailsComponent} from "./pages/book-details/book-details.component";
 import { SalesComponent } from './pages/sales/sales.component';
 import {NotFoundPageComponent} from "./pages/errors/not-found-page/not-found-page.component";
+import {LoginComponent} from "./pages/login/login.component";
 
 
 export const routes: Routes = [
@@ -11,7 +12,7 @@ export const routes: Routes = [
 	{path: "search", component: HomeComponent},
 	{path: "signup", component: HomeComponent},
 	{path: "validate", component: HomeComponent},
-	{path: "login", component: HomeComponent},
+	{path: "login", component: LoginComponent},
 	{path: "change-password", component: HomeComponent},
 	{path: "forgot-password", component: HomeComponent},
 	{path: "reset-password/:id/:code", component: HomeComponent, canActivate: [numericIDGuard]},

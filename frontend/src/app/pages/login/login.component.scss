@@ -1,0 +1,28 @@
+.form {
+  width: 100%;
+  min-width: 300px;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.remember-me {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.input {
+  height: 60px;
+}
+
+.login-btn {
+  align-self: center;
+}
+
+.help-message {
+  text-align: center;
+  margin-top: 15px;
+}
+

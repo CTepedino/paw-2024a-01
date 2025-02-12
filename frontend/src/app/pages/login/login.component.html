@@ -1,1 +1,25 @@
-<p>login works!</p>
+<app-notification-card>
+	<card-title>Log in to Cybrary</card-title>
+	<card-text>
+		<div class="form">
+			<mat-form-field appearance="outline" class="input">
+				<mat-label>Email</mat-label>
+				<input matInput required>
+			</mat-form-field>
+			
+			<app-password-input/>
+			
+			<mat-checkbox class="remember-me" [(ngModel)]="rememberMe">Remember me</mat-checkbox>
+			
+			<app-action-button class="login-btn">
+				Log in
+			</app-action-button>
+			
+			<div class="help-message">
+				<p>Don't have an account? <a routerLink="/signup">Register</a></p>
+				
+				<p><a routerLink="/forgot-password">Forgot your password?</a></p>
+			</div>
+		</div>
+	</card-text>
+</app-notification-card>
