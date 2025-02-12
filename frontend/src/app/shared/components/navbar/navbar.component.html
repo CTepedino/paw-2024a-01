@@ -15,27 +15,25 @@
 			}
 		</div>
 		<div class="right-section">
-			@if (showRightBar()){
-				@if (isLoggedIn()){
-					<app-navbar-menu [user]="loggedUser()!">
-						<app-navbar-menu-item link="/profile/{{loggedUser()?.id}}" icon="person">Profile</app-navbar-menu-item>
-						<app-navbar-menu-item link="purchases" icon="shopping_basket">Purchases</app-navbar-menu-item>
-						@if (loggedUser()?.roles?.includes(UserRoles.WRITER)){
-							<app-navbar-menu-item link="sales" icon="shopping_basket">Sales</app-navbar-menu-item>
-							<app-navbar-menu-item link="analytics" icon="analytics">Analytics</app-navbar-menu-item>
-						}
-						<app-navbar-menu-item link="questions" icon="question_answer">Questions</app-navbar-menu-item>
-						<app-navbar-menu-item link="add-book" icon="book">Publish</app-navbar-menu-item>
-						<app-navbar-menu-item link="/" icon="exit_to_app" last (click)="logout.emit()">Sign out</app-navbar-menu-item>
-					</app-navbar-menu>
-				} @else {
-					<app-nav-button link="/login">
-						Log In
-					</app-nav-button>
-					<app-nav-button link="/signup">
-						Sign Up
-					</app-nav-button>
-				}
+			@if (isLoggedIn()){
+				<app-navbar-menu [user]="loggedUser()">
+					<app-navbar-menu-item link="/profile/{{loggedUser()?.id}}" icon="person">Profile</app-navbar-menu-item>
+					<app-navbar-menu-item link="purchases" icon="shopping_basket">Purchases</app-navbar-menu-item>
+					@if (loggedUser()?.roles?.includes(UserRoles.WRITER)){
+						<app-navbar-menu-item link="sales" icon="shopping_basket">Sales</app-navbar-menu-item>
+						<app-navbar-menu-item link="analytics" icon="analytics">Analytics</app-navbar-menu-item>
+					}
+					<app-navbar-menu-item link="questions" icon="question_answer">Questions</app-navbar-menu-item>
+					<app-navbar-menu-item link="add-book" icon="book">Publish</app-navbar-menu-item>
+					<app-navbar-menu-item link="/" icon="exit_to_app" last (click)="logout.emit()">Sign out</app-navbar-menu-item>
+				</app-navbar-menu>
+			} @else {
+				<app-nav-button link="/login">
+					Log In
+				</app-nav-button>
+				<app-nav-button link="/signup">
+					Sign Up
+				</app-nav-button>
 			}
 		</div>
 	</mat-toolbar-row>

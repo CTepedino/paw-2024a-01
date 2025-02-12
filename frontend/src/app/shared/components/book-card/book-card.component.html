@@ -7,7 +7,9 @@
 			<p>By {{book().writerInfo.firstName}} {{book().writerInfo.lastName}}</p>
 			<p class="book-genre">{{book().genre}}</p>
 			<div class="book-details">
-				<span><mat-icon>star</mat-icon>{{book().averageRating | number: '1.1-2'}}</span>
+				@if (book().averageRating! > 0){
+					<span><mat-icon>star</mat-icon>{{book().averageRating | number: '1.1-2'}}</span>
+				}
 				<span><mat-icon>face</mat-icon>+{{book().suggestedAge}}</span>
 				<span><mat-icon>description</mat-icon>{{book().pageCount}}</span>
 				<span><mat-icon>calendar_today</mat-icon>{{book().publishDate | date: 'yyyy'}}</span>

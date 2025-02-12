@@ -1,7 +1,6 @@
 <app-navbar
-	[showSearchBar]="true"
+	[showSearchBar]="showSearchBar"
 	[isLoggedIn]="isLoggedIn"
-	[showRightBar]="true"
 	(logout)="logout()"
 	[loggedUser]="user | async"
 ></app-navbar>

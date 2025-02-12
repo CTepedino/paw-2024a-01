@@ -18,5 +18,5 @@ import {User} from "../../model/user/user";
   styleUrl: './navbar-menu.component.scss'
 })
 export class NavbarMenuComponent {
-  user = input.required<Partial<User>>()
+  user = input.required<Partial<User> | null>()
 }
