@@ -6,7 +6,6 @@ import {MatSelectModule} from "@angular/material/select";
 import {FormsModule} from "@angular/forms";
 import {OrderStatus} from "../../shared/model/order/orderStatus";
 
-
 @Component({
   selector: 'app-sales',
   imports: [MatGridListModule, MatFormFieldModule, MatLabel, MatInputModule, MatSelectModule, FormsModule],
@@ -22,4 +21,26 @@ export class SalesComponent {
   ];
 
   selectedStatus = 'ALL';
+
+  user = {
+    firstName: 'juan',
+    lastName: 'perez'
+  }
+
+  book = {
+    cover: "assets/book-cover.jpg",
+    name: "Test book",
+    price: 300
+  }
+
+  order = {
+    book: this.book,
+    buyer: this.user,
+    date: '2023-05-05',
+    status: OrderStatus.COMPLETED
+  }
+
+  orders = Array(10).fill(this.order);
+  //orders = Array()
+
 }

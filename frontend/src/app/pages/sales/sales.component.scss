@@ -16,3 +16,27 @@
 .full-width {
   width: 100%;
 }
+
+.centerer{
+  width: 100%;
+  text-align: center;
+}
+
+.big-font {
+  font-size: 3rem;
+}
+
+.table-top {
+  background-color: #437c90;
+}
+
+:host .table-title {
+  ::ng-deep {
+    .mat-grid-tile-content {
+      color: white;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 10px;
+    }
+  }
+}

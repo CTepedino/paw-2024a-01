@@ -19,4 +19,21 @@
             </mat-form-field>
         </mat-grid-tile>
     </mat-grid-list>
+
+    @if (orders.length === 0) {
+        <div class="centerer big-font">
+            <h5 i18n>No sales found</h5>
+        </div>
+    }
+
+    @if (orders.length != 0) {
+        <mat-grid-list cols="5" rowHeight="3:1" gutterSize="20px" class="table-top">
+            <mat-grid-tile i18n class="table-title center-left">Cover</mat-grid-tile>
+            <mat-grid-tile i18n class="table-title center-left">Book</mat-grid-tile>
+            <mat-grid-tile i18n class="table-title center-left">Date</mat-grid-tile>
+            <mat-grid-tile i18n class="table-title center-left">Status</mat-grid-tile>
+            <mat-grid-tile i18n class="table-title center-left">Actions</mat-grid-tile>
+        </mat-grid-list>
+    }
+
 </div>
