@@ -44,8 +44,8 @@ export class ResetPasswordFormComponent {
 	}
 
 	resetForm = new FormGroup({
-		password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-		confirm: new FormControl('', [Validators.required, Validators.minLength(6)]),
+		password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]),
+		confirm: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]),
 	});
 
 	resetPassword(){

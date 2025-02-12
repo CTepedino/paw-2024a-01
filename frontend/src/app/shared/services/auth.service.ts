@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../../enviroment/enviroment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {BehaviorSubject, map, Observable, of, switchMap, tap} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, of, switchMap, tap} from "rxjs";
 import {Index} from "../model";
 import {MediaTypes} from "../const/mediaTypes";
 import {User} from "../model/user/user";
@@ -14,12 +14,13 @@ export class AuthService {
 
   private baseUrl = environment.apiURL;
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient) { }
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasValidToken());
     isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
     private loggedUserUrl: string | null | undefined;
+    private remember: boolean = false;
 
     getLoggedUser(): Observable<User | null> {
         if (this.loggedUserUrl){
@@ -33,48 +34,51 @@ export class AuthService {
         return of(null);
     }
 
-    login(email: string, password: string, rememberMe: boolean = false): Observable<Index> {
-    const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(`${email}:${password}`)});
-    return this.http.get<Index>(this.baseUrl, {headers, observe: 'response'}).pipe(
-        tap(response => {
-            const jwt = response.headers.get('Authorization');
-            const refreshToken = response.headers.get('X-Refresh-Token');
-            this.loggedUserUrl = response.body?.loggedUser;
-            if (jwt && refreshToken){
-                this.storeTokens(jwt, refreshToken, false);
-                this.isLoggedInSubject.next(true);
-            }
-        }),
-        map(response => response.body!)
-    );
+    login(email: string, password: string, rememberMe: boolean = this.remember): Observable<Index> {
+        const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(`${email}:${password}`)});
+        return this.http.get<Index>(this.baseUrl, {headers, observe: 'response'}).pipe(
+            tap(response => {
+                const jwt = response.headers.get('Authorization');
+                const refreshToken = response.headers.get('X-Refresh-Token');
+
+                if (jwt && refreshToken){
+                    this.storeTokens(jwt, refreshToken, rememberMe);
+                    this.isLoggedInSubject.next(true);
+                    this.loggedUserUrl = response.body?.loggedUser;
+                }
+            }),
+            map(response => response.body!)
+        );
     }
 
-    logout(){
+    logout(saveInfo = false){
         sessionStorage.removeItem('jwt');
         localStorage.removeItem('jwt');
         sessionStorage.removeItem('refreshToken');
         localStorage.removeItem('refreshToken');
-        this.loggedUserUrl = null;
-        this.isLoggedInSubject.next(false);
+        if (!saveInfo) {
+            this.loggedUserUrl = null;
+            this.isLoggedInSubject.next(false);
+        }
     }
 
     refreshToken(): Observable<void> {
-    const refreshToken = this.getRefreshToken();
-    if (!refreshToken){
-      throw new Error('No refresh token available');
-    }
-    const headers = new HttpHeaders({Authorization: refreshToken});
+        const refreshToken = this.getRefreshToken();
+        if (!refreshToken){
+          throw new Error('No refresh token available');
+        }
+        const headers = new HttpHeaders({Authorization: refreshToken});
 
-    return this.http.get<void>(this.baseUrl, {headers, observe: "response"}).pipe(
-        tap(response => {
-            const jwt = response.headers.get('Authorization');
-            const newRefreshToken = response.headers.get('X-Refresh-Token');
-            if (jwt && newRefreshToken){
-                this.updateTokens(jwt, newRefreshToken);
-            }
-        }),
-        map(() => void 0)
-    );
+        return this.http.get<void>(this.baseUrl, {headers, observe: "response"}).pipe(
+            tap(response => {
+                const jwt = response.headers.get('Authorization');
+                const newRefreshToken = response.headers.get('X-Refresh-Token');
+                if (jwt && newRefreshToken){
+                    this.updateTokens(jwt, newRefreshToken);
+                }
+            }),
+            map(() => void 0)
+        );
     }
 
     validateCode(id: string, code: string): Observable<Index> {
@@ -99,6 +103,30 @@ export class AuthService {
         ).pipe(map(() => void 0))
     }
 
+    tryLogin(email: string, password: string): Observable<boolean>{
+        const jwt = this.getJwtToken();
+        const refresh = this.getRefreshToken();
+
+        this.logout(true);
+
+        return this.login(email, password).pipe(
+            map(index => {
+                if (!index.loggedUser){
+                    if (jwt && refresh) {
+                        this.storeTokens(jwt, refresh, this.remember);
+                    }
+                }
+                return !!index.loggedUser;
+            }),
+            catchError(() => {
+                if (jwt && refresh) {
+                    this.storeTokens(jwt, refresh, this.remember);
+                }
+                return of(false);
+            })
+        );
+    }
+
     getJwtToken(): string | null {
     return sessionStorage.getItem('jwt') || localStorage.getItem('jwt');
     }
@@ -108,13 +136,14 @@ export class AuthService {
     }
 
     storeTokens(jwt: string, refreshToken: string, rememberMe: boolean){
-     if (rememberMe) {
-          localStorage.setItem('jwt', jwt);
-          localStorage.setItem('refreshToken', refreshToken);
-      } else {
-          sessionStorage.setItem('jwt', jwt);
-          sessionStorage.setItem('refreshToken', refreshToken);
-      }
+        this.remember = rememberMe;
+        if (rememberMe) {
+            localStorage.setItem('jwt', jwt);
+            localStorage.setItem('refreshToken', refreshToken);
+        } else {
+            sessionStorage.setItem('jwt', jwt);
+            sessionStorage.setItem('refreshToken', refreshToken);
+        }
     }
 
     updateTokens(jwt: string, refreshToken: string){
