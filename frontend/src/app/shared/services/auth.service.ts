@@ -77,12 +77,8 @@ export class AuthService {
     );
     }
 
-    validateEmail(email: string, emailCode: string): Observable<Index> {
-      return this.login(email, emailCode, false);
-    }
-
-    submitResetPasswordCode(email: string, resetCode: string): Observable<Index> {
-      return this.login(email, resetCode, false)
+    validateCode(id: string, code: string): Observable<Index> {
+      return this.login(id, code, false);
     }
 
     sendResetPasswordCodeEmail(email: string): Observable<void> {

@@ -1,7 +1,7 @@
 <app-notification-card>
 	<card-title>Log in to Cybrary</card-title>
 	<card-text>
-		<form class="form" [formGroup]="loginForm" (ngSubmit)="doLogin()">
+		<form class="form" [formGroup]="loginForm" (keydown.enter)="doLogin()" (ngSubmit)="doLogin()">
 			
 			@if (loginFailed()){
 				<p class="red-text">There was an error with your login attempt. Please verify your email and password and try again</p>

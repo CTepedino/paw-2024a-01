@@ -54,32 +54,32 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                 if (separator == -1) {
                     throw new BadCredentialsException("Invalid basic authentication token");
                 }
-                String email = token.substring(0, separator);
+                String identifier = token.substring(0, separator);
                 String credentials = token.substring(separator + 1);
                 Authentication authentication;
 
                 if (userService.isResetPasswordCode(credentials)){
                     try {
-                        userService.validateResetPasswordCode(email, credentials);
+                        userService.validateResetPasswordCode(identifier, credentials);
                     } catch (Exception e) {
                         throw new BadCredentialsException("Bad credentials");
                     }
-
-                    authentication = new ResetPasswordCodeAuthenticationToken(email, credentials);
+                    identifier = userService.findById(Long.parseLong(identifier)).orElseThrow().getEmail();
+                    authentication = new ResetPasswordCodeAuthenticationToken(identifier, credentials);
                 } else if (userService.isEmailValidationCode(credentials)){
                     try {
-                        userService.validateEmail(email, credentials);
+                        userService.validateEmail(identifier, credentials);
                     } catch (Exception e) {
                         throw new BadCredentialsException("Bad credentials");
                     }
-
-                    authentication = new EmailValidationAuthenticationToken(email, credentials);
+                    identifier = userService.findById(Long.parseLong(identifier)).orElseThrow().getEmail();
+                    authentication = new EmailValidationAuthenticationToken(identifier, credentials);
                 } else {
 
-                    authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, credentials, null));
+                    authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(identifier, credentials, null));
                 }
 
-                userService.findByEmail(email).ifPresent(u -> {
+                userService.findByEmail(identifier).ifPresent(u -> {
                     response.setHeader("Authorization", jwtTokenUtil.generateToken(u));
                     response.setHeader("X-Refresh-Token", jwtTokenUtil.generateRefreshToken(u));
                 });
