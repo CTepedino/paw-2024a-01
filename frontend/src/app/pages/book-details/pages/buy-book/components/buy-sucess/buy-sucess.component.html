@@ -1,0 +1,28 @@
+<app-notification-card>
+	<card-title>
+		<div class="success">
+			<h2>Receipt sent successfully!</h2>
+		</div>
+	</card-title>
+	<card-text>
+		<div class="content">
+			<p>You will be notified once the payment has been verified by the publisher</p>
+			
+			<div class="btn-row">
+				<app-nav-button link="/">
+					Find more books
+				</app-nav-button>
+				<app-nav-button link="/purchases">
+					View purchases
+				</app-nav-button>
+			</div>
+			
+			<img class="success-image"
+				 ngSrc="assets/order_summary.svg"
+				 alt="Bought confirmation"
+				 width="400"
+				 height="400"
+			/>
+		</div>
+	</card-text>
+</app-notification-card>

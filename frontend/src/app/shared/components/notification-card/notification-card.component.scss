@@ -8,7 +8,6 @@
 }
 
 .notice-content {
-  border-top: 1px black solid;
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -17,4 +16,18 @@
 .center-title {
   width: 100%;
   text-align: center;
+}
+
+.title-separator {
+  width: 90%;
+  border-top: black 1px solid;
+}
+
+.notice-title {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }

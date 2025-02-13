@@ -27,6 +27,8 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
   styleUrl: './book-card.component.scss'
 })
 export class BookCardComponent {
+
+
 	book = input.required<BookWithData>();
 
     protected readonly SalesCategory = SalesCategory;

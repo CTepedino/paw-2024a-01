@@ -21,6 +21,7 @@ import {ChangePasswordComponent} from "./pages/change-password/change-password.c
 import {AddBookComponent} from "./pages/add-book/add-book.component";
 import {EditBookComponent} from "./pages/edit-book/edit-book.component";
 import {BuyBookComponent} from "./pages/book-details/pages/buy-book/buy-book.component";
+import {canBuyBookGuard} from "./shared/guards/can-buy-book.guard";
 
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
@@ -40,7 +41,7 @@ export const routes: Routes = [
 	{path: "book/:id/my-questions", component: BookDetailsComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard]},
 	{path: "book/:id/edit", component: EditBookComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard]},
 	{path: "book/:id/deal", component: HomeComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard]},
-	{path: "book/:id/buy", component: BuyBookComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard]},
+	{path: "book/:id/buy", component: BuyBookComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard, canBuyBookGuard]},
 
 	{path: "questions", component: HomeComponent, canActivate: [loggedInGuard]},
 	{path: "questions/asked-questions", component: HomeComponent, canActivate: [loggedInGuard]},

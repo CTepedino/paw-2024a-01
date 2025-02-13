@@ -5,13 +5,15 @@ import {BookWithData} from "../../../../shared/model/book/bookWithData";
 import {BookDetailsService} from "../../store/book-details.service";
 import {AsyncPipe} from "@angular/common";
 import {BuyBookFormComponent} from "./components/buy-book-form/buy-book-form.component";
+import {BuySucessComponent} from "./components/buy-sucess/buy-sucess.component";
 
 @Component({
   selector: 'app-buy-book',
-  imports: [
-    AsyncPipe,
-    BuyBookFormComponent,
-  ],
+	imports: [
+		AsyncPipe,
+		BuyBookFormComponent,
+		BuySucessComponent,
+	],
   templateUrl: './buy-book.component.html',
   styleUrl: './buy-book.component.scss'
 })

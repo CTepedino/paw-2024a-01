@@ -2,6 +2,6 @@
 	@if (buying){
 		<app-buy-book-form (bought)="bought()" [book]="book"></app-buy-book-form>
 	} @else {
-		bought
+		<app-buy-sucess></app-buy-sucess>
 	}
 }
