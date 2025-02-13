@@ -92,14 +92,13 @@ export class EditBookComponent implements OnInit{
 
 	onSubmit() {
 		if (this.form.valid){
-			console.log('pub')
 
 			this.editBookService.edit(this.form).pipe(
 				map(() => {
 					this.router.navigate([`/book`, this.bookId]);
 				}), catchError((err) => {
 					console.log(err);
-					return throwError(() => 'publish failed');
+					return throwError(() => 'edit failed');
 				})
 			).subscribe();
 		}

@@ -3,7 +3,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardImage} from "@angular/mat
 import {DecimalPipe} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {RouterLink} from "@angular/router";
-import {BookWithInfo} from "../../model/book/bookWithInfo";
+import {BookWithData} from "../../model/book/bookWithData";
 import {SalesCategory} from "../../model/book/salesCategory";
 import {BookBadgeComponent} from "../book-badge/book-badge.component";
 
@@ -23,7 +23,7 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
   styleUrl: './small-book-card.component.scss'
 })
 export class SmallBookCardComponent {
-	book = input.required<BookWithInfo>();
+	book = input.required<BookWithData>();
 	showDate = input(false, {transform: booleanAttribute});
 
 	protected readonly SalesCategory = SalesCategory;

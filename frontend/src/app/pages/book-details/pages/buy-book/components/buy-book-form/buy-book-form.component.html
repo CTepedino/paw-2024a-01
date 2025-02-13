@@ -1,0 +1,25 @@
+<app-content-card>
+	<h3 class="title">
+		Purchasing {{book().title}}
+	</h3>
+	<hr/>
+	<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+		<p>Please transfer the required amount and upload the corresponding payment receipt</p>
+		<p>You will be able to access the book after the payment has been verified by the published</p>
+		<p>Book's price: {{getPrice(book()) | currency}}</p>
+		<p>Writer's CBU/alias: {{book().writerInfo.cbu}}</p>
+		<div class="input-zone">
+			<div class="file-row">
+				<app-file-input class="input" accept="application/pdf, image/*" formGroupName="receipt" [formGroup]="getReceiptFormGroup()">Receipt</app-file-input>
+			</div>
+		</div>
+		<div class="options">
+			<app-action-button [disabled]="!form.valid" (click)="onSubmit()">
+				Upload receipt
+			</app-action-button>
+			<app-cancel-button routerLink="/book/{{book().id}}">
+				Cancel
+			</app-cancel-button>
+		</div>
+	</form>
+</app-content-card>

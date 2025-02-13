@@ -109,7 +109,6 @@ export class AddBookComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid){
-      console.log('pub')
 
       this.addBookService.publish(this.form).pipe(
       map((id) => {

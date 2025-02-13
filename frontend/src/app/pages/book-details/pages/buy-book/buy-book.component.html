@@ -1,0 +1,7 @@
+@if (book$ | async; as book){
+	@if (buying){
+		<app-buy-book-form (bought)="bought()" [book]="book"></app-buy-book-form>
+	} @else {
+		bought
+	}
+}

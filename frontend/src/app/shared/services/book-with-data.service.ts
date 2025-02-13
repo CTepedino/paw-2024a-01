@@ -1,41 +1,27 @@
 import { Injectable } from '@angular/core';
 import {BookSearchQuery} from "../model/book/bookSearchQuery";
-import {forkJoin, map, Observable, of, switchMap} from "rxjs";
+import {concatMap, forkJoin, map, Observable, of, switchMap} from "rxjs";
 import {PaginatedContent} from "../model/paginatedContent";
-import {BookWithInfo} from "../model/book/bookWithInfo";
+import {BookWithData} from "../model/book/bookWithData";
 import {User} from "../model/user/user";
 import {Deal} from "../model/book/deal";
 import {BookService} from "./book.service";
 import {UserService} from "./user.service";
+import {Book} from "../model/book/book";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookWithDataService {
 
-  constructor(private bookService: BookService, private userService: UserService) { }
+    constructor(private bookService: BookService, private userService: UserService) { }
 
-  listBooksWithData(query: BookSearchQuery = {}): Observable<PaginatedContent<BookWithInfo>> {
+    writers: Map<string, User> = new Map<string, User>;
 
-    const writerCache: Map<string, User> = new Map<string, User>;
-
+    listBooksWithData(query: BookSearchQuery = {}): Observable<PaginatedContent<BookWithData>> {
     return this.bookService.listBooks(query).pipe(
-        switchMap((paginatedBooks) => {
-          const bookRequests = paginatedBooks.data.map((book) => {
-
-
-
-            const writer$ = this.fetchWriter(book.writer!, writerCache);
-            const deal$ = this.fetchDeal(book.deal);
-
-            return forkJoin({writerInfo: writer$, dealInfo: deal$}).pipe(
-                map(({writerInfo, dealInfo}) => ({
-                  ...book,
-                  writerInfo: writerInfo,
-                  dealInfo: dealInfo
-                }))
-            );
-          });
+        concatMap((paginatedBooks) => {
+          const bookRequests = paginatedBooks.data.map((book) => this.fillBook(book));
 
           return forkJoin(bookRequests).pipe(
               map((booksWithData) => ({
@@ -46,25 +32,47 @@ export class BookWithDataService {
 
         })
     )
-  }
+    }
 
-  private fetchWriter(writerUrl: string, writerCache: Map<string, User>): Observable<User>{
-    if (writerCache.has(writerUrl)){
-      return of(writerCache.get(writerUrl)!);
+    getBookWithData(id: string | number): Observable<BookWithData>{
+        return this.bookService.getBookById(id).pipe(
+            concatMap(book => this.fillBook(book))
+        )
+    }
+
+
+    private fillBook(book: Book): Observable<BookWithData> {
+      const writer$ = this.fetchWriter(book.writer!);
+      const deal$ = this.fetchDeal(book.deal);
+
+      return forkJoin({writerInfo: writer$, dealInfo: deal$}).pipe(
+          map(({writerInfo, dealInfo}) => ({
+              ...book,
+              writerInfo: writerInfo,
+              dealInfo: dealInfo
+          }))
+      );
+    }
+
+    private fetchWriter(writerUrl: string): Observable<User>{
+    if (this.writers.has(writerUrl)){
+      return of(this.writers.get(writerUrl)!);
     }
     return this.userService.getUser(writerUrl).pipe(
         map((writer) => {
-          writerCache.set(writerUrl, writer);
+            this.writers.set(writerUrl, writer);
           return writer;
         })
     );
-  }
+    }
 
-  private fetchDeal(dealUrl: string | undefined): Observable<Deal | null>{
+    private fetchDeal(dealUrl: string | undefined): Observable<Deal | null>{
     if (dealUrl == null){
       return of(null);
     }
 
     return this.bookService.getDeal(dealUrl);
-  }
+    }
+
 }
+

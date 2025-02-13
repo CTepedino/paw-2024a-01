@@ -5,7 +5,7 @@ import {HomeService} from "../home/store/home.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
-import {BookWithInfo} from "../../shared/model/book/bookWithInfo";
+import {BookWithData} from "../../shared/model/book/bookWithData";
 import {AsyncPipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";

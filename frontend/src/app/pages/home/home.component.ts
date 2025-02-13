@@ -10,7 +10,7 @@ import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {AsyncPipe} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
-import {BookWithInfo} from "../../shared/model/book/bookWithInfo";
+import {BookWithData} from "../../shared/model/book/bookWithData";
 import {NgxPaginationModule, PaginationInstance} from "ngx-pagination";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 
@@ -26,8 +26,8 @@ export class HomeComponent implements OnInit {
 	private router = inject(Router)
 
 
-	pagination$!: Observable<PaginatedContent<BookWithInfo>>;
-	books$!: Observable<BookWithInfo[]>
+	pagination$!: Observable<PaginatedContent<BookWithData>>;
+	books$!: Observable<BookWithData[]>
 	currentPage!: number;
 	pageSize = 20;
 

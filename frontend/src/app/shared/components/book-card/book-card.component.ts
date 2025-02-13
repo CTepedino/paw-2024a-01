@@ -5,7 +5,7 @@ import {RouterLink} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {DatePipe, DecimalPipe, NgOptimizedImage} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
-import {BookWithInfo} from "../../model/book/bookWithInfo";
+import {BookWithData} from "../../model/book/bookWithData";
 import {BookBadgeComponent} from "../book-badge/book-badge.component";
 
 @Component({
@@ -27,7 +27,7 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
   styleUrl: './book-card.component.scss'
 })
 export class BookCardComponent {
-	book = input.required<BookWithInfo>();
+	book = input.required<BookWithData>();
 
     protected readonly SalesCategory = SalesCategory;
 

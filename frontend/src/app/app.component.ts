@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentChecked, Component, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {NavbarComponent} from "./shared/components/navbar/navbar.component";
 import {AuthService} from "./shared/services/auth.service";
-import {filter, Observable, of, switchMap} from "rxjs";
+import {concatMap, filter, Observable, of, switchMap} from "rxjs";
 import {User} from "./shared/model/user/user";
 import {AsyncPipe} from "@angular/common";
 
@@ -12,8 +12,8 @@ import {AsyncPipe} from "@angular/common";
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit{
-  isLoggedIn = true;
+export class AppComponent implements OnInit {
+  isLoggedIn = signal(true);
   user: Observable<User | null> = of(null);
 
   showSearchBar = true;
@@ -26,11 +26,13 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
     this.user = this.authService.isLoggedIn$.pipe(
-        switchMap(status => {
-          this.isLoggedIn = status;
+        concatMap(status => {
+          this.isLoggedIn.set(status);
           return status? this.authService.getLoggedUser() : of(null);
         })
     );
+
+
 
     this.router.events.pipe(
         filter(event => event instanceof NavigationEnd)

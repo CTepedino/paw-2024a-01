@@ -1,6 +1,6 @@
 <app-navbar
 	[showSearchBar]="showSearchBar"
-	[isLoggedIn]="isLoggedIn"
+	[isLoggedIn]="isLoggedIn()"
 	(logout)="logout()"
 	[loggedUser]="user | async"
 ></app-navbar>

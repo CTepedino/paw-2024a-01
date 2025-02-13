@@ -5,7 +5,7 @@ import {MatIcon} from "@angular/material/icon";
 import {DatePipe, DecimalPipe, NgOptimizedImage} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {BookBadgeComponent} from "../../../../shared/components/book-badge/book-badge.component";
-import {BookWithInfo} from "../../../../shared/model/book/bookWithInfo";
+import {BookWithData} from "../../../../shared/model/book/bookWithData";
 
 
 @Component({

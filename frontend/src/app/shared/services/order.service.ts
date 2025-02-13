@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {OrderSearchQuery} from "../model/order/orderSearchQuery";
 import {Order} from "../model/order/order";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {environment} from "../../../enviroment/enviroment";
 import {MediaTypes} from "../const/mediaTypes";
 
@@ -27,12 +27,12 @@ export class OrderService {
     return this.http.get<Order[]>(this.apiURL, {params: params})
   }
 
-  postOrder(order: Order){
-    this.http.post(
+  postOrder(order: Order): Observable<string>{
+    return this.http.post(
         this.apiURL,
         order,
-        {headers: {"Content-Type": MediaTypes.ORDER}}
-    );
+        {headers: {"Content-Type": MediaTypes.ORDER}, observe: 'response'}
+    ).pipe(map((response) => response.headers.get('Location') || ''));
   }
 
   getOrder(orderUrl: string): Observable<Order>{
@@ -47,9 +47,9 @@ export class OrderService {
     );
   }
 
-  putReceipt(orderUrl: string, receipt: File){
+  putReceipt(orderUrl: string, receipt: File): Observable<void>{
     const formData = new FormData();
     formData.append("receipt", receipt);
-    this.http.put(`${orderUrl}/receipt`, formData);
+    return this.http.put<void>(`${orderUrl}/receipt`, formData);
   }
 }
