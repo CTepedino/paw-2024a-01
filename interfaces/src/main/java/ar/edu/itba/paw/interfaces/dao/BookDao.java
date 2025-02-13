@@ -33,8 +33,7 @@ public interface BookDao {
             BookGenre genre,
             BigDecimal price,
             int pageCount,
-            int suggestedAge,
-            LocalDate publishDate
+            int suggestedAge
     );
 
     void unpause(Book book);

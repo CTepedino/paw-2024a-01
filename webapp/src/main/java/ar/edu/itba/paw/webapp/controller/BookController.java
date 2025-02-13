@@ -13,6 +13,7 @@ import ar.edu.itba.paw.models.files.BookPreview;
 import ar.edu.itba.paw.models.files.CoverImage;
 import ar.edu.itba.paw.webapp.contentType.VndMediaTypes;
 import ar.edu.itba.paw.webapp.dto.input.BookCreateDTO;
+import ar.edu.itba.paw.webapp.dto.input.BookEditDTO;
 import ar.edu.itba.paw.webapp.dto.input.DealSubmitDTO;
 import ar.edu.itba.paw.webapp.dto.input.validations.ImageFile;
 import ar.edu.itba.paw.webapp.dto.input.validations.PdfFile;
@@ -123,7 +124,7 @@ public class BookController {
     @Consumes(value = {VndMediaTypes.BOOK})
     public Response editBook(
             @PathParam("id") final long id,
-            @Valid BookCreateDTO bookDTO
+            @Valid BookEditDTO bookDTO
     ){
         bs.editPublication(
                 id,
@@ -132,8 +133,7 @@ public class BookController {
                 bookDTO.getGenre(),
                 bookDTO.getPrice(),
                 bookDTO.getPageCount(),
-                bookDTO.getSuggestedAge(),
-                bookDTO.getPublicationDate()
+                bookDTO.getSuggestedAge()
         );
 
         return Response.noContent().build();

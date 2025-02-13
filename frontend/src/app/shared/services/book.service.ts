@@ -51,12 +51,12 @@ export class BookService {
       return this.http.get<Book>(bookUrl);
   }
 
-  getBookById(id: number): Observable<Book> {
+  getBookById(id: any): Observable<Book> {
       return this.http.get<Book>(`${this.apiURL}/${id}`);
   }
 
-  putBook(bookUrl: string, book: Book){
-      this.http.put(
+  putBook(bookUrl: string, book: Book): Observable<void>{
+      return this.http.put<void>(
           bookUrl,
           book,
           {headers: {"Content-Type": MediaTypes.BOOK}}

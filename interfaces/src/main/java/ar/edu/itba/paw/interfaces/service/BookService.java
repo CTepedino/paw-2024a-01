@@ -28,8 +28,7 @@ public interface BookService {
             BookGenre genre,
             BigDecimal price,
             int pageCount,
-            int suggestedAge,
-            LocalDate publishedDate
+            int suggestedAge
     );
 
     void checkBookSalesCategory(Book book);

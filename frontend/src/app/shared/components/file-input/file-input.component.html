@@ -2,7 +2,7 @@
 	<mat-form-field appearance="outline" class="input">
 		<mat-label><ng-content></ng-content></mat-label>
 		<input type="file" #fileInput hidden (change)="onFileSelected($event)" [accept]="accept()">
-		<input matInput placeholder="Choose a file" readonly formControlName="fileName" required>
+		<input matInput placeholder="Choose a file" readonly formControlName="fileName" [required]="required()">
 		<button mat-button matSuffix (click)="fileInput.click()" type="button">Browse</button>
 	</mat-form-field>
 </div>

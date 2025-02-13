@@ -45,7 +45,7 @@ export class AddBookService {
       pageCount: bookPublishForm.get('pageCount')?.value,
       publicationDate: bookPublishForm.get('publicationDate')?.value.toISOString().substring(0, 10)
     }).pipe(
-        switchMap(bookUrl => {
+        concatMap(bookUrl => {
           return forkJoin([
             this.bookService.putBookCover(bookUrl, bookPublishForm.get('cover')?.get('fileData')?.value),
             this.bookService.putBookPreview(bookUrl, bookPublishForm.get('preview')?.get('fileData')?.value),

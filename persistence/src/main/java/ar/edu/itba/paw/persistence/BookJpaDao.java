@@ -35,14 +35,13 @@ public class BookJpaDao implements BookDao {
     }
 
     @Override
-    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate) {
+    public void modify(Book book, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         book.setTitle(title);
         book.setDescription(description);
         book.setGenre(genre);
         book.setPrice(price);
         book.setPageCount(pageCount);
         book.setSuggestedAge(suggestedAge);
-        book.setPublishDate(publishDate);
     }
 
     @Override

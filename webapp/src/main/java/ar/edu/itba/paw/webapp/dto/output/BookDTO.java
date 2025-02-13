@@ -20,7 +20,7 @@ public class BookDTO {
     private BigDecimal price;
     private int pageCount;
     private int suggestedAge;
-    private LocalDate publishDate;
+    private LocalDate publicationDate;
     private boolean isPaused;
     private BookSalesCategory salesCategory;
     private int averageRating;
@@ -50,7 +50,7 @@ public class BookDTO {
         dto.price = b.getPrice();
         dto.pageCount = b.getPageCount();
         dto.suggestedAge = b.getSuggestedAge();
-        dto.publishDate = b.getPublishDate();
+        dto.publicationDate = b.getPublishDate();
         dto.isPaused = b.isPaused();
         dto.salesCategory = b.getSalesCategory();
         dto.averageRating = b.getAverageRating();
@@ -149,12 +149,12 @@ public class BookDTO {
         this.suggestedAge = suggestedAge;
     }
 
-    public LocalDate getPublishDate() {
-        return publishDate;
+    public LocalDate getPublicationDate() {
+        return publicationDate;
     }
 
-    public void setPublishDate(LocalDate publishDate) {
-        this.publishDate = publishDate;
+    public void setPublicationDate(LocalDate publishDate) {
+        this.publicationDate = publishDate;
     }
 
     public boolean isPaused() {

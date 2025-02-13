@@ -10,7 +10,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, NativeDateAdapte
 import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
 import {FileInputComponent} from "../../shared/components/file-input/file-input.component";
 import {AddBookService} from "./store/add-book.service";
-import {AsyncPipe, JsonPipe} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 import {fileTypeValidator} from "../../shared/validators/fileTypeValidator";
 import {Router} from "@angular/router";
 import {catchError, map, throwError} from "rxjs";
@@ -124,26 +124,5 @@ export class AddBookComponent implements OnInit {
   }
 
 
-  print(){
-
-    console.log(this.form.get('cover')?.valid);
-    console.log(this.form.get('preview')?.valid);
-    console.log(this.form.get('file')?.valid);
-
-    console.log(this.form.get('suggestedAge')?.valid);
-    console.log(this.form.get('pageCount')?.valid);
-    console.log(this.form.get('genre')?.valid);
-
-    console.log(this.form.get('title')?.valid);
-    console.log(this.form.get('price')?.valid);
-    console.log(this.form.get('description')?.valid);
-
-    console.log(this.form.get('publicationDate')?.valid);
-    console.log(this.form.get('cbu')?.valid);
-
-    console.log(this.form.valid);
-
-    console.log(this.form.value);
-  }
 
 }

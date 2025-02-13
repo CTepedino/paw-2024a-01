@@ -70,14 +70,14 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge, LocalDate publishDate) {
+    public void editPublication(long bookId, String title, String description, BookGenre genre, BigDecimal price, int pageCount, int suggestedAge) {
         Book book = findById(bookId).orElseThrow(BookNotFoundException::new);
 
         if (book.getDeal() != null && book.getDeal().getPrice().compareTo(price) >= 0){
             dealDao.deleteDeal(bookId);
         }
 
-        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge, publishDate);
+        bookDao.modify(book, title, description, genre, price, pageCount, suggestedAge);
         LOGGER.atDebug().setMessage("Publication for Book {} edited correctly").addArgument(title).log();
     }
 

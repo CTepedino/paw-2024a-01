@@ -21,6 +21,7 @@ export class FileInputComponent {
   @Input() formGroup!: FormGroup;
 
   accept = input.required<string>();
+  required = input(true);
 
   onFileSelected(event: Event){
     const input = event.target as HTMLInputElement;
