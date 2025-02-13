@@ -67,6 +67,7 @@ export class AuthService {
         if (!refreshToken){
           throw new Error('No refresh token available');
         }
+        this.logout(true);
         const headers = new HttpHeaders({Authorization: refreshToken});
 
         return this.http.get<void>(this.baseUrl, {headers, observe: "response"}).pipe(

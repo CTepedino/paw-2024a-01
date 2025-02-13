@@ -1,4 +1,3 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
@@ -81,6 +80,11 @@ mat-paginator {
   ));
 }
 
+/*:root {
+  @include mat.select-overrides((
+          panel-background-color: rgb(38, 166, 154),
+  ));
+}*/
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';

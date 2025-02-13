@@ -23,24 +23,24 @@
 		}
 	</mat-grid-list>
 }
-
-@if ((books$ | async)?.length! > 0){
-	<h5 class="home-margin">Latest books</h5>
-	<mat-grid-list cols="2" rowHeight="260px" gutterSize="5px" class="book-grid">
-		@for (book of ((books$ | async)! | paginate: {id: 'books', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id) {
-			<mat-grid-tile >
-				<app-book-card class="grid-book-card" [book]="book"/>
-			</mat-grid-tile>
+@if ((books$ | async); as books){
+	@if (books?.length! > 0){
+		<h5 class="home-margin">Latest books</h5>
+		<mat-grid-list cols="2" rowHeight="260px" gutterSize="5px" class="book-grid">
+			@for (book of ((books)! | paginate: {id: 'books', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id) {
+				<mat-grid-tile >
+					<app-book-card class="grid-book-card" [book]="book"/>
+				</mat-grid-tile>
+			}
+		</mat-grid-list>
+		
+		@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+			<app-paginator id="books" (pageChange)="onPageChange($event)"/>
 		}
-	</mat-grid-list>
-	
-	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
-		<app-paginator id="books" (pageChange)="onPageChange($event)"/>
+	} @else {
+		<h5 class="no-books">There are no publications yet, be the first to make one!</h5>
 	}
-} @else {
-	<h5 class="no-books">There are no publications yet, be the first to make one!</h5>
 }
-
 
 
 

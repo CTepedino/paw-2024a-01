@@ -1,0 +1,87 @@
+<app-content-card>
+	<div class="title">
+		<h3>Publish your book!</h3>
+	</div>
+	<hr/>
+	<form [formGroup]="form" (ngSubmit)="onSubmit()">
+		@if (!firstPublication()){
+			<div class="form">
+				<p>Since this is your first book, you will need to enter your payment information</p>
+				<mat-form-field appearance="outline" class="input">
+					<mat-label>Your CBU or alias</mat-label>
+					<input matInput required>
+				</mat-form-field>
+			</div>
+			<hr/>
+		}
+		<div class="form">
+			<p>Fill in the book's details</p>
+			<div class="input-zone">
+				<mat-form-field appearance="outline" class="input">
+					<mat-label>Title</mat-label>
+					<input matInput required maxlength="50" #title formGroupName="title">
+					<mat-hint align="end">{{title.value.length}} / 50</mat-hint>
+				</mat-form-field>
+			</div>
+			<div class="input-zone">
+				<mat-form-field appearance="outline" class="input">
+					<mat-label>Description</mat-label>
+					<textarea matInput #description required class="textarea" maxlength="1000"></textarea>
+					<mat-hint align="end">{{description.value.length}} / 1000</mat-hint>
+				</mat-form-field>
+			</div>
+			<div class="input-zone">
+
+			</div>
+			<div class="input-zone">
+				<div class="as-row">
+					<mat-form-field appearance="outline" class="input">
+						<mat-select required>
+							@for (genre of Object.values(BookGenre); track genre){
+								<mat-option [value]="genre">{{genre}}</mat-option>
+							}
+						</mat-select>
+						<mat-label>Genre</mat-label>
+					</mat-form-field>
+					<mat-form-field appearance="outline" class="input">
+						<mat-label>Page count</mat-label>
+						<input matInput required type="number">
+					</mat-form-field>
+					<mat-form-field appearance="outline" class="input">
+						<mat-label>Price</mat-label>
+						<input matInput required type="number">
+					</mat-form-field>
+				</div>
+			</div>
+			<div class="input-zone">
+				<div class="as-row">
+					<mat-form-field appearance="outline" class="input">
+						<mat-label>Recommended age</mat-label>
+						<input matInput required type="number">
+					</mat-form-field>
+					<mat-form-field appearance="outline" class="input">
+						<mat-label>Publication date</mat-label>
+						<input matInput [matDatepicker]="picker" required>
+						<mat-hint>MM/DD/YYYY</mat-hint>
+						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+						<mat-datepicker #picker></mat-datepicker>
+					</mat-form-field>
+				</div>
+			</div>
+			<div class="input-zone">
+				<div class="file-row">
+					<app-file-input class="input" accept="image/*" formGroupName="cover" [formGroup]="getCoverFormGroup()">Cover image</app-file-input>
+					<app-file-input class="input" accept="application/pdf" formGroupName="preview" [formGroup]="getPreviewFormGroup()">Preview file</app-file-input>
+					<app-file-input class="input" accept="application/pdf" formGroupName="file" [formGroup]="getFileFormGroup()">Book file</app-file-input>
+				</div>
+			</div>
+			<div class="btn-zone">
+				<app-action-button>
+					Publish
+				</app-action-button>
+			</div>
+		</div>
+</form>
+	
+	
+</app-content-card>

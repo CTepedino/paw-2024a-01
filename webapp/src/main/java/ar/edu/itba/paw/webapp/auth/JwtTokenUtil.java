@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JwtTokenUtil {
 
-    private static final long EXPIRATION_TIME = TimeUnit.HOURS.toMillis(1);
-    private static final long REFRESH_TOKEN_EXPIRATION = TimeUnit.DAYS.toMillis(7);
+    private static final long EXPIRATION_TIME = TimeUnit.HOURS.toMillis(2);
+    private static final long REFRESH_TOKEN_EXPIRATION = TimeUnit.DAYS.toMillis(31);
 
 
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
