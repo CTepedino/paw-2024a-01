@@ -1,16 +1,20 @@
-import {Component, ElementRef, input, ViewChild} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ContentCardComponent} from "../../shared/components/content-card/content-card.component";
 import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {BookGenre} from "../../shared/model/book/bookGenre";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {DateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, NativeDateAdapter} from "@angular/material/core";
-import {MatIcon} from "@angular/material/icon";
-import {MatButton} from "@angular/material/button";
 import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
 import {FileInputComponent} from "../../shared/components/file-input/file-input.component";
+import {AddBookService} from "./store/add-book.service";
+import {AsyncPipe, JsonPipe} from "@angular/common";
+import {fileTypeValidator} from "../../shared/validators/fileTypeValidator";
+import {Router} from "@angular/router";
+import {catchError, map, throwError} from "rxjs";
+
 
 @Component({
   selector: 'app-add-book',
@@ -27,10 +31,9 @@ import {FileInputComponent} from "../../shared/components/file-input/file-input.
     MatDatepickerToggle,
     MatDatepicker,
     MatSuffix,
-    MatIcon,
-    MatButton,
     ActionButtonComponent,
-    FileInputComponent
+    FileInputComponent,
+    AsyncPipe,
   ],
   templateUrl: './add-book.component.html',
   styleUrl: './add-book.component.scss',
@@ -39,32 +42,58 @@ import {FileInputComponent} from "../../shared/components/file-input/file-input.
     {provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS}
   ]
 })
-export class AddBookComponent {
-
-  firstPublication = input(false);
+export class AddBookComponent implements OnInit {
+  addBookService = inject(AddBookService);
+  router = inject(Router);
 
   protected readonly BookGenre = BookGenre;
   protected readonly Object = Object;
+
+  maxDate = new Date();
+
+  showCBUField = this.addBookService.shouldShowCBUField();
 
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      title: [''],
+      cbu: [''],
+      title: ['', [Validators.required, Validators.maxLength(50)]],
+      description: ['', [Validators.required, Validators.maxLength(1000)]],
+      genre: [null, [Validators.required]],
+      suggestedAge: [null, [Validators.required, Validators.max(100), Validators.min(0)]],
+      price: [null, [Validators.required, Validators.max(100000000), Validators.min(0)]],
+      pageCount: [null, [Validators.required, Validators.max(1000000), Validators.min(0)]],
+      publicationDate: [null, [Validators.required]],
       cover: this.fb.group({
         fileName: [''],
-        fileData: [null],
+        fileData: [null, [Validators.required, fileTypeValidator(['image/*'])]],
       }),
       preview: this.fb.group({
         fileName: [''],
-        fileData: [null],
+        fileData: [null, [Validators.required, fileTypeValidator(['application/pdf'])]],
       }),
       file: this.fb.group({
         fileName: [''],
-        fileData: [null],
+        fileData: [null, [Validators.required, fileTypeValidator(['application/pdf'])]],
       }),
     });
   }
+
+  ngOnInit() {
+    this.showCBUField.pipe(map((show) => {
+      if (show){
+        this.form.get('cbu')?.addValidators([
+            Validators.required,
+            Validators.pattern(/^[a-zA-ZáéíóüúÁÉÍÓÜÚ0-9ñÑ.-]+$/),
+            Validators.minLength(6),
+            Validators.maxLength(22)
+        ]);
+        this.form.get('cbu')?.updateValueAndValidity();
+      }
+    })).subscribe();
+  }
+
 
   getCoverFormGroup(): FormGroup{
     return this.form.get('cover') as FormGroup;
@@ -79,11 +108,42 @@ export class AddBookComponent {
   }
 
   onSubmit() {
-    const file = this.form.get('fileUpload.fileData')?.value;
-    if (file) {
-      console.log('Uploading file:', file);
-      // Handle the file upload process
+    if (this.form.valid){
+      console.log('pub')
+
+      this.addBookService.publish(this.form).pipe(
+      map((id) => {
+        console.log(`id: ${id}`)
+        this.router.navigate([`/book/${id}`]);
+      }), catchError((err) => {
+        console.log(err);
+        return throwError(() => 'publish failed');
+      })
+      ).subscribe();
     }
+  }
+
+
+  print(){
+
+    console.log(this.form.get('cover')?.valid);
+    console.log(this.form.get('preview')?.valid);
+    console.log(this.form.get('file')?.valid);
+
+    console.log(this.form.get('suggestedAge')?.valid);
+    console.log(this.form.get('pageCount')?.valid);
+    console.log(this.form.get('genre')?.valid);
+
+    console.log(this.form.get('title')?.valid);
+    console.log(this.form.get('price')?.valid);
+    console.log(this.form.get('description')?.valid);
+
+    console.log(this.form.get('publicationDate')?.valid);
+    console.log(this.form.get('cbu')?.valid);
+
+    console.log(this.form.valid);
+
+    console.log(this.form.value);
   }
 
 }

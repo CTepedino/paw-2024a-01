@@ -1,6 +1,6 @@
 import {booleanAttribute, Component, computed, input} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardImage} from "@angular/material/card";
-import {DecimalPipe, NgOptimizedImage} from "@angular/common";
+import {DecimalPipe} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {RouterLink} from "@angular/router";
 import {BookWithInfo} from "../../model/book/bookWithInfo";
@@ -18,7 +18,6 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 		MatRipple,
 		RouterLink,
 		BookBadgeComponent,
-		NgOptimizedImage
 	],
   templateUrl: './small-book-card.component.html',
   styleUrl: './small-book-card.component.scss'

@@ -61,6 +61,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     User user = us.findByEmail(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
                     response.setHeader("Authorization", jwtTokenUtil.generateToken(user));
                     response.setHeader("X-Refresh-Token", jwtTokenUtil.generateRefreshToken(user));
+                } else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Unauthorized: Invalid token or refresh token");
+                    return;
                 }
             }
         }

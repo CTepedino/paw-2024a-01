@@ -32,8 +32,8 @@ export class UserService {
     return this.http.get<User>(`${this.apiURL}/${id}`);
   }
 
-  putUser(userUrl: string, user: User){
-    this.http.put(
+  putUser(userUrl: string, user: User): Observable<void>{
+    return this.http.put<void>(
         this.apiURL,
         user,
         {headers: {"Content-Type": MediaTypes.USER}}

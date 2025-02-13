@@ -12,7 +12,7 @@
 				}
 				<span><mat-icon>face</mat-icon>+{{book().suggestedAge}}</span>
 				<span><mat-icon>description</mat-icon>{{book().pageCount}}</span>
-				<span><mat-icon>calendar_today</mat-icon>{{book().publishDate | date: 'yyyy'}}</span>
+				<span><mat-icon>calendar_today</mat-icon>{{book().publicationDate | date: 'yyyy'}}</span>
 			</div>
 			<p class="price">
 				@if(book().dealInfo){

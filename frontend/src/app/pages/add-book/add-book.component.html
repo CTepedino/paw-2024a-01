@@ -4,12 +4,14 @@
 	</div>
 	<hr/>
 	<form [formGroup]="form" (ngSubmit)="onSubmit()">
-		@if (!firstPublication()){
+		@if ((showCBUField | async)){
 			<div class="form">
 				<p>Since this is your first book, you will need to enter your payment information</p>
 				<mat-form-field appearance="outline" class="input">
 					<mat-label>Your CBU or alias</mat-label>
-					<input matInput required>
+					<input matInput required #cbu formControlName="cbu">
+					<mat-hint>At least 6 characters</mat-hint>
+					<mat-hint align="end">{{cbu.value.length}} / 22</mat-hint>
 				</mat-form-field>
 			</div>
 			<hr/>
@@ -19,14 +21,14 @@
 			<div class="input-zone">
 				<mat-form-field appearance="outline" class="input">
 					<mat-label>Title</mat-label>
-					<input matInput required maxlength="50" #title formGroupName="title">
+					<input matInput required maxlength="50" #title formControlName="title">
 					<mat-hint align="end">{{title.value.length}} / 50</mat-hint>
 				</mat-form-field>
 			</div>
 			<div class="input-zone">
 				<mat-form-field appearance="outline" class="input">
 					<mat-label>Description</mat-label>
-					<textarea matInput #description required class="textarea" maxlength="1000"></textarea>
+					<textarea matInput #description required class="textarea" maxlength="1000" formControlName="description"></textarea>
 					<mat-hint align="end">{{description.value.length}} / 1000</mat-hint>
 				</mat-form-field>
 			</div>
@@ -36,7 +38,7 @@
 			<div class="input-zone">
 				<div class="as-row">
 					<mat-form-field appearance="outline" class="input">
-						<mat-select required>
+						<mat-select required formControlName="genre">
 							@for (genre of Object.values(BookGenre); track genre){
 								<mat-option [value]="genre">{{genre}}</mat-option>
 							}
@@ -45,11 +47,11 @@
 					</mat-form-field>
 					<mat-form-field appearance="outline" class="input">
 						<mat-label>Page count</mat-label>
-						<input matInput required type="number">
+						<input matInput required type="number" formControlName="pageCount" min="1" max="1000000">
 					</mat-form-field>
 					<mat-form-field appearance="outline" class="input">
 						<mat-label>Price</mat-label>
-						<input matInput required type="number">
+						<input matInput required type="number" formControlName="price" min="0" max="100000000">
 					</mat-form-field>
 				</div>
 			</div>
@@ -57,11 +59,11 @@
 				<div class="as-row">
 					<mat-form-field appearance="outline" class="input">
 						<mat-label>Recommended age</mat-label>
-						<input matInput required type="number">
+						<input matInput required type="number" formControlName="suggestedAge" min="0" max="99">
 					</mat-form-field>
 					<mat-form-field appearance="outline" class="input">
 						<mat-label>Publication date</mat-label>
-						<input matInput [matDatepicker]="picker" required>
+						<input matInput [matDatepicker]="picker" required formControlName="publicationDate" [max]="maxDate" readonly>
 						<mat-hint>MM/DD/YYYY</mat-hint>
 						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 						<mat-datepicker #picker></mat-datepicker>
@@ -76,12 +78,10 @@
 				</div>
 			</div>
 			<div class="btn-zone">
-				<app-action-button>
+				<app-action-button [disabled]="!form.valid" (click)="onSubmit()">
 					Publish
 				</app-action-button>
 			</div>
 		</div>
 </form>
-	
-	
 </app-content-card>

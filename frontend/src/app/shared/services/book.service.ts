@@ -37,11 +37,13 @@ export class BookService {
     );
   }
 
-  postBook(book: Book) {
-      this.http.post(
+  postBook(book: Book): Observable<string> {
+      return this.http.post(
           this.apiURL,
           book,
-          {headers: {"Content-Type": MediaTypes.BOOK}}
+          {headers: {"Content-Type": MediaTypes.BOOK}, observe: 'response'},
+      ).pipe(
+          map(response => response.headers.get('Location') || '')
       );
   }
 
@@ -61,22 +63,22 @@ export class BookService {
       );
   }
 
-  putBookCover(bookUrl: string, cover: File){
+  putBookCover(bookUrl: string, cover: File): Observable<void>{
       const formData = new FormData();
       formData.append('cover', cover);
-      this.http.put(`${bookUrl}/cover`, formData);
+      return this.http.put<void>(`${bookUrl}/cover`, formData);
   }
 
-  putBookPreview(bookUrl: string, preview: File){
+  putBookPreview(bookUrl: string, preview: File): Observable<void>{
       const formData = new FormData();
       formData.append('preview', preview);
-      this.http.put(`${bookUrl}/preview`, formData);
+      return this.http.put<void>(`${bookUrl}/preview`, formData);
   }
 
-  putBookFile(bookUrl: string, file: File){
+  putBookFile(bookUrl: string, file: File): Observable<void>{
       const formData = new FormData();
       formData.append('book_file', file);
-      this.http.put(`${bookUrl}/book-file`, formData);
+      return this.http.put<void>(`${bookUrl}/book-file`, formData);
   }
 
   getDeal(dealUrl: string): Observable<Deal> {
