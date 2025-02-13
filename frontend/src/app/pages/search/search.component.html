@@ -1,0 +1,16 @@
+<mat-grid-list cols="20">
+    <!-- Columna izquierda (70%) -->
+    <mat-grid-tile [colspan]="15" class="left-column full-height">
+        <mat-grid-list cols="2" rowHeight="300px" gutterSize="10px" class="book-grid">
+            @for (book of books; track book) {
+                <mat-grid-tile>
+                    <app-book-card-search></app-book-card-search>
+                </mat-grid-tile>
+            }
+        </mat-grid-list>
+    </mat-grid-tile>
+
+    <!-- Columna derecha (30%) -->
+    <mat-grid-tile [colspan]="5" class="right-column">
+    </mat-grid-tile>
+</mat-grid-list>

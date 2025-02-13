@@ -16,6 +16,7 @@ import {bookWriterGuard} from "./shared/guards/book-writer.guard";
 import {canValidateCodeGuard} from "./shared/guards/can-validate-code.guard";
 import {EmailValidationComponent} from "./pages/email-validation/email-validation.component";
 import {ResetPasswordComponent} from "./pages/reset-password/reset-password.component";
+import {SearchComponent} from "./pages/search/search.component";
 import {ChangePasswordComponent} from "./pages/change-password/change-password.component";
 import {AddBookComponent} from "./pages/add-book/add-book.component";
 import {EditBookComponent} from "./pages/edit-book/edit-book.component";
@@ -29,7 +30,7 @@ export const routes: Routes = [
 	{path: "validate", component: EmailValidationComponent, canActivate: [canValidateCodeGuard]},
 	{path: "reset-password", component: ResetPasswordComponent, canActivate: [canValidateCodeGuard]},
 
-	{path: "search", component: HomeComponent},
+	{path: "search", component: SearchComponent},
 
 	{path: "add-book", component: AddBookComponent, canActivate: [loggedInGuard]},
 	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard]},

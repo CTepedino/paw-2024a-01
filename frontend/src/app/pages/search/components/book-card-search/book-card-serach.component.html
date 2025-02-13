@@ -1,0 +1,26 @@
+<mat-card matRipple class="book-card">
+	<mat-card-header class="header">
+		<img mat-card-image src="{{book.cover}}?height=250&width=200" alt="Book cover" class="book-image">
+		<mat-card-content class="book-content">
+			<h2 class="book-title">{{book.title}}</h2>
+			<p class="book-author">By {{book.author}}</p>
+			<p class="book-genre">{{book.genre}}</p>
+			<div class="book-details">
+				<span><mat-icon>face</mat-icon>+{{book.age}}</span>
+				<span><mat-icon>description</mat-icon>{{book.pages}}</span>
+				<span><mat-icon>calendar_today</mat-icon>{{book.year}}</span>
+			</div>
+			<p class="price">
+				@if(book.deal){
+					<p class="deal">
+						<span class="crossed">${{book.price | number}}</span>
+						<span class="discount"> -{{book.percentage | number}}%</span>
+					</p>
+					<p class="deal-price">${{book.deal | number}}</p>
+				} @else {
+					${{book.price | number}}
+				}
+			</p>
+		</mat-card-content>
+	</mat-card-header>
+</mat-card>
