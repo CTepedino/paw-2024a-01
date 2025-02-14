@@ -7,7 +7,6 @@ import ar.edu.itba.paw.models.books.Book;
 import ar.edu.itba.paw.models.deals.Deal;
 import ar.edu.itba.paw.models.exception.BookNotFoundException;
 import ar.edu.itba.paw.models.exception.InvalidDealException;
-import ar.edu.itba.paw.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,7 +34,7 @@ public class DealServiceImpl implements DealService {
 
     @Transactional
     @Override
-    public void createOrUpdate(long bookId, BigDecimal price, int duration) {
+    public void createOrUpdate(long bookId, BigDecimal price, LocalDate end) {
         Book book = bookDao.findById(bookId).orElseThrow(BookNotFoundException::new);
 
         if (price.compareTo(book.getPrice().multiply(new BigDecimal("0.95").setScale(2, RoundingMode.HALF_UP))) >= 0){
@@ -44,10 +42,10 @@ public class DealServiceImpl implements DealService {
         }
 
         if (book.getDeal() == null){
-            dealDao.create(bookId, price, LocalDate.now(), LocalDate.now().plusDays(duration));
+            dealDao.create(bookId, price, LocalDate.now(), end);
             LOGGER.atDebug().setMessage("Started deal for book {}").addArgument(bookId).log();
         } else {
-            dealDao.update(book.getDeal(), price, book.getDeal().getStartDate().plusDays(duration));
+            dealDao.update(book.getDeal(), price, end);
             LOGGER.atDebug().setMessage("Updated deal for book {}").addArgument(bookId).log();
         }
 

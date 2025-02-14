@@ -23,8 +23,7 @@ import {EditBookComponent} from "./pages/edit-book/edit-book.component";
 import {BuyBookComponent} from "./pages/book-details/pages/buy-book/buy-book.component";
 import {canBuyBookGuard} from "./shared/guards/can-buy-book.guard";
 import { ProfileComponent } from './pages/profile/profile.component';
-
-
+import {DealComponent} from "./pages/book-details/pages/deal/deal.component";
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
 
@@ -42,7 +41,7 @@ export const routes: Routes = [
 	{path: "book/:id/questions", component: BookDetailsComponent, canActivate: [numericIDGuard]},
 	{path: "book/:id/my-questions", component: BookDetailsComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard]},
 	{path: "book/:id/edit", component: EditBookComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard]},
-	{path: "book/:id/deal", component: HomeComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard]},
+	{path: "book/:id/deal", component: DealComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard]},
 	{path: "book/:id/buy", component: BuyBookComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard, canBuyBookGuard]},
 
 	{path: "questions", component: HomeComponent, canActivate: [loggedInGuard]},

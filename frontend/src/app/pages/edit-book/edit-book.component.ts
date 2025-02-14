@@ -35,7 +35,7 @@ export class EditBookComponent implements OnInit{
 	router = inject(Router);
 	route = inject(ActivatedRoute);
 
-	bookId = this.route.snapshot.paramMap.get('id');
+	bookId: any;
 
 	protected readonly BookGenre = BookGenre;
 	protected readonly Object = Object;
@@ -48,7 +48,7 @@ export class EditBookComponent implements OnInit{
 			description: ['', [Validators.required, Validators.maxLength(1000)]],
 			genre: [null, [Validators.required]],
 			suggestedAge: [null, [Validators.required, Validators.max(100), Validators.min(0)]],
-			price: [null, [Validators.required, Validators.max(100000000), Validators.min(0)]],
+			price: [null, [Validators.required, Validators.max(100000000), Validators.min(0.1)]],
 			pageCount: [null, [Validators.required, Validators.max(1000000), Validators.min(0)]],
 			cover: this.fb.group({
 				fileName: [''],
@@ -66,6 +66,7 @@ export class EditBookComponent implements OnInit{
 	}
 
 	ngOnInit() {
+		this.bookId = this.route.snapshot.paramMap.get('id');
 		this.editBookService.getBook(this.bookId).pipe(map((book) => {
 			this.form.patchValue({
 				title: book.title,
