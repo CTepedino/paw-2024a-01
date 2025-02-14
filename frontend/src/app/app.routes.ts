@@ -24,6 +24,7 @@ import {BuyBookComponent} from "./pages/book-details/pages/buy-book/buy-book.com
 import {canBuyBookGuard} from "./shared/guards/can-buy-book.guard";
 import { ProfileComponent } from './pages/profile/profile.component';
 import {DealComponent} from "./pages/book-details/pages/deal/deal.component";
+import {EditProfileComponent} from "./pages/edit-profile/edit-profile.component";
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
 
@@ -55,7 +56,7 @@ export const routes: Routes = [
 	{path: "profile/:id/recommendations", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "profile/:id/wishlist", component: HomeComponent, canActivate: [numericIDGuard, userIdGuard]},
 	{path: "change-password", component: ChangePasswordComponent, canActivate: [loggedInGuard]},
-	{path: "edit-profile", component: HomeComponent, canActivate: [loggedInGuard]},
+	//{path: "edit-profile", component: HomeComponent, canActivate: [loggedInGuard]},
 
 	{path: "analytics", component: HomeComponent, canActivate: [loggedInGuard, writerGuard]},
 
@@ -63,6 +64,7 @@ export const routes: Routes = [
 
 	{path: "sales", component: SalesComponent, canActivate: [loggedInGuard, writerGuard]},
 	{path: "my-profile", component: ProfileComponent},
+	{path: "edit-profile", component: EditProfileComponent},
 	{path: "404", component: NotFoundPageComponent},
 	{path: "**", redirectTo: "404"}
 ];
