@@ -24,6 +24,9 @@ import {BuyBookComponent} from "./pages/book-details/pages/buy-book/buy-book.com
 import {canBuyBookGuard} from "./shared/guards/can-buy-book.guard";
 import { ProfileComponent } from './pages/profile/profile.component';
 import {DealComponent} from "./pages/book-details/pages/deal/deal.component";
+import {QuestionsComponent} from "./pages/questions/questions.component";
+import {AskedQuestionsComponent} from "./pages/questions/components/asked-questions/asked-questions.component";
+import {RecievedQuestionsComponent} from "./pages/questions/components/recieved-questions/recieved-questions.component";
 import {EditProfileComponent} from "./pages/edit-profile/edit-profile.component";
 import {SignupComponent} from "./pages/signup/signup.component";
 export const routes: Routes = [
@@ -46,9 +49,12 @@ export const routes: Routes = [
 	{path: "book/:id/deal", component: DealComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard]},
 	{path: "book/:id/buy", component: BuyBookComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard, canBuyBookGuard]},
 
-	{path: "questions", component: HomeComponent, canActivate: [loggedInGuard]},
-	{path: "questions/asked-questions", component: HomeComponent, canActivate: [loggedInGuard]},
-	{path: "questions/received-questions", component: HomeComponent, canActivate: [loggedInGuard, writerGuard] },
+	{path: "questions", component: QuestionsComponent, canActivate: [loggedInGuard], children: [
+			{path: '', redirectTo: 'asked-questions', pathMatch: 'full' },
+			{path: "asked-questions", component: AskedQuestionsComponent, canActivate: [loggedInGuard]},
+			{path: "received-questions", component: RecievedQuestionsComponent, canActivate: [loggedInGuard, writerGuard] },
+	]},
+
 
 	{path: "profile", component: HomeComponent, canActivate: [loggedInGuard]},
 	{path: "profile/:id", component: HomeComponent, canActivate: [numericIDGuard]},
