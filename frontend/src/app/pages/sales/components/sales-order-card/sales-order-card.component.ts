@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {OrderStatus} from "../../../../shared/model/order/orderStatus";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {CurrencyPipe, DatePipe} from "@angular/common";
 import {MatButtonModule} from "@angular/material/button";
+import {MatDialog} from "@angular/material/dialog";
+import {AcceptPopupComponent} from "../accept-popup/accept-popup.component";
+import {DeclinePopupComponent} from "../decline-popup/decline-popup.component";
 
 @Component({
   selector: 'app-sales-order-card',
@@ -11,6 +14,21 @@ import {MatButtonModule} from "@angular/material/button";
   styleUrl: './sales-order-card.component.scss'
 })
 export class SalesOrderCardComponent {
+  readonly dialog = inject(MatDialog);
+
+  openAcceptDialog(): void {
+    this.dialog.open(AcceptPopupComponent, {
+      width: '99%',
+      height: '175px',
+    });
+  }
+
+  openDeclineDialog(): void {
+    this.dialog.open(DeclinePopupComponent, {
+      width: '99%',
+      height: '260px',
+    });
+  }
 
   user = {
     firstName: 'Juan',

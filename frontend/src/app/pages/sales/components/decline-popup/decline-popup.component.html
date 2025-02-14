@@ -1,0 +1,12 @@
+<h1 i18n mat-dialog-title>Payment Approval</h1>
+<div mat-dialog-content>
+    <p i18n>Are you sure you want to decline payment?</p>
+    <mat-form-field class="full-width">
+        <mat-label i18n>Reason for payment rejection</mat-label>
+        <input matInput>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button i18n mat-button class="cancel-button" (click)="closeDialog()">CANCEL</button>
+    <button i18n mat-button class="decline-button" (click)="closeDialog()">DECLINE</button>
+</div>

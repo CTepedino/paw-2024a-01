@@ -28,8 +28,8 @@
             <p i18n>Done</p>
         }
         @if (order.status == OrderStatus.WAITING_APPROVAL){
-            <button i18n mat-flat-button class="decline-button">DECLINE</button>
-            <button i18n mat-flat-button class="accept-button">ACCEPT</button>
+            <button i18n mat-flat-button class="decline-button" (click)="openDeclineDialog()">DECLINE</button>
+            <button i18n mat-flat-button class="accept-button" (click)="openAcceptDialog()">ACCEPT</button>
         }
     </mat-grid-tile>
 </mat-grid-list>

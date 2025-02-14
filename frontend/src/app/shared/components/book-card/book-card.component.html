@@ -4,7 +4,7 @@
 		<img mat-card-image src="{{book().cover}}?height=250&width=200" alt="Book cover" class="book-image">
 		<mat-card-content class="book-content">
 			<h2 class="book-title">{{book().title}}</h2>
-			<p>By {{book().writerInfo.firstName}} {{book().writerInfo.lastName}}</p>
+			<p class="writer">By {{book().writerInfo.firstName}} {{book().writerInfo.lastName}}</p>
 			<p class="book-genre">{{book().genre}}</p>
 			<div class="book-details">
 				@if (book().averageRating! > 0){
