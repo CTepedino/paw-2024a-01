@@ -64,7 +64,7 @@ public class AccessHelper {
                 .isPresent();
     }
 
-    public boolean isLoggedUserAndOwnsBook(String userIdString, String bookIdString){
+    public boolean isLoggedUserAndOwnsBook(String bookIdString, String userIdString){
         long userId = Long.parseLong(userIdString);
         long bookId = Long.parseLong(bookIdString);
 

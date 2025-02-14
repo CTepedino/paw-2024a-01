@@ -85,8 +85,6 @@ export class DealComponent implements OnInit {
   }
 
   onSubmit(){
-
-
     if (this.form.valid){
 
       this.bookDetailsService.setDeal(this.id, this.form).pipe(
