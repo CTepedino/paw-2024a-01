@@ -33,7 +33,7 @@ export class BookService {
     })
 
     return this.http.get<Book[]>(this.apiURL, {params: params, observe: 'response'}).pipe(
-     map((response) => setPagination(response, 10))
+     map((response) => setPagination(response, query.size!))
     );
   }
 

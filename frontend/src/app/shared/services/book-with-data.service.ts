@@ -55,23 +55,23 @@ export class BookWithDataService {
     }
 
     private fetchWriter(writerUrl: string): Observable<User>{
-    if (this.writers.has(writerUrl)){
-      return of(this.writers.get(writerUrl)!);
-    }
-    return this.userService.getUser(writerUrl).pipe(
-        map((writer) => {
-            this.writers.set(writerUrl, writer);
-          return writer;
-        })
-    );
+        if (this.writers.has(writerUrl)){
+          return of(this.writers.get(writerUrl)!);
+        }
+        return this.userService.getUser(writerUrl).pipe(
+            map((writer) => {
+                this.writers.set(writerUrl, writer);
+              return writer;
+            })
+        );
     }
 
     private fetchDeal(dealUrl: string | undefined): Observable<Deal | null>{
-    if (dealUrl == null){
-      return of(null);
-    }
+        if (dealUrl == null){
+          return of(null);
+        }
 
-    return this.bookService.getDeal(dealUrl);
+        return this.bookService.getDeal(dealUrl);
     }
 
 }

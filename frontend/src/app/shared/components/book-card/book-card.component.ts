@@ -28,7 +28,6 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 })
 export class BookCardComponent {
 
-
 	book = input.required<BookWithData>();
 
     protected readonly SalesCategory = SalesCategory;

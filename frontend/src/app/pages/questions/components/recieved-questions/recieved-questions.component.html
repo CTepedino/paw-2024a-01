@@ -1,1 +1,20 @@
-<p>recieved-questions works!</p>
+<mat-checkbox class="remember-me" checked (change)="setQuestions($event)">Include answered questions</mat-checkbox>
+@if (questions$ | async; as questions){
+	
+	<div class="questions-container">
+		@for (question of ((questions)!| paginate: {id: 'received', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!});
+			track question.id){
+			<app-question-card
+				[question]="question"
+				received
+			></app-question-card>
+		}
+	</div>
+	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+		<app-paginator id="received" (pageChange)="onPageChange($event)"/>
+	}
+} @else {
+	<h5 class="empty-q">
+		You have not received any questions
+	</h5>
+}

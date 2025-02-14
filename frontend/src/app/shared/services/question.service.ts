@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
 import {QuestionSearchQuery} from "../model/question/questionSearchQuery";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {Question} from "../model/question/question";
 import {Answer} from "../model/question/answer";
 import {MediaTypes} from "../const/mediaTypes";
+import {PaginatedContent, setPagination} from "../model/paginatedContent";
 
 @Injectable({
   providedIn: 'root'
@@ -16,20 +17,26 @@ export class QuestionService {
 
   constructor(private http: HttpClient) { }
 
-  listQuestions(query: QuestionSearchQuery): Observable<Question[]>{
-    const params = new HttpParams();
+  listQuestions(query: QuestionSearchQuery): Observable<PaginatedContent<Question>>{
+    if (!query.size){
+      query.size = 10;
+    }
+
+    let params = new HttpParams();
 
     Object.entries(query).forEach(([name, value]) => {
         if (value !== null && value !== undefined){
-          params.append(name, value);
+          params = params.append(name, value);
         }
     });
 
-    return this.http.get<Question[]>(this.apiUrl, {params: params});
+    return this.http.get<Question[]>(this.apiUrl, {params: params, observe: 'response'}).pipe(
+        map((response) => setPagination(response, query.size!))
+    );
   }
 
-  postQuestion(question: Question){
-    this.http.post(
+  postQuestion(question: Question): Observable<void>{
+    return this.http.post<void>(
         this.apiUrl,
         question,
         {headers: {"Content-Type": MediaTypes.QUESTION}}
@@ -44,8 +51,8 @@ export class QuestionService {
     return this.http.get<Answer>(`${questionUrl}/answer`);
   }
 
-  putAnswer(questionUrl: string, answer: Answer) {
-    this.http.put<Answer>(
+  putAnswer(questionUrl: string, answer: Answer): Observable<void> {
+    return this.http.put<void>(
         `${questionUrl}/answer`,
         answer,
         {headers: {"Content-Type": MediaTypes.ANSWER}}

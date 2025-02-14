@@ -1,11 +1,31 @@
-<p>questions works!</p>
+<div class="title-container">
+	<h2 class="page-title">Questions</h2>
+</div>
 
-<app-question-card>
 
-</app-question-card>
-
-<!--
-@if (hasMultipleTabs){
-	<router-outlet/>
-}
--->
+<div class="center">
+	<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="selectedIndex$ | async">
+		<mat-tab class="tab">
+			<ng-template mat-tab-label>
+				<h3>Asked questions</h3>
+			</ng-template>
+			<ng-template matTabContent>
+				<div class="white">
+					<app-asked-questions/>
+				</div>
+			</ng-template>
+		</mat-tab>
+		@if (showTabs){
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h2>Received questions</h2>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+						<app-recieved-questions/>
+					</div>
+				</ng-template>
+			</mat-tab>
+		}
+	</mat-tab-group>
+</div>

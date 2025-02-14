@@ -1,1 +1,18 @@
-<p>asked-questions works!</p>
+@if (questions$ | async; as questions){
+	<div class="questions-container">
+		
+		@for (question of ((questions)!| paginate: {id: 'asked', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!});
+			track question.id){
+			<app-question-card
+				[question]="question"
+			></app-question-card>
+		}
+	</div>
+	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+		<app-paginator id="asked" (pageChange)="onPageChange($event)"/>
+	}
+} @else {
+	<h5 class="empty-q">
+		You have not made any questions yet
+	</h5>
+}

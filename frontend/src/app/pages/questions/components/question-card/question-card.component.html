@@ -1,46 +1,52 @@
 <div class="question-card">
-	<div class="img-wrap" routerLink="/book/{{question.bookInfo.id}}">
+	<div class="img-wrap" routerLink="/book/{{question().bookInfo.id}}">
 	<img
 		class="book-img"
-		[ngSrc]="question.bookInfo.cover!"
+		[ngSrc]="question().bookInfo.cover!"
 		alt="Book cover"
 		height="150"
 		width="100"
 	/>
 	</div>
 	<div class="info">
-		<a routerLink="/book/{{question.bookInfo.id}}">{{question.bookInfo.title}}</a>
+		<div>Book: <a routerLink="/book/{{question().bookInfo.id}}">{{question().bookInfo.title}}</a></div>
 		<div>
 			@if (received()){
-				<a routerLink="/profile/{{question.questionerInfo?.id}}">Questioner: {{question.questionerInfo?.firstName}} {{question.questionerInfo?.lastName}}</a>
+				Questioner: <a routerLink="/profile/{{question().questionerInfo?.id}}"> {{question().questionerInfo?.firstName}} {{question().questionerInfo?.lastName}}</a>
 			} @else {
-				<a routerLink="/profile/{{question.writerInfo?.id}}">{{question.writerInfo?.firstName}} {{question.writerInfo?.lastName}}</a>
+				Writer: <a routerLink="/profile/{{question().writerInfo?.id}}"> {{question().writerInfo?.firstName}} {{question().writerInfo?.lastName}}</a>
 			}
 		</div>
 	</div>
 	<div class="question">
 		<div>
-			<span class="question-text">{{question.question}}</span>
-			<span class="date"> - {{question.date | date:'yyyy/MM/dd'}}</span>
+			<span class="question-text">{{question().question}}</span>
+			<span class="date"> - {{question().date | date:'yyyy/MM/dd'}}</span>
 		</div>
 		<div class="answer">
-			@if(!received()){
-					<form class="row-form">
+			@if(received()){
+				@if (showAnswer()){
+					<span><mat-icon class="arrow">subdirectory_arrow_right</mat-icon></span>
+					<span class="answer-text">{{question().answerInfo?.answer}}</span>
+					<span class="date"> - {{question().answerInfo?.answerDate | date:'yyyy/MM/dd'}}</span>
+				} @else {
+					<form class="row-form" [formGroup]="form"  (ngSubmit)="onSubmit()" >
 						<mat-icon class="arrow">subdirectory_arrow_right</mat-icon>
 						<mat-form-field class="input">
-							<input matInput required class="input-field">
+							<input matInput required class="input-field" formControlName="answer" autocomplete="off">
 						</mat-form-field>
-						<app-action-button class="button">
+						<app-action-button class="button" [disabled]="!this.form.valid" (click)="onSubmit()">
 							<div class="answer">
 								Answer
 							</div>
 						</app-action-button>
 					</form>
+				}
 			} @else {
 				<span><mat-icon class="arrow">subdirectory_arrow_right</mat-icon></span>
-				@if (question.answerInfo) {
-					<span class="answer-text">{{question.answerInfo.answer}}</span>
-					<span class="date"> - {{question.answerInfo.answerDate | date:'yyyy/MM/dd'}}</span>
+				@if (showAnswer()) {
+					<span class="answer-text">{{question().answerInfo?.answer}}</span>
+					<span class="date"> - {{question().answerInfo?.answerDate | date:'yyyy/MM/dd'}}</span>
 				} @else {
 					<span class="answer-text">No answer yet</span>
 				}
