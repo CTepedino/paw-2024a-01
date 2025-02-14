@@ -1,10 +1,12 @@
 import {Component, input} from '@angular/core';
 import {TabComponent} from "../../shared/components/tab/tab.component";
+import {ReviewFormCardComponent} from "./components/review-form-card/review-form-card.component";
 
 @Component({
   selector: 'app-book-details',
 	imports: [
-		TabComponent
+		TabComponent,
+		ReviewFormCardComponent
 	],
   templateUrl: './book-details.component.html',
   styleUrl: './book-details.component.scss',

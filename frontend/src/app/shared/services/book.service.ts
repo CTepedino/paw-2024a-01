@@ -121,8 +121,8 @@ export class BookService {
       return this.http.get<Review>(`${bookUrl}/reviews/${userId}`);
   }
 
-  putReview(bookUrl: string, userId: number, review: Review){
-      return this.http.put(
+  putReview(bookUrl: string, userId: number, review: Review): Observable<void>{
+      return this.http.put<void>(
           `${bookUrl}/reviews/${userId}`,
           review,
           {headers: {"Content-Type": MediaTypes.REVIEW}}
