@@ -1,15 +1,16 @@
 .book-card {
-  height: 370px;
+  height: 300px;
   max-width: 250px;
   display: flex;
   align-items: center;
-  margin: 20px;
+  margin: 10px;
   border-radius: 0;
   cursor: pointer;
+  background-color: white;
 }
 
 .book-image {
-  height: 200px;
+  height: 150px;
   max-width: 250px;
   border-radius: 2px 2px 0 0;
   object-fit: cover;
@@ -45,10 +46,11 @@
   margin-top: 0;
   font-size: 1.25rem;
   text-overflow: ellipsis;
+  white-space: nowrap;  /* Evita el salto de línea */
+  overflow: hidden;  /* Oculta el texto que se desborda */
   text-align: start;
-  padding-left: 25px;
-  padding-right: 25px;
 }
+
 
 .crossed {
   text-decoration: line-through;
@@ -59,6 +61,9 @@
   font-weight: normal;
   margin-bottom: 0;
   margin-top: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;  /* Evita que el texto salte de línea */
+  overflow: hidden;  /* Oculta el contenido que sobrepase el ancho */
 }
 
 .discount{
@@ -74,10 +79,11 @@
   margin-top: 5px;
   margin-bottom: 0;
   font-size: 0.9rem;
-  padding-left: 25px;
-  padding-right: 25px;
   text-overflow: ellipsis;
+  white-space: nowrap;  /* Evita que el texto salte de línea */
+  overflow: hidden;  /* Oculta el contenido que sobrepase el ancho */
 }
+
 
 .no-deal {
   margin-top: 15px;
@@ -88,6 +94,7 @@
   font-size: 0.8rem;
   margin-top: 5px;
   margin-bottom: 0;
-  padding-left: 25px;
-  padding-right: 25px;
+  text-overflow: ellipsis;
+  white-space: nowrap;  /* Evita que el texto salte de línea */
+  overflow: hidden;  /* Oculta el contenido que sobrepase el ancho */
 }
