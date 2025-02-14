@@ -55,7 +55,6 @@
 .price {
   color: #0288d1;
   font-size: 1.5rem;
-  font-weight: bold;
   position: absolute;
   bottom: 10px;
   right: 30px;
@@ -73,7 +72,7 @@
   white-space: nowrap;  /* Mantiene el texto en una sola línea */
   overflow: hidden;  /* Oculta el texto que no cabe */
   text-overflow: ellipsis;  /* Muestra "..." cuando el texto es demasiado largo */
-
+  font-weight: 400;
   word-break: break-all;  /* Corta la palabra si es necesario */
 }
 
@@ -111,6 +110,5 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  font-weight: 500;
   text-align: start;
 }
