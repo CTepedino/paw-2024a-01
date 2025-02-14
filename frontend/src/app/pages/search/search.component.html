@@ -10,7 +10,74 @@
         </mat-grid-list>
     </mat-grid-tile>
 
-    <!-- Columna derecha (30%) -->
-    <mat-grid-tile [colspan]="5" class="right-column">
+    <mat-grid-tile [colspan]="5" class="right-column full-height">
+        <form>
+            <!-- Título -->
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Title</mat-label>
+                <input matInput>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="input">
+                <mat-select formControlName="orderby">
+                    @for (orderby of Object.values(BookSearchOrderBy); track orderby){
+                        <mat-option [value]="orderby">{{orderby}}</mat-option>
+                    }
+                </mat-select>
+                <mat-label>Order by</mat-label>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="input">
+                <mat-select formControlName="genre">
+                    @for (genre of Object.values(BookGenre); track genre){
+                        <mat-option [value]="genre">{{genre}}</mat-option>
+                    }
+                </mat-select>
+                <mat-label>Genre</mat-label>
+            </mat-form-field>
+
+            <!-- Cantidad de páginas -->
+            <div class="form-group">
+                <mat-form-field appearance="outline">
+                    <mat-label>Min pages</mat-label>
+                    <input matInput type="number" min="0" max="1000000">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Max pages</mat-label>
+                    <input matInput type="number" min="0" max="1000000">
+                </mat-form-field>
+            </div>
+
+            <!-- Precio -->
+            <div class="form-group">
+                <mat-form-field appearance="outline">
+                    <mat-label>Min price</mat-label>
+                    <input matInput type="number" step="100" min="0" max="1000000">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Max price</mat-label>
+                    <input matInput type="number" step="100" min="0" max="1000000">
+                </mat-form-field>
+            </div>
+
+            <!-- Edad Aceptada -->
+            <div class="form-group">
+                <mat-form-field appearance="outline">
+                    <mat-label>Min age</mat-label>
+                    <input matInput type="number" min="0" max="99">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Max age</mat-label>
+                    <input matInput type="number" min="0" max="99">
+                </mat-form-field>
+            </div>
+
+            <div class="btn-zone">
+                <app-action-button>
+                    Apply
+                </app-action-button>
+            </div>
+        </form>
     </mat-grid-tile>
+
 </mat-grid-list>

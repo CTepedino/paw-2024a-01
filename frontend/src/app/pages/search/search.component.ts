@@ -1,24 +1,22 @@
 import {Component, inject} from "@angular/core";
-import {FormsModule} from "@angular/forms";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
-import {HomeService} from "../home/store/home.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {map, Observable} from "rxjs";
-import {PaginatedContent} from "../../shared/model/paginatedContent";
-import {BookWithData} from "../../shared/model/book/bookWithData";
 import {AsyncPipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
-import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
-import {BookCardComponent} from "../../shared/components/book-card/book-card.component";
-import {Book} from "../../shared/model/book/book";
-import {SmallBookCardComponent} from "../../shared/components/small-book-card/small-book-card.component";
 import {MatCardModule} from "@angular/material/card";
-import {OrderStatus} from "../../shared/model/order/orderStatus";
 import {BookCardSerachComponent} from "./components/book-card-search/book-card-serach.component";
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {BookGenre} from "../../shared/model/book/bookGenre";
+import {BookSearchOrderBy} from "../../shared/model/book/bookSearchOrderBy";
+import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
+
 
 @Component({
     selector: 'app-search',
-    imports: [FormsModule, MatGridList, MatGridTile, MatCardModule, AsyncPipe, NgxPaginationModule, BookCardSerachComponent],
+    imports: [FormsModule, MatGridList, MatGridTile, MatCardModule, AsyncPipe, NgxPaginationModule, BookCardSerachComponent, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, ReactiveFormsModule, ActionButtonComponent],
     templateUrl: './search.component.html',
     styleUrl: './search.component.scss',
 })
@@ -39,5 +37,9 @@ export class SearchComponent {
 
 
     books = Array(10).fill(this.book);
-    //orders = Array()
+    generos = ['Ficción', 'No ficción', 'Misterio', 'Ciencia Ficción', 'Fantasía', 'Romance'];
+    generoSeleccionado: string = '';
+    protected readonly BookGenre = BookGenre;
+    protected readonly Object = Object;
+    protected readonly BookSearchOrderBy = BookSearchOrderBy;
 }
