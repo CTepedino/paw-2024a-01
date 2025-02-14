@@ -1,0 +1,28 @@
+<div class="profile-header center">
+    <!-- Imagen de perfil -->
+    <img class="profile-img" src="assets/default-profile.jpg" alt="Profile picture"/>
+
+    <!-- Nombre y email -->
+    <h2 class="writer-name">{{user.firstName}} {{user.lastName}}</h2>
+    <p class="writer-info">{{user.email}}</p>
+
+    <!-- Categoría de escritor -->
+    <div class="sales-category bronze">
+        <p>Bronze</p>
+    </div>
+
+    <!-- CBU -->
+    <p class="writer-info">
+        CBU: {{user.cbu}}
+    </p>
+
+    <!-- Botones de acción -->
+    <div class="edit-profile">
+        <button mat-raised-button color="primary" routerLink="/edit-profile">
+            EDITAR PERFIL
+        </button>
+        <button mat-raised-button color="primary" routerLink="/change-password">
+            CAMBIAR CONTRASEÑA
+        </button>
+    </div>
+</div>

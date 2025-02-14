@@ -1,0 +1,43 @@
+.profile-header {
+  text-align: center;
+  padding: 20px 0;
+
+  .profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .writer-name {
+    margin: 10px 0;
+    color: #437C90;
+    font-size: 24px;
+  }
+
+  .writer-info {
+    color: #666;
+    margin: 5px 0;
+  }
+
+  .sales-category {
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 4px;
+    margin: 10px 0;
+
+    &.bronze {
+      background-color: #CD7F32;
+      color: white;
+    }
+  }
+
+  .edit-profile {
+    margin-top: 20px;
+
+    button {
+      margin: 0 5px;
+      background-color: #26a69a;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<div class="container">
+    <!-- Header con la imagen y datos del usuario -->
+    <app-profile-header
+            [user]="user">
+    </app-profile-header>
+
+    <!-- Tabs de navegación -->
+    <app-profile-tabs
+            [selectedTab]="selectedTab"
+            (tabChange)="selectedTab = $event">
+    </app-profile-tabs>
+</div>

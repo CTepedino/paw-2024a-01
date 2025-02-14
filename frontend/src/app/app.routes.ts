@@ -22,6 +22,8 @@ import {AddBookComponent} from "./pages/add-book/add-book.component";
 import {EditBookComponent} from "./pages/edit-book/edit-book.component";
 import {BuyBookComponent} from "./pages/book-details/pages/buy-book/buy-book.component";
 import {canBuyBookGuard} from "./shared/guards/can-buy-book.guard";
+import { ProfileComponent } from './pages/profile/profile.component';
+
 
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
@@ -61,7 +63,7 @@ export const routes: Routes = [
 	{path: "purchases", component: HomeComponent, canActivate: [loggedInGuard]},
 
 	{path: "sales", component: SalesComponent, canActivate: [loggedInGuard, writerGuard]},
-
+	{path: "my-profile", component: ProfileComponent},
 	{path: "404", component: NotFoundPageComponent},
 	{path: "**", redirectTo: "404"}
 ];
