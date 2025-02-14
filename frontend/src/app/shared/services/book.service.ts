@@ -85,16 +85,16 @@ export class BookService {
       return this.http.get<Deal>(dealUrl);
   }
 
-  putDeal(bookUrl: string, deal: Deal){
-      this.http.put(
+  putDeal(bookUrl: string, deal: Deal): Observable<void>{
+      return this.http.put<void>(
           `${bookUrl}/deal`,
           deal,
           {headers: {"Content-Type": MediaTypes.DEAL}}
       );
   }
 
-  deleteDeal(dealUrl: string){
-      this.http.delete(dealUrl);
+  deleteDeal(dealUrl: string): Observable<void>{
+      return this.http.delete<void>(dealUrl);
   }
 
   getBookMonthlyAnalytics(analyticsUrl: string): Observable<BookMonthlyAnalytics> {

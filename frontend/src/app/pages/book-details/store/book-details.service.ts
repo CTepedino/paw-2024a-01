@@ -3,13 +3,15 @@ import {BookWithDataService} from "../../../shared/services/book-with-data.servi
 import {BookWithData} from "../../../shared/model/book/bookWithData";
 import {concatMap, Observable, of, tap} from "rxjs";
 import {OrderService} from "../../../shared/services/order.service";
+import {FormGroup} from "@angular/forms";
+import {BookService} from "../../../shared/services/book.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookDetailsService {
 
-  constructor(private bookService: BookWithDataService, private orderService: OrderService) { }
+  constructor(private bookWithDataService: BookWithDataService, private orderService: OrderService, private bookService: BookService) { }
 
   private book: BookWithData | undefined;
 
@@ -18,7 +20,7 @@ export class BookDetailsService {
       return of(this.book!);
     }
 
-    return this.bookService.getBookWithData(id).pipe(
+    return this.bookWithDataService.getBookWithData(id).pipe(
         tap((book) => this.book = book)
     );
   }
@@ -31,5 +33,23 @@ export class BookDetailsService {
     );
   }
 
+  setDeal(id: number, form: FormGroup): Observable<void> {
+    return this.getBook(id).pipe(
+        concatMap(book => {
+          return this.bookService.putDeal(
+              book.self!,
+              {
+                price: form.get('price')?.value,
+                end: form.get('endDate')?.value.toISOString().substring(0, 10)
+              }
+          );
+        })
+    )
+  }
 
+  endDeal(id: number): Observable<void> {
+    return this.getBook(id).pipe(
+        concatMap(book => this.bookService.deleteDeal(book.deal!))
+    );
+  }
 }
