@@ -29,6 +29,10 @@ import {AskedQuestionsComponent} from "./pages/questions/components/asked-questi
 import {RecievedQuestionsComponent} from "./pages/questions/components/recieved-questions/recieved-questions.component";
 import {EditProfileComponent} from "./pages/edit-profile/edit-profile.component";
 import {SignupComponent} from "./pages/signup/signup.component";
+import {PurchasesComponent} from "./pages/purchases/purchases.component";
+
+
+
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
 
@@ -67,8 +71,10 @@ export const routes: Routes = [
 
 	{path: "analytics", component: HomeComponent, canActivate: [loggedInGuard, writerGuard]},
 
-	{path: "purchases", component: HomeComponent, canActivate: [loggedInGuard]},
-
+	//{path: "purchases", component: HomeComponent, canActivate: [loggedInGuard]},
+	{
+		path: "purchases", component: PurchasesComponent
+	},
 	{path: "sales", component: SalesComponent, canActivate: [loggedInGuard, writerGuard]},
 	{path: "my-profile", component: ProfileComponent},
 	{path: "edit-profile", component: EditProfileComponent},

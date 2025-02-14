@@ -1,0 +1,66 @@
+<div class="container">
+    <h1 class="page-title">My Purchases</h1>
+
+    <div class="search-filters">
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput [(ngModel)]="searchTitle">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Select order status</mat-label>
+            <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
+                @for (status of statusOptions; track status.value) {
+                    <mat-option [value]="status.value">{{status.label}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div class="table-header">
+        <div class="header-cell">Cover</div>
+        <div class="header-cell">Book</div>
+        <div class="header-cell">Date</div>
+        <div class="header-cell">Status</div>
+        <div class="header-cell">Actions</div>
+    </div>
+
+    @if (purchases.length === 0) {
+        <div class="empty-message">
+            <h5>No purchases found</h5>
+        </div>
+    }
+
+    @for (purchase of purchases; track purchase.book.id) {
+        <div class="purchase-row">
+            <div class="cell cover-cell">
+                <img [src]="purchase.book.coverUrl" [alt]="purchase.book.title">
+            </div>
+
+            <div class="cell info-cell">
+                <h3>{{purchase.book.title}}</h3>
+                <p>By {{purchase.book.author}}</p>
+                <p class="price">${{purchase.book.price}}</p>
+            </div>
+
+            <div class="cell date-cell">
+                {{purchase.date}}
+            </div>
+
+            <div class="cell status-cell">
+                {{purchase.status}}
+            </div>
+
+            <div class="cell actions-cell">
+                @if (purchase.status === 'COMPLETED') {
+                    <button mat-raised-button color="primary">READ BOOK</button>
+                    <mat-checkbox
+                            [(ngModel)]="purchase.recommended"
+                            class="recommend-checkbox">
+                        Recommend book
+                    </mat-checkbox>
+                }
+            </div>
+        </div>
+    }
+</div>
