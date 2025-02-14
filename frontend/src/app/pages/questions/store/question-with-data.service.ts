@@ -32,13 +32,13 @@ export class QuestionWithDataService {
       );
     }
 
-    getReceivedQuestions(page: number, size: number = 10, is_answered: boolean){
+    getReceivedQuestions(page: number, size: number = 10, include_answered: boolean){
         return this.authService.getLoggedUser().pipe(
             concatMap(user => this.getQuestions({
                 writer_id: user?.id,
                 page: page,
                 size: size,
-                is_answered: is_answered? undefined : false
+                is_answered: include_answered? undefined : false
             }).pipe(
                 concatMap(questionPage => this.fillQuestionerInfo(questionPage))
             ))

@@ -7,7 +7,7 @@ import {map, Observable} from "rxjs";
 import {QuestionWithDataService} from "../../store/question-with-data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, JsonPipe} from "@angular/common";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
 
@@ -19,7 +19,8 @@ import {NgxPaginationModule} from "ngx-pagination";
         MatCheckbox,
         AsyncPipe,
         PaginatorComponent,
-        NgxPaginationModule
+        NgxPaginationModule,
+        JsonPipe
     ],
   templateUrl: './asked-questions.component.html',
   styleUrl: './asked-questions.component.scss'

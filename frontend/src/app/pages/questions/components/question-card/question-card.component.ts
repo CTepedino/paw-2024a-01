@@ -44,7 +44,7 @@ export class QuestionCardComponent implements OnInit{
   }
 
   ngOnInit(): void {
-  //  this.showAnswer.set(!!this.question().answerInfo)
+    this.showAnswer.set(!!this.question().answerInfo)
   }
 
 
