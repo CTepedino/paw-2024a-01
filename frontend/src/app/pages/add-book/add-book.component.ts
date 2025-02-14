@@ -62,7 +62,7 @@ export class AddBookComponent implements OnInit {
       description: ['', [Validators.required, Validators.maxLength(1000)]],
       genre: [null, [Validators.required]],
       suggestedAge: [null, [Validators.required, Validators.max(100), Validators.min(0)]],
-      price: [null, [Validators.required, Validators.max(100000000), Validators.min(0)]],
+      price: [null, [Validators.required, Validators.max(100000000), Validators.min(0.1)]],
       pageCount: [null, [Validators.required, Validators.max(1000000), Validators.min(0)]],
       publicationDate: [null, [Validators.required]],
       cover: this.fb.group({

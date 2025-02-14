@@ -30,3 +30,40 @@ html, body {
   justify-content: center;
   margin-top: 950px;
 }
+
+.right-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+form {
+  width: 90%;
+  max-width: 400px; /* Ajusta esto según necesites */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.form-group .mat-form-field {
+  flex: 1;
+}
+
+.btn-zone {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  justify-content: center;
+}

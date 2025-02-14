@@ -224,7 +224,7 @@ public class BookController {
         @PathParam("id") final long id,
         @Valid DealSubmitDTO dealDTO
     ){
-        ds.createOrUpdate(id, dealDTO.getPrice(), dealDTO.getDuration());
+        ds.createOrUpdate(id, dealDTO.getPrice(), dealDTO.getEnd());
         return Response.noContent().build();
     }
 

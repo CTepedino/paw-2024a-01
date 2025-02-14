@@ -4,7 +4,7 @@
 
 @if ((bestSellers$ | async)?.length! > 0){
 	<h5 class="home-margin">Best sellers</h5>
-	<mat-grid-list cols="6" rowHeight="400px" gutterSize="5px" class="book-grid">
+	<mat-grid-list cols="6" rowHeight="350px" gutterSize="5px" class="book-grid">
 		@for(book of bestSellers$ | async;track book.id){
 			<mat-grid-tile>
 				<app-small-book-card [book]="book" class="grid-book-card"></app-small-book-card>
@@ -15,7 +15,7 @@
 
 @if ((newDeals$ | async)?.length! > 0){
 	<h5 class="home-margin">New deals</h5>
-	<mat-grid-list cols="6" rowHeight="400px" gutterSize="5px" class="book-grid">
+	<mat-grid-list cols="6" rowHeight="350px" gutterSize="5px" class="book-grid">
 		@for (book of newDeals$ | async; track book.id){
 			<mat-grid-tile>
 				<app-small-book-card [book]="book" class="grid-book-card"></app-small-book-card>
@@ -26,7 +26,7 @@
 @if ((books$ | async); as books){
 	@if (books?.length! > 0){
 		<h5 class="home-margin">Latest books</h5>
-		<mat-grid-list cols="2" rowHeight="260px" gutterSize="5px" class="book-grid">
+		<mat-grid-list cols="2" rowHeight="240px" gutterSize="5px" class="book-grid">
 			@for (book of ((books)! | paginate: {id: 'books', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id) {
 				<mat-grid-tile >
 					<app-book-card class="grid-book-card" [book]="book"/>

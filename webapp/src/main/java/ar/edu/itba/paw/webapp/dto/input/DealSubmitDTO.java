@@ -1,7 +1,12 @@
 package ar.edu.itba.paw.webapp.dto.input;
 
-import javax.validation.constraints.*;
+import ar.edu.itba.paw.webapp.dto.input.validations.TomorrowOrMore;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class DealSubmitDTO {
 
@@ -10,9 +15,9 @@ public class DealSubmitDTO {
     @DecimalMax(value = "100000000.0")
     private BigDecimal price;
 
-    @Positive
-    @Max(value = 100)
-    private int duration;
+    @TomorrowOrMore
+    @NotNull
+    private LocalDate end;
 
     public BigDecimal getPrice() {
         return price;
@@ -22,11 +27,11 @@ public class DealSubmitDTO {
         this.price = price;
     }
 
-    public int getDuration() {
-        return duration;
+    public LocalDate getEnd() {
+        return end;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setEnd(LocalDate end) {
+        this.end = end;
     }
 }

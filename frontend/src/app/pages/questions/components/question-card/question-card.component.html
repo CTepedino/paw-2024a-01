@@ -1,0 +1,50 @@
+<div class="question-card">
+	<div class="img-wrap" routerLink="/book/{{question.bookInfo.id}}">
+	<img
+		class="book-img"
+		[ngSrc]="question.bookInfo.cover!"
+		alt="Book cover"
+		height="150"
+		width="100"
+	/>
+	</div>
+	<div class="info">
+		<a routerLink="/book/{{question.bookInfo.id}}">{{question.bookInfo.title}}</a>
+		<div>
+			@if (received()){
+				<a routerLink="/profile/{{question.questionerInfo?.id}}">Questioner: {{question.questionerInfo?.firstName}} {{question.questionerInfo?.lastName}}</a>
+			} @else {
+				<a routerLink="/profile/{{question.writerInfo?.id}}">{{question.writerInfo?.firstName}} {{question.writerInfo?.lastName}}</a>
+			}
+		</div>
+	</div>
+	<div class="question">
+		<div>
+			<span class="question-text">{{question.question}}</span>
+			<span class="date"> - {{question.date | date:'yyyy/MM/dd'}}</span>
+		</div>
+		<div class="answer">
+			@if(!received()){
+					<form class="row-form">
+						<mat-icon class="arrow">subdirectory_arrow_right</mat-icon>
+						<mat-form-field class="input">
+							<input matInput required class="input-field">
+						</mat-form-field>
+						<app-action-button class="button">
+							<div class="answer">
+								Answer
+							</div>
+						</app-action-button>
+					</form>
+			} @else {
+				<span><mat-icon class="arrow">subdirectory_arrow_right</mat-icon></span>
+				@if (question.answerInfo) {
+					<span class="answer-text">{{question.answerInfo.answer}}</span>
+					<span class="date"> - {{question.answerInfo.answerDate | date:'yyyy/MM/dd'}}</span>
+				} @else {
+					<span class="answer-text">No answer yet</span>
+				}
+			}
+		</div>
+	</div>
+</div>

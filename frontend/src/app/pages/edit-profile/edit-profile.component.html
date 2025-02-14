@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="form-container">
+        <h2>Editar perfil</h2>
+
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nombre<span class="required">*</span></mat-label>
+                <input matInput formControlName="firstName">
+                @if (editForm.get('firstName')?.invalid && editForm.get('firstName')?.touched) {
+                    <mat-error>{{getErrorMessage('firstName')}}</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Apellido<span class="required">*</span></mat-label>
+                <input matInput formControlName="lastName">
+                @if (editForm.get('lastName')?.invalid && editForm.get('lastName')?.touched) {
+                    <mat-error>{{getErrorMessage('lastName')}}</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>CBU o alias<span class="required">*</span></mat-label>
+                <input matInput formControlName="cbu">
+                @if (editForm.get('cbu')?.invalid && editForm.get('cbu')?.touched) {
+                    <mat-error>{{getErrorMessage('cbu')}}</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+                @if (editForm.get('description')?.invalid && editForm.get('description')?.touched) {
+                    <mat-error>{{getErrorMessage('description')}}</mat-error>
+                }
+            </mat-form-field>
+
+            <div class="image-upload">
+                <button mat-raised-button color="primary" type="button">
+                    IMAGEN DE PERFIL
+                </button>
+            </div>
+
+            <div class="submit-button">
+                <button mat-raised-button color="primary" [disabled]="!editForm.valid">
+                    GUARDAR CAMBIOS
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

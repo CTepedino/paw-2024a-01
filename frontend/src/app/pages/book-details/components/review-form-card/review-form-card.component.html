@@ -1,0 +1,34 @@
+<app-content-card>
+	<h2 class="title">
+		@if (edit){
+			Change your review
+		} @else {
+			Leave a review
+		}
+	</h2>
+	<hr/>
+	<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+		<div class="form-input">
+			<ngb-rating class="star-rating"
+					formControlName="rating"
+					[max]="5"
+					[resettable]="true"
+			></ngb-rating>
+		</div>
+		<div class="form-input">
+			<mat-form-field appearance="outline" class="input">
+				<mat-label>Review</mat-label>
+				<textarea matInput #reviewText required class="textarea" maxlength="500" formControlName="review"></textarea>
+				<mat-hint align="end">{{reviewText.value.length}} / 500</mat-hint>
+			</mat-form-field>
+		</div>
+		<div class="btn-zone">
+			<app-action-button [disabled]="!form.valid" (click)="onSubmit()" submit>
+				Set deal
+			</app-action-button>
+			<app-cancel-button routerLink="/book/{{id}}">
+				Cancel
+			</app-cancel-button>
+		</div>
+	</form>
+</app-content-card>
