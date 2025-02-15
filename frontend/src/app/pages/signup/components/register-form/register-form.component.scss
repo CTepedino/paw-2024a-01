@@ -1,0 +1,35 @@
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+
+  a {
+    color: #26a69a;
+    text-decoration: none;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.form {
+  width: 100%;
+  min-width: 300px;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 40px;
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
+
+.signup-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

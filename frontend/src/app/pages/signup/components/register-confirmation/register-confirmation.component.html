@@ -1,0 +1,9 @@
+<app-notification-card>
+	<card-title>Registration successful!</card-title>
+	<card-text>
+		<p class="register-confirmation">Check your inbox for an email with a link to validate your Cybrary account</p>
+		<div class="resend-button">
+			<app-action-button [disabled]="disableResend" (click)="resendEmail()">Resend email</app-action-button>
+		</div>
+	</card-text>
+</app-notification-card>

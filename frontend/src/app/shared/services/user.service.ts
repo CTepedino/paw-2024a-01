@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
 import {User} from "../model/user/user";
 import {Observable} from "rxjs";
@@ -16,11 +16,16 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  postUser(user: User){
-    this.http.post(
+  postUser(user: User): Observable<void>{
+    const headers = new HttpHeaders({
+      'Accept-Language': navigator.language || 'en-US',
+      "Content-Type": MediaTypes.USER
+    });
+
+    return this.http.post<void>(
         this.apiURL,
         user,
-        {headers: {"Content-Type": MediaTypes.USER}}
+        {headers: headers}
     );
   }
 
