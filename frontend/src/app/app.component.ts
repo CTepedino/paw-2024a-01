@@ -5,7 +5,6 @@ import {AuthService} from "./shared/services/auth.service";
 import {concatMap, filter, Observable, of, switchMap} from "rxjs";
 import {User} from "./shared/model/user/user";
 import {AsyncPipe} from "@angular/common";
-import { TranslationService } from './shared/services/translation.service';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +24,6 @@ export class AppComponent implements OnInit {
       private authService: AuthService,
       private router: Router,
       private route: ActivatedRoute,
-      private translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
@@ -38,12 +36,6 @@ export class AppComponent implements OnInit {
             this.pfp.set(`${this.user()?.profilePicture}?height=50&width=50&t=${new Date().getTime()}`)
         }
     })
-
-      const savedLang = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en';
-      const supportedLanguages = ['en', 'es'];
-      const defaultLang = supportedLanguages.includes(savedLang) ? savedLang : 'en';
-
-      this.translationService.setLanguage(defaultLang);
 
 
 
@@ -71,10 +63,6 @@ export class AppComponent implements OnInit {
 
     })
   }
-
-    changeLanguage(lang: string) {
-        this.translationService.setLanguage(lang);
-    }
 
 
   logout(){
