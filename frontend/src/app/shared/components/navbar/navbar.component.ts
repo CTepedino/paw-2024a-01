@@ -10,7 +10,6 @@ import { NavbarMenuComponent } from '../navbar-menu/navbar-menu.component';
 import { UserRoles } from '../../model/user/userRoles';
 import { NavButtonComponent } from '../nav-button/nav-button.component';
 import { User } from '../../model/user/user';
-import {TranslationService} from "../../services/translation.service";
 
 
 @Component({
@@ -42,12 +41,9 @@ export class NavbarComponent {
 
   logout = output<void>();
 
-  constructor(private translationService: TranslationService) {
+  constructor() {
   }
 
-  translate(key: string): string {
-    return this.translationService.getTranslation(key);
-  }
 
   protected readonly UserRoles = UserRoles;
 }
