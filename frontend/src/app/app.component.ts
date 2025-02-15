@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
 
     showSearchBar = true;
 
-    currentLang: string = 'en';
 
   constructor(
       private authService: AuthService,
@@ -40,9 +39,11 @@ export class AppComponent implements OnInit {
         }
     })
 
-      this.translationService.currentLang$.subscribe(lang => {
-          this.currentLang = lang;
-      });
+      const savedLang = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en';
+      const supportedLanguages = ['en', 'es'];
+      const defaultLang = supportedLanguages.includes(savedLang) ? savedLang : 'en';
+
+      this.translationService.setLanguage(defaultLang);
 
 
 
@@ -73,10 +74,6 @@ export class AppComponent implements OnInit {
 
     changeLanguage(lang: string) {
         this.translationService.setLanguage(lang);
-    }
-
-    getTranslation(key: string): string {
-        return this.translationService.getTranslation(key);
     }
 
 

@@ -1,31 +1,34 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslationService {
-  private translations: { [key: string]: { [key: string]: string } } = {
-    en: { WELCOME: 'Welcome', LOGIN: 'Login', SIGNUP: 'Sign Up' },
-    es: { WELCOME: 'Bienvenido', LOGIN: 'Iniciar sesión', SIGNUP: 'Registrarse' }
-  };
+  private translations: { [key: string]: string } = {};
+  private currentLang = new BehaviorSubject<string>('en');
+  currentLang$ = this.currentLang.asObservable();
 
-  private currentLangSubject = new BehaviorSubject<string>('en');
-  currentLang$ = this.currentLangSubject.asObservable();
-
-  constructor() {
-    const savedLang = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en';
-    this.setLanguage(savedLang);
-  }
+  constructor(private http: HttpClient) {}
 
   setLanguage(lang: string) {
-    if (!this.translations[lang]) lang = 'en'; // Si el idioma no existe, usar inglés por defecto
     localStorage.setItem('lang', lang);
-    this.currentLangSubject.next(lang);
+    this.currentLang.next(lang);
+    this.loadTranslations(lang).subscribe();
+  }
+
+  loadTranslations(lang: string): Observable<{ [key: string]: string }> {
+    return this.http.get<{ [key: string]: string }>(`/assets/i18n/${lang}.json`).pipe(
+        tap(data => {
+          this.translations = data;
+          console.log('Traducciones cargadas:', data);
+        })
+    );
   }
 
   getTranslation(key: string): string {
-    const lang = this.currentLangSubject.getValue();
-    return this.translations[lang]?.[key] || key;
+    return this.translations[key] || key;
   }
 }

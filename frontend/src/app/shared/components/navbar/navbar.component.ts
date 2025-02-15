@@ -45,7 +45,7 @@ export class NavbarComponent {
   constructor(private translationService: TranslationService) {
   }
 
-  getTranslation(key: string): string {
+  translate(key: string): string {
     return this.translationService.getTranslation(key);
   }
 
