@@ -30,6 +30,8 @@ import {RecievedQuestionsComponent} from "./pages/questions/components/recieved-
 import {EditProfileComponent} from "./pages/edit-profile/edit-profile.component";
 import {SignupComponent} from "./pages/signup/signup.component";
 import {PurchasesComponent} from "./pages/purchases/purchases.component";
+import {userExistsGuard} from "./shared/guards/user-exists.guard";
+import {bookExistsGuard} from "./shared/guards/book-exists.guard";
 
 
 
@@ -44,20 +46,20 @@ export const routes: Routes = [
 	{path: "reset-password", component: ResetPasswordComponent, canActivate: [canValidateCodeGuard]},
 
 	{path: "add-book", component: AddBookComponent, canActivate: [loggedInGuard]},
-	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard]},
-	{path: "book/:id/reviews", component: BookDetailsComponent, canActivate: [numericIDGuard]},
-	{path: "book/:id/questions", component: BookDetailsComponent, canActivate: [numericIDGuard]},
-	{path: "book/:id/my-questions", component: BookDetailsComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard]},
-	{path: "book/:id/edit", component: EditBookComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard]},
-	{path: "book/:id/deal", component: DealComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard]},
-	{path: "book/:id/buy", component: BuyBookComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard, canBuyBookGuard]},
+	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard, bookExistsGuard]},
+	{path: "book/:id/reviews", component: BookDetailsComponent, canActivate: [numericIDGuard, bookExistsGuard]},
+	{path: "book/:id/questions", component: BookDetailsComponent, canActivate: [numericIDGuard, bookExistsGuard]},
+	{path: "book/:id/my-questions", component: BookDetailsComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard, bookExistsGuard]},
+	{path: "book/:id/edit", component: EditBookComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard, bookExistsGuard]},
+	{path: "book/:id/deal", component: DealComponent, canActivate: [numericIDGuard, loggedInGuard, bookWriterGuard, bookExistsGuard]},
+	{path: "book/:id/buy", component: BuyBookComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard, canBuyBookGuard, bookExistsGuard]},
 
 	{path: "questions", component: QuestionsComponent, canActivate: [loggedInGuard], children: [
 			{path: "asked-questions", component: AskedQuestionsComponent, canActivate: [loggedInGuard]},
 			{path: "received-questions", component: RecievedQuestionsComponent, canActivate: [loggedInGuard, writerGuard] },
 	]},
 
-	{path: "profile/:id", component: ProfileComponent, canActivate: [numericIDGuard], children: [
+	{path: "profile/:id", component: ProfileComponent, canActivate: [numericIDGuard, userExistsGuard], children: [
 			{path: "owned", component: ProfileComponent},
 			{path: "wishlist", component: ProfileComponent, canActivate: [userIdGuard]},
 			{path: "publications", component: ProfileComponent, canActivate: [idIsWriterGuard]},
