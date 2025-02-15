@@ -15,7 +15,7 @@ export class AuthService {
     private baseUrl = environment.apiURL;
 
     private loggedUserSubject = new BehaviorSubject<User | null | undefined>(undefined);
-    loggedUser$ = this.loggedUserSubject.asObservable();
+    private loggedUser$ = this.loggedUserSubject.asObservable();
 
     private remember: boolean = false;
     private firstGetUserCall = true;

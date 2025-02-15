@@ -4,7 +4,7 @@
 		<form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
 			<mat-form-field appearance="outline">
 				<mat-label>First name</mat-label>
-				<input matInput formControlName="firstName" maxlength="255">
+				<input matInput formControlName="firstName" maxlength="255" autocomplete="off">
 				@if (showErrorMessage('firstName')) {
 					<mat-error>{{getErrorMessage('firstName')}}</mat-error>
 				}
@@ -12,7 +12,7 @@
 			
 			<mat-form-field appearance="outline">
 				<mat-label>Last name</mat-label>
-				<input matInput formControlName="lastName">
+				<input matInput formControlName="lastName" autocomplete="off">
 				@if (showErrorMessage('lastName')) {
 					<mat-error>{{getErrorMessage('lastName')}}</mat-error>
 				}
@@ -20,7 +20,7 @@
 			
 			<mat-form-field appearance="outline">
 				<mat-label>Email</mat-label>
-				<input matInput formControlName="email" type="email" email maxlength="255">
+				<input matInput formControlName="email" type="email" maxlength="255" autocomplete="off">
 				@if (showErrorMessage('email')) {
 					<mat-error>{{getErrorMessage('email')}}</mat-error>
 				}

@@ -1,5 +1,38 @@
-.container {
+/*.container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+}*/
+
+.center {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.tabber {
+  width: 70%;
+}
+
+.white {
+  background-color: white;
+}
+
+::ng-deep .mat-mdc-tab-header {
+  background-color: #437C90 !important;
+}
+
+.page-title {
+  color: #437C90;
+  font-size: 60px;
+  margin-bottom: 10px;
+  margin-top: 30px;
+  width: 70%;
+}
+
+
+.title-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

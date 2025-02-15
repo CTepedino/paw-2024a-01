@@ -1,12 +1,48 @@
-<div class="container">
-    <!-- Header con la imagen y datos del usuario -->
-    <app-profile-header
-            [user]="user">
-    </app-profile-header>
-
-    <!-- Tabs de navegación -->
-    <app-profile-tabs
-            [selectedTab]="selectedTab"
-            (tabChange)="selectedTab = $event">
-    </app-profile-tabs>
-</div>
+@if (displayInfo$ | async; as displayInfo){
+	<div class="container">
+		<app-profile-header
+				[user]="displayInfo?.user!"
+				[ownsProfile]="displayInfo?.isOwner!"
+		></app-profile-header>
+	</div>
+	<div class="center">
+		<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="index.selectedIndex">
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h3>Bought books</h3>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					</div>
+				</ng-template>
+			</mat-tab>
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h2>Recommendations</h2>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					</div>
+				</ng-template>
+			</mat-tab>
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h2>Wishlist</h2>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					</div>
+				</ng-template>
+			</mat-tab>
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h2>Publications</h2>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					</div>
+				</ng-template>
+			</mat-tab>
+		</mat-tab-group>
+	</div>
+}

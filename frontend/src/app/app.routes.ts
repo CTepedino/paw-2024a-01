@@ -59,18 +59,18 @@ export const routes: Routes = [
 	]},
 
 	{path: "my-profile", redirectTo: 'profile'},
-	{path: "profile", component: ProfileComponent,/* canActivate: [loggedInGuard]*/},
+	{path: "profile", component: ProfileComponent, canActivate: [loggedInGuard]},
 	{path: "profile/:id", component: ProfileComponent, canActivate: [numericIDGuard]},
 	{path: "profile/:id/publications", component: ProfileComponent, canActivate: [numericIDGuard, idIsWriterGuard]},
 	{path: "profile/:id/bought-books", component: ProfileComponent, canActivate: [numericIDGuard, userIdGuard, writerGuard]},
 	{path: "profile/:id/recommendations", component: ProfileComponent, canActivate: [numericIDGuard]},
 	{path: "profile/:id/wishlist", component: ProfileComponent, canActivate: [numericIDGuard, userIdGuard]},
 	{path: "change-password", component: ChangePasswordComponent, canActivate: [loggedInGuard]},
-	{path: "edit-profile", component: EditProfileComponent,/* canActivate: [loggedInGuard]*/},
+	{path: "edit-profile", component: EditProfileComponent, canActivate: [loggedInGuard]},
 
 	{path: "analytics", component: HomeComponent, canActivate: [loggedInGuard, writerGuard]},
 
-	{path: "purchases", component: PurchasesComponent, /*canActivate: [loggedInGuard]*/},
+	{path: "purchases", component: PurchasesComponent, canActivate: [loggedInGuard]},
 	{path: "sales", component: SalesComponent, canActivate: [loggedInGuard, writerGuard]},
 
 	{path: "404", component: NotFoundPageComponent},
