@@ -1,7 +1,7 @@
 import {HttpErrorResponse, HttpInterceptorFn, HttpResponse} from '@angular/common/http';
 import {inject} from "@angular/core";
 import {AuthService} from "../services/auth.service";
-import {catchError, switchMap, tap, throwError} from "rxjs";
+import {catchError, concatMap, switchMap, tap, throwError} from "rxjs";
 
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -9,50 +9,37 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   let modifiedReq = req;
 
   const jwtToken = authService.getJwtToken();
+
   if (jwtToken){
     modifiedReq = req.clone({
-      setHeaders: {
-        Authorization: jwtToken
-      }
+      setHeaders: {Authorization: jwtToken}
     });
   }
 
   return next(modifiedReq).pipe(
-      tap(event => {
-        if (event instanceof HttpResponse) {
-          const newJwt = event.headers.get('Authorization');
-          const newRefreshToken = event.headers.get('X-Refresh-Token');
-
-          if (newJwt && newRefreshToken) {
-            authService.updateTokens(newJwt, newRefreshToken);
-          }
-        }
-      }),
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          return authService.refreshToken().pipe(
-              switchMap(() => {
-                const newToken = authService.getJwtToken();
-                if (!newToken) {
-                  return throwError(() => error);
-                }
+          if (error.status === 401){
+              return authService.refreshToken().pipe(
+                  concatMap(() => {
+                      const newToken = authService.getJwtToken();
+                      if (!newToken){
+                          authService.logout();
+                          return throwError(() => error);
+                      }
 
-                const retryReq = req.clone({
-                  setHeaders: {
-                    Authorization: newToken
-                  }
-                });
+                      const retryReq = req.clone({
+                          setHeaders: {Authorization: newToken}
+                      });
 
-                return next(retryReq);
-              }),
-              catchError(refreshError => {
-                authService.logout();
-                return throwError(() => refreshError);
-              })
-          );
-        }
-
-        return throwError(() => error);
+                      return next(retryReq);
+                  }),
+                  catchError(refreshError => {
+                      authService.logout();
+                      return throwError(() => refreshError);
+                  })
+              )
+          }
+          return throwError(() => error);
       })
   );
 };

@@ -12,7 +12,7 @@ export class ChangePasswordService {
 
   validateOld(oldPassword: string): Observable<boolean>{
     return this.authService.getLoggedUser().pipe(
-        concatMap(user => this.authService.tryLogin(user?.email ?? '', oldPassword))
+        concatMap(user => this.authService.verifyCredentials(user?.email ?? '', oldPassword))
     );
   }
 

@@ -60,11 +60,11 @@ export const routes: Routes = [
 
 	{path: "my-profile", redirectTo: 'profile'},
 	{path: "profile", component: ProfileComponent,/* canActivate: [loggedInGuard]*/},
-	{path: "profile/:id", component: HomeComponent, canActivate: [numericIDGuard]},
-	{path: "profile/:id/publications", component: HomeComponent, canActivate: [numericIDGuard, idIsWriterGuard]},
-	{path: "profile/:id/bought-books", component: HomeComponent, canActivate: [numericIDGuard, userIdGuard, writerGuard]},
-	{path: "profile/:id/recommendations", component: HomeComponent, canActivate: [numericIDGuard]},
-	{path: "profile/:id/wishlist", component: HomeComponent, canActivate: [numericIDGuard, userIdGuard]},
+	{path: "profile/:id", component: ProfileComponent, canActivate: [numericIDGuard]},
+	{path: "profile/:id/publications", component: ProfileComponent, canActivate: [numericIDGuard, idIsWriterGuard]},
+	{path: "profile/:id/bought-books", component: ProfileComponent, canActivate: [numericIDGuard, userIdGuard, writerGuard]},
+	{path: "profile/:id/recommendations", component: ProfileComponent, canActivate: [numericIDGuard]},
+	{path: "profile/:id/wishlist", component: ProfileComponent, canActivate: [numericIDGuard, userIdGuard]},
 	{path: "change-password", component: ChangePasswordComponent, canActivate: [loggedInGuard]},
 	{path: "edit-profile", component: EditProfileComponent,/* canActivate: [loggedInGuard]*/},
 

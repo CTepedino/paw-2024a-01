@@ -1,10 +1,9 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {MatTab, MatTabContent, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {AuthService} from "../../shared/services/auth.service";
-import {BehaviorSubject, map} from "rxjs";
+import {map} from "rxjs";
 import {UserRoles} from "../../shared/model/user/userRoles";
-import {AsyncPipe} from "@angular/common";
 import {AskedQuestionsComponent} from "./components/asked-questions/asked-questions.component";
 import {RecievedQuestionsComponent} from "./components/recieved-questions/recieved-questions.component";
 
@@ -14,7 +13,6 @@ import {RecievedQuestionsComponent} from "./components/recieved-questions/reciev
 		MatTab,
 		MatTabGroup,
 		MatTabLabel,
-		AsyncPipe,
 		MatTabContent,
 		AskedQuestionsComponent,
 		RecievedQuestionsComponent
@@ -24,14 +22,12 @@ import {RecievedQuestionsComponent} from "./components/recieved-questions/reciev
 })
 export class QuestionsComponent implements OnInit {
 
-	route = inject(ActivatedRoute);
 	router = inject(Router);
 	authService = inject(AuthService);
 
 	showTabs = false;
 
-	private selectedIndexSubject = new BehaviorSubject<number>(0);
-	selectedIndex$ = this.selectedIndexSubject.asObservable();
+	index = { selectedIndex: 0 }
 
 	constructor() {
 		this.authService.getLoggedUser().pipe(
@@ -42,11 +38,10 @@ export class QuestionsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		const urlSegments = this.route.snapshot.url;
-		const lastSegment = urlSegments[urlSegments.length - 1]?.path;
+		const url = this.router.url;
 
-		if (lastSegment === 'received-questions') {
-			this.selectedIndexSubject.next(1);
+		if (url.endsWith('received-questions')) {
+			setTimeout(() => this.index.selectedIndex = 1, 100);
 		}
 	}
 

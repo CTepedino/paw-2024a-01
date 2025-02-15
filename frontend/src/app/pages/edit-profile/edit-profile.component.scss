@@ -1,51 +1,14 @@
-.container {
+.form {
+  width: 100%;
   display: flex;
+  flex-grow: 1;
+  flex-direction: column;
   justify-content: center;
-  padding: 20px;
-}
-
-.form-container {
-  width: 100%;
-  max-width: 500px;
-  padding: 20px;
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-
-  h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-  }
-}
-
-.full-width {
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.required {
-  color: red;
-  margin-left: 4px;
-}
-
-.image-upload {
-  margin: 20px 0;
-  text-align: center;
-
-  button {
-    background-color: #26a69a;
-    color: white;
-  }
+  margin-top: 40px;
 }
 
 .submit-button {
   text-align: center;
   margin-top: 20px;
-
-  button {
-    background-color: #26a69a;
-    color: white;
-    padding: 0 30px;
-  }
+  margin-bottom: 20px;
 }

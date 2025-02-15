@@ -33,8 +33,9 @@ export class NavbarComponent {
   showSearchBar = input(true);
   showRightBar = input(true);
 
-  isLoggedIn = input(false);
-  loggedUser = input<User | null>(null);
+  isLoggedIn = input<boolean | undefined>(undefined);
+  loggedUser = input<User | null | undefined>(undefined);
+  pfp = input<string>('');
 
   logout = output<void>()
 

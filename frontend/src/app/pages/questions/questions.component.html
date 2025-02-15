@@ -4,7 +4,7 @@
 
 
 <div class="center">
-	<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="selectedIndex$ | async">
+	<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="index.selectedIndex">
 		<mat-tab class="tab">
 			<ng-template mat-tab-label>
 				<h3>Asked questions</h3>

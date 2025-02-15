@@ -19,12 +19,13 @@ import {User} from "../../model/user/user";
 })
 export class NavbarMenuComponent {
   user = input.required<Partial<User> | null>();
+  pfp = input.required<string>();
 
   getPfp(){
-    if (this.user == null){
+    if (this.user() == null){
       return 'assets/user.jpeg';
     }
-    return `${this.user()?.profilePicture}?height=50&width=50`;
+    return `${this.user()?.profilePicture}?height=50&width=50&t=${new Date().getTime()}`;
   }
 
 
