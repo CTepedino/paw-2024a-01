@@ -1,15 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, output} from '@angular/core';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
-import {
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle
-} from "@angular/material/dialog";
+import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-decline-popup',
@@ -19,15 +13,26 @@ import {
     MatButtonModule,
     MatDialogTitle,
     MatDialogContent,
-    MatDialogActions,
-    MatDialogClose],
+    MatDialogActions, ReactiveFormsModule],
   templateUrl: './decline-popup.component.html',
   styleUrl: './decline-popup.component.scss'
 })
 export class DeclinePopupComponent {
-  constructor(public dialogRef: MatDialogRef<DeclinePopupComponent>) { }
+  form: FormGroup;
+
+  constructor(public dialogRef: MatDialogRef<DeclinePopupComponent>, private fb: FormBuilder) {
+    this.form = fb.group({
+      reason: ['', [Validators.required, Validators.maxLength(255)]]
+    })
+  }
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  onSubmit(){
+    if (this.form.valid){
+      this.dialogRef.close({reason: this.form.get('reason')?.value})
+    }
   }
 }

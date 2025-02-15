@@ -1,0 +1,64 @@
+<app-notification-card>
+	<card-title>Create a Cybrary account</card-title>
+	<card-text>
+		<form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
+			<mat-form-field appearance="outline">
+				<mat-label>First name</mat-label>
+				<input matInput formControlName="firstName" maxlength="255">
+				@if (showErrorMessage('firstName')) {
+					<mat-error>{{getErrorMessage('firstName')}}</mat-error>
+				}
+			</mat-form-field>
+			
+			<mat-form-field appearance="outline">
+				<mat-label>Last name</mat-label>
+				<input matInput formControlName="lastName">
+				@if (showErrorMessage('lastName')) {
+					<mat-error>{{getErrorMessage('lastName')}}</mat-error>
+				}
+			</mat-form-field>
+			
+			<mat-form-field appearance="outline">
+				<mat-label>Email</mat-label>
+				<input matInput formControlName="email" type="email" email maxlength="255">
+				@if (showErrorMessage('email')) {
+					<mat-error>{{getErrorMessage('email')}}</mat-error>
+				}
+			</mat-form-field>
+			
+			<mat-form-field appearance="outline">
+				<mat-label>Password</mat-label>
+				<input matInput formControlName="password" maxlength="255"
+					   [type]="hide ? 'password' : 'text'">
+				<button mat-icon-button matSuffix type="button"
+						(click)="hide = !hide">
+					<mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+				</button>
+				@if (showErrorMessage('password')) {
+					<mat-error>{{getErrorMessage('password')}}</mat-error>
+				}
+			</mat-form-field>
+			
+			<mat-form-field appearance="outline">
+				<mat-label>Confirm password</mat-label>
+				<input matInput formControlName="repeatPassword" maxlength="255"
+					   [type]="hide ? 'password' : 'text'">
+				<button mat-icon-button matSuffix type="button"
+						(click)="hide = !hide">
+					<mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+				</button>
+				@if (signupForm.hasError('notMatching')) {
+					<mat-error>Passwords do not match</mat-error>
+				}
+			</mat-form-field>
+			
+			<app-action-button class="signup-btn" [disabled]="!signupForm.valid" submit>SIGN UP</app-action-button>
+
+			<p class="login-link">
+				Already have an account?
+				<a routerLink="/login">Log in</a>
+			</p>
+		</form>
+	</card-text>
+</app-notification-card>
+

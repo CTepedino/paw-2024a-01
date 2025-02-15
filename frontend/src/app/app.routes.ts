@@ -36,14 +36,13 @@ import {AnalyticsComponent} from "./pages/analytics/analytics.component";
 
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
+	{path: "search", component: SearchComponent},
 
-	//{path: "signup", component: HomeComponent, canActivate: [notLoggedGuard]},
+	{path: "signup", component: SignupComponent, canActivate: [notLoggedGuard]},
 	{path: "login", component: LoginComponent, canActivate: [notLoggedGuard]},
 	{path: "forgot-password", component: ForgotPasswordComponent, canActivate: [notLoggedGuard]},
 	{path: "validate", component: EmailValidationComponent, canActivate: [canValidateCodeGuard]},
 	{path: "reset-password", component: ResetPasswordComponent, canActivate: [canValidateCodeGuard]},
-
-	{path: "search", component: SearchComponent},
 
 	{path: "add-book", component: AddBookComponent, canActivate: [loggedInGuard]},
 	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard]},
@@ -60,26 +59,20 @@ export const routes: Routes = [
 			{path: "received-questions", component: RecievedQuestionsComponent, canActivate: [loggedInGuard, writerGuard] },
 	]},
 
-
-	{path: "profile", component: HomeComponent, canActivate: [loggedInGuard]},
+	{path: "my-profile", redirectTo: 'profile'},
+	{path: "profile", component: ProfileComponent,/* canActivate: [loggedInGuard]*/},
 	{path: "profile/:id", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "profile/:id/publications", component: HomeComponent, canActivate: [numericIDGuard, idIsWriterGuard]},
 	{path: "profile/:id/bought-books", component: HomeComponent, canActivate: [numericIDGuard, userIdGuard, writerGuard]},
 	{path: "profile/:id/recommendations", component: HomeComponent, canActivate: [numericIDGuard]},
 	{path: "profile/:id/wishlist", component: HomeComponent, canActivate: [numericIDGuard, userIdGuard]},
 	{path: "change-password", component: ChangePasswordComponent, canActivate: [loggedInGuard]},
-	//{path: "edit-profile", component: HomeComponent, canActivate: [loggedInGuard]},
+	{path: "edit-profile", component: EditProfileComponent,/* canActivate: [loggedInGuard]*/},
 
 	{path: "analytics", component: AnalyticsComponent, canActivate: [loggedInGuard, writerGuard]},
 
-	//{path: "purchases", component: HomeComponent, canActivate: [loggedInGuard]},
-	{
-		path: "purchases", component: PurchasesComponent
-	},
+	{path: "purchases", component: PurchasesComponent, /*canActivate: [loggedInGuard]*/},
 	{path: "sales", component: SalesComponent, canActivate: [loggedInGuard, writerGuard]},
-	{path: "my-profile", component: ProfileComponent},
-	{path: "edit-profile", component: EditProfileComponent},
-	{path: "signup", component: SignupComponent, canActivate: [notLoggedGuard]},
 
 	{path: "404", component: NotFoundPageComponent},
 	{path: "**", redirectTo: "404"}

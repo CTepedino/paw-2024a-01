@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, output} from '@angular/core';
 import {MatButtonModule} from "@angular/material/button";
 import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
@@ -30,5 +30,9 @@ export class AcceptPopupComponent {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  accept(){
+      this.dialogRef.close({accept: true});
   }
 }

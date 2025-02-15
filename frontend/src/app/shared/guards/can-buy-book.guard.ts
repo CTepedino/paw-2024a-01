@@ -22,7 +22,7 @@ export const canBuyBookGuard: CanActivateFn = (route, state) => {
           book_id: Number(id)
         }).pipe(
             map((orders) => {
-              if(orders.length == 0){
+              if(orders.pagination.totalCount != 0){
                 router.navigate(['/']);
                 return false;
               }

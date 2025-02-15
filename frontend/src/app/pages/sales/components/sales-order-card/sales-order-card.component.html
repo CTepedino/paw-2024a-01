@@ -1,33 +1,35 @@
 <mat-grid-list cols="5" rowHeight="1.5:1" gutterSize="0px">
     <mat-grid-tile class="purchased-book">
-        <img src="{{book.cover}}?height=250&width=200" alt="Book cover" class="book-image">
+        <img src="{{order().bookInfo.cover!}}?height=250&width=200" alt="Book cover" class="book-image">
     </mat-grid-tile>
     <mat-grid-tile class="purchased-book purchase-info">
-        <a class="book-title">{{book.name}}</a>
-        <p class="price">{{book.price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
-        <p i18n>Buyer: <a>{{order.buyer.firstName}} {{order.buyer.lastName}}</a></p>
+        <a class="book-title">{{order().bookInfo.title}}</a>
+        <p class="price">{{order().price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
+        <p class="buyer" i18n>Buyer: <a>{{order().buyerInfo?.firstName}} {{order().buyerInfo?.lastName}}</a></p>
     </mat-grid-tile>
     <mat-grid-tile class="purchased-book purchase-info">
-        <p>{{order.date | date}}</p>
+        <p>{{order().date | date}}</p>
     </mat-grid-tile>
     <mat-grid-tile class="purchased-book purchase-info">
-        @if (order.status == OrderStatus.COMPLETED){
-            <p i18n>Completed</p>
-            <button i18n mat-flat-button class="receipt-button">VIEW RECEIPT</button>
-        }
-        @if (order.status == OrderStatus.WAITING_APPROVAL){
-            <p i18n>Pending payment approval</p>
-            <button i18n mat-flat-button class="receipt-button">VIEW RECEIPT</button>
-        }
-        @if (order.status == OrderStatus.REJECTED_PAYMENT){
-            <p i18n>Waiting for buyer to resend payment</p>
-        }
+		@switch (order().status){
+			@case (OrderStatus.COMPLETED){
+				<p i18n>Completed</p>
+				<button i18n mat-flat-button class="receipt-button" (click)="orderService.openReceiptInternal(order().receipt!)">VIEW RECEIPT</button>
+			}
+			@case (OrderStatus.WAITING_APPROVAL){
+				<p i18n>Pending payment approval</p>
+				<button i18n mat-flat-button class="receipt-button" (click)="orderService.openReceiptInternal(order().receipt!)">VIEW RECEIPT</button>
+			}
+			@case (OrderStatus.REJECTED_PAYMENT){
+				<p i18n>Waiting for buyer to resend payment</p>
+			}
+		}
     </mat-grid-tile>
     <mat-grid-tile class="purchased-book purchase-info">
-        @if (order.status == OrderStatus.COMPLETED){
+        @if (order().status == OrderStatus.COMPLETED){
             <p i18n>Done</p>
         }
-        @if (order.status == OrderStatus.WAITING_APPROVAL){
+        @if (order().status == OrderStatus.WAITING_APPROVAL){
             <button i18n mat-flat-button class="decline-button" (click)="openDeclineDialog()">DECLINE</button>
             <button i18n mat-flat-button class="accept-button" (click)="openAcceptDialog()">ACCEPT</button>
         }
