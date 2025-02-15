@@ -53,18 +53,16 @@ export const routes: Routes = [
 	{path: "book/:id/buy", component: BuyBookComponent, canActivate: [numericIDGuard, loggedInGuard, isNotBookWriterGuard, canBuyBookGuard]},
 
 	{path: "questions", component: QuestionsComponent, canActivate: [loggedInGuard], children: [
-			{path: '', redirectTo: 'asked-questions', pathMatch: 'full' },
 			{path: "asked-questions", component: AskedQuestionsComponent, canActivate: [loggedInGuard]},
 			{path: "received-questions", component: RecievedQuestionsComponent, canActivate: [loggedInGuard, writerGuard] },
 	]},
 
-	{path: "my-profile", redirectTo: 'profile'},
-	{path: "profile", component: ProfileComponent, canActivate: [loggedInGuard]},
-	{path: "profile/:id", component: ProfileComponent, canActivate: [numericIDGuard]},
-	{path: "profile/:id/publications", component: ProfileComponent, canActivate: [numericIDGuard, idIsWriterGuard]},
-	{path: "profile/:id/bought-books", component: ProfileComponent, canActivate: [numericIDGuard, userIdGuard, writerGuard]},
-	{path: "profile/:id/recommendations", component: ProfileComponent, canActivate: [numericIDGuard]},
-	{path: "profile/:id/wishlist", component: ProfileComponent, canActivate: [numericIDGuard, userIdGuard]},
+	{path: "profile/:id", component: ProfileComponent, canActivate: [numericIDGuard], children: [
+			{path: "owned", component: ProfileComponent},
+			{path: "wishlist", component: ProfileComponent, canActivate: [userIdGuard]},
+			{path: "publications", component: ProfileComponent, canActivate: [idIsWriterGuard]},
+	]},
+
 	{path: "change-password", component: ChangePasswordComponent, canActivate: [loggedInGuard]},
 	{path: "edit-profile", component: EditProfileComponent, canActivate: [loggedInGuard]},
 

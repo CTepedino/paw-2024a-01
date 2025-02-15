@@ -1,25 +1,47 @@
-<div class="profile-tabs">
-    <a class="profile-tab"
-       [class.active]="selectedTab === 'publications'"
-       (click)="onTabClick('publications')">
-        <div class="tab-text">
-            <p>Publicaciones</p>
-        </div>
-    </a>
-
-    <a class="profile-tab"
-       [class.active]="selectedTab === 'boughtBooks'"
-       (click)="onTabClick('boughtBooks')">
-        <div class="tab-text">
-            <p>Libros comprados</p>
-        </div>
-    </a>
-
-    <a class="profile-tab"
-       [class.active]="selectedTab === 'wishlist'"
-       (click)="onTabClick('wishlist')">
-        <div class="tab-text">
-            <p>Deseados</p>
-        </div>
-    </a>
+<div class="center">
+	<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="index.selectedIndex">
+		@if (showPublications()){
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h3>Publications</h3>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					</div>
+				</ng-template>
+			</mat-tab>
+		}
+		@if (showBoughtBooks()){
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h2>Bought books</h2>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					</div>
+				</ng-template>
+			</mat-tab>
+		} @else {
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h2>Recommendations</h2>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					</div>
+				</ng-template>
+			</mat-tab>
+		}
+		@if (showWishlist()){
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					<h2>Wishlist</h2>
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					</div>
+				</ng-template>
+			</mat-tab>
+		}
+	</mat-tab-group>
 </div>

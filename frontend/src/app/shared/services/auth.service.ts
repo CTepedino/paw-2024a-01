@@ -50,6 +50,18 @@ export class AuthService {
         return this.loggedUser$;
     }
 
+    getLoggedUserFromApi(): Observable<User | null>{
+        return this.http.get<Index>(this.baseUrl).pipe(
+            concatMap(index => {
+                if (index.loggedUser){
+                    return this.http.get<User>(index.loggedUser);
+                }
+                return of(null);
+            }),
+            catchError(() => of(null))
+        )
+    }
+
     resetLoggedUser() {
         const user = this.loggedUserSubject.value?.self;
 
