@@ -1,0 +1,58 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-title {
+  color: #437C90;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.sales-category{
+  margin: initial;
+  color: white;
+  padding: 5px !important;
+}
+
+.bronze {
+  background: #CD7F32;
+}
+
+.silver {
+  background: #C0C0C0;
+}
+
+.gold {
+  background: #FFD700;
+}
+
+.sales-category {
+  margin: initial;
+  color: white;
+  width: fit-content;
+  padding: inherit;
+}
+
+.card-panel {
+  background-color: #437c90 !important;
+  border-radius: 4px;
+  color: white;
+}
+
+.card {
+  margin-top: 30px;
+  border: 0;
+}
+
+:host .card-panel {
+  ::ng-deep {
+    .mat-grid-tile-content {
+      color: white;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 20px;
+    }
+  }
+}

@@ -30,6 +30,7 @@ import {RecievedQuestionsComponent} from "./pages/questions/components/recieved-
 import {EditProfileComponent} from "./pages/edit-profile/edit-profile.component";
 import {SignupComponent} from "./pages/signup/signup.component";
 import {PurchasesComponent} from "./pages/purchases/purchases.component";
+import {AnalyticsComponent} from "./pages/analytics/analytics.component";
 
 
 
@@ -69,7 +70,7 @@ export const routes: Routes = [
 	{path: "change-password", component: ChangePasswordComponent, canActivate: [loggedInGuard]},
 	//{path: "edit-profile", component: HomeComponent, canActivate: [loggedInGuard]},
 
-	{path: "analytics", component: HomeComponent, canActivate: [loggedInGuard, writerGuard]},
+	{path: "analytics", component: AnalyticsComponent, canActivate: [loggedInGuard, writerGuard]},
 
 	//{path: "purchases", component: HomeComponent, canActivate: [loggedInGuard]},
 	{
