@@ -5,6 +5,7 @@ import {AuthService} from "./shared/services/auth.service";
 import {concatMap, filter, Observable, of, switchMap} from "rxjs";
 import {User} from "./shared/model/user/user";
 import {AsyncPipe} from "@angular/common";
+import { TranslationService } from './shared/services/translation.service';
 
 @Component({
   selector: 'app-root',
@@ -18,10 +19,14 @@ export class AppComponent implements OnInit {
 
   showSearchBar = true;
 
+    currentLang: string = 'en';  // Default language
+    translations: { [key: string]: string } = {};
+
   constructor(
       private authService: AuthService,
       private router: Router,
-      private route: ActivatedRoute
+      private route: ActivatedRoute,
+      private translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +36,20 @@ export class AppComponent implements OnInit {
           return status? this.authService.getLoggedUser() : of(null);
         })
     );
+
+      const savedLang = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en';
+
+      // Configurar el idioma al inicializar
+      const browserLang = navigator.language.split('-')[0];  // Extract language code (e.g., 'en' from 'en-US')
+
+      // List of supported languages
+      const supportedLanguages = ['en', 'es'];
+
+      // If the browser's language is not supported, fall back to English
+      const defaultLang = supportedLanguages.includes(browserLang) ? browserLang : 'en';
+
+      // Set the language
+      this.changeLanguage(defaultLang);
 
 
 
@@ -58,6 +77,15 @@ export class AppComponent implements OnInit {
 
     })
   }
+
+    changeLanguage(lang: string): void {
+        this.translationService.setLanguage(lang);
+        this.currentLang = lang;
+
+        this.translationService.loadTranslations(lang).subscribe((data) => {
+            this.translations = data;
+        });
+    }
 
 
   logout(){
