@@ -5,6 +5,7 @@ import {Order} from "../model/order/order";
 import {map, Observable} from "rxjs";
 import {environment} from "../../../enviroment/enviroment";
 import {MediaTypes} from "../const/mediaTypes";
+import {PaginatedContent, setPagination} from "../model/paginatedContent";
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +16,22 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  listOrders(query: OrderSearchQuery): Observable<Order[]>{
-    const params = new HttpParams();
+  listOrders(query: OrderSearchQuery): Observable<PaginatedContent<Order>>{
+    if (!query.page){
+      query.page = 10
+    }
+
+    let params = new HttpParams();
 
     Object.entries(query).forEach(([name, value]) => {
       if (value !== null && value !== undefined){
-        params.append(name, value);
+        params = params.append(name, value);
       }
     })
 
-    return this.http.get<Order[]>(this.apiURL, {params: params})
+    return this.http.get<Order[]>(this.apiURL, {params: params, observe: 'response'}).pipe(
+        map(response => setPagination(response, query.size!))
+    )
   }
 
   postOrder(order: Order): Observable<string>{
@@ -39,8 +46,8 @@ export class OrderService {
     return this.http.get<Order>(orderUrl);
   }
 
-  patchOrder(orderUrl: string, rejectionReason: string | null){
-    return this.http.patch(
+  patchOrder(orderUrl: string, rejectionReason: string | null): Observable<void>{
+    return this.http.patch<void>(
         orderUrl,
         {rejectionReason: rejectionReason},
         {headers: {"Content-Type": MediaTypes.ORDER}}
@@ -52,4 +59,13 @@ export class OrderService {
     formData.append("receipt", receipt);
     return this.http.put<void>(`${orderUrl}/receipt`, formData);
   }
+
+  openReceiptInternal(receiptUrl: string){
+    this.http.get(receiptUrl, {responseType: 'blob'}).subscribe(blob => {
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    });
+  }
+
 }

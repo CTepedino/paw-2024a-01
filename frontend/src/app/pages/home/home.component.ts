@@ -57,7 +57,6 @@ export class HomeComponent implements OnInit {
 			queryParamsHandling: 'merge',
 		});
 
-		//this.currentPage.set(page);
 
 		this.books$ = this.homeService.getRecentBooks(page, this.pageSize).pipe(
 			map((page) => page.data)
