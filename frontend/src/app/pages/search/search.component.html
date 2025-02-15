@@ -14,36 +14,36 @@
         <form>
             <!-- Título -->
             <mat-form-field appearance="outline" style="width: 100%;">
-                <mat-label>Title</mat-label>
+                <mat-label i18n>Title</mat-label>
                 <input matInput>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="input">
                 <mat-select formControlName="orderby">
                     @for (orderby of Object.values(BookSearchOrderBy); track orderby){
-                        <mat-option [value]="orderby">{{orderby}}</mat-option>
+                        <mat-option i18n [value]="orderby">{{orderby}}</mat-option>
                     }
                 </mat-select>
-                <mat-label>Order by</mat-label>
+                <mat-label i18n>Order by</mat-label>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="input">
                 <mat-select formControlName="genre">
                     @for (genre of Object.values(BookGenre); track genre){
-                        <mat-option [value]="genre">{{genre}}</mat-option>
+                        <mat-option i18n [value]="genre">{{genre}}</mat-option>
                     }
                 </mat-select>
-                <mat-label>Genre</mat-label>
+                <mat-label i18n>Genre</mat-label>
             </mat-form-field>
 
             <!-- Cantidad de páginas -->
             <div class="form-group">
                 <mat-form-field appearance="outline">
-                    <mat-label>Min pages</mat-label>
+                    <mat-label i18n>Min pages</mat-label>
                     <input matInput type="number" min="0" max="1000000">
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Max pages</mat-label>
+                    <mat-label i18n>Max pages</mat-label>
                     <input matInput type="number" min="0" max="1000000">
                 </mat-form-field>
             </div>
@@ -51,11 +51,11 @@
             <!-- Precio -->
             <div class="form-group">
                 <mat-form-field appearance="outline">
-                    <mat-label>Min price</mat-label>
+                    <mat-label i18n>Min price</mat-label>
                     <input matInput type="number" step="100" min="0" max="1000000">
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Max price</mat-label>
+                    <mat-label i18n>Max price</mat-label>
                     <input matInput type="number" step="100" min="0" max="1000000">
                 </mat-form-field>
             </div>
@@ -63,17 +63,17 @@
             <!-- Edad Aceptada -->
             <div class="form-group">
                 <mat-form-field appearance="outline">
-                    <mat-label>Min age</mat-label>
+                    <mat-label i18n>Min age</mat-label>
                     <input matInput type="number" min="0" max="99">
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Max age</mat-label>
+                    <mat-label i18n>Max age</mat-label>
                     <input matInput type="number" min="0" max="99">
                 </mat-form-field>
             </div>
 
             <div class="btn-zone">
-                <app-action-button>
+                <app-action-button i18n>
                     Apply
                 </app-action-button>
             </div>
