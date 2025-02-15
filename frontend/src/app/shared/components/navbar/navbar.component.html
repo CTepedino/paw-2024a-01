@@ -15,10 +15,7 @@
 			}
 		</div>
 		<div class="right-section">
-			@if(isLoggedIn() === undefined){
-			
-			}
-			@else {
+			@if (isLoggedIn() !== undefined) {
 				@if (isLoggedIn()){
 					<app-navbar-menu [user]="loggedUser()!" [pfp]="pfp()">
 						<app-navbar-menu-item link="/profile/{{loggedUser()?.id}}" icon="person">Profile</app-navbar-menu-item>
@@ -33,10 +30,10 @@
 					</app-navbar-menu>
 				} @else {
 					<app-nav-button link="/login">
-						Log In
+						{{ translations()['LOGIN'] }}
 					</app-nav-button>
 					<app-nav-button link="/signup">
-						Sign Up
+						{{ translations()['SIGNUP'] }}
 					</app-nav-button>
 				}
 			}
