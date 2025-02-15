@@ -39,26 +39,14 @@ export class NavbarComponent {
   loggedUser = input<User | null | undefined>(undefined);
   pfp = input<string>('');
 
-  // Definir la variable de traducción
-  currentLang = 'en';
-  translations = signal<{ [key: string]: string }>({});
 
   logout = output<void>();
 
   constructor(private translationService: TranslationService) {
-    // Cargar las traducciones al inicio
-    const savedLang = localStorage.getItem('lang') || 'en';
-    this.changeLanguage(savedLang);
   }
 
-  changeLanguage(lang: string) {
-    this.translationService.setLanguage(lang);
-    this.currentLang = lang;
-
-    this.translationService.loadTranslations(lang).subscribe((data) => {
-      this.translations.set(data);
-      localStorage.setItem('lang', lang);  // Guardar el idioma en localStorage
-    });
+  getTranslation(key: string): string {
+    return this.translationService.getTranslation(key);
   }
 
   protected readonly UserRoles = UserRoles;

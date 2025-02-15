@@ -20,8 +20,7 @@ export class AppComponent implements OnInit {
 
     showSearchBar = true;
 
-    currentLang: string = 'en';  // Default language
-    translations: { [key: string]: string } = {};
+    currentLang: string = 'en';
 
   constructor(
       private authService: AuthService,
@@ -41,19 +40,9 @@ export class AppComponent implements OnInit {
         }
     })
 
-      const savedLang = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en';
-
-      // Configurar el idioma al inicializar
-      const browserLang = navigator.language.split('-')[0];  // Extract language code (e.g., 'en' from 'en-US')
-
-      // List of supported languages
-      const supportedLanguages = ['en', 'es'];
-
-      // If the browser's language is not supported, fall back to English
-      const defaultLang = supportedLanguages.includes(browserLang) ? browserLang : 'en';
-
-      // Set the language
-      this.changeLanguage(defaultLang);
+      this.translationService.currentLang$.subscribe(lang => {
+          this.currentLang = lang;
+      });
 
 
 
@@ -82,13 +71,12 @@ export class AppComponent implements OnInit {
     })
   }
 
-    changeLanguage(lang: string): void {
+    changeLanguage(lang: string) {
         this.translationService.setLanguage(lang);
-        this.currentLang = lang;
+    }
 
-        this.translationService.loadTranslations(lang).subscribe((data) => {
-            this.translations = data;
-        });
+    getTranslation(key: string): string {
+        return this.translationService.getTranslation(key);
     }
 
 

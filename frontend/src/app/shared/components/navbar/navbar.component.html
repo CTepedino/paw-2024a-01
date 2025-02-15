@@ -30,10 +30,10 @@
 					</app-navbar-menu>
 				} @else {
 					<app-nav-button link="/login">
-						{{ translations()['LOGIN'] }}
+                        {{ getTranslation('LOGIN') }}
 					</app-nav-button>
 					<app-nav-button link="/signup">
-						{{ translations()['SIGNUP'] }}
+                        {{ getTranslation('SIGNUP') }}
 					</app-nav-button>
 				}
 			}
