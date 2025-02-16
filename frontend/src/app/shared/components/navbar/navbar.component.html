@@ -8,10 +8,12 @@
 		
 		<div class="center-section">
 			@if (showSearchBar()){
-				<mat-form-field class="search">
-					<mat-icon matPrefix>search</mat-icon>
-					<input matInput required autocomplete="off">
-				</mat-form-field>
+				<form class="search" [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="onSubmit()">
+					<mat-form-field>
+						<mat-icon matPrefix>search</mat-icon>
+						<input matInput required autocomplete="off" formControlName="search">
+					</mat-form-field>
+				</form>
 			}
 		</div>
 		<div class="right-section">

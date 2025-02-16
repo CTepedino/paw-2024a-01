@@ -45,18 +45,18 @@ export class AppComponent implements OnInit {
       const currentRoute = this.router.url;
 
       const noSearchBar = [
-          /^\/login$/,
-          /^\/signup$/,
-          /^\/search$/,
-          /^\/validate$/,
-          /^\/change-password$/,
-          /^\/forgot-password$/,
-          /^\/reset-password$/,
-          /^\/add-book$/,
-          /^\/book\/\d+\/edit$/,
-          /^\/book\/\d+\/buy$/,
-          /^\/book\/\d+\/deal$/,
-          /^\/edit-profile$/
+          /^\/login.*$/,
+          /^\/signup.*$/,
+          /^\/search.*$/,
+          /^\/validate.*$/,
+          /^\/change-password.*$/,
+          /^\/forgot-password.*$/,
+          /^\/reset-password.*$/,
+          /^\/add-book.*$/,
+          /^\/book\/\d+\/edit.*$/,
+          /^\/book\/\d+\/buy.*$/,
+          /^\/book\/\d+\/deal.*$/,
+          /^\/edit-profile.*$/
       ];
 
       this.showSearchBar = !noSearchBar.some(pattern => pattern.test(currentRoute));
