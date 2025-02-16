@@ -39,6 +39,7 @@ export class RegisterFormComponent {
 
 	signupForm: FormGroup;
 	hide = true;
+	hideRepeat = true;
 
 	submitted = output<string>();
 

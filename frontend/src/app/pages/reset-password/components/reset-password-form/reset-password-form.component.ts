@@ -36,12 +36,8 @@ export class ResetPasswordFormComponent {
 	resetFailed = signal(false);
 	noMatch = signal(false);
 
-	hide = signal(true);
-	toggleHide(event: MouseEvent) {
-		event.preventDefault();
-		this.hide.set(!this.hide());
-		event.stopPropagation();
-	}
+	hide = true;
+	hideRepeat = true;
 
 	resetForm = new FormGroup({
 		password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]),

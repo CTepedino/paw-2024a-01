@@ -42,10 +42,10 @@
 			<mat-form-field appearance="outline">
 				<mat-label>Confirm password</mat-label>
 				<input matInput formControlName="repeatPassword" maxlength="255"
-					   [type]="hide ? 'password' : 'text'">
+					   [type]="hideRepeat ? 'password' : 'text'">
 				<button mat-icon-button matSuffix type="button"
-						(click)="hide = !hide">
-					<mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+						(click)="hideRepeat = !hideRepeat">
+					<mat-icon>{{hideRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
 				</button>
 				@if (signupForm.hasError('notMatching')) {
 					<mat-error>Passwords do not match</mat-error>

@@ -36,12 +36,9 @@ export class ChangePasswordComponent {
 	authFailure = signal(false);
 
 
-	hide = signal(true);
-	toggleHide(event: MouseEvent) {
-		event.preventDefault();
-		this.hide.set(!this.hide());
-		event.stopPropagation();
-	}
+	hideOld = true;
+	hideNew = true;
+	hideRepeat = true;
 
 	changePasswordForm = new FormGroup({
 		old: new FormControl('', [Validators.required]),
