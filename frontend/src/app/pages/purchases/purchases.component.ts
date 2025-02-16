@@ -6,7 +6,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {PurchasesOrderCardComponent} from "./components/purchases-order-card/purchases-order-card.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
@@ -65,8 +65,18 @@ export class PurchasesComponent implements OnInit {
   ngOnInit(): void{
     this.route.queryParams.subscribe(params => {
       this.currentPage =Number(params['page']) || 1;
+      this.form.get('title')?.setValue(params['title']);
+      if (Object.values(OrderStatus).includes(params['status'])){
+        this.form.get('status')?.setValue(params['status']);
+      }
+      this.form.updateValueAndValidity();
     });
-    this.pagination$ =  this.ordersWithDataService.getPurchases({page: this.currentPage, size: this.pageSize})
+    this.pagination$ =  this.ordersWithDataService.getPurchases({
+      page: this.currentPage,
+      size: this.pageSize,
+      title: this.form.get('title')?.value,
+      status: this.form.get('status')?.value
+    })
     this.orders$ = this.pagination$.pipe(
         map((page) => page.data)
     )
@@ -78,6 +88,8 @@ export class PurchasesComponent implements OnInit {
       queryParams: { page: page },
       queryParamsHandling: 'merge',
     });
+
+    this.currentPage = page;
 
     this.orders$ = this.ordersWithDataService.getPurchases({page: page, size: this.pageSize}).pipe(
         map((page) => page.data)
@@ -93,6 +105,17 @@ export class PurchasesComponent implements OnInit {
       title: this.form.get('title')?.value,
       status: this.form.get('status')?.value
     })
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        title: this.form.get('title')?.value,
+        status: this.form.get('status')?.value
+      },
+      queryParamsHandling: 'merge',
+    });
+
     this.orders$ = this.pagination$.pipe(
         map((page) => page.data)
     )
