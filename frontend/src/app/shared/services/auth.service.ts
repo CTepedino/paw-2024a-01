@@ -18,7 +18,6 @@ export class AuthService {
     private loggedUser$ = this.loggedUserSubject.asObservable();
 
     private remember: boolean = false;
-    private firstGetUserCall = true;
 
     constructor(private http: HttpClient) {
         if (sessionStorage.getItem('refreshToken')){
@@ -30,36 +29,28 @@ export class AuthService {
         }
     }
 
-    getLoggedUser(): Observable<User | null | undefined>{
-        if (this.firstGetUserCall){
-            this.firstGetUserCall = false;
-            return this.http.get<Index>(this.baseUrl).pipe(
-                concatMap(index => {
-                    if (index.loggedUser){
-                        return this.http.get<User>(index.loggedUser).pipe(
-                            concatMap((user) => {
-                                this.loggedUserSubject.next(user);
-                                return this.loggedUser$;
-                            })
-                        )
-                    }
-                    return this.loggedUser$;
-                })
-            )
-        }
-        return this.loggedUser$;
-    }
-
-    getLoggedUserFromApi(): Observable<User | null>{
-        return this.http.get<Index>(this.baseUrl).pipe(
-            concatMap(index => {
-                if (index.loggedUser){
-                    return this.http.get<User>(index.loggedUser);
+    getLoggedUser(): Observable<User | null>{
+        return this.loggedUser$.pipe(
+            concatMap(user => {
+                if (user === undefined){
+                    return this.http.get<Index>(this.baseUrl).pipe(
+                        concatMap(index => {
+                            if (index.loggedUser){
+                                return this.http.get<User>(index.loggedUser).pipe(
+                                    concatMap((user) => {
+                                        this.loggedUserSubject.next(user);
+                                        return this.loggedUser$ as Observable<User>;
+                                    })
+                                )
+                            }
+                            this.loggedUserSubject.next(null);
+                            return this.loggedUser$ as Observable<null>;
+                        })
+                    )
                 }
-                return of(null);
-            }),
-            catchError(() => of(null))
-        )
+                return of(user);
+            })
+        );
     }
 
     resetLoggedUser() {

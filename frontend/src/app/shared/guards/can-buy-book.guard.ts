@@ -11,7 +11,7 @@ export const canBuyBookGuard: CanActivateFn = (route, state) => {
 
   const id = route.paramMap.get('id');
 
-  return authService.getLoggedUserFromApi().pipe(
+  return authService.getLoggedUser().pipe(
       concatMap(user => {
         if( user?.id == Number(id) ){
           router.navigate(['/']);

@@ -2,7 +2,7 @@
 	<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="index.selectedIndex">
 		@if (showPublications()){
 			<mat-tab class="tab">
-				<ng-template mat-tab-label>
+				<ng-template mat-tab-label class="label">
 					<h3>Publications</h3>
 				</ng-template>
 				<ng-template matTabContent>
@@ -14,8 +14,8 @@
 		}
 		@if (showBoughtBooks()){
 			<mat-tab class="tab">
-				<ng-template mat-tab-label>
-					<h2>Bought books</h2>
+				<ng-template mat-tab-label class="label">
+					<h3>Bought books</h3>
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
@@ -25,8 +25,8 @@
 			</mat-tab>
 		} @else {
 			<mat-tab class="tab">
-				<ng-template mat-tab-label>
-					<h2>Recommendations</h2>
+				<ng-template mat-tab-label class="label">
+					<h3>Recommendations</h3>
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
@@ -37,8 +37,8 @@
 		}
 		@if (showWishlist()){
 			<mat-tab class="tab">
-				<ng-template mat-tab-label>
-					<h2>Wishlist</h2>
+				<ng-template mat-tab-label class="label">
+					<h3>Wishlist</h3>
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">

@@ -13,7 +13,7 @@ export const userIdGuard: CanActivateFn = (route, state) => {
 
   let user = undefined
 
-  return authService.getLoggedUserFromApi().pipe(
+  return authService.getLoggedUser().pipe(
       map(user => {
           if (user?.id != Number(id)){
               router.navigate([`/profile/${id}`]);

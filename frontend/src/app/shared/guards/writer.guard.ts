@@ -8,7 +8,7 @@ export const writerGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  return authService.getLoggedUserFromApi().pipe(
+  return authService.getLoggedUser().pipe(
       map(user => {
         if (!user || !user.roles?.includes(UserRoles.WRITER)){
           router.navigate(['/']);

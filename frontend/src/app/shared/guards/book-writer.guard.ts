@@ -13,7 +13,7 @@ export const bookWriterGuard: CanActivateFn = (route, state) => {
   const id = route.paramMap.get('id');
 
   return forkJoin({
-    loggedUser: authService.getLoggedUserFromApi(),
+    loggedUser: authService.getLoggedUser(),
     book: bookService.getBookById(Number(id))
   }).pipe(
       map(({loggedUser, book}) => {
