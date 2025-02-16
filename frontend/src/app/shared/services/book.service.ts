@@ -28,7 +28,7 @@ export class BookService {
 
     Object.entries(query).forEach(([name, value]) => {
     if (value !== null && value !== undefined){
-     params = params.append(name, value.toString());
+     params = params.append(name, value);
     }
     })
 
@@ -128,4 +128,12 @@ export class BookService {
           {headers: {"Content-Type": MediaTypes.REVIEW}}
       );
   }
+
+    openBookInternal(bookUrl: string){
+        this.http.get(bookUrl, {responseType: 'blob'}).subscribe(blob => {
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+        });
+    }
 }

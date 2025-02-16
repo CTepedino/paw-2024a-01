@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AuthService} from "../../../shared/services/auth.service";
 import {BookService} from "../../../shared/services/book.service";
 import {UserService} from "../../../shared/services/user.service";
-import {concatMap, forkJoin, map, Observable, of, switchMap} from "rxjs";
+import {concatMap, forkJoin, map, Observable} from "rxjs";
 import {FormGroup} from "@angular/forms";
 
 @Injectable({
@@ -27,7 +27,10 @@ export class AddBookService {
               lastName: user?.lastName,
               cbu: bookPublishForm.get('cbu')?.value,
               description: user?.description
-            }).pipe(concatMap(() => this.postBook(bookPublishForm)))
+            }).pipe(concatMap(() => {
+                this.authService.resetLoggedUser();
+                return this.postBook(bookPublishForm)
+            }))
           } else {
             return this.postBook(bookPublishForm);
           }

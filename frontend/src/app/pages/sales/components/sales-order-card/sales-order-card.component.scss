@@ -11,6 +11,8 @@
 
 .book-title{
   font-weight: bold;
+  cursor: pointer;
+  text-align: center;
 }
 
 :host .purchase-info {
@@ -26,6 +28,7 @@
 
 .price {
   color: #437C90;
+  text-align: center;
 }
 
 .receipt-button{

@@ -6,25 +6,20 @@ import {catchError, forkJoin, map, of} from "rxjs";
 
 export const userIdGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
-  const userService = inject(UserService);
+
   const router = inject(Router);
 
-  const id = route.paramMap.get('id');
+  const id = route.parent?.paramMap.get('id') || route.paramMap.get('id');
 
-  return forkJoin({
-    loggedUser: authService.getLoggedUser(),
-    user: userService.getUserById(Number(id))
-  }).pipe(
-      map(({loggedUser, user}) => {
-        if (loggedUser == null || loggedUser.id != user.id){
-          router.navigate(['/']);
-          return false;
-        }
-        return true;
-      }),
-      catchError(() => {
-        router.navigate(['/']);
-        return of(false);
+  let user = undefined
+
+  return authService.getLoggedUserFromApi().pipe(
+      map(user => {
+          if (user?.id != Number(id)){
+              router.navigate([`/profile/${id}`]);
+              return false;
+          }
+          return true;
       })
-  )
+  );
 };

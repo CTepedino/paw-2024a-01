@@ -39,7 +39,7 @@ export class UserService {
 
   putUser(userUrl: string, user: User): Observable<void>{
     return this.http.put<void>(
-        this.apiURL,
+        userUrl,
         user,
         {headers: {"Content-Type": MediaTypes.USER}}
     );
@@ -53,10 +53,10 @@ export class UserService {
     );
   }
 
-  putProfilePicture(userUrl: string, pfp: File){
+  putProfilePicture(userUrl: string, pfp: File): Observable<void>{
     const formData = new FormData();
     formData.append('image', pfp);
-    this.http.put(`${userUrl}/profile-picture`, formData);
+    return this.http.put<void>(`${userUrl}/profile-picture`, formData);
   }
 
   deleteProfilePicture(userUrl: string){

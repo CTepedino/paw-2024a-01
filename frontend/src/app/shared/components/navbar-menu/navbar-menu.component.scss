@@ -14,11 +14,13 @@
 }
 
 
-.user-picture {
+.nav-picture {
   border-radius: 50%;
   margin-top: 20px;
   margin-bottom: 16px;
   margin-left: 15px;
+  height: 50px;
+  width: 50px;
 }
 
 ::ng-deep {

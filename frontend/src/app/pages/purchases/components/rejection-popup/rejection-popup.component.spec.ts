@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BookCardSerachComponent } from './book-card-serach.component';
+import { RejectionPopupComponent } from './rejection-popup.component';
 
-describe('BookCardSearchComponent', () => {
-  let component: BookCardSerachComponent;
-  let fixture: ComponentFixture<BookCardSerachComponent>;
+describe('RejectionPopupComponent', () => {
+  let component: RejectionPopupComponent;
+  let fixture: ComponentFixture<RejectionPopupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BookCardSerachComponent]
+      imports: [RejectionPopupComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BookCardSerachComponent);
+    fixture = TestBed.createComponent(RejectionPopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

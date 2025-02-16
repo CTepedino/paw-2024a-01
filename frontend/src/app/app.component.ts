@@ -1,4 +1,4 @@
-import {AfterContentChecked, Component, OnInit, signal} from '@angular/core';
+import {AfterContentChecked, Component, computed, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {NavbarComponent} from "./shared/components/navbar/navbar.component";
 import {AuthService} from "./shared/services/auth.service";
@@ -13,24 +13,29 @@ import {AsyncPipe} from "@angular/common";
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  isLoggedIn = signal(true);
-  user: Observable<User | null> = of(null);
+    user = signal<User | null | undefined>(undefined);
+    isLoggedIn = signal<boolean | undefined>(undefined);
+    pfp = signal<string | null>(null);
 
-  showSearchBar = true;
+    showSearchBar = true;
+
 
   constructor(
       private authService: AuthService,
       private router: Router,
-      private route: ActivatedRoute
+      private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this.user = this.authService.isLoggedIn$.pipe(
-        concatMap(status => {
-          this.isLoggedIn.set(status);
-          return status? this.authService.getLoggedUser() : of(null);
-        })
-    );
+    this.authService.getLoggedUser().subscribe(user => {
+        this.user.set(user);
+        if (user !== undefined){
+            this.isLoggedIn.set(user != null);
+        }
+        if (user){
+            this.pfp.set(`${this.user()?.profilePicture}?height=50&width=50&t=${new Date().getTime()}`)
+        }
+    })
 
 
 
@@ -40,18 +45,18 @@ export class AppComponent implements OnInit {
       const currentRoute = this.router.url;
 
       const noSearchBar = [
-          /^\/login$/,
-          /^\/signup$/,
-          /^\/search$/,
-          /^\/validate$/,
-          /^\/change-password$/,
-          /^\/forgot-password$/,
-          /^\/reset-password$/,
-          /^\/add-book$/,
-          /^\/book\/\d+\/edit$/,
-          /^\/book\/\d+\/buy$/,
-          /^\/book\/\d+\/deal$/,
-          /^\/edit-profile$/
+          /^\/login.*$/,
+          /^\/signup.*$/,
+          /^\/search.*$/,
+          /^\/validate.*$/,
+          /^\/change-password.*$/,
+          /^\/forgot-password.*$/,
+          /^\/reset-password.*$/,
+          /^\/add-book.*$/,
+          /^\/book\/\d+\/edit.*$/,
+          /^\/book\/\d+\/buy.*$/,
+          /^\/book\/\d+\/deal.*$/,
+          /^\/edit-profile.*$/
       ];
 
       this.showSearchBar = !noSearchBar.some(pattern => pattern.test(currentRoute));

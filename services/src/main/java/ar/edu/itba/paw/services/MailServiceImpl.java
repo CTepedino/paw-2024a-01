@@ -218,7 +218,7 @@ public class MailServiceImpl implements MailService{
         data.put("url", env.getProperty("baseUrl"));
         data.put("question", question.getQuestion());
         data.put("book", question.getBook().getTitle());
-        data.put("questionsUrl", env.getProperty("baseUrl") + "/questions/questions");
+        data.put("questionsUrl", env.getProperty("baseUrl") + "/questions/received-questions");
 
         try {
             LOGGER.atDebug().setMessage("Sending Question Received email to: {}").addArgument(to).log();

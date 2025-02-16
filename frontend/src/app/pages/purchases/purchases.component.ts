@@ -1,12 +1,21 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatButtonModule} from '@angular/material/button';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {PurchasesOrderCardComponent} from "./components/purchases-order-card/purchases-order-card.component";
+import {NgxPaginationModule} from "ngx-pagination";
+import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
+import {OrderStatus} from "../../shared/model/order/orderStatus";
+import {OrderWithDataService} from "../../shared/services/order-with-data.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {map, Observable} from "rxjs";
+import {PaginatedContent} from "../../shared/model/paginatedContent";
+import {OrderWithData} from "../../shared/model/order/orderWithData";
 
 @Component({
   selector: 'app-purchases',
@@ -19,37 +28,98 @@ import { FormsModule } from '@angular/forms';
     MatGridListModule,
     MatCheckboxModule,
     MatButtonModule,
-    FormsModule
+    PurchasesOrderCardComponent,
+    NgxPaginationModule,
+    PaginatorComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './purchases.component.html',
   styleUrl: './purchases.component.scss'
 })
-export class PurchasesComponent {
-  searchTitle = '';
-  selectedStatus = 'ALL';
+export class PurchasesComponent implements OnInit {
+  ordersWithDataService = inject(OrderWithDataService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router)
 
-  statusOptions = [
-    { value: 'ALL', label: 'All status' },
-    { value: 'COMPLETED', label: 'Completed' },
-    { value: 'REJECTED_PAYMENT', label: 'Rejected payment' },
-    { value: 'WAITING_APPROVAL', label: 'Waiting approval' }
+  pagination$!: Observable<PaginatedContent<OrderWithData>>;
+  orders$!: Observable<OrderWithData[]>
+  currentPage!: number;
+  pageSize = 20;
+
+  orderStatusOptions = [
+    { label: $localize`Any status`, value: null },
+    { label: $localize`Rejected payment`, value: OrderStatus.REJECTED_PAYMENT.toString() },
+    { label: $localize`Approval needed`, value: OrderStatus.WAITING_APPROVAL.toString() },
+    { label: $localize`Completed`, value: OrderStatus.COMPLETED.toString() }
   ];
 
-  // Datos de ejemplo
-  purchases = [{
-    book: {
-      id: 1,
-      title: 'Test Book',
-      author: 'Luca Bloise',
-      price: 399,
-      coverUrl: 'assets/book-cover.jpg'
-    },
-    date: '2/10/25, 7:29PM',
-    status: 'COMPLETED',
-    recommended: false
-  }];
+  form: FormGroup;
 
-  onStatusChange() {
-    console.log('Status changed:', this.selectedStatus);
+  constructor(private fb: FormBuilder) {
+    this.form = fb.group({
+      title: [''],
+      status: [null]
+    })
   }
+
+  ngOnInit(): void{
+    this.route.queryParams.subscribe(params => {
+      this.currentPage =Number(params['page']) || 1;
+      this.form.get('title')?.setValue(params['title']);
+      if (Object.values(OrderStatus).includes(params['status'])){
+        this.form.get('status')?.setValue(params['status']);
+      }
+      this.form.updateValueAndValidity();
+    });
+    this.pagination$ =  this.ordersWithDataService.getPurchases({
+      page: this.currentPage,
+      size: this.pageSize,
+      title: this.form.get('title')?.value,
+      status: this.form.get('status')?.value
+    })
+    this.orders$ = this.pagination$.pipe(
+        map((page) => page.data)
+    )
+  }
+
+  onPageChange(page: number){
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: page },
+      queryParamsHandling: 'merge',
+    });
+
+    this.currentPage = page;
+
+    this.orders$ = this.ordersWithDataService.getPurchases({page: page, size: this.pageSize}).pipe(
+        map((page) => page.data)
+    )
+  }
+
+  onSubmit(){
+    console.log(this.form.value);
+    this.currentPage = 1;
+    this.pagination$ = this.ordersWithDataService.getPurchases({
+      page: this.currentPage,
+      size: this.pageSize,
+      title: this.form.get('title')?.value,
+      status: this.form.get('status')?.value
+    })
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        title: this.form.get('title')?.value,
+        status: this.form.get('status')?.value
+      },
+      queryParamsHandling: 'merge',
+    });
+
+    this.orders$ = this.pagination$.pipe(
+        map((page) => page.data)
+    )
+  }
+
+  protected readonly OrderStatus = OrderStatus;
 }

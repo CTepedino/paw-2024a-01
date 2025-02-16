@@ -1,0 +1,46 @@
+<mat-grid-list cols="5" rowHeight="1.5:1" gutterSize="0px">
+	<mat-grid-tile class="purchased-book">
+		<img src="{{order().bookInfo.cover!}}?height=250&width=200" alt="Book cover" class="book-image">
+	</mat-grid-tile>
+	<mat-grid-tile class="purchased-book purchase-info">
+		<a class="book-title">{{order().bookInfo.title}}</a>
+		<p class="author">By: <a>{{order().writerInfo?.firstName}} {{order().writerInfo?.lastName}}</a></p>
+		<p class="price">{{order().price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
+	</mat-grid-tile>
+	<mat-grid-tile class="purchased-book purchase-info">
+		<p>{{order().date | date}}</p>
+	</mat-grid-tile>
+	<mat-grid-tile class="purchased-book purchase-info">
+		@switch (order().status){
+			@case (OrderStatus.COMPLETED){
+				<p i18n class="status-info">Completed</p>
+			}
+			@case (OrderStatus.WAITING_APPROVAL){
+				<p i18n class="status-info">Waiting for the writer to approve your payment</p>
+			}
+			@case (OrderStatus.REJECTED_PAYMENT){
+				<p class="red-text">Your payment was rejected. Please, resend it to CBU: {{order().writerInfo?.cbu}}</p>
+				<app-cancel-button class="reject-button" (click)="openRejectionDialog()">
+					Rejection reason
+				</app-cancel-button>
+			}
+		}
+	</mat-grid-tile>
+	<mat-grid-tile class="purchased-book purchase-info">
+		@if (order().status == OrderStatus.REJECTED_PAYMENT){
+			<app-action-button class="action-btn" (click)="openReuploadDialog()">
+				ReUpload receipt
+			</app-action-button>
+		}
+		@if (order().status == OrderStatus.COMPLETED){
+			<app-action-button class="action-btn" (click)="bookService.openBookInternal(order().bookInfo.bookFile!)">
+				Read book
+			</app-action-button>
+		}
+		@if (order().status == OrderStatus.WAITING_APPROVAL){
+			<mat-icon>hourglass_top</mat-icon> Wait
+		}
+		
+	</mat-grid-tile>
+</mat-grid-list>
+

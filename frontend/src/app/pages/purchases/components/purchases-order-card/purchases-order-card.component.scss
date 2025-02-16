@@ -1,0 +1,66 @@
+.purchased-book{
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.book-image {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.book-title{
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+}
+
+:host .purchase-info {
+  ::ng-deep {
+    .mat-grid-tile-content {
+      height: 100%;
+      align-content: center;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.price {
+  color: #437C90;
+  text-align: center;
+}
+
+.receipt-button{
+  background-color: #47a499 !important;
+  border-radius: 0;
+}
+
+.decline-button{
+  background-color: #ed2200 !important;
+  border-radius: 0;
+  margin-bottom: 10px;
+}
+
+.accept-button{
+  background-color: #217e00 !important;
+  border-radius: 0;
+}
+
+.author {
+  text-align: center;
+}
+
+.action-btn {
+  margin-bottom: 25px;
+}
+
+.red-text {
+  color: red;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.status-info {
+  text-align: center;
+}

@@ -21,23 +21,43 @@
   }
 
   .sales-category {
-    display: inline-block;
-    padding: 5px 20px;
-    border-radius: 4px;
-    margin: 10px 0;
+
+    min-height: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    text-transform: uppercase;
 
     &.bronze {
       background-color: #CD7F32;
       color: white;
     }
+
+    &.silver {
+      background-color: silver;
+    }
+
+    &.gold {
+      background-color: gold;
+    }
   }
 
   .edit-profile {
-    margin-top: 20px;
-
-    button {
-      margin: 0 5px;
-      background-color: #26a69a;
-    }
+    margin-top: 5px;
   }
+}
+
+.description{
+  width: 50%;
+  text-align: center;
+}
+
+.center-label {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

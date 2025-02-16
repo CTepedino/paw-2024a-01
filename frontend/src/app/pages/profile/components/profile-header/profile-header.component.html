@@ -1,28 +1,45 @@
 <div class="profile-header center">
-    <!-- Imagen de perfil -->
-    <img class="profile-img" src="assets/default-profile.jpg" alt="Profile picture"/>
-
-    <!-- Nombre y email -->
-    <h2 class="writer-name">{{user.firstName}} {{user.lastName}}</h2>
-    <p class="writer-info">{{user.email}}</p>
-
-    <!-- Categoría de escritor -->
-    <div class="sales-category bronze">
-        <p>Bronze</p>
-    </div>
-
-    <!-- CBU -->
-    <p class="writer-info">
-        CBU: {{user.cbu}}
-    </p>
-
-    <!-- Botones de acción -->
-    <div class="edit-profile">
-        <button mat-raised-button color="primary" routerLink="/edit-profile">
-            EDITAR PERFIL
-        </button>
-        <button mat-raised-button color="primary" routerLink="/change-password">
-            CAMBIAR CONTRASEÑA
-        </button>
-    </div>
+    <img class="profile-img" ngSrc="{{user().profilePicture!}}?width=120&height=120" width="120" height="120" alt="Profile picture"/>
+    <h2 class="writer-name">{{user().firstName}} {{user().lastName}}</h2>
+    <p class="writer-info">{{user().email}}</p>
+	
+	@if (user().roles?.includes(UserRoles.WRITER)) {
+		<p class="writer-info">
+			CBU: {{user().cbu}}
+		</p>
+	}
+	
+	<div class="center-label">
+	@switch (user().writerCategory){
+		@case (WriterCategory.BRONZE){
+			<div class="sales-category bronze">Bronze</div>
+		}
+		@case (WriterCategory.SILVER){
+			<div class="sales-category silver">Silver</div>
+		}
+		@case (WriterCategory.GOLD){
+			<div class="sales-category gold">Gold</div>
+		}
+	}
+	</div>
+	
+	@if (user().description){
+		<div class="center-label">
+			<p class="description">
+				{{user().description}}
+			</p>
+		</div>
+	}
+	
+	@if (ownsProfile()){
+		<div class="edit-profile">
+			<app-nav-button link="/edit-profile">
+				Edit profile
+			</app-nav-button>
+			<app-nav-button link="/change-password">
+				Change password
+			</app-nav-button>
+		</div>
+	}
+	
 </div>

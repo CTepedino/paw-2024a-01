@@ -1,29 +1,33 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ProfileHeaderComponent } from './components/profile-header/profile-header.component';
-import { ProfileTabsComponent } from './components/profile-tabs/profile-tabs.component';
+import {Component, inject} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute} from "@angular/router";
+import {ProfileHeaderComponent} from "./components/profile-header/profile-header.component";
+import {Observable} from "rxjs";
+import {ProfileDisplayInfo, UserProfileService} from "./store/user-profile.service";
+import {ProfileTabsComponent} from "./components/profile-tabs/profile-tabs.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    ProfileHeaderComponent,
-    ProfileTabsComponent
-  ],
+	imports: [
+		CommonModule,
+		ProfileHeaderComponent,
+		ProfileTabsComponent
+	],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
-  user = {
-    userId: 1,
-    firstName: 'Federico',
-    lastName: 'Madero',
-    email: 'emaderotorres@gmail.com',
-    writerCategory: 'BRONZE',
-    cbu: '111122223333444555566',
-    isWriter: true
-  };
+	route = inject(ActivatedRoute);
+	userProfileService = inject(UserProfileService);
 
-  selectedTab = 'publications';
+	index = { selectedIndex: 0 }
+
+	userId: number;
+	displayInfo$: Observable<ProfileDisplayInfo>;
+
+	constructor() {
+		this.userId = this.route.snapshot.params['id'];
+		this.displayInfo$ = this.userProfileService.getUser(this.userId);
+	}
 }
