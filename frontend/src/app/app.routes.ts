@@ -32,6 +32,8 @@ import {PurchasesComponent} from "./pages/purchases/purchases.component";
 import {userExistsGuard} from "./shared/guards/user-exists.guard";
 import {bookExistsGuard} from "./shared/guards/book-exists.guard";
 import {SearchComponent} from "./pages/search/search.component";
+import {AnalyticsComponent} from "./pages/analytics/analytics.component";
+
 
 
 export const routes: Routes = [
@@ -67,7 +69,7 @@ export const routes: Routes = [
 	{path: "change-password", component: ChangePasswordComponent, canActivate: [loggedInGuard]},
 	{path: "edit-profile", component: EditProfileComponent, canActivate: [loggedInGuard]},
 
-	{path: "analytics", component: HomeComponent, canActivate: [loggedInGuard, writerGuard]},
+	{path: "analytics", component: AnalyticsComponent, canActivate: [loggedInGuard, writerGuard]},
 
 	{path: "purchases", component: PurchasesComponent, canActivate: [loggedInGuard]},
 	{path: "sales", component: SalesComponent, canActivate: [loggedInGuard, writerGuard]},

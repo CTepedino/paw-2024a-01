@@ -1,0 +1,119 @@
+<div class="container">
+    <h1 class="page-title">Analytics</h1>
+
+    @if(user.writerCategory === 'DEFAULT'){
+            <span i18n>+ {{user.bronzeMin - user.totalOrders}} to Bronze</span>
+    }
+    @if(user.writerCategory === 'BRONZE'){
+        <span i18n class="sales-category bronze">Bronze</span>
+        <span i18n>+ {{user.silverMin - user.totalOrders}} to Silver</span>
+    }
+    @if(user.writerCategory === 'SILVER'){
+        <span i18n class="sales-category silver">Silver</span>
+        <span i18n>+ {{user.goldMin - user.totalOrders}} to Gold</span>
+    }
+    @if(user.writerCategory === 'GOLD'){
+        <span i18n class="sales-category gold">Gold</span>
+    }
+
+    <mat-grid-list cols="4" rowHeight="2.8:1" gutterSize="20px" class="card">
+        <mat-grid-tile i18n class="card-panel">
+            Total Orders
+            <br/>
+            {{user.totalOrders}}
+        </mat-grid-tile>
+        <mat-grid-tile i18n class="card-panel">
+            Total Revenue
+            <br/>
+            {{user.totalRevenue | currency: 'USD' : 'symbol' : '1.0-0'}}
+        </mat-grid-tile>
+        <mat-grid-tile i18n class="card-panel">
+            Orders this month
+            <br/>
+            {{user.ordersThisMonth}}
+        </mat-grid-tile>
+        <mat-grid-tile i18n class="card-panel">
+            Revenue this month
+            <br/>
+            {{user.revenueThisMonth | currency: 'USD' : 'symbol' : '1.0-0'}}
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-checkbox class="checkbox" i18n [(ngModel)]="showByMonth">
+        Show by Month
+    </mat-checkbox>
+
+    @if(showByMonth){
+        <div class="search-filters">
+            <mat-form-field appearance="outline">
+                <mat-label i18n>Select a year</mat-label>
+                <mat-select [(ngModel)]="selectedYear">
+                    @for (year of years; track year){
+                        <mat-option [value]="year">{{year}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label i18n>Select a month</mat-label>
+                <mat-select [(ngModel)]="selectedMonth">
+                    @for (month of months; track month){
+                        <mat-option [value]="month">{{month}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <mat-grid-list cols="4" rowHeight="2.8:1" gutterSize="20px" class="card">
+            <mat-grid-tile i18n class="card-panel">
+                Orders that month
+                <br/>
+                {{user.ordersThisMonth}}
+            </mat-grid-tile>
+            <mat-grid-tile i18n class="card-panel">
+                Revenue that month
+                <br/>
+                {{user.revenueThisMonth | currency: 'USD' : 'symbol' : '1.0-0'}}
+            </mat-grid-tile>
+            <mat-grid-tile>
+            </mat-grid-tile>
+            <mat-grid-tile>
+            </mat-grid-tile>
+        </mat-grid-list>
+    }
+
+    <div class="table-header">
+        <div i18n class="header-cell">Cover</div>
+        <div i18n class="header-cell">Book</div>
+        <div i18n class="header-cell">Total orders</div>
+        <div i18n class="header-cell">Total revenue</div>
+    </div>
+
+    @if (books.length === 0) {
+        <div class="empty-message">
+            <h5 i18n>No books sold</h5>
+        </div>
+    }
+
+    @for (order of books; track order.book.id) {
+        <div class="purchase-row">
+            <div class="cell cover-cell">
+                <img [src]="order.book.coverUrl" [alt]="order.book.title">
+            </div>
+
+            <div class="cell info-cell">
+                <h3>{{order.book.title}}</h3>
+                <p class="price">{{order.book.price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
+            </div>
+
+            <div class="cell status-cell">
+                {{order.totalOrders}}
+            </div>
+
+            <div class="cell status-cell">
+                {{order.totalRevenue | currency: 'USD' : 'symbol' : '1.0-0'}}
+            </div>
+        </div>
+    }
+
+</div>
