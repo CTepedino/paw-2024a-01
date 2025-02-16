@@ -33,6 +33,8 @@ import {userExistsGuard} from "./shared/guards/user-exists.guard";
 import {bookExistsGuard} from "./shared/guards/book-exists.guard";
 import {SearchComponent} from "./pages/search/search.component";
 import {AnalyticsComponent} from "./pages/analytics/analytics.component";
+import {profileRedirectGuard} from "./shared/guards/profile-redirect.guard";
+
 
 
 
@@ -60,6 +62,7 @@ export const routes: Routes = [
 			{path: "received-questions", component: RecievedQuestionsComponent, canActivate: [loggedInGuard, writerGuard] },
 	]},
 
+	{path: "profile", component: ProfileComponent , canActivate: [loggedInGuard, profileRedirectGuard]},
 	{path: "profile/:id", component: ProfileComponent, canActivate: [numericIDGuard, userExistsGuard], children: [
 			{path: "owned", component: ProfileComponent},
 			{path: "wishlist", component: ProfileComponent, canActivate: [userIdGuard]},

@@ -6,10 +6,11 @@ import {MatIconButton} from "@angular/material/button";
 import {MatInput} from "@angular/material/input";
 import {NotificationCardComponent} from "../../shared/components/notification-card/notification-card.component";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {catchError, concatMap, map, of, throwError} from "rxjs";
 import {ChangePasswordService} from "./store/change-password.service";
 import {Title} from "@angular/platform-browser";
+import {CancelButtonComponent} from "../../shared/components/cancel-button/cancel-button.component";
 
 @Component({
   selector: 'app-change-password',
@@ -22,7 +23,9 @@ import {Title} from "@angular/platform-browser";
 		MatLabel,
 		MatSuffix,
 		NotificationCardComponent,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		CancelButtonComponent,
+		RouterLink
 	],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.scss',
