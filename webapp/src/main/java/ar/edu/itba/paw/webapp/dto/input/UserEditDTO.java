@@ -15,7 +15,7 @@ public class UserEditDTO {
     private String lastName;
 
     @Size(min = 6, max = 22)
-    @Pattern(regexp = "[a-zA-ZáéíóúÁÉÍÓÜñÑ0-9.-]+")
+    @Pattern(regexp = "[a-zA-ZáéíóúÁÉÍÓÜñÑ0-9.-]*")
     private String cbu;
 
     @Size(max = 500)

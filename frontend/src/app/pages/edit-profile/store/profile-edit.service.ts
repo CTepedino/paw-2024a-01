@@ -22,8 +22,11 @@ export class ProfileEditService {
           let newUser = {
             firstName: form.get('firstName')?.value,
             lastName: form.get('lastName')?.value,
-            cbu: form.get('cbu')?.value,
             description: form.get('description')?.value,
+            cbu: undefined
+          }
+          if (form.get('cbu')?.value){
+              newUser = {...newUser, cbu: form.get('cbu')?.value}
           }
           return this.userService.putUser(user?.self!, newUser).pipe(
               concatMap(() => {

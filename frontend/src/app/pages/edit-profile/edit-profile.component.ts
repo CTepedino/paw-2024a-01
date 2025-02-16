@@ -42,6 +42,7 @@ export class EditProfileComponent implements OnInit {
   shouldShowCbu = false;
 
   editForm: FormGroup;
+  userId: any;
 
   constructor(private fb: FormBuilder) {
     this.editForm = this.fb.group({
@@ -70,6 +71,7 @@ export class EditProfileComponent implements OnInit {
           this.editForm.get('lastName')?.setValue(user?.lastName);
           this.editForm.get('description')?.setValue(user?.description);
           this.editForm.updateValueAndValidity();
+          this.userId = user?.id;
         })
     ).subscribe();
   }
@@ -80,7 +82,7 @@ export class EditProfileComponent implements OnInit {
     if (this.editForm.valid) {
       this.profileEditService.updateProfile(this.editForm).pipe(
           map(() => {
-            this.router.navigate(['profile']);
+            this.router.navigate([`profile/${this.userId}`]);
           })
       ).subscribe();
     }
