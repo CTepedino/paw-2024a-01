@@ -31,8 +31,6 @@ export class QuestionsComponent implements OnInit {
 
 	index = { selectedIndex: 0 }
 
-	setup = true;
-
 	constructor() {
 		this.title.setTitle('Questions')
 
@@ -47,27 +45,17 @@ export class QuestionsComponent implements OnInit {
 	ngOnInit(): void {
 		const url = this.router.url;
 
-		this.setTab(url);
-	}
-
-
-	setTab(url: string){
 		if (url.includes('received-questions')) {
-			this.index.selectedIndex = 1;
+			setTimeout(() => this.index.selectedIndex = 1, 100);
 		}
-		setTimeout(() => this.setup = false, 100)
 	}
-
 
 	onTabChange(event: any){
 		if (event.index === 0) {
-			this.navigate('asked-questions');
+			this.router.navigate(['questions/asked-questions']);
 		} else if (event.index === 1) {
-			this.navigate('received-questions');
+			this.router.navigate(['questions/received-questions']);
 		}
 	}
 
-	navigate(tab: string){
-		this.router.navigate([`/questions//${tab}`], {queryParamsHandling: this.setup? 'merge' : undefined})
-	}
 }
