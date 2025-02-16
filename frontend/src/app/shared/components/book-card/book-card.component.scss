@@ -1,83 +1,3 @@
-.book-card {
-  display: flex;
-  height: 230px;
-  width: 98%;
-  overflow: hidden;
-  flex-grow: 1;
-  cursor: pointer;
-  margin: 5px;
-  background-color: white;
-  border-radius: 0;
-}
-
-
-
-.book-content {
-  height: 230px;
-  width: 100%; /* Hace que el contenido no sobrepase el ancho de la tarjeta */
-  overflow: hidden; /* Evita que los elementos internos la desborden */
-  text-align: center; /* Opcional: centra el texto */
-  padding: 10px; /* Agrega un poco de padding */
-  box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
-}
-
-
-.book-image {
-  max-height: 230px;
-  width: 30%;
-  margin-right: 20px;
-  border-radius: 2px 2px 0 0;
-  object-fit: contain;
-  text-align: start;
-}
-
-.book-info {
-  flex-grow: 1;
-}
-
-.book-details {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: start;
-
-  span {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-}
-
-.mat-mdc-card-header {
-  padding: 0;
-}
-
-.price {
-  color: #0288d1;
-  font-size: 1.5rem;
-  position: absolute;
-  bottom: 10px;
-  right: 30px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  text-align: right;
-}
-
-.book-title {
-  margin-top: 0;
-  width: 100%;
-  margin-bottom: 0;
-  font-size: 1.8rem;
-  text-align: start;
-  white-space: nowrap;  /* Mantiene el texto en una sola línea */
-  overflow: hidden;  /* Oculta el texto que no cabe */
-  text-overflow: ellipsis;  /* Muestra "..." cuando el texto es demasiado largo */
-  font-weight: 400;
-  word-break: break-all;  /* Corta la palabra si es necesario */
-}
-
-
-
 .book-genre {
   margin-bottom: 5px;
   text-align: start;
@@ -112,3 +32,125 @@
   overflow: hidden;
   text-align: start;
 }
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 280px;
+  width: 95%;
+  margin: 8px;
+  padding: 12px;
+  border-radius: 1px;
+}
+
+
+
+.book-content {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 24px;
+  padding-left: 50px;
+  max-height: 250px;
+}
+
+
+.book-image {
+  max-height: 280px;
+  margin-top: -12px;
+  margin-left: -12px;
+  width: 200px;
+  border-radius: 2px 2px 0 0;
+  object-fit: scale-down;
+}
+
+.book-info {
+  flex-grow: 1;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: start;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.mat-mdc-card-header {
+  padding: 0;
+}
+
+.mat-card-content {
+  width: 100%;
+}
+
+.price {
+  color: #0288d1;
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-align: right;
+}
+
+.book-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-height: 30px;
+}
+
+.book-author {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.8rem;
+  color: gray;
+  margin: 0;
+  max-height: 23px;
+}
+
+
+.book-genre {
+  margin-bottom: 5px;
+}
+
+.crossed {
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+
+}
+
+.deal {
+  font-size: 1rem;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.discount{
+  color: red;
+  margin-left: 5px;
+}
+
+.deal-price {
+  margin-top: 5px;
+}
+
+.book-title {
+  margin-top: 0;
+  width: 100%;
+  margin-bottom: 0;
+  font-size: 1.8rem;
+  text-align: start;
+  min-height: 40px;
+}
+

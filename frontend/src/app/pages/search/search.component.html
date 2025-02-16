@@ -1,83 +1,95 @@
-<mat-grid-list cols="20">
-    <!-- Columna izquierda (70%) -->
-    <mat-grid-tile [colspan]="15" class="left-column full-height">
-        <mat-grid-list cols="2" rowHeight="300px" gutterSize="10px" class="book-grid">
-            @for (book of books; track book) {
-                <mat-grid-tile>
-                    <app-book-card-search></app-book-card-search>
-                </mat-grid-tile>
-            }
-        </mat-grid-list>
-    </mat-grid-tile>
+<div class="search-page">
+	<div class="left-side">
+		@if (!(pagination$ | async)){
+			<div class="empty-error">
+				<h4>No books found</h4>
+				<app-action-button (click)="resetFilters()">
+					Reset filters
+				</app-action-button>
+			</div>
+		}
+		@if (books$ | async; as books){
+			<mat-grid-list cols="2" rowHeight="290px" gutterSize="5px">
+				@for(book of ((books)! | paginate: {id: 'bookSearch', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id){
+					<mat-grid-tile>
+						<app-book-card [book]="book" class="searched-book" compact></app-book-card>
+					</mat-grid-tile>
+				}
+			</mat-grid-list>
+		}
+	</div>
+	<div class="right-side">
+		<div class="form-container">
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="onSubmit()">
+				<mat-form-field appearance="outline" style="width: 100%;">
+					<mat-label i18n>Title</mat-label>
+					<input matInput formControlName="title">
+				</mat-form-field>
+				
+				<mat-form-field appearance="outline" class="input">
+					<mat-select formControlName="orderBy">
+						@for (orderby of Object.values(BookSearchOrderBy); track orderby){
+							@if (orderby != BookSearchOrderBy.BEST_SELLERS && orderby != BookSearchOrderBy.NEW_DEALS){
+								<mat-option i18n [value]="orderby">{{orderby}}</mat-option>
+							}
+						}
+					</mat-select>
+					<mat-label i18n>Order by</mat-label>
+				</mat-form-field>
+				
+				<mat-form-field appearance="outline" class="input">
+					<mat-select formControlName="genre">
+						<mat-option [value]="null">Any</mat-option>
+						@for (genre of Object.values(BookGenre); track genre){
+							<mat-option i18n [value]="genre">{{genre}}</mat-option>
+						}
+					</mat-select>
+					<mat-label i18n>Genre</mat-label>
+				</mat-form-field>
+				
+				<div class="form-group">
+					<mat-form-field appearance="outline">
+						<mat-label i18n>Min pages</mat-label>
+						<input matInput type="number" min="0" max="1000000" formControlName="minPages">
+					</mat-form-field>
+					<mat-form-field appearance="outline">
+						<mat-label i18n>Max pages</mat-label>
+						<input matInput type="number" min="0" max="1000000" formControlName="maxPages">
+					</mat-form-field>
+				</div>
+				
+				<div class="form-group">
+					<mat-form-field appearance="outline">
+						<mat-label i18n>Min price</mat-label>
+						<input matInput type="number" step="100" min="0" max="1000000" formControlName="minPrice">
+					</mat-form-field>
+					<mat-form-field appearance="outline">
+						<mat-label i18n>Max price</mat-label>
+						<input matInput type="number" step="100" min="0" max="1000000" formControlName="maxPrice">
+					</mat-form-field>
+				</div>
+				
+				<div class="form-group">
+					<mat-form-field appearance="outline">
+						<mat-label i18n>Min age</mat-label>
+						<input matInput type="number" min="0" max="99" formControlName="minAge">
+					</mat-form-field>
+					<mat-form-field appearance="outline">
+						<mat-label i18n>Max age</mat-label>
+						<input matInput type="number" min="0" max="99" formControlName="maxAge">
+					</mat-form-field>
+				</div>
+				
+				<div class="btn-zone">
+					<app-action-button i18n submit [disabled]="!this.form.valid">
+						Apply
+					</app-action-button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
-    <mat-grid-tile [colspan]="5" class="right-column full-height">
-        <form>
-            <!-- Título -->
-            <mat-form-field appearance="outline" style="width: 100%;">
-                <mat-label i18n>Title</mat-label>
-                <input matInput>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="input">
-                <mat-select formControlName="orderby">
-                    @for (orderby of Object.values(BookSearchOrderBy); track orderby){
-                        <mat-option i18n [value]="orderby">{{orderby}}</mat-option>
-                    }
-                </mat-select>
-                <mat-label i18n>Order by</mat-label>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="input">
-                <mat-select formControlName="genre">
-                    @for (genre of Object.values(BookGenre); track genre){
-                        <mat-option i18n [value]="genre">{{genre}}</mat-option>
-                    }
-                </mat-select>
-                <mat-label i18n>Genre</mat-label>
-            </mat-form-field>
-
-            <!-- Cantidad de páginas -->
-            <div class="form-group">
-                <mat-form-field appearance="outline">
-                    <mat-label i18n>Min pages</mat-label>
-                    <input matInput type="number" min="0" max="1000000">
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label i18n>Max pages</mat-label>
-                    <input matInput type="number" min="0" max="1000000">
-                </mat-form-field>
-            </div>
-
-            <!-- Precio -->
-            <div class="form-group">
-                <mat-form-field appearance="outline">
-                    <mat-label i18n>Min price</mat-label>
-                    <input matInput type="number" step="100" min="0" max="1000000">
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label i18n>Max price</mat-label>
-                    <input matInput type="number" step="100" min="0" max="1000000">
-                </mat-form-field>
-            </div>
-
-            <!-- Edad Aceptada -->
-            <div class="form-group">
-                <mat-form-field appearance="outline">
-                    <mat-label i18n>Min age</mat-label>
-                    <input matInput type="number" min="0" max="99">
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label i18n>Max age</mat-label>
-                    <input matInput type="number" min="0" max="99">
-                </mat-form-field>
-            </div>
-
-            <div class="btn-zone">
-                <app-action-button i18n>
-                    Apply
-                </app-action-button>
-            </div>
-        </form>
-    </mat-grid-tile>
-
-</mat-grid-list>
+@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+	<app-paginator id="bookSearch" (pageChange)="onPageChange($event)"/>
+}

@@ -47,8 +47,6 @@ export class HomeComponent implements OnInit {
 	newDeals$ = this.homeService.getNewDeals(6);
 
 
-
-
 	onPageChange(page: number){
 
 		this.router.navigate([], {
@@ -62,6 +60,8 @@ export class HomeComponent implements OnInit {
 			map((page) => page.data)
 		)
 	}
+
+
 
 	protected readonly BookGenre = BookGenre;
 

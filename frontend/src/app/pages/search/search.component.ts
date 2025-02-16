@@ -1,45 +1,138 @@
-import {Component, inject} from "@angular/core";
+import {Component, inject, OnInit} from '@angular/core';
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
-import {AsyncPipe} from "@angular/common";
-import {NgxPaginationModule} from "ngx-pagination";
-import {MatCardModule} from "@angular/material/card";
-import {BookCardSerachComponent} from "./components/book-card-search/book-card-serach.component";
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
+import {MatOption} from "@angular/material/core";
+import {MatSelect} from "@angular/material/select";
+import {AsyncPipe, JsonPipe} from "@angular/common";
+import {BookCardComponent} from "../../shared/components/book-card/book-card.component";
+import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
+import {BookWithDataService} from "../../shared/services/book-with-data.service";
 import {BookGenre} from "../../shared/model/book/bookGenre";
 import {BookSearchOrderBy} from "../../shared/model/book/bookSearchOrderBy";
-import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
+import {map, Observable} from "rxjs";
+import {PaginatedContent} from "../../shared/model/paginatedContent";
+import {BookWithData} from "../../shared/model/book/bookWithData";
+import {ActivatedRoute, Router} from "@angular/router";
+import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
+import {NgxPaginationModule} from "ngx-pagination";
 
 
 @Component({
-    selector: 'app-search',
-    imports: [FormsModule, MatGridList, MatGridTile, MatCardModule, AsyncPipe, NgxPaginationModule, BookCardSerachComponent, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, ReactiveFormsModule, ActionButtonComponent],
-    templateUrl: './search.component.html',
-    styleUrl: './search.component.scss',
+  selector: 'app-search2',
+  imports: [
+    MatGridList,
+    MatGridTile,
+    ActionButtonComponent,
+    FormsModule,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    BookCardComponent,
+    AsyncPipe,
+    PaginatorComponent,
+    JsonPipe,
+    NgxPaginationModule
+  ],
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.scss'
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  bookWithDataService = inject(BookWithDataService);
 
-    book = {
-        cover: "assets/book-cover.jpg",
-        title: "Test book",
-        price: 300,
-        author: "Juan Lopez",
-        genre: "Fiction",
-        age: 15,
-        pages: 200,
-        year: 2024,
-        percentage: 20,
-        deal: 200
+  pagination$!: Observable<PaginatedContent<BookWithData>>;
+  books$!: Observable<BookWithData[]>
+  currentPage!: number;
+  pageSize = 20;
+
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.form = this.fb.group({
+      title: [''],
+      orderBy: [BookSearchOrderBy.PUBLICATION_DATE_DESC],
+      genre: [null],
+      minPages: [null],
+      maxPages: [null],
+      minPrice: [null],
+      maxPrice: [null],
+      minAge: [null],
+      maxAge: [null]
+    });
+  }
+
+    ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+          this.currentPage = Number(params['page']) || 1;
+        });
+        this.pagination$ =  this.bookWithDataService.listBooksWithData({page: this.currentPage, size: this.pageSize})
+        this.books$ = this.pagination$.pipe(
+            map((page) => page.data)
+        )
+    }
+
+    reFetchBooks(){
+      this.pagination$ = this.bookWithDataService.listBooksWithData({
+        page: this.currentPage,
+        size: this.pageSize,
+        title: this.form.get('title')?.value,
+        genre: this.form.get('genre')?.value,
+        order_by: this.form.get('orderBy')?.value,
+        min_page_count: this.form.get('minPages')?.value,
+        max_page_count: this.form.get('maxPages')?.value,
+        min_price: this.form.get('minPrice')?.value,
+        max_price: this.form.get('maxPrice')?.value,
+        min_suggested_age: this.form.get('minAge')?.value,
+        max_suggested_age: this.form.get('maxAge')?.value,
+      });
+      this.books$ = this.pagination$.pipe(
+          map((page) => page.data)
+      );
+    }
+
+    onSubmit(){
+      if (this.form.valid){
+        this.currentPage = 1;
+        this.reFetchBooks();
+      }
+    }
+
+    resetFilters(){
+      this.form.get('title')?.setValue('');
+      this.form.get('genre')?.setValue(null);
+      this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC)
+      this.form.get('minPages')?.setValue(null)
+      this.form.get('maxPages')?.setValue(null)
+      this.form.get('minPrice')?.setValue(null)
+      this.form.get('maxPrice')?.setValue(null)
+      this.form.get('minAge')?.setValue(null)
+      this.form.get('maxAge')?.setValue(null)
+      this.form.updateValueAndValidity();
+      this.onSubmit();
     }
 
 
-    books = Array(10).fill(this.book);
-    generos = ['Ficción', 'No ficción', 'Misterio', 'Ciencia Ficción', 'Fantasía', 'Romance'];
-    generoSeleccionado: string = '';
-    protected readonly BookGenre = BookGenre;
-    protected readonly Object = Object;
-    protected readonly BookSearchOrderBy = BookSearchOrderBy;
+    onPageChange(page: number){
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: page },
+        queryParamsHandling: 'merge',
+      });
+
+      this.currentPage = page;
+      this.reFetchBooks();
+    }
+
+  protected readonly BookGenre = BookGenre;
+  protected readonly Object = Object;
+  protected readonly BookSearchOrderBy = BookSearchOrderBy;
+
 }

@@ -11,6 +11,7 @@ export interface BookSearchQuery {
 	min_page_count?: number,
 	max_page_count?: number,
 	min_suggested_age?: number,
+	max_suggested_age?: number,
 	order_by?: BookSearchOrderBy,
 	writer_id?: number,
 	owner_id?: number,

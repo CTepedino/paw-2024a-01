@@ -16,13 +16,12 @@ import {bookWriterGuard} from "./shared/guards/book-writer.guard";
 import {canValidateCodeGuard} from "./shared/guards/can-validate-code.guard";
 import {EmailValidationComponent} from "./pages/email-validation/email-validation.component";
 import {ResetPasswordComponent} from "./pages/reset-password/reset-password.component";
-import {SearchComponent} from "./pages/search/search.component";
 import {ChangePasswordComponent} from "./pages/change-password/change-password.component";
 import {AddBookComponent} from "./pages/add-book/add-book.component";
 import {EditBookComponent} from "./pages/edit-book/edit-book.component";
 import {BuyBookComponent} from "./pages/book-details/pages/buy-book/buy-book.component";
 import {canBuyBookGuard} from "./shared/guards/can-buy-book.guard";
-import { ProfileComponent } from './pages/profile/profile.component';
+import {ProfileComponent} from './pages/profile/profile.component';
 import {DealComponent} from "./pages/book-details/pages/deal/deal.component";
 import {QuestionsComponent} from "./pages/questions/questions.component";
 import {AskedQuestionsComponent} from "./pages/questions/components/asked-questions/asked-questions.component";
@@ -32,7 +31,7 @@ import {SignupComponent} from "./pages/signup/signup.component";
 import {PurchasesComponent} from "./pages/purchases/purchases.component";
 import {userExistsGuard} from "./shared/guards/user-exists.guard";
 import {bookExistsGuard} from "./shared/guards/book-exists.guard";
-
+import {SearchComponent} from "./pages/search/search.component";
 
 
 export const routes: Routes = [

@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import {booleanAttribute, Component, computed, input} from '@angular/core';
 import {SalesCategory} from "../../model/book/salesCategory";
 import {MatCard, MatCardContent, MatCardHeader, MatCardImage} from "@angular/material/card";
 import {RouterLink} from "@angular/router";
@@ -29,6 +29,7 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 export class BookCardComponent {
 
 	book = input.required<BookWithData>();
+	compact = input(false, {transform: booleanAttribute});
 
     protected readonly SalesCategory = SalesCategory;
 

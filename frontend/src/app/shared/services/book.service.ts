@@ -28,7 +28,7 @@ export class BookService {
 
     Object.entries(query).forEach(([name, value]) => {
     if (value !== null && value !== undefined){
-     params = params.append(name, value.toString());
+     params = params.append(name, value);
     }
     })
 
