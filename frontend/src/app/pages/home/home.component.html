@@ -2,6 +2,7 @@
 
 <app-genre-list [genres]="genres$"/>
 
+
 @if ((bestSellers$ | async)?.length! > 0){
 	<h5 i18n class="home-margin">Best sellers</h5>
 	<mat-grid-list cols="6" rowHeight="350px" gutterSize="5px" class="book-grid">
@@ -13,6 +14,7 @@
 	</mat-grid-list>
 }
 
+
 @if ((newDeals$ | async)?.length! > 0){
 	<h5 i18n class="home-margin">New deals</h5>
 	<mat-grid-list cols="6" rowHeight="350px" gutterSize="5px" class="book-grid">
@@ -23,21 +25,23 @@
 		}
 	</mat-grid-list>
 }
+
+
 @if ((books$ | async); as books){
-	@if (books?.length! > 0){
-		<h5 i18n class="home-margin">Latest books</h5>
-		<mat-grid-list cols="2" rowHeight="300px" gutterSize="5px" class="book-grid">
-			@for (book of ((books)! | paginate: {id: 'books', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id) {
-				<mat-grid-tile >
-					<app-book-card class="grid-book-card" [book]="book"/>
-				</mat-grid-tile>
-			}
-		</mat-grid-list>
-		
-		@if ((pagination$ | async)?.pagination?.pageCount! > 1){
-			<app-paginator id="books" (pageChange)="onPageChange($event)"/>
+	<h5 i18n class="home-margin">Latest books</h5>
+	<mat-grid-list cols="2" rowHeight="300px" gutterSize="5px" class="book-grid">
+		@for (book of ((books)! | paginate: {id: 'books', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id) {
+			<mat-grid-tile >
+				<app-book-card class="grid-book-card" [book]="book"/>
+			</mat-grid-tile>
 		}
-	} @else {
-		<h5 i18n class="no-books">There are no publications yet, be the first to make one!</h5>
+	</mat-grid-list>
+	
+	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+		<app-paginator id="books" (pageChange)="onPageChange($event)"/>
 	}
+}
+
+@if ((pagination$ | async)?.pagination?.totalCount === 0) {
+<h5 i18n class="no-books">There are no publications yet, be the first to make one!</h5>
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
 import {BookSearchQuery} from "../model/book/bookSearchQuery";
-import {map, Observable} from "rxjs";
+import {concatMap, map, Observable} from "rxjs";
 import {Book} from "../model/book/book";
 import {BookMonthlyAnalytics} from "../model/book/bookMonthlyAnalytics";
 import {Deal} from "../model/book/deal";
@@ -32,7 +32,7 @@ export class BookService {
     }
     })
 
-    return this.http.get<Book[]>(this.apiURL, {params: params, observe: 'response'}).pipe(
+    return this.http.get<[]>(this.apiURL, {params: params, observe: 'response'}).pipe(
      map((response) => setPagination(response, query.size!))
     );
   }

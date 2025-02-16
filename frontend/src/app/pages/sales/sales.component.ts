@@ -28,8 +28,6 @@ export class SalesComponent implements OnInit{
   private route = inject(ActivatedRoute);
   private router = inject(Router)
 
-
-
   pagination$!: Observable<PaginatedContent<OrderWithData>>;
   orders$!: Observable<OrderWithData[]>
   currentPage!: number;
@@ -62,7 +60,12 @@ export class SalesComponent implements OnInit{
       }
       this.form.updateValueAndValidity();
     });
-    this.pagination$ =  this.ordersWithDataService.getSales({page: this.currentPage, size: this.pageSize})
+    this.pagination$ =  this.ordersWithDataService.getSales({
+      page: this.currentPage,
+      size: this.pageSize,
+      title: this.form.get('title')?.value,
+      status: this.form.get('status')?.value
+    })
     this.orders$ = this.pagination$.pipe(
         map((page) => page.data)
     )
@@ -75,7 +78,14 @@ export class SalesComponent implements OnInit{
       queryParamsHandling: 'merge',
     });
 
-    this.orders$ = this.ordersWithDataService.getSales({page: page, size: this.pageSize}).pipe(
+    this.currentPage = page;
+
+    this.orders$ = this.ordersWithDataService.getSales({
+      page: page,
+      size: this.pageSize,
+      title: this.form.get('title')?.value,
+      status: this.form.get('status')?.value
+    }).pipe(
         map((page) => page.data)
     )
   }
@@ -86,7 +96,7 @@ export class SalesComponent implements OnInit{
       page: this.currentPage,
       size: this.pageSize,
       title: this.form.get('title')?.value,
-      status: this.form.get('status')?.value == ''? undefined : this.form.get('status')?.value
+      status: this.form.get('status')?.value
     })
 
     this.router.navigate([], {

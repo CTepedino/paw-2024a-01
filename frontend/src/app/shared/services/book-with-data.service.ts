@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BookSearchQuery} from "../model/book/bookSearchQuery";
-import {concatMap, forkJoin, map, Observable, of, switchMap} from "rxjs";
+import {catchError, concatMap, forkJoin, map, Observable, of, switchMap} from "rxjs";
 import {PaginatedContent} from "../model/paginatedContent";
 import {BookWithData} from "../model/book/bookWithData";
 import {User} from "../model/user/user";
@@ -22,9 +22,8 @@ export class BookWithDataService {
     return this.bookService.listBooks(query).pipe(
         concatMap((paginatedBooks) => {
           const bookRequests = paginatedBooks.data.map((book) => this.fillBook(book));
-
           return forkJoin(bookRequests).pipe(
-              map((booksWithData) => ({
+              map((booksWithData) =>({
                 data: booksWithData,
                 pagination: paginatedBooks.pagination
               }))

@@ -8,7 +8,7 @@ import {SmallBookCardComponent} from "../../shared/components/small-book-card/sm
 import {HomeService} from "./store/home.service";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, JsonPipe} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BookWithData} from "../../shared/model/book/bookWithData";
 import {NgxPaginationModule, PaginationInstance} from "ngx-pagination";
@@ -17,7 +17,7 @@ import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-home',
-	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent, SmallBookCardComponent, AsyncPipe, NgxPaginationModule, PaginatorComponent],
+	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent, SmallBookCardComponent, AsyncPipe, NgxPaginationModule, PaginatorComponent, JsonPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

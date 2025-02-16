@@ -45,10 +45,10 @@ public class WishlistJpaDao implements WishlistDao {
 
     @Override
     public List<WishlistItem> getWishlist(long userId, int offset, int limit){
-        Query nativeQuery = em.createNativeQuery("SELECT id FROM wishlist WHERE user_id = :userId");
+        Query nativeQuery = em.createNativeQuery("SELECT id FROM wishlist WHERE user_id = :userId ORDER BY id DESC");
         nativeQuery.setParameter("userId", userId);
 
-        TypedQuery<WishlistItem> query = em.createQuery("FROM WishlistItem w WHERE w.id IN :idList", WishlistItem.class);
+        TypedQuery<WishlistItem> query = em.createQuery("FROM WishlistItem w WHERE w.id IN :idList ORDER BY w.id DESC", WishlistItem.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }

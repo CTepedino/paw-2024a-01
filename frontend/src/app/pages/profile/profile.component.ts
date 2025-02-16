@@ -25,13 +25,16 @@ export class ProfileComponent {
 
 	index = { selectedIndex: 0 }
 
-	userId: number;
-	displayInfo$: Observable<ProfileDisplayInfo>;
+	userId: number = 0;
+	displayInfo$: Observable<ProfileDisplayInfo> | null = null;
 
 	constructor() {
 		this.title.setTitle('Profile');
 
-		this.userId = this.route.snapshot.params['id'];
-		this.displayInfo$ = this.userProfileService.getUser(this.userId);
+		this.route.params.subscribe(params => {
+			this.userId = params['id'];
+			this.displayInfo$ = this.userProfileService.getUser(this.userId);
+		});
+
 	}
 }

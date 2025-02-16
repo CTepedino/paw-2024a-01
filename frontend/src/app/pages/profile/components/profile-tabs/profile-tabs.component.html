@@ -7,6 +7,7 @@
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
+						<app-publications-tab [userId]="user().id!"></app-publications-tab>
 					</div>
 				</ng-template>
 			</mat-tab>
@@ -18,6 +19,7 @@
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
+						<app-bought-books-tab [userId]="user().id!"></app-bought-books-tab>
 					</div>
 				</ng-template>
 			</mat-tab>
@@ -28,6 +30,7 @@
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
+						<app-recommendations-tab [userId]="user().id!"></app-recommendations-tab>
 					</div>
 				</ng-template>
 			</mat-tab>
@@ -39,6 +42,7 @@
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
+						<app-wishlist-tab [userId]="user().id!"></app-wishlist-tab>
 					</div>
 				</ng-template>
 			</mat-tab>

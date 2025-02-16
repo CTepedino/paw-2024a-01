@@ -45,10 +45,10 @@ public class RecommendationsJpaDao implements RecommendationsDao {
 
     @Override
     public List<Recommendation> getRecommendationsForBook(long userId, int offset, int limit) {
-        Query nativeQuery = em.createNativeQuery("SELECT id FROM recommendations WHERE user_id = :userId");
+        Query nativeQuery = em.createNativeQuery("SELECT id FROM recommendations WHERE user_id = :userId ORDER BY id DESC");
         nativeQuery.setParameter("userId", userId);
 
-        TypedQuery<Recommendation> query = em.createQuery("FROM Recommendation r WHERE r.id IN :idList", Recommendation.class);
+        TypedQuery<Recommendation> query = em.createQuery("FROM Recommendation r WHERE r.id IN :idList ORDER BY r.id DESC", Recommendation.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, offset, limit);
     }

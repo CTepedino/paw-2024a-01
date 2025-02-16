@@ -25,6 +25,7 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 export class SmallBookCardComponent {
 	book = input.required<BookWithData>();
 	showDate = input(false, {transform: booleanAttribute});
+	showWriter = input(true, {transform: booleanAttribute});
 
 	protected readonly SalesCategory = SalesCategory;
 

@@ -95,13 +95,17 @@ export class PurchasesComponent implements OnInit {
 
     this.currentPage = page;
 
-    this.orders$ = this.ordersWithDataService.getPurchases({page: page, size: this.pageSize}).pipe(
+    this.orders$ = this.ordersWithDataService.getPurchases({
+      page: page,
+      size: this.pageSize,
+      title: this.form.get('title')?.value,
+      status: this.form.get('status')?.value
+    }).pipe(
         map((page) => page.data)
     )
   }
 
   onSubmit(){
-    console.log(this.form.value);
     this.currentPage = 1;
     this.pagination$ = this.ordersWithDataService.getPurchases({
       page: this.currentPage,

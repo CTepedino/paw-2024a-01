@@ -1,0 +1,13 @@
+@if (books$ | async; as	books){
+	<mat-grid-list cols="4" gutterSize="10px" class="book-grid">
+		@for (book of (books | paginate: {id: 'wishlist', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id){
+			<mat-grid-tile>
+				<app-small-book-card [book]="book" class="wishlist"></app-small-book-card>
+			</mat-grid-tile>
+		}
+	</mat-grid-list>
+	
+	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+		<app-paginator id="wishlist" (pageChange)="onPageChange($event)"/>
+	}
+}

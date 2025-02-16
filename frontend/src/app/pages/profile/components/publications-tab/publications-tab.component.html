@@ -1,0 +1,33 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="onSubmit()">
+	<mat-grid-list cols="2" rowHeight="5:1" gutterSize="10px">
+		<mat-grid-tile>
+			<mat-form-field class="full-width">
+				<mat-label i18n>Title</mat-label>
+				<input matInput formControlName="title">
+			</mat-form-field>
+		</mat-grid-tile>
+		<mat-grid-tile>
+			<mat-form-field class="full-width">
+				<mat-label i18n>Order status</mat-label>
+				<mat-select (selectionChange)="onSubmit()" formControlName="orderBy">
+					@for (status of BookSearchOrderByOptions; track status.value){
+						<mat-option [value]="status.value"> {{ status.label }}</mat-option>
+					}
+				</mat-select>
+			</mat-form-field>
+		</mat-grid-tile>
+	</mat-grid-list>
+</form>
+@if (books$ | async; as	books){
+	<mat-grid-list cols="4" gutterSize="10px" class="book-grid">
+		@for (book of (books | paginate: {id: 'publications', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id){
+			<mat-grid-tile>
+				<app-small-book-card [book]="book" class="publication"></app-small-book-card>
+			</mat-grid-tile>
+		}
+	</mat-grid-list>
+	
+	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+		<app-paginator id="publications" (pageChange)="onPageChange($event)"/>
+	}
+}

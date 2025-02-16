@@ -1,14 +1,18 @@
-import {Component, computed, inject, input, OnInit, output, signal} from '@angular/core';
+import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatTab, MatTabContent, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {User} from "../../../../shared/model/user/user";
 import {UserRoles} from "../../../../shared/model/user/userRoles";
 import {Router} from "@angular/router";
+import {WishlistTabComponent} from "../wishlist-tab/wishlist-tab.component";
+import {RecommendationsTabComponent} from "../recommendations-tab/recommendations-tab.component";
+import {PublicationsTabComponent} from "../publications-tab/publications-tab.component";
+import {BoughtBooksTabComponent} from "../bought-books-tab/bought-books-tab.component";
 
 @Component({
     selector: 'app-profile-tabs',
     standalone: true,
-    imports: [CommonModule, MatTab, MatTabContent, MatTabGroup, MatTabLabel],
+    imports: [CommonModule, MatTab, MatTabContent, MatTabGroup, MatTabLabel, WishlistTabComponent, RecommendationsTabComponent, PublicationsTabComponent, BoughtBooksTabComponent],
     templateUrl: './profile-tabs.component.html',
     styleUrl: './profile-tabs.component.scss'
 })
@@ -18,42 +22,53 @@ export class ProfileTabsComponent implements OnInit {
     user = input.required<User>();
     ownsProfile = input.required<boolean>();
 
-    showBoughtBooks = computed(() => this.user()?.roles?.includes(UserRoles.WRITER) ?? false);
-    showPublications = signal(() => this.ownsProfile());
-    showWishlist = signal(() => this.ownsProfile());
+    showPublications = computed(() => this.user()?.roles?.includes(UserRoles.WRITER) ?? false);
+    showBoughtBooks = computed(() => this.ownsProfile());
+    showWishlist = computed(() => this.ownsProfile());
 
     index = { selectedIndex: 0 }
+
+    setup = true;
 
     ngOnInit(): void {
         const url = this.router.url;
 
-        if (url.endsWith('owned')) {
-            setTimeout(() => this.index.selectedIndex = this.showPublications()? 1: 0, 100);
+        setTimeout(() => this.setTab(url), 100);
+    }
+
+    setTab(url: string){
+        if (url.includes('owned')) {
+            this.index.selectedIndex = this.showPublications()? 1: 0;
         }
-        if (url.endsWith('wishlist')) {
-            setTimeout(() => this.index.selectedIndex = this.showPublications()? 2: 1, 100);
+        if (url.includes('wishlist')) {
+            this.index.selectedIndex = this.showPublications()? 2: 1;
         }
+        setTimeout(() => this.setup = false, 100)
     }
 
     onTabChange(event: any) {
         if (this.showPublications()) {
             if (event.index == 0) {
-                this.router.navigate([`/profile/${this.user()?.id}/publications`]);
+                this.navigate('publications');
             }
             if (event.index == 1) {
-                this.router.navigate([`/profile/${this.user()?.id}/owned`]);
+                this.navigate('owned');
             }
             if (event.index == 2) {
-                this.router.navigate([`/profile/${this.user()?.id}/wishlist`]);
+                this.navigate('wishlist');
             }
         } else {
             if (event.index == 0) {
-                this.router.navigate([`/profile/${this.user()?.id}/owned`]);
+                this.navigate('owned');
 
             }
             if (event.index == 1) {
-                this.router.navigate([`/profile/${this.user()?.id}/wishlist`]);
+                this.navigate('wishlist');
             }
         }
+    }
+
+    navigate(tab: string){
+        this.router.navigate([`/profile/${this.user()?.id}/${tab}`], {queryParamsHandling: this.setup? 'merge' : undefined})
     }
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {GenreService} from "../../../shared/services/genre.service";
 import {BookGenre} from "../../../shared/model/book/bookGenre";
-import {map, Observable} from "rxjs";
+import {catchError, map, Observable, of} from "rxjs";
 import {BookSearchOrderBy} from "../../../shared/model/book/bookSearchOrderBy";
 import {BookWithData} from "../../../shared/model/book/bookWithData";
 import {PaginatedContent} from "../../../shared/model/paginatedContent";

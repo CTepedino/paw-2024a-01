@@ -45,7 +45,7 @@ export class QuestionsComponent implements OnInit {
 	ngOnInit(): void {
 		const url = this.router.url;
 
-		if (url.endsWith('received-questions')) {
+		if (url.includes('received-questions')) {
 			setTimeout(() => this.index.selectedIndex = 1, 100);
 		}
 	}
