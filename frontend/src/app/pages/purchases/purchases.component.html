@@ -1,66 +1,53 @@
-<div class="container">
-    <h1 class="page-title">My Purchases</h1>
-
-    <div class="search-filters">
-        <mat-form-field appearance="outline">
-            <mat-label>Title</mat-label>
-            <input matInput [(ngModel)]="searchTitle">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>Select order status</mat-label>
-            <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
-                @for (status of statusOptions; track status.value) {
-                    <mat-option [value]="status.value">{{status.label}}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-    </div>
-
-    <div class="table-header">
-        <div class="header-cell">Cover</div>
-        <div class="header-cell">Book</div>
-        <div class="header-cell">Date</div>
-        <div class="header-cell">Status</div>
-        <div class="header-cell">Actions</div>
-    </div>
-
-    @if (purchases.length === 0) {
-        <div class="empty-message">
-            <h5>No purchases found</h5>
-        </div>
-    }
-
-    @for (purchase of purchases; track purchase.book.id) {
-        <div class="purchase-row">
-            <div class="cell cover-cell">
-                <img [src]="purchase.book.coverUrl" [alt]="purchase.book.title">
-            </div>
-
-            <div class="cell info-cell">
-                <h3>{{purchase.book.title}}</h3>
-                <p>By {{purchase.book.author}}</p>
-                <p class="price">${{purchase.book.price}}</p>
-            </div>
-
-            <div class="cell date-cell">
-                {{purchase.date}}
-            </div>
-
-            <div class="cell status-cell">
-                {{purchase.status}}
-            </div>
-
-            <div class="cell actions-cell">
-                @if (purchase.status === 'COMPLETED') {
-                    <button mat-raised-button color="primary">READ BOOK</button>
-                    <mat-checkbox
-                            [(ngModel)]="purchase.recommended"
-                            class="recommend-checkbox">
-                        Recommend book
-                    </mat-checkbox>
-                }
-            </div>
-        </div>
-    }
+<div class="container sales">
+	<h1 i18n class="page-title">My Purchases</h1>
+	<form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="onSubmit()">
+		<mat-grid-list cols="2" rowHeight="5:1" gutterSize="10px">
+			<mat-grid-tile>
+				<mat-form-field class="full-width">
+					<mat-label i18n>Title</mat-label>
+					<input matInput formControlName="title">
+				</mat-form-field>
+			</mat-grid-tile>
+			<mat-grid-tile>
+				<mat-form-field class="full-width">
+					<mat-label i18n>Order status</mat-label>
+					<mat-select (selectionChange)="onSubmit()" formControlName="status">
+						@for (status of orderStatusOptions; track status.value){
+							<mat-option [value]="status.value"> {{ status.label }}</mat-option>
+						}
+					</mat-select>
+				</mat-form-field>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</form>
+	@let pagination = pagination$ | async;
+	@if ((orders$ | async); as orders){
+		@if (orders.length === 0) {
+			<div class="centerer big-font">
+				<h5 i18n>No sales found</h5>
+			</div>
+		}
+		
+		@if (orders.length != 0) {
+			<mat-grid-list cols="5" rowHeight="3:1" gutterSize="20px" class="table-top">
+				<mat-grid-tile i18n class="table-title center-left">Cover</mat-grid-tile>
+				<mat-grid-tile i18n class="table-title center-left">Book</mat-grid-tile>
+				<mat-grid-tile i18n class="table-title center-left">Date</mat-grid-tile>
+				<mat-grid-tile i18n class="table-title center-left">Status</mat-grid-tile>
+				<mat-grid-tile i18n class="table-title center-left">Actions</mat-grid-tile>
+			</mat-grid-list>
+			
+			
+			@for (order of ((orders)! | paginate: {id: 'purchases', itemsPerPage: pageSize, currentPage: currentPage, totalItems: pagination?.pagination?.totalCount!}); track order){
+				<app-purchases-order-card
+					[order]="order"
+				></app-purchases-order-card>
+			}
+			
+			@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+				<app-paginator id="purchases" (pageChange)="onPageChange($event)"/>
+			}
+		}
+	}
 </div>
+

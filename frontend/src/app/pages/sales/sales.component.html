@@ -11,7 +11,7 @@
 			<mat-grid-tile>
 				<mat-form-field class="full-width">
 					<mat-label i18n>Order status</mat-label>
-					<mat-select [(value)]="selectedStatus" (valueChange)="onSubmit()" formControlName="status">
+					<mat-select (selectionChange)="onSubmit()" formControlName="status">
 						@for (status of orderStatusOptions; track status.value){
 							<mat-option [value]="status.value"> {{ status.label }}</mat-option>
 						}

@@ -1,3 +1,47 @@
+.purchases{
+  width: 95% !important;
+}
+
+.page-title {
+  color: #437C90 !important;
+  font-size: xxx-large;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.centerer{
+  width: 100%;
+  text-align: center;
+}
+
+.big-font {
+  font-size: 3rem;
+}
+
+.table-top {
+  background-color: #437c90;
+}
+
+:host .table-title {
+  ::ng-deep {
+    .mat-grid-tile-content {
+      color: white;
+      justify-content: flex;
+      align-items: center;
+      padding-left: 10px;
+    }
+  }
+}
+
+/*
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -77,4 +121,4 @@
   text-align: center;
   padding: 20px;
   color: #666;
-}
+}*/

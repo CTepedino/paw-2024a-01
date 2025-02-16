@@ -1,0 +1,11 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+	<h1 i18n mat-dialog-title>Reupload payment</h1>
+	<div mat-dialog-content>
+		<p i18n>Please fix and reupload the payment receipt</p>
+		<app-file-input accept="application/pdf, image/*" formGroupName="form" [formGroup]="form">Receipt</app-file-input>
+	</div>
+	<div mat-dialog-actions>
+		<button i18n mat-button class="cancel-button" (click)="closeDialog()" type="button">CANCEL</button>
+		<button i18n mat-button class="decline-button" (click)="onSubmit()" type="submit" [disabled]="!this.form.valid">DECLINE</button>
+	</div>
+</form>

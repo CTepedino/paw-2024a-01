@@ -128,4 +128,12 @@ export class BookService {
           {headers: {"Content-Type": MediaTypes.REVIEW}}
       );
   }
+
+    openBookInternal(bookUrl: string){
+        this.http.get(bookUrl, {responseType: 'blob'}).subscribe(blob => {
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+        });
+    }
 }
