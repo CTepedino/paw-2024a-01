@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
@@ -71,11 +71,23 @@ export class SearchComponent implements OnInit {
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
           this.currentPage = Number(params['page']) || 1;
+          this.form.get('title')?.setValue(params['title']);
+          if (Object.values(BookSearchOrderBy).includes(params['order_by'])){
+            this.form.get('orderBy')?.setValue(params['order_by']);
+          }
+          if (Object.values(BookGenre).includes(params['genre'])){
+            this.form.get('genre')?.setValue(params['genre']);
+          }
+          this.form.get('minPages')?.setValue(params['min_pages']);
+          this.form.get('maxPages')?.setValue(params['max_pages']);
+          this.form.get('minPrice')?.setValue(params['min_price']);
+          this.form.get('maxPrice')?.setValue(params['max_price']);
+          this.form.get('minAge')?.setValue(params['min_age']);
+          this.form.get('maxAge')?.setValue(params['max_age']);
+
+          this.form.updateValueAndValidity();
         });
-        this.pagination$ =  this.bookWithDataService.listBooksWithData({page: this.currentPage, size: this.pageSize})
-        this.books$ = this.pagination$.pipe(
-            map((page) => page.data)
-        )
+        this.reFetchBooks();
     }
 
     reFetchBooks(){
@@ -95,11 +107,30 @@ export class SearchComponent implements OnInit {
       this.books$ = this.pagination$.pipe(
           map((page) => page.data)
       );
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          page: this.currentPage,
+          title: this.form.get('title')?.value,
+          genre: this.form.get('genre')?.value,
+          order_by: this.form.get('orderBy')?.value,
+          min_pages: this.form.get('minPages')?.value,
+          max_pages: this.form.get('maxPages')?.value,
+          min_price: this.form.get('minPrice')?.value,
+          max_price: this.form.get('maxPrice')?.value,
+          min_age: this.form.get('minAge')?.value,
+          max_age: this.form.get('maxAge')?.value,
+        },
+        queryParamsHandling: 'merge',
+      });
+
     }
 
     onSubmit(){
       if (this.form.valid){
         this.currentPage = 1;
+
         this.reFetchBooks();
       }
     }
