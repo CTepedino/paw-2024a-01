@@ -22,7 +22,7 @@ public class UserJpaDao implements UserDao {
 
     @Override
     public User create(String email, String password, String firstName, String lastName, boolean isEnabled, Locale locale) {
-        final User user = new User(email, password, firstName, lastName, isEnabled, locale);
+        final User user = new User(email.toLowerCase(), password, firstName, lastName, isEnabled, locale);
         em.persist(user);
         return user;
     }
@@ -79,7 +79,7 @@ public class UserJpaDao implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        TypedQuery<User> query = em.createQuery("FROM User WHERE email = :email", User.class);
+        TypedQuery<User> query = em.createQuery("FROM User WHERE LOWER(email) = LOWER(:email)", User.class);
         query.setParameter("email", email);
 
         return query.getResultList().stream().findFirst();
