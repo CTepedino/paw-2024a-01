@@ -18,6 +18,7 @@ import {BookWithData} from "../../shared/model/book/bookWithData";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
+import {Title} from "@angular/platform-browser";
 
 
 @Component({
@@ -43,6 +44,7 @@ import {NgxPaginationModule} from "ngx-pagination";
   styleUrl: './search.component.scss'
 })
 export class SearchComponent implements OnInit {
+  title = inject(Title);
   route = inject(ActivatedRoute);
   router = inject(Router);
   bookWithDataService = inject(BookWithDataService);
@@ -55,6 +57,8 @@ export class SearchComponent implements OnInit {
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
+    this.title.setTitle('Search')
+
     this.form = this.fb.group({
       title: [''],
       orderBy: [BookSearchOrderBy.PUBLICATION_DATE_DESC],

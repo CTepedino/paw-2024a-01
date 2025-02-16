@@ -1,7 +1,8 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, inject} from '@angular/core';
 import {
 	ActionNotificationCardComponent
 } from "../../../shared/components/action-notification-card/action-notification-card.component";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-server-error-page',
@@ -13,5 +14,9 @@ import {
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ServerErrorPageComponent {
+	title = inject(Title);
 
+	constructor() {
+		this.title.setTitle('Server error');
+	}
 }

@@ -14,6 +14,7 @@ import {ProfileEditService} from "./store/profile-edit.service";
 import {UserRoles} from "../../shared/model/user/userRoles";
 import {CancelButtonComponent} from "../../shared/components/cancel-button/cancel-button.component";
 import {Router, RouterLink} from "@angular/router";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-edit-profile',
@@ -36,6 +37,7 @@ import {Router, RouterLink} from "@angular/router";
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EditProfileComponent implements OnInit {
+  title = inject(Title);
   profileEditService = inject(ProfileEditService);
   router = inject(Router);
 
@@ -45,6 +47,8 @@ export class EditProfileComponent implements OnInit {
   userId: any;
 
   constructor(private fb: FormBuilder) {
+    this.title.setTitle('Edit profile');
+
     this.editForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],

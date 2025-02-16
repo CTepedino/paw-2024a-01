@@ -1,6 +1,7 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input, OnInit} from '@angular/core';
 import {TabComponent} from "../../shared/components/tab/tab.component";
 import {ReviewFormCardComponent} from "./components/review-form-card/review-form-card.component";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-book-details',
@@ -12,10 +13,18 @@ import {ReviewFormCardComponent} from "./components/review-form-card/review-form
   styleUrl: './book-details.component.scss',
 })
 export class BookDetailsComponent {
-  id = input.required<number>();
+	title = inject(Title);
 
 
-  review = {
+
+    id = input.required<number>();
+
+	constructor(){
+		this.title.setTitle('Book Details')
+	}
+
+
+	review = {
     reviewerInfo: {
       id: 1,
       firstName: 'Armando',

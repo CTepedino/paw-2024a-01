@@ -13,6 +13,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {BookWithData} from "../../shared/model/book/bookWithData";
 import {NgxPaginationModule, PaginationInstance} from "ngx-pagination";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-home',
@@ -21,10 +22,14 @@ import {PaginatorComponent} from "../../shared/components/paginator/paginator.co
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
+	title = inject(Title);
 	private homeService = inject(HomeService);
 	private route = inject(ActivatedRoute);
 	private router = inject(Router)
 
+	constructor() {
+		this.title.setTitle('Cybrary');
+	}
 
 	pagination$!: Observable<PaginatedContent<BookWithData>>;
 	books$!: Observable<BookWithData[]>

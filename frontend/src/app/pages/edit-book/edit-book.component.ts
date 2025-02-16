@@ -12,6 +12,7 @@ import {fileTypeValidator} from "../../shared/validators/fileTypeValidator";
 import {catchError, map, throwError} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EditBookService} from "./store/edit-book.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-edit-book',
@@ -31,6 +32,7 @@ import {EditBookService} from "./store/edit-book.service";
   styleUrl: './edit-book.component.scss'
 })
 export class EditBookComponent implements OnInit{
+	title = inject(Title);
 	editBookService = inject(EditBookService);
 	router = inject(Router);
 	route = inject(ActivatedRoute);
@@ -43,6 +45,8 @@ export class EditBookComponent implements OnInit{
 	form: FormGroup;
 
 	constructor(private fb: FormBuilder) {
+		this.title.setTitle('Edit book');
+
 		this.form = this.fb.group({
 			title: ['', [Validators.required, Validators.maxLength(50)]],
 			description: ['', [Validators.required, Validators.maxLength(1000)]],

@@ -6,6 +6,7 @@ import {map} from "rxjs";
 import {UserRoles} from "../../shared/model/user/userRoles";
 import {AskedQuestionsComponent} from "./components/asked-questions/asked-questions.component";
 import {RecievedQuestionsComponent} from "./components/recieved-questions/recieved-questions.component";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-questions',
@@ -21,6 +22,7 @@ import {RecievedQuestionsComponent} from "./components/recieved-questions/reciev
   styleUrl: './questions.component.scss'
 })
 export class QuestionsComponent implements OnInit {
+	title = inject(Title);
 
 	router = inject(Router);
 	authService = inject(AuthService);
@@ -30,6 +32,9 @@ export class QuestionsComponent implements OnInit {
 	index = { selectedIndex: 0 }
 
 	constructor() {
+		this.title.setTitle('Questions')
+
+
 		this.authService.getLoggedUser().pipe(
 			map(user => {
 				this.showTabs = user?.roles?.includes(UserRoles.WRITER)!;

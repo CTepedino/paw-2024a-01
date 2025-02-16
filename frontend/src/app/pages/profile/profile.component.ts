@@ -5,6 +5,7 @@ import {ProfileHeaderComponent} from "./components/profile-header/profile-header
 import {Observable} from "rxjs";
 import {ProfileDisplayInfo, UserProfileService} from "./store/user-profile.service";
 import {ProfileTabsComponent} from "./components/profile-tabs/profile-tabs.component";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ import {ProfileTabsComponent} from "./components/profile-tabs/profile-tabs.compo
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
+	title = inject(Title);
 	route = inject(ActivatedRoute);
 	userProfileService = inject(UserProfileService);
 
@@ -27,6 +29,8 @@ export class ProfileComponent {
 	displayInfo$: Observable<ProfileDisplayInfo>;
 
 	constructor() {
+		this.title.setTitle('Profile');
+
 		this.userId = this.route.snapshot.params['id'];
 		this.displayInfo$ = this.userProfileService.getUser(this.userId);
 	}

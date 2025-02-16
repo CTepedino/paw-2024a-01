@@ -14,6 +14,7 @@ import {AsyncPipe} from "@angular/common";
 import {fileTypeValidator} from "../../shared/validators/fileTypeValidator";
 import {Router} from "@angular/router";
 import {catchError, map, throwError} from "rxjs";
+import {Title} from "@angular/platform-browser";
 
 
 @Component({
@@ -43,6 +44,7 @@ import {catchError, map, throwError} from "rxjs";
   ]
 })
 export class AddBookComponent implements OnInit {
+  title = inject(Title);
   addBookService = inject(AddBookService);
   router = inject(Router);
 
@@ -56,6 +58,8 @@ export class AddBookComponent implements OnInit {
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
+    this.title.setTitle('Publish')
+
     this.form = this.fb.group({
       cbu: [''],
       title: ['', [Validators.required, Validators.maxLength(50)]],

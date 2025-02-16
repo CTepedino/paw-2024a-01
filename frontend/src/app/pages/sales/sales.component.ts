@@ -14,6 +14,7 @@ import {OrderWithData} from "../../shared/model/order/orderWithData";
 import {AsyncPipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-sales',
@@ -22,6 +23,7 @@ import {PaginatorComponent} from "../../shared/components/paginator/paginator.co
   styleUrl: './sales.component.scss',
 })
 export class SalesComponent implements OnInit{
+  title = inject(Title);
   ordersWithDataService = inject(OrderWithDataService);
   private route = inject(ActivatedRoute);
   private router = inject(Router)
@@ -43,6 +45,8 @@ export class SalesComponent implements OnInit{
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
+    this.title.setTitle('Sales')
+
     this.form = fb.group({
       title: [''],
       status: ['']

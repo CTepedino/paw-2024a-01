@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -8,6 +8,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {RegisterConfirmationComponent} from "./components/register-confirmation/register-confirmation.component";
 import {RegisterFormComponent} from "./components/register-form/register-form.component";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-signup',
@@ -27,6 +28,12 @@ import {RegisterFormComponent} from "./components/register-form/register-form.co
   styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
+  title = inject(Title);
+
+  constructor() {
+    this.title.setTitle('Sign Up')
+  }
+
   registering = true;
   email = '';
 

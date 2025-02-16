@@ -1,7 +1,8 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, inject} from '@angular/core';
 import {
   ActionNotificationCardComponent
 } from "../../shared/components/action-notification-card/action-notification-card.component";
+import {Title} from "@angular/platform-browser";
 
 
 @Component({
@@ -14,5 +15,9 @@ import {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EmailValidationComponent {
+  title = inject(Title);
 
+  constructor() {
+    this.title.setTitle('Validate email');
+  }
 }

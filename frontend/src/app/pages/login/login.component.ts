@@ -11,6 +11,7 @@ import {AuthService} from "../../shared/services/auth.service";
 import {catchError, map, throwError} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-login',
@@ -32,9 +33,13 @@ import {MatIconButton} from "@angular/material/button";
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class LoginComponent {
-
+  title = inject(Title);
   authService = inject(AuthService);
   router = inject(Router);
+
+  constructor() {
+    this.title.setTitle('Login')
+  }
 
   redirect = input<string>()
 

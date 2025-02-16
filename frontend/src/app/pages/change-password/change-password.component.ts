@@ -9,6 +9,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {Router} from "@angular/router";
 import {catchError, concatMap, map, of, throwError} from "rxjs";
 import {ChangePasswordService} from "./store/change-password.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-change-password',
@@ -28,6 +29,7 @@ import {ChangePasswordService} from "./store/change-password.service";
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ChangePasswordComponent {
+	title = inject(Title);
 	changePasswordService = inject(ChangePasswordService)
 	router = inject(Router);
 
@@ -45,6 +47,10 @@ export class ChangePasswordComponent {
 		password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]),
 		confirm: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]),
 	});
+
+	constructor() {
+		this.title.setTitle('Change password');
+	}
 
 	changePassword(){
 		if (this.changePasswordForm.valid) {

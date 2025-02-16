@@ -16,6 +16,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {OrderWithData} from "../../shared/model/order/orderWithData";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-purchases',
@@ -37,6 +38,7 @@ import {OrderWithData} from "../../shared/model/order/orderWithData";
   styleUrl: './purchases.component.scss'
 })
 export class PurchasesComponent implements OnInit {
+  title = inject(Title);
   ordersWithDataService = inject(OrderWithDataService);
   private route = inject(ActivatedRoute);
   private router = inject(Router)
@@ -56,6 +58,8 @@ export class PurchasesComponent implements OnInit {
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
+    this.title.setTitle('Purchases');
+
     this.form = fb.group({
       title: [''],
       status: [null]

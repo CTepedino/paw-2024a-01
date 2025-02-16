@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {ContentCardComponent} from "../../shared/components/content-card/content-card.component";
 import {TabComponent} from "../../shared/components/tab/tab.component";
 import {WriterCategory} from "../../shared/model/user/writerCategory";
@@ -8,6 +8,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {FormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-analytics',
@@ -16,6 +17,13 @@ import {MatSelectModule} from "@angular/material/select";
   styleUrl: './analytics.component.scss'
 })
 export class AnalyticsComponent {
+  title = inject(Title);
+
+  constructor(){
+    this.title.setTitle('Analytics');
+  }
+
+
   showByMonth = false;
   selectedMonth: string = 'February';
   selectedYear: number = 2025;
