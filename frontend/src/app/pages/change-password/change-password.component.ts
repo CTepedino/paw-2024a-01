@@ -76,7 +76,7 @@ export class ChangePasswordComponent {
 						} else {
 							return this.changePasswordService.resetPassword(password ?? '').pipe(
 								map(() => {
-									this.router.navigate(['/'])
+									this.router.navigate(['/profile'])
 								}),
 								catchError(() => {
 									this.changeFailed.set(true);

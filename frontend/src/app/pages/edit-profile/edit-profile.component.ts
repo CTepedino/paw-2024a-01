@@ -86,7 +86,7 @@ export class EditProfileComponent implements OnInit {
     if (this.editForm.valid) {
       this.profileEditService.updateProfile(this.editForm).pipe(
           map(() => {
-            this.router.navigate([`profile/${this.userId}`]);
+            this.router.navigate([`profile`]);
           })
       ).subscribe();
     }

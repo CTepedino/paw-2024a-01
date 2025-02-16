@@ -186,8 +186,8 @@ export class AuthService {
 
     verifyCredentials(email: string, password: string): Observable<boolean> {
         const tokens = this.temporalLogout();
-
-        return this.http.get<Index>(this.baseUrl).pipe(
+        const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(`${email}:${password}`)});
+        return this.http.get<Index>(this.baseUrl, {headers: headers}).pipe(
             map(index => {
                 this.setTokens(tokens.jwt, tokens.refreshToken);
                 return !!index.loggedUser;
