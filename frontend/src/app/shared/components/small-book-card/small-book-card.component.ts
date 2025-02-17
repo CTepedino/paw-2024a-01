@@ -6,6 +6,7 @@ import {RouterLink} from "@angular/router";
 import {BookWithData} from "../../model/book/bookWithData";
 import {SalesCategory} from "../../model/book/salesCategory";
 import {BookBadgeComponent} from "../book-badge/book-badge.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-small-book-card',
@@ -18,6 +19,7 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 		MatRipple,
 		RouterLink,
 		BookBadgeComponent,
+		TranslateModule
 	],
   templateUrl: './small-book-card.component.html',
   styleUrl: './small-book-card.component.scss'

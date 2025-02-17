@@ -1,8 +1,8 @@
 @switch (category()){
 	@case (SalesCategory.BEST_SELLER){
-		<div class="card-badge bestseller">Best Seller</div>
+		<div class="card-badge bestseller">{{ 'BEST_SELLER' | translate }}</div>
 	}
 	@case (SalesCategory.POPULAR){
-		<div class="card-badge popular">Popular</div>
+		<div class="card-badge popular">{{ 'POPULAR' | translate }}</div>
 	}
 }

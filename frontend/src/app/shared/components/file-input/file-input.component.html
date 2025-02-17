@@ -2,7 +2,7 @@
 	<mat-form-field appearance="outline" class="input">
 		<mat-label><ng-content></ng-content></mat-label>
 		<input type="file" #fileInput hidden (change)="onFileSelected($event)" [accept]="accept()">
-		<input matInput placeholder="Choose a file" readonly formControlName="fileName" [required]="required()">
-		<button mat-button matSuffix (click)="fileInput.click()" type="button">Browse</button>
+		<input matInput placeholder="{{ 'FILE_INPUT.CHOOSE_A_FILE' | translate }}" readonly formControlName="fileName" [required]="required()">
+		<button mat-button matSuffix (click)="fileInput.click()" type="button">{{ 'FILE_INPUT.BROWSE' | translate }}</button>
 	</mat-form-field>
 </div>

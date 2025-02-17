@@ -11,6 +11,7 @@ import { UserRoles } from '../../model/user/userRoles';
 import { NavButtonComponent } from '../nav-button/nav-button.component';
 import { User } from '../../model/user/user';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @Component({
@@ -28,6 +29,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
     NavbarMenuItemComponent,
     NavbarMenuComponent,
     ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'

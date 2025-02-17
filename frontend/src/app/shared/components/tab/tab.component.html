@@ -1,13 +1,13 @@
 <div class="center">
-	<mat-tab-group class="tabber">
-		<mat-tab label="first" class="tab">
-			<div class="white">Content 1</div>
-		</mat-tab>
-		<mat-tab label="second" class="tab">
-			<div class="white">Content 2</div>
-		</mat-tab>
-		<mat-tab label="third" class="tab">
-			<div class="white">Content 3</div>
-		</mat-tab>
-	</mat-tab-group>
+    <mat-tab-group class="tabber">
+        <mat-tab [label]="'TAB_FIRST' | translate" class="tab">
+            <div class="white">{{ 'CONTENT_1' | translate }}</div>
+        </mat-tab>
+        <mat-tab [label]="'TAB_SECOND' | translate" class="tab">
+            <div class="white">{{ 'CONTENT_2' | translate }}</div>
+        </mat-tab>
+        <mat-tab [label]="'TAB_THIRD' | translate" class="tab">
+            <div class="white">{{ 'CONTENT_3' | translate }}</div>
+        </mat-tab>
+    </mat-tab-group>
 </div>

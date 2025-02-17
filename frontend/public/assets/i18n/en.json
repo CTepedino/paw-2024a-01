@@ -323,6 +323,39 @@
       "MAX_LENGTH": "Exceeds the maximum permitted length",
       "PASSWORD_MISMATCH": "Passwords do not match"
     }
+  },
+
+  "BOOK_CARD": {
+    "BY": "By"
+  },
+
+  "FILE_INPUT": {
+    "CHOOSE_A_FILE": "Choose a file",
+    "BROWSE": "Browse"
+  },
+
+  "NAVBAR":{
+    "PROFILE": "Profile",
+    "PURCHASES": "Purchases",
+    "SALES": "Sales",
+    "ANALYTICS": "Analytics",
+    "QUESTIONS": "Questions",
+    "PUBLISH": "Publish",
+    "SIGN_OUT": "Sign out",
+    "LOG_IN": "Log in",
+    "SIGN_UP": "Sign up"
+  },
+
+  "TAB": {
+    "TAB_FIRST": "First",
+    "TAB_SECOND": "Second",
+    "TAB_THIRD": "Third",
+    "CONTENT_1": "Content 1",
+    "CONTENT_2": "Content 2",
+    "CONTENT_3": "Content 3"
   }
+
+
+
 
 }

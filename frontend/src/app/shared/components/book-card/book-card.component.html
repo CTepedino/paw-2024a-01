@@ -4,9 +4,9 @@
 		<img mat-card-image src="{{book().cover}}?height=280&width=200" alt="Book cover" class="book-image">
 		<mat-card-content class="book-content">
 			<h2 class="book-title">{{book().title}}</h2>
-			<p class="writer">By {{book().writerInfo.firstName}} @if(!compact()){{{book().writerInfo.lastName}}}</p>
-			<p class="book-genre">{{book().genre}}</p>
-			<div class="book-details">
+			<p class="writer">{{ 'BOOK_CARD.BY' | translate }} {{book().writerInfo.firstName}} @if(!compact()){{{book().writerInfo.lastName}}}</p>
+            <p class="book-genre">{{ (book().genre || 'UNKNOWN_GENRE') | translate }}</p>
+            <div class="book-details">
 				@if (book().averageRating! > 0 && !compact()){
 					<span><mat-icon>star</mat-icon>{{book().averageRating | number: '1.1-2'}}</span>
 				}
