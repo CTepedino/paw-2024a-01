@@ -2,16 +2,16 @@
 	<mat-grid-list cols="2" rowHeight="5:1" gutterSize="10px">
 		<mat-grid-tile>
 			<mat-form-field class="full-width">
-				<mat-label i18n>Title</mat-label>
+				<mat-label>{{ 'TITLE' | translate }}</mat-label>
 				<input matInput formControlName="title">
 			</mat-form-field>
 		</mat-grid-tile>
 		<mat-grid-tile>
 			<mat-form-field class="full-width">
-				<mat-label i18n>Order status</mat-label>
+				<mat-label>{{ 'ORDER_BY' | translate }}</mat-label>
 				<mat-select (selectionChange)="onSubmit()" formControlName="orderBy">
 					@for (status of BookSearchOrderByOptions; track status.value){
-						<mat-option [value]="status.value"> {{ status.label }}</mat-option>
+						<mat-option [value]="status.value"> {{ status.value | translate }}</mat-option>
 					}
 				</mat-select>
 			</mat-form-field>
@@ -32,6 +32,6 @@
 	}
 	
 	@if (books.length === 0){
-		<h4 class="center-text">No books found</h4>
+		<h4 class="center-text">{{ 'NO_BOOKS_FOUND' | translate }}</h4>
 	}
 }

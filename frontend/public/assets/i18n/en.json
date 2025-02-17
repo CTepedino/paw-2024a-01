@@ -166,6 +166,20 @@
   "LOG_IN": "Log in",
   "DONT_HAVE_ACCOUNT": "Don't have an account?",
   "REGISTER": "Register",
-  "FORGOT_PASSWORD": "Forgot your password?"
+  "FORGOT_PASSWORD": "Forgot your password?",
+
+  "ORDER_STATUS": "Order status",
+  "PROFILE": "Profile",
+  "WRITER_INFO": "Writer Info",
+  "CBU": "CBU",
+  "BRONZE": "Bronze",
+  "SILVER": "Silver",
+  "GOLD": "Gold",
+  "CHANGE_PASSWORD": "Change password",
+  "PUBLICATIONS": "Publications",
+  "BOUGHT_BOOKS": "Bought books",
+  "RECOMMENDATIONS": "Recommendations",
+  "WISHLIST": "Wishlist"
+
 
 }

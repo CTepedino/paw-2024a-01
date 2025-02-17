@@ -8,11 +8,12 @@ import {WishlistTabComponent} from "../wishlist-tab/wishlist-tab.component";
 import {RecommendationsTabComponent} from "../recommendations-tab/recommendations-tab.component";
 import {PublicationsTabComponent} from "../publications-tab/publications-tab.component";
 import {BoughtBooksTabComponent} from "../bought-books-tab/bought-books-tab.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-profile-tabs',
     standalone: true,
-    imports: [CommonModule, MatTab, MatTabContent, MatTabGroup, MatTabLabel, WishlistTabComponent, RecommendationsTabComponent, PublicationsTabComponent, BoughtBooksTabComponent],
+    imports: [CommonModule, MatTab, MatTabContent, MatTabGroup, MatTabLabel, WishlistTabComponent, RecommendationsTabComponent, PublicationsTabComponent, BoughtBooksTabComponent, TranslateModule],
     templateUrl: './profile-tabs.component.html',
     styleUrl: './profile-tabs.component.scss'
 })

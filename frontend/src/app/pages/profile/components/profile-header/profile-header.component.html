@@ -5,20 +5,20 @@
 	
 	@if (user().roles?.includes(UserRoles.WRITER)) {
 		<p class="writer-info">
-			CBU: {{user().cbu}}
+            {{ 'CBU' | translate }}: {{user().cbu}}
 		</p>
 	}
 	
 	<div class="center-label">
 	@switch (user().writerCategory){
 		@case (WriterCategory.BRONZE){
-			<div class="sales-category bronze">Bronze</div>
+			<div class="sales-category bronze">{{ 'BRONZE' | translate }}</div>
 		}
 		@case (WriterCategory.SILVER){
-			<div class="sales-category silver">Silver</div>
+			<div class="sales-category silver">{{ 'SILVER' | translate }}</div>
 		}
 		@case (WriterCategory.GOLD){
-			<div class="sales-category gold">Gold</div>
+			<div class="sales-category gold">{{ 'GOLD' | translate }}</div>
 		}
 	}
 	</div>
@@ -34,10 +34,10 @@
 	@if (ownsProfile()){
 		<div class="edit-profile">
 			<app-nav-button link="/edit-profile">
-				Edit profile
+                {{ 'EDIT_PROFILE' | translate }}
 			</app-nav-button>
 			<app-nav-button link="/change-password">
-				Change password
+                {{ 'CHANGE_PASSWORD' | translate }}
 			</app-nav-button>
 		</div>
 	}

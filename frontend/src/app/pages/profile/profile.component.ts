@@ -6,6 +6,7 @@ import {Observable} from "rxjs";
 import {ProfileDisplayInfo, UserProfileService} from "./store/user-profile.service";
 import {ProfileTabsComponent} from "./components/profile-tabs/profile-tabs.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +14,8 @@ import {Title} from "@angular/platform-browser";
 	imports: [
 		CommonModule,
 		ProfileHeaderComponent,
-		ProfileTabsComponent
+		ProfileTabsComponent,
+		TranslateModule
 	],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'

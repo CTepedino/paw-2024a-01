@@ -166,5 +166,18 @@
   "LOG_IN": "Iniciar sesión",
   "DONT_HAVE_ACCOUNT": "¿No tienes una cuenta?",
   "REGISTER": "Regístrate",
-  "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?"
+  "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+
+  "ORDER_STATUS": "Estado del pedido",
+  "PROFILE": "Perfil",
+  "WRITER_INFO": "Información del escritor",
+  "CBU": "CBU",
+  "BRONZE": "Bronce",
+  "SILVER": "Plata",
+  "GOLD": "Oro",
+  "CHANGE_PASSWORD": "Cambiar contraseña",
+  "PUBLICATIONS": "Publicaciones",
+  "BOUGHT_BOOKS": "Libros comprados",
+  "RECOMMENDATIONS": "Recomendaciones",
+  "WISHLIST": "Lista de deseos"
 }

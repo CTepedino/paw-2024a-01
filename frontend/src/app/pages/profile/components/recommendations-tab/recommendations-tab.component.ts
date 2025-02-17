@@ -9,6 +9,7 @@ import {UserProfileService} from "../../store/user-profile.service";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
 import {BookWithData} from "../../../../shared/model/book/bookWithData";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-recommendations-tab',
@@ -18,7 +19,8 @@ import {BookWithData} from "../../../../shared/model/book/bookWithData";
     MatGridTile,
     NgxPaginationModule,
     PaginatorComponent,
-    SmallBookCardComponent
+    SmallBookCardComponent,
+    TranslateModule
   ],
   templateUrl: './recommendations-tab.component.html',
   styleUrl: './recommendations-tab.component.scss'
