@@ -114,5 +114,16 @@
   "POPULAR": "Popular",
   "SALES_FOR_BEST_SELLER": "+{{sales}} sales for Best Seller",
   "BEST_SELLER": "Best Seller",
-  "TOTAL_SALES": "Total Sales"
+  "TOTAL_SALES": "Total Sales",
+  "WRITE_NEW_PASSWORD": "Write your new password",
+  "OLD_PASSWORD": "Old password",
+  "NEW_PASSWORD": "New password",
+  "CONFIRM_NEW_PASSWORD": "Confirm new password",
+  "INCLUDE_LESS_THAN_6_CHARACTERS": "At least 6 characters",
+  "INCORRECT_PASSWORD": "Incorrect Password",
+  "PASSWORD_CHANGE_ERROR": "There was an error with your password change attempt. Please try again later",
+  "PASSWORDS_DO_NOT_MATCH": "Passwords do not match",
+  "SAVE_CHANGES": "Save changes",
+  "CANCEL": "Cancel"
+
 }

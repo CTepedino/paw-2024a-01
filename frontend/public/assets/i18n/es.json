@@ -114,5 +114,16 @@
   "POPULAR": "Popular",
   "SALES_FOR_BEST_SELLER": "+{{sales}} ventas para Best Seller",
   "BEST_SELLER": "Best Seller",
-  "TOTAL_SALES": "Ventas Totales"
+  "TOTAL_SALES": "Ventas Totales",
+
+  "WRITE_NEW_PASSWORD": "Escribe tu nueva contraseña",
+  "OLD_PASSWORD": "Contraseña anterior",
+  "NEW_PASSWORD": "Nueva contraseña",
+  "CONFIRM_NEW_PASSWORD": "Confirmar nueva contraseña",
+  "INCLUDE_LESS_THAN_6_CHARACTERS": "Al menos 6 caracteres",
+  "INCORRECT_PASSWORD": "Contraseña incorrecta",
+  "PASSWORD_CHANGE_ERROR": "Hubo un error con el intento de cambio de contraseña. Por favor, inténtalo más tarde",
+  "PASSWORDS_DO_NOT_MATCH": "Las contraseñas no coinciden",
+  "SAVE_CHANGES": "Guardar cambios",
+  "CANCEL": "Cancelar"
 }

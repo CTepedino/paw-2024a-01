@@ -11,6 +11,7 @@ import {catchError, concatMap, map, of, throwError} from "rxjs";
 import {ChangePasswordService} from "./store/change-password.service";
 import {Title} from "@angular/platform-browser";
 import {CancelButtonComponent} from "../../shared/components/cancel-button/cancel-button.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-change-password',
@@ -25,7 +26,8 @@ import {CancelButtonComponent} from "../../shared/components/cancel-button/cance
 		NotificationCardComponent,
 		ReactiveFormsModule,
 		CancelButtonComponent,
-		RouterLink
+		RouterLink,
+		TranslateModule
 	],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.scss',
