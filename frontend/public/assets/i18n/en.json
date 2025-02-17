@@ -134,6 +134,10 @@
   "PROFILE_PICTURE": "Profile picture",
   "REQUIRED_FIELD": "This field is required",
   "MAX_LENGTH": "Exceeds the maximum permitted length",
-  "INVALID_CBU": "Invalid CBU or alias"
+  "INVALID_CBU": "Invalid CBU or alias",
+
+  "EMAIL_VALIDATED_SUCCESS": "Email validated successfully!",
+  "START_USING_CYBRARY": "You can start using Cybrary",
+  "START_EXPLORING": "Start exploring"
 
 }

@@ -3,12 +3,14 @@ import {
   ActionNotificationCardComponent
 } from "../../shared/components/action-notification-card/action-notification-card.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @Component({
   selector: 'app-email-validation',
   imports: [
-    ActionNotificationCardComponent
+    ActionNotificationCardComponent,
+    TranslateModule
   ],
   templateUrl: './email-validation.component.html',
   styleUrl: './email-validation.component.scss',
