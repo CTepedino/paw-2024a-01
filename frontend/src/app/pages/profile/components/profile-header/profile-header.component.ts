@@ -6,11 +6,12 @@ import {UserRoles} from "../../../../shared/model/user/userRoles";
 import {User} from "../../../../shared/model/user/user";
 import {WriterCategory} from "../../../../shared/model/user/writerCategory";
 import {NavButtonComponent} from "../../../../shared/components/nav-button/nav-button.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-profile-header',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, RouterModule, NavButtonComponent, NgOptimizedImage],
+    imports: [CommonModule, MatButtonModule, RouterModule, NavButtonComponent, NgOptimizedImage, TranslateModule],
     templateUrl: './profile-header.component.html',
     styleUrl: './profile-header.component.scss'
 })

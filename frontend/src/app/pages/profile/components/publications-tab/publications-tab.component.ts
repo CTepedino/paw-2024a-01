@@ -14,6 +14,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {BookSearchOrderBy, BookSearchOrderByOptions} from "../../../../shared/model/book/bookSearchOrderBy";
 import {MatInput} from "@angular/material/input";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-publications-tab',
@@ -29,7 +30,8 @@ import {MatInput} from "@angular/material/input";
 		MatSelect,
 		MatOption,
 		MatLabel,
-		MatInput
+		MatInput,
+		TranslateModule
 	],
   templateUrl: './publications-tab.component.html',
   styleUrl: './publications-tab.component.scss'

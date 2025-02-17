@@ -166,6 +166,64 @@
   "LOG_IN": "Log in",
   "DONT_HAVE_ACCOUNT": "Don't have an account?",
   "REGISTER": "Register",
-  "FORGOT_PASSWORD": "Forgot your password?"
+  "FORGOT_PASSWORD": "Forgot your password?",
+
+  "PROFILE": "Profile",
+  "WRITER_INFO": "Writer Info",
+  "CBU": "CBU",
+  "BRONZE": "Bronze",
+  "SILVER": "Silver",
+  "GOLD": "Gold",
+  "CHANGE_PASSWORD": "Change password",
+  "PUBLICATIONS": "Publications",
+  "BOUGHT_BOOKS": "Bought books",
+  "RECOMMENDATIONS": "Recommendations",
+  "WISHLIST": "Wishlist",
+
+  "MY_PURCHASES": "My Purchases",
+  "NO_PURCHASES_FOUND": "No purchases found",
+  "COVER": "Cover",
+  "BOOK": "Book",
+  "DATE": "Date",
+  "STATUS": "Status",
+  "ACTIONS": "Actions",
+
+  "ORDER_STATUS": {
+    "ORDER_STATUS": "Order status",
+    "WAITING_PAYMENT": "Waiting for payment",
+    "REJECTED_PAYMENT": "Payment rejected",
+    "WAITING_APPROVAL": "Waiting for approval",
+    "COMPLETED": "Completed"
+  },
+
+  "PURCHASES": {
+    "ORDER_STATUS": {
+      "COMPLETED": "Completed",
+      "WAITING_APPROVAL": "Waiting for the writer to approve your payment",
+      "REJECTED_PAYMENT": "Your payment was rejected. Please, resend it to CBU: {{cbu}}"
+    },
+    "BUTTONS": {
+      "REJECTION_REASON": "Rejection reason",
+      "REUPLOAD_RECEIPT": "ReUpload receipt",
+      "READ_BOOK": "Read book",
+      "WAIT": "Wait"
+    },
+    "LABELS": {
+      "BY": "By:",
+      "PRICE": "Price:",
+      "DATE": "Date:"
+    },
+    "PAYMENT_REJECTION": {
+      "REASON": "Payment rejection reason",
+      "CLOSE": "Close"
+    },
+    "REUPLOAD": {
+      "REUPLOAD": "Reupload payment",
+      "INSTRUCTIONS": "Please fix and reupload the payment receipt",
+      "RECEIPT": "Receipt",
+      "CANCEL": "Cancel",
+      "DECILNE": "Decline"
+    }
+  }
 
 }

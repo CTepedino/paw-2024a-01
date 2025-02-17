@@ -1,7 +1,7 @@
-<h1 i18n mat-dialog-title>Payment rejection reason</h1>
+<h1 mat-dialog-title>{{ 'PURCHASES.PAYMENT_REJECTION.REASON' | translate }}</h1>
 <div mat-dialog-content>
-	<p i18n>{{data.reason}}</p>
+	<p>{{data.reason}}</p>
 </div>
 <div mat-dialog-actions>
-	<button i18n mat-button class="cancel-button" (click)="closeDialog()">Close</button>
+	<button mat-button class="cancel-button" (click)="closeDialog()">{{ 'PURCHASES.PAYMENT_REJECTION.CLOSE' | translate }}</button>
 </div>

@@ -9,6 +9,7 @@ import {AsyncPipe, JsonPipe} from "@angular/common";
 import {SmallBookCardComponent} from "../../../../shared/components/small-book-card/small-book-card.component";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-wishlist-tab',
@@ -19,7 +20,8 @@ import {NgxPaginationModule} from "ngx-pagination";
     MatGridList,
     SmallBookCardComponent,
     PaginatorComponent,
-    NgxPaginationModule
+    NgxPaginationModule,
+    TranslateModule
   ],
   templateUrl: './wishlist-tab.component.html',
   styleUrl: './wishlist-tab.component.scss'

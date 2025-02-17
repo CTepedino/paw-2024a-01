@@ -3,7 +3,7 @@
 		@if (showPublications()){
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
-					<h3>Publications</h3>
+					<h3>{{ 'PUBLICATIONS' | translate }}</h3>
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
@@ -15,7 +15,7 @@
 		@if (showBoughtBooks()){
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
-					<h2>Bought books</h2>
+					<h2>{{ 'BOUGHT_BOOKS' | translate }}</h2>
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
@@ -26,7 +26,7 @@
 		} @else {
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
-					<h2>Recommendations</h2>
+					<h2>{{ 'RECOMMENDATIONS' | translate }}</h2>
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
@@ -38,7 +38,7 @@
 		@if (showWishlist()){
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
-					<h2>Wishlist</h2>
+					<h2>{{ 'WISHLIST' | translate }}</h2>
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">

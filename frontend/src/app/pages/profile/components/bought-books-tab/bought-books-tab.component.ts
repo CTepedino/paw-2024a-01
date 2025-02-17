@@ -15,6 +15,7 @@ import {UserProfileService} from "../../store/user-profile.service";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
 import {BookWithData} from "../../../../shared/model/book/bookWithData";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-bought-books-tab',
@@ -30,7 +31,8 @@ import {BookWithData} from "../../../../shared/model/book/bookWithData";
     NgxPaginationModule,
     PaginatorComponent,
     ReactiveFormsModule,
-    SmallBookCardComponent
+    SmallBookCardComponent,
+    TranslateModule
   ],
   templateUrl: './bought-books-tab.component.html',
   styleUrl: './bought-books-tab.component.scss'
