@@ -153,6 +153,10 @@
   "NO_ACCOUNT_ASSOCIATED": "No account associated with this email",
   "RESET_PASSWORD_BTN": "Reset password",
   "CHECK_INBOX_TITLE": "Check your inbox",
-  "CHECK_INBOX_MESSAGE": "An email with a link to reset your password was sent to your address"
+  "CHECK_INBOX_MESSAGE": "An email with a link to reset your password was sent to your address",
+
+  "FIND_BOOK": "Find a Book",
+  "CONTACT_WRITER": "Contact the writer",
+  "GET_COPY": "Get your copy"
 
 }

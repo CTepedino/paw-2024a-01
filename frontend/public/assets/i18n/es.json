@@ -153,5 +153,9 @@
   "NO_ACCOUNT_ASSOCIATED": "No hay cuenta asociada con este correo electrónico",
   "RESET_PASSWORD_BTN": "Restablecer contraseña",
   "CHECK_INBOX_TITLE": "Revisa tu bandeja de entrada",
-  "CHECK_INBOX_MESSAGE": "Se envió un correo electrónico con un enlace para restablecer tu contraseña a tu dirección"
+  "CHECK_INBOX_MESSAGE": "Se envió un correo electrónico con un enlace para restablecer tu contraseña a tu dirección",
+
+  "FIND_BOOK": "Encontrar un libro",
+  "CONTACT_WRITER": "Contactar al escritor",
+  "GET_COPY": "Obtener tu copia"
 }
