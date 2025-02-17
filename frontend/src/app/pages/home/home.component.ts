@@ -14,10 +14,11 @@ import {BookWithData} from "../../shared/model/book/bookWithData";
 import {NgxPaginationModule, PaginationInstance} from "ngx-pagination";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-home',
-	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent, SmallBookCardComponent, AsyncPipe, NgxPaginationModule, PaginatorComponent, JsonPipe],
+	imports: [MatGridListModule, TutorialCardsComponent, GenreListComponent, BookCardComponent, SmallBookCardComponent, AsyncPipe, NgxPaginationModule, PaginatorComponent, JsonPipe, TranslateModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

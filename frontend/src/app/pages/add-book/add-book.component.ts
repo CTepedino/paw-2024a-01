@@ -15,6 +15,7 @@ import {fileTypeValidator} from "../../shared/validators/fileTypeValidator";
 import {Router} from "@angular/router";
 import {catchError, map, throwError} from "rxjs";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @Component({
@@ -35,6 +36,7 @@ import {Title} from "@angular/platform-browser";
     ActionButtonComponent,
     FileInputComponent,
     AsyncPipe,
+    TranslateModule,
   ],
   templateUrl: './add-book.component.html',
   styleUrl: './add-book.component.scss',

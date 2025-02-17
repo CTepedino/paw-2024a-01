@@ -1,33 +1,33 @@
 <app-content-card>
 	<div class="title">
-		<h3>Publish your book!</h3>
+		<h3>{{ 'PUBLISH_YOUR_BOOK' | translate }}</h3>
 	</div>
 	<hr/>
 	<form [formGroup]="form" (ngSubmit)="onSubmit()">
 		@if ((showCBUField | async)){
 			<div class="form">
-				<p>Since this is your first book, you will need to enter your payment information</p>
+				<p>{{ 'FIRST_BOOK_PAYMENT_INFO' | translate }}</p>
 				<mat-form-field appearance="outline" class="input">
-					<mat-label>Your CBU or alias</mat-label>
+					<mat-label>{{ 'CBU_LABEL' | translate }}</mat-label>
 					<input matInput required #cbu formControlName="cbu">
-					<mat-hint>At least 6 characters</mat-hint>
+					<mat-hint>{{ 'CBU_HINT' | translate }}</mat-hint>
 					<mat-hint align="end">{{cbu.value.length}} / 22</mat-hint>
 				</mat-form-field>
 			</div>
 			<hr/>
 		}
 		<div class="form">
-			<p>Fill in the book's details</p>
+			<p>{{ 'FILL_BOOK_DETAILS' | translate }}</p>
 			<div class="input-zone">
 				<mat-form-field appearance="outline" class="input">
-					<mat-label>Title</mat-label>
+					<mat-label>{{ 'TITLE' | translate }}</mat-label>
 					<input matInput required maxlength="50" #title formControlName="title">
 					<mat-hint align="end">{{title.value.length}} / 50</mat-hint>
 				</mat-form-field>
 			</div>
 			<div class="input-zone">
 				<mat-form-field appearance="outline" class="input">
-					<mat-label>Description</mat-label>
+					<mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
 					<textarea matInput #description required class="textarea" maxlength="1000" formControlName="description"></textarea>
 					<mat-hint align="end">{{description.value.length}} / 1000</mat-hint>
 				</mat-form-field>
@@ -40,17 +40,17 @@
 					<mat-form-field appearance="outline" class="input">
 						<mat-select required formControlName="genre">
 							@for (genre of Object.values(BookGenre); track genre){
-								<mat-option [value]="genre"> {{ (genre) }}</mat-option>
+								<mat-option [value]="genre">{{ (genre) | translate }}</mat-option>
 							}
 						</mat-select>
-						<mat-label>Genre</mat-label>
+						<mat-label>{{ 'GENRE' | translate }}</mat-label>
 					</mat-form-field>
 					<mat-form-field appearance="outline" class="input">
-						<mat-label>Page count</mat-label>
+						<mat-label>{{ 'PAGE_COUNT' | translate }}</mat-label>
 						<input matInput required type="number" formControlName="pageCount" min="1" max="1000000">
 					</mat-form-field>
 					<mat-form-field appearance="outline" class="input">
-						<mat-label>Price</mat-label>
+						<mat-label>{{ 'PRICE' | translate }}</mat-label>
 						<input matInput required type="number" formControlName="price" min="0.1" max="100000000">
 					</mat-form-field>
 				</div>
@@ -58,13 +58,13 @@
 			<div class="input-zone">
 				<div class="as-row">
 					<mat-form-field appearance="outline" class="input">
-						<mat-label>Recommended age</mat-label>
+						<mat-label>{{ 'RECOMMENDED_AGE' | translate }}</mat-label>
 						<input matInput required type="number" formControlName="suggestedAge" min="0" max="99">
 					</mat-form-field>
 					<mat-form-field appearance="outline" class="input">
-						<mat-label>Publication date</mat-label>
+						<mat-label>{{ 'PUBLICATION_DATE' | translate }}</mat-label>
 						<input matInput [matDatepicker]="picker" required formControlName="publicationDate" [max]="maxDate" readonly>
-						<mat-hint>MM/DD/YYYY</mat-hint>
+						<mat-hint>{{ 'PUBLICATION_DATE_HINT' | translate }}</mat-hint>
 						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 						<mat-datepicker #picker></mat-datepicker>
 					</mat-form-field>
@@ -72,14 +72,14 @@
 			</div>
 			<div class="input-zone">
 				<div class="file-row">
-					<app-file-input class="input" accept="image/*" formGroupName="cover" [formGroup]="getCoverFormGroup()">Cover image</app-file-input>
-					<app-file-input class="input" accept="application/pdf" formGroupName="preview" [formGroup]="getPreviewFormGroup()">Preview file</app-file-input>
-					<app-file-input class="input" accept="application/pdf" formGroupName="file" [formGroup]="getFileFormGroup()">Book file</app-file-input>
+					<app-file-input class="input" accept="image/*" formGroupName="cover" [formGroup]="getCoverFormGroup()">{{ 'COVER_IMAGE' | translate }}</app-file-input>
+					<app-file-input class="input" accept="application/pdf" formGroupName="preview" [formGroup]="getPreviewFormGroup()">{{ 'PREVIEW_FILE' | translate }}</app-file-input>
+					<app-file-input class="input" accept="application/pdf" formGroupName="file" [formGroup]="getFileFormGroup()">{{ 'BOOK_FILE' | translate }}</app-file-input>
 				</div>
 			</div>
 			<div class="btn-zone">
 				<app-action-button [disabled]="!form.valid" (click)="onSubmit()">
-					Publish
+                    {{ 'PUBLISH' | translate }}
 				</app-action-button>
 			</div>
 		</div>
