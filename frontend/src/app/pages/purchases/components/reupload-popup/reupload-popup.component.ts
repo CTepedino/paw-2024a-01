@@ -6,6 +6,7 @@ import {MatButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FileInputComponent} from "../../../../shared/components/file-input/file-input.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-reupload-popup',
@@ -19,7 +20,8 @@ import {FileInputComponent} from "../../../../shared/components/file-input/file-
     MatInput,
     MatLabel,
     ReactiveFormsModule,
-    FileInputComponent
+    FileInputComponent,
+    TranslateModule
   ],
   templateUrl: './reupload-popup.component.html',
   styleUrl: './reupload-popup.component.scss'

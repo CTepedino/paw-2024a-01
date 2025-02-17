@@ -14,6 +14,7 @@ import {OrderWithData} from "../../../../shared/model/order/orderWithData";
 import {OrderStatus} from "../../../../shared/model/order/orderStatus";
 import {RejectionPopupComponent} from "../rejection-popup/rejection-popup.component";
 import {ReuploadPopupComponent} from "../reupload-popup/reupload-popup.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-purchases-order-card',
@@ -25,7 +26,8 @@ import {ReuploadPopupComponent} from "../reupload-popup/reupload-popup.component
     MatGridList,
     MatGridTile,
     MatIcon,
-    CancelButtonComponent
+    CancelButtonComponent,
+    TranslateModule
   ],
   templateUrl: './purchases-order-card.component.html',
   styleUrl: './purchases-order-card.component.scss'

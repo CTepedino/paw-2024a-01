@@ -17,6 +17,8 @@ import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {OrderWithData} from "../../shared/model/order/orderWithData";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
+import {BookSearchOrderBy} from "../../shared/model/book/bookSearchOrderBy";
 
 @Component({
   selector: 'app-purchases',
@@ -32,7 +34,8 @@ import {Title} from "@angular/platform-browser";
     PurchasesOrderCardComponent,
     NgxPaginationModule,
     PaginatorComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './purchases.component.html',
   styleUrl: './purchases.component.scss'
@@ -47,13 +50,6 @@ export class PurchasesComponent implements OnInit {
   orders$!: Observable<OrderWithData[]>
   currentPage!: number;
   pageSize = 20;
-
-  orderStatusOptions = [
-    { label: $localize`Any status`, value: null },
-    { label: $localize`Rejected payment`, value: OrderStatus.REJECTED_PAYMENT.toString() },
-    { label: $localize`Approval needed`, value: OrderStatus.WAITING_APPROVAL.toString() },
-    { label: $localize`Completed`, value: OrderStatus.COMPLETED.toString() }
-  ];
 
   form: FormGroup;
 
@@ -112,4 +108,6 @@ export class PurchasesComponent implements OnInit {
   }
 
   protected readonly OrderStatus = OrderStatus;
+  protected readonly BookSearchOrderBy = BookSearchOrderBy;
+  protected readonly Object = Object;
 }

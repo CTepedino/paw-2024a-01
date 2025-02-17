@@ -168,7 +168,6 @@
   "REGISTER": "Regístrate",
   "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
 
-  "ORDER_STATUS": "Estado del pedido",
   "PROFILE": "Perfil",
   "WRITER_INFO": "Información del escritor",
   "CBU": "CBU",
@@ -179,5 +178,51 @@
   "PUBLICATIONS": "Publicaciones",
   "BOUGHT_BOOKS": "Libros comprados",
   "RECOMMENDATIONS": "Recomendaciones",
-  "WISHLIST": "Lista de deseos"
+  "WISHLIST": "Lista de deseos",
+
+  "MY_PURCHASES": "Mis Compras",
+  "NO_PURCHASES_FOUND": "No se encontraron compras",
+  "COVER": "Portada",
+  "BOOK": "Libro",
+  "DATE": "Fecha",
+  "STATUS": "Estado",
+  "ACTIONS": "Acciones",
+
+  "ORDER_STATUS": {
+    "ORDER_STATUS": "Estado del pedido",
+    "WAITING_PAYMENT": "Esperando pago",
+    "REJECTED_PAYMENT": "Pago rechazado",
+    "WAITING_APPROVAL": "Esperando aprobación",
+    "COMPLETED": "Completado"
+  },
+
+  "PURCHASES": {
+    "ORDER_STATUS": {
+      "COMPLETED": "Completado",
+      "WAITING_APPROVAL": "Esperando que el escritor apruebe tu pago",
+      "REJECTED_PAYMENT": "Tu pago fue rechazado. Por favor, reenvíalo al CBU: {{cbu}}"
+    },
+    "BUTTONS": {
+      "REJECTION_REASON": "Motivo de rechazo",
+      "REUPLOAD_RECEIPT": "ReSubir comprobante",
+      "READ_BOOK": "Leer libro",
+      "WAIT": "Esperar"
+    },
+    "LABELS": {
+      "BY": "Por:",
+      "PRICE": "Precio:",
+      "DATE": "Fecha:"
+    },
+    "PAYMENT_REJECTION": {
+      "REASON": "Motivo del rechazo del pago",
+      "CLOSE": "Cerrar"
+    },
+    "REUPLOAD": {
+      "REUPLOAD": "Re-subir pago",
+      "INSTRUCTIONS": "Por favor, corrige y vuelve a subir el recibo de pago",
+      "RECEIPT": "Recibo",
+      "CANCEL": "Cancelar",
+      "DECLINE": "Rechazar"
+    }
+  }
 }

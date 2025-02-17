@@ -7,6 +7,7 @@ import {
 	MatDialogRef,
 	MatDialogTitle
 } from "@angular/material/dialog";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-rejection-popup',
@@ -14,7 +15,8 @@ import {
 		MatButton,
 		MatDialogActions,
 		MatDialogContent,
-		MatDialogTitle
+		MatDialogTitle,
+		TranslateModule
 	],
   templateUrl: './rejection-popup.component.html',
   styleUrl: './rejection-popup.component.scss'
