@@ -19,6 +19,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @Component({
@@ -38,7 +39,8 @@ import {Title} from "@angular/platform-browser";
     AsyncPipe,
     PaginatorComponent,
     JsonPipe,
-    NgxPaginationModule
+    NgxPaginationModule,
+    TranslateModule,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'

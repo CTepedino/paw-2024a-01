@@ -57,5 +57,24 @@
   "SPIRITUALITY": "Espiritualidad",
   "HUMANITIES_SOCIAL_SCIENCES": "Humanidades y Ciencias Sociales",
   "PARENTING_FAMILIES": "Paternidad y Familia",
-  "SCIENCE_TECHNOLOGY": "Ciencia y Tecnología"
+  "SCIENCE_TECHNOLOGY": "Ciencia y Tecnología",
+
+  "NO_BOOKS_FOUND": "No se encontraron libros",
+  "RESET_FILTERS": "Restablecer filtros",
+  "ORDER_BY": "Ordenar por",
+  "ANY": "Cualquiera",
+  "MIN_PAGES": "Páginas mínimas",
+  "MAX_PAGES": "Páginas máximas",
+  "MIN_PRICE": "Precio mínimo",
+  "MAX_PRICE": "Precio máximo",
+  "MIN_AGE": "Edad mínima",
+  "MAX_AGE": "Edad máxima",
+  "APPLY": "Aplicar",
+
+  "PRICE_ASC": "Precio ascendente",
+  "PRICE_DESC": "Precio descendente",
+  "PAGE_COUNT_ASC": "Cantidad de páginas ascendente",
+  "PAGE_COUNT_DESC": "Cantidad de páginas descendente",
+  "PUBLICATION_DATE_ASC": "Fecha de publicación ascendente",
+  "PUBLICATION_DATE_DESC": "Fecha de publicación descendente"
 }

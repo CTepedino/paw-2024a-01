@@ -2,9 +2,9 @@
 	<div class="left-side">
 		@if (!(pagination$ | async)){
 			<div class="empty-error">
-				<h4>No books found</h4>
+				<h4>{{ 'NO_BOOKS_FOUND' | translate }}</h4>
 				<app-action-button (click)="resetFilters()">
-					Reset filters
+                    {{ 'RESET_FILTERS' | translate }}
 				</app-action-button>
 			</div>
 		}
@@ -22,7 +22,7 @@
 		<div class="form-container">
 			<form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="onSubmit()">
 				<mat-form-field appearance="outline" style="width: 100%;">
-					<mat-label i18n>Title</mat-label>
+					<mat-label>{{ 'TITLE' | translate }}</mat-label>
 					<input matInput formControlName="title">
 				</mat-form-field>
 				
@@ -30,59 +30,59 @@
 					<mat-select formControlName="orderBy">
 						@for (orderby of Object.values(BookSearchOrderBy); track orderby){
 							@if (orderby != BookSearchOrderBy.BEST_SELLERS && orderby != BookSearchOrderBy.NEW_DEALS){
-								<mat-option i18n [value]="orderby">{{orderby}}</mat-option>
+								<mat-option [value]="orderby">{{ orderby | translate }}</mat-option>
 							}
 						}
 					</mat-select>
-					<mat-label i18n>Order by</mat-label>
+					<mat-label>{{ 'ORDER_BY' | translate }}</mat-label>
 				</mat-form-field>
 				
 				<mat-form-field appearance="outline" class="input">
 					<mat-select formControlName="genre">
-						<mat-option [value]="null">Any</mat-option>
+						<mat-option [value]="null">{{ 'ANY' | translate }}</mat-option>
 						@for (genre of Object.values(BookGenre); track genre){
-							<mat-option i18n [value]="genre">{{genre}}</mat-option>
+							<mat-option [value]="genre">{{ genre | translate }}</mat-option>
 						}
 					</mat-select>
-					<mat-label i18n>Genre</mat-label>
+					<mat-label>{{ 'GENRE' | translate }}</mat-label>
 				</mat-form-field>
 				
 				<div class="form-group">
 					<mat-form-field appearance="outline">
-						<mat-label i18n>Min pages</mat-label>
+						<mat-label>{{ 'MIN_PAGES' | translate }}</mat-label>
 						<input matInput type="number" min="0" max="1000000" formControlName="minPages">
 					</mat-form-field>
 					<mat-form-field appearance="outline">
-						<mat-label i18n>Max pages</mat-label>
+						<mat-label>{{ 'MAX_PAGES' | translate }}</mat-label>
 						<input matInput type="number" min="0" max="1000000" formControlName="maxPages">
 					</mat-form-field>
 				</div>
 				
 				<div class="form-group">
 					<mat-form-field appearance="outline">
-						<mat-label i18n>Min price</mat-label>
+						<mat-label>{{ 'MIN_PRICE' | translate }}</mat-label>
 						<input matInput type="number" step="100" min="0" max="1000000" formControlName="minPrice">
 					</mat-form-field>
 					<mat-form-field appearance="outline">
-						<mat-label i18n>Max price</mat-label>
+						<mat-label>{{ 'MAX_PRICE' | translate }}</mat-label>
 						<input matInput type="number" step="100" min="0" max="1000000" formControlName="maxPrice">
 					</mat-form-field>
 				</div>
 				
 				<div class="form-group">
 					<mat-form-field appearance="outline">
-						<mat-label i18n>Min age</mat-label>
+						<mat-label>{{ 'MIN_AGE' | translate }}</mat-label>
 						<input matInput type="number" min="0" max="99" formControlName="minAge">
 					</mat-form-field>
 					<mat-form-field appearance="outline">
-						<mat-label i18n>Max age</mat-label>
+						<mat-label>{{ 'MAX_AGE' | translate }}</mat-label>
 						<input matInput type="number" min="0" max="99" formControlName="maxAge">
 					</mat-form-field>
 				</div>
 				
 				<div class="btn-zone">
-					<app-action-button i18n submit [disabled]="!this.form.valid">
-						Apply
+					<app-action-button submit [disabled]="!this.form.valid">
+                        {{ 'APPLY' | translate }}
 					</app-action-button>
 				</div>
 			</form>

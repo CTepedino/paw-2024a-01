@@ -4,13 +4,15 @@ import {BookGenre} from "../../../../shared/model/book/bookGenre";
 import {GenreIcon} from "../../../../shared/const/genreIcon";
 import {MatIcon} from "@angular/material/icon";
 import {MatFabAnchor} from "@angular/material/button";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-genre-button',
   imports: [
     RouterLink,
     MatIcon,
-    MatFabAnchor
+    MatFabAnchor,
+    TranslateModule
   ],
   templateUrl: './genre-button.component.html',
   styleUrl: './genre-button.component.scss'
