@@ -58,23 +58,29 @@ export class BoughtBooksTabComponent implements OnInit{
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
+      if (Object.keys(params).length === 0){
+        this.form.get('title')?.setValue('');
+        this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC)
+      }
+
       this.currentPage = Number(params['page']) || 1;
       this.form.get('title')?.setValue(params['title']);
       if (Object.values(BookSearchOrderBy).includes(params['order_by'])){
         this.form.get('orderBy')?.setValue(params['order_by']);
       }
       this.form.updateValueAndValidity();
-    });
 
-    this.pagination$ =  this.profileService.getBoughtBooks({
-      page: this.currentPage,
-      size: this.pageSize,
-      title: this.form.get('title')?.value,
-      order_by: this.form.get('orderBy')?.value
-    }, this.userId())
-    this.books$ = this.pagination$.pipe(
-        map((page) => page.data)
-    )
+
+      this.pagination$ =  this.profileService.getBoughtBooks({
+        page: this.currentPage,
+        size: this.pageSize,
+        title: this.form.get('title')?.value,
+        order_by: this.form.get('orderBy')?.value
+      }, this.userId())
+      this.books$ = this.pagination$.pipe(
+          map((page) => page.data)
+      )
+    });
   }
 
   onPageChange(page: number){

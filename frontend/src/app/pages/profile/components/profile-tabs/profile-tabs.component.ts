@@ -69,6 +69,10 @@ export class ProfileTabsComponent implements OnInit {
     }
 
     navigate(tab: string){
-        this.router.navigate([`/profile/${this.user()?.id}/${tab}`], {queryParamsHandling: this.setup? 'merge' : undefined})
+        if (this.setup){
+            this.router.navigate([`/profile/${this.user()?.id}/${tab}`], {queryParamsHandling: 'merge'})
+        } else {
+            this.router.navigate([`/profile/${this.user()?.id}/${tab}`])
+        }
     }
 }

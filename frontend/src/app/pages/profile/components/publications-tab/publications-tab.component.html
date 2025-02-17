@@ -30,4 +30,8 @@
 	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
 		<app-paginator id="publications" (pageChange)="onPageChange($event)"/>
 	}
+	
+	@if (books.length === 0){
+		<h4 class="center-text">No books found</h4>
+	}
 }
