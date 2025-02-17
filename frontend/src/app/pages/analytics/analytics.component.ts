@@ -14,6 +14,7 @@ import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../shared/model/user/user";
+import {AuthService} from "../../shared/services/auth.service";
 
 @Component({
   selector: 'app-analytics',
@@ -24,6 +25,7 @@ import {User} from "../../shared/model/user/user";
 export class AnalyticsComponent implements OnInit {
   title = inject(Title);
   analyticsService = inject(AnalyticsService);
+  authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -65,6 +67,7 @@ export class AnalyticsComponent implements OnInit {
       month: [new Date().getMonth()]
     })
 
+    this.authService.getLoggedUser().subscribe(user => this.user = user);
     this.analyticsService.getTotal().subscribe((analytics) => this.total = analytics);
     this.analyticsService.getCurrentMonthTotal().subscribe((analytics) => this.currentMonthTotal = analytics);
   }
