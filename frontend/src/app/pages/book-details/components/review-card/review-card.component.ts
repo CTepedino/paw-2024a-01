@@ -6,18 +6,19 @@ import {DatePipe} from "@angular/common";
 import {StarRatingComponent} from "../../../../shared/components/star-rating/star-rating.component";
 
 @Component({
-  selector: 'app-review-card',
-  imports: [
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardImage,
-    RouterLink,
-    DatePipe,
-    StarRatingComponent
-  ],
-  templateUrl: './review-card.component.html',
-  styleUrl: './review-card.component.scss'
+    selector: 'app-review-card',
+    imports: [
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatCardImage,
+        RouterLink,
+        DatePipe,
+        StarRatingComponent
+    ],
+    templateUrl: './review-card.component.html',
+    standalone: true,
+    styleUrl: './review-card.component.scss'
 })
 export class ReviewCardComponent {
   review = input.required<ReviewWithInfo>();

@@ -1,0 +1,78 @@
+<div class="container book-container">
+    <!-- Sección superior: Información principal -->
+    <div class="main-info">
+        <!-- Columna izquierda: Imagen -->
+        <div class="cover-section">
+            <img class="book-cover" [src]="book.coverUrl" [alt]="book.title"/>
+        </div>
+
+        <!-- Columna central: Detalles -->
+        <div class="details-section">
+            <h1>{{book.title}}</h1>
+
+            <!-- Badge de Popular/Bestseller -->
+            <div class="sales-category popular">
+                Popular
+            </div>
+
+            <!-- Información del autor -->
+            <a class="author-info" [routerLink]="['/profile', book.authorId]">
+                {{book.author}}
+                <span class="writer-category">
+          <mat-icon class="bronze-info">person</mat-icon>
+        </span>
+            </a>
+
+            <!-- Rating -->
+            <div class="rating-section">
+                <app-star-rating [rating]="5"/>
+                <span>(2)</span>
+            </div>
+
+            <!-- Precio -->
+            <div class="price-section">
+                <h6 class="price">
+                    <span class="strikethrough">${{book.originalPrice}}</span>
+                    <span class="percentage">-{{book.discountPercentage}}%</span>
+                </h6>
+                <h5 class="price">${{book.currentPrice}}</h5>
+            </div>
+
+            <!-- Metadata -->
+            <div class="info-boxes">
+                <div class="info-box">
+                    <mat-icon>calendar_month</mat-icon>
+                    <p>{{book.publishDate}}</p>
+                </div>
+                <div class="info-box">
+                    <mat-icon>auto_stories</mat-icon>
+                    <p>{{book.genre}}</p>
+                </div>
+                <div class="info-box">
+                    <mat-icon>description</mat-icon>
+                    <p>{{book.pageCount}}</p>
+                </div>
+                <div class="info-box">
+                    <mat-icon>face</mat-icon>
+                    <p>+{{book.ageRestriction}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna derecha: Acciones -->
+        <div class="action-section">
+            <button class="buy-button">COMPRAR LIBRO</button>
+        </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="description">
+        <p>{{book.description}}</p>
+    </div>
+
+    <!-- Vista previa -->
+    <div class="preview-section">
+        <h5>Vista previa</h5>
+        <iframe [src]="book.previewUrl" width="100%" height="700"></iframe>
+    </div>
+</div>

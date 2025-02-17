@@ -2,12 +2,13 @@ import {Component, computed, input} from '@angular/core';
 import {MatIcon} from "@angular/material/icon";
 
 @Component({
-  selector: 'app-star-rating',
-  imports: [
-    MatIcon
-  ],
-  templateUrl: './star-rating.component.html',
-  styleUrl: './star-rating.component.scss'
+    selector: 'app-star-rating',
+    imports: [
+        MatIcon
+    ],
+    templateUrl: './star-rating.component.html',
+    standalone: true,
+    styleUrl: './star-rating.component.scss'
 })
 export class StarRatingComponent {
   rating = input.required<number>();

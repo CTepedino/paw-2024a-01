@@ -52,6 +52,7 @@ export const routes: Routes = [
 	{path: "validate", component: EmailValidationComponent, canActivate: [canValidateCodeGuard]},
 	{path: "reset-password", component: ResetPasswordComponent, canActivate: [canValidateCodeGuard]},
 
+	{path: "bookdetails", component: BookDetailsComponent},
 	{path: "add-book", component: AddBookComponent, canActivate: [loggedInGuard]},
 	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard, bookExistsGuard], children: [
 			{path: "reviews", component: BookDetailsComponent},

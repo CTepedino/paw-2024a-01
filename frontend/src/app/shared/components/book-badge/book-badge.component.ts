@@ -5,6 +5,7 @@ import {SalesCategory} from "../../model/book/salesCategory";
   selector: 'app-book-badge',
   imports: [],
   templateUrl: './book-badge.component.html',
+  standalone: true,
   styleUrl: './book-badge.component.scss'
 })
 export class BookBadgeComponent {
