@@ -244,7 +244,7 @@
     "DATE_FORMAT": "yyyy/MM/dd",
     "ANSWER": "Answer",
     "CHECKBOX_LABEL": "Include answered questions",
-    "NO_QUESTIONS": "You have not received any questions",
+    "NO_QUESTIONS": "You have not received any questions"
   },
 
   "RESET_PASSWORD":{
@@ -258,6 +258,45 @@
     "SUCCESS_TITLE": "Password reset successful!",
     "SUCCESS_TEXT": "You will now be logged in",
     "ACTION_BUTTON": "Start exploring"
+  },
+
+  "SALES": {
+    "TITLE": "My Sales",
+    "FORM": {
+      "TITLE": "Title",
+      "ORDER_STATUS": "Order status"
+    },
+    "NO_SALES": "No sales found",
+    "TABLE": {
+      "COVER": "Cover",
+      "BOOK": "Book",
+      "DATE": "Date",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    },
+    "PAYMENT_APPROVAL": {
+      "TITLE": "Payment Approval",
+      "CONFIRMATION_MESSAGE": "Are you sure you want to accept payment?",
+      "CANCEL_BUTTON": "CANCEL",
+      "ACCEPT_BUTTON": "ACCEPT"
+    },
+    "PAYMENT_DECLINE": {
+      "TITLE": "Payment Approval",
+      "CONFIRMATION_MESSAGE": "Are you sure you want to decline payment?",
+      "REASON_LABEL": "Reason for payment rejection",
+      "CANCEL_BUTTON": "CANCEL",
+      "DECLINE_BUTTON": "DECLINE"
+    },
+    "ORDER_DETAILS": {
+      "BUYER": "Buyer",
+      "COMPLETED": "Completed",
+      "VIEW_RECEIPT": "VIEW RECEIPT",
+      "PENDING_APPROVAL": "Pending payment approval",
+      "WAITING_FOR_PAYMENT": "Waiting for buyer to resend payment",
+      "DONE": "Done",
+      "DECLINE": "DECLINE",
+      "ACCEPT": "ACCEPT"
+    }
   }
 
 

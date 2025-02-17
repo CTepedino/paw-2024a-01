@@ -10,6 +10,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-accept-popup',
@@ -21,7 +22,8 @@ import {
       MatDialogTitle,
       MatDialogContent,
       MatDialogActions,
-      MatDialogClose],
+      MatDialogClose,
+      TranslateModule],
   templateUrl: './accept-popup.component.html',
   styleUrl: './accept-popup.component.scss'
 })

@@ -260,7 +260,45 @@
       "SUCCESS_TEXT": "Ahora se te iniciará sesión",
       "ACTION_BUTTON": "Comienza a explorar"
     }
-  }
+  },
 
+  "SALES": {
+    "TITLE": "Mis Ventas",
+    "FORM": {
+      "TITLE": "Título",
+      "ORDER_STATUS": "Estado del pedido"
+    },
+    "NO_SALES": "No se encontraron ventas",
+    "TABLE": {
+      "COVER": "Portada",
+      "BOOK": "Libro",
+      "DATE": "Fecha",
+      "STATUS": "Estado",
+      "ACTIONS": "Acciones"
+    },
+    "PAYMENT_APPROVAL": {
+      "TITLE": "Aprobación de Pago",
+      "CONFIRMATION_MESSAGE": "¿Estás seguro de que deseas aceptar el pago?",
+      "CANCEL_BUTTON": "CANCELAR",
+      "ACCEPT_BUTTON": "ACEPTAR"
+    },
+    "PAYMENT_DECLINE": {
+      "TITLE": "Aprobación de Pago",
+      "CONFIRMATION_MESSAGE": "¿Estás seguro de que deseas rechazar el pago?",
+      "REASON_LABEL": "Motivo del rechazo del pago",
+      "CANCEL_BUTTON": "CANCELAR",
+      "DECLINE_BUTTON": "RECHAZAR"
+    },
+    "ORDER_DETAILS": {
+      "BUYER": "Comprador",
+      "COMPLETED": "Completado",
+      "VIEW_RECEIPT": "VER RECIBO",
+      "PENDING_APPROVAL": "Aprobación de pago pendiente",
+      "WAITING_FOR_PAYMENT": "Esperando que el comprador reenvíe el pago",
+      "DONE": "Finalizado",
+      "DECLINE": "RECHAZAR",
+      "ACCEPT": "ACEPTAR"
+    }
+  }
 
 }

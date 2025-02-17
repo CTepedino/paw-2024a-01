@@ -9,10 +9,11 @@ import {DeclinePopupComponent} from "../decline-popup/decline-popup.component";
 import {OrderWithData} from "../../../../shared/model/order/orderWithData";
 import {OrderService} from "../../../../shared/services/order.service";
 import {tap} from "rxjs";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-sales-order-card',
-  imports: [MatGridListModule, CurrencyPipe, DatePipe, MatButtonModule],
+  imports: [MatGridListModule, CurrencyPipe, DatePipe, MatButtonModule, TranslateModule],
   templateUrl: './sales-order-card.component.html',
   styleUrl: './sales-order-card.component.scss'
 })

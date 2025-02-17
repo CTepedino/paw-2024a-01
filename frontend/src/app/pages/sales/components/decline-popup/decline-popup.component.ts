@@ -4,6 +4,7 @@ import {MatInputModule} from "@angular/material/input";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-decline-popup',
@@ -13,7 +14,9 @@ import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "
     MatButtonModule,
     MatDialogTitle,
     MatDialogContent,
-    MatDialogActions, ReactiveFormsModule],
+    MatDialogActions,
+    ReactiveFormsModule,
+    TranslateModule],
   templateUrl: './decline-popup.component.html',
   styleUrl: './decline-popup.component.scss'
 })
