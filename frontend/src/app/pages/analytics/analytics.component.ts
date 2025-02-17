@@ -16,7 +16,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../shared/model/user/user";
 import {AuthService} from "../../shared/services/auth.service";
 import {NgxPaginationModule} from "ngx-pagination";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-analytics',
@@ -62,8 +62,10 @@ export class AnalyticsComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder){
-    this.title.setTitle('Analytics');
+  constructor(private fb: FormBuilder, private translate: TranslateService){
+    this.translate.get('PAGE_ANALYTICS').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
     this.form = fb.group({
       year: [new Date().getFullYear()],
       month: [new Date().getMonth()]

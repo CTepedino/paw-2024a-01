@@ -12,7 +12,7 @@ import {catchError, map, throwError} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-login',
@@ -39,8 +39,11 @@ export class LoginComponent {
   authService = inject(AuthService);
   router = inject(Router);
 
-  constructor() {
-    this.title.setTitle('Login')
+  constructor(private translate: TranslateService) {
+    this.translate.get('LOGIN').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
   }
 
   redirect = input<string>()

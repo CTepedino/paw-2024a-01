@@ -6,7 +6,7 @@ import {Observable} from "rxjs";
 import {ProfileDisplayInfo, UserProfileService} from "./store/user-profile.service";
 import {ProfileTabsComponent} from "./components/profile-tabs/profile-tabs.component";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-profile',
@@ -30,8 +30,11 @@ export class ProfileComponent {
 	userId: number = 0;
 	displayInfo$: Observable<ProfileDisplayInfo> | null = null;
 
-	constructor() {
-		this.title.setTitle('Profile');
+	constructor(private translate: TranslateService) {
+		this.translate.get('PROFILE_BROWSER').subscribe(translatedTitle => {
+			this.title.setTitle(translatedTitle);
+		});
+
 
 		this.route.params.subscribe(params => {
 			this.userId = params['id'];

@@ -5,7 +5,7 @@ import {
   ForgotPasswordMailSucessComponent
 } from "./components/forgot-password-mail-sucess/forgot-password-mail-sucess.component";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-forgot-password',
@@ -22,8 +22,11 @@ import {TranslateModule} from "@ngx-translate/core";
 export class ForgotPasswordComponent {
   title = inject(Title);
 
-  constructor() {
-    this.title.setTitle('Forgot Password')
+  constructor(private translate: TranslateService) {
+    this.translate.get('FORGOT_PASSWORD_BROWSER').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
   }
 
   showForm = true;

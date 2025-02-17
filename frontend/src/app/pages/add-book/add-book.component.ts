@@ -15,7 +15,7 @@ import {fileTypeValidator} from "../../shared/validators/fileTypeValidator";
 import {Router} from "@angular/router";
 import {catchError, map, throwError} from "rxjs";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 
 @Component({
@@ -59,8 +59,11 @@ export class AddBookComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.title.setTitle('Publish')
+  constructor(private fb: FormBuilder, private translate: TranslateService) {
+
+    this.translate.get('PAGE_PUBLISH').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
 
     this.form = this.fb.group({
       cbu: [''],

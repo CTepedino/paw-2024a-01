@@ -11,7 +11,7 @@ import {catchError, concatMap, map, of, throwError} from "rxjs";
 import {ChangePasswordService} from "./store/change-password.service";
 import {Title} from "@angular/platform-browser";
 import {CancelButtonComponent} from "../../shared/components/cancel-button/cancel-button.component";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-change-password',
@@ -53,8 +53,10 @@ export class ChangePasswordComponent {
 		confirm: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]),
 	});
 
-	constructor() {
-		this.title.setTitle('Change password');
+	constructor(private translate: TranslateService) {
+		this.translate.get('PAGE_CHANGE_PASSWORD').subscribe(translatedTitle => {
+			this.title.setTitle(translatedTitle);
+		});
 	}
 
 	changePassword(){

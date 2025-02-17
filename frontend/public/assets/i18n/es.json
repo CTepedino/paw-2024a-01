@@ -328,8 +328,24 @@
     "CONTENT_1": "Contenido 1",
     "CONTENT_2": "Contenido 2",
     "CONTENT_3": "Contenido 3"
-  }
+  },
 
+  "PAGE_PUBLISH": "Publicar",
+  "PAGE_ANALYTICS": "Analíticas",
+  "PAGE_CHANGE_PASSWORD": "Cambiar contraseña",
+  "PAGE_EDIT_PROFILE": "Editar perfil",
+  "PAGE_VALIDATE_EMAIL": "Validar correo electrónico",
+  "PAGE_NOT_FOUND_BROWSER": "Página no encontrada",
+  "SERVER_ERROR": "Error del servidor",
+  "FORGOT_PASSWORD_BROWSER": "Olvidé la contraseña",
+  "LOGIN": "Iniciar sesión",
+  "PROFILE_BROWSER": "Perfil",
+  "PURCHASES_BROWSER": "Compras",
+  "QUESTIONS_BROWSER": "Preguntas",
+  "RESET_PASSWORD_BROWSER": "Restablecer contraseña",
+  "SALES_BROWSER": "Ventas",
+  "SEARCH": "Buscar",
+  "SIGN_UP": "Registrarse"
 
 
 }

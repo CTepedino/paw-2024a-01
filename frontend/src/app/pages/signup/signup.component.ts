@@ -9,6 +9,7 @@ import {RouterModule} from "@angular/router";
 import {RegisterConfirmationComponent} from "./components/register-confirmation/register-confirmation.component";
 import {RegisterFormComponent} from "./components/register-form/register-form.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-signup',
@@ -30,8 +31,11 @@ import {Title} from "@angular/platform-browser";
 export class SignupComponent {
   title = inject(Title);
 
-  constructor() {
-    this.title.setTitle('Sign Up')
+  constructor(private translate: TranslateService) {
+    this.translate.get('SIGN_UP').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
   }
 
   registering = true;

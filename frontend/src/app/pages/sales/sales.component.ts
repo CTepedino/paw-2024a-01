@@ -15,7 +15,7 @@ import {AsyncPipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-sales',
@@ -37,8 +37,11 @@ export class SalesComponent implements OnInit{
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.title.setTitle('Sales')
+  constructor(private fb: FormBuilder, private translate: TranslateService) {
+    this.translate.get('SALES_BROWSER').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
 
     this.form = fb.group({
       title: [''],

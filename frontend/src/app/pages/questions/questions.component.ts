@@ -7,7 +7,7 @@ import {UserRoles} from "../../shared/model/user/userRoles";
 import {AskedQuestionsComponent} from "./components/asked-questions/asked-questions.component";
 import {RecievedQuestionsComponent} from "./components/recieved-questions/recieved-questions.component";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-questions',
@@ -33,8 +33,11 @@ export class QuestionsComponent implements OnInit {
 
 	index = { selectedIndex: 0 }
 
-	constructor() {
-		this.title.setTitle('Questions')
+	constructor(private translate: TranslateService) {
+		this.translate.get('QUESTIONS_BROWSER').subscribe(translatedTitle => {
+			this.title.setTitle(translatedTitle);
+		});
+
 
 
 		this.authService.getLoggedUser().pipe(

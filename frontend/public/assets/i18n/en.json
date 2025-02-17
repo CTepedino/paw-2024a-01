@@ -353,9 +353,22 @@
     "CONTENT_1": "Content 1",
     "CONTENT_2": "Content 2",
     "CONTENT_3": "Content 3"
-  }
+  },
 
-
-
-
+  "PAGE_PUBLISH": "Publish",
+  "PAGE_ANALYTICS": "Analytics",
+  "PAGE_CHANGE_PASSWORD": "Change password",
+  "PAGE_EDIT_PROFILE": "Edit profile",
+  "PAGE_VALIDATE_EMAIL": "Validate email",
+  "PAGE_NOT_FOUND_BROWSER": "Page not found",
+  "SERVER_ERROR": "Server error",
+  "FORGOT_PASSWORD_BROWSER": "Forgot Password",
+  "LOGIN": "Login",
+  "PROFILE_BROWSER": "Profile",
+  "PURCHASES_BROWSER": "Purchases",
+  "QUESTIONS_BROWSER": "Questions",
+  "RESET_PASSWORD_BROWSER": "Reset Password",
+  "SALES_BROWSER": "Sales",
+  "SEARCH": "Search",
+  "SIGN_UP": "Sign Up"
 }
