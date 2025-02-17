@@ -3,11 +3,13 @@ import {
 	ActionNotificationCardComponent
 } from "../../../shared/components/action-notification-card/action-notification-card.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-server-error-page',
 	imports: [
-		ActionNotificationCardComponent
+		ActionNotificationCardComponent,
+		TranslateModule
 	],
   templateUrl: './server-error-page.component.html',
   styleUrl: './server-error-page.component.scss',

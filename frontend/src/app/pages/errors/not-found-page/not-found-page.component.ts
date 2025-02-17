@@ -3,11 +3,13 @@ import {
   ActionNotificationCardComponent
 } from "../../../shared/components/action-notification-card/action-notification-card.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-not-found-page',
   imports: [
-    ActionNotificationCardComponent
+    ActionNotificationCardComponent,
+    TranslateModule
   ],
   templateUrl: './not-found-page.component.html',
   styleUrl: './not-found-page.component.scss',

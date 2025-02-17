@@ -138,6 +138,13 @@
 
   "EMAIL_VALIDATED_SUCCESS": "Email validated successfully!",
   "START_USING_CYBRARY": "You can start using Cybrary",
-  "START_EXPLORING": "Start exploring"
+  "START_EXPLORING": "Start exploring",
+
+  "PAGE_NOT_FOUND": "404: Not found",
+  "RESOURCE_NOT_FOUND": "The resource you are looking for cannot be found. You can keep searching for the page you want or return to the homepage",
+  "GO_HOME": "Go home",
+
+  "INTERNAL_SERVER_ERROR_TITLE": "500: Internal Server Error",
+  "INTERNAL_SERVER_ERROR_MESSAGE": "Something went wrong on our end. Please try again later",
 
 }
