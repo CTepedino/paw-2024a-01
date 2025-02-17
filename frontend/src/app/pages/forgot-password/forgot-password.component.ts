@@ -5,13 +5,15 @@ import {
   ForgotPasswordMailSucessComponent
 } from "./components/forgot-password-mail-sucess/forgot-password-mail-sucess.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-forgot-password',
   imports: [
     ReactiveFormsModule,
     ForgotPasswordFormComponent,
-    ForgotPasswordMailSucessComponent
+    ForgotPasswordMailSucessComponent,
+    TranslateModule
   ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss',

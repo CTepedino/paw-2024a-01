@@ -147,4 +147,12 @@
   "INTERNAL_SERVER_ERROR_TITLE": "500: Internal Server Error",
   "INTERNAL_SERVER_ERROR_MESSAGE": "Something went wrong on our end. Please try again later",
 
+  "RESET_PASSWORD_TITLE": "Reset your password",
+  "RESET_PASSWORD_MESSAGE": "Enter your email address and we'll send you a link to reset your password",
+  "EMAIL": "Email",
+  "NO_ACCOUNT_ASSOCIATED": "No account associated with this email",
+  "RESET_PASSWORD_BTN": "Reset password",
+  "CHECK_INBOX_TITLE": "Check your inbox",
+  "CHECK_INBOX_MESSAGE": "An email with a link to reset your password was sent to your address"
+
 }

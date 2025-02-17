@@ -145,5 +145,13 @@
   "GO_HOME": "Ir a inicio",
 
   "INTERNAL_SERVER_ERROR_TITLE": "500: Error Interno del Servidor",
-  "INTERNAL_SERVER_ERROR_MESSAGE": "Algo salió mal en nuestro lado. Por favor, intenta nuevamente más tarde"
+  "INTERNAL_SERVER_ERROR_MESSAGE": "Algo salió mal en nuestro lado. Por favor, intenta nuevamente más tarde",
+
+  "RESET_PASSWORD_TITLE": "Restablecer tu contraseña",
+  "RESET_PASSWORD_MESSAGE": "Ingresa tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña",
+  "EMAIL": "Correo electrónico",
+  "NO_ACCOUNT_ASSOCIATED": "No hay cuenta asociada con este correo electrónico",
+  "RESET_PASSWORD_BTN": "Restablecer contraseña",
+  "CHECK_INBOX_TITLE": "Revisa tu bandeja de entrada",
+  "CHECK_INBOX_MESSAGE": "Se envió un correo electrónico con un enlace para restablecer tu contraseña a tu dirección"
 }

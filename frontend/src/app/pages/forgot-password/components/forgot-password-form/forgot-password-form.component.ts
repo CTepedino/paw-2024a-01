@@ -6,6 +6,7 @@ import {NotificationCardComponent} from "../../../../shared/components/notificat
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../../../shared/services/auth.service";
 import {catchError, map, throwError} from "rxjs";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-forgot-password-form',
@@ -15,7 +16,8 @@ import {catchError, map, throwError} from "rxjs";
     MatInput,
     MatLabel,
     NotificationCardComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './forgot-password-form.component.html',
   styleUrl: './forgot-password-form.component.scss',
