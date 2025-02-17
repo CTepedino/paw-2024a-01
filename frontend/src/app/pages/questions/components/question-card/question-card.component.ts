@@ -9,6 +9,7 @@ import {MatInput} from "@angular/material/input";
 import {ActionButtonComponent} from "../../../../shared/components/action-button/action-button.component";
 import {QuestionService} from "../../../../shared/services/question.service";
 import {tap} from "rxjs";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-question-card',
@@ -22,7 +23,8 @@ import {tap} from "rxjs";
     MatInput,
     MatLabel,
     ReactiveFormsModule,
-    ActionButtonComponent
+    ActionButtonComponent,
+    TranslateModule
   ],
   templateUrl: './question-card.component.html',
   styleUrl: './question-card.component.scss'

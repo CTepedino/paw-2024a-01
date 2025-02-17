@@ -7,6 +7,7 @@ import {UserRoles} from "../../shared/model/user/userRoles";
 import {AskedQuestionsComponent} from "./components/asked-questions/asked-questions.component";
 import {RecievedQuestionsComponent} from "./components/recieved-questions/recieved-questions.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-questions',
@@ -16,7 +17,8 @@ import {Title} from "@angular/platform-browser";
 		MatTabLabel,
 		MatTabContent,
 		AskedQuestionsComponent,
-		RecievedQuestionsComponent
+		RecievedQuestionsComponent,
+		TranslateModule
 	],
   templateUrl: './questions.component.html',
   styleUrl: './questions.component.scss'

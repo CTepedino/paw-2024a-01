@@ -1,5 +1,5 @@
 <div class="title-container">
-	<h2 class="page-title">Questions</h2>
+	<h2 class="page-title">{{ 'QUESTIONS.TITLE' | translate }}</h2>
 </div>
 
 
@@ -7,7 +7,7 @@
 	<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="index.selectedIndex">
 		<mat-tab class="tab">
 			<ng-template mat-tab-label>
-				<h3>Asked questions</h3>
+				<h3>{{ 'QUESTIONS.TABS.ASKED_QUESTIONS' | translate }}</h3>
 			</ng-template>
 			<ng-template matTabContent>
 				<div class="white">
@@ -18,7 +18,7 @@
 		@if (showTabs){
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
-					<h2>Received questions</h2>
+					<h2>{{ 'QUESTIONS.TABS.RECEIVED_QUESTIONS' | translate }}</h2>
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">

@@ -224,5 +224,27 @@
       "CANCEL": "Cancelar",
       "DECLINE": "Rechazar"
     }
+  },
+
+  "QUESTIONS": {
+    "TITLE": "Preguntas",
+    "TABS": {
+      "ASKED_QUESTIONS": "Preguntas hechas",
+      "RECEIVED_QUESTIONS": "Preguntas recibidas"
+    },
+    "NO_QUESTIONS_ASKED": "Aún no has hecho ninguna pregunta",
+    "QUESTION_CARD": {
+      "BOOK": "Libro",
+      "QUESTIONER": "Preguntador",
+      "WRITER": "Escritor",
+      "ANSWER": "Respuesta",
+      "NO_ANSWER_YET": "Sin respuesta aún",
+      "ANSWER_LABEL": "Responder"
+    },
+    "DATE_FORMAT": "yyyy/MM/dd",
+    "ANSWER": "Respuesta",
+    "CHECKBOX_LABEL": "Incluir preguntas respondidas",
+    "NO_QUESTIONS": "No has recibido ninguna pregunta"
   }
+
 }

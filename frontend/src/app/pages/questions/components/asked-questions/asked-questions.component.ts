@@ -10,6 +10,7 @@ import {PaginatedContent} from "../../../../shared/model/paginatedContent";
 import {AsyncPipe, JsonPipe} from "@angular/common";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-asked-questions',
@@ -20,7 +21,8 @@ import {NgxPaginationModule} from "ngx-pagination";
         AsyncPipe,
         PaginatorComponent,
         NgxPaginationModule,
-        JsonPipe
+        JsonPipe,
+        TranslateModule
     ],
   templateUrl: './asked-questions.component.html',
   styleUrl: './asked-questions.component.scss'

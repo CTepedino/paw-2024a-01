@@ -1,4 +1,4 @@
-<mat-checkbox class="remember-me" checked (change)="setQuestions($event)">Include answered questions</mat-checkbox>
+<mat-checkbox class="remember-me" checked (change)="setQuestions($event)">{{ 'QUESTIONS.CHECKBOX_LABEL' | translate }}</mat-checkbox>
 @if (questions$ | async; as questions){
 	
 	<div class="questions-container">
@@ -16,7 +16,7 @@
 	
 	@if (questions.length === 0) {
 		<h5 class="empty-q">
-			You have not received any questions
+            {{ 'QUESTIONS.NO_QUESTIONS' | translate }}
 		</h5>
 	}
 }
