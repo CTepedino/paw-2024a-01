@@ -244,7 +244,7 @@
     "DATE_FORMAT": "yyyy/MM/dd",
     "ANSWER": "Answer",
     "CHECKBOX_LABEL": "Include answered questions",
-    "NO_QUESTIONS": "You have not received any questions",
+    "NO_QUESTIONS": "You have not received any questions"
   },
 
   "RESET_PASSWORD":{
@@ -258,7 +258,117 @@
     "SUCCESS_TITLE": "Password reset successful!",
     "SUCCESS_TEXT": "You will now be logged in",
     "ACTION_BUTTON": "Start exploring"
-  }
+  },
 
+  "SALES": {
+    "TITLE": "My Sales",
+    "FORM": {
+      "TITLE": "Title",
+      "ORDER_STATUS": "Order status"
+    },
+    "NO_SALES": "No sales found",
+    "TABLE": {
+      "COVER": "Cover",
+      "BOOK": "Book",
+      "DATE": "Date",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    },
+    "PAYMENT_APPROVAL": {
+      "TITLE": "Payment Approval",
+      "CONFIRMATION_MESSAGE": "Are you sure you want to accept payment?",
+      "CANCEL_BUTTON": "CANCEL",
+      "ACCEPT_BUTTON": "ACCEPT"
+    },
+    "PAYMENT_DECLINE": {
+      "TITLE": "Payment Approval",
+      "CONFIRMATION_MESSAGE": "Are you sure you want to decline payment?",
+      "REASON_LABEL": "Reason for payment rejection",
+      "CANCEL_BUTTON": "CANCEL",
+      "DECLINE_BUTTON": "DECLINE"
+    },
+    "ORDER_DETAILS": {
+      "BUYER": "Buyer",
+      "COMPLETED": "Completed",
+      "VIEW_RECEIPT": "VIEW RECEIPT",
+      "PENDING_APPROVAL": "Pending payment approval",
+      "WAITING_FOR_PAYMENT": "Waiting for buyer to resend payment",
+      "DONE": "Done",
+      "DECLINE": "DECLINE",
+      "ACCEPT": "ACCEPT"
+    }
+  },
 
+  "REGISTRATION": {
+    "SUCCESS": "Registration successful!",
+    "CONFIRMATION": "Check your inbox for an email with a link to validate your Cybrary account",
+    "RESEND_EMAIL": "Resend email"
+  },
+
+  "SIGNUP": {
+    "TITLE": "Create a Cybrary account",
+    "FIRST_NAME": "First name",
+    "LAST_NAME": "Last name",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm password",
+    "PASSWORD_NOT_MATCHING": "Passwords do not match",
+    "SIGN_UP": "Sign up",
+    "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+    "LOGIN": "Log in",
+    "ERRORS": {
+      "REQUIRED": "This field is required",
+      "INVALID_EMAIL": "Invalid email",
+      "MIN_LENGTH": "At least 6 characters",
+      "MAX_LENGTH": "Exceeds the maximum permitted length",
+      "PASSWORD_MISMATCH": "Passwords do not match"
+    }
+  },
+
+  "BOOK_CARD": {
+    "BY": "By"
+  },
+
+  "FILE_INPUT": {
+    "CHOOSE_A_FILE": "Choose a file",
+    "BROWSE": "Browse"
+  },
+
+  "NAVBAR":{
+    "PROFILE": "Profile",
+    "PURCHASES": "Purchases",
+    "SALES": "Sales",
+    "ANALYTICS": "Analytics",
+    "QUESTIONS": "Questions",
+    "PUBLISH": "Publish",
+    "SIGN_OUT": "Sign out",
+    "LOG_IN": "Log in",
+    "SIGN_UP": "Sign up"
+  },
+
+  "TAB": {
+    "TAB_FIRST": "First",
+    "TAB_SECOND": "Second",
+    "TAB_THIRD": "Third",
+    "CONTENT_1": "Content 1",
+    "CONTENT_2": "Content 2",
+    "CONTENT_3": "Content 3"
+  },
+
+  "PAGE_PUBLISH": "Publish",
+  "PAGE_ANALYTICS": "Analytics",
+  "PAGE_CHANGE_PASSWORD": "Change password",
+  "PAGE_EDIT_PROFILE": "Edit profile",
+  "PAGE_VALIDATE_EMAIL": "Validate email",
+  "PAGE_NOT_FOUND_BROWSER": "Page not found",
+  "SERVER_ERROR": "Server error",
+  "FORGOT_PASSWORD_BROWSER": "Forgot Password",
+  "LOGIN": "Login",
+  "PROFILE_BROWSER": "Profile",
+  "PURCHASES_BROWSER": "Purchases",
+  "QUESTIONS_BROWSER": "Questions",
+  "RESET_PASSWORD_BROWSER": "Reset Password",
+  "SALES_BROWSER": "Sales",
+  "SEARCH": "Search",
+  "SIGN_UP": "Sign Up"
 }

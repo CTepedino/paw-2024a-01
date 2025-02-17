@@ -1,9 +1,9 @@
 <app-notification-card>
-	<card-title>Registration successful!</card-title>
+	<card-title>{{ 'REGISTRATION.SUCCESS' | translate }}</card-title>
 	<card-text>
-		<p class="register-confirmation">Check your inbox for an email with a link to validate your Cybrary account</p>
+		<p class="register-confirmation">{{ 'REGISTRATION.CONFIRMATION' | translate }}</p>
 		<div class="resend-button">
-			<app-action-button [disabled]="disableResend" (click)="resendEmail()">Resend email</app-action-button>
+			<app-action-button [disabled]="disableResend" (click)="resendEmail()">{{ 'REGISTRATION.RESEND_EMAIL' | translate }}</app-action-button>
 		</div>
 	</card-text>
 </app-notification-card>

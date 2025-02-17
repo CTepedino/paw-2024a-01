@@ -50,7 +50,9 @@ export class EditProfileComponent implements OnInit {
   userId: any;
 
   constructor(private fb: FormBuilder, private translate: TranslateService) {
-    this.title.setTitle('Edit profile');
+    this.translate.get('PAGE_EDIT_PROFILE').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
 
     this.editForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(50)]],

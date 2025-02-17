@@ -17,7 +17,7 @@ import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {OrderWithData} from "../../shared/model/order/orderWithData";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {BookSearchOrderBy} from "../../shared/model/book/bookSearchOrderBy";
 
 @Component({
@@ -53,8 +53,11 @@ export class PurchasesComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.title.setTitle('Purchases');
+  constructor(private fb: FormBuilder, private translate: TranslateService) {
+    this.translate.get('PURCHASES_BROWSER').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
 
     this.form = fb.group({
       title: [''],

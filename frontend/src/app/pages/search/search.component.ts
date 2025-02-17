@@ -19,7 +19,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 
 @Component({
@@ -58,8 +58,10 @@ export class SearchComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.title.setTitle('Search')
+  constructor(private fb: FormBuilder, private translate: TranslateService) {
+    this.translate.get('SEARCH').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
 
     this.form = this.fb.group({
       title: [''],

@@ -7,6 +7,7 @@ import {DatePipe, DecimalPipe, NgOptimizedImage} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {BookWithData} from "../../model/book/bookWithData";
 import {BookBadgeComponent} from "../book-badge/book-badge.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-book-card',
@@ -21,7 +22,8 @@ import {BookBadgeComponent} from "../book-badge/book-badge.component";
 		MatCardHeader,
 		MatRipple,
 		BookBadgeComponent,
-		NgOptimizedImage
+		NgOptimizedImage,
+		TranslateModule
 	],
   templateUrl: './book-card.component.html',
   styleUrl: './book-card.component.scss'

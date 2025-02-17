@@ -3,7 +3,6 @@
   "NEW_DEALS": "Nuevas ofertas",
   "LATEST_BOOKS": "Últimos libros",
   "NO_PUBLICATIONS": "Aún no hay publicaciones, ¡sé el primero en hacer una!",
-
   "PUBLISH_YOUR_BOOK": "¡Publica tu libro!",
   "FIRST_BOOK_PAYMENT_INFO": "Como este es tu primer libro, necesitarás ingresar tu información de pago",
   "CBU_LABEL": "Tu CBU o alias",
@@ -21,7 +20,6 @@
   "PREVIEW_FILE": "Archivo de vista previa",
   "BOOK_FILE": "Archivo del libro",
   "PUBLISH": "Publicar",
-
   "FICTION": "Ficción",
   "NON_FICTION": "No Ficción",
   "MYSTERY": "Misterio",
@@ -58,7 +56,6 @@
   "HUMANITIES_SOCIAL_SCIENCES": "Humanidades y Ciencias Sociales",
   "PARENTING_FAMILIES": "Paternidad y Familia",
   "SCIENCE_TECHNOLOGY": "Ciencia y Tecnología",
-
   "NO_BOOKS_FOUND": "No se encontraron libros",
   "RESET_FILTERS": "Restablecer filtros",
   "ORDER_BY": "Ordenar por",
@@ -70,14 +67,12 @@
   "MIN_AGE": "Edad mínima",
   "MAX_AGE": "Edad máxima",
   "APPLY": "Aplicar",
-
   "PRICE_ASC": "Precio ascendente",
   "PRICE_DESC": "Precio descendente",
   "PAGE_COUNT_ASC": "Cantidad de páginas ascendente",
   "PAGE_COUNT_DESC": "Cantidad de páginas descendente",
   "PUBLICATION_DATE_ASC": "Fecha de publicación ascendente",
   "PUBLICATION_DATE_DESC": "Fecha de publicación descendente",
-
   "ANALYTICS": "Analíticas",
   "SALES_TO_BRONZE": "{{count}} ventas más para la categoría Bronce",
   "SALES_TO_SILVER": "{{count}} ventas más para la categoría Plata",
@@ -96,7 +91,6 @@
   "TABLE_BOOK": "Libro",
   "TABLE_TOTAL_ORDERS": "Total de pedidos",
   "TABLE_TOTAL_REVENUE": "Ingresos totales",
-
   "January": "Enero",
   "February": "Febrero",
   "March": "Marzo",
@@ -109,13 +103,11 @@
   "October": "Octubre",
   "November": "Noviembre",
   "December": "Diciembre",
-
   "SALES_FOR_POPULAR": "+{{sales}} ventas para Popular",
   "POPULAR": "Popular",
   "SALES_FOR_BEST_SELLER": "+{{sales}} ventas para Best Seller",
   "BEST_SELLER": "Best Seller",
   "TOTAL_SALES": "Ventas Totales",
-
   "WRITE_NEW_PASSWORD": "Escribe tu nueva contraseña",
   "OLD_PASSWORD": "Contraseña anterior",
   "NEW_PASSWORD": "Nueva contraseña",
@@ -126,7 +118,6 @@
   "PASSWORDS_DO_NOT_MATCH": "Las contraseñas no coinciden",
   "SAVE_CHANGES": "Guardar cambios",
   "CANCEL": "Cancelar",
-
   "EDIT_PROFILE": "Editar tu perfil",
   "FIRST_NAME": "Nombre",
   "LAST_NAME": "Apellido",
@@ -135,18 +126,14 @@
   "REQUIRED_FIELD": "Este campo es obligatorio",
   "MAX_LENGTH": "Excede la longitud máxima permitida",
   "INVALID_CBU": "CBU o alias inválido",
-
   "EMAIL_VALIDATED_SUCCESS": "¡Correo electrónico validado con éxito!",
   "START_USING_CYBRARY": "Puedes comenzar a usar Cybrary",
   "START_EXPLORING": "Comienza a explorar",
-
   "PAGE_NOT_FOUND": "404: No encontrado",
   "RESOURCE_NOT_FOUND": "No se pudo encontrar el recurso que buscas. Puedes seguir buscando la página que deseas o volver a la página de inicio",
   "GO_HOME": "Ir a inicio",
-
   "INTERNAL_SERVER_ERROR_TITLE": "500: Error Interno del Servidor",
   "INTERNAL_SERVER_ERROR_MESSAGE": "Algo salió mal en nuestro lado. Por favor, intenta nuevamente más tarde",
-
   "RESET_PASSWORD_TITLE": "Restablecer tu contraseña",
   "RESET_PASSWORD_MESSAGE": "Ingresa tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña",
   "EMAIL": "Correo electrónico",
@@ -154,11 +141,9 @@
   "RESET_PASSWORD_BTN": "Restablecer contraseña",
   "CHECK_INBOX_TITLE": "Revisa tu bandeja de entrada",
   "CHECK_INBOX_MESSAGE": "Se envió un correo electrónico con un enlace para restablecer tu contraseña a tu dirección",
-
   "FIND_BOOK": "Encontrar un libro",
   "CONTACT_WRITER": "Contactar al escritor",
   "GET_COPY": "Obtener tu copia",
-
   "LOG_IN_TITLE": "Inicia sesión en Cybrary",
   "ERROR_LOGIN": "Hubo un error con tu intento de inicio de sesión. Por favor, verifica tu correo electrónico y contraseña e inténtalo de nuevo",
   "PASSWORD": "Contraseña",
@@ -167,7 +152,6 @@
   "DONT_HAVE_ACCOUNT": "¿No tienes una cuenta?",
   "REGISTER": "Regístrate",
   "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
-
   "PROFILE": "Perfil",
   "WRITER_INFO": "Información del escritor",
   "CBU": "CBU",
@@ -179,7 +163,6 @@
   "BOUGHT_BOOKS": "Libros comprados",
   "RECOMMENDATIONS": "Recomendaciones",
   "WISHLIST": "Lista de deseos",
-
   "MY_PURCHASES": "Mis Compras",
   "NO_PURCHASES_FOUND": "No se encontraron compras",
   "COVER": "Portada",
@@ -187,7 +170,6 @@
   "DATE": "Fecha",
   "STATUS": "Estado",
   "ACTIONS": "Acciones",
-
   "ORDER_STATUS": {
     "ORDER_STATUS": "Estado del pedido",
     "WAITING_PAYMENT": "Esperando pago",
@@ -195,7 +177,6 @@
     "WAITING_APPROVAL": "Esperando aprobación",
     "COMPLETED": "Completado"
   },
-
   "PURCHASES": {
     "ORDER_STATUS": {
       "COMPLETED": "Completado",
@@ -225,7 +206,6 @@
       "DECLINE": "Rechazar"
     }
   },
-
   "QUESTIONS": {
     "TITLE": "Preguntas",
     "TABS": {
@@ -246,7 +226,6 @@
     "CHECKBOX_LABEL": "Incluir preguntas respondidas",
     "NO_QUESTIONS": "No has recibido ninguna pregunta"
   },
-
   "RESET_PASSWORD": {
     "NOTIFICATION_CARD": {
       "RESET_PASSWORD_TITLE": "Restablecer tu contraseña",
@@ -260,7 +239,113 @@
       "SUCCESS_TEXT": "Ahora se te iniciará sesión",
       "ACTION_BUTTON": "Comienza a explorar"
     }
-  }
+  },
+  "SALES": {
+    "TITLE": "Mis Ventas",
+    "FORM": {
+      "TITLE": "Título",
+      "ORDER_STATUS": "Estado del pedido"
+    },
+    "NO_SALES": "No se encontraron ventas",
+    "TABLE": {
+      "COVER": "Portada",
+      "BOOK": "Libro",
+      "DATE": "Fecha",
+      "STATUS": "Estado",
+      "ACTIONS": "Acciones"
+    },
+    "PAYMENT_APPROVAL": {
+      "TITLE": "Aprobación de Pago",
+      "CONFIRMATION_MESSAGE": "¿Estás seguro de que deseas aceptar el pago?",
+      "CANCEL_BUTTON": "CANCELAR",
+      "ACCEPT_BUTTON": "ACEPTAR"
+    },
+    "PAYMENT_DECLINE": {
+      "TITLE": "Aprobación de Pago",
+      "CONFIRMATION_MESSAGE": "¿Estás seguro de que deseas rechazar el pago?",
+      "REASON_LABEL": "Motivo del rechazo del pago",
+      "CANCEL_BUTTON": "CANCELAR",
+      "DECLINE_BUTTON": "RECHAZAR"
+    },
+    "ORDER_DETAILS": {
+      "BUYER": "Comprador",
+      "COMPLETED": "Completado",
+      "VIEW_RECEIPT": "VER RECIBO",
+      "PENDING_APPROVAL": "Aprobación de pago pendiente",
+      "WAITING_FOR_PAYMENT": "Esperando que el comprador reenvíe el pago",
+      "DONE": "Finalizado",
+      "DECLINE": "RECHAZAR",
+      "ACCEPT": "ACEPTAR"
+    }
+  },
+  "REGISTRATION": {
+    "SUCCESS": "¡Registro exitoso!",
+    "CONFIRMATION": "Revisa tu bandeja de entrada para un correo con un enlace para validar tu cuenta de Cybrary",
+    "RESEND_EMAIL": "Reenviar correo"
+  },
+  "SIGNUP": {
+    "TITLE": "Crear una cuenta en Cybrary",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellido",
+    "EMAIL": "Correo electrónico",
+    "PASSWORD": "Contraseña",
+    "CONFIRM_PASSWORD": "Confirmar contraseña",
+    "PASSWORD_NOT_MATCHING": "Las contraseñas no coinciden",
+    "SIGN_UP": "Registrarse",
+    "ALREADY_HAVE_ACCOUNT": "¿Ya tienes una cuenta?",
+    "LOGIN": "Iniciar sesión",
+    "ERRORS": {
+      "REQUIRED": "Este campo es obligatorio",
+      "INVALID_EMAIL": "Correo electrónico inválido",
+      "MIN_LENGTH": "Al menos 6 caracteres",
+      "MAX_LENGTH": "Excede la longitud máxima permitida",
+      "PASSWORD_MISMATCH": "Las contraseñas no coinciden"
+    }
+  },
+  "BOOK_CARD": {
+    "BY": "Por"
+  },
+  "FILE_INPUT": {
+    "CHOOSE_A_FILE": "Seleccionar un archivo",
+    "BROWSE": "Explorar"
+  },
+  "NAVBAR": {
+    "PROFILE": "Perfil",
+    "PURCHASES": "Compras",
+    "SALES": "Ventas",
+    "ANALYTICS": "Analítica",
+    "QUESTIONS": "Preguntas",
+    "PUBLISH": "Publicar",
+    "SIGN_OUT": "Cerrar sesión",
+    "LOG_IN": "Iniciar sesión",
+    "SIGN_UP": "Registrarse"
+  },
+
+  "TAB": {
+    "TAB_FIRST": "Primero",
+    "TAB_SECOND": "Segundo",
+    "TAB_THIRD": "Tercero",
+    "CONTENT_1": "Contenido 1",
+    "CONTENT_2": "Contenido 2",
+    "CONTENT_3": "Contenido 3"
+  },
+
+  "PAGE_PUBLISH": "Publicar",
+  "PAGE_ANALYTICS": "Analíticas",
+  "PAGE_CHANGE_PASSWORD": "Cambiar contraseña",
+  "PAGE_EDIT_PROFILE": "Editar perfil",
+  "PAGE_VALIDATE_EMAIL": "Validar correo electrónico",
+  "PAGE_NOT_FOUND_BROWSER": "Página no encontrada",
+  "SERVER_ERROR": "Error del servidor",
+  "FORGOT_PASSWORD_BROWSER": "Olvidé la contraseña",
+  "LOGIN": "Iniciar sesión",
+  "PROFILE_BROWSER": "Perfil",
+  "PURCHASES_BROWSER": "Compras",
+  "QUESTIONS_BROWSER": "Preguntas",
+  "RESET_PASSWORD_BROWSER": "Restablecer contraseña",
+  "SALES_BROWSER": "Ventas",
+  "SEARCH": "Buscar",
+  "SIGN_UP": "Registrarse"
 
 
 }

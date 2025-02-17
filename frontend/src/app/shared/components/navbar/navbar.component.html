@@ -20,22 +20,22 @@
 			@if (isLoggedIn() !== undefined) {
 				@if (isLoggedIn()){
 					<app-navbar-menu [user]="loggedUser()!" [pfp]="pfp()">
-						<app-navbar-menu-item link="/profile/{{loggedUser()?.id}}" icon="person">Profile</app-navbar-menu-item>
-						<app-navbar-menu-item link="purchases" icon="shopping_basket">Purchases</app-navbar-menu-item>
+						<app-navbar-menu-item link="/profile/{{loggedUser()?.id}}" icon="person">{{ 'NAVBAR.PROFILE' | translate }}</app-navbar-menu-item>
+						<app-navbar-menu-item link="purchases" icon="shopping_basket">{{ 'NAVBAR.PURCHASES' | translate }}</app-navbar-menu-item>
 						@if (loggedUser()?.roles?.includes(UserRoles.WRITER)){
-							<app-navbar-menu-item link="sales" icon="shopping_basket">Sales</app-navbar-menu-item>
-							<app-navbar-menu-item link="analytics" icon="analytics">Analytics</app-navbar-menu-item>
+							<app-navbar-menu-item link="sales" icon="shopping_basket">{{ 'NAVBAR.SALES' | translate }}</app-navbar-menu-item>
+							<app-navbar-menu-item link="analytics" icon="analytics">{{ 'NAVBAR.ANALYTICS' | translate }}</app-navbar-menu-item>
 						}
-						<app-navbar-menu-item link="questions" icon="question_answer">Questions</app-navbar-menu-item>
-						<app-navbar-menu-item link="add-book" icon="book">Publish</app-navbar-menu-item>
-						<app-navbar-menu-item link="/" icon="exit_to_app" last (click)="logout.emit()">Sign out</app-navbar-menu-item>
+						<app-navbar-menu-item link="questions" icon="question_answer">{{ 'NAVBAR.QUESTIONS' | translate }}</app-navbar-menu-item>
+						<app-navbar-menu-item link="add-book" icon="book">{{ 'NAVBAR.PUBLISH' | translate }}</app-navbar-menu-item>
+						<app-navbar-menu-item link="/" icon="exit_to_app" last (click)="logout.emit()">{{ 'NAVBAR.SIGN_OUT' | translate }}</app-navbar-menu-item>
 					</app-navbar-menu>
 				} @else {
 					<app-nav-button link="/login">
-                        Log in
+                        {{ 'NAVBAR.LOG_IN' | translate }}
 					</app-nav-button>
 					<app-nav-button link="/signup">
-                        Sign up
+                        {{ 'NAVBAR.SIGN_UP' | translate }}
 					</app-nav-button>
 				}
 			}

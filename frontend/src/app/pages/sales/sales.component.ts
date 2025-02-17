@@ -15,10 +15,11 @@ import {AsyncPipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-sales',
-  imports: [MatGridListModule, MatFormFieldModule, MatLabel, MatInputModule, MatSelectModule, FormsModule, SalesOrderCardComponent, AsyncPipe, NgxPaginationModule, PaginatorComponent, ReactiveFormsModule],
+  imports: [MatGridListModule, MatFormFieldModule, MatLabel, MatInputModule, MatSelectModule, FormsModule, SalesOrderCardComponent, AsyncPipe, NgxPaginationModule, PaginatorComponent, ReactiveFormsModule, TranslateModule],
   templateUrl: './sales.component.html',
   styleUrl: './sales.component.scss',
 })
@@ -33,17 +34,14 @@ export class SalesComponent implements OnInit{
   currentPage!: number;
   pageSize = 20;
 
-  orderStatusOptions = [
-    { label: $localize`Any status`, value: '' },
-    { label: $localize`Rejected payment`, value: OrderStatus.REJECTED_PAYMENT },
-    { label: $localize`Approval needed`, value: OrderStatus.WAITING_APPROVAL },
-    { label: $localize`Completed`, value: OrderStatus.COMPLETED }
-  ];
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.title.setTitle('Sales')
+  constructor(private fb: FormBuilder, private translate: TranslateService) {
+    this.translate.get('SALES_BROWSER').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
 
     this.form = fb.group({
       title: [''],
@@ -95,4 +93,7 @@ export class SalesComponent implements OnInit{
       queryParamsHandling: 'merge',
     });
   }
+
+  protected readonly Object = Object;
+  protected readonly OrderStatus = OrderStatus;
 }

@@ -7,14 +7,14 @@
 		<h2 class="book-title">{{book().title}}</h2>
 		@if (showWriter()){
 			<p class="writer">
-				By {{book().writerInfo.firstName}} {{book().writerInfo.lastName}}
+                {{ 'BOOK_CARD.BY' | translate }} {{book().writerInfo.firstName}} {{book().writerInfo.lastName}}
 			
 			</p>
 		}
 		@if (showDate()) {
 			<p class="extra-info">{{book().publicationDate}}</p>
 		} @else {
-			<p class="extra-info">{{book().genre}}</p>
+			<p class="extra-info">{{ (book().genre || 'UNKNOWN_GENRE') | translate }}</p>
 		}
 		<div class="price">
 			@if(book().deal){

@@ -3,7 +3,7 @@ import {
   ActionNotificationCardComponent
 } from "../../shared/components/action-notification-card/action-notification-card.component";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 
 @Component({
@@ -19,7 +19,10 @@ import {TranslateModule} from "@ngx-translate/core";
 export class EmailValidationComponent {
   title = inject(Title);
 
-  constructor() {
-    this.title.setTitle('Validate email');
+  constructor(private translate: TranslateService) {
+    this.translate.get('PAGE_VALIDATE_EMAIL').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
   }
 }

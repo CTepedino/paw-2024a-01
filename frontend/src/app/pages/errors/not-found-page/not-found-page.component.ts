@@ -3,7 +3,7 @@ import {
   ActionNotificationCardComponent
 } from "../../../shared/components/action-notification-card/action-notification-card.component";
 import {Title} from "@angular/platform-browser";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-not-found-page',
@@ -18,7 +18,10 @@ import {TranslateModule} from "@ngx-translate/core";
 export class NotFoundPageComponent {
   title = inject(Title);
 
-  constructor() {
-    this.title.setTitle('Page not found');
+  constructor(private translate: TranslateService) {
+    this.translate.get('PAGE_NOT_FOUND_BROWSER').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
   }
 }
