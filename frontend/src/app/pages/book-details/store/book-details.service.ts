@@ -146,18 +146,15 @@ export class BookDetailsService {
         );
     }
 
-    setReview(bookId: number, form: FormGroup): Observable<void>{
+    setReview(bookId: number, review: Review): Observable<void>{
         return this.getBook(bookId).pipe(
             concatMap(book => this.authService.getLoggedUser().pipe(
                 concatMap(user => this.bookService.putReview(
                     book.self!,
                     user?.id!,
-                    {
-                        rating: form.get('rating')?.value,
-                        review: form.get('review')?.value
-                    }))
+                    review
             ))
-        );
+        )));
     }
 
     isWishlisted(bookId: number): Observable<boolean> {
