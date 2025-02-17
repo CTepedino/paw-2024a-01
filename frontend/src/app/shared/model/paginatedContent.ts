@@ -2,8 +2,8 @@ import {Observable} from "rxjs";
 import {HttpResponse} from "@angular/common/http";
 
 interface Pagination {
-	first: string;
-	last: string;
+	first?: string;
+	last?: string;
 	previous?: string;
 	next?: string;
 	totalCount: number;
@@ -31,12 +31,12 @@ export function setPagination<T>(response: HttpResponse<T[]>, size: number): Pag
 	}
 
 	return {
-		data: response.body || [],
+		data: Array.isArray(response.body) ? response.body : [],
 		pagination: {
 			...links,
-			totalCount: Number(totalCount),
-			pageCount: Math.ceil(Number(totalCount)/size)
+			totalCount: Number(totalCount) ?? 0,
+			pageCount: Math.ceil(Number(totalCount)/size) ?? 1
 		}
-	} as PaginatedContent<T>;
+	};
 
 }

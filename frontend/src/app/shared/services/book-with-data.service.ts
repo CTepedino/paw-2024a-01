@@ -19,18 +19,23 @@ export class BookWithDataService {
     writers: Map<string, User> = new Map<string, User>;
 
     listBooksWithData(query: BookSearchQuery = {}): Observable<PaginatedContent<BookWithData>> {
-    return this.bookService.listBooks(query).pipe(
-        concatMap((paginatedBooks) => {
-          const bookRequests = paginatedBooks.data.map((book) => this.fillBook(book));
-          return forkJoin(bookRequests).pipe(
-              map((booksWithData) =>({
-                data: booksWithData,
-                pagination: paginatedBooks.pagination
-              }))
-          );
+        return this.bookService.listBooks(query).pipe(
+            concatMap((paginatedBooks) => {
+              if (paginatedBooks.data.length === 0){
+                  return of({data: [], pagination: paginatedBooks.pagination});
+              }
 
-        })
-    )
+              const bookRequests = paginatedBooks.data.map((book) => this.fillBook(book));
+
+              return forkJoin(bookRequests).pipe(
+                  map((booksWithData) =>({
+                    data: booksWithData,
+                    pagination: paginatedBooks.pagination
+                  }))
+              );
+
+            })
+        )
     }
 
     getBookWithData(id: string | number): Observable<BookWithData>{

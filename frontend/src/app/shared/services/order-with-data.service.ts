@@ -46,6 +46,9 @@ export class OrderWithDataService {
   private getOrders(query: OrderSearchQuery): Observable<PaginatedContent<OrderWithData>> {
     return this.orderService.listOrders(query).pipe(
         concatMap((orders) => {
+            if (orders.data.length === 0){
+                return of({data: [], pagination: orders.pagination});
+            }
           const orderRequests = orders.data.map(o => this.fillBookInfo(o));
 
           return forkJoin(orderRequests).pipe(
@@ -58,20 +61,28 @@ export class OrderWithDataService {
     )
   }
 
-  private fillWriterInfo(orders: PaginatedContent<OrderWithData>): Observable<PaginatedContent<OrderWithData>> {
-    const writerRequests = orders.data.map(o => this.userService.getUser(o.seller!).pipe(
-        map(writer => ({...o, writerInfo: writer}))
-    ));
+    private fillWriterInfo(orders: PaginatedContent<OrderWithData>): Observable<PaginatedContent<OrderWithData>> {
+        if (orders.data.length === 0){
+          return of(orders);
+        }
 
-    return forkJoin(writerRequests).pipe(
-        map((ordersWithData) => ({
-          data: ordersWithData,
-          pagination: orders.pagination
-        }))
-    )
-  }
+        const writerRequests = orders.data.map(o => this.userService.getUser(o.seller!).pipe(
+           map(writer => ({...o, writerInfo: writer}))
+        ));
+
+        return forkJoin(writerRequests).pipe(
+            map((ordersWithData) => ({
+              data: ordersWithData,
+              pagination: orders.pagination
+            }))
+        )
+    }
 
   private fillBuyerInfo(orders: PaginatedContent<OrderWithData>): Observable<PaginatedContent<OrderWithData>> {
+      if (orders.data.length === 0){
+          return of(orders);
+      }
+
     const questionerRequests = orders.data.map(o => this.userService.getUser(o.buyer!).pipe(
         map(user => ({...o, buyerInfo: user}))
     ));

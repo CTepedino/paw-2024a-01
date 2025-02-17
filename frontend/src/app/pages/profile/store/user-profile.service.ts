@@ -44,6 +44,10 @@ export class UserProfileService {
   getRecommendations(userId: any, page: number, size: number): Observable<PaginatedContent<BookWithData>> {
     return this.userService.getRecommendations(userId, page, size).pipe(
         concatMap(recommendations => {
+            if (recommendations.data.length === 0){
+                return of({data: [], pagination: recommendations.pagination})
+            }
+
           const bookRequests = recommendations.data.map(rec => this.bookWithDataService.getBookWithData(rec.bookId!));
 
           return forkJoin(bookRequests).pipe(
@@ -61,16 +65,20 @@ export class UserProfileService {
   getWishlist(userId: any, page: number, size: number): Observable<PaginatedContent<BookWithData>> {
     return this.userService.getWishlist(userId, page, size).pipe(
         concatMap(wishlist => {
-          const bookRequests = wishlist.data.map(w => this.bookWithDataService.getBookWithData(w.bookId!));
+            if (wishlist.data.length === 0){
+                return of({data: [], pagination: wishlist.pagination})
+            }
 
-          return forkJoin(bookRequests).pipe(
-              map(books => {
-                return {
-                  data: books,
-                  pagination: wishlist.pagination
-                }
-              })
-          )
+            const bookRequests = wishlist.data.map(w => this.bookWithDataService.getBookWithData(w.bookId!));
+
+            return forkJoin(bookRequests).pipe(
+                map(books => {
+                    return {
+                        data: books,
+                        pagination: wishlist.pagination
+                    }
+                })
+            )
         })
     )
   }

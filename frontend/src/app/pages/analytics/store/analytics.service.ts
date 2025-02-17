@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {AuthService} from "../../../shared/services/auth.service";
 import {UserService} from "../../../shared/services/user.service";
 import {BookService} from "../../../shared/services/book.service";
-import {concatMap, forkJoin, map, Observable} from "rxjs";
+import {concatMap, forkJoin, map, Observable, of} from "rxjs";
 import {Book} from "../../../shared/model/book/book";
 import {PaginatedContent} from "../../../shared/model/paginatedContent";
 
@@ -58,6 +58,10 @@ export class AnalyticsService {
     return this.authService.getLoggedUser().pipe(
         concatMap(user => this.bookService.listBooks({writer_id: user?.id, page: page, size: size}).pipe(
                 concatMap(books => {
+                    if (books.data.length === 0){
+                        return of({data: [], pagination: books.pagination});
+                    }
+
                   const booksWithAnalytics$ = books.data.map( b => {
                     return this.bookService.getBookMonthlyAnalyticsFromBook(b.self!, `${year}-${month < 10? '0':''}${month}`).pipe(
                         map(analytics => new BookWithAnalytics(b, new Analytics(analytics.orderCount!, analytics.salesTotal!)))

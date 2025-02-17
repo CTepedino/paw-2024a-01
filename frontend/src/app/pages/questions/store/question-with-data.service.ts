@@ -48,6 +48,10 @@ export class QuestionWithDataService {
   private getQuestions(query: QuestionSearchQuery): Observable<PaginatedContent<QuestionWithData>> {
     return this.questionService.listQuestions(query).pipe(
         concatMap((questions) => {
+            if (questions.data.length === 0){
+                return of({data: [], pagination: questions.pagination})
+            }
+
           const questionRequests = questions.data.map(q => this.fillBookAndAnswerInfo(q));
 
           return forkJoin(questionRequests).pipe(
@@ -96,7 +100,6 @@ export class QuestionWithDataService {
   private fillBookAndAnswerInfo(question: Question): Observable<QuestionWithData> {
     const book$ = this.fetchBook(question.book!);
     const answer$ = this.fetchAnswer(question.self!);
-    let forkQuery = {bookInfo: book$, answerInfo: answer$};
 
     return forkJoin({bookInfo: book$, answerInfo: answer$}).pipe(
         map(({bookInfo, answerInfo}) => ({

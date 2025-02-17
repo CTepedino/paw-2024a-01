@@ -93,3 +93,5 @@
 @if ((pagination$ | async)?.pagination?.pageCount! > 1){
 	<app-paginator id="bookSearch" (pageChange)="onPageChange($event)"/>
 }
+
+{{pagination$ | async | json}}

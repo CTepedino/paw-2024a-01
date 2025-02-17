@@ -12,7 +12,7 @@ import {ActionButtonComponent} from "../../shared/components/action-button/actio
 import {BookWithDataService} from "../../shared/services/book-with-data.service";
 import {BookGenre} from "../../shared/model/book/bookGenre";
 import {BookSearchOrderBy} from "../../shared/model/book/bookSearchOrderBy";
-import {map, Observable} from "rxjs";
+import {catchError, map, Observable, of} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {BookWithData} from "../../shared/model/book/bookWithData";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -97,6 +97,7 @@ export class SearchComponent implements OnInit {
     }
 
     reFetchBooks(){
+
       this.pagination$ = this.bookWithDataService.listBooksWithData({
         page: this.currentPage,
         size: this.pageSize,
@@ -111,7 +112,7 @@ export class SearchComponent implements OnInit {
         max_suggested_age: this.form.get('maxAge')?.value,
       });
       this.books$ = this.pagination$.pipe(
-          map((page) => page.data)
+          map((page) => page.data),
       );
 
       this.router.navigate([], {
