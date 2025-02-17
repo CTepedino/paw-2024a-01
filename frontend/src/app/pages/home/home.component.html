@@ -5,7 +5,7 @@
 
 @if ((bestSellers$ | async)?.length! > 0){
 	<h5 class="home-margin">{{'BEST_SELLERS' | translate }}</h5>
-	<mat-grid-list cols="6" rowHeight="350px" gutterSize="5px" class="book-grid">
+	<mat-grid-list cols="6" rowHeight="375px" gutterSize="5px" class="book-grid">
 		@for(book of bestSellers$ | async;track book.id){
 			<mat-grid-tile>
 				<app-small-book-card [book]="book" class="grid-book-card"></app-small-book-card>
@@ -17,7 +17,7 @@
 
 @if ((newDeals$ | async)?.length! > 0){
 	<h5 class="home-margin">{{'NEW_DEALS' | translate }}</h5>
-	<mat-grid-list cols="6" rowHeight="350px" gutterSize="5px" class="book-grid">
+	<mat-grid-list cols="6" rowHeight="375px" gutterSize="5px" class="book-grid">
 		@for (book of newDeals$ | async; track book.id){
 			<mat-grid-tile>
 				<app-small-book-card [book]="book" class="grid-book-card"></app-small-book-card>

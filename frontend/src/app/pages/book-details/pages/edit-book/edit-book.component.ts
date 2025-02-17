@@ -1,18 +1,18 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
-import {ContentCardComponent} from "../../shared/components/content-card/content-card.component";
-import {FileInputComponent} from "../../shared/components/file-input/file-input.component";
 import {MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {BookGenre} from "../../shared/model/book/bookGenre";
-import {fileTypeValidator} from "../../shared/validators/fileTypeValidator";
 import {catchError, map, throwError} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EditBookService} from "./store/edit-book.service";
 import {Title} from "@angular/platform-browser";
+import {FileInputComponent} from "../../../../shared/components/file-input/file-input.component";
+import {ActionButtonComponent} from "../../../../shared/components/action-button/action-button.component";
+import {ContentCardComponent} from "../../../../shared/components/content-card/content-card.component";
+import {BookGenre} from "../../../../shared/model/book/bookGenre";
+import {fileTypeValidator} from "../../../../shared/validators/fileTypeValidator";
 
 @Component({
   selector: 'app-edit-book',
@@ -26,7 +26,9 @@ import {Title} from "@angular/platform-browser";
 		MatLabel,
 		MatOption,
 		MatSelect,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		FileInputComponent,
+		ActionButtonComponent
 	],
   templateUrl: './edit-book.component.html',
   styleUrl: './edit-book.component.scss'

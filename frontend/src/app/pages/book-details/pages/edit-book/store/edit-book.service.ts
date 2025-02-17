@@ -1,23 +1,22 @@
 import {Injectable} from '@angular/core';
-import {BookService} from "../../../shared/services/book.service";
 import {FormGroup} from "@angular/forms";
-import {forkJoin, map, Observable, tap} from "rxjs";
-import {Book} from "../../../shared/model/book/book";
+import {concatMap, forkJoin, map, Observable, tap} from "rxjs";
+import {Book} from "../../../../../shared/model/book/book";
+import {BookService} from "../../../../../shared/services/book.service";
+import {BookDetailsService} from "../../../store/book-details.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditBookService {
 
-  constructor(private bookService: BookService) { }
+  constructor(private bookService: BookService, private bookDetailsService: BookDetailsService) { }
 
-  private bookUrl: string = '';
+    bookUrl: string = '';
 
   getBook(id: any): Observable<Book>{
-    return this.bookService.getBookById(id).pipe(
-        tap(book => {
-          this.bookUrl = book.self!;
-        })
+    return this.bookDetailsService.getBook(id).pipe(
+        tap(book => this.bookUrl = book.self!)
     );
   }
 
@@ -43,7 +42,9 @@ export class EditBookService {
           actions.push(this.bookService.putBookCover(this.bookUrl, bookEditForm.get('file')?.get('fileData')?.value));
       }
 
-      return forkJoin(actions).pipe(map(() => {return;}))
+      return forkJoin(actions).pipe(
+          concatMap(() => this.bookDetailsService.reloadBook())
+      );
   }
 
 }

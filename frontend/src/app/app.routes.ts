@@ -18,7 +18,6 @@ import {EmailValidationComponent} from "./pages/email-validation/email-validatio
 import {ResetPasswordComponent} from "./pages/reset-password/reset-password.component";
 import {ChangePasswordComponent} from "./pages/change-password/change-password.component";
 import {AddBookComponent} from "./pages/add-book/add-book.component";
-import {EditBookComponent} from "./pages/edit-book/edit-book.component";
 import {BuyBookComponent} from "./pages/book-details/pages/buy-book/buy-book.component";
 import {canBuyBookGuard} from "./shared/guards/can-buy-book.guard";
 import {ProfileComponent} from './pages/profile/profile.component';
@@ -37,10 +36,7 @@ import {profileRedirectGuard} from "./shared/guards/profile-redirect.guard";
 import {BoughtBooksTabComponent} from "./pages/profile/components/bought-books-tab/bought-books-tab.component";
 import {WishlistTabComponent} from "./pages/profile/components/wishlist-tab/wishlist-tab.component";
 import {PublicationsTabComponent} from "./pages/profile/components/publications-tab/publications-tab.component";
-import {ReviewFormCardComponent} from "./pages/book-details/components/review-form-card/review-form-card.component";
-
-
-
+import {EditBookComponent} from "./pages/book-details/pages/edit-book/edit-book.component";
 
 export const routes: Routes = [
 	{path: "", component: HomeComponent, pathMatch: "full"},
@@ -52,7 +48,6 @@ export const routes: Routes = [
 	{path: "validate", component: EmailValidationComponent, canActivate: [canValidateCodeGuard]},
 	{path: "reset-password", component: ResetPasswordComponent, canActivate: [canValidateCodeGuard]},
 
-	{path: "bookdetails", component: BookDetailsComponent},
 	{path: "add-book", component: AddBookComponent, canActivate: [loggedInGuard]},
 	{path: "book/:id", component: BookDetailsComponent, canActivate: [numericIDGuard, bookExistsGuard], children: [
 			{path: "reviews", component: BookDetailsComponent},

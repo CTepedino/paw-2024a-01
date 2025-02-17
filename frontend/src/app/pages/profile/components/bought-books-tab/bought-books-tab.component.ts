@@ -88,7 +88,7 @@ export class BoughtBooksTabComponent implements OnInit{
   }
 
   fetchBooks(){
-    this.pagination$ =  this.profileService.getPublications({
+    this.pagination$ =  this.profileService.getBoughtBooks({
       page: this.currentPage,
       size: this.pageSize,
       title: this.form.get('title')?.value,

@@ -1,78 +1,202 @@
-<div class="container book-container">
-    <!-- Sección superior: Información principal -->
-    <div class="main-info">
-        <!-- Columna izquierda: Imagen -->
-        <div class="cover-section">
-            <img class="book-cover" [src]="book.coverUrl" [alt]="book.title"/>
-        </div>
+@if (book$ | async; as book){
+<app-content-card>
+	<mat-grid-list cols="12" rowHeight="450">
+		<mat-grid-tile colspan="5">
+			@if (book.cover){
+				<div class="cover-centerer">
+					<img
+						class="book-cover"
+						ngSrc="{{book.cover}}"
+						alt="Book cover"
+						height="450"
+						width="300"
+					/>
+				</div>
+			}
+		</mat-grid-tile>
+		<mat-grid-tile colspan="7">
+			<div class="book-info">
+				<div class="info-row">
+					<div class="info">
+						<h1 class="title">{{book.title}}</h1>
+						<div class="category">
+							@switch (book.salesCategory){
+								@case (SalesCategory.BEST_SELLER){
+									<div class="sales-category best-seller">
+										Best Seller
+									</div>
+								}
+								@case (SalesCategory.POPULAR){
+									<div class="sales-category popular">
+										Popular
+									</div>
+								}
+							}
+						</div>
+						<div class="author">
+							@switch (book.writerInfo.writerCategory){
+								@case (WriterCategory.GOLD){
+									<mat-icon class="writer-icon gold">person</mat-icon>
+								}
+								@case (WriterCategory.SILVER){
+									<mat-icon class="writer-icon silver">person</mat-icon>
+								}
+								@case (WriterCategory.BRONZE){
+									<mat-icon class="writer-icon bronze">person</mat-icon>
+								}
+								@case (WriterCategory.DEFAULT){
+									<mat-icon class="writer-icon">person</mat-icon>
+								}
+							}
+							<a class="writer-name" routerLink="/profile/{{book.writerInfo.id}}">{{book.writerInfo.firstName}} {{book.writerInfo.lastName}}</a>
+						</div>
+						<div class="rating">
+							@if(book.averageRating! > 0){
+								<app-star-rating [rating]="book.averageRating!"></app-star-rating>
+							}
+						</div>
+						<div class="pricing">
+							@if (book.deal){
+								<h6 class="deal">
+									<span class="strikethrough">${{book.price | number: '1.0-0'}}</span>
+									<span class="percentage">-{{getPercentage(book.price!, book.dealInfo?.price!) | number: '1.0-0'}}%</span>
+								</h6>
+								<h5 class="price">${{book.dealInfo?.price | number: '1.0-0'}}</h5>
+							} @else {
+								<h5 class="price">${{book.price | number: '1.0-0'}}</h5>
+							}
+						</div>
+					</div>
+					<div class="actions">
+						@let isLoggedIn = isLoggedIn$ | async;
+						@let isAuthor = isAuthor$ | async;
+						@let existsOrder = existsOrder$ | async;
+						@let isOwner = isOwner$ | async;
+						@let hasDeal = !!book.deal;
+						@let hasReviewed = !!loggedUserReview;
 
-        <!-- Columna central: Detalles -->
-        <div class="details-section">
-            <h1>{{book.title}}</h1>
-
-            <!-- Badge de Popular/Bestseller -->
-            <div class="sales-category popular">
-                Popular
-            </div>
-
-            <!-- Información del autor -->
-            <a class="author-info" [routerLink]="['/profile', book.authorId]">
-                {{book.author}}
-                <span class="writer-category">
-          <mat-icon class="bronze-info">person</mat-icon>
-        </span>
-            </a>
-
-            <!-- Rating -->
-            <div class="rating-section">
-                <app-star-rating [rating]="5"/>
-                <span>(2)</span>
-            </div>
-
-            <!-- Precio -->
-            <div class="price-section">
-                <h6 class="price">
-                    <span class="strikethrough">${{book.originalPrice}}</span>
-                    <span class="percentage">-{{book.discountPercentage}}%</span>
-                </h6>
-                <h5 class="price">${{book.currentPrice}}</h5>
-            </div>
-
-            <!-- Metadata -->
-            <div class="info-boxes">
-                <div class="info-box">
-                    <mat-icon>calendar_month</mat-icon>
-                    <p>{{book.publishDate}}</p>
-                </div>
-                <div class="info-box">
-                    <mat-icon>auto_stories</mat-icon>
-                    <p>{{book.genre}}</p>
-                </div>
-                <div class="info-box">
-                    <mat-icon>description</mat-icon>
-                    <p>{{book.pageCount}}</p>
-                </div>
-                <div class="info-box">
-                    <mat-icon>face</mat-icon>
-                    <p>+{{book.ageRestriction}}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Columna derecha: Acciones -->
-        <div class="action-section">
-            <button class="buy-button">COMPRAR LIBRO</button>
-        </div>
-    </div>
-
-    <!-- Descripción -->
-    <div class="description">
-        <p>{{book.description}}</p>
-    </div>
-
-    <!-- Vista previa -->
-    <div class="preview-section">
-        <h5>Vista previa</h5>
-        <iframe [src]="book.previewUrl" width="100%" height="700"></iframe>
-    </div>
-</div>
+						@if ((!isLoggedIn || !existsOrder) && !isAuthor){
+							<app-action-button class="action-btn"><div class="book-action">Buy book</div></app-action-button>
+						}
+						@if (isAuthor || isOwner){
+							<app-action-button class="action-btn" (click)="bookDetailsService.openPdf(book.bookFile!)">
+								<div class="book-action">Read book</div>
+							</app-action-button>
+						}
+						@if (isAuthor || !isOwner){
+							<app-action-button class="action-btn" (click)="bookDetailsService.openPdf(book.preview!)">
+								<div class="book-action">Read preview</div>
+							</app-action-button>
+						}
+						@if (isAuthor){
+							<app-action-button class="action-btn" routerLink="/book/{{book.id}}/edit">
+								<div class="book-action">Edit book</div>
+							</app-action-button>
+						}
+						@if (isAuthor && !hasDeal){
+							<app-action-button class="action-btn" routerLink="/book/{{book.id}}/deal">
+								<div class="book-action">Start a deal</div>
+							</app-action-button>
+						}
+						@if (isAuthor && hasDeal){
+							<app-action-button class="action-btn" routerLink="/book/{{book.id}}/deal">
+								<div class="book-action">Change deal</div>
+							</app-action-button>
+						}
+						@if (!isOwner && existsOrder){
+							<app-action-button class="action-btn" routerLink="/purchases" [queryParams]="{title: book.title}">
+								<div class="book-action">Go to purchases</div>
+							</app-action-button>
+						}
+						@if (isOwner && !hasReviewed){ <!--TODO: open popup-->
+							<app-action-button class="action-btn" (click)="openReviewDialog()">
+								<div class="book-action">Leave review</div>
+							</app-action-button>
+						}
+						@if (isOwner && hasReviewed){ <!--TODO: open popup-->
+							<app-action-button class="action-btn" (click)="openReviewDialog()">
+								<div class="book-action">Edit review</div>
+							</app-action-button>
+						}
+						@if (isLoggedIn && !existsOrder && !isAuthor){
+							<mat-checkbox class="book-checkbox" [checked]="(isWishlisted)" (change)="bookDetailsService.toggleWishlist(book.id!,$event.checked)">Wishlist book</mat-checkbox>
+						}
+						@if (isOwner){
+							<mat-checkbox class="book-checkbox" [checked]="(isRecommended)" (change)="bookDetailsService.toggleRecommend(book.id!,$event.checked)">Recommend book</mat-checkbox>
+						}
+					</div>
+				</div>
+				<div class="details-row">
+					<div class="details-box not-last">
+						<mat-icon>calendar_month</mat-icon>
+						<p>{{book.publicationDate}}</p>
+					</div>
+					<div class="details-box not-last">
+						<mat-icon>{{ GenreIcon[book.genre!] }}</mat-icon>
+						<p class="genre">{{book.genre}}</p>
+					</div>
+					<div class="details-box not-last">
+						<mat-icon>description</mat-icon>
+						<p>{{book.pageCount}}</p>
+					</div>
+					<div class="details-box">
+						<mat-icon>face</mat-icon>
+						<p>+{{book.suggestedAge}}</p>
+					</div>
+				</div>
+			</div>
+		</mat-grid-tile>
+	</mat-grid-list>
+	<div class="description">
+		<p>{{book.description}}</p>
+	</div>
+	@if (recommendations$ | async; as recommendations){
+		<div class="recommended-books">
+			<h5 class="preview-name">Explore similar books!</h5>
+			<mat-grid-list cols="4" gutterSize="20px" rowHeight="375px">
+				@for (book of recommendations; track book.id){
+					<mat-grid-tile>
+						<app-small-book-card [book]="book" class="recommended-book"></app-small-book-card>
+					</mat-grid-tile>
+				}
+			</mat-grid-list>
+		</div>
+	}
+	<div class="tab-centerer">
+		<mat-tab-group class="tabber">
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					Reviews ({{(reviewPage$ | async)?.pagination?.totalCount}})
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					
+					</div>
+				</ng-template>
+			</mat-tab>
+			<mat-tab class="tab">
+				<ng-template mat-tab-label>
+					Questions ({{(questionPage$ | async)?.pagination?.totalCount}})
+				</ng-template>
+				<ng-template matTabContent>
+					<div class="white">
+					
+					</div>
+				</ng-template>
+			</mat-tab>
+			@if (!isAuthor && isLoggedIn){
+				<mat-tab class="tab">
+					<ng-template mat-tab-label>
+						My questions ({{(myQuestionPage$ | async)?.pagination?.totalCount}})
+					</ng-template>
+					<ng-template matTabContent>
+						<div class="white">
+						
+						</div>
+					</ng-template>
+				</mat-tab>
+			}
+		</mat-tab-group>
+	</div>
+</app-content-card>
+}

@@ -1,11 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
-import { StarRatingComponent } from '../../shared/components/star-rating/star-rating.component';
-import { BookBadgeComponent } from '../../shared/components/book-badge/book-badge.component';
-import { ActionButtonComponent } from '../../shared/components/action-button/action-button.component';
-import { SalesCategory } from '../../shared/model/book/salesCategory';
+import {Component, inject, OnInit} from '@angular/core';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+import {StarRatingComponent} from '../../shared/components/star-rating/star-rating.component';
+import {ActionButtonComponent} from '../../shared/components/action-button/action-button.component';
+import {SalesCategory} from '../../shared/model/book/salesCategory';
+import {ContentCardComponent} from "../../shared/components/content-card/content-card.component";
+import {MatGridList, MatGridTile} from "@angular/material/grid-list";
+import {WriterCategory} from "../../shared/model/user/writerCategory";
+import {MatCheckbox} from "@angular/material/checkbox";
+import {GenreIcon} from "../../shared/const/genreIcon";
+import {Title} from "@angular/platform-browser";
+import {SmallBookCardComponent} from "../../shared/components/small-book-card/small-book-card.component";
+import {MatTab, MatTabContent, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
+import {BookDetailsService} from "./store/book-details.service";
+import {Observable, tap} from "rxjs";
+import {BookWithData} from "../../shared/model/book/bookWithData";
+import {PaginatedContent} from "../../shared/model/paginatedContent";
+import {ReviewWithInfo} from "../../shared/model/review/reviewWithInfo";
+import {Question} from "../../shared/model/question/question";
+import {MatDialog} from "@angular/material/dialog";
+import {DeclinePopupComponent} from "../sales/components/decline-popup/decline-popup.component";
+import {ReviewFormCardComponent} from "./components/review-form-card/review-form-card.component";
 
 @Component({
     selector: 'app-book-details',
@@ -14,97 +30,107 @@ import { SalesCategory } from '../../shared/model/book/salesCategory';
         CommonModule,
         MatIconModule,
         RouterModule,
+        ContentCardComponent,
+        MatGridList,
+        MatGridTile,
+        NgOptimizedImage,
         StarRatingComponent,
-        BookBadgeComponent,
-        ActionButtonComponent
+        ActionButtonComponent,
+        MatCheckbox,
+        SmallBookCardComponent,
+        MatTabGroup,
+        MatTab,
+        MatTabContent,
+        MatTabLabel
     ],
     templateUrl: './book-details.component.html',
     styleUrl: './book-details.component.scss'
 })
 export class BookDetailsComponent implements OnInit {
-    book = {
-        id: 1,
-        coverUrl: 'assets/images/dune.jpg',
-        title: 'Dune',
-        author: 'Don Nadie',
-        authorId: 1,
-        writerCategory: 'BRONZE',
-        rating: 5,
-        reviewCount: 2,
-        originalPrice: 31199,
-        currentPrice: 15000,
-        discountPercentage: 52,
-        publishDate: '2024-05-13',
-        genre: 'Ciencia ficción',
-        pageCount: 784,
-        ageRestriction: 8,
-        salesCategory: SalesCategory.POPULAR,
-        description: 'Arrakis: un planeta desértico donde el agua es el bien más preciado y, donde llorar a los muertos es el símbolo de máxima prodigalidad. Paul Atreides: un adolescente marcado por un destino singular, dotado de extraños poderes y, abocado a convertirse en dictador, mesías y mártir...',
-        previewUrl: 'url-to-preview-pdf',
-        // Estados
-        isAuthor: false,
-        ownsBook: false,
-        isWishlisted: false,
-        hasReview: false
-    };
+    dialog = inject(MatDialog);
+    bookDetailsService = inject(BookDetailsService);
+    route = inject(ActivatedRoute);
+    router = inject(Router);
+    title = inject(Title);
 
-    // Recomendaciones
-    recommendations = [
-        {
-            id: 1,
-            title: 'El sueño de la vaca',
-            author: 'Federico Madero',
-            price: 143,
-            coverUrl: 'assets/covers/book1.jpg'
-        },
-        {
-            id: 2,
-            title: 'Los Mitos De Cthulhu',
-            author: 'Don Nadie',
-            price: 29500,
-            coverUrl: 'assets/covers/book2.jpg'
-        },
-        {
-            id: 3,
-            title: 'Fundación E Imperio',
-            author: 'Don Nadie',
-            price: 16900,
-            coverUrl: 'assets/covers/book3.jpg'
-        }
-    ];
+    recommendedPageSize = 4;
+    pageSize = 10;
 
-    // Tabs
-    selectedTab: 'reviews' | 'questions' | 'myQuestions' = 'reviews';
-    reviewCount = 2;
-    questionCount = 1;
-    myQuestionCount = 0;
+    pageNumber = 1;
 
-    constructor() {}
+    bookId: number = 0;
+    book$: Observable<BookWithData> | null = null;
+    recommendations$: Observable<BookWithData[]> | null = null;
+    isLoggedIn$: Observable<boolean> | null = null;
+    isAuthor$: Observable<boolean> | null = null;
+    existsOrder$: Observable<boolean> | null = null;
+    isOwner$: Observable<boolean> | null = null;
+
+    isWishlisted: boolean = false;
+    isRecommended: boolean = false;
+
+    loggedUserReview: ReviewWithInfo | null = null;
+
+    reviewPage$: Observable<PaginatedContent<ReviewWithInfo>> | null = null;
+
+    questionPage$: Observable<PaginatedContent<Question>> | null = null;
+
+    myQuestionPage$: Observable<PaginatedContent<Question>> | null = null;
+
+    constructor() {
+        this.title.setTitle('Book details')
+    }
 
     ngOnInit() {
-        // Aquí irían las llamadas a los servicios para obtener los datos reales
+        this.route.params.subscribe((params) => {
+            this.bookId = params['id'];
+            this.book$ = this.bookDetailsService.getBook(this.bookId);
+            this.recommendations$ = this.bookDetailsService.getRecommendedBooks(this.bookId, this.recommendedPageSize);
+            this.isLoggedIn$ = this.bookDetailsService.isLoggedIn().pipe(
+                tap(logged => {
+                    if (logged){
+                        this.isAuthor$ = this.bookDetailsService.isAuthor(this.bookId);
+                        this.existsOrder$ = this.bookDetailsService.existsOrder(this.bookId);
+                        this.isOwner$ = this.bookDetailsService.isOwner(this.bookId);
+                        this.bookDetailsService.isWishlisted(this.bookId).subscribe(w => this.isWishlisted = w);
+                        this.bookDetailsService.isRecommended(this.bookId).subscribe(r => this.isRecommended = r);
+
+                        this.bookDetailsService.getLoggedReview(this.bookId).subscribe(r => this.loggedUserReview = r);
+
+                        this.questionPage$ = this.bookDetailsService.getAllOtherQuestions(this.bookId, this.pageNumber, this.pageSize);
+
+                        this.myQuestionPage$ = this.bookDetailsService.getAllMyQuestions(this.bookId, this.pageNumber, this.pageSize);
+                    } else {
+                        this.questionPage$ = this.bookDetailsService.getAllQuestions(this.bookId, this.pageNumber, this.pageSize);
+                    }
+                })
+            );
+            this.reviewPage$ = this.bookDetailsService.getReviews(this.bookId,{page: this.pageNumber, size: this.pageSize});
+
+        })
     }
 
-    buyBook() {
-        console.log('Comprando libro...');
+    getPercentage(price: number, dealPrice: number){
+        return ((price-dealPrice)/price)*100;
     }
 
-    toggleWishlist() {
-        this.book.isWishlisted = !this.book.isWishlisted;
-        // Aquí iría la llamada al servicio
+    openReviewDialog(){
+        const reviewDialog = this.dialog.open(ReviewFormCardComponent, {
+            width: '99%',
+            height: '500px',
+            data: {review: this.loggedUserReview}
+        })
+
+        reviewDialog.afterClosed().subscribe(result => {
+            if (result.update){
+                this.loggedUserReview = result.review;
+                this.bookDetailsService.setReview(this.bookId, result.review).subscribe();
+            }
+        })
     }
 
-    readBook() {
-        window.open(`/book/file/${this.book.id}`, '_blank');
-    }
-
-    goToPurchases() {
-        // Implementar navegación
-    }
-
-    openReviewModal() {
-        // Implementar apertura de modal
-    }
 
     protected readonly SalesCategory = SalesCategory;
+    protected readonly WriterCategory = WriterCategory;
+    protected readonly GenreIcon = GenreIcon;
 }

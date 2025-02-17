@@ -42,10 +42,26 @@ export class BookDetailsService {
         );
     }
 
+    reloadBook(): Observable<void>{
+        if (this.book){
+            return this.bookWithDataService.getBookWithData(this.book.id!).pipe(
+                tap((book) => this.book = book),
+                map(() => void 0)
+            );
+        }
+        return of(void 0);
+    }
+
+    isLoggedIn(): Observable<boolean> {
+        return this.authService.getLoggedUser().pipe(
+            map(user => !!user)
+        );
+    }
+
     isAuthor(bookId: number): Observable<boolean>{
         return this.getBook(bookId).pipe(
             concatMap(book => this.authService.getLoggedUser().pipe(
-                map(user => book.writer == user?.self)
+                map(user => book.writerInfo.id == user?.id)
             ))
         )
     }
@@ -77,20 +93,25 @@ export class BookDetailsService {
     setDeal(id: number, form: FormGroup): Observable<void> {
         return this.getBook(id).pipe(
             concatMap(book => {
-                return this.bookService.putDeal(
-                    book.self!,
-                    {
-                        price: form.get('price')?.value,
-                        end: form.get('endDate')?.value.toISOString().substring(0, 10)
-                    }
-                );
+                const deal = {
+                    price: form.get('price')?.value,
+                    end: form.get('endDate')?.value.toISOString().substring(0, 10)
+                }
+                this.book!.deal = book.self + '/deal';
+                this.book!.dealInfo = deal;
+                return this.bookService.putDeal(book.self!, deal);
             })
         )
     }
 
     endDeal(id: number): Observable<void> {
         return this.getBook(id).pipe(
-            concatMap(book => this.bookService.deleteDeal(book.deal!))
+            concatMap(book => {
+                const toReturn = this.bookService.deleteDeal(book.deal!);
+                this.book!.deal = undefined;
+                this.book!.dealInfo = undefined;
+                return toReturn;
+            })
         );
     }
 
@@ -116,11 +137,12 @@ export class BookDetailsService {
         )
     }
 
-    getLoggedReview(bookId: number): Observable<Review>{
+    getLoggedReview(bookId: number): Observable<Review | null>{
         return this.authService.getLoggedUser().pipe(
             concatMap(user => {
                 return this.bookService.getReview(bookId, user?.id!);
-            })
+            }),
+            catchError(() => of(null))
         );
     }
 
@@ -131,7 +153,7 @@ export class BookDetailsService {
                     book.self!,
                     user?.id!,
                     {
-                        rating: form.get('rating')?.value * 2,
+                        rating: form.get('rating')?.value,
                         review: form.get('review')?.value
                     }))
             ))
@@ -150,8 +172,8 @@ export class BookDetailsService {
         )
     }
 
-    toggleWishlist(bookId: number, add: boolean): Observable<void> {
-        return this.authService.getLoggedUser().pipe(
+    toggleWishlist(bookId: number, add: boolean) {
+        this.authService.getLoggedUser().pipe(
             concatMap(user => {
                 if (add){
                     return this.userService.postWishlistItem(user?.self!, bookId);
@@ -159,7 +181,7 @@ export class BookDetailsService {
                     return this.userService.deleteWishlistItem(user?.self!, bookId);
                 }
           })
-      )
+      ).subscribe();
     }
 
     isRecommended(bookId: number): Observable<boolean> {
@@ -174,8 +196,8 @@ export class BookDetailsService {
         )
     }
 
-    toggleRecommend(bookId: number, add: boolean): Observable<void> {
-        return this.authService.getLoggedUser().pipe(
+    toggleRecommend(bookId: number, add: boolean) {
+        this.authService.getLoggedUser().pipe(
             concatMap(user => {
                 if (add){
                     return this.userService.postRecommendation(user?.self!, bookId);
@@ -183,11 +205,13 @@ export class BookDetailsService {
                     return this.userService.deleteRecommendation(user?.self!, bookId);
                 }
             })
-        )
+        ).subscribe();
     }
 
-    getRecommendedBooks(bookId: number, size: number): Observable<PaginatedContent<BookWithData>>{
-        return this.bookWithDataService.listBooksWithData({recommendations_for_book: bookId, size: size});
+    getRecommendedBooks(bookId: number, size: number): Observable<BookWithData[]>{
+        return this.bookWithDataService.listBooksWithData({recommendations_for_book: bookId, size: size}).pipe(
+            map(page => page.data)
+        );
     }
 
     getAllQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<Question>> {
@@ -215,6 +239,10 @@ export class BookDetailsService {
 
     answerQuestion(questionUrl: string, answer: string){
         return this.questionService.putAnswer(questionUrl, {answer: answer, answerDate: new Date().toString()})
+    }
+
+    openPdf(url: string){
+        return this.bookService.openBookInternal(url);
     }
 
 }

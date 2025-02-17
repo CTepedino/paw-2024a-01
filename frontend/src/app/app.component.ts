@@ -69,14 +69,12 @@ export class AppComponent implements OnInit {
   }
 
     initializeTranslation() {
-        // Detectar idioma del navegador
-        const browserLang = navigator.language.split('-')[0]; // Ejemplo: "es-ES" → "es"
-        const defaultLang = 'en'; // Idioma por defecto
 
-        // Lista de idiomas soportados
+        const browserLang = navigator.language.split('-')[0];
+        const defaultLang = 'en';
+
         const availableLangs = ['en', 'es'];
 
-        // Usar el idioma del navegador si está disponible, sino usar el idioma por defecto
         const selectedLang = availableLangs.includes(browserLang) ? browserLang : defaultLang;
 
         this.translate.setDefaultLang(defaultLang);
