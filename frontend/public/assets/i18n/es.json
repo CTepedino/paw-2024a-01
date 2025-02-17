@@ -125,5 +125,14 @@
   "PASSWORD_CHANGE_ERROR": "Hubo un error con el intento de cambio de contraseña. Por favor, inténtalo más tarde",
   "PASSWORDS_DO_NOT_MATCH": "Las contraseñas no coinciden",
   "SAVE_CHANGES": "Guardar cambios",
-  "CANCEL": "Cancelar"
+  "CANCEL": "Cancelar",
+
+  "EDIT_PROFILE": "Editar tu perfil",
+  "FIRST_NAME": "Nombre",
+  "LAST_NAME": "Apellido",
+  "CBU_ALIAS": "CBU o alias",
+  "PROFILE_PICTURE": "Foto de perfil",
+  "REQUIRED_FIELD": "Este campo es obligatorio",
+  "MAX_LENGTH": "Excede la longitud máxima permitida",
+  "INVALID_CBU": "CBU o alias inválido"
 }

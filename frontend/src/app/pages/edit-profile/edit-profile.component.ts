@@ -15,6 +15,8 @@ import {UserRoles} from "../../shared/model/user/userRoles";
 import {CancelButtonComponent} from "../../shared/components/cancel-button/cancel-button.component";
 import {Router, RouterLink} from "@angular/router";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-profile',
@@ -30,7 +32,8 @@ import {Title} from "@angular/platform-browser";
     FileInputComponent,
     ActionButtonComponent,
     CancelButtonComponent,
-    RouterLink
+    RouterLink,
+    TranslateModule
   ],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.scss',
@@ -46,7 +49,7 @@ export class EditProfileComponent implements OnInit {
   editForm: FormGroup;
   userId: any;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private translate: TranslateService) {
     this.title.setTitle('Edit profile');
 
     this.editForm = this.fb.group({
@@ -98,13 +101,13 @@ export class EditProfileComponent implements OnInit {
 
   getErrorMessage(field: string): string {
     if (this.editForm.get(field)?.hasError('required')) {
-      return 'This field is required';
+      return this.translate.instant('REQUIRED_FIELD'); // Traducción del mensaje de campo requerido
     }
     if (this.editForm.get(field)?.hasError('maxlength')) {
-      return 'Exceeds the maximum permitted length';
+      return this.translate.instant('MAX_LENGTH'); // Traducción de exceder longitud máxima
     }
     if (this.editForm.get(field)?.hasError('pattern')) {
-      return 'Invalid cbu or alias';
+      return this.translate.instant('INVALID_CBU'); // Traducción para CBU o alias inválido
     }
     return '';
   }

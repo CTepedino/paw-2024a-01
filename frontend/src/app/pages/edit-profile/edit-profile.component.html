@@ -1,16 +1,16 @@
 <app-notification-card>
-	<card-title>Edit your profile</card-title>
+	<card-title>{{ 'EDIT_PROFILE' | translate }}</card-title>
 	<card-text>
 		<form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form">
 			<mat-form-field appearance="outline" class="full-width">
-				<mat-label>First name</mat-label>
+				<mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
 				<input matInput formControlName="firstName" required>
 				@if (editForm.get('firstName')?.invalid && editForm.get('firstName')?.touched) {
 					<mat-error>{{getErrorMessage('firstName')}}</mat-error>
 				}
 			</mat-form-field>
 			<mat-form-field appearance="outline" class="full-width">
-				<mat-label>Last name</mat-label>
+				<mat-label>{{ 'LAST_NAME' | translate }}</mat-label>
 				<input matInput formControlName="lastName" required>
 				@if (editForm.get('lastName')?.invalid && editForm.get('lastName')?.touched) {
 					<mat-error>{{getErrorMessage('lastName')}}</mat-error>
@@ -18,7 +18,7 @@
 			</mat-form-field>
 			@if (shouldShowCbu){
 				<mat-form-field appearance="outline" class="full-width">
-					<mat-label>CBU or alias</mat-label>
+					<mat-label>{{ 'CBU_ALIAS' | translate }}</mat-label>
 					<input matInput formControlName="cbu" required>
 					@if (editForm.get('cbu')?.invalid && editForm.get('cbu')?.touched) {
 						<mat-error>{{getErrorMessage('cbu')}}</mat-error>
@@ -26,7 +26,7 @@
 				</mat-form-field>
 			}
 			<mat-form-field appearance="outline" class="full-width">
-				<mat-label>Description</mat-label>
+				<mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
 				<textarea matInput formControlName="description"></textarea>
 				@if (editForm.get('description')?.invalid && editForm.get('description')?.touched) {
 					<mat-error>{{getErrorMessage('description')}}</mat-error>
@@ -34,14 +34,14 @@
 			</mat-form-field>
 			
 			<app-file-input accept="image/*" formGroupName="pfp" [formGroup]="getPfpFormGroup()" [required]="false">
-				Profile picture
+                {{ 'PROFILE_PICTURE' | translate }}
 			</app-file-input>
 			<div class="btn-row">
 				<app-action-button class="submit-button" submit [disabled]="!editForm.valid">
-					Save changes
+                    {{ 'SAVE_CHANGES' | translate }}
 				</app-action-button>
 				<app-cancel-button routerLink="/profile/{{userId}}" type="button">
-					Cancel
+                    {{ 'CANCEL' | translate }}
 				</app-cancel-button>
 			</div>
 		</form>
