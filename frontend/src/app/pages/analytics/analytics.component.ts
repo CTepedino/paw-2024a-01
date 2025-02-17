@@ -15,10 +15,11 @@ import {PaginatorComponent} from "../../shared/components/paginator/paginator.co
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../shared/model/user/user";
 import {AuthService} from "../../shared/services/auth.service";
+import {NgxPaginationModule} from "ngx-pagination";
 
 @Component({
   selector: 'app-analytics',
-  imports: [MatGridListModule, CurrencyPipe, MatCheckboxModule, FormsModule, MatFormFieldModule, MatSelectModule, AnalyticsCardComponent, AsyncPipe, PaginatorComponent, ReactiveFormsModule],
+  imports: [MatGridListModule, CurrencyPipe, MatCheckboxModule, FormsModule, MatFormFieldModule, MatSelectModule, AnalyticsCardComponent, AsyncPipe, PaginatorComponent, ReactiveFormsModule, NgxPaginationModule],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss'
 })

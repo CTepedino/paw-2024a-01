@@ -75,44 +75,30 @@ export class PurchasesComponent implements OnInit {
       }
       this.form.updateValueAndValidity();
     });
-    this.pagination$ =  this.ordersWithDataService.getPurchases({
-      page: this.currentPage,
-      size: this.pageSize,
-      title: this.form.get('title')?.value,
-      status: this.form.get('status')?.value
-    })
-    this.orders$ = this.pagination$.pipe(
-        map((page) => page.data)
-    )
+    this.fetchOrders();
   }
 
   onPageChange(page: number){
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: page },
-      queryParamsHandling: 'merge',
-    });
-
     this.currentPage = page;
-
-    this.orders$ = this.ordersWithDataService.getPurchases({
-      page: page,
-      size: this.pageSize,
-      title: this.form.get('title')?.value,
-      status: this.form.get('status')?.value
-    }).pipe(
-        map((page) => page.data)
-    )
+    this.fetchOrders();
   }
 
   onSubmit(){
     this.currentPage = 1;
+    this.fetchOrders();
+  }
+
+  fetchOrders(){
     this.pagination$ = this.ordersWithDataService.getPurchases({
       page: this.currentPage,
       size: this.pageSize,
       title: this.form.get('title')?.value,
       status: this.form.get('status')?.value
-    })
+    });
+
+    this.orders$ = this.pagination$.pipe(
+        map((page) => page.data)
+    );
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -123,10 +109,6 @@ export class PurchasesComponent implements OnInit {
       },
       queryParamsHandling: 'merge',
     });
-
-    this.orders$ = this.pagination$.pipe(
-        map((page) => page.data)
-    )
   }
 
   protected readonly OrderStatus = OrderStatus;

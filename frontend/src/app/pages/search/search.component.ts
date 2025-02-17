@@ -93,11 +93,34 @@ export class SearchComponent implements OnInit {
 
           this.form.updateValueAndValidity();
         });
-        this.reFetchBooks();
+        this.fetchBooks();
     }
 
-    reFetchBooks(){
+    onSubmit(){
+      this.currentPage = 1;
+      this.fetchBooks();
+    }
 
+    resetFilters(){
+      this.form.get('title')?.setValue('');
+      this.form.get('genre')?.setValue(null);
+      this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC)
+      this.form.get('minPages')?.setValue(null)
+      this.form.get('maxPages')?.setValue(null)
+      this.form.get('minPrice')?.setValue(null)
+      this.form.get('maxPrice')?.setValue(null)
+      this.form.get('minAge')?.setValue(null)
+      this.form.get('maxAge')?.setValue(null)
+      this.form.updateValueAndValidity();
+      this.onSubmit();
+    }
+
+    onPageChange(page: number){
+      this.currentPage = page;
+      this.fetchBooks();
+    }
+
+    fetchBooks(){
       this.pagination$ = this.bookWithDataService.listBooksWithData({
         page: this.currentPage,
         size: this.pageSize,
@@ -111,6 +134,7 @@ export class SearchComponent implements OnInit {
         min_suggested_age: this.form.get('minAge')?.value,
         max_suggested_age: this.form.get('maxAge')?.value,
       });
+
       this.books$ = this.pagination$.pipe(
           map((page) => page.data),
       );
@@ -131,42 +155,6 @@ export class SearchComponent implements OnInit {
         },
         queryParamsHandling: 'merge',
       });
-
-    }
-
-    onSubmit(){
-      if (this.form.valid){
-        this.currentPage = 1;
-
-        this.reFetchBooks();
-      }
-    }
-
-    resetFilters(){
-      this.form.get('title')?.setValue('');
-      this.form.get('genre')?.setValue(null);
-      this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC)
-      this.form.get('minPages')?.setValue(null)
-      this.form.get('maxPages')?.setValue(null)
-      this.form.get('minPrice')?.setValue(null)
-      this.form.get('maxPrice')?.setValue(null)
-      this.form.get('minAge')?.setValue(null)
-      this.form.get('maxAge')?.setValue(null)
-      this.form.updateValueAndValidity();
-      this.onSubmit();
-    }
-
-
-    onPageChange(page: number){
-
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { page: page },
-        queryParamsHandling: 'merge',
-      });
-
-      this.currentPage = page;
-      this.reFetchBooks();
     }
 
   protected readonly BookGenre = BookGenre;

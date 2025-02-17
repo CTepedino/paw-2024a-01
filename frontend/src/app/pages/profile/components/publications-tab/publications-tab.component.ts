@@ -59,7 +59,8 @@ export class PublicationsTabComponent implements OnInit {
 		this.route.queryParams.subscribe(params => {
 			if (Object.keys(params).length === 0){
 				this.form.get('title')?.setValue('');
-				this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC)
+				this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC);
+				this.currentPage = 1;
 			}
 
 			this.currentPage = Number(params['page']) || 1;
@@ -69,61 +70,41 @@ export class PublicationsTabComponent implements OnInit {
 			}
 			this.form.updateValueAndValidity();
 
-			this.pagination$ =  this.profileService.getPublications({
-				page: this.currentPage,
-				size: this.pageSize,
-				title: this.form.get('title')?.value,
-				order_by: this.form.get('orderBy')?.value
-			}, this.userId())
-			this.books$ = this.pagination$.pipe(
-				map((page) => page.data)
-			)
+			this.fetchBooks();
 		});
 	}
 
 	onPageChange(page: number){
-		this.router.navigate([], {
-			relativeTo: this.route,
-			queryParams: { page: page },
-			queryParamsHandling: 'merge',
-		});
-
 		this.currentPage = page;
-
-		this.books$ = this.profileService.getPublications({
-			page: this.currentPage,
-			size: this.pageSize,
-			title: this.form.get('title')?.value,
-			order_by: this.form.get('orderBy')?.value
-		}, this.userId()).pipe(
-			map((page) => page.data)
-		)
+		this.fetchBooks();
 	}
 
 	onSubmit(){
 		this.currentPage = 1;
-		this.pagination$ = this.profileService.getPublications({
+		this.fetchBooks();
+	}
+
+	fetchBooks() {
+		this.pagination$ =  this.profileService.getPublications({
 			page: this.currentPage,
 			size: this.pageSize,
 			title: this.form.get('title')?.value,
 			order_by: this.form.get('orderBy')?.value
 		}, this.userId())
+		this.books$ = this.pagination$.pipe(
+			map((page) => page.data)
+		)
 
 		this.router.navigate([], {
 			relativeTo: this.route,
 			queryParams: {
-				page: 1,
+				page: this.currentPage,
 				title: this.form.get('title')?.value,
 				order_by: this.form.get('orderBy')?.value
 			},
 			queryParamsHandling: 'merge',
 		});
-
-		this.books$ = this.pagination$.pipe(
-			map((page) => page.data)
-		)
 	}
-
 
 	protected readonly BookSearchOrderBy = BookSearchOrderBy;
 	protected readonly BookSearchOrderByOptions = BookSearchOrderByOptions;

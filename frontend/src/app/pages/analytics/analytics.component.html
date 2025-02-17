@@ -93,12 +93,12 @@
     </div>
 	
 	@if (books$ | async; as books){
-		@for (book of books; track book.book.id) {
+		@for (book of ((books)! | paginate: {id: 'analytics', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.book.id) {
 			<app-analytics-card [book]="book"></app-analytics-card>
 		}
 		
 		@if ((pagination$ | async)?.pagination?.pageCount! > 1){
-			<app-paginator id="bought-books" (pageChange)="onPageChange($event)"/>
+			<app-paginator id="analytics" (pageChange)="onPageChange($event)"/>
 		}
 	}
 </div>
