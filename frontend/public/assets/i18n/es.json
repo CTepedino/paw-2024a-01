@@ -157,5 +157,14 @@
 
   "FIND_BOOK": "Encontrar un libro",
   "CONTACT_WRITER": "Contactar al escritor",
-  "GET_COPY": "Obtener tu copia"
+  "GET_COPY": "Obtener tu copia",
+
+  "LOG_IN_TITLE": "Inicia sesión en Cybrary",
+  "ERROR_LOGIN": "Hubo un error con tu intento de inicio de sesión. Por favor, verifica tu correo electrónico y contraseña e inténtalo de nuevo",
+  "PASSWORD": "Contraseña",
+  "REMEMBER_ME": "Recuérdame",
+  "LOG_IN": "Iniciar sesión",
+  "DONT_HAVE_ACCOUNT": "¿No tienes una cuenta?",
+  "REGISTER": "Regístrate",
+  "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?"
 }

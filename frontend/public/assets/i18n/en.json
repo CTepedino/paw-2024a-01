@@ -157,6 +157,15 @@
 
   "FIND_BOOK": "Find a Book",
   "CONTACT_WRITER": "Contact the writer",
-  "GET_COPY": "Get your copy"
+  "GET_COPY": "Get your copy",
+
+  "LOG_IN_TITLE": "Log in to Cybrary",
+  "ERROR_LOGIN": "There was an error with your login attempt. Please verify your email and password and try again",
+  "PASSWORD": "Password",
+  "REMEMBER_ME": "Remember me",
+  "LOG_IN": "Log in",
+  "DONT_HAVE_ACCOUNT": "Don't have an account?",
+  "REGISTER": "Register",
+  "FORGOT_PASSWORD": "Forgot your password?"
 
 }

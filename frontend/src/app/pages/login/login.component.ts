@@ -12,6 +12,7 @@ import {catchError, map, throwError} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
 import {Title} from "@angular/platform-browser";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ import {Title} from "@angular/platform-browser";
     MatIcon,
     MatIconButton,
     MatSuffix,
+    TranslateModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
