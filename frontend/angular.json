@@ -4,14 +4,6 @@
   "newProjectRoot": "projects",
   "projects": {
     "frontend": {
-      "i18n": {
-        "sourceLocale": "en-US",
-        "locales": {
-          "es": {
-            "translation": "src/locale/messages.es.json"
-          }
-        }
-      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -25,7 +17,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "localize": true,
             "outputPath": "dist/frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -82,20 +73,9 @@
             },
             "development": {
               "buildTarget": "frontend:build:development"
-            },
-            "es": {
-              "buildTarget": "frontend:build:development,es"
             }
           },
           "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "frontend:build",
-            "outputPath": "src/locale",
-            "format": "json"
-          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
