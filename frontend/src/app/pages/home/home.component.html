@@ -40,8 +40,9 @@
 	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
 		<app-paginator id="books" (pageChange)="onPageChange($event)"/>
 	}
-}
-
-@if ((pagination$ | async)?.pagination?.totalCount === 0) {
-<h5 class="no-books">{{'NO_PUBLICATIONS' | translate }}</h5>
+	
+	
+	@if (books.length === 0) {
+		<h5 class="no-books">{{'NO_PUBLICATIONS' | translate }}</h5>
+	}
 }

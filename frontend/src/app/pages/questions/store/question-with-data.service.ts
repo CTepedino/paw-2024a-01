@@ -65,6 +65,10 @@ export class QuestionWithDataService {
   }
 
   private fillWriterInfo(questions: PaginatedContent<QuestionWithData>): Observable<PaginatedContent<QuestionWithData>> {
+      if (questions.data.length === 0){
+          return of(questions);
+      }
+
     const writerRequests = questions.data.map(q => this.userService.getUser(q.writer!).pipe(
         map(writer => ({
           ...q,
@@ -81,6 +85,10 @@ export class QuestionWithDataService {
   }
 
   private fillQuestionerInfo(questions: PaginatedContent<QuestionWithData>): Observable<PaginatedContent<QuestionWithData>> {
+      if (questions.data.length === 0){
+          return of(questions);
+      }
+
     const questionerRequests = questions.data.map(q => this.userService.getUser(q.questioner!).pipe(
         map(user => ({
           ...q,

@@ -11,9 +11,12 @@
 	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
 		<app-paginator id="asked" (pageChange)="onPageChange($event)"/>
 	}
-} @else {
-	<h5 class="empty-q">
-		You have not made any questions yet
-	</h5>
+	
+	@if ((questions.length) === 0){
+		<h5 class="empty-q">
+			You have not made any questions yet
+		</h5>
+	}
 }
+
 

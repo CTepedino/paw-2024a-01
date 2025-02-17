@@ -13,8 +13,10 @@
 	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
 		<app-paginator id="received" (pageChange)="onPageChange($event)"/>
 	}
-} @else {
-	<h5 class="empty-q">
-		You have not received any questions
-	</h5>
+	
+	@if (questions.length === 0) {
+		<h5 class="empty-q">
+			You have not received any questions
+		</h5>
+	}
 }

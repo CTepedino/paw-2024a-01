@@ -1,6 +1,6 @@
 <div class="search-page">
 	<div class="left-side">
-		@if (!(pagination$ | async)){
+		@if ((pagination$ | async)?.pagination?.totalCount === 0){
 			<div class="empty-error">
 				<h4>{{ 'NO_BOOKS_FOUND' | translate }}</h4>
 				<app-action-button (click)="resetFilters()">
@@ -93,5 +93,3 @@
 @if ((pagination$ | async)?.pagination?.pageCount! > 1){
 	<app-paginator id="bookSearch" (pageChange)="onPageChange($event)"/>
 }
-
-{{pagination$ | async | json}}
