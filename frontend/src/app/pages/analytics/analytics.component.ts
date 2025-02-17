@@ -16,10 +16,11 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../shared/model/user/user";
 import {AuthService} from "../../shared/services/auth.service";
 import {NgxPaginationModule} from "ngx-pagination";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-analytics',
-  imports: [MatGridListModule, CurrencyPipe, MatCheckboxModule, FormsModule, MatFormFieldModule, MatSelectModule, AnalyticsCardComponent, AsyncPipe, PaginatorComponent, ReactiveFormsModule, NgxPaginationModule],
+  imports: [MatGridListModule, CurrencyPipe, MatCheckboxModule, FormsModule, MatFormFieldModule, MatSelectModule, AnalyticsCardComponent, AsyncPipe, PaginatorComponent, ReactiveFormsModule, NgxPaginationModule, TranslateModule],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss'
 })

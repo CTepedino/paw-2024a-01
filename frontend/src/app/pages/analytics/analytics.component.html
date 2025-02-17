@@ -1,53 +1,53 @@
 <div class="container">
-    <h1 class="page-title">Analytics</h1>
+    <h1 class="page-title">{{ 'ANALYTICS' | translate }}</h1>
 
     @if(user?.writerCategory === WriterCategory.DEFAULT){
-            <span>{{5 - user?.orderCount!}} more sales to Bronze category</span>
+            <span>{{ 'SALES_TO_BRONZE' | translate: { count: 5 - user?.orderCount! } }}</span>
     }
     @if(user?.writerCategory === WriterCategory.BRONZE){
         <span class="sales-category bronze">Bronze</span>
-        <span>{{10 - user?.orderCount!}} more sales to Silver category</span>
+        <span>{{ 'SALES_TO_SILVER' | translate: { count: 10 - user?.orderCount! } }}</span>
     }
     @if(user?.writerCategory === WriterCategory.SILVER){
         <span class="sales-category silver">Silver</span>
-        <span>{{20 - user?.orderCount!}} more sales to Gold category</span>
+        <span>{{ 'SALES_TO_GOLD' | translate: { count: 20 - user?.orderCount! } }}</span>
     }
     @if(user?.writerCategory === WriterCategory.GOLD){
         <span class="sales-category gold">Gold</span>
-		<span>You are one of the most popular writers on Cybrary!</span>
+		<span>{{ 'POPULAR_WRITER' | translate }}</span>
     }
 	
     <mat-grid-list cols="4" rowHeight="2.8:1" gutterSize="20px" class="card">
         <mat-grid-tile class="card-panel">
-            Total Orders
+            {{ 'TOTAL_ORDERS' | translate }}
             <br/>
             {{total?.orderCount}}
         </mat-grid-tile>
         <mat-grid-tile class="card-panel">
-            Total Revenue
+            {{ 'TOTAL_REVENUE' | translate }}
             <br/>
             {{total?.salesTotal | currency: 'USD' : 'symbol' : '1.0-0'}}
         </mat-grid-tile>
         <mat-grid-tile class="card-panel">
-            Orders this month
+            {{ 'ORDERS_THIS_MONTH' | translate }}
             <br/>
             {{currentMonthTotal?.orderCount}}
         </mat-grid-tile>
         <mat-grid-tile class="card-panel">
-            Revenue this month
+            {{ 'REVENUE_THIS_MONTH' | translate }}
             <br/>
             {{currentMonthTotal?.salesTotal | currency: 'USD' : 'symbol' : '1.0-0'}}
         </mat-grid-tile>
     </mat-grid-list>
 
     <mat-checkbox class="checkbox" [(ngModel)]="showByMonth" (change)="setBooks($event)">
-        Show by Month
+        {{ 'SHOW_BY_MONTH' | translate }}
     </mat-checkbox>
 
     @if(showByMonth){
         <form class="search-filters" [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="onSubmit()">
             <mat-form-field appearance="outline">
-                <mat-label>Select a year</mat-label>
+                <mat-label>{{ 'SELECT_YEAR' | translate }}</mat-label>
                 <mat-select formControlName="year" (selectionChange)="onSubmit()">
                     @for (year of years; track year){
                         <mat-option [value]="year">{{year}}</mat-option>
@@ -56,10 +56,10 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Select a month</mat-label>
+                <mat-label>{{ 'SELECT_MONTH' | translate }}</mat-label>
                 <mat-select formControlName="month" (selectionChange)="onSubmit()">
                     @for (month of months; track month.number){
-                        <mat-option [value]="month.number">{{month.name}}</mat-option>
+                        <mat-option [value]="month.number">{{ month.name | translate }}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
@@ -68,12 +68,12 @@
 		@if (monthlyTotal$ | async; as monthlyTotal){
 			<mat-grid-list cols="4" rowHeight="2.8:1" gutterSize="20px" class="card">
 				<mat-grid-tile class="card-panel">
-					Orders that month
+                    {{ 'ORDERS_THAT_MONTH' | translate }}
 					<br/>
 					{{monthlyTotal?.orderCount}}
 				</mat-grid-tile>
 				<mat-grid-tile class="card-panel">
-					Revenue that month
+                    {{ 'REVENUE_THAT_MONTH' | translate }}
 					<br/>
 					{{monthlyTotal?.salesTotal | currency: 'USD' : 'symbol' : '1.0-0'}}
 				</mat-grid-tile>
@@ -86,10 +86,10 @@
     }
 
     <div class="table-header">
-        <div class="header-cell">Cover</div>
-        <div class="header-cell">Book</div>
-        <div class="header-cell">Total orders</div>
-        <div class="header-cell">Total revenue</div>
+        <div class="header-cell">{{ 'TABLE_COVER' | translate }}</div>
+        <div class="header-cell">{{ 'TABLE_BOOK' | translate }}</div>
+        <div class="header-cell">{{ 'TABLE_TOTAL_ORDERS' | translate }}</div>
+        <div class="header-cell">{{ 'TABLE_TOTAL_REVENUE' | translate }}</div>
     </div>
 	
 	@if (books$ | async; as books){
