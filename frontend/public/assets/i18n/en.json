@@ -245,6 +245,20 @@
     "ANSWER": "Answer",
     "CHECKBOX_LABEL": "Include answered questions",
     "NO_QUESTIONS": "You have not received any questions",
+  },
+
+  "RESET_PASSWORD":{
+    "RESET_PASSWORD_TITLE": "Reset your password",
+    "NEW_PASSWORD": "New password",
+    "CONFIRM_PASSWORD": "Confirm new password",
+    "PASSWORD_HINT": "At least 6 characters",
+    "ERROR_RESET": "There was an error with your password reset attempt. Please try again later",
+    "PASSWORD_MISMATCH": "Passwords do not match",
+    "CHANGE_PASSWORD_BUTTON": "Change password",
+    "SUCCESS_TITLE": "Password reset successful!",
+    "SUCCESS_TEXT": "You will now be logged in",
+    "ACTION_BUTTON": "Start exploring"
   }
+
 
 }

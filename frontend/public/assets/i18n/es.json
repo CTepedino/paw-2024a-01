@@ -245,6 +245,22 @@
     "ANSWER": "Respuesta",
     "CHECKBOX_LABEL": "Incluir preguntas respondidas",
     "NO_QUESTIONS": "No has recibido ninguna pregunta"
+  },
+
+  "RESET_PASSWORD": {
+    "NOTIFICATION_CARD": {
+      "RESET_PASSWORD_TITLE": "Restablecer tu contraseña",
+      "NEW_PASSWORD": "Nueva contraseña",
+      "CONFIRM_PASSWORD": "Confirmar nueva contraseña",
+      "PASSWORD_HINT": "Al menos 6 caracteres",
+      "ERROR_RESET": "Hubo un error con tu intento de restablecer la contraseña. Por favor, inténtalo nuevamente más tarde",
+      "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
+      "CHANGE_PASSWORD_BUTTON": "Cambiar contraseña",
+      "SUCCESS_TITLE": "¡Restablecimiento de contraseña exitoso!",
+      "SUCCESS_TEXT": "Ahora se te iniciará sesión",
+      "ACTION_BUTTON": "Comienza a explorar"
+    }
   }
+
 
 }

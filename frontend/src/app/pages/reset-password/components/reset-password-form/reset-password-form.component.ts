@@ -9,6 +9,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {Router} from "@angular/router";
 import {ResetPasswordService} from "../../store/reset-password.service";
 import {catchError, map, throwError} from "rxjs";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-reset-password-form',
@@ -21,7 +22,8 @@ import {catchError, map, throwError} from "rxjs";
 		MatLabel,
 		MatSuffix,
 		NotificationCardComponent,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		TranslateModule
 	],
   templateUrl: './reset-password-form.component.html',
   styleUrl: './reset-password-form.component.scss',
