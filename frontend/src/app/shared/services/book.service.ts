@@ -105,21 +105,28 @@ export class BookService {
       return this.http.get<BookMonthlyAnalytics>(`${bookUrl}/monthly-analytics/${period}`);
   }
 
-  listReviews(bookUrl: string, query: ReviewSearchQuery): Observable<Review[]>{
-      const params = new HttpParams();
+  listReviews(bookUrl: string, query: ReviewSearchQuery): Observable<PaginatedContent<Review>>{
+      if (!query.size){
+          query.size = 10;
+      }
+
+      let params = new HttpParams();
 
       Object.entries(query).forEach(([name, value]) => {
           if (value !== null && value !== undefined){
-              params.append(name, value);
+              params = params.append(name, value);
           }
       });
 
-      return this.http.get<Review[]>(bookUrl, {params: params});
+      return this.http.get<Review[]>(bookUrl, {params: params, observe: "response"}).pipe(
+          map(response => setPagination(response, query.size!))
+      );
   }
 
-  getReview(bookUrl: string, userId: number): Observable<Review> {
-      return this.http.get<Review>(`${bookUrl}/reviews/${userId}`);
+  getReview(bookId: number, userId: number): Observable<Review> {
+      return this.http.get<Review>(`${this.apiURL}/${bookId}/reviews/${userId}`);
   }
+
 
   putReview(bookUrl: string, userId: number, review: Review): Observable<void>{
       return this.http.put<void>(

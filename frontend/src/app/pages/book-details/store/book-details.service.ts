@@ -7,75 +7,214 @@ import {FormGroup} from "@angular/forms";
 import {BookService} from "../../../shared/services/book.service";
 import {AuthService} from "../../../shared/services/auth.service";
 import {Review} from "../../../shared/model/review/review";
+import {UserService} from "../../../shared/services/user.service";
+import {OrderStatus} from "../../../shared/model/order/orderStatus";
+import {PaginatedContent} from "../../../shared/model/paginatedContent";
+import {ReviewWithInfo} from "../../../shared/model/review/reviewWithInfo";
+import {ReviewOrderBy} from "../../../shared/model/review/reviewOrderBy";
+import {ReviewSearchQuery} from "../../../shared/model/review/reviewSearchQuery";
+import {QuestionService} from "../../../shared/services/question.service";
+import {Question} from "../../../shared/model/question/question";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookDetailsService {
 
-  constructor(private bookWithDataService: BookWithDataService, private orderService: OrderService, private bookService: BookService, private authService: AuthService) { }
+    constructor(
+        private bookWithDataService: BookWithDataService,
+        private orderService: OrderService,
+        private bookService: BookService,
+        private authService: AuthService,
+        private userService: UserService,
+        private questionService: QuestionService
+    ) { }
 
-  private book: BookWithData | undefined;
+    private book: BookWithData | undefined;
 
-  getBook(id: string | number): Observable<BookWithData>{
-    if (this.book?.id == id){
-      return of(this.book!);
+    getBook(id: number): Observable<BookWithData>{
+        if (this.book?.id == id){
+            return of(this.book!);
+        }
+
+        return this.bookWithDataService.getBookWithData(id).pipe(
+            tap((book) => this.book = book)
+        );
     }
 
-    return this.bookWithDataService.getBookWithData(id).pipe(
-        tap((book) => this.book = book)
-    );
-  }
+    isAuthor(bookId: number): Observable<boolean>{
+        return this.getBook(bookId).pipe(
+            concatMap(book => this.authService.getLoggedUser().pipe(
+                map(user => book.writer == user?.self)
+            ))
+        )
+    }
 
-  buy(bookId: number, receipt: File): Observable<void>{
-    return this.orderService.postOrder({
-      bookId: bookId
-    }).pipe(
-        concatMap(orderUrl => this.orderService.putReceipt(orderUrl, receipt))
-    );
-  }
+    existsOrder(bookId: number): Observable<boolean> {
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => this.orderService.listOrders({book_id: bookId, buyer_id: user?.id!}).pipe(
+                map(orders => orders.pagination.totalCount > 0)
+            ))
+        );
+    }
 
-  setDeal(id: number, form: FormGroup): Observable<void> {
-    return this.getBook(id).pipe(
-        concatMap(book => {
-          return this.bookService.putDeal(
-              book.self!,
-              {
-                price: form.get('price')?.value,
-                end: form.get('endDate')?.value.toISOString().substring(0, 10)
-              }
-          );
-        })
-    )
-  }
+    isOwner(bookId: number): Observable<boolean> {
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => this.orderService.listOrders({book_id: bookId, buyer_id: user?.id!, status: OrderStatus.COMPLETED}).pipe(
+                map(orders => orders.pagination.totalCount > 0)
+            ))
+        );
+    }
 
-  endDeal(id: number): Observable<void> {
-    return this.getBook(id).pipe(
-        concatMap(book => this.bookService.deleteDeal(book.deal!))
-    );
-  }
+    buy(bookId: number, receipt: File): Observable<void>{
+        return this.orderService.postOrder({
+            bookId: bookId
+        }).pipe(
+            concatMap(orderUrl => this.orderService.putReceipt(orderUrl, receipt))
+        );
+    }
 
-  getLoggedReview(bookId: any): Observable<Review | null>{
-      return forkJoin({
-          user$: this.authService.getLoggedUser(),
-          book$: this.getBook(bookId)
-      }).pipe(
-          concatMap(response => this.bookService.getReview(response.book$.self!, response.user$?.id!))
-      );
-  }
+    setDeal(id: number, form: FormGroup): Observable<void> {
+        return this.getBook(id).pipe(
+            concatMap(book => {
+                return this.bookService.putDeal(
+                    book.self!,
+                    {
+                        price: form.get('price')?.value,
+                        end: form.get('endDate')?.value.toISOString().substring(0, 10)
+                    }
+                );
+            })
+        )
+    }
 
-  setReview(bookId: any, form: FormGroup): Observable<void>{
-      return forkJoin({
-          user$: this.authService.getLoggedUser(),
-          book$: this.bookService.getBookById(bookId)
-      }).pipe(
-          concatMap(response => {
-              return this.bookService.putReview(response.book$.self!, response.user$?.id!,{
-                  rating: form.get('rating')?.value * 2,
-                  review: form.get('review')?.value
-              })
+    endDeal(id: number): Observable<void> {
+        return this.getBook(id).pipe(
+            concatMap(book => this.bookService.deleteDeal(book.deal!))
+        );
+    }
+
+    getReviews(bookId: number, query: ReviewSearchQuery): Observable<PaginatedContent<ReviewWithInfo>> {
+        return this.getBook(bookId).pipe(
+            concatMap(book => this.bookService.listReviews(book?.self!, query).pipe(
+                concatMap(reviews => {
+                    if (reviews.data.length === 0){
+                        return of({data: [], pagination: reviews.pagination});
+                    }
+                    const reviewers$ = reviews.data.map(r => this.userService.getUser(r.reviewer!).pipe(
+                        map(reviewer => ({...r, reviewerInfo: reviewer}))
+                    ));
+
+                    return forkJoin(reviewers$).pipe(
+                        map(reviewers => ({
+                            data: reviewers,
+                            pagination: reviews.pagination
+                        }))
+                    )
+                })
+            ))
+        )
+    }
+
+    getLoggedReview(bookId: number): Observable<Review>{
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => {
+                return this.bookService.getReview(bookId, user?.id!);
+            })
+        );
+    }
+
+    setReview(bookId: number, form: FormGroup): Observable<void>{
+        return this.getBook(bookId).pipe(
+            concatMap(book => this.authService.getLoggedUser().pipe(
+                concatMap(user => this.bookService.putReview(
+                    book.self!,
+                    user?.id!,
+                    {
+                        rating: form.get('rating')?.value * 2,
+                        review: form.get('review')?.value
+                    }))
+            ))
+        );
+    }
+
+    isWishlisted(bookId: number): Observable<boolean> {
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => {
+                if (!user) return of(false);
+                return this.userService.getWishlistItem(user.self!, bookId).pipe(
+                    map(() => true),
+                    catchError(() => of(false))
+                );
+            })
+        )
+    }
+
+    toggleWishlist(bookId: number, add: boolean): Observable<void> {
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => {
+                if (add){
+                    return this.userService.postWishlistItem(user?.self!, bookId);
+                } else {
+                    return this.userService.deleteWishlistItem(user?.self!, bookId);
+                }
           })
-      );
-  }
+      )
+    }
+
+    isRecommended(bookId: number): Observable<boolean> {
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => {
+                if (!user) return of(false);
+                return this.userService.getRecommendation(user.self!, bookId).pipe(
+                    map(() => true),
+                    catchError(() => of(false))
+                )
+            })
+        )
+    }
+
+    toggleRecommend(bookId: number, add: boolean): Observable<void> {
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => {
+                if (add){
+                    return this.userService.postRecommendation(user?.self!, bookId);
+                } else {
+                    return this.userService.deleteRecommendation(user?.self!, bookId);
+                }
+            })
+        )
+    }
+
+    getRecommendedBooks(bookId: number, size: number): Observable<PaginatedContent<BookWithData>>{
+        return this.bookWithDataService.listBooksWithData({recommendations_for_book: bookId, size: size});
+    }
+
+    getAllQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<Question>> {
+        return this.questionService.listQuestions({book_id: bookId, page: page, size: size});
+    }
+
+    getAllMyQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<Question>> {
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => this.questionService.listQuestions({book_id: bookId, page: page, size: size, questioner_id: user?.id!}))
+        );
+    }
+
+    getAllOtherQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<Question>> {
+        return this.authService.getLoggedUser().pipe(
+            concatMap(user => this.questionService.listQuestions({book_id: bookId, page: page, size: size, questioner_id: user?.id!, exclude_questioner: true}))
+        );
+    }
+
+    askQuestion(bookId: number, question: string){
+        return this.questionService.postQuestion({
+            bookId: bookId,
+            question: question,
+        });
+    }
+
+    answerQuestion(questionUrl: string, answer: string){
+        return this.questionService.putAnswer(questionUrl, {answer: answer, answerDate: new Date().toString()})
+    }
 
 }

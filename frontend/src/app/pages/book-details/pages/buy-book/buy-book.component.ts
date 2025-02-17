@@ -21,13 +21,13 @@ export class BuyBookComponent implements OnInit {
   private bookDetailsService = inject(BookDetailsService);
   private route = inject(ActivatedRoute);
 
-  id: string | null = null;
+  id: number | null = null;
   book$: Observable<BookWithData> | undefined;
 
   buying = true;
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
     this.book$ = this.bookDetailsService.getBook(this.id!);
   }
 

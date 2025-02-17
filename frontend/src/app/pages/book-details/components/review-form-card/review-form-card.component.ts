@@ -36,13 +36,13 @@ export class ReviewFormCardComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
 
-  id: string;
+  id: number;
   review$: Observable<Review | null>;
   edit = false;
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    this.id = this.route.snapshot.paramMap.get('id')!;
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
     this.review$ = this.bookDetailsService.getLoggedReview(this.id);
 
     this.form = this.fb.group({

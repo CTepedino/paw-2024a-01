@@ -61,7 +61,7 @@ export class UserService {
   }
 
   deleteProfilePicture(userUrl: string){
-    this.http.delete(`${userUrl}/profile-picture`)
+    return this.http.delete(`${userUrl}/profile-picture`)
   }
 
   getWriterMonthlyAnalytics(analyticsUrl: string): Observable<WriterMonthlyAnalytics> {
@@ -85,16 +85,16 @@ export class UserService {
     return this.http.get<Wishlist>(`${userUrl}/wishlist/${bookId}`);
   }
 
-  postWishlistItem(userUrl: string, bookId: number){
-    this.http.post(
+  postWishlistItem(userUrl: string, bookId: number): Observable<void>{
+    return this.http.post<void>(
         `${userUrl}/wishlist`,
         {bookId: bookId},
         {headers: {"Content-Type": MediaTypes.WISHLIST}}
     );
   }
 
-  deleteWishlistItem(userUrl: string, bookId: number){
-    this.http.delete(`${userUrl}/wishlist/${bookId}`);
+  deleteWishlistItem(userUrl: string, bookId: number): Observable<void>{
+    return this.http.delete<void>(`${userUrl}/wishlist/${bookId}`);
   }
 
   getRecommendations(userId: any, page: number = 1, size: number = 20): Observable<PaginatedContent<Recommendation>> {
@@ -110,16 +110,16 @@ export class UserService {
     return this.http.get<Recommendation>(`${userUrl}/recommendations/${bookId}`);
   }
 
-  postRecommendation(userUrl: string, bookId: number){
-    this.http.post(
+  postRecommendation(userUrl: string, bookId: number): Observable<void>{
+    return this.http.post<void>(
         `${userUrl}/recommendations`,
         {bookId: bookId},
         {headers: {"Content-Type": MediaTypes.RECOMMENDATION}}
     );
   }
 
-  deleteRecommendation(userUrl: string, bookId: number){
-    this.http.delete(`${userUrl}/recommendations/${bookId}`);
+  deleteRecommendation(userUrl: string, bookId: number): Observable<void>{
+    return this.http.delete<void>(`${userUrl}/recommendations/${bookId}`);
   }
 }
 
