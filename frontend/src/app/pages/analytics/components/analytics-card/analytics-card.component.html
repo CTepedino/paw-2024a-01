@@ -1,0 +1,30 @@
+<div class="purchase-row">
+	<div class="cell cover-cell" routerLink="/book/{{book().book.id}}">
+		<img ngSrc="{{book().book.cover}}?width=100&height=150" height="150" width="100" [alt]="book().book.title">
+	</div>
+	
+	<div class="cell info-cell">
+		<h3><a routerLink="/book/{{book().book.id}}">{{book().book.title}}</a></h3>
+		<p class="price">{{book().book.price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
+	</div>
+	
+	<div class="cell status-cell">
+		<p class="order-count">{{book().analytics.orderCount}}</p>
+		@switch (book().book.salesCategory){
+			@case (SalesCategory.DEFAULT){
+				<p class="cat-info">+ {{5 - book().analytics.orderCount}} sales for Popular</p>
+			}
+			@case (SalesCategory.POPULAR){
+				<p class="silver">Popular</p>
+				<p class="cat-info">+ {{10 - book().analytics.orderCount}} sales for Best Seller</p>
+			}
+			@case (SalesCategory.BEST_SELLER){
+				<p class="gold">Best Seller</p>
+			}
+		}
+	</div>
+	
+	<div class="cell status-cell">
+		{{book().analytics.salesTotal | currency: 'USD' : 'symbol' : '1.0-0'}}
+	</div>
+</div>

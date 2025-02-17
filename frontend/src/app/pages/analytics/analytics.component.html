@@ -1,53 +1,54 @@
 <div class="container">
     <h1 class="page-title">Analytics</h1>
 
-    @if(user.writerCategory === 'DEFAULT'){
-            <span>+ {{user.bronzeMin - user.totalOrders}} to Bronze</span>
+    @if(user?.writerCategory === WriterCategory.DEFAULT){
+            <span>{{5 - user?.orderCount!}} more sales to Bronze category</span>
     }
-    @if(user.writerCategory === 'BRONZE'){
+    @if(user?.writerCategory === WriterCategory.BRONZE){
         <span class="sales-category bronze">Bronze</span>
-        <span>+ {{user.silverMin - user.totalOrders}} to Silver</span>
+        <span>{{10 - user?.orderCount!}} more sales to Silver category</span>
     }
-    @if(user.writerCategory === 'SILVER'){
+    @if(user?.writerCategory === WriterCategory.SILVER){
         <span class="sales-category silver">Silver</span>
-        <span>+ {{user.goldMin - user.totalOrders}} to Gold</span>
+        <span>{{20 - user?.orderCount!}} more sales to Gold category</span>
     }
-    @if(user.writerCategory === 'GOLD'){
+    @if(user?.writerCategory === WriterCategory.GOLD){
         <span class="sales-category gold">Gold</span>
+		<span>You are one of the most popular writers on Cybrary!</span>
     }
-
+	
     <mat-grid-list cols="4" rowHeight="2.8:1" gutterSize="20px" class="card">
         <mat-grid-tile class="card-panel">
             Total Orders
             <br/>
-            {{user.totalOrders}}
+            {{total?.orderCount}}
         </mat-grid-tile>
         <mat-grid-tile class="card-panel">
             Total Revenue
             <br/>
-            {{user.totalRevenue | currency: 'USD' : 'symbol' : '1.0-0'}}
+            {{total?.salesTotal | currency: 'USD' : 'symbol' : '1.0-0'}}
         </mat-grid-tile>
         <mat-grid-tile class="card-panel">
             Orders this month
             <br/>
-            {{user.ordersThisMonth}}
+            {{currentMonthTotal?.orderCount}}
         </mat-grid-tile>
         <mat-grid-tile class="card-panel">
             Revenue this month
             <br/>
-            {{user.revenueThisMonth | currency: 'USD' : 'symbol' : '1.0-0'}}
+            {{currentMonthTotal?.salesTotal | currency: 'USD' : 'symbol' : '1.0-0'}}
         </mat-grid-tile>
     </mat-grid-list>
 
-    <mat-checkbox class="checkbox" [(ngModel)]="showByMonth">
+    <mat-checkbox class="checkbox" [(ngModel)]="showByMonth" (change)="setBooks($event)">
         Show by Month
     </mat-checkbox>
 
     @if(showByMonth){
-        <div class="search-filters">
+        <form class="search-filters" [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="onSubmit()">
             <mat-form-field appearance="outline">
                 <mat-label>Select a year</mat-label>
-                <mat-select [(ngModel)]="selectedYear">
+                <mat-select formControlName="year" (selectionChange)="onSubmit()">
                     @for (year of years; track year){
                         <mat-option [value]="year">{{year}}</mat-option>
                     }
@@ -56,30 +57,32 @@
 
             <mat-form-field appearance="outline">
                 <mat-label>Select a month</mat-label>
-                <mat-select [(ngModel)]="selectedMonth">
-                    @for (month of months; track month){
-                        <mat-option [value]="month">{{month}}</mat-option>
+                <mat-select formControlName="month" (selectionChange)="onSubmit()">
+                    @for (month of months; track month.number){
+                        <mat-option [value]="month.number">{{month.name}}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
-        </div>
+        </form>
 
-        <mat-grid-list cols="4" rowHeight="2.8:1" gutterSize="20px" class="card">
-            <mat-grid-tile class="card-panel">
-                Orders that month
-                <br/>
-                {{user.ordersThisMonth}}
-            </mat-grid-tile>
-            <mat-grid-tile class="card-panel">
-                Revenue that month
-                <br/>
-                {{user.revenueThisMonth | currency: 'USD' : 'symbol' : '1.0-0'}}
-            </mat-grid-tile>
-            <mat-grid-tile>
-            </mat-grid-tile>
-            <mat-grid-tile>
-            </mat-grid-tile>
-        </mat-grid-list>
+		@if (monthlyTotal$ | async; as monthlyTotal){
+			<mat-grid-list cols="4" rowHeight="2.8:1" gutterSize="20px" class="card">
+				<mat-grid-tile class="card-panel">
+					Orders that month
+					<br/>
+					{{monthlyTotal?.orderCount}}
+				</mat-grid-tile>
+				<mat-grid-tile class="card-panel">
+					Revenue that month
+					<br/>
+					{{monthlyTotal?.salesTotal | currency: 'USD' : 'symbol' : '1.0-0'}}
+				</mat-grid-tile>
+				<mat-grid-tile>
+				</mat-grid-tile>
+				<mat-grid-tile>
+				</mat-grid-tile>
+			</mat-grid-list>
+		}
     }
 
     <div class="table-header">
@@ -88,32 +91,14 @@
         <div class="header-cell">Total orders</div>
         <div class="header-cell">Total revenue</div>
     </div>
-
-    @if (books.length === 0) {
-        <div class="empty-message">
-            <h5>No books sold</h5>
-        </div>
-    }
-
-    @for (order of books; track order.book.id) {
-        <div class="purchase-row">
-            <div class="cell cover-cell">
-                <img [src]="order.book.coverUrl" [alt]="order.book.title">
-            </div>
-
-            <div class="cell info-cell">
-                <h3>{{order.book.title}}</h3>
-                <p class="price">{{order.book.price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
-            </div>
-
-            <div class="cell status-cell">
-                {{order.totalOrders}}
-            </div>
-
-            <div class="cell status-cell">
-                {{order.totalRevenue | currency: 'USD' : 'symbol' : '1.0-0'}}
-            </div>
-        </div>
-    }
-
+	
+	@if (books$ | async; as books){
+		@for (book of books; track book.book.id) {
+			<app-analytics-card [book]="book"></app-analytics-card>
+		}
+		
+		@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+			<app-paginator id="bought-books" (pageChange)="onPageChange($event)"/>
+		}
+	}
 </div>

@@ -78,33 +78,6 @@
   color: #666;
 }
 
-.purchase-row {
-  display: grid;
-  grid-template-columns: 1fr 2fr 2fr 1fr;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-
-  .cover-cell img {
-    width: 100px;
-    height: auto;
-  }
-
-  .info-cell {
-    h3 {
-      margin: 0;
-      color: #437C90;
-    }
-
-    p {
-      margin: 5px 0;
-    }
-
-    .price {
-      color: #666;
-    }
-  }
-}
 
 .table-header {
   display: grid;
@@ -112,7 +85,8 @@
   background-color: #437c90;
   color: white;
   padding: 15px;
-  border-radius: 4px;
-  margin-bottom: 10px;
+  border-radius: 0;
+  margin-bottom: 0;
   margin-top: 50px;
+
 }

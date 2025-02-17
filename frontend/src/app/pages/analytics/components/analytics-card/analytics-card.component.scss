@@ -1,0 +1,60 @@
+.purchase-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr 1fr;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  height: 150px;
+
+  .cover-cell img {
+    width: 100px;
+    cursor: pointer;
+  }
+
+  .info-cell {
+    h3 {
+      margin: 0;
+      color: #437C90;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+
+    .price {
+      color: #666;
+    }
+  }
+}
+
+.order-count{
+  width: 120px;
+  margin-bottom: 10px;
+  text-align: start;
+}
+
+.gold {
+  padding: 15px;
+  width: 120px;
+  background-color: gold;
+  text-align: center;
+  font-weight: bold;
+}
+
+.silver {
+  padding: 15px;
+  width: 120px;
+  background-color: silver;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.status-cell {
+  margin-right: 100px;
+  text-align: start;
+}
+
+.cat-info {
+  text-align: start;
+  margin-right: 100px;
+}
