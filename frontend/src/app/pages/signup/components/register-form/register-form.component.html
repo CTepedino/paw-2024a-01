@@ -1,9 +1,9 @@
 <app-notification-card>
-	<card-title>Create a Cybrary account</card-title>
+	<card-title>{{ 'SIGNUP.TITLE' | translate }}</card-title>
 	<card-text>
 		<form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
 			<mat-form-field appearance="outline">
-				<mat-label>First name</mat-label>
+				<mat-label>{{ 'SIGNUP.FIRST_NAME' | translate }}</mat-label>
 				<input matInput formControlName="firstName" maxlength="255" autocomplete="off">
 				@if (showErrorMessage('firstName')) {
 					<mat-error>{{getErrorMessage('firstName')}}</mat-error>
@@ -11,7 +11,7 @@
 			</mat-form-field>
 			
 			<mat-form-field appearance="outline">
-				<mat-label>Last name</mat-label>
+				<mat-label>{{ 'SIGNUP.LAST_NAME' | translate }}</mat-label>
 				<input matInput formControlName="lastName" autocomplete="off">
 				@if (showErrorMessage('lastName')) {
 					<mat-error>{{getErrorMessage('lastName')}}</mat-error>
@@ -19,7 +19,7 @@
 			</mat-form-field>
 			
 			<mat-form-field appearance="outline">
-				<mat-label>Email</mat-label>
+				<mat-label>{{ 'SIGNUP.EMAIL' | translate }}</mat-label>
 				<input matInput formControlName="email" type="email" maxlength="255" autocomplete="off">
 				@if (showErrorMessage('email')) {
 					<mat-error>{{getErrorMessage('email')}}</mat-error>
@@ -27,7 +27,7 @@
 			</mat-form-field>
 			
 			<mat-form-field appearance="outline">
-				<mat-label>Password</mat-label>
+				<mat-label>{{ 'SIGNUP.PASSWORD' | translate }}</mat-label>
 				<input matInput formControlName="password" maxlength="255"
 					   [type]="hide ? 'password' : 'text'">
 				<button mat-icon-button matSuffix type="button"
@@ -40,7 +40,7 @@
 			</mat-form-field>
 			
 			<mat-form-field appearance="outline">
-				<mat-label>Confirm password</mat-label>
+				<mat-label>{{ 'SIGNUP.CONFIRM_PASSWORD' | translate }}</mat-label>
 				<input matInput formControlName="repeatPassword" maxlength="255"
 					   [type]="hideRepeat ? 'password' : 'text'">
 				<button mat-icon-button matSuffix type="button"
@@ -48,15 +48,15 @@
 					<mat-icon>{{hideRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
 				</button>
 				@if (signupForm.hasError('notMatching')) {
-					<mat-error>Passwords do not match</mat-error>
+					<mat-error>{{ 'SIGNUP.PASSWORD_NOT_MATCHING' | translate }}</mat-error>
 				}
 			</mat-form-field>
 			
-			<app-action-button class="signup-btn" [disabled]="!signupForm.valid" submit>SIGN UP</app-action-button>
+			<app-action-button class="signup-btn" [disabled]="!signupForm.valid" submit>{{ 'SIGNUP.SIGN_UP' | translate }}</app-action-button>
 
 			<p class="login-link">
-				Already have an account?
-				<a routerLink="/login">Log in</a>
+                {{ 'SIGNUP.ALREADY_HAVE_ACCOUNT' | translate }}
+				<a routerLink="/login"> {{ 'SIGNUP.LOGIN' | translate }}</a>
 			</p>
 		</form>
 	</card-text>

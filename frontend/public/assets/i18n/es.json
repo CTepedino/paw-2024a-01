@@ -299,6 +299,31 @@
       "DECLINE": "RECHAZAR",
       "ACCEPT": "ACEPTAR"
     }
-  }
+  },
 
+  "REGISTRATION": {
+    "SUCCESS": "¡Registro exitoso!",
+    "CONFIRMATION": "Revisa tu bandeja de entrada para un correo con un enlace para validar tu cuenta de Cybrary",
+    "RESEND_EMAIL": "Reenviar correo"
+  },
+
+  "SIGNUP": {
+    "TITLE": "Crear una cuenta en Cybrary",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellido",
+    "EMAIL": "Correo electrónico",
+    "PASSWORD": "Contraseña",
+    "CONFIRM_PASSWORD": "Confirmar contraseña",
+    "PASSWORD_NOT_MATCHING": "Las contraseñas no coinciden",
+    "SIGN_UP": "Registrarse",
+    "ALREADY_HAVE_ACCOUNT": "¿Ya tienes una cuenta?",
+    "LOGIN": "Iniciar sesión",
+    "ERRORS": {
+      "REQUIRED": "Este campo es obligatorio",
+      "INVALID_EMAIL": "Correo electrónico inválido",
+      "MIN_LENGTH": "Al menos 6 caracteres",
+      "MAX_LENGTH": "Excede la longitud máxima permitida",
+      "PASSWORD_MISMATCH": "Las contraseñas no coinciden"
+    }
+  }
 }

@@ -2,12 +2,14 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, input} from '@angular/core';
 import {NotificationCardComponent} from "../../../../shared/components/notification-card/notification-card.component";
 import {AuthService} from "../../../../shared/services/auth.service";
 import {ActionButtonComponent} from "../../../../shared/components/action-button/action-button.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-register-confirmation',
   imports: [
     NotificationCardComponent,
-    ActionButtonComponent
+    ActionButtonComponent,
+    TranslateModule
   ],
   templateUrl: './register-confirmation.component.html',
   styleUrl: './register-confirmation.component.scss',

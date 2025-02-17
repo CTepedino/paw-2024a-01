@@ -12,6 +12,7 @@ import {NavButtonComponent} from "../../../../shared/components/nav-button/nav-b
 import {CancelButtonComponent} from "../../../../shared/components/cancel-button/cancel-button.component";
 import {AuthService} from "../../../../shared/services/auth.service";
 import {UserService} from "../../../../shared/services/user.service";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
 	selector: 'app-register-form',
@@ -27,7 +28,8 @@ import {UserService} from "../../../../shared/services/user.service";
 		NotificationCardComponent,
 		ActionButtonComponent,
 		NavButtonComponent,
-		CancelButtonComponent
+		CancelButtonComponent,
+		TranslateModule
 	],
 	templateUrl: './register-form.component.html',
 	styleUrl: './register-form.component.scss',
@@ -43,7 +45,7 @@ export class RegisterFormComponent {
 
 	submitted = output<string>();
 
-	constructor(private fb: FormBuilder, private router: Router) {
+	constructor(private fb: FormBuilder, private router: Router, private translate: TranslateService) {
 		this.signupForm = this.fb.group({
 			firstName: ['', [Validators.required, Validators.maxLength(255)]],
 			lastName: ['', [Validators.required, Validators.maxLength(255)]],
@@ -78,19 +80,19 @@ export class RegisterFormComponent {
 
 	getErrorMessage(field: string): string {
 		if (this.signupForm.get(field)?.hasError('required')) {
-			return '';
+			return this.translate.instant('SIGNUP.ERRORS.REQUIRED');
 		}
 		if (this.signupForm.get(field)?.hasError('email')) {
-			return 'Invalid email';
+			return this.translate.instant('SIGNUP.ERRORS.INVALID_EMAIL');
 		}
 		if (this.signupForm.get(field)?.hasError('minlength')) {
-			return 'At least 6 characters';
+			return this.translate.instant('SIGNUP.ERRORS.MIN_LENGTH');
 		}
 		if (this.signupForm.get(field)?.hasError('maxlength')) {
-			return 'Exceeds the maximum permitted length';
+			return this.translate.instant('SIGNUP.ERRORS.MAX_LENGTH');
 		}
 		if (this.signupForm.hasError('notMatching')) {
-			return 'Passwords do not match';
+			return this.translate.instant('SIGNUP.ERRORS.PASSWORD_MISMATCH');
 		}
 		return '';
 	}
