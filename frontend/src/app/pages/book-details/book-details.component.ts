@@ -26,7 +26,7 @@ import {MyQuestionsTabComponent} from "./components/my-questions-tab/my-question
 import {WriterQuestionsTabComponent} from "./components/writer-questions-tab/writer-questions-tab.component";
 import {QuestionSubmitBarComponent} from "./components/question-submit-bar/question-submit-bar.component";
 import {QuestionWithData} from "../../shared/model/question/questionWithData";
-import {TranslateService} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-book-details',
@@ -51,7 +51,8 @@ import {TranslateService} from "@ngx-translate/core";
         QuestionsTabComponent,
         MyQuestionsTabComponent,
         WriterQuestionsTabComponent,
-        QuestionSubmitBarComponent
+        QuestionSubmitBarComponent,
+        TranslateModule
     ],
     templateUrl: './book-details.component.html',
     styleUrl: './book-details.component.scss'

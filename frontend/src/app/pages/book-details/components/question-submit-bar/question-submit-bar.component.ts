@@ -7,6 +7,7 @@ import {MatInput} from "@angular/material/input";
 import {concatMap} from "rxjs";
 import {QuestionService} from "../../../../shared/services/question.service";
 import {AuthService} from "../../../../shared/services/auth.service";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-question-submit-bar',
@@ -18,7 +19,8 @@ import {AuthService} from "../../../../shared/services/auth.service";
     MatInput,
     MatLabel,
     ReactiveFormsModule,
-    MatPrefix
+    MatPrefix,
+    TranslateModule
   ],
   templateUrl: './question-submit-bar.component.html',
   styleUrl: './question-submit-bar.component.scss'

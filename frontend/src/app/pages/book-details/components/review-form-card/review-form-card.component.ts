@@ -13,6 +13,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-review-form-card',
@@ -28,7 +29,7 @@ import {
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-
+    TranslateModule
 
   ],
   templateUrl: './review-form-card.component.html',

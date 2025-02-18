@@ -24,12 +24,12 @@
 								@switch (book.salesCategory){
 									@case (SalesCategory.BEST_SELLER){
 										<div class="sales-category best-seller">
-											Best Seller
+                                            {{ 'BEST_SELLER' | translate }}
 										</div>
 									}
 									@case (SalesCategory.POPULAR){
 										<div class="sales-category popular">
-											Popular
+                                            {{ 'POPULAR' | translate }}
 										</div>
 									}
 								}
@@ -79,54 +79,54 @@
 						@let hasReviewed = !!loggedUserReview;
 
 						@if ((!isLoggedIn || !existsOrder) && !isAuthor){
-							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/buy"><div class="book-action">Buy book</div></app-action-button>
+							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/buy"><div class="book-action"> {{ 'BOOK_DETAILS.BUY_BOOK' | translate }}</div></app-action-button>
 						}
 						@if (!isOwner && existsOrder){
 							<div class="purchased">You already bought this book</div>
 							<app-action-button class="action-btn" routerLink="/purchases" [queryParams]="{title: book.title}">
-								<div class="book-action">Go to purchases</div>
+								<div class="book-action">{{ 'BOOK_DETAILS.GO_TO_PURCHASES' | translate }}</div>
 							</app-action-button>
 						}
 						@if (isAuthor || isOwner){
 							<app-action-button class="action-btn" (click)="bookDetailsService.openPdf(book.bookFile!)">
-								<div class="book-action">Read book</div>
+								<div class="book-action">{{ 'BOOK_DETAILS.READ_BOOK' | translate }}</div>
 							</app-action-button>
 						}
 						@if (isAuthor || !isOwner){
 							<app-action-button class="action-btn" (click)="bookDetailsService.openPdf(book.preview!)">
-								<div class="book-action">Read preview</div>
+								<div class="book-action">{{ 'BOOK_DETAILS.READ_PREVIEW' | translate }}</div>
 							</app-action-button>
 						}
 						@if (isAuthor){
 							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/edit">
-								<div class="book-action">Edit book</div>
+								<div class="book-action">{{ 'BOOK_DETAILS.EDIT_BOOK' | translate }}</div>
 							</app-action-button>
 						}
 						@if (isAuthor && !hasDeal){
 							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/deal">
-								<div class="book-action">Start a deal</div>
+								<div class="book-action">{{ 'BOOK_DETAILS.START_DEAL' | translate }}</div>
 							</app-action-button>
 						}
 						@if (isAuthor && hasDeal){
 							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/deal">
-								<div class="book-action">Change deal</div>
+								<div class="book-action">{{ 'BOOK_DETAILS.CHANGE_DEAL' | translate }}</div>
 							</app-action-button>
 						}
 						@if (isOwner && !hasReviewed){
 							<app-action-button class="action-btn" (click)="openReviewDialog()">
-								<div class="book-action">Leave review</div>
+								<div class="book-action">{{ 'BOOK_DETAILS.LEAVE_REVIEW' | translate }}</div>
 							</app-action-button>
 						}
 						@if (isOwner && hasReviewed){
 							<app-action-button class="action-btn" (click)="openReviewDialog()">
-								<div class="book-action">Edit review</div>
+								<div class="book-action">{{ 'BOOK_DETAILS.EDIT_REVIEW' | translate }}</div>
 							</app-action-button>
 						}
 						@if (isLoggedIn && !existsOrder && !isAuthor){
-							<mat-checkbox class="book-checkbox" [checked]="(isWishlisted)" (change)="bookDetailsService.toggleWishlist(book.id!,$event.checked)">Wishlist book</mat-checkbox>
+							<mat-checkbox class="book-checkbox" [checked]="(isWishlisted)" (change)="bookDetailsService.toggleWishlist(book.id!,$event.checked)">{{ 'BOOK_DETAILS.WISHLIST_BOOK' | translate }}</mat-checkbox>
 						}
 						@if (isOwner){
-							<mat-checkbox class="book-checkbox" [checked]="(isRecommended)" (change)="bookDetailsService.toggleRecommend(book.id!,$event.checked)">Recommend book</mat-checkbox>
+							<mat-checkbox class="book-checkbox" [checked]="(isRecommended)" (change)="bookDetailsService.toggleRecommend(book.id!,$event.checked)">{{ 'BOOK_DETAILS.RECOMMEND_BOOK' | translate }}</mat-checkbox>
 						}
 					</div>
 				</div>
@@ -137,7 +137,7 @@
 					</div>
 					<div class="details-box not-last">
 						<mat-icon>{{ GenreIcon[book.genre!] }}</mat-icon>
-						<p class="genre">{{book.genre}}</p>
+						<p class="genre">{{ (book.genre || 'UNKNOWN_GENRE') | translate }}</p>
 					</div>
 					<div class="details-box not-last">
 						<mat-icon>description</mat-icon>
@@ -156,7 +156,7 @@
 	</div>
 	@if (recommendations$ | async; as recommendations){
 		<div class="recommended-books">
-			<h5 class="preview-name">Explore similar books!</h5>
+			<h5 class="preview-name">{{ 'BOOK_DETAILS.SIMILAR_BOOKS' | translate }}</h5>
 			<mat-grid-list cols="4" gutterSize="20px" rowHeight="375px">
 				@for (book of recommendations; track book.id){
 					<mat-grid-tile>
@@ -177,7 +177,7 @@
 		<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="index.selectedIndex">
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
-					Reviews ({{((reviewPage$ | async)?.pagination?.totalCount ?? 0) + (loggedUserReview!=null? 1: 0)}})
+                    {{ 'BOOK_DETAILS.REVIEWS' | translate }} ({{((reviewPage$ | async)?.pagination?.totalCount ?? 0) + (loggedUserReview!=null? 1: 0)}})
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
@@ -187,7 +187,7 @@
 			</mat-tab>
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
-					Questions ({{(questionPage$ | async)?.pagination?.totalCount}})
+                    {{ 'BOOK_DETAILS.QUESTIONS' | translate }} ({{(questionPage$ | async)?.pagination?.totalCount}})
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
@@ -202,7 +202,7 @@
 			@if (!isAuthor && isLoggedIn){
 				<mat-tab class="tab">
 					<ng-template mat-tab-label>
-						My questions ({{(myQuestionPage$ | async)?.pagination?.totalCount}})
+                        {{ 'BOOK_DETAILS.MY_QUESTIONS' | translate }} ({{(myQuestionPage$ | async)?.pagination?.totalCount}})
 					</ng-template>
 					<ng-template matTabContent>
 						<div class="white">

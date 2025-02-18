@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslateModule, TranslatePipe} from "@ngx-translate/core";
 import {QuestionService} from "../../../../shared/services/question.service";
 import {QuestionWithData} from "../../../../shared/model/question/questionWithData";
 import {tap} from "rxjs";
@@ -21,7 +21,8 @@ import {tap} from "rxjs";
     MatInput,
     MatLabel,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    TranslateModule
   ],
   templateUrl: './small-question-card.component.html',
   styleUrl: './small-question-card.component.scss'

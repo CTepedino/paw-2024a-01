@@ -1,24 +1,24 @@
 <app-content-card>
 	<h3 class="title">
-		Purchasing {{book().title}}
+        {{ 'BUY_BOOK.TITLE' | translate: { title: book().title } }}
 	</h3>
 	<hr/>
 	<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
-		<p>Please transfer the required amount and upload the corresponding payment receipt</p>
-		<p>You will be able to access the book after the payment has been verified by the published</p>
-		<p>Book's price: {{getPrice(book()) | currency}}</p>
-		<p>Writer's CBU/alias: {{book().writerInfo.cbu}}</p>
+		<p>{{ 'BUY_BOOK.INSTRUCTION1' | translate }}</p>
+		<p>{{ 'BUY_BOOK.INSTRUCTION2' | translate }}</p>
+		<p>{{ 'BUY_BOOK.BOOK_PRICE' | translate: { price: getPrice(book()) | currency } }}</p>
+		<p>{{ 'BUY_BOOK.WRITER_CBU' | translate: { cbu: book().writerInfo.cbu } }}</p>
 		<div class="input-zone">
 			<div class="file-row">
-				<app-file-input class="input" accept="application/pdf, image/*" formGroupName="receipt" [formGroup]="getReceiptFormGroup()">Receipt</app-file-input>
+				<app-file-input class="input" accept="application/pdf, image/*" formGroupName="receipt" [formGroup]="getReceiptFormGroup()">{{ 'BUY_BOOK.RECEIPT_LABEL' | translate }}</app-file-input>
 			</div>
 		</div>
 		<div class="options">
 			<app-action-button [disabled]="!form.valid" (click)="onSubmit()">
-				Upload receipt
+                {{ 'BUY_BOOK.UPLOAD_BUTTON' | translate }}
 			</app-action-button>
 			<app-cancel-button routerLink="/book/{{book().id}}">
-				Cancel
+                {{ 'BUY_BOOK.CANCEL_BUTTON' | translate }}
 			</app-cancel-button>
 		</div>
 	</form>

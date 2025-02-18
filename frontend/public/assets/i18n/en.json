@@ -377,5 +377,81 @@
   "BOOK_DETAILS_BROWSER": "Book details",
   "BUY_BOOK_BROWSER": "Buy book",
   "SET_DEAL_BROWSER": "Set deal",
-  "EDIT_BOOK_BROWSER": "Edit book"
+  "EDIT_BOOK_BROWSER": "Edit book",
+
+  "BOOK_DETAILS": {
+    "BUY_BOOK": "Buy book",
+    "GO_TO_PURCHASES": "Go to purchases",
+    "READ_BOOK": "Read book",
+    "READ_PREVIEW": "Read preview",
+    "EDIT_BOOK": "Edit book",
+    "START_DEAL": "Start a deal",
+    "CHANGE_DEAL": "Change deal",
+    "LEAVE_REVIEW": "Leave review",
+    "EDIT_REVIEW": "Edit review",
+    "WISHLIST_BOOK": "Wishlist book",
+    "RECOMMEND_BOOK": "Recommend book",
+    "SIMILAR_BOOKS": "Explore similar books!",
+    "REVIEWS": "Reviews",
+    "QUESTIONS": "Questions",
+    "MY_QUESTIONS": "My questions",
+    "NO_QUESTIONS": "You have not made any questions yet",
+    "ASK_QUESTION": "Ask question",
+    "LEAVE_QUESTION": "Leave a question",
+    "CHANGE_REVIEW": "Change your review",
+    "LEAVE_A_REVIEW": "Leave a review",
+    "REVIEW": "Review",
+    "SET_REVIEW": "Set review",
+    "YOUR_REVIEW": "Your review",
+    "READER_OPINION": "Reader's opinions",
+    "NO_REVIEWS": "This book has no reviews yet",
+    "RATING_ASC": "Ascending rating",
+    "RATING_DESC": "Descending rating",
+    "DATE_DESC": "Newest first"
+  },
+
+  "BUY_BOOK": {
+    "TITLE": "Purchasing {{title}}",
+    "INSTRUCTION1": "Please transfer the required amount and upload the corresponding payment receipt",
+    "INSTRUCTION2": "You will be able to access the book after the payment has been verified by the publisher",
+    "BOOK_PRICE": "Book's price: {{price}}",
+    "WRITER_CBU": "Writer's CBU/alias: {{cbu}}",
+    "RECEIPT_LABEL": "Receipt",
+    "UPLOAD_BUTTON": "Upload receipt",
+    "CANCEL_BUTTON": "Cancel",
+    "SUCCESS_TITLE": "Receipt sent successfully!",
+    "SUCCESS_MESSAGE": "You will be notified once the payment has been verified by the publisher",
+    "FIND_BOOKS_BUTTON": "Find more books",
+    "VIEW_PURCHASES_BUTTON": "View purchases",
+    "SUCCESS_IMAGE_ALT": "Bought confirmation"
+  },
+
+  "DEAL": {
+    "EDIT_DEAL": "Edit the current deal for {{title}}",
+    "START_DEAL": "Start a new deal for {{title}}",
+    "ORIGINAL_PRICE": "Original price: {{price}}",
+    "CURRENT_DEAL_PRICE": "Current deal price: {{dealPrice}}",
+    "DISCOUNTED_PRICE_LABEL": "Discounted price",
+    "DISCOUNTED_PRICE_HINT": "Should be less than {{minPrice}}",
+    "END_DATE_LABEL": "End date",
+    "END_DATE_HINT": "MM/DD/YYYY",
+    "SET_DEAL_BUTTON": "Set deal",
+    "END_DEAL_BUTTON": "End deal",
+    "CANCEL_BUTTON": "Cancel"
+  },
+
+  "EDIT_BOOK": {
+    "EDIT_BOOK_TITLE": "Edit the book's information",
+    "FILL_BOOK_DETAILS": "Fill in the book's details",
+    "TITLE_LABEL": "Title",
+    "DESCRIPTION_LABEL": "Description",
+    "GENRE_LABEL": "Genre",
+    "PRICE_LABEL": "Price",
+    "RECOMMENDED_AGE_LABEL": "Recommended age",
+    "PAGE_COUNT_LABEL": "Page count",
+    "COVER_IMAGE_LABEL": "Cover image",
+    "PREVIEW_FILE_LABEL": "Preview file",
+    "BOOK_FILE_LABEL": "Book file",
+    "SAVE_CHANGES_BUTTON": "Save changes"
+  }
 }

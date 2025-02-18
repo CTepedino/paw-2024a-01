@@ -111,7 +111,7 @@ describe('AuthService', () => {
 
     // Simulate index API failure
     const reqIndex = httpTestingController.expectOne(service['baseUrl']);
-    reqIndex.error(new ProgressEvent('error'));
+    reqIndex.flush('Failed!', {status: 500, statusText: 'Internal Server Error'});
 
     try {
       await userPromise;
