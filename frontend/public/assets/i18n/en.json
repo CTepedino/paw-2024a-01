@@ -21,6 +21,9 @@
   "PREVIEW_FILE": "Preview file",
   "BOOK_FILE": "Book file",
   "PUBLISH": "Publish",
+  "ADDBOOK.ERRORS.MIN_LENGTH": "At least 6 characters",
+  "ADDBOOK.ERRORS.MAX_LENGTH": "At most 22 characters",
+  "ADDBOOK.ERRORS.CBU_PATTERNS": "Should be a valid cbu or alias",
 
   "FICTION": "Fiction",
   "NON_FICTION": "Non-Fiction",

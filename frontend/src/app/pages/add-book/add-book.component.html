@@ -12,6 +12,9 @@
 					<input matInput required #cbu formControlName="cbu">
 					<mat-hint>{{ 'CBU_HINT' | translate }}</mat-hint>
 					<mat-hint align="end">{{cbu.value.length}} / 22</mat-hint>
+					@if (showErrorMessage('cbu')) {
+						<mat-error>{{getErrorMessage('cbu')}}</mat-error>
+					}
 				</mat-form-field>
 			</div>
 			<hr/>
