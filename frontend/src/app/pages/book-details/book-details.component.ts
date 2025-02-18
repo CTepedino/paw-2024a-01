@@ -14,11 +14,10 @@ import {Title} from "@angular/platform-browser";
 import {SmallBookCardComponent} from "../../shared/components/small-book-card/small-book-card.component";
 import {MatTab, MatTabContent, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {BookDetailsService} from "./store/book-details.service";
-import {concatMap, map, Observable, tap} from "rxjs";
+import {concatMap, Observable, tap} from "rxjs";
 import {BookWithData} from "../../shared/model/book/bookWithData";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {ReviewWithInfo} from "../../shared/model/review/reviewWithInfo";
-import {Question} from "../../shared/model/question/question";
 import {MatDialog} from "@angular/material/dialog";
 import {ReviewFormCardComponent} from "./components/review-form-card/review-form-card.component";
 import {ReviewTabComponent} from "./components/review-tab/review-tab.component";
@@ -87,6 +86,9 @@ export class BookDetailsComponent implements OnInit {
 
     myQuestionPage$: Observable<PaginatedContent<QuestionWithData>> | null = null;
 
+    setup = true;
+    index = { selectedIndex: 0 }
+
     constructor() {
         this.title.setTitle('Book details')
     }
@@ -123,6 +125,15 @@ export class BookDetailsComponent implements OnInit {
             );
 
         })
+
+        const url = this.router.url;
+        if (url.includes('questions')) {
+            setTimeout(() => this.index.selectedIndex = 1, 100);
+        }
+        if (url.includes('my-questions')) {
+            setTimeout(() => this.index.selectedIndex = 2, 100);
+        }
+        setTimeout(() => this.setup = false, 150);
     }
 
     getPercentage(price: number, dealPrice: number){
@@ -144,9 +155,23 @@ export class BookDetailsComponent implements OnInit {
             }
         })
     }
-    
+
     refetchMyQuestions(){
         this.myQuestionPage$ = this.bookDetailsService.getAllMyQuestions(this.bookId, this.pageNumber, this.pageSize);
+    }
+
+
+    onTabChange(event: any){
+        if (!this.setup){
+            this.pageNumber = 1;
+        }
+        if (event.index === 0) {
+            this.router.navigate([`book/${this.bookId}/reviews`], {queryParams: {page: this.pageNumber}, queryParamsHandling: 'replace'});
+        } else if (event.index === 1) {
+            this.router.navigate([`book/${this.bookId}/questions`], {queryParams: {page: this.pageNumber}, queryParamsHandling: 'replace'});
+        } else if (event.index === 2) {
+            this.router.navigate([`book/${this.bookId}/my-questions`], {queryParams: {page: this.pageNumber}, queryParamsHandling: 'replace'});
+        }
     }
 
     protected readonly SalesCategory = SalesCategory;

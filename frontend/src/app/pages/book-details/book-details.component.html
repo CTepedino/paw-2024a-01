@@ -76,7 +76,7 @@
 						@let hasReviewed = !!loggedUserReview;
 
 						@if ((!isLoggedIn || !existsOrder) && !isAuthor){
-							<app-action-button class="action-btn"><div class="book-action">Buy book</div></app-action-button>
+							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/buy"><div class="book-action">Buy book</div></app-action-button>
 						}
 						@if (isAuthor || isOwner){
 							<app-action-button class="action-btn" (click)="bookDetailsService.openPdf(book.bookFile!)">
@@ -89,17 +89,17 @@
 							</app-action-button>
 						}
 						@if (isAuthor){
-							<app-action-button class="action-btn" routerLink="/book/{{book.id}}/edit">
+							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/edit">
 								<div class="book-action">Edit book</div>
 							</app-action-button>
 						}
 						@if (isAuthor && !hasDeal){
-							<app-action-button class="action-btn" routerLink="/book/{{book.id}}/deal">
+							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/deal">
 								<div class="book-action">Start a deal</div>
 							</app-action-button>
 						}
 						@if (isAuthor && hasDeal){
-							<app-action-button class="action-btn" routerLink="/book/{{book.id}}/deal">
+							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/deal">
 								<div class="book-action">Change deal</div>
 							</app-action-button>
 						}
@@ -171,7 +171,7 @@
 	}
 	
 	<div class="tab-centerer">
-		<mat-tab-group class="tabber">
+		<mat-tab-group class="tabber" (selectedTabChange)="onTabChange($event)" [selectedIndex]="index.selectedIndex">
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
 					Reviews ({{((reviewPage$ | async)?.pagination?.totalCount ?? 0) + (loggedUserReview!=null? 1: 0)}})
