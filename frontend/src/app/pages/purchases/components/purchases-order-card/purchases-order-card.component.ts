@@ -6,7 +6,7 @@ import {tap} from "rxjs";
 import {CancelButtonComponent} from "../../../../shared/components/cancel-button/cancel-button.component";
 import {MatIcon} from "@angular/material/icon";
 import {ActionButtonComponent} from "../../../../shared/components/action-button/action-button.component";
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {CurrencyPipe, DatePipe, NgOptimizedImage} from "@angular/common";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {BookService} from "../../../../shared/services/book.service";
 import {OrderService} from "../../../../shared/services/order.service";
@@ -15,20 +15,23 @@ import {OrderStatus} from "../../../../shared/model/order/orderStatus";
 import {RejectionPopupComponent} from "../rejection-popup/rejection-popup.component";
 import {ReuploadPopupComponent} from "../reupload-popup/reupload-popup.component";
 import {TranslateModule} from "@ngx-translate/core";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-purchases-order-card',
-  imports: [
-    FormsModule,
-    ActionButtonComponent,
-    CurrencyPipe,
-    DatePipe,
-    MatGridList,
-    MatGridTile,
-    MatIcon,
-    CancelButtonComponent,
-    TranslateModule
-  ],
+	imports: [
+		FormsModule,
+		ActionButtonComponent,
+		CurrencyPipe,
+		DatePipe,
+		MatGridList,
+		MatGridTile,
+		MatIcon,
+		CancelButtonComponent,
+		TranslateModule,
+		NgOptimizedImage,
+		RouterLink
+	],
   templateUrl: './purchases-order-card.component.html',
   styleUrl: './purchases-order-card.component.scss'
 })

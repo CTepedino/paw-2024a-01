@@ -1,9 +1,9 @@
 <mat-grid-list cols="5" rowHeight="1.5:1" gutterSize="0px">
 	<mat-grid-tile class="purchased-book">
-		<img src="{{order().bookInfo.cover!}}?height=250&width=200" alt="Book cover" class="book-image">
+		<img ngSrc="{{order().bookInfo.cover!}}?height=250&width=175" height="250" width="175" alt="Book cover" class="book-image">
 	</mat-grid-tile>
 	<mat-grid-tile class="purchased-book purchase-info">
-		<a class="book-title">{{order().bookInfo.title}}</a>
+		<a class="book-title" routerLink="/book/{{order().bookInfo?.id}}">{{order().bookInfo.title}}</a>
 		<p class="author">{{ 'PURCHASES.LABELS.BY' | translate }} <a>{{order().writerInfo?.firstName}} {{order().writerInfo?.lastName}}</a></p>
 		<p class="price">{{order().price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
 	</mat-grid-tile>
