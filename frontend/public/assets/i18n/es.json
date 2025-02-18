@@ -380,7 +380,7 @@
     "SET_REVIEW": "Establecer reseña",
     "YOUR_REVIEW": "Tu reseña",
     "READER_OPINION": "Opiniones de los lectores",
-    "NO_REVIEWS": "Este libro aún no tiene reseñas",
+    "NO_REVIEW": "Este libro aún no tiene reseñas",
     "RATING_ASC": "Calificación ascendente",
     "RATING_DESC": "Calificación descendente",
     "DATE_DESC": "Más reciente primero"

@@ -404,7 +404,7 @@
     "SET_REVIEW": "Set review",
     "YOUR_REVIEW": "Your review",
     "READER_OPINION": "Reader's opinions",
-    "NO_REVIEWS": "This book has no reviews yet",
+    "NO_REVIEW": "This book has no reviews yet",
     "RATING_ASC": "Ascending rating",
     "RATING_DESC": "Descending rating",
     "DATE_DESC": "Newest first"
