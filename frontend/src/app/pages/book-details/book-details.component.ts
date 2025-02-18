@@ -26,6 +26,7 @@ import {MyQuestionsTabComponent} from "./components/my-questions-tab/my-question
 import {WriterQuestionsTabComponent} from "./components/writer-questions-tab/writer-questions-tab.component";
 import {QuestionSubmitBarComponent} from "./components/question-submit-bar/question-submit-bar.component";
 import {QuestionWithData} from "../../shared/model/question/questionWithData";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-book-details',
@@ -89,8 +90,10 @@ export class BookDetailsComponent implements OnInit {
     setup = true;
     index = { selectedIndex: 0 }
 
-    constructor() {
-        this.title.setTitle('Book details')
+    constructor(private translate: TranslateService) {
+        this.translate.get('BOOK_DETAILS_BROWSER').subscribe(translatedTitle => {
+            this.title.setTitle(translatedTitle);
+        });
     }
 
     ngOnInit() {

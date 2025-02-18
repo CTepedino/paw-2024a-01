@@ -73,7 +73,7 @@ export class BoughtBooksTabComponent implements OnInit{
       }
       this.form.updateValueAndValidity();
 
-      this.fetchBooks();
+      this.fetchBooks(true);
     });
   }
 
@@ -87,7 +87,7 @@ export class BoughtBooksTabComponent implements OnInit{
     this.fetchBooks();
   }
 
-  fetchBooks(){
+  fetchBooks(keepUrl: boolean = false){
     this.pagination$ =  this.profileService.getBoughtBooks({
       page: this.currentPage,
       size: this.pageSize,
@@ -98,15 +98,18 @@ export class BoughtBooksTabComponent implements OnInit{
         map((page) => page.data)
     )
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: this.currentPage,
-        title: this.form.get('title')?.value,
-        order_by: this.form.get('orderBy')?.value
-      },
-      queryParamsHandling: 'merge',
-    });
+    if (!keepUrl){
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          page: this.currentPage,
+          title: this.form.get('title')?.value,
+          order_by: this.form.get('orderBy')?.value
+        },
+        queryParamsHandling: 'merge',
+      });
+    }
+
   }
 
   protected readonly BookSearchOrderByOptions = BookSearchOrderByOptions;

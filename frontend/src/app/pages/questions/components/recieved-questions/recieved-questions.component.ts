@@ -1,7 +1,7 @@
-import {Component, inject, input, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {QuestionCardComponent} from "../question-card/question-card.component";
 import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
-import {AsyncPipe, JsonPipe} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable} from "rxjs";
@@ -20,7 +20,6 @@ import {QuestionWithDataService} from "../../../../shared/services/question-with
 		AsyncPipe,
 		PaginatorComponent,
 		NgxPaginationModule,
-		JsonPipe,
 		TranslateModule
 	],
   templateUrl: './recieved-questions.component.html',

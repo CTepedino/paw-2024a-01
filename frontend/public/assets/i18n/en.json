@@ -370,5 +370,9 @@
   "RESET_PASSWORD_BROWSER": "Reset Password",
   "SALES_BROWSER": "Sales",
   "SEARCH": "Search",
-  "SIGN_UP": "Sign Up"
+  "SIGN_UP": "Sign Up",
+  "BOOK_DETAILS_BROWSER": "Book details",
+  "BUY_BOOK_BROWSER": "Buy book",
+  "SET_DEAL_BROWSER": "Set deal",
+  "EDIT_BOOK_BROWSER": "Edit book"
 }

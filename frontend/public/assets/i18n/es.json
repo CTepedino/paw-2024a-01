@@ -345,7 +345,10 @@
   "RESET_PASSWORD_BROWSER": "Restablecer contraseña",
   "SALES_BROWSER": "Ventas",
   "SEARCH": "Buscar",
-  "SIGN_UP": "Registrarse"
-
+  "SIGN_UP": "Registrarse",
+  "BOOK_DETAILS_BROWSER": "Información del libro",
+  "BUY_BOOK_BROWSER": "Comprar libro",
+  "SET_DEAL_BROWSER": "Editar oferta",
+  "EDIT_BOOK_BROWSER": "Editar libro"
 
 }

@@ -48,7 +48,7 @@ export class WriterQuestionsTabComponent implements OnInit{
   }
 
   onPageChange(page: number){
-
+    this.currentPage = page;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page: page },

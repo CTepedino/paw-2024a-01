@@ -13,6 +13,8 @@ import {ActionButtonComponent} from "../../../../shared/components/action-button
 import {CancelButtonComponent} from "../../../../shared/components/cancel-button/cancel-button.component";
 import {DateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, NativeDateAdapter} from "@angular/material/core";
 import {DeleteButtonComponent} from "../../../../shared/components/delete-button/delete-button.component";
+import {Title} from "@angular/platform-browser";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-deal',
@@ -46,6 +48,7 @@ export class DealComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   bookDetailsService = inject(BookDetailsService);
+  title = inject(Title);
 
   id: any;
   book$: Observable<BookWithData> | null  = null;
@@ -54,7 +57,11 @@ export class DealComponent implements OnInit {
 
   minDate: Date;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private translate: TranslateService) {
+    this.translate.get('SET_DEAL_BROWSER').subscribe(translatedTitle => {
+      this.title.setTitle(translatedTitle);
+    });
+
     this.minDate = new Date();
     this.minDate.setTime(new Date().getTime() + 24 * 60 * 60 * 1000);
 

@@ -56,6 +56,8 @@ export class MyQuestionsTabComponent implements OnInit, OnChanges{
 
   onPageChange(page: number){
 
+    this.currentPage = page;
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page: page },

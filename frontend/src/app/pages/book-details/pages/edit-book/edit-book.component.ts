@@ -13,6 +13,7 @@ import {ActionButtonComponent} from "../../../../shared/components/action-button
 import {ContentCardComponent} from "../../../../shared/components/content-card/content-card.component";
 import {BookGenre} from "../../../../shared/model/book/bookGenre";
 import {fileTypeValidator} from "../../../../shared/validators/fileTypeValidator";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-edit-book',
@@ -46,8 +47,10 @@ export class EditBookComponent implements OnInit{
 
 	form: FormGroup;
 
-	constructor(private fb: FormBuilder) {
-		this.title.setTitle('Edit book');
+	constructor(private fb: FormBuilder, private translate: TranslateService) {
+		this.translate.get('EDIT_BOOK_BROWSER').subscribe(translatedTitle => {
+			this.title.setTitle(translatedTitle);
+		});
 
 		this.form = this.fb.group({
 			title: ['', [Validators.required, Validators.maxLength(50)]],
