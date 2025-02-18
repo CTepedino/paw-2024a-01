@@ -1,7 +1,7 @@
-INSERT INTO users (user_id, email, password, is_enabled) VALUES (101, 'repeatedEmail@error.com', 'password', true);
+INSERT INTO users (user_id, email, password, is_enabled) VALUES (101, 'repeatedemail@error.com', 'password', true);
 INSERT INTO roles (user_id, role) VALUES (101, 'READER');
 
-INSERT INTO users (user_id, email, password, is_enabled) VALUES (102, 'anotherMail@mail.com', '12345678', true);
+INSERT INTO users (user_id, email, password, is_enabled) VALUES (102, 'anothermail@mail.com', '12345678', true);
 INSERT INTO roles (user_id, role) VALUES (102, 'WRITER');
 
 INSERT INTO books (book_id, title, description, genre, page_count, price, suggested_age, published_date, writer_id, is_paused, sales_category)
@@ -11,7 +11,7 @@ INSERT INTO cover_images (id, file) VALUES (101,'');
 INSERT INTO book_previews (id, file) VALUES (101,'');
 INSERT INTO book_files (id, file) VALUES (101,'');
 
-INSERT INTO users (user_id, email, password, cbu, is_enabled) VALUES (103, 'booksPaused@mail.com', '12345678', '123', true);
+INSERT INTO users (user_id, email, password, cbu, is_enabled) VALUES (103, 'bookspaused@mail.com', '12345678', '123', true);
 INSERT INTO roles (user_id, role) VALUES (103, 'WRITER');
 INSERT INTO email_validations (id, code, expiration) VALUES (101, '12345', NOW());
 INSERT INTO reset_codes (id, code, expiration) VALUES (101, '12345', NOW());

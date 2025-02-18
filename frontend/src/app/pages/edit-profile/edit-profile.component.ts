@@ -103,13 +103,13 @@ export class EditProfileComponent implements OnInit {
 
   getErrorMessage(field: string): string {
     if (this.editForm.get(field)?.hasError('required')) {
-      return this.translate.instant('REQUIRED_FIELD'); // Traducción del mensaje de campo requerido
+      return this.translate.instant('REQUIRED_FIELD');
     }
     if (this.editForm.get(field)?.hasError('maxlength')) {
-      return this.translate.instant('MAX_LENGTH'); // Traducción de exceder longitud máxima
+      return this.translate.instant('MAX_LENGTH');
     }
     if (this.editForm.get(field)?.hasError('pattern')) {
-      return this.translate.instant('INVALID_CBU'); // Traducción para CBU o alias inválido
+      return this.translate.instant('INVALID_CBU');
     }
     return '';
   }

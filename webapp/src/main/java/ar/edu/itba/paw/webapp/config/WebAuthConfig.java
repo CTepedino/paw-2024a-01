@@ -137,8 +137,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
                 .requestMatchers(HttpMethod.POST,
                         "/api/books"
-                ).access(authFilter((a, o) ->
-                            accessHelper.isLoggedAndCanPublish()))
+                ).authenticated()
 
                 .requestMatchers(HttpMethod.PUT,
                         "/api/books/{id:\\d+}",

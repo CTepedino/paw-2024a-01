@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ContentCardComponent} from "../../shared/components/content-card/content-card.component";
-import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatOption, MatSelect} from "@angular/material/select";
@@ -37,6 +37,7 @@ import {TranslateModule, TranslateService} from "@ngx-translate/core";
     FileInputComponent,
     AsyncPipe,
     TranslateModule,
+    MatError,
   ],
   templateUrl: './add-book.component.html',
   styleUrl: './add-book.component.scss',
@@ -120,17 +121,33 @@ export class AddBookComponent implements OnInit {
     if (this.form.valid){
 
       this.addBookService.publish(this.form).pipe(
-      map((id) => {
-        console.log(`id: ${id}`)
-        this.router.navigate([`/book/${id}`]);
-      }), catchError((err) => {
-        console.log(err);
-        return throwError(() => 'publish failed');
-      })
+        map((id) => {
+          console.log(`id: ${id}`)
+          this.router.navigate([`/book/${id}`]);
+        }), catchError((err) => {
+          console.log(err);
+          return throwError(() => 'publish failed');
+        })
       ).subscribe();
     }
   }
 
 
+  showErrorMessage(field: string){
+    return this.form.get(field)?.invalid && this.form.get(field)?.touched
+  }
 
+
+  getErrorMessage(field: string): string {
+    if (this.form.get(field)?.hasError('required')) {
+      return this.translate.instant('REQUIRED_FIELD');
+    }
+    if (this.form.get(field)?.hasError('maxlength')) {
+      return this.translate.instant('MAX_LENGTH');
+    }
+    if (this.form.get(field)?.hasError('pattern')) {
+      return this.translate.instant('INVALID_CBU');
+    }
+    return '';
+  }
 }

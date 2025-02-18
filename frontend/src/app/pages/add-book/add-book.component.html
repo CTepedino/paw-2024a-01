@@ -12,6 +12,9 @@
 					<input matInput required #cbu formControlName="cbu">
 					<mat-hint>{{ 'CBU_HINT' | translate }}</mat-hint>
 					<mat-hint align="end">{{cbu.value.length}} / 22</mat-hint>
+					@if (showErrorMessage('cbu')) {
+						<mat-error>{{getErrorMessage('cbu')}}</mat-error>
+					}
 				</mat-form-field>
 			</div>
 			<hr/>
@@ -78,7 +81,7 @@
 				</div>
 			</div>
 			<div class="btn-zone">
-				<app-action-button [disabled]="!form.valid" (click)="onSubmit()">
+				<app-action-button [disabled]="!form.valid" submit>
                     {{ 'PUBLISH' | translate }}
 				</app-action-button>
 			</div>

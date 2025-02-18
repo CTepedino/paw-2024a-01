@@ -9,7 +9,7 @@ export const isNotBookWriterGuard: CanActivateFn = (route, state) => {
   const bookService = inject(BookService);
   const router = inject(Router);
 
-  const id = route.paramMap.get('id');
+  const id = route.paramMap.get('id') || route.parent?.paramMap.get('id');
 
   return forkJoin({
     loggedUser: authService.getLoggedUserFromApi(),

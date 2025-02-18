@@ -1,0 +1,16 @@
+<div class="full-width">
+	<form class="row-form" [formGroup]="form"  (ngSubmit)="onSubmit()" >
+		<div class="input-zone">
+			<mat-form-field class="input">
+				<mat-label>Leave a question</mat-label>
+				<input matInput required class="input-field" formControlName="question" autocomplete="off" maxlength="500">
+				<mat-icon class="arrow" matPrefix>question_answer</mat-icon>
+			</mat-form-field>
+		</div>
+		<app-action-button class="question-button" [disabled]="!this.form.valid" (click)="onSubmit()">
+			<div class="question">
+				Ask question
+			</div>
+		</app-action-button>
+	</form>
+</div>

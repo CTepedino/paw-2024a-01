@@ -74,7 +74,7 @@ export class PurchasesComponent implements OnInit {
       }
       this.form.updateValueAndValidity();
     });
-    this.fetchOrders();
+    this.fetchOrders(true);
   }
 
   onPageChange(page: number){
@@ -87,7 +87,7 @@ export class PurchasesComponent implements OnInit {
     this.fetchOrders();
   }
 
-  fetchOrders(){
+  fetchOrders(keepUrl: boolean = false){
     this.pagination$ = this.ordersWithDataService.getPurchases({
       page: this.currentPage,
       size: this.pageSize,
@@ -99,15 +99,17 @@ export class PurchasesComponent implements OnInit {
         map((page) => page.data)
     );
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: this.currentPage,
-        title: this.form.get('title')?.value,
-        status: this.form.get('status')?.value
-      },
-      queryParamsHandling: 'merge',
-    });
+    if (!keepUrl) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          page: this.currentPage,
+          title: this.form.get('title')?.value,
+          status: this.form.get('status')?.value
+        },
+        queryParamsHandling: 'merge',
+      });
+    }
   }
 
   protected readonly OrderStatus = OrderStatus;

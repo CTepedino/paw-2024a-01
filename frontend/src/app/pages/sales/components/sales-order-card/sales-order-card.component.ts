@@ -1,7 +1,7 @@
 import {Component, inject, input} from '@angular/core';
 import {OrderStatus} from "../../../../shared/model/order/orderStatus";
 import {MatGridListModule} from "@angular/material/grid-list";
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {CurrencyPipe, DatePipe, NgOptimizedImage} from "@angular/common";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {AcceptPopupComponent} from "../accept-popup/accept-popup.component";
@@ -10,10 +10,11 @@ import {OrderWithData} from "../../../../shared/model/order/orderWithData";
 import {OrderService} from "../../../../shared/services/order.service";
 import {tap} from "rxjs";
 import {TranslateModule} from "@ngx-translate/core";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-sales-order-card',
-  imports: [MatGridListModule, CurrencyPipe, DatePipe, MatButtonModule, TranslateModule],
+  imports: [MatGridListModule, CurrencyPipe, DatePipe, MatButtonModule, TranslateModule, RouterLink, NgOptimizedImage],
   templateUrl: './sales-order-card.component.html',
   styleUrl: './sales-order-card.component.scss'
 })

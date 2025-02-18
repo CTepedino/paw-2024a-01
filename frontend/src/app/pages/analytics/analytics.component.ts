@@ -89,10 +89,10 @@ export class AnalyticsComponent implements OnInit {
       this.form.updateValueAndValidity();
     });
 
-    this.fetchBooks();
+    this.fetchBooks(true);
   }
 
-  fetchBooks(){
+  fetchBooks(keepUrl: boolean = false){
     this.monthlyTotal$ = this.analyticsService.getMonthlyTotal(this.form.get('year')?.value, this.form.get('month')?.value);
 
     if (this.showByMonth){
@@ -109,17 +109,19 @@ export class AnalyticsComponent implements OnInit {
         map((pagination) => pagination.data)
     );
 
+    if (!keepUrl){
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          page: this.currentPage,
+          show_by_month: this.showByMonth,
+          year: this.form.get('year')?.value,
+          month: this.form.get('month')?.value
+        },
+        queryParamsHandling: 'merge',
+      });
+    }
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: this.currentPage,
-        show_by_month: this.showByMonth,
-        year: this.form.get('year')?.value,
-        month: this.form.get('month')?.value
-      },
-      queryParamsHandling: 'merge',
-    });
   }
 
   setBooks(event: any){

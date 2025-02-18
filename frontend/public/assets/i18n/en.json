@@ -21,6 +21,9 @@
   "PREVIEW_FILE": "Preview file",
   "BOOK_FILE": "Book file",
   "PUBLISH": "Publish",
+  "ADDBOOK.ERRORS.MIN_LENGTH": "At least 6 characters",
+  "ADDBOOK.ERRORS.MAX_LENGTH": "At most 22 characters",
+  "ADDBOOK.ERRORS.CBU_PATTERNS": "Should be a valid cbu or alias",
 
   "FICTION": "Fiction",
   "NON_FICTION": "Non-Fiction",
@@ -370,5 +373,9 @@
   "RESET_PASSWORD_BROWSER": "Reset Password",
   "SALES_BROWSER": "Sales",
   "SEARCH": "Search",
-  "SIGN_UP": "Sign Up"
+  "SIGN_UP": "Sign Up",
+  "BOOK_DETAILS_BROWSER": "Book details",
+  "BUY_BOOK_BROWSER": "Buy book",
+  "SET_DEAL_BROWSER": "Set deal",
+  "EDIT_BOOK_BROWSER": "Edit book"
 }

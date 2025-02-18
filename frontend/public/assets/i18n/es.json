@@ -20,6 +20,10 @@
   "PREVIEW_FILE": "Archivo de vista previa",
   "BOOK_FILE": "Archivo del libro",
   "PUBLISH": "Publicar",
+  "ADDBOOK.ERRORS.MIN_LENGTH": "Al menos 6 carácteres",
+  "ADDBOOK.ERRORS.MAX_LENGTH": "Máximo 22 carácteres",
+  "ADDBOOK.ERRORS.CBU_PATTERNS": "Debe ser un CBU o alias valido",
+
   "FICTION": "Ficción",
   "NON_FICTION": "No Ficción",
   "MYSTERY": "Misterio",
@@ -345,7 +349,10 @@
   "RESET_PASSWORD_BROWSER": "Restablecer contraseña",
   "SALES_BROWSER": "Ventas",
   "SEARCH": "Buscar",
-  "SIGN_UP": "Registrarse"
-
+  "SIGN_UP": "Registrarse",
+  "BOOK_DETAILS_BROWSER": "Información del libro",
+  "BUY_BOOK_BROWSER": "Comprar libro",
+  "SET_DEAL_BROWSER": "Editar oferta",
+  "EDIT_BOOK_BROWSER": "Editar libro"
 
 }

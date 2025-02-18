@@ -14,17 +14,19 @@ import {Title} from "@angular/platform-browser";
 import {SmallBookCardComponent} from "../../shared/components/small-book-card/small-book-card.component";
 import {MatTab, MatTabContent, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {BookDetailsService} from "./store/book-details.service";
-import {concatMap, map, Observable, tap} from "rxjs";
+import {concatMap, Observable, tap} from "rxjs";
 import {BookWithData} from "../../shared/model/book/bookWithData";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {ReviewWithInfo} from "../../shared/model/review/reviewWithInfo";
-import {Question} from "../../shared/model/question/question";
 import {MatDialog} from "@angular/material/dialog";
 import {ReviewFormCardComponent} from "./components/review-form-card/review-form-card.component";
 import {ReviewTabComponent} from "./components/review-tab/review-tab.component";
 import {QuestionsTabComponent} from "./components/questions-tab/questions-tab.component";
 import {MyQuestionsTabComponent} from "./components/my-questions-tab/my-questions-tab.component";
 import {WriterQuestionsTabComponent} from "./components/writer-questions-tab/writer-questions-tab.component";
+import {QuestionSubmitBarComponent} from "./components/question-submit-bar/question-submit-bar.component";
+import {QuestionWithData} from "../../shared/model/question/questionWithData";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-book-details',
@@ -48,7 +50,8 @@ import {WriterQuestionsTabComponent} from "./components/writer-questions-tab/wri
         ReviewTabComponent,
         QuestionsTabComponent,
         MyQuestionsTabComponent,
-        WriterQuestionsTabComponent
+        WriterQuestionsTabComponent,
+        QuestionSubmitBarComponent
     ],
     templateUrl: './book-details.component.html',
     styleUrl: './book-details.component.scss'
@@ -80,12 +83,17 @@ export class BookDetailsComponent implements OnInit {
 
     reviewPage$: Observable<PaginatedContent<ReviewWithInfo>> | null = null;
 
-    questionPage$: Observable<PaginatedContent<Question>> | null = null;
+    questionPage$: Observable<PaginatedContent<QuestionWithData>> | null = null;
 
-    myQuestionPage$: Observable<PaginatedContent<Question>> | null = null;
+    myQuestionPage$: Observable<PaginatedContent<QuestionWithData>> | null = null;
 
-    constructor() {
-        this.title.setTitle('Book details')
+    setup = true;
+    index = { selectedIndex: 0 }
+
+    constructor(private translate: TranslateService) {
+        this.translate.get('BOOK_DETAILS_BROWSER').subscribe(translatedTitle => {
+            this.title.setTitle(translatedTitle);
+        });
     }
 
     ngOnInit() {
@@ -120,6 +128,15 @@ export class BookDetailsComponent implements OnInit {
             );
 
         })
+
+        const url = this.router.url;
+        if (url.includes('questions')) {
+            setTimeout(() => this.index.selectedIndex = 1, 100);
+        }
+        if (url.includes('my-questions')) {
+            setTimeout(() => this.index.selectedIndex = 2, 100);
+        }
+        setTimeout(() => this.setup = false, 150);
     }
 
     getPercentage(price: number, dealPrice: number){
@@ -142,6 +159,23 @@ export class BookDetailsComponent implements OnInit {
         })
     }
 
+    refetchMyQuestions(){
+        this.myQuestionPage$ = this.bookDetailsService.getAllMyQuestions(this.bookId, this.pageNumber, this.pageSize);
+    }
+
+
+    onTabChange(event: any){
+        if (!this.setup){
+            this.pageNumber = 1;
+        }
+        if (event.index === 0) {
+            this.router.navigate([`book/${this.bookId}/reviews`]);
+        } else if (event.index === 1) {
+            this.router.navigate([`book/${this.bookId}/questions`]);
+        } else if (event.index === 2) {
+            this.router.navigate([`book/${this.bookId}/my-questions`]);
+        }
+    }
 
     protected readonly SalesCategory = SalesCategory;
     protected readonly WriterCategory = WriterCategory;

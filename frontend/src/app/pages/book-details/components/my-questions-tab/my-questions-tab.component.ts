@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit} from '@angular/core';
+import {Component, inject, input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {BookDetailsService} from "../../store/book-details.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable} from "rxjs";
@@ -22,12 +22,13 @@ import {TranslatePipe} from "@ngx-translate/core";
   templateUrl: './my-questions-tab.component.html',
   styleUrl: './my-questions-tab.component.scss'
 })
-export class MyQuestionsTabComponent implements OnInit{
+export class MyQuestionsTabComponent implements OnInit, OnChanges{
   bookDetailsService = inject(BookDetailsService)
   route = inject(ActivatedRoute);
   router = inject(Router);
 
   bookId = input.required<number>();
+  questionPage = input.required<Observable<PaginatedContent<QuestionWithData>>>();
 
   currentPage!: number;
   pageSize = 10;
@@ -39,13 +40,23 @@ export class MyQuestionsTabComponent implements OnInit{
       this.currentPage = Number(params['page']) || 1;
     });
 
-    this.pagination$ =  this.bookDetailsService.getAllMyQuestions(this.bookId(), this.currentPage, this.pageSize)
+    this.pagination$ =  this.questionPage();
+    this.questions$ = this.pagination$.pipe(
+        map((page) => page.data)
+    )
+  }
+
+  ngOnChanges() {
+    this.currentPage = 1;
+    this.pagination$ =  this.questionPage();
     this.questions$ = this.pagination$.pipe(
         map((page) => page.data)
     )
   }
 
   onPageChange(page: number){
+
+    this.currentPage = page;
 
     this.router.navigate([], {
       relativeTo: this.route,

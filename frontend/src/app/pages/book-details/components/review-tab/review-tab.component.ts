@@ -67,7 +67,7 @@ export class ReviewTabComponent implements OnInit {
 			}
 			this.form.updateValueAndValidity();
 		});
-		this.fetchReviews();
+		this.fetchReviews(true);
 	}
 
 	onPageChange(page: number){
@@ -80,7 +80,7 @@ export class ReviewTabComponent implements OnInit {
 		this.fetchReviews();
 	}
 
-	fetchReviews(){
+	fetchReviews(keepUrl: boolean = false){
 		this.pagination$ = this.bookDetailsService.getReviews(this.bookId(), {
 			order_by: this.form.get('orderBy')?.value,
 			page: this.currentPage,
@@ -91,14 +91,17 @@ export class ReviewTabComponent implements OnInit {
 			map((page) => page.data)
 		);
 
-		this.router.navigate([], {
-			relativeTo: this.route,
-			queryParams: {
-				page: this.currentPage,
-				status: this.form.get('orderBy')?.value
-			},
-			queryParamsHandling: 'merge',
-		});
+		if (!keepUrl){
+			this.router.navigate([], {
+				relativeTo: this.route,
+				queryParams: {
+					page: this.currentPage,
+					status: this.form.get('orderBy')?.value
+				},
+				queryParamsHandling: 'merge',
+			});
+		}
+
 	}
 
 	protected readonly Object = Object;

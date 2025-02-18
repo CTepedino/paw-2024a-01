@@ -71,7 +71,7 @@ export class SalesComponent implements OnInit{
     this.fetchOrders();
   }
 
-  fetchOrders(){
+  fetchOrders(keepUrl: boolean = false){
     this.pagination$ = this.ordersWithDataService.getSales({
       page: this.currentPage,
       size: this.pageSize,
@@ -83,15 +83,17 @@ export class SalesComponent implements OnInit{
         map((page) => page.data)
     );
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: 1,
-        title: this.form.get('title')?.value,
-        status: this.form.get('status')?.value
-      },
-      queryParamsHandling: 'merge',
-    });
+      this.router.navigate([], {
+        relativeTo: this.route,
+        skipLocationChange: true,
+        queryParams: {
+          page: 1,
+          title: this.form.get('title')?.value,
+          status: this.form.get('status')?.value
+        },
+        queryParamsHandling: 'merge',
+      });
+
   }
 
   protected readonly Object = Object;

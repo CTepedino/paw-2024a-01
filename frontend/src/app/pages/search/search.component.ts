@@ -95,7 +95,7 @@ export class SearchComponent implements OnInit {
 
           this.form.updateValueAndValidity();
         });
-        this.fetchBooks();
+        this.fetchBooks(true);
     }
 
     onSubmit(){
@@ -122,7 +122,7 @@ export class SearchComponent implements OnInit {
       this.fetchBooks();
     }
 
-    fetchBooks(){
+    fetchBooks(keepUrl: boolean = false){
       this.pagination$ = this.bookWithDataService.listBooksWithData({
         page: this.currentPage,
         size: this.pageSize,
@@ -141,22 +141,25 @@ export class SearchComponent implements OnInit {
           map((page) => page.data),
       );
 
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: {
-          page: this.currentPage,
-          title: this.form.get('title')?.value,
-          genre: this.form.get('genre')?.value,
-          order_by: this.form.get('orderBy')?.value,
-          min_pages: this.form.get('minPages')?.value,
-          max_pages: this.form.get('maxPages')?.value,
-          min_price: this.form.get('minPrice')?.value,
-          max_price: this.form.get('maxPrice')?.value,
-          min_age: this.form.get('minAge')?.value,
-          max_age: this.form.get('maxAge')?.value,
-        },
-        queryParamsHandling: 'merge',
-      });
+      if (!keepUrl){
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            page: this.currentPage,
+            title: this.form.get('title')?.value,
+            genre: this.form.get('genre')?.value,
+            order_by: this.form.get('orderBy')?.value,
+            min_pages: this.form.get('minPages')?.value,
+            max_pages: this.form.get('maxPages')?.value,
+            min_price: this.form.get('minPrice')?.value,
+            max_price: this.form.get('maxPrice')?.value,
+            min_age: this.form.get('minAge')?.value,
+            max_age: this.form.get('maxAge')?.value,
+          },
+          queryParamsHandling: 'merge',
+        });
+      }
+
     }
 
   protected readonly BookGenre = BookGenre;

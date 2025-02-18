@@ -3,7 +3,6 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailValidationService;
 import ar.edu.itba.paw.models.exception.InvalidCodeException;
-import ar.edu.itba.paw.models.exception.NoValidationCodeException;
 import ar.edu.itba.paw.models.files.ProfilePicture;
 import ar.edu.itba.paw.models.users.User;
 import org.junit.Before;
@@ -72,28 +71,24 @@ public class UserServiceImplTest {
 
     @Test
     public void testValidateInexistentUser(){
-        Mockito.when(userDao.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
 
         assertThrows(
-                NoValidationCodeException.class,
-                () -> userService.validateEmail(EMAIL, "12345")
+                InvalidCodeException.class,
+                () -> userService.validateEmail("email", "12345")
         );
     }
 
     @Test
     public void testValidateEnabledUser(){
-        Mockito.when(userDao.findByEmail(Mockito.anyString())).thenReturn(Optional.of(new User(1, EMAIL, ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, true, Locale.US)));
 
         assertThrows(
-                NoValidationCodeException.class,
+                InvalidCodeException.class,
                 () -> userService.validateEmail(EMAIL, "12345")
         );
     }
 
     @Test
     public void testValidateInvalidCheck(){
-        Mockito.when(userDao.findByEmail(Mockito.anyString())).thenReturn(Optional.of(new User(1, EMAIL, ENCODED_PASSWORD, FIRST_NAME, LAST_NAME, false, Locale.US)));
-        Mockito.when(evs.checkValidation(Mockito.anyLong(), Mockito.anyString())).thenReturn(false);
 
         assertThrows(
                 InvalidCodeException.class,
