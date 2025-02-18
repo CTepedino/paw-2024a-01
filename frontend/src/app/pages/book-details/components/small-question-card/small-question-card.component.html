@@ -1,0 +1,38 @@
+<div class="question-card">
+	<div class="question">
+		<div>
+			<span class="question-text">{{question().question}}</span>
+			<span class="date"> - {{question().date | date:'yyyy/MM/dd'}}</span>
+		</div>
+		<div class="answer">
+			@if(received()){
+				@if (showAnswer()){
+					<span><mat-icon class="arrow">subdirectory_arrow_right</mat-icon></span>
+					<span class="answer-text">{{question().answerInfo?.answer}}</span>
+					<span class="date"> - {{question().answerInfo?.answerDate | date:'yyyy/MM/dd'}}</span>
+				} @else {
+					<form class="row-form" [formGroup]="form"  (ngSubmit)="onSubmit()" >
+						<mat-icon class="arrow">subdirectory_arrow_right</mat-icon>
+						<mat-form-field class="input">
+							<mat-label>{{ 'QUESTIONS.QUESTION_CARD.ANSWER' | translate }}</mat-label>
+							<input matInput required class="input-field" formControlName="answer" autocomplete="off" maxlength="500">
+						</mat-form-field>
+						<app-action-button class="button" [disabled]="!this.form.valid" (click)="onSubmit()">
+							<div class="answer">
+								{{ 'QUESTIONS.QUESTION_CARD.ANSWER_LABEL' | translate }}
+							</div>
+						</app-action-button>
+					</form>
+				}
+			} @else {
+				<span><mat-icon class="arrow">subdirectory_arrow_right</mat-icon></span>
+				@if (question().answerInfo) {
+					<span class="answer-text">{{question().answerInfo?.answer}}</span>
+					<span class="date"> - {{question().answerInfo?.answerDate | date:'yyyy/MM/dd'}}</span>
+				} @else {
+					<span class="answer-text">{{ 'QUESTIONS.QUESTION_CARD.NO_ANSWER_YET' | translate }}</span>
+				}
+			}
+		</div>
+	</div>
+</div>

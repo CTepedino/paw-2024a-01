@@ -1,0 +1,36 @@
+@if (loggedUserReview()){
+	<h3 class="title">Your review</h3>
+	<app-review-card [review]="loggedUserReview()!"></app-review-card>
+}
+
+@if ((pagination$ | async)?.pagination?.totalCount! > 0){
+	@if (reviews$ | async; as reviews){
+		<div class="header">
+			<h3>Reader's opinions</h3>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="half">
+				<mat-form-field class="full-width">
+					<mat-select (selectionChange)="onSubmit()" formControlName="orderBy">
+						@for (status of Object.values(ReviewOrderBy); track status){
+							<mat-option [value]="status">{{status}}</mat-option>
+						}
+					</mat-select>
+				</mat-form-field>
+			</form>
+		</div>
+		<mat-grid-list cols="1" class="full-width" rowHeight="200px">
+			@for(review of ((reviews)!| paginate: {id: 'received', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!});; track review.reviewerId){
+				<mat-grid-tile>
+					<app-review-card [review]="review" class="full-width"></app-review-card>
+				</mat-grid-tile>
+			}
+		</mat-grid-list>
+	}
+	@if (((pagination$ | async)?.pagination?.pageCount ?? 0) > 1){
+		<app-paginator id="reviews" (pageChange)="onPageChange($event)"/>
+	}
+} @else {
+	@if (!loggedUserReview()){
+		<h5 class="center-text">This book has no reviews yet</h5>
+	}
+}
+

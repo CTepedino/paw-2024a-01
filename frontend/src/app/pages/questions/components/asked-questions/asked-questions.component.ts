@@ -4,13 +4,14 @@ import {QuestionCardComponent} from "../question-card/question-card.component";
 import {MatFormField} from "@angular/material/form-field";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {map, Observable} from "rxjs";
-import {QuestionWithDataService} from "../../store/question-with-data.service";
+
 import {ActivatedRoute, Router} from "@angular/router";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
 import {AsyncPipe, JsonPipe} from "@angular/common";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {TranslateModule} from "@ngx-translate/core";
+import {QuestionWithDataService} from "../../../../shared/services/question-with-data.service";
 
 @Component({
   selector: 'app-asked-questions',

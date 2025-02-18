@@ -14,14 +14,17 @@ import {Title} from "@angular/platform-browser";
 import {SmallBookCardComponent} from "../../shared/components/small-book-card/small-book-card.component";
 import {MatTab, MatTabContent, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {BookDetailsService} from "./store/book-details.service";
-import {Observable, tap} from "rxjs";
+import {concatMap, map, Observable, tap} from "rxjs";
 import {BookWithData} from "../../shared/model/book/bookWithData";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {ReviewWithInfo} from "../../shared/model/review/reviewWithInfo";
 import {Question} from "../../shared/model/question/question";
 import {MatDialog} from "@angular/material/dialog";
-import {DeclinePopupComponent} from "../sales/components/decline-popup/decline-popup.component";
 import {ReviewFormCardComponent} from "./components/review-form-card/review-form-card.component";
+import {ReviewTabComponent} from "./components/review-tab/review-tab.component";
+import {QuestionsTabComponent} from "./components/questions-tab/questions-tab.component";
+import {MyQuestionsTabComponent} from "./components/my-questions-tab/my-questions-tab.component";
+import {WriterQuestionsTabComponent} from "./components/writer-questions-tab/writer-questions-tab.component";
 
 @Component({
     selector: 'app-book-details',
@@ -41,7 +44,11 @@ import {ReviewFormCardComponent} from "./components/review-form-card/review-form
         MatTabGroup,
         MatTab,
         MatTabContent,
-        MatTabLabel
+        MatTabLabel,
+        ReviewTabComponent,
+        QuestionsTabComponent,
+        MyQuestionsTabComponent,
+        WriterQuestionsTabComponent
     ],
     templateUrl: './book-details.component.html',
     styleUrl: './book-details.component.scss'
@@ -86,26 +93,31 @@ export class BookDetailsComponent implements OnInit {
             this.bookId = params['id'];
             this.book$ = this.bookDetailsService.getBook(this.bookId);
             this.recommendations$ = this.bookDetailsService.getRecommendedBooks(this.bookId, this.recommendedPageSize);
+            this.reviewPage$ = this.bookDetailsService.getReviews(this.bookId,{page: this.pageNumber, size: this.pageSize});
             this.isLoggedIn$ = this.bookDetailsService.isLoggedIn().pipe(
                 tap(logged => {
                     if (logged){
-                        this.isAuthor$ = this.bookDetailsService.isAuthor(this.bookId);
+                        this.isAuthor$ = this.bookDetailsService.isAuthor(this.bookId).pipe(
+                            tap(isAuthor => {
+                                if (!isAuthor){
+                                    this.questionPage$ = this.bookDetailsService.getAllOtherQuestions(this.bookId, this.pageNumber, this.pageSize);
+                                    this.myQuestionPage$ = this.bookDetailsService.getAllMyQuestions(this.bookId, this.pageNumber, this.pageSize);
+                                    this.bookDetailsService.getLoggedReview(this.bookId).subscribe(r => this.loggedUserReview = r);
+                                } else {
+                                    this.questionPage$ = this.bookDetailsService.getAllQuestions(this.bookId, this.pageNumber, this.pageSize);
+                                }
+                            })
+                        );
                         this.existsOrder$ = this.bookDetailsService.existsOrder(this.bookId);
                         this.isOwner$ = this.bookDetailsService.isOwner(this.bookId);
                         this.bookDetailsService.isWishlisted(this.bookId).subscribe(w => this.isWishlisted = w);
                         this.bookDetailsService.isRecommended(this.bookId).subscribe(r => this.isRecommended = r);
 
-                        this.bookDetailsService.getLoggedReview(this.bookId).subscribe(r => this.loggedUserReview = r);
-
-                        this.questionPage$ = this.bookDetailsService.getAllOtherQuestions(this.bookId, this.pageNumber, this.pageSize);
-
-                        this.myQuestionPage$ = this.bookDetailsService.getAllMyQuestions(this.bookId, this.pageNumber, this.pageSize);
                     } else {
-                        this.questionPage$ = this.bookDetailsService.getAllQuestions(this.bookId, this.pageNumber, this.pageSize);
+                        this.questionPage$ = this.bookDetailsService.getAllOtherQuestions(this.bookId, this.pageNumber, this.pageSize);
                     }
                 })
             );
-            this.reviewPage$ = this.bookDetailsService.getReviews(this.bookId,{page: this.pageNumber, size: this.pageSize});
 
         })
     }
@@ -123,8 +135,9 @@ export class BookDetailsComponent implements OnInit {
 
         reviewDialog.afterClosed().subscribe(result => {
             if (result.update){
-                this.loggedUserReview = result.review;
-                this.bookDetailsService.setReview(this.bookId, result.review).subscribe();
+                this.bookDetailsService.setReview(this.bookId, result.review).pipe(
+                    concatMap(() => this.bookDetailsService.getLoggedReview(this.bookId))
+                ).subscribe(review => this.loggedUserReview = review);
             }
         })
     }

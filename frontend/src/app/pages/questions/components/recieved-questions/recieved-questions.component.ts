@@ -2,7 +2,7 @@ import {Component, inject, input, OnInit} from '@angular/core';
 import {QuestionCardComponent} from "../question-card/question-card.component";
 import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
 import {AsyncPipe, JsonPipe} from "@angular/common";
-import {QuestionWithDataService} from "../../store/question-with-data.service";
+
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
@@ -10,6 +10,7 @@ import {QuestionWithData} from "../../../../shared/model/question/questionWithDa
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {TranslateModule} from "@ngx-translate/core";
+import {QuestionWithDataService} from "../../../../shared/services/question-with-data.service";
 
 @Component({
   selector: 'app-recieved-questions',

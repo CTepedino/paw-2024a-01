@@ -109,7 +109,6 @@ export class BookService {
       if (!query.size){
           query.size = 10;
       }
-
       let params = new HttpParams();
 
       Object.entries(query).forEach(([name, value]) => {
@@ -118,7 +117,7 @@ export class BookService {
           }
       });
 
-      return this.http.get<Review[]>(bookUrl, {params: params, observe: "response"}).pipe(
+      return this.http.get<Review[]>(`${bookUrl}/reviews`, {params: params, observe: "response"}).pipe(
           map(response => setPagination(response, query.size!))
       );
   }

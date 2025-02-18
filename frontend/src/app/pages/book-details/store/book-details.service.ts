@@ -15,6 +15,8 @@ import {ReviewOrderBy} from "../../../shared/model/review/reviewOrderBy";
 import {ReviewSearchQuery} from "../../../shared/model/review/reviewSearchQuery";
 import {QuestionService} from "../../../shared/services/question.service";
 import {Question} from "../../../shared/model/question/question";
+import {QuestionWithData} from "../../../shared/model/question/questionWithData";
+import {QuestionWithDataService} from "../../../shared/services/question-with-data.service";
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,7 @@ export class BookDetailsService {
         private bookService: BookService,
         private authService: AuthService,
         private userService: UserService,
-        private questionService: QuestionService
+        private questionService: QuestionWithDataService
     ) { }
 
     private book: BookWithData | undefined;
@@ -137,10 +139,12 @@ export class BookDetailsService {
         )
     }
 
-    getLoggedReview(bookId: number): Observable<Review | null>{
+    getLoggedReview(bookId: number): Observable<ReviewWithInfo | null>{
         return this.authService.getLoggedUser().pipe(
             concatMap(user => {
-                return this.bookService.getReview(bookId, user?.id!);
+                return this.bookService.getReview(bookId, user?.id!).pipe(
+                    map(review => ({...review, reviewerInfo: user!}))
+                );
             }),
             catchError(() => of(null))
         );
@@ -211,32 +215,24 @@ export class BookDetailsService {
         );
     }
 
-    getAllQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<Question>> {
-        return this.questionService.listQuestions({book_id: bookId, page: page, size: size});
+    getAllQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<QuestionWithData>> {
+        return this.questionService.getQuestions({book_id: bookId, page: page, size: size});
     }
 
-    getAllMyQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<Question>> {
+    getAllMyQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<QuestionWithData>> {
         return this.authService.getLoggedUser().pipe(
-            concatMap(user => this.questionService.listQuestions({book_id: bookId, page: page, size: size, questioner_id: user?.id!}))
+            concatMap(user => this.questionService.getQuestions({book_id: bookId, page: page, size: size, questioner_id: user?.id!}))
         );
     }
 
-    getAllOtherQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<Question>> {
+    getAllOtherQuestions(bookId: number, page: number, size: number): Observable<PaginatedContent<QuestionWithData>> {
         return this.authService.getLoggedUser().pipe(
-            concatMap(user => this.questionService.listQuestions({book_id: bookId, page: page, size: size, questioner_id: user?.id!, exclude_questioner: true}))
+            concatMap(user => {
+                return this.questionService.getQuestions({book_id: bookId, page: page, size: size, questioner_id: (user?.id != null) ? user.id : undefined, exclude_questioner: true, is_answered: true})
+            })
         );
     }
 
-    askQuestion(bookId: number, question: string){
-        return this.questionService.postQuestion({
-            bookId: bookId,
-            question: question,
-        });
-    }
-
-    answerQuestion(questionUrl: string, answer: string){
-        return this.questionService.putAnswer(questionUrl, {answer: answer, answerDate: new Date().toString()})
-    }
 
     openPdf(url: string){
         return this.bookService.openBookInternal(url);

@@ -104,16 +104,17 @@
 							</app-action-button>
 						}
 						@if (!isOwner && existsOrder){
+							<p>You already bought this book</p>
 							<app-action-button class="action-btn" routerLink="/purchases" [queryParams]="{title: book.title}">
 								<div class="book-action">Go to purchases</div>
 							</app-action-button>
 						}
-						@if (isOwner && !hasReviewed){ <!--TODO: open popup-->
+						@if (isOwner && !hasReviewed){
 							<app-action-button class="action-btn" (click)="openReviewDialog()">
 								<div class="book-action">Leave review</div>
 							</app-action-button>
 						}
-						@if (isOwner && hasReviewed){ <!--TODO: open popup-->
+						@if (isOwner && hasReviewed){
 							<app-action-button class="action-btn" (click)="openReviewDialog()">
 								<div class="book-action">Edit review</div>
 							</app-action-button>
@@ -166,11 +167,11 @@
 		<mat-tab-group class="tabber">
 			<mat-tab class="tab">
 				<ng-template mat-tab-label>
-					Reviews ({{(reviewPage$ | async)?.pagination?.totalCount}})
+					Reviews ({{((reviewPage$ | async)?.pagination?.totalCount ?? 0) + (loggedUserReview!=null? 1: 0)}})
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
-					
+						<app-review-tab [loggedUserReview]="loggedUserReview" [bookId]="bookId"></app-review-tab>
 					</div>
 				</ng-template>
 			</mat-tab>
@@ -180,7 +181,11 @@
 				</ng-template>
 				<ng-template matTabContent>
 					<div class="white">
-					
+						@if (isAuthor){
+							<app-writer-questions-tab [bookId]="bookId"></app-writer-questions-tab>
+						} @else {
+							<app-questions-tab [bookId]="bookId"></app-questions-tab>
+						}
 					</div>
 				</ng-template>
 			</mat-tab>
@@ -191,7 +196,7 @@
 					</ng-template>
 					<ng-template matTabContent>
 						<div class="white">
-						
+							<app-my-questions-tab [bookId]="bookId"></app-my-questions-tab>
 						</div>
 					</ng-template>
 				</mat-tab>

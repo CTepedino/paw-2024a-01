@@ -1,15 +1,16 @@
 import {Injectable} from "@angular/core";
-import {QuestionService} from "../../../shared/services/question.service";
-import {UserService} from "../../../shared/services/user.service";
-import {BookService} from "../../../shared/services/book.service";
-import {Book} from "../../../shared/model/book/book";
-import {QuestionSearchQuery} from "../../../shared/model/question/questionSearchQuery";
+import {QuestionService} from "./question.service";
+import {UserService} from "./user.service";
+import {BookService} from "./book.service";
+import {AuthService} from "./auth.service";
+import {Book} from "../model/book/book";
 import {catchError, concatMap, forkJoin, map, Observable, of} from "rxjs";
-import {PaginatedContent} from "../../../shared/model/paginatedContent";
-import {QuestionWithData} from "../../../shared/model/question/questionWithData";
-import {Question} from "../../../shared/model/question/question";
-import {Answer} from "../../../shared/model/question/answer";
-import {AuthService} from "../../../shared/services/auth.service";
+import {QuestionSearchQuery} from "../model/question/questionSearchQuery";
+import {PaginatedContent} from "../model/paginatedContent";
+import {QuestionWithData} from "../model/question/questionWithData";
+import {Question} from "../model/question/question";
+import {Answer} from "../model/question/answer";
+
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class QuestionWithDataService {
         );
     }
 
-  private getQuestions(query: QuestionSearchQuery): Observable<PaginatedContent<QuestionWithData>> {
+  getQuestions(query: QuestionSearchQuery): Observable<PaginatedContent<QuestionWithData>> {
     return this.questionService.listQuestions(query).pipe(
         concatMap((questions) => {
             if (questions.data.length === 0){
@@ -107,7 +108,10 @@ export class QuestionWithDataService {
 
   private fillBookAndAnswerInfo(question: Question): Observable<QuestionWithData> {
     const book$ = this.fetchBook(question.book!);
-    const answer$ = this.fetchAnswer(question.self!);
+    let answer$: Observable<Answer | undefined> = of(undefined);
+    if (question.answer){
+        answer$ = this.fetchAnswer(question.self!);
+    }
 
     return forkJoin({bookInfo: book$, answerInfo: answer$}).pipe(
         map(({bookInfo, answerInfo}) => ({

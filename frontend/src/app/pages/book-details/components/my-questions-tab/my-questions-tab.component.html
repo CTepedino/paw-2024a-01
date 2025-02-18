@@ -1,0 +1,22 @@
+@if (questions$ | async; as questions){
+	<div class="questions-container">
+		
+		@for (question of ((questions)!| paginate: {id: 'my-questions', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!});
+			track question.id){
+			<app-small-question-card
+				[question]="question"
+			></app-small-question-card>
+		}
+	</div>
+	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
+		<app-paginator id="my-questions" (pageChange)="onPageChange($event)"/>
+	}
+	
+	@if ((questions.length) === 0){
+		<h5 class="empty-q">
+			{{ 'QUESTIONS.NO_QUESTIONS_ASKED' | translate }}
+		</h5>
+	}
+}
+
+

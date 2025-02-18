@@ -102,7 +102,7 @@ export class PurchasesComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1,
+        page: this.currentPage,
         title: this.form.get('title')?.value,
         status: this.form.get('status')?.value
       },
