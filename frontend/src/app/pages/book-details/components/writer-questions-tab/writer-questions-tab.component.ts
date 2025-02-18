@@ -28,6 +28,8 @@ export class WriterQuestionsTabComponent implements OnInit{
   router = inject(Router);
 
   bookId = input.required<number>();
+  questionPage = input.required<Observable<PaginatedContent<QuestionWithData>>>();
+
 
   currentPage!: number;
   pageSize = 10;
@@ -39,7 +41,7 @@ export class WriterQuestionsTabComponent implements OnInit{
       this.currentPage = Number(params['page']) || 1;
     });
 
-    this.pagination$ =  this.bookDetailsService.getAllQuestions(this.bookId(), this.currentPage, this.pageSize)
+    this.pagination$ =  this.questionPage();
     this.questions$ = this.pagination$.pipe(
         map((page) => page.data)
     )

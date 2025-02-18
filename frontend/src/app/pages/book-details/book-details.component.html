@@ -163,6 +163,13 @@
 			</mat-grid-list>
 		</div>
 	}
+	
+	@if (isLoggedIn && !isAuthor && !existsOrder){
+		<div class="question-form">
+			<app-question-submit-bar [bookId]="bookId" (submitted)="refetchMyQuestions()"></app-question-submit-bar>
+		</div>
+	}
+	
 	<div class="tab-centerer">
 		<mat-tab-group class="tabber">
 			<mat-tab class="tab">
@@ -182,9 +189,9 @@
 				<ng-template matTabContent>
 					<div class="white">
 						@if (isAuthor){
-							<app-writer-questions-tab [bookId]="bookId"></app-writer-questions-tab>
+							<app-writer-questions-tab [bookId]="bookId" [questionPage]="questionPage$!"></app-writer-questions-tab>
 						} @else {
-							<app-questions-tab [bookId]="bookId"></app-questions-tab>
+							<app-questions-tab [bookId]="bookId" [questionPage]="questionPage$!"></app-questions-tab>
 						}
 					</div>
 				</ng-template>
@@ -196,7 +203,7 @@
 					</ng-template>
 					<ng-template matTabContent>
 						<div class="white">
-							<app-my-questions-tab [bookId]="bookId"></app-my-questions-tab>
+							<app-my-questions-tab [bookId]="bookId" [questionPage]="myQuestionPage$!"></app-my-questions-tab>
 						</div>
 					</ng-template>
 				</mat-tab>

@@ -25,6 +25,8 @@ import {ReviewTabComponent} from "./components/review-tab/review-tab.component";
 import {QuestionsTabComponent} from "./components/questions-tab/questions-tab.component";
 import {MyQuestionsTabComponent} from "./components/my-questions-tab/my-questions-tab.component";
 import {WriterQuestionsTabComponent} from "./components/writer-questions-tab/writer-questions-tab.component";
+import {QuestionSubmitBarComponent} from "./components/question-submit-bar/question-submit-bar.component";
+import {QuestionWithData} from "../../shared/model/question/questionWithData";
 
 @Component({
     selector: 'app-book-details',
@@ -48,7 +50,8 @@ import {WriterQuestionsTabComponent} from "./components/writer-questions-tab/wri
         ReviewTabComponent,
         QuestionsTabComponent,
         MyQuestionsTabComponent,
-        WriterQuestionsTabComponent
+        WriterQuestionsTabComponent,
+        QuestionSubmitBarComponent
     ],
     templateUrl: './book-details.component.html',
     styleUrl: './book-details.component.scss'
@@ -80,9 +83,9 @@ export class BookDetailsComponent implements OnInit {
 
     reviewPage$: Observable<PaginatedContent<ReviewWithInfo>> | null = null;
 
-    questionPage$: Observable<PaginatedContent<Question>> | null = null;
+    questionPage$: Observable<PaginatedContent<QuestionWithData>> | null = null;
 
-    myQuestionPage$: Observable<PaginatedContent<Question>> | null = null;
+    myQuestionPage$: Observable<PaginatedContent<QuestionWithData>> | null = null;
 
     constructor() {
         this.title.setTitle('Book details')
@@ -141,7 +144,10 @@ export class BookDetailsComponent implements OnInit {
             }
         })
     }
-
+    
+    refetchMyQuestions(){
+        this.myQuestionPage$ = this.bookDetailsService.getAllMyQuestions(this.bookId, this.pageNumber, this.pageSize);
+    }
 
     protected readonly SalesCategory = SalesCategory;
     protected readonly WriterCategory = WriterCategory;

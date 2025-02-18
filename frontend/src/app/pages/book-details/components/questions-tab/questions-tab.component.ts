@@ -31,6 +31,8 @@ export class QuestionsTabComponent implements OnInit{
   router = inject(Router);
 
   bookId = input.required<number>();
+  questionPage = input.required<Observable<PaginatedContent<QuestionWithData>>>();
+
 
   currentPage!: number;
   pageSize = 10;
@@ -42,7 +44,7 @@ export class QuestionsTabComponent implements OnInit{
       this.currentPage = Number(params['page']) || 1;
     });
 
-    this.pagination$ =  this.bookDetailsService.getAllOtherQuestions(this.bookId(), this.currentPage, this.pageSize)
+    this.pagination$ =  this.questionPage();
     this.questions$ = this.pagination$.pipe(
         map((page) => page.data)
     )
