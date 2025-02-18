@@ -353,6 +353,83 @@
   "BOOK_DETAILS_BROWSER": "Información del libro",
   "BUY_BOOK_BROWSER": "Comprar libro",
   "SET_DEAL_BROWSER": "Editar oferta",
-  "EDIT_BOOK_BROWSER": "Editar libro"
+  "EDIT_BOOK_BROWSER": "Editar libro",
+
+  "BOOK_DETAILS": {
+    "BUY_BOOK": "Comprar libro",
+    "GO_TO_PURCHASES": "Ir a compras",
+    "READ_BOOK": "Leer libro",
+    "READ_PREVIEW": "Leer vista previa",
+    "EDIT_BOOK": "Editar libro",
+    "START_DEAL": "Iniciar un trato",
+    "CHANGE_DEAL": "Modificar trato",
+    "LEAVE_REVIEW": "Dejar reseña",
+    "EDIT_REVIEW": "Editar reseña",
+    "WISHLIST_BOOK": "Agregar a la lista de deseos",
+    "RECOMMEND_BOOK": "Recomendar libro",
+    "SIMILAR_BOOKS": "Explorar libros similares!",
+    "REVIEWS": "Reseñas",
+    "QUESTIONS": "Preguntas",
+    "MY_QUESTIONS": "Mis preguntas",
+    "NO_QUESTIONS": "Aún no has hecho ninguna pregunta",
+    "ASK_QUESTION": "Hacer una pregunta",
+    "LEAVE_QUESTION": "Dejar una pregunta",
+    "CHANGE_REVIEW": "Modificar tu reseña",
+    "LEAVE_A_REVIEW": "Dejar una reseña",
+    "REVIEW": "Reseña",
+    "SET_REVIEW": "Establecer reseña",
+    "YOUR_REVIEW": "Tu reseña",
+    "READER_OPINION": "Opiniones de los lectores",
+    "NO_REVIEWS": "Este libro aún no tiene reseñas",
+    "RATING_ASC": "Calificación ascendente",
+    "RATING_DESC": "Calificación descendente",
+    "DATE_DESC": "Más reciente primero"
+  },
+
+  "BUY_BOOK": {
+    "TITLE": "Comprando {{title}}",
+    "INSTRUCTION1": "Por favor, transfiera el monto requerido y suba el comprobante de pago correspondiente",
+    "INSTRUCTION2": "Podrá acceder al libro después de que el pago haya sido verificado por el editor",
+    "BOOK_PRICE": "Precio del libro: {{price}}",
+    "WRITER_CBU": "CBU/alias del escritor: {{cbu}}",
+    "RECEIPT_LABEL": "Comprobante",
+    "UPLOAD_BUTTON": "Subir comprobante",
+    "CANCEL_BUTTON": "Cancelar",
+    "SUCCESS_TITLE": "¡Comprobante enviado con éxito!",
+    "SUCCESS_MESSAGE": "Se le notificará una vez que el pago haya sido verificado por el editor",
+    "FIND_BOOKS_BUTTON": "Buscar más libros",
+    "VIEW_PURCHASES_BUTTON": "Ver compras",
+    "SUCCESS_IMAGE_ALT": "Confirmación de compra"
+  },
+
+  "DEAL": {
+    "EDIT_DEAL": "Editar la oferta actual para {{title}}",
+    "START_DEAL": "Iniciar una nueva oferta para {{title}}",
+    "ORIGINAL_PRICE": "Precio original: {{price}}",
+    "CURRENT_DEAL_PRICE": "Precio actual de la oferta: {{dealPrice}}",
+    "DISCOUNTED_PRICE_LABEL": "Precio con descuento",
+    "DISCOUNTED_PRICE_HINT": "Debe ser menor que {{minPrice}}",
+    "END_DATE_LABEL": "Fecha de finalización",
+    "END_DATE_HINT": "DD/MM/AAAA",
+    "SET_DEAL_BUTTON": "Establecer oferta",
+    "END_DEAL_BUTTON": "Finalizar oferta",
+    "CANCEL_BUTTON": "Cancelar"
+  },
+
+  "EDIT_BOOK": {
+    "EDIT_BOOK_TITLE": "Editar la información del libro",
+    "FILL_BOOK_DETAILS": "Complete los detalles del libro",
+    "TITLE_LABEL": "Título",
+    "DESCRIPTION_LABEL": "Descripción",
+    "GENRE_LABEL": "Género",
+    "PRICE_LABEL": "Precio",
+    "RECOMMENDED_AGE_LABEL": "Edad recomendada",
+    "PAGE_COUNT_LABEL": "Número de páginas",
+    "COVER_IMAGE_LABEL": "Imagen de portada",
+    "PREVIEW_FILE_LABEL": "Archivo de vista previa",
+    "BOOK_FILE_LABEL": "Archivo del libro",
+    "SAVE_CHANGES_BUTTON": "Guardar cambios"
+  }
+
 
 }

@@ -1,19 +1,19 @@
 <app-notification-card>
 	<card-title>
 		<div class="success">
-			<h2>Receipt sent successfully!</h2>
+			<h2>{{ 'BUY_BOOK.SUCCESS_TITLE' | translate }}</h2>
 		</div>
 	</card-title>
 	<card-text>
 		<div class="content">
-			<p>You will be notified once the payment has been verified by the publisher</p>
+			<p>{{ 'BUY_BOOK.SUCCESS_MESSAGE' | translate }}</p>
 			
 			<div class="btn-row">
 				<app-nav-button link="/">
-					Find more books
+                    {{ 'BUY_BOOK.FIND_BOOKS_BUTTON' | translate }}
 				</app-nav-button>
 				<app-nav-button link="/purchases">
-					View purchases
+                    {{ 'BUY_BOOK.VIEW_PURCHASES_BUTTON' | translate }}
 				</app-nav-button>
 			</div>
 			

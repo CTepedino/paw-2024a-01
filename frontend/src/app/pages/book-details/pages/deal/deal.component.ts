@@ -14,7 +14,7 @@ import {CancelButtonComponent} from "../../../../shared/components/cancel-button
 import {DateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, NativeDateAdapter} from "@angular/material/core";
 import {DeleteButtonComponent} from "../../../../shared/components/delete-button/delete-button.component";
 import {Title} from "@angular/platform-browser";
-import {TranslateService} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-deal',
@@ -35,7 +35,8 @@ import {TranslateService} from "@ngx-translate/core";
     CancelButtonComponent,
     RouterLink,
     DecimalPipe,
-    DeleteButtonComponent
+    DeleteButtonComponent,
+    TranslateModule
   ],
   templateUrl: './deal.component.html',
   styleUrl: './deal.component.scss',

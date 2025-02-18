@@ -2,42 +2,42 @@
 	<app-content-card>
 		<h2 class="title">
 			@if (book.deal){
-				Edit the current deal for {{book.title}}
+                {{ 'DEAL.EDIT_DEAL' | translate: { title: book.title } }}
 			} @else {
-				Start a new deal for {{book.title}}
+                {{ 'DEAL.START_DEAL' | translate: { title: book.title } }}
 			}
 		</h2>
 		<hr/>
 		<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
-			<p>Original price: {{book.price | currency}}</p>
+			<p>{{ 'DEAL.ORIGINAL_PRICE' | translate: { price: (book.price | currency) } }}</p>
 			@if (book.deal){
-				<p>Current deal price: {{book.dealInfo?.price | currency}}</p>
+				<p>{{ 'DEAL.CURRENT_DEAL_PRICE' | translate: { dealPrice: (book.dealInfo?.price | currency) } }}</p>
 			}
 			<div class="input-row">
 			<mat-form-field appearance="outline" class="input">
-				<mat-label>Discounted price</mat-label>
+				<mat-label>{{ 'DEAL.DISCOUNTED_PRICE_LABEL' | translate }}</mat-label>
 				<input matInput required type="number" formControlName="price" min="0.1" [max]="getMinPrice(book.price!)">
-				<mat-hint>Should be less than {{getMinPrice(book.price!) | number}}</mat-hint>
+				<mat-hint>{{ 'DEAL.DISCOUNTED_PRICE_HINT' | translate: { minPrice: (getMinPrice(book.price!) | number) } }}</mat-hint>
 			</mat-form-field>
 			<mat-form-field appearance="outline" class="input">
-				<mat-label>End date</mat-label>
+				<mat-label>{{ 'DEAL.END_DATE_LABEL' | translate }}</mat-label>
 				<input matInput [matDatepicker]="picker" required formControlName="endDate" [min]="minDate" readonly>
-				<mat-hint>MM/DD/YYYY</mat-hint>
+				<mat-hint>{{ 'DEAL.END_DATE_HINT' | translate }}</mat-hint>
 				<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 				<mat-datepicker #picker></mat-datepicker>
 			</mat-form-field>
 			</div>
 			<div class="btn-zone">
 				<app-action-button [disabled]="!form.valid" (click)="onSubmit()" submit>
-					Set deal
+                    {{ 'DEAL.SET_DEAL_BUTTON' | translate }}
 				</app-action-button>
 				@if (book.deal){
 					<app-delete-button (click)="endDeal()" >
-						End deal
+                        {{ 'DEAL.END_DEAL_BUTTON' | translate }}
 					</app-delete-button>
 				}
 				<app-cancel-button routerLink="/book/{{book.id}}">
-					Cancel
+                    {{ 'DEAL.CANCEL_BUTTON' | translate }}
 				</app-cancel-button>
 			</div>
 		</form>

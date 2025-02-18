@@ -13,7 +13,7 @@ import {ActionButtonComponent} from "../../../../shared/components/action-button
 import {ContentCardComponent} from "../../../../shared/components/content-card/content-card.component";
 import {BookGenre} from "../../../../shared/model/book/bookGenre";
 import {fileTypeValidator} from "../../../../shared/validators/fileTypeValidator";
-import {TranslateService} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-edit-book',
@@ -29,7 +29,8 @@ import {TranslateService} from "@ngx-translate/core";
 		MatSelect,
 		ReactiveFormsModule,
 		FileInputComponent,
-		ActionButtonComponent
+		ActionButtonComponent,
+		TranslateModule
 	],
   templateUrl: './edit-book.component.html',
   styleUrl: './edit-book.component.scss'
