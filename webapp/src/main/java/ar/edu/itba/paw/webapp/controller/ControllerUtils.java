@@ -89,6 +89,9 @@ public class ControllerUtils {
         ByteArrayInputStream in = new ByteArrayInputStream(file);
         try {
             BufferedImage img = ImageIO.read(in);
+            if (img == null){
+                return file;
+            }
 
             if (height == null || height > img.getHeight()){
                 height = img.getHeight();

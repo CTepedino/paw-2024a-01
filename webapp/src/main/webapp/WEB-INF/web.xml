@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-  <display-name>PAW test application</display-name>
+  <display-name>Cybrary</display-name>
 
   <context-param>
     <param-name>contextClass</param-name>
@@ -79,10 +79,6 @@
       <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
     </init-param>
     <init-param>
-      <param-name>jersey.config.servlet.filter.forwardOn404</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <init-param>
       <param-name>jersey.config.server.response.setStatusOverSendError</param-name>
       <param-value>true</param-value>
     </init-param>
@@ -95,22 +91,33 @@
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
 
+
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/frontend/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/frontend/assets/*</url-pattern>
+  </servlet-mapping>
+
   <filter>
     <filter-name>StaticCacheFilter</filter-name>
     <filter-class>ar.edu.itba.paw.webapp.config.UnconditionalCacheFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>StaticCacheFilter</filter-name>
-    <url-pattern>/static/*</url-pattern>
+    <url-pattern>/frontend/assets/*</url-pattern>
   </filter-mapping>
-
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>/static/*</url-pattern>
-  </servlet-mapping>
+  <filter-mapping>
+    <filter-name>StaticCacheFilter</filter-name>
+    <url-pattern>/frontend/*</url-pattern>
+  </filter-mapping>
 
   <error-page>
     <error-code>404</error-code>
-    <location>/index.html</location>
+    <location>/frontend/index.html</location>
   </error-page>
+
+
 </web-app>
