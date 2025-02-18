@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AuthService} from "../../../shared/services/auth.service";
 import {BookService} from "../../../shared/services/book.service";
 import {UserService} from "../../../shared/services/user.service";
-import {concatMap, forkJoin, map, Observable} from "rxjs";
+import {concatMap, forkJoin, map, Observable, of, tap} from "rxjs";
 import {FormGroup} from "@angular/forms";
 
 @Injectable({
@@ -19,23 +19,24 @@ export class AddBookService {
   }
 
   publish(bookPublishForm: FormGroup): Observable<number> {
-    return this.authService.getLoggedUser().pipe(
-        concatMap(user => {
-          if (user?.cbu == null){
-            return this.userService.putUser(user?.self!, {
-              firstName: user?.firstName,
-              lastName: user?.lastName,
-              cbu: bookPublishForm.get('cbu')?.value,
-              description: user?.description
-            }).pipe(concatMap(() => {
-                this.authService.resetLoggedUser();
-                return this.postBook(bookPublishForm)
-            }))
-          } else {
-            return this.postBook(bookPublishForm);
-          }
-        })
-    );
+      return this.postBook(bookPublishForm).pipe(
+          concatMap(bookId => this.authService.getLoggedUser().pipe(
+              concatMap(user => {
+                  if (user?.cbu == null){
+                      return this.userService.putUser(user?.self!, {
+                          firstName: user?.firstName,
+                          lastName: user?.lastName,
+                          cbu: bookPublishForm.get('cbu')?.value,
+                          description: user?.description
+                      }).pipe(map(() => {
+                          this.authService.resetLoggedUser();
+                          return bookId;
+                      }))
+                  }
+                  return of(bookId);
+              })
+          ))
+      );
   }
 
   private postBook(bookPublishForm: FormGroup): Observable<number>{

@@ -113,15 +113,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void checkWriterRole(User user) {
-        if (user.getCbu()==null){
-            throw new InvalidWriterException();
-        }
-
         if (!user.getRoles().contains(UserRoles.WRITER)) {
             userDao.giveRole(user, UserRoles.WRITER);
+            LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(user.getUserId()).log();
         }
-
-        LOGGER.atDebug().setMessage("Gave writer role to userId: {}").addArgument(user.getUserId()).log();
     }
 
     @Transactional

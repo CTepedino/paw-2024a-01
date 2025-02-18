@@ -121,13 +121,13 @@ export class AddBookComponent implements OnInit {
     if (this.form.valid){
 
       this.addBookService.publish(this.form).pipe(
-      map((id) => {
-        console.log(`id: ${id}`)
-        this.router.navigate([`/book/${id}`]);
-      }), catchError((err) => {
-        console.log(err);
-        return throwError(() => 'publish failed');
-      })
+        map((id) => {
+          console.log(`id: ${id}`)
+          this.router.navigate([`/book/${id}`]);
+        }), catchError((err) => {
+          console.log(err);
+          return throwError(() => 'publish failed');
+        })
       ).subscribe();
     }
   }

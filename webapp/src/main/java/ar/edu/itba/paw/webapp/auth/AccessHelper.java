@@ -49,13 +49,6 @@ public class AccessHelper {
                 .isPresent();
     }
 
-    public boolean isLoggedAndCanPublish(){
-        return us.getLoggedUser()
-                .filter(u -> u.getCbu() != null)
-                .isPresent();
-    }
-
-
     public boolean isLoggedAndWriter(String bookIdString){
         long bookId = Long.parseLong(bookIdString);
 
