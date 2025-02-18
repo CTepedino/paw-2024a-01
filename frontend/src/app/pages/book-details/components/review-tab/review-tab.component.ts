@@ -15,6 +15,7 @@ import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {AsyncPipe} from "@angular/common";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-review-tab',
@@ -29,7 +30,8 @@ import {NgxPaginationModule} from "ngx-pagination";
 		AsyncPipe,
 		MatGridTile,
 		PaginatorComponent,
-		NgxPaginationModule
+		NgxPaginationModule,
+		TranslateModule
 	],
   templateUrl: './review-tab.component.html',
   styleUrl: './review-tab.component.scss'

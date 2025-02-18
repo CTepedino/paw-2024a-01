@@ -1,17 +1,17 @@
 @if (loggedUserReview()){
-	<h3 class="title">Your review</h3>
+	<h3 class="title">{{ 'BOOK_DETAILS.YOUR_REVIEW' | translate }}</h3>
 	<app-review-card [review]="loggedUserReview()!"></app-review-card>
 }
 
 @if ((pagination$ | async)?.pagination?.totalCount! > 0){
 	@if (reviews$ | async; as reviews){
 		<div class="header">
-			<h3>Reader's opinions</h3>
+			<h3>{{ 'BOOK_DETAILS.READER_OPINION' | translate }}</h3>
 			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="half">
 				<mat-form-field class="full-width">
 					<mat-select (selectionChange)="onSubmit()" formControlName="orderBy">
 						@for (status of Object.values(ReviewOrderBy); track status){
-							<mat-option [value]="status">{{status}}</mat-option>
+							<mat-option [value]="status">{{ ('BOOK_DETAILS.' + status) | translate }}</mat-option>
 						}
 					</mat-select>
 				</mat-form-field>
@@ -30,7 +30,7 @@
 	}
 } @else {
 	@if (!loggedUserReview()){
-		<h5 class="center-text">This book has no reviews yet</h5>
+		<h5 class="center-text">{{ 'BOOK_DETAILS.NO_REVIEW' | translate }}</h5>
 	}
 }
 

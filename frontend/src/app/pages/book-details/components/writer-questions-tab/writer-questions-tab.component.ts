@@ -8,7 +8,7 @@ import {AsyncPipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {SmallQuestionCardComponent} from "../small-question-card/small-question-card.component";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslateModule, TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-writer-questions-tab',
@@ -17,7 +17,8 @@ import {TranslatePipe} from "@ngx-translate/core";
     NgxPaginationModule,
     PaginatorComponent,
     SmallQuestionCardComponent,
-    TranslatePipe
+    TranslatePipe,
+    TranslateModule
   ],
   templateUrl: './writer-questions-tab.component.html',
   styleUrl: './writer-questions-tab.component.scss'

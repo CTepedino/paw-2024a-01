@@ -3,7 +3,8 @@
 @use '@angular/material' as mat;
 @use 'styles/theme-colors' as cy;
 /* Importing Bootstrap SCSS file. */
-@use 'bootstrap/scss/bootstrap';
+//@use 'bootstrap/scss/bootstrap';
+@use 'bootstrap';
 
 html {
   @include mat.theme((

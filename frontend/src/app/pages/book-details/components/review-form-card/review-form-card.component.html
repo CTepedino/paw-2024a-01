@@ -1,8 +1,8 @@
 <h2 mat-dialog-title class="title">
 	@if (edit){
-		Change your review
+        {{ 'BOOK_DETAILS.CHANGE_REVIEW' | translate }}
 	} @else {
-		Leave a review
+        {{ 'BOOK_DETAILS.LEAVE_A_REVIEW' | translate }}
 	}
 </h2>
 <div mat-dialog-content>
@@ -16,7 +16,7 @@
 		</div>
 		<div class="form-input">
 			<mat-form-field appearance="outline" class="input">
-				<mat-label>Review</mat-label>
+				<mat-label>{{ 'BOOK_DETAILS.REVIEW' | translate }}</mat-label>
 				<textarea matInput #reviewText required class="textarea" maxlength="500" formControlName="review"></textarea>
 				<mat-hint align="end">{{reviewText.value.length}} / 500</mat-hint>
 			</mat-form-field>
@@ -25,9 +25,9 @@
 </div>
 <div class="btn-zone" mat-dialog-actions>
 	<app-action-button [disabled]="!form.valid" (click)="onSubmit()" submit>
-		Set review
+        {{ 'BOOK_DETAILS.SET_REVIEW' | translate }}
 	</app-action-button>
 	<app-cancel-button (click)="cancelReview()">
-		Cancel
+        {{ 'CANCEL' | translate }}
 	</app-cancel-button>
 </div>

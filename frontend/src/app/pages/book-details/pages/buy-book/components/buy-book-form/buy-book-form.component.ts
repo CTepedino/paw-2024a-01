@@ -10,6 +10,7 @@ import {RouterLink} from "@angular/router";
 import {BookDetailsService} from "../../../../store/book-details.service";
 import {BookWithData} from "../../../../../../shared/model/book/bookWithData";
 import {fileTypeValidator} from "../../../../../../shared/validators/fileTypeValidator";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @Component({
@@ -21,7 +22,8 @@ import {fileTypeValidator} from "../../../../../../shared/validators/fileTypeVal
     FileInputComponent,
     ActionButtonComponent,
     CancelButtonComponent,
-    RouterLink
+    RouterLink,
+    TranslateModule
   ],
   templateUrl: './buy-book-form.component.html',
   styleUrl: './buy-book-form.component.scss'

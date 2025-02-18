@@ -1,21 +1,21 @@
 <app-content-card>
 	<div class="title">
-		<h3>Edit the book's information</h3>
+		<h3>{{ 'EDIT_BOOK.EDIT_BOOK_TITLE' | translate }}</h3>
 	</div>
 	<hr/>
 	<form [formGroup]="form" (ngSubmit)="onSubmit()">
 		<div class="form">
-			<p>Fill in the book's details</p>
+			<p>{{ 'EDIT_BOOK.FILL_BOOK_DETAILS' | translate }}</p>
 			<div class="input-zone">
 				<mat-form-field appearance="outline" class="input">
-					<mat-label>Title</mat-label>
+					<mat-label>{{ 'EDIT_BOOK.TITLE_LABEL' | translate }}</mat-label>
 					<input matInput required maxlength="50" #title formControlName="title">
 					<mat-hint align="end">{{title.value.length}} / 50</mat-hint>
 				</mat-form-field>
 			</div>
 			<div class="input-zone">
 				<mat-form-field appearance="outline" class="input">
-					<mat-label>Description</mat-label>
+					<mat-label>{{ 'EDIT_BOOK.DESCRIPTION_LABEL' | translate }}</mat-label>
 					<textarea matInput #description required class="textarea" maxlength="1000" formControlName="description"></textarea>
 					<mat-hint align="end">{{description.value.length}} / 1000</mat-hint>
 				</mat-form-field>
@@ -28,14 +28,14 @@
 					<mat-form-field appearance="outline" class="input">
 						<mat-select required formControlName="genre">
 							@for (genre of Object.values(BookGenre); track genre){
-								<mat-option [value]="genre">{{genre}}</mat-option>
+								<mat-option [value]="genre">{{genre | translate}}</mat-option>
 							}
 						</mat-select>
-						<mat-label>Genre</mat-label>
+						<mat-label>{{ 'EDIT_BOOK.GENRE_LABEL' | translate }}</mat-label>
 					</mat-form-field>
 
 					<mat-form-field appearance="outline" class="input">
-						<mat-label>Price</mat-label>
+						<mat-label>{{ 'EDIT_BOOK.PRICE_LABEL' | translate }}</mat-label>
 						<input matInput required type="number" formControlName="price" min="0.1" max="100000000">
 					</mat-form-field>
 				</div>
@@ -43,25 +43,25 @@
 			<div class="input-zone">
 				<div class="as-row">
 					<mat-form-field appearance="outline" class="input">
-						<mat-label>Recommended age</mat-label>
+						<mat-label>{{ 'EDIT_BOOK.RECOMMENDED_AGE_LABEL' | translate }}</mat-label>
 						<input matInput required type="number" formControlName="suggestedAge" min="0" max="99">
 					</mat-form-field>
 					<mat-form-field appearance="outline" class="input">
-						<mat-label>Page count</mat-label>
+						<mat-label>{{ 'EDIT_BOOK.PAGE_COUNT_LABEL' | translate }}</mat-label>
 						<input matInput required type="number" formControlName="pageCount" min="1" max="1000000">
 					</mat-form-field>
 				</div>
 			</div>
 			<div class="input-zone">
 				<div class="file-row">
-					<app-file-input class="input" accept="image/*" formGroupName="cover" [formGroup]="getCoverFormGroup()" [required]="false">Cover image</app-file-input>
-					<app-file-input class="input" accept="application/pdf" formGroupName="preview" [formGroup]="getPreviewFormGroup()" [required]="false">Preview file</app-file-input>
-					<app-file-input class="input" accept="application/pdf" formGroupName="file" [formGroup]="getFileFormGroup()" [required]="false">Book file</app-file-input>
+					<app-file-input class="input" accept="image/*" formGroupName="cover" [formGroup]="getCoverFormGroup()" [required]="false"> {{ 'EDIT_BOOK.COVER_IMAGE_LABEL' | translate }}</app-file-input>
+					<app-file-input class="input" accept="application/pdf" formGroupName="preview" [formGroup]="getPreviewFormGroup()" [required]="false"> {{ 'EDIT_BOOK.PREVIEW_FILE_LABEL' | translate }}</app-file-input>
+					<app-file-input class="input" accept="application/pdf" formGroupName="file" [formGroup]="getFileFormGroup()" [required]="false">{{ 'EDIT_BOOK.BOOK_FILE_LABEL' | translate }}</app-file-input>
 				</div>
 			</div>
 			<div class="btn-zone">
 				<app-action-button [disabled]="!form.valid" (click)="onSubmit()">
-					Save changes
+                    {{ 'EDIT_BOOK.SAVE_CHANGES_BUTTON' | translate }}
 				</app-action-button>
 			</div>
 		</div>
