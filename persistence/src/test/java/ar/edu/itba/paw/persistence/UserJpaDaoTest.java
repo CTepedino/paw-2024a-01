@@ -26,10 +26,10 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 public class UserJpaDaoTest {
     private static final String PASSWORD = "password";
-    private static final String EMAIL = "johnDoe@mail.com";
+    private static final String EMAIL = "johndoe@mail.com";
     private static final String FIRST_NAME = "John";
     private static final String LAST_NAME = "Doe";
-    private static final String INSERTED_EMAIL = "repeatedEmail@error.com";
+    private static final String INSERTED_EMAIL = "repeatedemail@error.com";
     private static final long EXISTING_ID = 102;
     private static final long NON_EXISTING_ID = 99999;
 
