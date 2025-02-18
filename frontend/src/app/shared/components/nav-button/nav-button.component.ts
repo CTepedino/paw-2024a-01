@@ -1,12 +1,10 @@
 import {Component, input} from '@angular/core';
-import {MatFabAnchor} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
 import {ActionButtonComponent} from "../action-button/action-button.component";
 
 @Component({
   selector: 'app-nav-button',
 	imports: [
-		MatFabAnchor,
 		RouterLink,
 		ActionButtonComponent
 	],

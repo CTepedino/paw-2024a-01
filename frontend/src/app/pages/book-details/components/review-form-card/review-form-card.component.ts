@@ -1,5 +1,4 @@
 import {Component, Inject} from '@angular/core';
-import {ContentCardComponent} from "../../../../shared/components/content-card/content-card.component";
 import {NgbRating} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Review} from "../../../../shared/model/review/review";
@@ -18,7 +17,6 @@ import {
 @Component({
   selector: 'app-review-form-card',
   imports: [
-    ContentCardComponent,
     NgbRating,
     MatFormField,
     MatHint,

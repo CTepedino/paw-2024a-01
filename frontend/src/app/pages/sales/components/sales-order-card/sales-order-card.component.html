@@ -3,7 +3,7 @@
         <img ngSrc="{{order().bookInfo.cover!}}?height=250&width=175" height="250" width="175" alt="Book cover" class="book-image">
     </mat-grid-tile>
     <mat-grid-tile class="purchased-book purchase-info">
-        <a class="book-title" routerLink="/book/{{order().bookInfo?.id}}">{{order().bookInfo.title}}</a>
+        <a class="book-title" routerLink="/book/{{order().bookInfo.id}}">{{order().bookInfo.title}}</a>
         <p class="price">{{order().price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
         <p class="buyer">{{ 'SALES.ORDER_DETAILS.BUYER' | translate }}: <a>{{order().buyerInfo?.firstName}} {{order().buyerInfo?.lastName}}</a></p>
     </mat-grid-tile>

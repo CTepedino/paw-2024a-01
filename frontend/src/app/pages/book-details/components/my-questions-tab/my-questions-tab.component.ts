@@ -1,4 +1,4 @@
-import {Component, inject, input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, inject, input, OnChanges, OnInit} from '@angular/core';
 import {BookDetailsService} from "../../store/book-details.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable} from "rxjs";
@@ -8,7 +8,6 @@ import {AsyncPipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {SmallQuestionCardComponent} from "../small-question-card/small-question-card.component";
-import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-my-questions-tab',
@@ -16,8 +15,7 @@ import {TranslatePipe} from "@ngx-translate/core";
     AsyncPipe,
     NgxPaginationModule,
     PaginatorComponent,
-    SmallQuestionCardComponent,
-    TranslatePipe
+    SmallQuestionCardComponent
   ],
   templateUrl: './my-questions-tab.component.html',
   styleUrl: './my-questions-tab.component.scss'

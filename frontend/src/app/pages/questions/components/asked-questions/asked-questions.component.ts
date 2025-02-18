@@ -1,13 +1,11 @@
-import {Component, inject, input, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {QuestionWithData} from "../../../../shared/model/question/questionWithData";
 import {QuestionCardComponent} from "../question-card/question-card.component";
-import {MatFormField} from "@angular/material/form-field";
-import {MatCheckbox} from "@angular/material/checkbox";
 import {map, Observable} from "rxjs";
 
 import {ActivatedRoute, Router} from "@angular/router";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
-import {AsyncPipe, JsonPipe} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {TranslateModule} from "@ngx-translate/core";
@@ -17,12 +15,9 @@ import {QuestionWithDataService} from "../../../../shared/services/question-with
   selector: 'app-asked-questions',
     imports: [
         QuestionCardComponent,
-        MatFormField,
-        MatCheckbox,
         AsyncPipe,
         PaginatorComponent,
         NgxPaginationModule,
-        JsonPipe,
         TranslateModule
     ],
   templateUrl: './asked-questions.component.html',

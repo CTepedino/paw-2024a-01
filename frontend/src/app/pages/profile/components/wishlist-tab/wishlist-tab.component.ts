@@ -5,7 +5,7 @@ import {map, Observable} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
 import {UserProfileService} from "../../store/user-profile.service";
-import {AsyncPipe, JsonPipe} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 import {SmallBookCardComponent} from "../../../../shared/components/small-book-card/small-book-card.component";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {NgxPaginationModule} from "ngx-pagination";
@@ -16,7 +16,6 @@ import {TranslateModule} from "@ngx-translate/core";
   imports: [
     MatGridTile,
     AsyncPipe,
-    JsonPipe,
     MatGridList,
     SmallBookCardComponent,
     PaginatorComponent,

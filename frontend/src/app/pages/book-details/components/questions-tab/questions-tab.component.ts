@@ -1,5 +1,4 @@
 import {Component, inject, input, OnInit} from '@angular/core';
-import {QuestionWithDataService} from "../../../../shared/services/question-with-data.service";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
 import {QuestionWithData} from "../../../../shared/model/question/questionWithData";
@@ -8,7 +7,6 @@ import {BookDetailsService} from "../../store/book-details.service";
 import {AsyncPipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
-import {QuestionCardComponent} from "../../../questions/components/question-card/question-card.component";
 import {TranslatePipe} from "@ngx-translate/core";
 import {SmallQuestionCardComponent} from "../small-question-card/small-question-card.component";
 
@@ -18,7 +16,6 @@ import {SmallQuestionCardComponent} from "../small-question-card/small-question-
     AsyncPipe,
     NgxPaginationModule,
     PaginatorComponent,
-    QuestionCardComponent,
     TranslatePipe,
     SmallQuestionCardComponent
   ],

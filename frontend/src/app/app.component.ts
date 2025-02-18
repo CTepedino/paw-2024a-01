@@ -1,15 +1,14 @@
-import {AfterContentChecked, Component, computed, inject, OnInit, signal} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {NavbarComponent} from "./shared/components/navbar/navbar.component";
 import {AuthService} from "./shared/services/auth.service";
-import {concatMap, filter, Observable, of, switchMap} from "rxjs";
+import {filter} from "rxjs";
 import {User} from "./shared/model/user/user";
-import {AsyncPipe} from "@angular/common";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, AsyncPipe, TranslateModule],
+    imports: [RouterOutlet, NavbarComponent, TranslateModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

@@ -1,18 +1,18 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {AsyncPipe, JsonPipe} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 import {BookCardComponent} from "../../shared/components/book-card/book-card.component";
 import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
 import {BookWithDataService} from "../../shared/services/book-with-data.service";
 import {BookGenre} from "../../shared/model/book/bookGenre";
 import {BookSearchOrderBy} from "../../shared/model/book/bookSearchOrderBy";
-import {catchError, map, Observable, of} from "rxjs";
+import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {BookWithData} from "../../shared/model/book/bookWithData";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -38,7 +38,6 @@ import {TranslateModule, TranslateService} from "@ngx-translate/core";
     BookCardComponent,
     AsyncPipe,
     PaginatorComponent,
-    JsonPipe,
     NgxPaginationModule,
     TranslateModule,
   ],

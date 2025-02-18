@@ -1,29 +1,22 @@
-import {Component, output} from '@angular/core';
+import {Component} from '@angular/core';
 import {MatButtonModule} from "@angular/material/button";
 import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle
-} from "@angular/material/dialog";
+import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
 import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-accept-popup',
-  imports: [
-      MatFormFieldModule,
-      MatInputModule,
-      FormsModule,
-      MatButtonModule,
-      MatDialogTitle,
-      MatDialogContent,
-      MatDialogActions,
-      MatDialogClose,
-      TranslateModule],
+    imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        MatButtonModule,
+        MatDialogTitle,
+        MatDialogContent,
+        MatDialogActions,
+        TranslateModule],
   templateUrl: './accept-popup.component.html',
   styleUrl: './accept-popup.component.scss'
 })

@@ -1,14 +1,12 @@
 import {Component, inject, input, OnInit} from '@angular/core';
 import {OrderStatus} from "../../../../shared/model/order/orderStatus";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatFormField} from "@angular/material/form-field";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {TranslatePipe} from "@ngx-translate/core";
 import {ReviewOrderBy} from "../../../../shared/model/review/reviewOrderBy";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
-import {OrderWithData} from "../../../../shared/model/order/orderWithData";
 import {ReviewWithInfo} from "../../../../shared/model/review/reviewWithInfo";
 import {BookDetailsService} from "../../store/book-details.service";
 import {ReviewCardComponent} from "../review-card/review-card.component";
@@ -23,11 +21,9 @@ import {NgxPaginationModule} from "ngx-pagination";
 	imports: [
 		FormsModule,
 		MatFormField,
-		MatLabel,
 		MatOption,
 		MatSelect,
 		ReactiveFormsModule,
-		TranslatePipe,
 		ReviewCardComponent,
 		MatGridList,
 		AsyncPipe,

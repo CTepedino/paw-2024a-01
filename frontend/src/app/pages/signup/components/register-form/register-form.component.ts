@@ -1,16 +1,13 @@
 import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, output} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router, RouterModule} from '@angular/router';
 import {NotificationCardComponent} from "../../../../shared/components/notification-card/notification-card.component";
 import {ActionButtonComponent} from "../../../../shared/components/action-button/action-button.component";
-import {NavButtonComponent} from "../../../../shared/components/nav-button/nav-button.component";
-import {CancelButtonComponent} from "../../../../shared/components/cancel-button/cancel-button.component";
-import {AuthService} from "../../../../shared/services/auth.service";
 import {UserService} from "../../../../shared/services/user.service";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 
@@ -27,8 +24,6 @@ import {TranslateModule, TranslateService} from "@ngx-translate/core";
 		RouterModule,
 		NotificationCardComponent,
 		ActionButtonComponent,
-		NavButtonComponent,
-		CancelButtonComponent,
 		TranslateModule
 	],
 	templateUrl: './register-form.component.html',
