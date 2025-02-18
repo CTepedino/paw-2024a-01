@@ -169,11 +169,11 @@ export class BookDetailsComponent implements OnInit {
             this.pageNumber = 1;
         }
         if (event.index === 0) {
-            this.router.navigate([`book/${this.bookId}/reviews`], {queryParams: {page: this.pageNumber}, queryParamsHandling: 'replace'});
+            this.router.navigate([`book/${this.bookId}/reviews`]);
         } else if (event.index === 1) {
-            this.router.navigate([`book/${this.bookId}/questions`], {queryParams: {page: this.pageNumber}, queryParamsHandling: 'replace'});
+            this.router.navigate([`book/${this.bookId}/questions`]);
         } else if (event.index === 2) {
-            this.router.navigate([`book/${this.bookId}/my-questions`], {queryParams: {page: this.pageNumber}, queryParamsHandling: 'replace'});
+            this.router.navigate([`book/${this.bookId}/my-questions`]);
         }
     }
 
