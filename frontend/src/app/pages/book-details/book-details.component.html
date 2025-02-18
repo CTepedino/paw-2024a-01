@@ -18,22 +18,26 @@
 			<div class="book-info">
 				<div class="info-row">
 					<div class="info">
-						<h1 class="title">{{book.title}}</h1>
-						<div class="category">
-							@switch (book.salesCategory){
-								@case (SalesCategory.BEST_SELLER){
-									<div class="sales-category best-seller">
-										Best Seller
-									</div>
+						<div class="row">
+							<h1 class="title">{{book.title}}</h1>
+							<div class="category">
+								@switch (book.salesCategory){
+									@case (SalesCategory.BEST_SELLER){
+										<div class="sales-category best-seller">
+											Best Seller
+										</div>
+									}
+									@case (SalesCategory.POPULAR){
+										<div class="sales-category popular">
+											Popular
+										</div>
+									}
 								}
-								@case (SalesCategory.POPULAR){
-									<div class="sales-category popular">
-										Popular
-									</div>
-								}
-							}
+							</div>
 						</div>
+	
 						<div class="author">
+							<a class="writer-name" routerLink="/profile/{{book.writerInfo.id}}">{{book.writerInfo.firstName}} {{book.writerInfo.lastName}}</a>
 							@switch (book.writerInfo.writerCategory){
 								@case (WriterCategory.GOLD){
 									<mat-icon class="writer-icon gold">person</mat-icon>
@@ -48,7 +52,6 @@
 									<mat-icon class="writer-icon">person</mat-icon>
 								}
 							}
-							<a class="writer-name" routerLink="/profile/{{book.writerInfo.id}}">{{book.writerInfo.firstName}} {{book.writerInfo.lastName}}</a>
 						</div>
 						<div class="rating">
 							@if(book.averageRating! > 0){
@@ -78,6 +81,12 @@
 						@if ((!isLoggedIn || !existsOrder) && !isAuthor){
 							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/buy"><div class="book-action">Buy book</div></app-action-button>
 						}
+						@if (!isOwner && existsOrder){
+							<div class="purchased">You already bought this book</div>
+							<app-action-button class="action-btn" routerLink="/purchases" [queryParams]="{title: book.title}">
+								<div class="book-action">Go to purchases</div>
+							</app-action-button>
+						}
 						@if (isAuthor || isOwner){
 							<app-action-button class="action-btn" (click)="bookDetailsService.openPdf(book.bookFile!)">
 								<div class="book-action">Read book</div>
@@ -101,12 +110,6 @@
 						@if (isAuthor && hasDeal){
 							<app-action-button class="action-btn" routerLink="/book/{{bookId}}/deal">
 								<div class="book-action">Change deal</div>
-							</app-action-button>
-						}
-						@if (!isOwner && existsOrder){
-							<p>You already bought this book</p>
-							<app-action-button class="action-btn" routerLink="/purchases" [queryParams]="{title: book.title}">
-								<div class="book-action">Go to purchases</div>
 							</app-action-button>
 						}
 						@if (isOwner && !hasReviewed){

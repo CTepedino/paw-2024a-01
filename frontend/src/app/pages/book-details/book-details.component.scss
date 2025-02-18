@@ -26,15 +26,16 @@
 
 .title {
   font-size: 3rem;
-  text-align: center;
+  text-align: start;
   margin-bottom: 10px;
   text-overflow: ellipsis;
+  width: 100%;
 }
 
 .category {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
 }
 
 .sales-category {
@@ -70,18 +71,18 @@
 .author {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-self: center;
 }
 
 .writer-icon {
   font-size: 2rem;
   align-self: center;
-
+  margin-top: -6px;
+  margin-right: -10px;
 }
 
 .writer-name {
-  margin-left: 10px;
   text-decoration: none;
   font-size: 1.5rem;
 }
@@ -89,7 +90,7 @@
 .rating {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   margin-top: 20px;
 }
 
@@ -97,7 +98,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   margin-top: 20px;
   color: #437C90;
 }
@@ -113,6 +114,7 @@
 
 .price {
   font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .info {
@@ -213,4 +215,9 @@
   display: flex;
   justify-content: center;
   margin-top: 40px;
+}
+
+.purchased {
+  margin-top: 25px;
+  margin-bottom: 0;
 }
