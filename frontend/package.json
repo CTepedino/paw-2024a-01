@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration=production --base-href /paw-2024a-01/frontend/ --deploy-url /paw-2024a-01/frontend/",
+    "build": "ng build --configuration=production --base-href /paw-2024a-01/ --deploy-url /paw-2024a-01/frontend/ && mkdir -p ./dist/assets && mv ./dist/frontend/assets/* ./dist/assets/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

@@ -98,7 +98,7 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
-    <url-pattern>/frontend/assets/*</url-pattern>
+    <url-pattern>/assets/*</url-pattern>
   </servlet-mapping>
 
   <filter>
@@ -107,7 +107,7 @@
   </filter>
   <filter-mapping>
     <filter-name>StaticCacheFilter</filter-name>
-    <url-pattern>/frontend/assets/*</url-pattern>
+    <url-pattern>/assets/*</url-pattern>
   </filter-mapping>
   <filter-mapping>
     <filter-name>StaticCacheFilter</filter-name>
