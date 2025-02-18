@@ -241,6 +241,10 @@ describe('AuthService', () => {
     // Mock a successful response with a logged user
     reqVerify.flush(mockIndex);
 
+    // Restore tokens after temporalLogout()
+    sessionStorage.setItem('jwt', 'old-jwt');
+    sessionStorage.setItem('refreshToken', 'old-refresh');
+
     // Expect the method to return true
     expect(await verifyPromise).toBeTrue();
 
