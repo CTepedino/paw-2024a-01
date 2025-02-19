@@ -16,6 +16,8 @@
   white-space: nowrap; /* Evita que el texto se divida en varias líneas */
   overflow: hidden; /* Oculta el texto que se desborda */
   text-overflow: ellipsis;
+
+  width: 100%;
 }
 
 .btn:disabled {

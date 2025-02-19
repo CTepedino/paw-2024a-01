@@ -13,6 +13,7 @@
   font-weight: bold;
   cursor: pointer;
   text-align: center;
+  text-decoration: none
 }
 
 :host .purchase-info {
@@ -63,4 +64,17 @@
 
 .status-info {
   text-align: center;
+}
+
+.scrollable-container {
+  height: 150px;
+  overflow-y: auto;   /* Habilita el scroll cuando el contenido sea mayor a la altura */
+}
+
+.scrollable-container::-webkit-scrollbar {
+  width: 0.5em;
+}
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 4px;
 }

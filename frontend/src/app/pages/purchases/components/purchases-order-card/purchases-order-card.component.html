@@ -1,46 +1,47 @@
-<mat-grid-list cols="5" rowHeight="1.5:1" gutterSize="0px">
-	<mat-grid-tile class="purchased-book">
-		<img ngSrc="{{order().bookInfo.cover!}}?height=250&width=175" height="250" width="175" alt="Book cover" class="book-image">
-	</mat-grid-tile>
-	<mat-grid-tile class="purchased-book purchase-info">
-		<a class="book-title" routerLink="/book/{{order().bookInfo.id}}">{{order().bookInfo.title}}</a>
-		<p class="author">{{ 'PURCHASES.LABELS.BY' | translate }} <a>{{order().writerInfo?.firstName}} {{order().writerInfo?.lastName}}</a></p>
-		<p class="price">{{order().price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
-	</mat-grid-tile>
-	<mat-grid-tile class="purchased-book purchase-info">
-		<p>{{order().date | date}}</p>
-	</mat-grid-tile>
-	<mat-grid-tile class="purchased-book purchase-info">
-		@switch (order().status){
-			@case (OrderStatus.COMPLETED){
-				<p class="status-info">{{ 'PURCHASES.ORDER_STATUS.COMPLETED' | translate }}</p>
-			}
-			@case (OrderStatus.WAITING_APPROVAL){
-				<p class="status-info">{{ 'PURCHASES.ORDER_STATUS.WAITING_APPROVAL' | translate }}</p>
-			}
-			@case (OrderStatus.REJECTED_PAYMENT){
-				<p class="red-text">{{ 'PURCHASES.ORDER_STATUS.REJECTED_PAYMENT' | translate: { cbu: order().writerInfo?.cbu } }}</p>
-				<app-cancel-button class="reject-button" (click)="openRejectionDialog()">
-                    {{ 'PURCHASES.BUTTONS.REJECTION_REASON' | translate }}
-				</app-cancel-button>
-			}
-		}
-	</mat-grid-tile>
-	<mat-grid-tile class="purchased-book purchase-info">
-		@if (order().status == OrderStatus.REJECTED_PAYMENT){
-			<app-action-button class="action-btn" (click)="openReuploadDialog()">
-                {{ 'PURCHASES.BUTTONS.REUPLOAD_RECEIPT' | translate }}
-			</app-action-button>
-		}
-		@if (order().status == OrderStatus.COMPLETED){
-			<app-action-button class="action-btn" (click)="bookService.openBookInternal(order().bookInfo.bookFile!)">
-                {{ 'PURCHASES.BUTTONS.READ_BOOK' | translate }}
-			</app-action-button>
-		}
-		@if (order().status == OrderStatus.WAITING_APPROVAL){
-			<mat-icon>hourglass_top</mat-icon> {{ 'PURCHASES.BUTTONS.WAIT' | translate }}
-		}
-		
-	</mat-grid-tile>
-</mat-grid-list>
+<div class="scrollable-container">
+    <mat-grid-list cols="5" rowHeight="150px" gutterSize="0px">
+        <mat-grid-tile class="purchased-book">
+            <img ngSrc="{{order().bookInfo.cover!}}?height=250&width=175" height="250" width="175" alt="Book cover" class="book-image">
+        </mat-grid-tile>
+        <mat-grid-tile class="purchased-book purchase-info">
+            <a class="book-title" routerLink="/book/{{order().bookInfo.id}}">{{order().bookInfo.title}}</a>
+            <p class="author">{{ 'PURCHASES.LABELS.BY' | translate }} <a>{{order().writerInfo?.firstName}} {{order().writerInfo?.lastName}}</a></p>
+            <p class="price">{{order().price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
+        </mat-grid-tile>
+        <mat-grid-tile class="purchased-book purchase-info">
+            <p>{{ order().date | date: "dd/MM/yyyy" }}</p>
+        </mat-grid-tile>
+        <mat-grid-tile class="purchased-book purchase-info">
+            @switch (order().status){
+                @case (OrderStatus.COMPLETED){
+                    <p class="status-info">{{ 'PURCHASES.ORDER_STATUS.COMPLETED' | translate }}</p>
+                }
+                @case (OrderStatus.WAITING_APPROVAL){
+                    <p class="status-info">{{ 'PURCHASES.ORDER_STATUS.WAITING_APPROVAL' | translate }}</p>
+                }
+                @case (OrderStatus.REJECTED_PAYMENT){
+                    <p class="red-text">{{ 'PURCHASES.ORDER_STATUS.REJECTED_PAYMENT' | translate: { cbu: order().writerInfo?.cbu } }}</p>
+                    <app-cancel-button class="reject-button" (click)="openRejectionDialog()">
+                        {{ 'PURCHASES.BUTTONS.REJECTION_REASON' | translate }}
+                    </app-cancel-button>
+                }
+            }
+        </mat-grid-tile>
+        <mat-grid-tile class="purchased-book purchase-info">
+            @if (order().status == OrderStatus.REJECTED_PAYMENT){
+                <app-action-button class="action-btn" (click)="openReuploadDialog()">
+                    {{ 'PURCHASES.BUTTONS.REUPLOAD_RECEIPT' | translate }}
+                </app-action-button>
+            }
+            @if (order().status == OrderStatus.COMPLETED){
+                <app-action-button class="action-btn" (click)="bookService.openBookInternal(order().bookInfo.bookFile!)">
+                    {{ 'PURCHASES.BUTTONS.READ_BOOK' | translate }}
+                </app-action-button>
+            }
+            @if (order().status == OrderStatus.WAITING_APPROVAL){
+                <mat-icon>hourglass_top</mat-icon> {{ 'PURCHASES.BUTTONS.WAIT' | translate }}
+            }
 
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

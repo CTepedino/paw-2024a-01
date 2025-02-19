@@ -1,37 +1,39 @@
-<mat-grid-list cols="5" rowHeight="1.5:1" gutterSize="0px">
-    <mat-grid-tile class="purchased-book">
-        <img ngSrc="{{order().bookInfo.cover!}}?height=250&width=175" height="250" width="175" alt="Book cover" class="book-image">
-    </mat-grid-tile>
-    <mat-grid-tile class="purchased-book purchase-info">
-        <a class="book-title" routerLink="/book/{{order().bookInfo.id}}">{{order().bookInfo.title}}</a>
-        <p class="price">{{order().price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
-        <p class="buyer">{{ 'SALES.ORDER_DETAILS.BUYER' | translate }}: <a>{{order().buyerInfo?.firstName}} {{order().buyerInfo?.lastName}}</a></p>
-    </mat-grid-tile>
-    <mat-grid-tile class="purchased-book purchase-info">
-        <p>{{order().date | date}}</p>
-    </mat-grid-tile>
-    <mat-grid-tile class="purchased-book purchase-info">
-		@switch (order().status){
-			@case (OrderStatus.COMPLETED){
-				<p>{{ 'SALES.ORDER_DETAILS.COMPLETED' | translate }}</p>
-				<button mat-flat-button class="receipt-button" (click)="orderService.openReceiptInternal(order().receipt!)">{{ 'SALES.ORDER_DETAILS.VIEW_RECEIPT' | translate }}</button>
-			}
-			@case (OrderStatus.WAITING_APPROVAL){
-				<p>{{ 'SALES.ORDER_DETAILS.PENDING_APPROVAL' | translate }}</p>
-				<button mat-flat-button class="receipt-button" (click)="orderService.openReceiptInternal(order().receipt!)">{{ 'SALES.ORDER_DETAILS.VIEW_RECEIPT' | translate }}</button>
-			}
-			@case (OrderStatus.REJECTED_PAYMENT){
-				<p>{{ 'SALES.ORDER_DETAILS.WAITING_FOR_PAYMENT' | translate }}</p>
-			}
-		}
-    </mat-grid-tile>
-    <mat-grid-tile class="purchased-book purchase-info">
-        @if (order().status == OrderStatus.COMPLETED){
-            <p>{{ 'SALES.ORDER_DETAILS.DONE' | translate }}</p>
-        }
-        @if (order().status == OrderStatus.WAITING_APPROVAL){
-            <button mat-flat-button class="decline-button" (click)="openDeclineDialog()">{{ 'SALES.ORDER_DETAILS.DECLINE' | translate }}</button>
-            <button mat-flat-button class="accept-button" (click)="openAcceptDialog()">{{ 'SALES.ORDER_DETAILS.ACCEPT' | translate }}</button>
-        }
-    </mat-grid-tile>
-</mat-grid-list>
+<div class="scrollable-container">
+    <mat-grid-list cols="5" gutterSize="0px" rowHeight="150px">
+        <mat-grid-tile class="purchased-book">
+            <img ngSrc="{{order().bookInfo.cover!}}?height=250&width=175" height="250" width="175" alt="Book cover" class="book-image">
+        </mat-grid-tile>
+        <mat-grid-tile class="purchased-book purchase-info">
+            <a class="book-title" routerLink="/book/{{order().bookInfo.id}}">{{order().bookInfo.title}}</a>
+            <p class="price">{{order().price | currency: 'USD' : 'symbol' : '1.0-0'}}</p>
+            <p class="buyer">{{ 'SALES.ORDER_DETAILS.BUYER' | translate }}: <a>{{order().buyerInfo?.firstName}} {{order().buyerInfo?.lastName}}</a></p>
+        </mat-grid-tile>
+        <mat-grid-tile class="purchased-book purchase-info">
+            <p>{{ order().date | date: "dd/MM/yyyy" }}</p>
+        </mat-grid-tile>
+        <mat-grid-tile class="purchased-book purchase-info">
+            @switch (order().status){
+                @case (OrderStatus.COMPLETED){
+                    <p>{{ 'SALES.ORDER_DETAILS.COMPLETED' | translate }}</p>
+                    <button mat-flat-button class="receipt-button" (click)="orderService.openReceiptInternal(order().receipt!)">{{ 'SALES.ORDER_DETAILS.VIEW_RECEIPT' | translate }}</button>
+                }
+                @case (OrderStatus.WAITING_APPROVAL){
+                    <p>{{ 'SALES.ORDER_DETAILS.PENDING_APPROVAL' | translate }}</p>
+                    <button mat-flat-button class="receipt-button" (click)="orderService.openReceiptInternal(order().receipt!)">{{ 'SALES.ORDER_DETAILS.VIEW_RECEIPT' | translate }}</button>
+                }
+                @case (OrderStatus.REJECTED_PAYMENT){
+                    <p>{{ 'SALES.ORDER_DETAILS.WAITING_FOR_PAYMENT' | translate }}</p>
+                }
+            }
+        </mat-grid-tile>
+        <mat-grid-tile class="purchased-book purchase-info">
+            @if (order().status == OrderStatus.COMPLETED){
+                <p>{{ 'SALES.ORDER_DETAILS.DONE' | translate }}</p>
+            }
+            @if (order().status == OrderStatus.WAITING_APPROVAL){
+                <button mat-flat-button class="decline-button" (click)="openDeclineDialog()">{{ 'SALES.ORDER_DETAILS.DECLINE' | translate }}</button>
+                <button mat-flat-button class="accept-button" (click)="openAcceptDialog()">{{ 'SALES.ORDER_DETAILS.ACCEPT' | translate }}</button>
+            }
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
