@@ -69,22 +69,24 @@
 }
 
 .author {
-  width: 100%;
+  width: 70%;
   display: flex;
-  justify-content: start;
   align-self: center;
+  justify-content: start;
 }
 
 .writer-icon {
   font-size: 2rem;
   align-self: center;
   width: 32px;
+  margin-right: 100px;
 }
 
 .writer-name {
   text-decoration: none;
   font-size: 1.5rem;
   width: 85%;
+  margin-right: 0;
 }
 
 .rating {

@@ -453,5 +453,7 @@
     "PREVIEW_FILE_LABEL": "Preview file",
     "BOOK_FILE_LABEL": "Book file",
     "SAVE_CHANGES_BUTTON": "Save changes"
-  }
+  },
+
+  "BOOK_DETAILS_BY": "By"
 }
