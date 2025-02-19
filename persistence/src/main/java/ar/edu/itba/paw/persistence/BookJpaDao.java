@@ -111,7 +111,7 @@ public class BookJpaDao implements BookDao {
             nativeQuery.setParameter(entry.getKey(), entry.getValue());
         }
 
-       TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b LEFT JOIN b.deal d WHERE b.bookId IN :idList ORDER BY " + queryDTO.getOrderBy().getColumnName(), Book.class);
+       TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b LEFT JOIN b.deal d WHERE b.bookId IN :idList ORDER BY " + queryDTO.getOrderBy().getModelName(), Book.class);
 
         return DaoUtils.paginatedQuery(em, nativeQuery, query, queryDTO.getOffset(), queryDTO.getLimit());
     }
