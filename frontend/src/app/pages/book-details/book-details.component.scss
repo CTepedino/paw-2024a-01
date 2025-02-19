@@ -78,13 +78,13 @@
 .writer-icon {
   font-size: 2rem;
   align-self: center;
-  margin-top: -6px;
-  margin-right: -10px;
+  width: 32px;
 }
 
 .writer-name {
   text-decoration: none;
   font-size: 1.5rem;
+  width: 85%;
 }
 
 .rating {
@@ -131,7 +131,7 @@
 }
 
 .action-btn {
-  width: 200px;
+  width: 80%;
   display: flex;
   justify-content: center;
 }

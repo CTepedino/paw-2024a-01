@@ -4,6 +4,7 @@
   border-bottom: 1px lightgray solid;
   display: flex;
   justify-content: space-between;
+  padding-top: 10px;
 }
 
 .img-wrap {
@@ -23,10 +24,13 @@
 }
 
 .question {
-  width: 58.3333333%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 10px;
 }
 
 .question-text {
