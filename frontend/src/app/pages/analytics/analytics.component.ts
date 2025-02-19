@@ -68,7 +68,7 @@ export class AnalyticsComponent implements OnInit {
     });
     this.form = fb.group({
       year: [new Date().getFullYear()],
-      month: [new Date().getMonth()]
+      month: [new Date().getMonth()+1]
     })
 
     this.authService.getLoggedUser().subscribe(user => this.user = user);
@@ -79,7 +79,7 @@ export class AnalyticsComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.currentPage = Number(params['page']) || 1;
-      this.showByMonth = params['show_by_month'] != 'false';
+      this.showByMonth = params['show_by_month'] == 'true';
       if (params['year'] > this.startYear){
         this.form.get('year')?.setValue(Number(params['year']));
       }
