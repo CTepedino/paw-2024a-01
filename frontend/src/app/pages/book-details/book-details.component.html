@@ -38,7 +38,23 @@
 	
 						<div class="author">
 							<div  class="writer-name">
-								{{'BOOK_DETAILS_BY' | translate}} <a class="writer-name" routerLink="/profile/{{book.writerInfo.id}}">{{book.writerInfo.firstName}} {{book.writerInfo.lastName}}</a>
+								<a class="writer-name" routerLink="/profile/{{book.writerInfo.id}}">{{book.writerInfo.firstName}} {{book.writerInfo.lastName}}</a>
+                                <span>
+                                    @switch (book.writerInfo.writerCategory){
+                                        @case (WriterCategory.GOLD){
+                                            <mat-icon class="writer-icon gold">workspace_premium</mat-icon>
+                                        }
+                                        @case (WriterCategory.SILVER){
+                                            <mat-icon class="writer-icon silver">workspace_premium</mat-icon>
+                                        }
+                                        @case (WriterCategory.BRONZE){
+                                            <mat-icon class="writer-icon bronze">workspace_premium</mat-icon>
+                                        }
+                                        @case (WriterCategory.DEFAULT){
+                                            <mat-icon class="writer-icon">workspace_premium</mat-icon>
+                                        }
+                                    }
+                                </span>
 							</div>
 						</div>
 						<div class="rating">

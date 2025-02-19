@@ -9,6 +9,10 @@
   max-height: 450px;
 }
 
+.book-cover {
+  object-fit: contain;
+}
+
 .book-info {
   width: 100%;
   height: 100%;
@@ -69,18 +73,12 @@
 }
 
 .author {
-  width: 70%;
+  width: 100%;
   display: flex;
   align-self: center;
   justify-content: start;
 }
 
-.writer-icon {
-  font-size: 2rem;
-  align-self: center;
-  width: 32px;
-  margin-right: 100px;
-}
 
 .writer-name {
   text-decoration: none;
