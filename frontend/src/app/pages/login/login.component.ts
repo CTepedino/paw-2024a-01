@@ -76,7 +76,7 @@ export class LoginComponent {
           catchError(() => {
             this.loginFailed.set(true);
             this.loginForm.reset();
-            return throwError(() => new Error("login failed"))
+            return throwError(() => {})
           })
       ).subscribe();
     }

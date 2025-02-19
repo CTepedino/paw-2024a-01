@@ -104,8 +104,7 @@ export class AuthService {
                 }
 
                 return of(response.body!);
-            }),
-            catchError(() => of({}))
+            })
         );
     }
 
