@@ -12,6 +12,7 @@
 				<mat-form-field class="full-width">
 					<mat-label>{{ 'ORDER_STATUS.ORDER_STATUS' | translate }}</mat-label>
 					<mat-select (selectionChange)="onSubmit()" formControlName="status">
+						<mat-option [value]="null">-</mat-option>
 						@for (status of Object.values(OrderStatus); track status){
 							<mat-option [value]="status"> {{ 'ORDER_STATUS.' + status | translate }}</mat-option>
 						}
