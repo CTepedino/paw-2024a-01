@@ -24,7 +24,7 @@
   "ADDBOOK.ERRORS.MAX_LENGTH": "Máximo 22 carácteres",
   "ADDBOOK.ERRORS.CBU_PATTERNS": "Debe ser un CBU o alias valido",
 
-  "DECLINE": "Rechazar",
+  "REUPLOAD": "Resubir",
 
   "FICTION": "Ficción",
   "NON_FICTION": "No Ficción",
