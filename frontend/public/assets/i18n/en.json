@@ -113,9 +113,9 @@
   "November": "November",
   "December": "December",
 
-  "SALES_FOR_POPULAR": "+{{sales}} sales for Popular",
+  "SALES_FOR_POPULAR": "+{{sales}} sales needed for Popular",
   "POPULAR": "Popular",
-  "SALES_FOR_BEST_SELLER": "+{{sales}} sales for Best Seller",
+  "SALES_FOR_BEST_SELLER": "+{{sales}} sales needed for Best Seller",
   "BEST_SELLER": "Best Seller",
   "TOTAL_SALES": "Total Sales",
   "WRITE_NEW_PASSWORD": "Write your new password",
