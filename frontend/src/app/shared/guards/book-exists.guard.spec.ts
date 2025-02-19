@@ -1,21 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  CanActivateFn,
-  convertToParamMap, provideRouter,
-  Router,
-  RouterStateSnapshot
-} from '@angular/router';
+import {TestBed} from '@angular/core/testing';
+import {ActivatedRouteSnapshot, CanActivateFn, provideRouter, Router, RouterStateSnapshot} from '@angular/router';
 
-import { bookExistsGuard } from './book-exists.guard';
+import {bookExistsGuard} from './book-exists.guard';
 import {BookService} from "../services/book.service";
 import {provideHttpClient} from "@angular/common/http";
-import {HttpClientTestingModule, provideHttpClientTesting} from "@angular/common/http/testing";
+import {provideHttpClientTesting} from "@angular/common/http/testing";
 import {Observable, of, throwError} from "rxjs";
-import {BookWithDataService} from "../services/book-with-data.service";
-import {UserService} from "../services/user.service";
-import {RouterTestingModule} from "@angular/router/testing";
 import {AppComponent} from "../../app.component";
 
 describe('bookExistsGuard', () => {

@@ -11,7 +11,6 @@ export const userIdGuard: CanActivateFn = (route, state) => {
 
   const id = route.parent?.paramMap.get('id') || route.paramMap.get('id');
 
-  let user = undefined
 
   return authService.getLoggedUserFromApi().pipe(
       map(user => {
