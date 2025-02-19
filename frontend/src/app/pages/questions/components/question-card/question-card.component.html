@@ -9,12 +9,12 @@
 	/>
 	</div>
 	<div class="info">
-		<div>{{ 'QUESTIONS.QUESTION_CARD.BOOK' | translate }}: <a routerLink="/book/{{question().bookInfo.id}}">{{question().bookInfo.title}}</a></div>
+		<div><a class="book-title" routerLink="/book/{{question().bookInfo.id}}">{{question().bookInfo.title}}</a></div>
 		<div>
 			@if (received()){
-                {{ 'QUESTIONS.QUESTION_CARD.QUESTIONER' | translate }}: <a routerLink="/profile/{{question().questionerInfo?.id}}"> {{question().questionerInfo?.firstName}} {{question().questionerInfo?.lastName}}</a>
+                {{ 'QUESTIONS.QUESTION_CARD.QUESTIONER' | translate }}: <a class="book-title" routerLink="/profile/{{question().questionerInfo?.id}}"> {{question().questionerInfo?.firstName}} {{question().questionerInfo?.lastName}}</a>
 			} @else {
-                {{ 'QUESTIONS.QUESTION_CARD.WRITER' | translate }}: <a routerLink="/profile/{{question().writerInfo?.id}}"> {{question().writerInfo?.firstName}} {{question().writerInfo?.lastName}}</a>
+                {{ 'QUESTIONS.QUESTION_CARD.WRITER' | translate }}: <a class="book-title" routerLink="/profile/{{question().writerInfo?.id}}"> {{question().writerInfo?.firstName}} {{question().writerInfo?.lastName}}</a>
 			}
 		</div>
 	</div>
