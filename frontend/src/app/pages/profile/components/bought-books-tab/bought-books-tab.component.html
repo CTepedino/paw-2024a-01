@@ -19,13 +19,15 @@
 	</mat-grid-list>
 </form>
 @if (books$ | async; as	books){
-	<mat-grid-list cols="4" gutterSize="10px" rowHeight="375px" class="book-grid">
-		@for (book of (books | paginate: {id: 'bought-books', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id){
-			<mat-grid-tile>
-				<app-small-book-card [book]="book" class="bought-book"></app-small-book-card>
-			</mat-grid-tile>
-		}
-	</mat-grid-list>
+    @if (books.length != 0){
+        <mat-grid-list cols="4" gutterSize="10px" rowHeight="375px" class="book-grid">
+            @for (book of (books | paginate: {id: 'bought-books', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id){
+                <mat-grid-tile>
+                    <app-small-book-card [book]="book" class="bought-book"></app-small-book-card>
+                </mat-grid-tile>
+            }
+        </mat-grid-list>
+    }
 	
 	@if ((pagination$ | async)?.pagination?.pageCount! > 1){
 		<app-paginator id="bought-books" (pageChange)="onPageChange($event)"/>
