@@ -64,19 +64,16 @@ describe('AuthService', () => {
   it('should return a logged-in user when API responds with user data', async() => {
     service['loggedUserSubject'].next(undefined);
     const user$ = service.getLoggedUser();
-    const userPromise = firstValueFrom(user$); // Convert observable to promise
+    const userPromise = firstValueFrom(user$);
 
-    // Mock API response for index
     const reqIndex = httpTestingController.expectOne(service['baseUrl']);
     expect(reqIndex.request.method).toBe('GET');
     reqIndex.flush(mockIndex);
 
-    // Mock API response for user
     const reqUser = httpTestingController.expectOne(mockIndex.loggedUser!);
     expect(reqUser.request.method).toBe('GET');
     reqUser.flush(mockUser);
 
-    // Ensure response matches expected user
     expect(await userPromise).toEqual(mockUser);
   });
 
@@ -85,22 +82,19 @@ describe('AuthService', () => {
     const user$ = service.getLoggedUser();
     const userPromise = firstValueFrom(user$);
 
-    // Mock API response for index (no logged user)
     const reqIndex = httpTestingController.expectOne(service['baseUrl']);
     expect(reqIndex.request.method).toBe('GET');
     reqIndex.flush({...mockIndex, loggedUser: null});
 
-    // Ensure response matches expected null
     expect(await userPromise).toBeNull();
   });
 
   it('should return cached user if already set (avoiding API call)', async () => {
-    service['loggedUserSubject'].next(mockUser); // Manually set cached user
+    service['loggedUserSubject'].next(mockUser);
 
     const user$ = service.getLoggedUser();
     const userPromise = firstValueFrom(user$);
 
-    // Ensure it returns the cached user
     expect(await userPromise).toEqual(mockUser);
   });
 
@@ -108,20 +102,17 @@ describe('AuthService', () => {
     const user$ = service.getLoggedUserFromApi();
     const userPromise = firstValueFrom(user$);
 
-    // Simulate index API failure
     const reqIndex = httpTestingController.expectOne(service['baseUrl']);
     reqIndex.flush('Failed!', {status: 500, statusText: 'Internal Server Error'});
 
-    // Ensure the method handles the error and returns null
     expect(await userPromise).toBeNull();
   });
 
   it('should always fetch the logged-in user from API (no caching)', async () => {
-    service['loggedUserSubject'].next(mockUser); // Set a cached user
+    service['loggedUserSubject'].next(mockUser);
     const user$ = service.getLoggedUserFromApi();
     const userPromise = firstValueFrom(user$);
 
-    // It should still make an API call despite the cached value
     const reqIndex = httpTestingController.expectOne(service['baseUrl']);
     expect(reqIndex.request.method).toBe('GET');
     reqIndex.flush(mockIndex);
@@ -134,24 +125,18 @@ describe('AuthService', () => {
   });
 
   it('should reset the logged user and fetch updated user data', () => {
-    // Set a mock user in the subject
     service['loggedUserSubject'].next(mockUser);
 
-    // Call resetLoggedUser
     service.resetLoggedUser();
 
-    // Ensure the user was first reset
     expect(service['loggedUserSubject'].value).toBeUndefined();
 
-    // Expect an HTTP GET request to the user's `self` URL
     const req = httpTestingController.expectOne(mockUser.self!);
     expect(req.request.method).toBe('GET');
 
-    // Respond with updated user data
     const updatedUser = { ...mockUser, firstName: 'Updated' };
     req.flush(updatedUser);
 
-    // Ensure the subject was updated with the new user data
     expect(service['loggedUserSubject'].value).toEqual(updatedUser);
   });
 
@@ -160,16 +145,13 @@ describe('AuthService', () => {
     const password = 'password123';
     const rememberMe = true;
 
-    // Call login
     const login$ = service.login(email, password, rememberMe);
     const loginPromise = firstValueFrom(login$);
 
-    // Expect a request with Basic Auth
     const reqLogin = httpTestingController.expectOne(service['baseUrl']);
     expect(reqLogin.request.method).toBe('GET');
     expect(reqLogin.request.headers.get('Authorization')).toBe('Basic ' + btoa(`${email}:${password}`));
 
-    // Mock response with tokens
     const jwtToken = 'mock-jwt-token';
     const refreshToken = 'mock-refresh-token';
     reqLogin.flush(mockIndex, {
@@ -179,40 +161,32 @@ describe('AuthService', () => {
       }),
     });
 
-    // Expect request to fetch logged user
     const reqUser = httpTestingController.expectOne(mockIndex.loggedUser!);
     expect(reqUser.request.method).toBe('GET');
     reqUser.flush(mockUser);
 
-    // Ensure the response contains the index data
     expect(await loginPromise).toEqual(mockIndex);
 
-    // Verify tokens are stored correctly
     expect(localStorage.getItem('jwt')).toBe(jwtToken);
     expect(localStorage.getItem('refreshToken')).toBe(refreshToken);
 
-    // Ensure loggedUserSubject was updated
     expect(service['loggedUserSubject'].value).toEqual(mockUser);
   });
 
   it('should log out the user and clear tokens', () => {
-    // Set tokens and a logged-in user
     sessionStorage.setItem('jwt', 'test-jwt');
     sessionStorage.setItem('refreshToken', 'test-refresh');
     localStorage.setItem('jwt', 'test-jwt');
     localStorage.setItem('refreshToken', 'test-refresh');
     service['loggedUserSubject'].next(mockUser);
 
-    // Call logout
     service.logout();
 
-    // Expect tokens to be removed
     expect(sessionStorage.getItem('jwt')).toBeNull();
     expect(sessionStorage.getItem('refreshToken')).toBeNull();
     expect(localStorage.getItem('jwt')).toBeNull();
     expect(localStorage.getItem('refreshToken')).toBeNull();
 
-    // Expect loggedUserSubject to be null
     expect(service['loggedUserSubject'].value).toBeNull();
   });
 
@@ -226,29 +200,23 @@ describe('AuthService', () => {
     const email = 'testuser@example.com';
     const password = 'password123';
 
-    // Store previous tokens
     sessionStorage.setItem('jwt', 'old-jwt');
     sessionStorage.setItem('refreshToken', 'old-refresh');
 
     const verify$ = service.verifyCredentials(email, password);
     const verifyPromise = firstValueFrom(verify$);
 
-    // Expect a request with Basic Auth
     const reqVerify = httpTestingController.expectOne(service['baseUrl']);
     expect(reqVerify.request.method).toBe('GET');
     expect(reqVerify.request.headers.get('Authorization')).toBe('Basic ' + btoa(`${email}:${password}`));
 
-    // Mock a successful response with a logged user
     reqVerify.flush(mockIndex);
 
-    // Restore tokens after temporalLogout()
     sessionStorage.setItem('jwt', 'old-jwt');
     sessionStorage.setItem('refreshToken', 'old-refresh');
 
-    // Expect the method to return true
     expect(await verifyPromise).toBeTrue();
 
-    // Ensure previous tokens are restored
     expect(sessionStorage.getItem('jwt')).toBe('old-jwt');
     expect(sessionStorage.getItem('refreshToken')).toBe('old-refresh');
   });
@@ -260,14 +228,11 @@ describe('AuthService', () => {
     const verify$ = service.verifyCredentials(email, password);
     const verifyPromise = firstValueFrom(verify$);
 
-    // Expect API request
     const reqVerify = httpTestingController.expectOne(service['baseUrl']);
     expect(reqVerify.request.method).toBe('GET');
 
-    // Mock response with no logged user
     reqVerify.flush({ ...mockIndex, loggedUser: null });
 
-    // Expect method to return false
     expect(await verifyPromise).toBeFalse();
   });
 
@@ -278,11 +243,9 @@ describe('AuthService', () => {
     const verify$ = service.verifyCredentials(email, password);
     const verifyPromise = firstValueFrom(verify$);
 
-    // Simulate an API failure
     const reqVerify = httpTestingController.expectOne(service['baseUrl']);
     reqVerify.flush('Error', { status: 500, statusText: 'Internal Server Error' });
 
-    // Expect method to return false
     expect(await verifyPromise).toBeFalse();
   });
 });
