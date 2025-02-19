@@ -12,6 +12,7 @@
 			</p>
 		}
 		@if (showDate()) {
+			<p class="extra-info">{{book().pageCount}} {{'PAGES' | translate}}</p>
 			<p class="extra-info">{{book().publicationDate}}</p>
 		} @else {
 			<p class="extra-info">{{ (book().genre || 'UNKNOWN_GENRE') | translate }}</p>

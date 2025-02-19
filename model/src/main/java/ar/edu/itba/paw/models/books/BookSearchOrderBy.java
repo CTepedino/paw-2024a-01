@@ -5,10 +5,12 @@ public enum BookSearchOrderBy {
     PRICE_DESC("COALESCE(d.price, b.price) desc", "COALESCE(d.price, b.price) desc", "price.desc"),
     PAGE_COUNT_ASC("page_count asc",  "page_count asc","pageCount.asc"),
     PAGE_COUNT_DESC("page_count desc",  "page_count desc","pageCount.desc"),
-    PUBLICATION_DATE_ASC("b.book_id desc", "b.bookId asc" ,"publicationDate.asc"),
-    PUBLICATION_DATE_DESC("b.book_id desc", "b.bookId desc" ,"publicationDate.desc"),
-    BEST_SELLERS("COUNT(o.book_id) desc", "COUNT(o.book_id) desc" ,null),
-    NEW_DEALS("d.start_date desc", "d.start_date desc" ,null);
+    PUBLICATION_DATE_ASC("b.published_date asc", "b.publishDate  asc" ,"publicationDate.asc"),
+    PUBLICATION_DATE_DESC("b.published_date desc ", "b.publishDate desc" ,"publicationDate.desc"),
+    BEST_SELLERS("COUNT(o.book_id) desc", "b.bookId desc" ,null),
+    NEW_DEALS("d.start_date desc", "d.start_date desc" ,null),
+    LATEST_BOOKS("b.book_id desc", "b.bookId desc", null);
+
 
     private final String columnName;
     private final String modelName;

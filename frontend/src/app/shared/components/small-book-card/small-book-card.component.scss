@@ -47,8 +47,8 @@
   font-size: 1.25rem;
   font-weight: 400;
   text-overflow: ellipsis;
-  white-space: nowrap;  /* Evita el salto de línea */
-  overflow: hidden;  /* Oculta el texto que se desborda */
+  white-space: nowrap;
+  overflow: hidden;
   text-align: start;
 }
 
@@ -63,8 +63,8 @@
   margin-bottom: 0;
   margin-top: 5px;
   text-overflow: ellipsis;
-  white-space: nowrap;  /* Evita que el texto salte de línea */
-  overflow: hidden;  /* Oculta el contenido que sobrepase el ancho */
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .discount{
@@ -81,8 +81,8 @@
   margin-bottom: 0;
   font-size: 0.9rem;
   text-overflow: ellipsis;
-  white-space: nowrap;  /* Evita que el texto salte de línea */
-  overflow: hidden;  /* Oculta el contenido que sobrepase el ancho */
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 
@@ -96,6 +96,7 @@
   margin-top: 5px;
   margin-bottom: 0;
   text-overflow: ellipsis;
-  white-space: nowrap;  /* Evita que el texto salte de línea */
-  overflow: hidden;  /* Oculta el contenido que sobrepase el ancho */
+  white-space: nowrap;
+  overflow: hidden;
 }
+

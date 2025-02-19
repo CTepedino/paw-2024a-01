@@ -28,10 +28,10 @@
 				
 				<mat-form-field appearance="outline" class="input">
 					<mat-select formControlName="orderBy">
-						@for (orderby of Object.values(BookSearchOrderBy); track orderby){
-							@if (orderby != BookSearchOrderBy.BEST_SELLERS && orderby != BookSearchOrderBy.NEW_DEALS){
+						@for (orderby of Object.values(SearchOrderBy); track orderby){
+							<!--@if (orderby != BookSearchOrderBy.BEST_SELLERS && orderby != BookSearchOrderBy.NEW_DEALS && orderby != BookSearchOrderBy.LATEST_BOOKS){-->
 								<mat-option [value]="orderby">{{ orderby | translate }}</mat-option>
-							}
+							<!--}-->
 						}
 					</mat-select>
 					<mat-label>{{ 'ORDER_BY' | translate }}</mat-label>

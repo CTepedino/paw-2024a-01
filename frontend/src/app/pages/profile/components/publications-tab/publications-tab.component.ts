@@ -12,7 +12,9 @@ import {BookWithData} from "../../../../shared/model/book/bookWithData";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {BookSearchOrderBy, BookSearchOrderByOptions} from "../../../../shared/model/book/bookSearchOrderBy";
+import {
+	SearchOrderBy
+} from "../../../../shared/model/book/bookSearchOrderBy";
 import {MatInput} from "@angular/material/input";
 import {TranslateModule} from "@ngx-translate/core";
 
@@ -53,7 +55,7 @@ export class PublicationsTabComponent implements OnInit {
 	constructor(private fb: FormBuilder) {
 		this.form = fb.group({
 			title: [''],
-			orderBy: [BookSearchOrderBy.PUBLICATION_DATE_DESC]
+			orderBy: [SearchOrderBy.PUBLICATION_DATE_DESC]
 		})
 	}
 
@@ -61,13 +63,13 @@ export class PublicationsTabComponent implements OnInit {
 		this.route.queryParams.subscribe(params => {
 			if (Object.keys(params).length === 0){
 				this.form.get('title')?.setValue('');
-				this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC);
+				this.form.get('orderBy')?.setValue(SearchOrderBy.PUBLICATION_DATE_DESC);
 				this.currentPage = 1;
 			}
 
 			this.currentPage = Number(params['page']) || 1;
 			this.form.get('title')?.setValue(params['title']);
-			if (Object.values(BookSearchOrderBy).includes(params['order_by'])){
+			if (Object.values(SearchOrderBy).includes(params['order_by'])){
 				this.form.get('orderBy')?.setValue(params['order_by']);
 			}
 			this.form.updateValueAndValidity();
@@ -111,6 +113,6 @@ export class PublicationsTabComponent implements OnInit {
 
 	}
 
-	protected readonly BookSearchOrderBy = BookSearchOrderBy;
-	protected readonly BookSearchOrderByOptions = BookSearchOrderByOptions;
+	protected readonly SearchOrderBy = SearchOrderBy;
+	protected readonly Object = Object;
 }

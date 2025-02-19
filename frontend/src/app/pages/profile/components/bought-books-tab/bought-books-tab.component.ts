@@ -9,13 +9,13 @@ import {NgxPaginationModule} from "ngx-pagination";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {SmallBookCardComponent} from "../../../../shared/components/small-book-card/small-book-card.component";
-import {BookSearchOrderBy, BookSearchOrderByOptions} from "../../../../shared/model/book/bookSearchOrderBy";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserProfileService} from "../../store/user-profile.service";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../../../shared/model/paginatedContent";
 import {BookWithData} from "../../../../shared/model/book/bookWithData";
 import {TranslateModule} from "@ngx-translate/core";
+import {SearchOrderBy} from "../../../../shared/model/book/bookSearchOrderBy";
 
 @Component({
   selector: 'app-bought-books-tab',
@@ -54,7 +54,7 @@ export class BoughtBooksTabComponent implements OnInit{
   constructor(private fb: FormBuilder) {
     this.form = fb.group({
       title: [''],
-      orderBy: [BookSearchOrderBy.PUBLICATION_DATE_DESC]
+      orderBy: [SearchOrderBy.PUBLICATION_DATE_DESC]
     })
   }
 
@@ -62,13 +62,13 @@ export class BoughtBooksTabComponent implements OnInit{
     this.route.queryParams.subscribe(params => {
       if (Object.keys(params).length === 0){
         this.form.get('title')?.setValue('');
-        this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC)
+        this.form.get('orderBy')?.setValue(SearchOrderBy.PUBLICATION_DATE_DESC)
         this.currentPage = 1;
       }
 
       this.currentPage = Number(params['page']) || 1;
       this.form.get('title')?.setValue(params['title']);
-      if (Object.values(BookSearchOrderBy).includes(params['order_by'])){
+      if (Object.values(SearchOrderBy).includes(params['order_by'])){
         this.form.get('orderBy')?.setValue(params['order_by']);
       }
       this.form.updateValueAndValidity();
@@ -112,5 +112,6 @@ export class BoughtBooksTabComponent implements OnInit{
 
   }
 
-  protected readonly BookSearchOrderByOptions = BookSearchOrderByOptions;
+  protected readonly Object = Object;
+  protected readonly SearchOrderBy = SearchOrderBy;
 }

@@ -10,8 +10,8 @@
 			<mat-form-field class="full-width">
 				<mat-label>{{ 'ORDER_BY' | translate }}</mat-label>
 				<mat-select (selectionChange)="onSubmit()" formControlName="orderBy">
-					@for (status of BookSearchOrderByOptions; track status.value){
-						<mat-option [value]="status.value"> {{ status.value | translate }}</mat-option>
+					@for (status of Object.values(SearchOrderBy); track status){
+						<mat-option [value]="status"> {{ status | translate }}</mat-option>
 					}
 				</mat-select>
 			</mat-form-field>
@@ -23,7 +23,7 @@
         <mat-grid-list cols="4" gutterSize="10px" rowHeight="375px" class="book-grid">
             @for (book of (books | paginate: {id: 'bought-books', itemsPerPage: pageSize, currentPage: currentPage, totalItems: (pagination$ | async)?.pagination?.totalCount!}); track book.id){
                 <mat-grid-tile>
-                    <app-small-book-card [book]="book" class="bought-book"></app-small-book-card>
+                    <app-small-book-card [book]="book" class="bought-book" showDate></app-small-book-card>
                 </mat-grid-tile>
             }
         </mat-grid-list>

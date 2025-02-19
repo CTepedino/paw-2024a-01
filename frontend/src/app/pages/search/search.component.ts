@@ -11,7 +11,7 @@ import {BookCardComponent} from "../../shared/components/book-card/book-card.com
 import {ActionButtonComponent} from "../../shared/components/action-button/action-button.component";
 import {BookWithDataService} from "../../shared/services/book-with-data.service";
 import {BookGenre} from "../../shared/model/book/bookGenre";
-import {BookSearchOrderBy} from "../../shared/model/book/bookSearchOrderBy";
+import {BookSearchOrderBy, SearchOrderBy} from "../../shared/model/book/bookSearchOrderBy";
 import {map, Observable} from "rxjs";
 import {PaginatedContent} from "../../shared/model/paginatedContent";
 import {BookWithData} from "../../shared/model/book/bookWithData";
@@ -64,7 +64,7 @@ export class SearchComponent implements OnInit {
 
     this.form = this.fb.group({
       title: [''],
-      orderBy: [BookSearchOrderBy.PUBLICATION_DATE_DESC],
+      orderBy: [SearchOrderBy.PUBLICATION_DATE_DESC],
       genre: [null],
       minPages: [null],
       maxPages: [null],
@@ -79,7 +79,7 @@ export class SearchComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
           this.currentPage = Number(params['page']) || 1;
           this.form.get('title')?.setValue(params['title']);
-          if (Object.values(BookSearchOrderBy).includes(params['order_by'])){
+          if (Object.values(SearchOrderBy).includes(params['order_by'])){
             this.form.get('orderBy')?.setValue(params['order_by']);
           }
           if (Object.values(BookGenre).includes(params['genre'])){
@@ -105,7 +105,7 @@ export class SearchComponent implements OnInit {
     resetFilters(){
       this.form.get('title')?.setValue('');
       this.form.get('genre')?.setValue(null);
-      this.form.get('orderBy')?.setValue(BookSearchOrderBy.PUBLICATION_DATE_DESC)
+      this.form.get('orderBy')?.setValue(SearchOrderBy.PUBLICATION_DATE_DESC)
       this.form.get('minPages')?.setValue(null)
       this.form.get('maxPages')?.setValue(null)
       this.form.get('minPrice')?.setValue(null)
@@ -163,6 +163,5 @@ export class SearchComponent implements OnInit {
 
   protected readonly BookGenre = BookGenre;
   protected readonly Object = Object;
-  protected readonly BookSearchOrderBy = BookSearchOrderBy;
-
+  protected readonly SearchOrderBy = SearchOrderBy;
 }

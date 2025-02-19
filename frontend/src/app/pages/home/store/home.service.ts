@@ -36,7 +36,7 @@ export class HomeService {
   }
 
   getRecentBooks(page: number, size: number): Observable<PaginatedContent<BookWithData>> {
-    return this.bookService.listBooksWithData({page: page, size: size, order_by: BookSearchOrderBy.PUBLICATION_DATE_DESC});
+    return this.bookService.listBooksWithData({page: page, size: size, order_by: BookSearchOrderBy.LATEST_BOOKS});
   }
 
 }
