@@ -13,11 +13,9 @@
   font-size: 14px;
   letter-spacing: .5px;
 
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-  overflow: hidden; /* Oculta el texto que se desborda */
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
-
-  width: 100%;
 }
 
 .btn:disabled {

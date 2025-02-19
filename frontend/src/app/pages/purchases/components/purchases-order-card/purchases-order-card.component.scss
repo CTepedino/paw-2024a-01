@@ -68,7 +68,7 @@
 
 .scrollable-container {
   height: 150px;
-  overflow-y: auto;   /* Habilita el scroll cuando el contenido sea mayor a la altura */
+  overflow-y: auto;
 }
 
 .scrollable-container::-webkit-scrollbar {
